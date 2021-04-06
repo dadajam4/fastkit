@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "sourceMap": false,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowJs": false,
+    "strict": true,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "removeComments": false,
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "types": ["vite/client", "jest", "node"],
+    "rootDir": ".",
+    "paths": {
+      "@fastkit/*": ["packages/*/src"],
+      "fastkit/*": ["packages/fastkit/src"],
+      "~/*": ["playground/playground/src"],
+    }
+  },
+  "include": [
+    "packages/global.d.ts",
+    "packages/*/src",
+    "scripts"
+  ]
+}

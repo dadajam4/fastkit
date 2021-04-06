@@ -1,0 +1,25 @@
+{
+  "name": "@fastkit/body-scroll-lock",
+  "version": "0.1.0",
+  "description": "@fastkit/body-scroll-lock",
+  "main": "index.js",
+  "module": "dist/body-scroll-lock.esm-bundler.js",
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "types": "dist/body-scroll-lock.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/body-scroll-lock#readme"
+}

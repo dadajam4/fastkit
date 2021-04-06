@@ -1,0 +1,25 @@
+{
+  "name": "@fastkit/helpers",
+  "version": "0.1.0",
+  "description": "@fastkit/helpers",
+  "main": "index.js",
+  "module": "dist/helpers.esm-bundler.js",
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "types": "dist/helpers.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/helpers#readme"
+}

@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+		"editorconfig.editorconfig",
+		"sohamkamani.code-eol",
+		"dbaeumer.vscode-eslint",
+		"stylelint.vscode-stylelint",
+		"mikestead.dotenv",
+		"digitalbrainstem.javascript-ejs-support"
+  ]
+}
