@@ -15,6 +15,7 @@ export interface ReleaseArgs {
   dry?: boolean;
   skipTests?: boolean;
   skipBuild?: boolean;
+  tag?: string;
 }
 
 const args = minimist<ReleaseArgs>(process.argv.slice(2));
@@ -223,26 +224,26 @@ async function publishPackage(
 
   // const releaseTag = args.tag || null;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const releaseTag = semver.prerelease(version)![0] || null;
+  const releaseTag = args.tag || semver.prerelease(version)![0] || null;
   console.log(releaseTag);
 
   step(`Publishing ${pkgName}...`);
   try {
-    // await runIfNotDry(
-    //   'yarn',
-    //   [
-    //     'publish',
-    //     '--new-version',
-    //     version,
-    //     ...(releaseTag ? ['--tag', releaseTag] : []),
-    //     '--access',
-    //     'public',
-    //   ],
-    //   {
-    //     cwd: pkgRoot,
-    //     stdio: 'pipe',
-    //   },
-    // );
+    await runIfNotDry(
+      'yarn',
+      [
+        'publish',
+        '--new-version',
+        version,
+        ...(releaseTag ? ['--tag', releaseTag] : []),
+        '--access',
+        'public',
+      ],
+      {
+        cwd: pkgRoot,
+        stdio: 'pipe',
+      },
+    );
     console.log(chalk.green(`Successfully published ${pkgName}@${version}`));
   } catch (e) {
     if (e.stderr.match(/previously published/)) {
