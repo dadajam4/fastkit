@@ -1,4 +1,5 @@
 module.exports = {
+  syntax: 'css-in-js',
   plugins: [
     'stylelint-scss'
   ],
@@ -19,5 +20,6 @@ module.exports = {
     '/coverage/',
     '/dist/',
     '**/dist/',
+    '**/*.ts'
   ],
 };

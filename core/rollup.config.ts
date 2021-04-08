@@ -7,6 +7,9 @@ import json from '@rollup/plugin-json';
 import { ROOT_DIR, PACKAGES_DIR, getPackage } from './utils';
 import { BuildOptions, BuildType } from './schemes';
 import { Options as TerserOptions } from 'rollup-plugin-terser';
+import { babel } from '@rollup/plugin-babel';
+import { rawStylesPlugin } from '../plugins/raw-styles';
+// import styles from 'rollup-plugin-styles';
 
 const TARGET: string | undefined = process.env.TARGET;
 const COMMIT: string | undefined = process.env.COMMIT;
@@ -97,6 +100,7 @@ function createConfig(
   output: NormalizedOutputOptions,
   plugins: Plugin[] = [],
 ): RollupOptions {
+  const _plugins = [...plugins];
   if (!output) {
     console.log(require('chalk').yellow(`invalid format: "${format}"`));
     process.exit(1);
@@ -128,7 +132,13 @@ function createConfig(
         declaration: shouldEmitDeclarations,
         declarationMap: shouldEmitDeclarations,
       },
-      exclude: ['**/__tests__', 'test-dts', 'scripts'],
+      exclude: [
+        '**/__tests__',
+        'test-dts',
+        'core',
+        'plugins',
+        'vite.config.ts',
+      ],
     },
   });
   // we only need to check TS and generate declarations once for each build.
@@ -171,6 +181,36 @@ function createConfig(
 
   const externalRe =
     isGlobalBuild || isBrowserESMBuild ? /^(vue)/ : /^(vue|@fastkit)/;
+
+  // if (packageOptions.styles) {
+  //   _plugins.push(styles(packageOptions.styles));
+  // }
+  if (packageOptions.legacy && isGlobalBuild) {
+    _plugins.push(
+      babel({
+        babelrc: false,
+        presets: [
+          [
+            '@babel/preset-env',
+            {
+              useBuiltIns: false,
+              targets: {
+                browsers: ['IE 11'],
+              },
+            },
+          ],
+        ],
+        extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', 'ts', 'tsx'],
+        babelHelpers: 'bundled',
+        plugins: [require('@babel/plugin-transform-arrow-functions')],
+      }),
+    );
+  }
+
+  if (packageOptions.rawStyles) {
+    _plugins.push(rawStylesPlugin(packageOptions.rawStyles));
+  }
+
   return {
     input: resolve(entryFile),
     // Global and Browser ESM builds inlines everything so that they can be
@@ -194,7 +234,7 @@ function createConfig(
         isNodeBuild,
       ),
       ...nodePlugins,
-      ...plugins,
+      ..._plugins,
     ],
     output,
     onwarn: (msg, warn) => {

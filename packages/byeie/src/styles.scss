@@ -1,0 +1,140 @@
+.byeie {
+  &,
+  * {
+    &,
+    &::before,
+    &::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box !important;
+      font: inherit;
+      color: inherit;
+      line-height: inherit;
+    }
+  }
+
+  position: fixed;
+  z-index: 3276700;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+  opacity: 0;
+  color: #000 !important;
+  animation: byeie-fade 0.5s ease 0s 1 normal forwards;
+  font-family: 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', 'メイリオ', 'Meiryo', 'ＭＳ ゴシック', sans-serif !important;
+
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, .7);
+  }
+
+  &__body {
+    position: absolute;
+    border-radius: 10px;
+    background: #fff;
+    top: 50%;
+    left: 50%;
+    width: 640px;
+    max-width: 90vw;
+    transform: translate(-50%, -50%);
+    padding: 40px 32px;
+    box-shadow: 1px 1px 7px rgba(0, 0, 0, .3);
+  }
+
+  &__title {
+    font-size: 18px !important;
+    margin: 0 0 20px !important;
+  }
+
+  &__lead {
+    margin: 10px 0 !important;
+    font-size: 13px !important;
+  }
+
+  &__note {
+    display: block;
+    font-size: 12px !important;
+    margin: 10px 0 !important;
+  }
+
+  &__installation {
+    margin-top: 25px;
+
+    &__title {
+      margin: 15px 0 10px !important;
+      font-size: 14px !important;
+    }
+
+    &__list {
+      margin-top: 10px !important;
+      list-style: disc none inside !important;
+    }
+
+    &__item {
+      margin-top: 10px !important;
+      list-style: inherit !important;
+
+      &__link {
+        color: #006a86 !important;
+
+        &,
+        &:hover,
+        &:focus {
+          text-decoration: underline !important;
+        }
+      }
+    }
+  }
+
+  &__close {
+    $size: 32px;
+
+    position: absolute;
+    appearance: none;
+    background: transparent !important;
+    outline: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    width: $size + 1px !important;
+    height: $size + 1px !important;
+    color: #000 !important;
+    transform: rotate(45deg);
+    right: 5px;
+    top: 5px;
+    cursor: pointer !important;
+
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      background: currentColor;
+    }
+
+    &::before {
+      top: $size / 2;
+      left: 0;
+      right: 0;
+      height: 1px;
+    }
+
+    &::after {
+      left: $size / 2;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+    }
+  }
+}
+
+@keyframes byeie-fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}

@@ -39,7 +39,12 @@ export function $<K extends keyof HTMLElementTagNameMap>(
       ) => any;
     };
   } = {},
-  children?: string | HTMLElement | (string | HTMLElement)[],
+  children?:
+    | undefined
+    | null
+    | string
+    | HTMLElement
+    | (undefined | null | string | HTMLElement)[],
 ): HTMLElementTagNameMap[K] {
   data = data || {};
 
@@ -77,6 +82,7 @@ export function $<K extends keyof HTMLElementTagNameMap>(
 
     for (let i = 0, l = children.length; i < l; i++) {
       const child = children[i];
+      if (child == null) continue;
       if (typeof child === 'string') {
         $el.innerHTML = child;
       } else if (child instanceof HTMLElement) {
@@ -86,4 +92,41 @@ export function $<K extends keyof HTMLElementTagNameMap>(
   }
 
   return $el;
+}
+
+export function dynamicStyle(css: string) {
+  const head = document.head || document.getElementsByTagName('head')[0];
+  const style = document.createElement('style');
+  head.appendChild(style);
+  style.appendChild(document.createTextNode(css));
+}
+
+export function currentScript(): HTMLScriptElement | null {
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  if ('currentScript' in document) {
+    return document.currentScript as HTMLScriptElement;
+  }
+
+  try {
+    throw new Error();
+  } catch (err) {
+    const src = (/at [^(\r\n]*\((.*):.+:.+\)$/i.exec(err.stack) || [])[1];
+    if (src) {
+      const scripts = (document as Document).getElementsByTagName('script');
+      for (const i in scripts) {
+        if (scripts[i].src == src) {
+          return scripts[i];
+        }
+      }
+    }
+    return null;
+  }
+}
+
+export function isIE() {
+  const ua = navigator.userAgent.toLowerCase();
+  return ua.indexOf('msie') !== -1 || ua.indexOf('trident') !== -1;
 }

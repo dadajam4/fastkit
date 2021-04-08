@@ -5,11 +5,14 @@
   "buildOptions": {
     "name": "BrowserWarn",
     "formats": [
-      "esm-bundler",
-      "cjs",
-      "global",
-      "esm-browser"
-    ]
+      "global"
+    ],
+    "legacy": true,
+    "rawStyles": {
+      "autoprefixer": {
+        "overrideBrowserslist": ["IE 11"]
+      }
+    }
   },
   "main": "index.js",
   "module": "dist/byeie.esm-bundler.js",

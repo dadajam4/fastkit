@@ -1,9 +1,13 @@
 import { byeie } from './byeie';
 
 try {
-  byeie();
+  if (__GLOBAL__) {
+    byeie();
+  }
 } catch (err) {
   if (typeof console !== 'undefined' && typeof console.warn === 'function') {
     console.warn(err);
   }
 }
+
+export default byeie;

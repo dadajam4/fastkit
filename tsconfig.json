@@ -18,14 +18,16 @@
     "types": ["vite/client", "jest", "node"],
     "rootDir": ".",
     "paths": {
+      "~/*": ["packages/playground/src/*"],
       "@fastkit/*": ["packages/*/src"],
       "fastkit/*": ["packages/fastkit/src"],
-      "~/*": ["playground/playground/src"],
     }
   },
   "include": [
     "packages/global.d.ts",
     "packages/*/src",
-    "scripts"
+    "vite.config.ts",
+    "plugins",
+    "core"
   ]
 }

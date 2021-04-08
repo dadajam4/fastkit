@@ -1,118 +1,160 @@
-import { docReady, $ } from './utils';
+import { docReady, $, dynamicStyle, currentScript, isIE } from './utils';
 import { getBrowserLanguageDict } from './dict';
 import * as gotItStore from './store';
+import styles from './styles.scss!raw';
 
-interface RecommendedBrowser {
-  name: string;
-  href: string;
+const recommendedBrowsers = ['edge', 'chrome', 'firefox'] as const;
+
+export interface ByeieOptions {
+  deadline?: string | Date;
 }
 
-const recommendedBrowsers: RecommendedBrowser[] = [
-  {
-    name: 'Microsoft Edge',
-    href: 'https://www.microsoft.com/ja-jp/edge',
-  },
-  {
-    name: 'Google Chrome',
-    href: 'https://www.google.com/intl/ja_jp/chrome/',
-  },
-  {
-    name: 'Mozilla Firefox',
-    href: 'https://www.mozilla.org/firefox/',
-  },
-];
+function getOptions(opts: ByeieOptions = {}): ByeieOptions {
+  let { deadline } = opts;
+  if (!deadline) {
+    const script = currentScript();
+    if (script) {
+      const query = script.src.split('?')[1];
+      const tmp = query.split('&');
+      for (const i in tmp) {
+        const row = tmp[i].split('=');
+        const key = row[0];
+        const value = row[1];
+        if (key === 'deadline' && value) {
+          deadline = value;
+        }
+      }
+    }
+  }
 
-export function byeie() {
+  if (deadline === 'recommended') {
+    // Microsoft Teams以外の Microsoft 365 アプリおよびサービスにおける IE 11 のサポート終了日
+    // {@link: https://blogs.windows.com/japan/2020/08/18/microsoft-365-apps-say-farewell-to-internet-explorer-11/}
+    deadline = '2021/08/17';
+  }
+
+  return { deadline };
+}
+
+export function byeie(opts?: ByeieOptions) {
   if (!__BROWSER__) return;
-  if (gotItStore.get()) return;
+
+  if (!isIE()) return;
+
+  const { deadline } = getOptions(opts);
+  if (!deadline) {
+    return;
+  }
+  const dt = deadline instanceof Date ? deadline : new Date(deadline);
+  const expired = Date.now() >= dt.getTime();
+  if (!expired && gotItStore.get()) return;
 
   function main() {
+    dynamicStyle(styles);
+
     const dict = getBrowserLanguageDict();
+
+    const formatedDeadline = dt.toLocaleDateString(dict.$lang, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    const headerDict = expired ? dict.expired : dict;
 
     const $el = $(
       'div',
       {
-        className: 'fk-bw',
+        className: 'byeie',
       },
       [
         $('div', {
-          className: 'fk-bw__backdrop',
-          on: {
-            click: close,
-          },
+          className: 'byeie__backdrop',
+          on: expired
+            ? {}
+            : {
+                click: close,
+              },
         }),
         $(
           'div',
           {
-            className: 'fk-bw__body',
+            className: 'byeie__body',
           },
           [
             $(
               'h2',
               {
-                className: 'fk-bw__title',
+                className: 'byeie__title',
               },
-              dict.title,
+              headerDict.title.replace('<%- deadline %>', formatedDeadline),
             ),
             $(
               'p',
               {
-                className: 'fk-bw__lead',
+                className: 'byeie__lead',
               },
-              dict.lead,
+              headerDict.lead,
             ),
             $(
               'small',
               {
-                className: 'fk-bw__note',
+                className: 'byeie__note',
               },
               dict.note,
             ),
             $(
               'div',
               {
-                className: 'fk-bw__installation',
+                className: 'byeie__installation',
               },
               [
                 $(
                   'h3',
                   {
-                    className: 'fk-bw__installation__title',
+                    className: 'byeie__installation__title',
                   },
                   dict.installation.title,
                 ),
                 $(
                   'ul',
                   {
-                    className: 'fk-bw__installation__list',
+                    className: 'byeie__installation__list',
                   },
                   recommendedBrowsers.map((browser) => {
+                    const _dict = dict.browser[browser];
                     return $(
                       'li',
                       {
-                        className: 'fk-bw__installation__item',
+                        className: 'byeie__installation__item',
                       },
-                      $('a', {
-                        className: 'fk-bw__installation__item__link',
-                        attrs: {
-                          href: browser.href,
-                          target: '_blank',
+                      $(
+                        'a',
+                        {
+                          className: 'byeie__installation__item__link',
+                          attrs: {
+                            href: _dict.href,
+                            target: '_blank',
+                          },
                         },
-                      }),
+                        _dict.name,
+                      ),
                     );
                   }),
                 ),
               ],
             ),
-            $('button', {
-              className: 'fk-bw__close',
-              attrs: {
-                type: 'button',
-              },
-              on: {
-                click: gotIt,
-              },
-            }),
+            expired
+              ? null
+              : $('button', {
+                  className: 'byeie__close',
+                  attrs: {
+                    type: 'button',
+                  },
+                  on: {
+                    click: gotIt,
+                  },
+                }),
           ],
         ),
       ],

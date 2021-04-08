@@ -1,3 +1,5 @@
+import { Options as AutoprefixerOptions } from 'autoprefixer';
+
 export type BuildType =
   | 'esm-bundler'
   | 'esm-browser'
@@ -13,6 +15,11 @@ export interface BuildOptions {
   prod?: boolean;
   name?: string;
   enableNonBrowserBranches?: boolean;
+  // styles?: StylesOptions;
+  rawStyles?: {
+    autoprefixer?: AutoprefixerOptions;
+  };
+  legacy?: boolean;
 }
 
 export interface FastkitPackage {

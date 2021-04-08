@@ -23,7 +23,42 @@ export const PACKAGES_DIR = new PathString(ROOT_DIR.join('packages'));
 export function getPackage(
   packagePath = ROOT_DIR.join('package.json'),
 ): FastkitPackage {
-  return require(packagePath);
+  try {
+    return require(packagePath);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function findPackage(
+  from: string,
+): Promise<FastkitPackage | undefined> {
+  let result: FastkitPackage | undefined;
+
+  if (await pathExists(from, 'file')) {
+    from = path.dirname(from);
+  }
+
+  while (true) {
+    const target = path.join(from, 'package.json');
+    try {
+      const pkg = require(target);
+      if (pkg) {
+        result = pkg;
+        break;
+      }
+    } catch (err) {
+      if (!err.message.startsWith('Cannot find module')) {
+        throw err;
+      }
+    }
+    const next = path.dirname(from);
+    if (next === from) {
+      break;
+    }
+    from = next;
+  }
+  return result;
 }
 
 export async function pathExists(filepath: string, type?: 'file' | 'dir') {
@@ -45,9 +80,13 @@ export const targets = (exports.targets = fs
       return false;
     }
 
-    const pkg = require(PACKAGES_DIR.join(f, 'package.json'));
-    if (pkg.private && !pkg.buildOptions) {
-      return false;
+    try {
+      const pkg = require(PACKAGES_DIR.join(f, 'package.json'));
+      if (pkg.private && !pkg.buildOptions) {
+        return false;
+      }
+    } catch (err) {
+      throw err;
     }
     return true;
   }));
