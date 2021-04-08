@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/tiny-logger",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "@fastkit/tiny-logger",
   "main": "index.js",
   "module": "dist/tiny-logger.esm-bundler.js",

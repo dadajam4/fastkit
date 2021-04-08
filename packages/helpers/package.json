@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/helpers",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "@fastkit/helpers",
   "main": "index.js",
   "module": "dist/helpers.esm-bundler.js",

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@fastkit/playground",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "@fastkit/playground",
   "main": "index.js",
   "module": "dist/playground.esm-bundler.js",

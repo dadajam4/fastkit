@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/byeie",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "@fastkit/byeie",
   "buildOptions": {
     "name": "BrowserWarn",
@@ -10,7 +10,9 @@
     "legacy": true,
     "rawStyles": {
       "autoprefixer": {
-        "overrideBrowserslist": ["IE 11"]
+        "overrideBrowserslist": [
+          "IE 11"
+        ]
       }
     }
   },
