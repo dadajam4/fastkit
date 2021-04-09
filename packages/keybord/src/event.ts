@@ -1,7 +1,5 @@
 import { KeyType, Key } from './schemes';
 
-const IN_DOCUMENT = typeof document !== 'undefined';
-
 export type KBEventName = 'keydown' | 'keypress' | 'keyup';
 
 export interface KBEvent extends KeyboardEvent {
@@ -43,7 +41,7 @@ function createSetting(rawKBSettings: RawKBSettings): ComputedKBSetting[] {
     : [rawKBSettings];
   const computedSettings: ComputedKBSetting[] = [];
 
-  if (!IN_DOCUMENT) return computedSettings;
+  if (!__BROWSER__) return computedSettings;
 
   _settings.forEach((_setting) => {
     const { target = document, event = 'keydown', capture = false } = _setting;

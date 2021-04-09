@@ -32,5 +32,14 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/fastkit#readme"
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/fastkit#readme",
+  "dependencies": {
+    "@fastkit/body-scroll-lock": "0.0.0",
+    "@fastkit/ev": "0.0.0",
+    "@fastkit/helpers": "0.0.0",
+    "@fastkit/keybord": "0.0.0",
+    "@fastkit/scroller": "0.0.0",
+    "@fastkit/tiny-logger": "0.0.0",
+    "@fastkit/visibility": "0.0.0"
+  }
 }

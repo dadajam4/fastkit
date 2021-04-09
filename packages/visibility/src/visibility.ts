@@ -1,4 +1,4 @@
-import { HAS_DOCUMENT, HIDDEN, VISIBILITY_CHANGE } from './constants';
+import { HIDDEN, VISIBILITY_CHANGE } from './constants';
 
 export type VisibilityTypedCallback = (event: Event) => any;
 export type VisibilityStateListener = (
@@ -16,7 +16,7 @@ export type VisibilityState = keyof VisibilityTypedCallbacks;
 const states: VisibilityState[] = ['visible', 'hidden'];
 
 function getVisibilityState(): VisibilityState {
-  if (!HAS_DOCUMENT) return 'hidden';
+  if (!__BROWSER__) return 'hidden';
   return document[HIDDEN] ? 'hidden' : 'visible';
 }
 
@@ -40,7 +40,7 @@ export class VisibilityManager {
   }
 
   constructor() {
-    HAS_DOCUMENT &&
+    if (__BROWSER__) {
       document.addEventListener(
         VISIBILITY_CHANGE,
         (e) => {
@@ -48,6 +48,7 @@ export class VisibilityManager {
         },
         false,
       );
+    }
   }
 
   private _setState(state: VisibilityState, event: Event): void {

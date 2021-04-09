@@ -1,9 +1,7 @@
 let _hidden = 'hidden';
 let _visibilityChange = 'visibilitychange';
 
-export const HAS_DOCUMENT = typeof document !== 'undefined';
-
-if (HAS_DOCUMENT) {
+if (__BROWSER__) {
   if (document.hidden !== undefined) {
     _hidden = 'hidden';
     _visibilityChange = 'visibilitychange';

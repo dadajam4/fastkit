@@ -14,12 +14,19 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "vue"
   ],
   "author": "dadajam4",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-scroller#readme"
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-scroller#readme",
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "dependencies": {
+    "@fastkit/scroller": "0.0.0"
+  }
 }

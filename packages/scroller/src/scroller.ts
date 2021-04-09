@@ -3,7 +3,8 @@ import {
   visibilityManager,
   VisibilityStateListener,
 } from '@fastkit/visibility';
-import { HAS_WINDOW, isDocumentElement, isBodyElement, error } from './util';
+import { isDocumentElement, isBodyElement } from './util';
+import { logger } from './logger';
 
 import { enableScroll, disableScroll } from './prevent-scroll';
 
@@ -609,7 +610,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     const convertedSetting: Partial<ScrollerSetting> =
       typeof settingOrElementOrQueryString === 'string' ||
       settingOrElementOrQueryString === null ||
-      (HAS_WINDOW && settingOrElementOrQueryString instanceof Element)
+      (__BROWSER__ && settingOrElementOrQueryString instanceof Element)
         ? (settingOrElementOrQueryString = {
             el: <Element | string>settingOrElementOrQueryString,
           })
@@ -648,7 +649,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     this._lastDirection = this._lastAxis === 'y' ? 'top' : 'left';
 
     // for SSR
-    if (!HAS_WINDOW) return;
+    if (!__BROWSER__) return;
 
     // Add Visibility Listener
     visibilityManager.change(this._visibilityListener);
@@ -664,8 +665,8 @@ export class Scroller extends EV<ScrollerEventMap> {
    */
   setElement(el?: Element | string | null) {
     if (el === null) return;
-    if (!HAS_WINDOW)
-      error('Element can be set only when it is under DOM context.');
+    if (!__BROWSER__)
+      logger.error('Element can be set only when it is under DOM context.');
 
     this.stop();
 
@@ -675,7 +676,11 @@ export class Scroller extends EV<ScrollerEventMap> {
     } else {
       _el = el || document.scrollingElement;
     }
-    if (!_el) throw error('missing scrolling element ' + el);
+    if (!_el) {
+      const message = 'missing scrolling element';
+      logger.error(message, el);
+      throw new Error(message);
+    }
 
     this._el = _el;
     this._isDocumentElement = isDocumentElement(_el);
@@ -1032,7 +1037,11 @@ export class Scroller extends EV<ScrollerEventMap> {
   }
 
   private _checkDestroyed(): void {
-    if (this.isDestroyed) throw error('already destroyed.');
+    if (this.isDestroyed) {
+      const message = 'already destroyed.';
+      logger.error(message);
+      throw new Error(message);
+    }
   }
 
   private _update(width?: number, height?: number): void {
@@ -1090,7 +1099,7 @@ export class Scroller extends EV<ScrollerEventMap> {
   }
 
   private _startScrollSizeOvserver() {
-    if (!HAS_WINDOW) return;
+    if (!__BROWSER__) return;
 
     this._stopScrollSizeOvserver();
 
@@ -1349,12 +1358,22 @@ export class Scroller extends EV<ScrollerEventMap> {
     }
   }
 
+  private _checkElement() {
+    const { _el } = this;
+    if (!_el) {
+      const message = 'missing element';
+      logger.error(message);
+      throw new Error(message);
+    }
+    return _el;
+  }
+
   private _createMergedScrollOptions(
     source?: ScrollerScrollOptions,
   ): ScrollOptions {
-    if (!this._el) throw error('missing element');
+    const el = this._checkElement();
     const merged: ScrollOptions = {
-      container: this._el,
+      container: el,
       ...this.scrollSettingsDefaults,
       ...source,
     };
@@ -1364,9 +1383,9 @@ export class Scroller extends EV<ScrollerEventMap> {
   private _createMergedScrollToElementOptions(
     source?: ScrollerScrollToElementOptions,
   ): ScrollToElementOptions {
-    if (!this._el) throw error('missing element');
+    const el = this._checkElement();
     const merged: ScrollToElementOptions = {
-      container: this._el,
+      container: el,
       ...this.scrollToElementSettingsDefaults,
       ...source,
     };
@@ -1394,13 +1413,12 @@ export class Scroller extends EV<ScrollerEventMap> {
     }
   }
   private _scrollEnable() {
-    if (!this._el) throw error('missing element');
-    enableScroll(this._el);
+    enableScroll(this._checkElement());
   }
 
   private _scrollDisable() {
-    if (!this._el) throw error('missing element');
+    const el = this._checkElement();
     this.cancel();
-    disableScroll(this._el);
+    disableScroll(el);
   }
 }
