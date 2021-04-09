@@ -1,4 +1,4 @@
-import { AvairableLanguage, getAvairableBrowserLanguage } from './language';
+import { AvairableLanguage, getAvairableLanguage } from './language';
 
 export interface Dict {
   $lang: AvairableLanguage;
@@ -156,8 +156,8 @@ export const dictMap: Record<AvairableLanguage, Omit<Dict, '$lang'>> = {
   },
 };
 
-export function getBrowserLanguageDict(): Dict {
-  const $lang = getAvairableBrowserLanguage();
+export function getLanguageDict(): Dict {
+  const $lang = getAvairableLanguage();
   return {
     $lang,
     ...dictMap[$lang],

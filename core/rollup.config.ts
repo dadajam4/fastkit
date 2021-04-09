@@ -193,7 +193,9 @@ function createConfig(
           [
             '@babel/preset-env',
             {
-              useBuiltIns: false,
+              useBuiltIns: 'usage',
+              corejs: 3,
+              ignoreBrowserslistConfig: true,
               targets: {
                 browsers: ['IE 11'],
               },
@@ -202,7 +204,11 @@ function createConfig(
         ],
         extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', 'ts', 'tsx'],
         babelHelpers: 'bundled',
-        plugins: [require('@babel/plugin-transform-arrow-functions')],
+        plugins: [
+          require('@babel/plugin-transform-arrow-functions'),
+          require('@babel/plugin-proposal-class-properties'),
+          require('@babel/plugin-transform-template-literals'),
+        ],
       }),
     );
   }

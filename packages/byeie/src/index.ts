@@ -5,8 +5,8 @@ try {
     byeie();
   }
 } catch (err) {
-  if (typeof console !== 'undefined' && typeof console.warn === 'function') {
-    console.warn(err);
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(err);
   }
 }
 

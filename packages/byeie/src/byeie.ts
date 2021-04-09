@@ -1,9 +1,20 @@
 import { docReady, $, dynamicStyle, currentScript, isIE } from './utils';
-import { getBrowserLanguageDict } from './dict';
+import { getLanguageDict } from './dict';
 import * as gotItStore from './store';
 import styles from './styles.scss!raw';
 
 const recommendedBrowsers = ['edge', 'chrome', 'firefox'] as const;
+
+/**
+ * deadline Alias
+ * {@link https://blogs.windows.com/japan/2020/08/18/microsoft-365-apps-say-farewell-to-internet-explorer-11/}
+ */
+const DEADLINE_ALIASES: { [key: string]: string } = {
+  // End of support for IE 11 in Microsoft Teams web apps
+  'microsoft-teams-web': '2020-11-30',
+  // End of support date for IE 11 for Microsoft 365 apps and services other than Microsoft Teams
+  'microsoft-365-pre': '2021-08-17',
+};
 
 export interface ByeieOptions {
   deadline?: string | Date;
@@ -14,7 +25,7 @@ function getOptions(opts: ByeieOptions = {}): ByeieOptions {
   if (!deadline) {
     const script = currentScript();
     if (script) {
-      const query = script.src.split('?')[1];
+      const query = script.src.split('?')[1] || '';
       const tmp = query.split('&');
       for (const i in tmp) {
         const row = tmp[i].split('=');
@@ -27,10 +38,14 @@ function getOptions(opts: ByeieOptions = {}): ByeieOptions {
     }
   }
 
-  if (deadline === 'recommended') {
-    // Microsoft Teams以外の Microsoft 365 アプリおよびサービスにおける IE 11 のサポート終了日
-    // {@link: https://blogs.windows.com/japan/2020/08/18/microsoft-365-apps-say-farewell-to-internet-explorer-11/}
-    deadline = '2021/08/17';
+  if (typeof deadline === 'string') {
+    const aliasValue = DEADLINE_ALIASES[deadline];
+    if (aliasValue) {
+      deadline = aliasValue;
+    }
+    if (deadline === 'recommended') {
+      deadline = '2021/08/17';
+    }
   }
 
   return { deadline };
@@ -52,7 +67,7 @@ export function byeie(opts?: ByeieOptions) {
   function main() {
     dynamicStyle(styles);
 
-    const dict = getBrowserLanguageDict();
+    const dict = getLanguageDict();
 
     const formatedDeadline = dt.toLocaleDateString(dict.$lang, {
       year: 'numeric',
