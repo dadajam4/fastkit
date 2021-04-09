@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/ev",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "@fastkit/ev",
   "main": "index.js",
   "module": "dist/ev.esm-bundler.js",
