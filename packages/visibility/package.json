@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/visibility",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "@fastkit/visibility",
   "main": "index.js",
   "module": "dist/visibility.esm-bundler.js",
