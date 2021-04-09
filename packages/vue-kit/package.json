@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-kit",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "vue-kit",
   "main": "index.js",
   "module": "dist/vue-kit.esm-bundler.js",
@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-kit#readme",
   "dependencies": {
-    "@fastkit/vue-scroller": "0.1.3",
-    "@fastkit/vue-utils": "0.1.3"
+    "@fastkit/vue-scroller": "0.1.4",
+    "@fastkit/vue-utils": "0.1.4"
   }
 }

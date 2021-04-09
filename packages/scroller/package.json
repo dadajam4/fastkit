@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/scroller",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "@fastkit/scroller",
   "main": "index.js",
   "module": "dist/scroller.esm-bundler.js",
@@ -23,9 +23,9 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/scroller#readme",
   "dependencies": {
-    "@fastkit/ev": "0.1.3",
-    "@fastkit/visibility": "0.1.3",
-    "@fastkit/tiny-logger": "0.1.3",
+    "@fastkit/ev": "0.1.4",
+    "@fastkit/visibility": "0.1.4",
+    "@fastkit/tiny-logger": "0.1.4",
     "bezier-easing": "^2.1.0"
   }
 }

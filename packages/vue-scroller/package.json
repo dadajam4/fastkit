@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-scroller",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "@fastkit/vue-scroller",
   "main": "index.js",
   "module": "dist/vue-scroller.esm-bundler.js",
@@ -27,6 +27,6 @@
     "vue": "^3.0.0"
   },
   "dependencies": {
-    "@fastkit/scroller": "0.1.3"
+    "@fastkit/scroller": "0.1.4"
   }
 }
