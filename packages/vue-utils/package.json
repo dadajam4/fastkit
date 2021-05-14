@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "@fastkit/vue-utils",
   "buildOptions": {
     "name": "VueUtils"
@@ -27,14 +27,14 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-utils#readme",
   "peerDependencies": {
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.0"
+    "vue": "^3.0.11",
+    "vue-router": "^4.0.6"
   },
   "dependencies": {
-    "@fastkit/body-scroll-lock": "0.1.4",
-    "@fastkit/visibility": "0.1.4",
-    "@fastkit/keybord": "0.1.4",
-    "@fastkit/helpers": "0.1.4",
-    "@fastkit/tiny-logger": "0.1.4"
+    "@fastkit/body-scroll-lock": "0.1.5",
+    "@fastkit/visibility": "0.1.5",
+    "@fastkit/keybord": "0.1.5",
+    "@fastkit/helpers": "0.1.5",
+    "@fastkit/tiny-logger": "0.1.5"
   }
 }

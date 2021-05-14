@@ -1,11 +1,11 @@
 {
   "name": "@fastkit/vue-color-scheme",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "@fastkit/vue-color-scheme",
   "buildOptions": {
     "name": "VueColorScheme"
   },
- "main": "index.js",
+  "main": "index.js",
   "module": "dist/vue-color-scheme.esm-bundler.js",
   "files": [
     "index.js",
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-color-scheme#readme",
   "dependencies": {
-    "@fastkit/color-scheme": "0.1.4",
-    "@fastkit/tiny-logger": "0.1.4"
+    "@fastkit/color-scheme": "0.1.5",
+    "@fastkit/tiny-logger": "0.1.5"
   }
 }

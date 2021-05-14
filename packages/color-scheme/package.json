@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color-scheme",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "@fastkit/color-scheme",
   "buildOptions": {
     "name": "ColorScheme",
@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/color-scheme#readme",
   "dependencies": {
-    "@fastkit/node-util": "0.1.4",
-    "@fastkit/color": "0.1.4",
-    "@fastkit/tiny-logger": "0.1.4",
+    "@fastkit/node-util": "0.1.5",
+    "@fastkit/color": "0.1.5",
+    "@fastkit/tiny-logger": "0.1.5",
     "fs-extra": "^9.1.0",
     "eta": "^1.12.1"
   }
