@@ -173,10 +173,10 @@ async function main() {
 
 async function updateVersions(version: string) {
   // 1. update root package.json
-  await updatePackage(path.resolve(__dirname, '..'), version);
+  await updatePackage(ROOT_DIR.toString(), version);
   // 2. update all packages
   for (const pkg of packages) {
-    await updatePackage(pkg, version);
+    await updatePackage(PACKAGES_DIR.join(pkg), version);
   }
 }
 
