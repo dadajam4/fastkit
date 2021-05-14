@@ -107,11 +107,6 @@ async function main() {
     return;
   }
 
-  console.log('targetVersion', targetVersion);
-  if (process) {
-    process.exit();
-  }
-
   // run tests before release
   step('\nRunning tests...');
   if (!skipTests && !isDryRun) {
