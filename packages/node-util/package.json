@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/node-util",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "@fastkit/node-util",
   "buildOptions": {
     "name": "NodeUtil",
