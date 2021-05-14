@@ -46,6 +46,7 @@ module.exports = {
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         'vue/one-component-per-file': 'off',
         'vue/require-explicit-emits': 'off',
+        'vue/require-default-prop': 'off',
 
         'prettier/prettier': [
           'error',

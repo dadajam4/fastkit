@@ -1,0 +1,159 @@
+/* stylelint-disable */
+<%~ it.scssValues %>
+
+@function theme($theme) {
+  $result: map-get($themes, $theme);
+  @if ($result == null) {
+    @error 'missing theme name "' + $theme + '"';
+  }
+  @return $result;
+}
+
+@function palette-color($palette-name) {
+  @return var(--palette-#{$palette-name});
+}
+
+@mixin palette-background($palette-name) {
+  background: palette-color($palette-name);
+}
+
+@mixin palette-text($palette-name) {
+  color: palette-color($palette-name);
+}
+
+@mixin palette-border($palette-name, $direction: '') {
+  $appends: if($direction == '', '', '-' + $direction);
+
+  border#{$appends}-color: palette-color($palette-name);
+}
+
+@mixin dump-theme-foundation {
+  @include palette-background('background');
+  @include palette-text('default');
+
+  a {
+    @include palette-text('link');
+  }
+}
+
+@mixin dump-color-scheme($with-foundation: false) {
+  $default-resolved: false;
+  $palette: null;
+
+  @each $theme-name, $theme in $themes {
+    $selector: '.' + $theme-name + '-theme';
+    $selector: if($default-resolved, $selector, ':root, ' + $selector);
+    $default-resolved: true;
+
+    $palette: map-get($theme, palette);
+    $scope-defaults: map-get($theme, scope-defaults);
+    $scopes: map-get($theme, scopes);
+
+    #{$selector} {
+      @if $with-foundation {
+        @include dump-theme-foundation;
+      }
+
+      @each $palette-name, $value in $palette {
+        $key: "--palette-" + $palette-name;
+        #{$key}: #{$value};
+      }
+
+      $default-scope: map-get($scope-defaults, default);
+      @if ($default-scope != null) {
+        @each $key, $value in $default-scope {
+          --#{$key}-color: #{$value};
+        }
+      }
+
+      @each $scope-name, $scope in $scopes {
+        $selector: '.' + $scope-name;
+        #{$selector} {
+          @each $key, $value in $scope {
+            @if $key != 'name' {
+              --#{$key}-color: #{$value};
+            }
+          }
+        }
+      }
+
+      $disabled-scope: map-get($scope-defaults, disabled);
+      @if ($disabled-scope != null) {
+        [disabled], .disabled {
+          @each $key, $value in $disabled-scope {
+            --#{$key}-color: #{$value};
+          }
+        }
+      }
+    }
+  }
+
+  .contained {
+    position: relative;
+    background-color: var(--main-color);
+    border-color: var(--border-color);
+    color: var(--text-color);
+
+    &.clickable {
+      box-shadow: 0 1px 1px var(--shadow-color);
+    }
+
+    &.clickable:hover,
+    &:focus {
+      background-color: var(--focus-color, var(--main-color));
+      border-color: var(--focusBorder-color, var(--border-color));
+      color: var(--focusText-color, var(--text-color));
+    }
+
+    &.clickable:focus {
+      box-shadow: 0 1px 1px var(--shadow-color), 0 1px 3px 2px var(--focusShadow-color);
+    }
+
+    &.clickable:active {
+      background-color: var(--active-color, var(--focus-color, var(--main-color)));
+      border-color: var(--activeBorder-color, var(--focusBorder-color, var(--border-color)));
+      color: var(--activeText-color, var(--focusText-color, var(--text-color)));
+    }
+  }
+
+  .outlined,
+  .plain {
+    position: relative;
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--outlineText-color, var(--main-color));
+
+    &.clickable:hover,
+    &:focus {
+      background-color: var(--light-color);
+    }
+
+    &.clickable:active {
+      background-color: var(--deep-color);
+    }
+  }
+
+  .outlined {
+    border-color: var(--outlineBorder-color, var(--main-color));
+
+    &.clickable:focus {
+      box-shadow: 0 1px 3px 1px var(--focusShadow-color);
+    }
+  }
+
+  @each $palette-name, $value in $palette {
+    $_value: palette-color($palette-name);
+
+    .#{$palette-name + '-background'} {
+      background: $_value;
+    }
+
+    .#{$palette-name + '-text'} {
+      color: $_value;
+    }
+
+    .#{$palette-name + '-border'} {
+      border-color: $_value;
+    }
+  }
+}

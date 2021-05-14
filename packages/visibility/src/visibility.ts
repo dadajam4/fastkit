@@ -11,9 +11,9 @@ interface VisibilityTypedCallbacks {
   hidden: VisibilityTypedCallback[];
 }
 
-export type VisibilityState = keyof VisibilityTypedCallbacks;
+const states = ['visible', 'hidden'] as const;
 
-const states: VisibilityState[] = ['visible', 'hidden'];
+export type VisibilityState = typeof states[number];
 
 function getVisibilityState(): VisibilityState {
   if (!__BROWSER__) return 'hidden';

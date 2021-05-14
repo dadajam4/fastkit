@@ -2,6 +2,9 @@
   "name": "@fastkit/ev",
   "version": "0.1.4",
   "description": "@fastkit/ev",
+  "buildOptions": {
+    "name": "EV"
+  },
   "main": "index.js",
   "module": "dist/ev.esm-bundler.js",
   "files": [

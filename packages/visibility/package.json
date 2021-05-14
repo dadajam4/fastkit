@@ -2,6 +2,9 @@
   "name": "@fastkit/visibility",
   "version": "0.1.4",
   "description": "@fastkit/visibility",
+  "buildOptions": {
+    "name": "visibilityManager"
+  },
   "main": "index.js",
   "module": "dist/visibility.esm-bundler.js",
   "files": [

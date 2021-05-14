@@ -1,0 +1,29 @@
+import { ColorSchemeInfo } from '@fastkit/color-scheme';
+
+export const THEME_NAMES = Object.freeze([<%~ it.list(it.scheme.themeNames) %>] as const);
+export type ColorThemeName = <%~ it.list(it.scheme.themeNames, ' | ') %>;
+
+export const PALETTE_NAMES = Object.freeze([<%~ it.list(it.scheme.paletteNames) %>] as const);
+export type ColorPaletteName = <%~ it.list(it.scheme.paletteNames, ' | ') %>;
+
+export const SCOPE_NAMES = Object.freeze([<%~ it.list(it.scheme.scopeNames) %>] as const);
+export type ColorScopeName = <%~ it.list(it.scheme.scopeNames, ' | ') %>;
+
+export const DEFAULT_THEME: ColorThemeName = '<%~ it.scheme.themeNames[0] %>';
+
+export const colorScheme: ColorSchemeInfo<ColorThemeName, ColorPaletteName, ColorScopeName> = Object.freeze({
+  defaultTheme: DEFAULT_THEME,
+  themeNames: THEME_NAMES,
+  paletteNames: PALETTE_NAMES,
+  scopeNames: SCOPE_NAMES,
+});
+
+export default colorScheme;
+
+declare module '@fastkit/color-scheme' {
+  export type GeneratedThemeName = ColorThemeName;
+
+  export type GeneratedScopeName = ColorScopeName;
+
+  export type GeneratedPaletteName = ColorPaletteName;
+}

@@ -122,6 +122,7 @@ async function build(target: string) {
   const buildOptions = pkg.buildOptions || {};
 
   const env = buildOptions.env || (devOnly ? 'development' : 'production');
+  const { tool } = buildOptions;
 
   await execa(
     'rollup',
@@ -136,6 +137,7 @@ async function build(target: string) {
         buildTypes ? `TYPES:true` : ``,
         prodOnly ? `PROD_ONLY:true` : ``,
         sourceMap ? `SOURCE_MAP:true` : ``,
+        tool ? `TOOL:true` : ``,
       ]
         .filter(Boolean)
         .join(','),
@@ -223,9 +225,8 @@ async function build(target: string) {
 
     const { Extractor, ExtractorConfig } = require('@microsoft/api-extractor');
     const extractorConfigPath = path.resolve(pkgDir, `api-extractor.json`);
-    const extractorConfig = ExtractorConfig.loadFileAndPrepare(
-      extractorConfigPath,
-    );
+    const extractorConfig =
+      ExtractorConfig.loadFileAndPrepare(extractorConfigPath);
     const extractorResult = Extractor.invoke(extractorConfig, {
       localBuild: true,
       showVerboseMessages: true,
@@ -241,6 +242,13 @@ async function build(target: string) {
       process.exitCode = 1;
     }
     await fs.remove(`${pkgDir}/dist/packages`);
+    if (tool) {
+      await fs.remove(`${pkgDir}/dist/tool/packages`);
+      const assetsDir = path.join(pkgDir, 'src/tool/assets');
+      if (await pathExists(assetsDir, 'dir')) {
+        await fs.copy(assetsDir, path.join(pkgDir, 'dist/tool/assets'));
+      }
+    }
   }
 
   async function moveDts() {

@@ -1,38 +1,29 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { PropType } from 'vue';
 
-type ObjectEmitsOptions = Record<string, ((...args: any[]) => any) | null>;
-type EmitsOptions = ObjectEmitsOptions | string[];
-type ExtractEmitEvents<T> = T extends Readonly<Array<infer V>>
-  ? {
-      [K in V & string as `on${Capitalize<K>}`]: PropType<
-        (...args: any[]) => void
-      >;
-    }
-  : T extends any[]
-  ? {
-      [K in T & string as `on${Capitalize<K>}`]: PropType<
-        (...args: any[]) => void
-      >;
-    }
-  : {} extends T
-  ? {}
-  : {
-      [K in keyof T & string as `on${Capitalize<K>}`]: T[K] extends (
-        ...args: infer Args
-      ) => any
-        ? PropType<(...args: Args) => void>
-        : PropType<(...args: any[]) => void>;
-    };
+export * from './emits';
+export * from './navigationable';
 
-/**
- * 以下がリリースされるまでのお茶濁し
- *
- * {@link https://github.com/vuejs/vue-next/pull/2164}
- */
-export function createEmitDefine<Options = EmitsOptions>(options: Options) {
+export const rawNumberPropType = [String, Number] as PropType<string | number>;
+
+export type RawNumberProp<D extends number | string | undefined = undefined> =
+  D extends undefined
+    ? {
+        type: PropType<string | number>;
+        required: true;
+      }
+    : {
+        type: PropType<string | number>;
+        default: string | number;
+      };
+
+export function rawNumberProp<
+  D extends number | string | undefined = undefined,
+  R = RawNumberProp<D>,
+>(defaultValue?: D): R {
   return {
-    props: (undefined as unknown) as ExtractEmitEvents<Options>,
-    emits: options,
-  };
+    type: rawNumberPropType,
+    required: defaultValue == null ? true : undefined,
+    default: defaultValue,
+  } as unknown as R;
 }

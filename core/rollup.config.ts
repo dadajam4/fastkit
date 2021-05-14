@@ -9,6 +9,8 @@ import { BuildOptions, BuildType } from './schemes';
 import { Options as TerserOptions } from 'rollup-plugin-terser';
 import { babel } from '@rollup/plugin-babel';
 import { rawStylesPlugin } from '../plugins/raw-styles';
+import vueJsx from '@vitejs/plugin-vue-jsx';
+import postcss from 'rollup-plugin-postcss';
 // import styles from 'rollup-plugin-styles';
 
 const TARGET: string | undefined = process.env.TARGET;
@@ -18,6 +20,7 @@ const FORMATS: string | undefined = process.env.FORMATS;
 // const TYPES: string | undefined = process.env.TYPES;
 const PROD_ONLY: string | undefined = process.env.PROD_ONLY;
 const SOURCE_MAP: string | undefined = process.env.SOURCE_MAP;
+const TOOL: string | undefined = process.env.TOOL;
 const __DEV__: string | undefined = process.env.__DEV__;
 
 if (!TARGET) {
@@ -56,19 +59,19 @@ const outputConfigs: Record<BuildType, NormalizedOutputOptions> = {
     file: resolve(`dist/${name}.global.js`),
     format: `iife`,
   },
-  // runtime-only builds, for main "fastkit" package only
-  'esm-bundler-runtime': {
-    file: resolve(`dist/${name}.runtime.esm-bundler.js`),
-    format: `es`,
-  },
-  'esm-browser-runtime': {
-    file: resolve(`dist/${name}.runtime.esm-browser.js`),
-    format: 'es',
-  },
-  'global-runtime': {
-    file: resolve(`dist/${name}.runtime.global.js`),
-    format: 'iife',
-  },
+  // // runtime-only builds, for main "fastkit" package only
+  // 'esm-bundler-runtime': {
+  //   file: resolve(`dist/${name}.runtime.esm-bundler.js`),
+  //   format: `es`,
+  // },
+  // 'esm-browser-runtime': {
+  //   file: resolve(`dist/${name}.runtime.esm-browser.js`),
+  //   format: 'es',
+  // },
+  // 'global-runtime': {
+  //   file: resolve(`dist/${name}.runtime.global.js`),
+  //   format: 'iife',
+  // },
 };
 
 const defaultFormats: BuildType[] = ['esm-bundler', 'cjs'];
@@ -87,10 +90,23 @@ if (NODE_ENV === 'production') {
     if (format === 'cjs') {
       packageConfigs.push(createProductionConfig(format));
     }
-    if (/^(global|esm-browser)(-runtime)?/.test(format)) {
+    if (/^(global|esm-browser)/.test(format)) {
       packageConfigs.push(createMinifiedConfig(format));
     }
   });
+}
+if (!!TOOL) {
+  packageConfigs.push(
+    createConfig(
+      'cjs',
+      {
+        file: resolve(`dist/tool/index.js`),
+        format: `cjs`,
+      },
+      [],
+      `src/tool/index.ts`,
+    ),
+  );
 }
 
 export default packageConfigs;
@@ -99,6 +115,7 @@ function createConfig(
   format: BuildType,
   output: NormalizedOutputOptions,
   plugins: Plugin[] = [],
+  entryFile = `src/index.ts`,
 ): RollupOptions {
   const _plugins = [...plugins];
   if (!output) {
@@ -138,15 +155,17 @@ function createConfig(
         'core',
         'plugins',
         'vite.config.ts',
+        'packages/playground',
       ],
     },
   });
+
   // we only need to check TS and generate declarations once for each build.
   // it also seems to run into weird issues when checking multiple times
   // during a single build.
   hasTSChecked = true;
 
-  const entryFile = /runtime$/.test(format) ? `src/runtime.ts` : `src/index.ts`;
+  // const entryFile = `src/index.ts`;
 
   const external =
     isGlobalBuild || isBrowserESMBuild
@@ -161,6 +180,7 @@ function createConfig(
           ...Object.keys(pkg.peerDependencies || {}),
           ...['path', 'url', 'stream'],
         ];
+  external.push('module', '@vueuse/head', 'chokidar', 'esbuild');
 
   // the browser builds requires postcss to be available
   // as a global (e.g. http://wzrd.in/standalone/postcss)
@@ -204,6 +224,7 @@ function createConfig(
         ],
         extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', 'ts', 'tsx'],
         babelHelpers: 'bundled',
+        exclude: ['node_modules/@babel/**', 'node_modules/core-js/**'],
         plugins: [
           require('@babel/plugin-transform-arrow-functions'),
           require('@babel/plugin-proposal-class-properties'),
@@ -217,6 +238,12 @@ function createConfig(
     _plugins.push(rawStylesPlugin(packageOptions.rawStyles));
   }
 
+  const postcssPlugin = postcss({
+    extract: `${name}${isProductionBuild ? '.min' : ''}.css`,
+    minimize: isProductionBuild,
+    sourceMap: isProductionBuild,
+  });
+
   return {
     input: resolve(entryFile),
     // Global and Browser ESM builds inlines everything so that they can be
@@ -229,6 +256,8 @@ function createConfig(
         namedExports: false,
       }),
       tsPlugin,
+      vueJsx(),
+      postcssPlugin,
       createReplacePlugin(
         isProductionBuild,
         isBundlerESMBuild,

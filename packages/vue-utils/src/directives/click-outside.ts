@@ -28,7 +28,8 @@ function normalizeRawClickOutsideDirectiveBindingValue(
   };
 }
 
-export type ClickOutsideDirectiveBinding = DirectiveBinding<RawClickOutsideDirectiveBindingValue>;
+export type ClickOutsideDirectiveBinding =
+  DirectiveBinding<RawClickOutsideDirectiveBindingValue>;
 
 export const ClickOutsideDirectiveElementSymbol = Symbol(
   'ClickOutsideDirectiveElementSymbol',

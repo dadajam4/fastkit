@@ -1,5 +1,5 @@
 import minimist from 'minimist';
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
@@ -19,10 +19,11 @@ export interface ReleaseArgs {
 }
 
 const args = minimist<ReleaseArgs>(process.argv.slice(2));
-const { version: currentVersion } = getPackage();
+const rootPkg = getPackage();
+const { version: currentVersion } = rootPkg;
 
 const semverPre = semver.prerelease(currentVersion);
-const preId = args.preid || (semverPre && semverPre[0]) || '';
+const preId = args.preid || (semverPre && String(semverPre[0])) || '';
 const isDryRun = args.dry;
 const skipTests = args.skipTests;
 const skipBuild = args.skipBuild;
@@ -106,6 +107,11 @@ async function main() {
     return;
   }
 
+  console.log('targetVersion', targetVersion);
+  if (process) {
+    process.exit();
+  }
+
   // run tests before release
   step('\nRunning tests...');
   if (!skipTests && !isDryRun) {
@@ -117,7 +123,7 @@ async function main() {
 
   // update all package versions and inter-dependencies
   step('\nUpdating cross dependencies...');
-  updateVersions(targetVersion);
+  await updateVersions(targetVersion);
 
   // build all packages with types
   step('\nBuilding all packages...');
@@ -170,30 +176,61 @@ async function main() {
   console.log();
 }
 
-function updateVersions(version: string) {
+async function updateVersions(version: string) {
   // 1. update root package.json
-  updatePackage(path.resolve(__dirname, '..'), version);
+  await updatePackage(path.resolve(__dirname, '..'), version);
   // 2. update all packages
-  packages.forEach((p) => updatePackage(getPkgRoot(p), version));
+  for (const pkg of packages) {
+    await updatePackage(pkg, version);
+  }
 }
 
-function updatePackage(pkgRoot: string, version: string) {
+async function updatePackage(pkgRoot: string, version: string) {
   const pkgPath = path.resolve(pkgRoot, 'package.json');
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+  const pkg = JSON.parse(await fs.readFile(pkgPath, 'utf-8'));
   pkg.version = version;
-  updateDeps(pkg, 'dependencies', version);
-  updateDeps(pkg, 'peerDependencies', version);
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+  await updateDeps(pkg, 'dependencies', version);
+  await updateDeps(pkg, 'peerDependencies', version);
+  await fs.writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
 }
 
-function updateDeps(
+const externalModuleVersionDetectedCache: {
+  [dep: string]: string | null;
+} = {};
+
+async function detectExternalModuleVersion(
+  dep: string,
+): Promise<string | null> {
+  const cached = externalModuleVersionDetectedCache[dep];
+  if (cached !== undefined) return cached;
+  let version: string | null = null;
+
+  const { dependencies, peerDependencies } = rootPkg;
+  if (dependencies && dependencies[dep]) {
+    version = dependencies[dep];
+  } else if (peerDependencies && peerDependencies[dep]) {
+    version = peerDependencies[dep];
+  } else {
+    const depPkg = await getPackage(
+      ROOT_DIR.join(`node_modules/${dep}/package.json`),
+    );
+    const depVersion = depPkg && depPkg.version;
+    if (depVersion) {
+      version = `^${depVersion}`;
+    }
+  }
+  return version;
+}
+
+async function updateDeps(
   pkg: FastkitPackage,
   depType: 'dependencies' | 'peerDependencies',
   version: string,
 ) {
   const deps = pkg[depType];
   if (!deps) return;
-  Object.keys(deps).forEach((dep) => {
+
+  for (const dep of Object.keys(deps)) {
     if (
       dep === 'fastkit' ||
       (dep.startsWith('@fastkit') &&
@@ -203,8 +240,16 @@ function updateDeps(
         chalk.yellow(`${pkg.name} -> ${depType} -> ${dep}@${version}`),
       );
       deps[dep] = version;
+    } else {
+      const version = await detectExternalModuleVersion(dep);
+      if (version) {
+        console.log(
+          chalk.yellow(`${pkg.name} -> ${depType} -> ${dep}@${version}`),
+        );
+        deps[dep] = version;
+      }
     }
-  });
+  }
 }
 
 async function publishPackage(
@@ -224,8 +269,8 @@ async function publishPackage(
 
   // const releaseTag = args.tag || null;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const releaseTag = args.tag || semver.prerelease(version)![0] || null;
-  console.log(releaseTag);
+  // const releaseTag = args.tag || String(semver.prerelease(version)![0]) || null;
+  const releaseTag = 'beta';
 
   step(`Publishing ${pkgName}...`);
   try {

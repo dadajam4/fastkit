@@ -1,0 +1,38 @@
+.v-stack-btn {
+  appearance: none;
+  display: inline-flex;
+  vertical-align: bottom;
+  border-style: solid;
+  border-width: 1px;
+  font: inherit;
+  // will-change: box-shadow;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0 16px;
+  height: 32px;
+  line-height: 1;
+  border-radius: 2px;
+  align-items: center;
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 500;
+  justify-content: center;
+  margin: 6px 8px;
+  min-width: 64px;
+  outline: 0;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), color 1ms;
+  position: relative;
+  user-select: none;
+  // background-color: transparent;
+
+  &::-moz-focus-inner {
+    border: 0;
+  }
+
+  &[disabled] {
+    // cursor: not-allowed;
+    cursor: default;
+  }
+}

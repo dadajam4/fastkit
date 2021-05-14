@@ -35,9 +35,12 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/fastkit#readme",
   "dependencies": {
     "@fastkit/body-scroll-lock": "0.1.4",
+    "@fastkit/color": "0.1.4",
+    "@fastkit/color-scheme": "0.1.4",
     "@fastkit/ev": "0.1.4",
     "@fastkit/helpers": "0.1.4",
     "@fastkit/keybord": "0.1.4",
+    "@fastkit/node-util": "0.1.4",
     "@fastkit/scroller": "0.1.4",
     "@fastkit/tiny-logger": "0.1.4",
     "@fastkit/visibility": "0.1.4"

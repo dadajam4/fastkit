@@ -49,14 +49,12 @@ export const dictMap: Record<AvairableLanguage, Omit<Dict, '$lang'>> = {
   ja: {
     title:
       '本ウェブサイトにおけるお使いのブラウザ（Internet Explorer）のサポートを <%- deadline %> に終了します。',
-    lead:
-      '快適に本サイトをご利用頂けるよう、より高速で安全な Internet Explorer の後継ブラウザである Microsoft Edge をご利用いただくか、Google Chrome や Mozilla Firefox など、他社製ブラウザのご利用をお願いいたします。',
+    lead: '快適に本サイトをご利用頂けるよう、より高速で安全な Internet Explorer の後継ブラウザである Microsoft Edge をご利用いただくか、Google Chrome や Mozilla Firefox など、他社製ブラウザのご利用をお願いいたします。',
     note: '※ Microsoft Edge は Windows Update により配信されています。',
     expired: {
       title:
         '本ウェブサイトにおけるお使いのブラウザ（Internet Explorer）のサポートを <%- deadline %> に終了しました。',
-      lead:
-        'より高速で安全な Internet Explorer の後継ブラウザである Microsoft Edge をご利用いただくか、Google Chrome や Mozilla Firefox など、他社製ブラウザのご利用をお願いいたします。',
+      lead: 'より高速で安全な Internet Explorer の後継ブラウザである Microsoft Edge をご利用いただくか、Google Chrome や Mozilla Firefox など、他社製ブラウザのご利用をお願いいたします。',
     },
     installation: {
       title: '推奨ブラウザ・インストール',

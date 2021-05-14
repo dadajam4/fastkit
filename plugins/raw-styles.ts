@@ -1,4 +1,4 @@
-import { Plugin, TransformResult } from 'vite';
+import { Plugin, TransformResult, ViteDevServer } from 'vite';
 import path from 'path';
 import sass from 'sass';
 import Fiber from 'fibers';
@@ -69,10 +69,18 @@ async function compile(
 ): Promise<TransformResult> {
   const file = rawId.replace(idMatchRe, '$1');
   const style = await processSass(file);
-  return processPostCss(style.css.toString(), file, options);
+  const deps = new Set<string>(style.stats.includedFiles.map((file) => file));
+  return processPostCss(style.css.toString(), file, options).then((result) => {
+    return {
+      ...result,
+      deps: Array.from(deps),
+    };
+  });
 }
 
 export function rawStylesPlugin(options?: BuildOptions['rawStyles']): Plugin {
+  let server: ViteDevServer;
+
   return {
     name: 'rawStyles',
     resolveId(id, parent, importer, ssr) {
@@ -82,35 +90,39 @@ export function rawStylesPlugin(options?: BuildOptions['rawStyles']): Plugin {
         return resolved;
       }
     },
-    configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
-        const { url } = req;
-        if (url && idMatchRe.test(url)) {
-          try {
-            const { code } = await compile(url, options);
-            res.setHeader('content-type', 'text/javascript');
-            res.writeHead(200);
-            res.end(code);
-          } catch (_err) {
-            console.log(_err);
-            res.writeHead(500);
-            res.end(_err.message);
-          }
-          return;
-        }
-        next();
-      });
+    configureServer(_server) {
+      server = _server;
     },
     load(id, ssr) {
       if (idMatchRe.test(id)) {
         return '';
       }
     },
-    transform(code, id, ssr) {
-      if (idMatchRe.test(id)) {
-        return compile(id);
+    async transform(_code, id, ssr) {
+      if (!idMatchRe.test(id)) return;
+      const { code, map, deps } = await compile(id);
+
+      if (server) {
+        const { moduleGraph } = server;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const thisModule = moduleGraph.getModuleById(id)!;
+        moduleGraph.updateModuleInfo(
+          thisModule,
+          new Set(deps),
+          new Set(),
+          false,
+        );
+
+        if (deps) {
+          deps.forEach((file) => {
+            this.addWatchFile(file);
+          });
+        }
       }
-      return null;
+      return {
+        code,
+        map,
+      };
     },
   };
 }

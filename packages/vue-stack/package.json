@@ -1,0 +1,39 @@
+{
+  "name": "@fastkit/vue-stack",
+  "version": "0.1.4",
+  "description": "@fastkit/vue-stack",
+  "buildOptions": {
+    "name": "VueStack"
+  },
+  "main": "index.js",
+  "module": "dist/vue-stack.esm-bundler.js",
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "types": "dist/vue-stack.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit",
+    "vue"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-stack#readme",
+  "dependencies": {
+    "@fastkit/body-scroll-lock": "0.1.4",
+    "@fastkit/color-scheme": "0.1.4",
+    "@fastkit/visibility": "0.1.4",
+    "@fastkit/vue-color-scheme": "0.1.4",
+    "@fastkit/keybord": "0.1.4",
+    "@fastkit/helpers": "0.1.4",
+    "@fastkit/tiny-logger": "0.1.4",
+    "@fastkit/vue-utils": "0.1.4"
+  }
+}

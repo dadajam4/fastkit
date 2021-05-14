@@ -1,13 +1,9 @@
 import { Options as AutoprefixerOptions } from 'autoprefixer';
 
-export type BuildType =
-  | 'esm-bundler'
-  | 'esm-browser'
-  | 'cjs'
-  | 'global'
-  | 'esm-bundler-runtime'
-  | 'esm-browser-runtime'
-  | 'global-runtime';
+export type BuildType = 'esm-bundler' | 'esm-browser' | 'cjs' | 'global';
+// | 'esm-bundler-runtime'
+// | 'esm-browser-runtime'
+// | 'global-runtime'
 
 export interface BuildOptions {
   env?: 'development' | 'production';
@@ -20,6 +16,7 @@ export interface BuildOptions {
     autoprefixer?: AutoprefixerOptions;
   };
   legacy?: boolean;
+  tool?: boolean;
 }
 
 export interface FastkitPackage {

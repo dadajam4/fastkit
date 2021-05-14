@@ -20,7 +20,7 @@
     "paths": {
       "~/*": ["packages/playground/src/*"],
       "@fastkit/*": ["packages/*/src"],
-      "fastkit/*": ["packages/fastkit/src"],
+      "fastkit/*": ["packages/fastkit/src"]
     }
   },
   "include": [
