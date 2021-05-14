@@ -108,6 +108,7 @@ async function runParallel(
 async function build(target: string) {
   const pkgDir = PACKAGES_DIR.join(target);
   const pkg = getPackage(`${pkgDir}/package.json`);
+  const destDir = path.join(pkgDir, 'dist');
 
   // only build published packages for release
   if (isRelease && pkg.private) {
@@ -116,7 +117,7 @@ async function build(target: string) {
 
   // if building a specific format, do not remove dist.
   if (!formats) {
-    await fs.remove(`${pkgDir}/dist`);
+    await fs.remove(destDir);
   }
 
   const buildOptions = pkg.buildOptions || {};
@@ -231,6 +232,12 @@ async function build(target: string) {
       localBuild: true,
       showVerboseMessages: true,
     });
+
+    if (tool) {
+      const dtsDir = path.join(destDir, `packages/${target}/src/tool`);
+      const dtsDest = path.join(destDir, 'tool');
+      await fs.copy(dtsDir, dtsDest);
+    }
 
     if (extractorResult.succeeded) {
       await moveDts();
