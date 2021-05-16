@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@fastkit/playground",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "@fastkit/playground",
   "main": "index.js",
   "module": "dist/playground.esm-bundler.js",
@@ -24,9 +24,9 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/playground#readme",
   "dependencies": {
-    "@fastkit/color-scheme": "0.1.8",
-    "@fastkit/vue-color-scheme": "0.1.8",
-    "@fastkit/vue-stack": "0.1.8",
-    "@fastkit/tiny-logger": "0.1.8"
+    "@fastkit/color-scheme": "0.1.9",
+    "@fastkit/vue-color-scheme": "0.1.9",
+    "@fastkit/vue-stack": "0.1.9",
+    "@fastkit/tiny-logger": "0.1.9"
   }
 }
