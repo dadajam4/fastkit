@@ -1,6 +1,6 @@
 {
   "name": "fastkit",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "fastkit",
   "main": "index.js",
   "module": "dist/fastkit.esm-bundler.js",
@@ -34,15 +34,15 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/fastkit#readme",
   "dependencies": {
-    "@fastkit/body-scroll-lock": "0.1.9",
-    "@fastkit/color": "0.1.9",
-    "@fastkit/color-scheme": "0.1.9",
-    "@fastkit/ev": "0.1.9",
-    "@fastkit/helpers": "0.1.9",
-    "@fastkit/keybord": "0.1.9",
-    "@fastkit/node-util": "0.1.9",
-    "@fastkit/scroller": "0.1.9",
-    "@fastkit/tiny-logger": "0.1.9",
-    "@fastkit/visibility": "0.1.9"
+    "@fastkit/body-scroll-lock": "0.1.10",
+    "@fastkit/color": "0.1.10",
+    "@fastkit/color-scheme": "0.1.10",
+    "@fastkit/ev": "0.1.10",
+    "@fastkit/helpers": "0.1.10",
+    "@fastkit/keybord": "0.1.10",
+    "@fastkit/node-util": "0.1.10",
+    "@fastkit/scroller": "0.1.10",
+    "@fastkit/tiny-logger": "0.1.10",
+    "@fastkit/visibility": "0.1.10"
   }
 }
