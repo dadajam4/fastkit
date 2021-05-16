@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-color-scheme",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "@fastkit/vue-color-scheme",
   "buildOptions": {
     "name": "VueColorScheme"
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-color-scheme#readme",
   "dependencies": {
-    "@fastkit/color-scheme": "0.1.7",
-    "@fastkit/tiny-logger": "0.1.7"
+    "@fastkit/color-scheme": "0.1.8",
+    "@fastkit/tiny-logger": "0.1.8"
   }
 }
