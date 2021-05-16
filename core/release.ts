@@ -254,6 +254,8 @@ async function detectExternalModuleVersion(
     }
   }
 
+  externalModuleVersionDetectedCache[dep] = version;
+
   return version;
 }
 

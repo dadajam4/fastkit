@@ -24,7 +24,7 @@ export function getPackage(
   packagePath = ROOT_DIR.join('package.json'),
 ): FastkitPackage {
   if (!packagePath.endsWith('.json')) {
-    packagePath = path.join('package.json');
+    packagePath = path.join(packagePath, 'package.json');
   }
   try {
     return require(packagePath);

@@ -1,3 +1,5 @@
-import { parse } from 'semver';
+// import { detectExternalModuleVersion } from './core/release';
 
-console.log(parse('^4.17.1'));
+// detectExternalModuleVersion('eta').then((result) => {
+//   console.log(result);
+// });
