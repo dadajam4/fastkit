@@ -2,7 +2,7 @@ import { ColorScopeOptionalKey, ColorScheme } from '../color-scheme';
 import { toScssValues } from './to-scss-values';
 import fs from 'fs-extra';
 import path from 'path';
-import Eta from 'eta';
+import { render } from 'eta';
 import { esbuildRequire } from '../../../node-util/src';
 
 const TEMPLATES_DIR = path.resolve(__dirname, 'assets/templates');
@@ -133,6 +133,6 @@ async function renderTemplate<
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(name: TemplateName, scope: TemplateScope) {
   const tmpl = await getTemplate(name);
-  const result = await Eta.render(tmpl, scope);
+  const result = await render(tmpl, scope);
   return result || '';
 }

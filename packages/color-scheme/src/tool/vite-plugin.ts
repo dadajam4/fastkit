@@ -70,9 +70,11 @@ export function colorSchemeVitePlugin(opts: ColorSchemePluginOptions): Plugin {
 
         const loadResult = await loadColorScheme(rawEntryPoint, dest);
 
+        const watcherIgnoreRe = /^(node_modules|node-file:)/;
+
         const { dependencies } = loadResult;
         const filteredDependencies = dependencies.filter(
-          (d) => !d.startsWith('node_modules'),
+          (d) => !watcherIgnoreRe.test(d),
         );
         if (filteredDependencies.length) {
           watcher = chokidar.watch(filteredDependencies).on('change', load);
