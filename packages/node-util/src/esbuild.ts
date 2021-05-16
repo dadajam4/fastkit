@@ -74,7 +74,7 @@ export async function esbuildRequire<T = any>(
     platform: 'node',
     // write: false,
     metafile: true,
-    logLevel: 'info',
+    // logLevel: 'warning',
     // external: ['module'],
     plugins: [nativeNodeModulesPlugin],
     outfile,

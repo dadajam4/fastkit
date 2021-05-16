@@ -5,10 +5,9 @@ import {
   // ColorSchemeLoaderType,
 } from './loader';
 import path from 'path';
-import { findPackageDir } from '@fastkit/color';
+import { findPackageDir } from '@fastkit/node-util';
 import chokidar from 'chokidar';
 import { ColorSchemeError } from '../logger';
-// import { ColorSchemeError } from '../logger';
 
 // const importSuffix = 'color-scheme';
 

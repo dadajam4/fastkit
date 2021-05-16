@@ -193,6 +193,26 @@ const externalModuleVersionDetectedCache: {
   [dep: string]: string | null;
 } = {};
 
+const externalPackages: {
+  [pkg: string]: FastkitPackage;
+} = {};
+
+let externalPackagesLoaded = false;
+
+async function loadExternalPackages() {
+  if (externalPackagesLoaded) return;
+  const { peerDependencies = {}, dependencies = {} } = rootPkg;
+  const pkgs = Array.from(
+    new Set([...Object.keys(peerDependencies), ...Object.keys(dependencies)]),
+  );
+  for (const pkg of pkgs) {
+    if (externalPackages[pkg]) continue;
+    const _pkg = await getPackage(ROOT_DIR.join('node_modules', pkg));
+    externalPackages[pkg] = _pkg;
+  }
+  externalPackagesLoaded = true;
+}
+
 async function detectExternalModuleVersion(
   dep: string,
 ): Promise<string | null> {
@@ -200,20 +220,40 @@ async function detectExternalModuleVersion(
   if (cached !== undefined) return cached;
   let version: string | null = null;
 
+  await loadExternalPackages();
+
   const { dependencies, peerDependencies } = rootPkg;
   if (dependencies && dependencies[dep]) {
     version = dependencies[dep];
   } else if (peerDependencies && peerDependencies[dep]) {
     version = peerDependencies[dep];
-  } else {
-    const depPkg = await getPackage(
-      ROOT_DIR.join(`node_modules/${dep}/package.json`),
-    );
-    const depVersion = depPkg && depPkg.version;
-    if (depVersion) {
-      version = `^${depVersion}`;
+  }
+
+  if (!version) {
+    for (const pkgName in externalPackages) {
+      const { peerDependencies, dependencies } = externalPackages[pkgName];
+      const deps = {
+        ...dependencies,
+        ...peerDependencies,
+      };
+      if (deps[dep]) {
+        version = deps[dep];
+        break;
+      }
     }
   }
+
+  if (!version) {
+    const depPkg = await getPackage(ROOT_DIR.join('node_modules', dep));
+    const depVersion = depPkg && depPkg.version;
+    if (depVersion) {
+      const parsed = semver.parse(depVersion);
+      if (parsed) {
+        version = `^${parsed.major}.${parsed.minor}.0`;
+      }
+    }
+  }
+
   return version;
 }
 

@@ -16,7 +16,7 @@ export const VStackBtn = defineComponent({
   emits: {
     ...navigationableEmits.emits,
   },
-  setup(props, ctx) {
+  setup(props) {
     const color = useColorClasses(props);
     const navigationable = useNavigationable(props);
     return {

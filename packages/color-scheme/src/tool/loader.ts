@@ -3,7 +3,7 @@ import { toScssValues } from './to-scss-values';
 import fs from 'fs-extra';
 import path from 'path';
 import { render } from 'eta';
-import { esbuildRequire } from '../../../node-util/src';
+import { esbuildRequire } from '@fastkit/node-util';
 
 const TEMPLATES_DIR = path.resolve(__dirname, 'assets/templates');
 
