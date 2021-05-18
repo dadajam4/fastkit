@@ -1,13 +1,20 @@
 import { DirectiveBinding, ObjectDirective } from 'vue';
 
 import { disableBodyScroll, enableBodyScroll } from '@fastkit/body-scroll-lock';
+import { pushDynamicStyle } from '@fastkit/helpers';
 
-export type BodyScrollLockDirectiveBinding = DirectiveBinding<
-  boolean | undefined | void
->;
+export type BodyScrollLockDirectiveBindingValue = boolean | undefined | void;
 
-export const BODY_SCROLL_LOCK_SCROLL_ATTRIBUTE =
-  'data-vstack-scroll-lock-scroller';
+export type BodyScrollLockDirectiveBinding =
+  DirectiveBinding<BodyScrollLockDirectiveBindingValue>;
+
+export const BODY_SCROLL_LOCK_ATTRIBUTE = 'data-body-scroll-lock';
+
+export const BODY_SCROLL_LOCK_SCROLLER_ATTRIBUTE = 'data-scroll-lock-scroller';
+
+if (__BROWSER__) {
+  pushDynamicStyle(`[${BODY_SCROLL_LOCK_ATTRIBUTE}] { overflow: hidden; }`);
+}
 
 class Stacks {
   readonly els: HTMLElement[] = [];
@@ -23,19 +30,19 @@ class Stacks {
   }
 
   private activate() {
-    document.documentElement.setAttribute('data-vstack-body-scroll-lock', '');
+    document.documentElement.setAttribute(BODY_SCROLL_LOCK_ATTRIBUTE, '');
     this.active = true;
   }
 
   private deactivate() {
-    document.documentElement.removeAttribute('data-vstack-body-scroll-lock');
+    document.documentElement.removeAttribute(BODY_SCROLL_LOCK_ATTRIBUTE);
     this.active = false;
   }
 
   push(el: HTMLElement) {
     if (!this.els.includes(el)) {
       const lockElement =
-        el.querySelector(`[${BODY_SCROLL_LOCK_SCROLL_ATTRIBUTE}]`) || el;
+        el.querySelector(`[${BODY_SCROLL_LOCK_SCROLLER_ATTRIBUTE}]`) || el;
 
       disableBodyScroll(lockElement);
       this.els.push(el);
@@ -47,7 +54,7 @@ class Stacks {
     const index = this.els.indexOf(el);
     if (index !== -1) {
       const lockElement =
-        el.querySelector(`[${BODY_SCROLL_LOCK_SCROLL_ATTRIBUTE}]`) || el;
+        el.querySelector(`[${BODY_SCROLL_LOCK_SCROLLER_ATTRIBUTE}]`) || el;
 
       enableBodyScroll(lockElement);
       this.els.splice(index, 1);
@@ -63,7 +70,7 @@ export type BodyScrollLockDirective = ObjectDirective<
   boolean | undefined | void
 >;
 
-export const bodyScrollRockDirective: BodyScrollLockDirective = {
+export const bodyScrollLockDirective: BodyScrollLockDirective = {
   mounted(el, binding) {
     binding.value && stacks.push(el);
   },
@@ -80,3 +87,9 @@ export const bodyScrollRockDirective: BodyScrollLockDirective = {
     stacks.remove(el);
   },
 };
+
+export function bodyScrollLockArgument(
+  bindingValue?: BodyScrollLockDirectiveBindingValue,
+): [BodyScrollLockDirective, BodyScrollLockDirectiveBindingValue] {
+  return [bodyScrollLockDirective, bindingValue];
+}

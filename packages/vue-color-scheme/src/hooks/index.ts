@@ -1,10 +1,15 @@
-import { computed, inject } from 'vue';
+import { computed, inject, ComputedRef } from 'vue';
 import { useHead } from '@vueuse/head';
-import { ThemeName, ScopeName, PaletteName } from '../types';
+import {
+  ThemeName,
+  ScopeName,
+  PaletteName,
+  ColorSchemeVariant,
+} from '../types';
 import { VueColorSchemeInjectionKey } from '../plugin';
 import { ColorSchemeError } from '../logger';
 
-export interface ColorSchemeHooksContext {
+export interface ColorSchemeHooksProps {
   readonly theme?: ThemeName;
   readonly color?: ScopeName;
   readonly textColor?: PaletteName;
@@ -12,21 +17,30 @@ export interface ColorSchemeHooksContext {
   readonly contained?: boolean;
   readonly outlined?: boolean;
   readonly plain?: boolean;
+  readonly defaultVariant?: ColorSchemeVariant;
 }
 
-export function useColorVariantClasses(ctx: ColorSchemeHooksContext) {
+export function useColorVariantClasses(ctx: ColorSchemeHooksProps) {
   const colorVariantClasses = computed(() => {
     const classes: string[] = [];
-    const { contained, outlined, plain } = ctx;
-    (contained || (!outlined && !plain)) && classes.push('contained');
-    outlined && classes.push('outlined');
-    plain && classes.push('plain');
+    const { contained, outlined, plain, defaultVariant } = ctx;
+    let variant: ColorSchemeVariant | undefined;
+    if (contained) {
+      variant = 'contained';
+    } else if (outlined) {
+      variant = 'outlined';
+    } else if (plain) {
+      variant = 'plain';
+    } else if (defaultVariant) {
+      variant = defaultVariant;
+    }
+    variant && classes.push(variant);
     return classes;
   });
   return colorVariantClasses;
 }
 
-export function useThemeClass(ctx: ColorSchemeHooksContext) {
+export function useThemeClass(ctx: ColorSchemeHooksProps) {
   const themeClass = computed(() => {
     const { theme } = ctx;
     return theme ? `${theme}-theme` : undefined;
@@ -34,7 +48,7 @@ export function useThemeClass(ctx: ColorSchemeHooksContext) {
   return themeClass;
 }
 
-export function useScopeColorClass(ctx: ColorSchemeHooksContext) {
+export function useScopeColorClass(ctx: ColorSchemeHooksProps) {
   const scopeColorClass = computed(() => {
     const { color } = ctx;
     return color ? `${color}` : undefined;
@@ -42,7 +56,7 @@ export function useScopeColorClass(ctx: ColorSchemeHooksContext) {
   return scopeColorClass;
 }
 
-export function useTextColorClass(ctx: ColorSchemeHooksContext) {
+export function useTextColorClass(ctx: ColorSchemeHooksProps) {
   const textColorClass = computed(() => {
     const { textColor } = ctx;
     return textColor ? `${textColor}-text` : undefined;
@@ -50,7 +64,7 @@ export function useTextColorClass(ctx: ColorSchemeHooksContext) {
   return textColorClass;
 }
 
-export function useBorderColorClass(ctx: ColorSchemeHooksContext) {
+export function useBorderColorClass(ctx: ColorSchemeHooksProps) {
   const borderColorClass = computed(() => {
     const { borderColor } = ctx;
     return borderColor ? `${borderColor}-border` : undefined;
@@ -58,7 +72,18 @@ export function useBorderColorClass(ctx: ColorSchemeHooksContext) {
   return borderColorClass;
 }
 
-export function useColorClasses(ctx: ColorSchemeHooksContext) {
+export interface ColorClassesControl {
+  themeClass: ComputedRef<string | undefined>;
+  scopeColorClass: ComputedRef<string | undefined>;
+  textColorClass: ComputedRef<string | undefined>;
+  borderColorClass: ComputedRef<string | undefined>;
+  colorVariantClasses: ComputedRef<string[]>;
+  colorClasses: ComputedRef<string[]>;
+}
+
+export function useColorClasses(
+  ctx: ColorSchemeHooksProps,
+): ColorClassesControl {
   const themeClass = useThemeClass(ctx);
   const scopeColorClass = useScopeColorClass(ctx);
   const textColorClass = useTextColorClass(ctx);
@@ -82,6 +107,7 @@ export function useColorClasses(ctx: ColorSchemeHooksContext) {
     scopeColorClass,
     textColorClass,
     borderColorClass,
+    colorVariantClasses,
     colorClasses,
   };
 }

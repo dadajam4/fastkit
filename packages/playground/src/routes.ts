@@ -6,4 +6,9 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('./pages/Home'),
     props: true,
   },
+  {
+    path: '/page2',
+    component: () => import('./pages/Page2'),
+    props: true,
+  },
 ];

@@ -55,3 +55,10 @@ export function focusFirstDescendant(element: HTMLElement): boolean {
   }
   return false;
 }
+
+export function pushDynamicStyle(styleContent: string) {
+  if (!__BROWSER__) return;
+  const style = document.createElement('style');
+  style.innerHTML = styleContent;
+  document.head.appendChild(style);
+}

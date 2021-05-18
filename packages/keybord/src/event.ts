@@ -20,6 +20,10 @@ export type RawKBSettings = RawKBSetting | RawKBSetting[];
 export interface RawKBSetting {
   target?: GlobalEventHandlers;
   key?: KeyType | KeyType[];
+
+  /**
+   * @default "keydown"
+   */
   event?: KBEventName;
   handler: KBHandler;
   capture?: boolean;

@@ -1,0 +1,88 @@
+@import '../styles/values.scss';
+
+.v-stack-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+  outline: 0;
+  pointer-events: none;
+
+  &__scroller {
+    display: table;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__centerer {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  &__content {
+    text-align: left;
+    position: relative;
+    display: inline-block;
+    margin: 24px;
+    border-radius: 2px;
+    box-shadow: $v-stack-dialog-shadow;
+    outline: 0;
+    background: var(--palette-background);
+    color: var(--palette-default);
+    min-width: 280px;
+    pointer-events: auto;
+  }
+
+  &__header {
+    box-sizing: border-box;
+    padding: 16px;
+    font-size: 24px;
+    line-height: 1.4;
+  }
+
+  &__body {
+    box-sizing: border-box;
+    padding: 16px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+  }
+
+  // &__action {
+  //   &--spacer {
+  //     margin-left: auto;
+  //   }
+  // }
+
+  // &[v-stack--outside-click-animate] {
+  //   animation-duration: 0.15s;
+  //   animation-name: v-stack-dialog-outside-click;
+  //   animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+  // }
+}
+
+// @keyframes v-stack-dialog-outside-click {
+//   0% {
+//     transform: scale(1);
+//   }
+
+//   50% {
+//     transform: scale(1.03);
+//   }
+
+//   100% {
+//     transform: scale(1);
+//   }
+// }

@@ -30,7 +30,9 @@ export default defineConfig({
   plugins: [
     globalsPlugin(),
     viteSSR(),
-    vueJsx(),
+    vueJsx({
+      transformOn: true,
+    }),
     vue(),
     rawStylesPlugin(),
     colorSchemeVitePlugin({

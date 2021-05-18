@@ -1,6 +1,7 @@
 import { defineComponent } from 'vue';
 import { RouterView } from 'vue-router';
 import { useInjectTheme } from '@fastkit/vue-color-scheme';
+import { VStackRoot } from '@fastkit/vue-stack';
 
 export const App = defineComponent({
   name: 'App',
@@ -9,19 +10,9 @@ export const App = defineComponent({
   },
   render() {
     return (
-      <div>
-        <h1>App</h1>
-        <select v-model={this.$color.rootTheme}>
-          {this.$color.themeNames.map((t) => {
-            return (
-              <option value={t} key={t}>
-                {t}
-              </option>
-            );
-          })}
-        </select>
-        <RouterView></RouterView>
-      </div>
+      <VStackRoot class="app">
+        <RouterView />
+      </VStackRoot>
     );
   },
 });

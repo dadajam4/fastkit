@@ -6,7 +6,7 @@ import {
   VueColorSchemePluginSettings,
 } from './types';
 
-export class VueColorScheme {
+export class VueColorSchemeService {
   private _rootTheme: Ref<ThemeName>;
 
   readonly defaultTheme: ThemeName;

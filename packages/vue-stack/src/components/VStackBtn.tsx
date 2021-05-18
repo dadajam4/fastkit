@@ -1,5 +1,5 @@
 import './VStackBtn.scss';
-import { defineComponent } from 'vue';
+import { defineComponent, ExtractPropTypes } from 'vue';
 import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
 import {
   navigationableEmits,
@@ -7,12 +7,17 @@ import {
   useNavigationable,
 } from '@fastkit/vue-utils';
 
+const props = {
+  ...colorSchemeProps({ defaultScope: 'base', defaultVariant: 'contained' }),
+  ...navigationableProps,
+  spacer: Boolean,
+};
+
+export type VStackBtnProps = Partial<ExtractPropTypes<typeof props>>;
+
 export const VStackBtn = defineComponent({
   name: 'VStackBtn',
-  props: {
-    ...colorSchemeProps({ defaultScope: 'base' }),
-    ...navigationableProps,
-  },
+  props,
   emits: {
     ...navigationableEmits.emits,
   },
@@ -30,7 +35,12 @@ export const VStackBtn = defineComponent({
     const children = $slots.default && $slots.default();
     return (
       <Tag
-        class={['v-stack-btn', colorClasses, classes]}
+        class={[
+          'v-stack-btn',
+          colorClasses,
+          classes,
+          this.spacer ? 'v-stack-btn--spacer' : undefined,
+        ]}
         {...attrs}
         onClick={(ev: MouseEvent) => {
           if (this.disabled) return;

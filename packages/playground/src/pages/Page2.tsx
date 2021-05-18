@@ -4,7 +4,7 @@ import { VStackBtn, VStackDialog } from '@fastkit/vue-stack';
 import { RouterLink } from 'vue-router';
 
 const component = defineComponent({
-  name: 'HomeView',
+  name: 'Page2View',
   setup() {
     return {
       disabled: ref(false),
@@ -22,7 +22,7 @@ const component = defineComponent({
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/page2">page2</RouterLink>
 
-        <h1>App</h1>
+        <h1>Page2View</h1>
         <select v-model={this.$color.rootTheme}>
           {this.$color.themeNames.map((t) => {
             return (

@@ -13,7 +13,7 @@ export interface UseKeybordRef {
 }
 
 export interface UseKeybord {
-  (settings: UseKeybordSettings): UseKeybordRef;
+  (settings: UseKeybordSettings, options?: UseKeybordOptions): UseKeybordRef;
   Key: typeof Key;
 }
 

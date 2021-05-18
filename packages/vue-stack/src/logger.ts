@@ -1,3 +1,7 @@
-import { TinyLogger } from '@fastkit/tiny-logger';
+import { TinyLogger, createTinyError } from '@fastkit/tiny-logger';
 
-export const logger = new TinyLogger('vue-stack');
+const name = 'vue-stack';
+
+export const logger = new TinyLogger(name);
+
+export const VueStackError = createTinyError(name);

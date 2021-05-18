@@ -23,3 +23,11 @@ export interface VueColorSchemePluginSettings
 }
 
 export type ColorSchemePropKey = string | null | false | undefined;
+
+export const COLOR_SCHEME_VARIANTS = [
+  'contained',
+  'outlined',
+  'plain',
+] as const;
+
+export type ColorSchemeVariant = typeof COLOR_SCHEME_VARIANTS[number];

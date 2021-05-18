@@ -9,7 +9,7 @@ export type ClickOutsideDirectiveHandler =
 
 export interface ClickOutsideDirectiveBindingValue {
   handler?: ClickOutsideDirectiveHandler;
-  conditional?: (ev: MouseEvent | PointerEvent) => boolean;
+  conditional?: (ev: MouseEvent | PointerEvent, pre?: boolean) => boolean;
   include?: () => HTMLElement[];
 }
 
@@ -63,7 +63,7 @@ function pointerHook(
 ) {
   const value = normalizeRawClickOutsideDirectiveBindingValue(binding.value);
   const { conditional, include, handler } = value;
-  if (!handler || (conditional && !conditional(ev))) return;
+  if (!handler || (conditional && !conditional(ev, true))) return;
 
   if (
     ('isTrusted' in ev && !ev.isTrusted) ||
@@ -99,3 +99,9 @@ export const clickOutsideDirective: ClickOutsideDirective = {
   //   return undefined;
   // },
 };
+
+export function clickOutsideArgument(
+  bindingValue: RawClickOutsideDirectiveBindingValue,
+): [ClickOutsideDirective, RawClickOutsideDirectiveBindingValue] {
+  return [clickOutsideDirective, bindingValue];
+}

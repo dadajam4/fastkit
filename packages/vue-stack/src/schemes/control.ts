@@ -1,0 +1,250 @@
+import {
+  Ref,
+  Transition,
+  VNode,
+  PropType,
+  ExtractPropTypes,
+  SetupContext,
+} from 'vue';
+import type { VueStackService } from '../service';
+import { RouteLocationNormalized } from 'vue-router';
+import {
+  colorSchemeProps,
+  ColorSchemePropsStaticOptions,
+  ColorClassesControl,
+} from '@fastkit/vue-color-scheme';
+import { UseKeybordRef, StyleValue } from '@fastkit/vue-utils';
+import { createEmitDefine, rawNumberProp } from '@fastkit/vue-utils';
+
+type DelayTimerProps = 'openDelay' | 'closeDelay';
+
+export type VStackCloseReason = 'indeterminate' | 'resolved' | 'canceled';
+
+export type VueStackActivatorPayload = HTMLElement | MouseEvent;
+
+export type VStackNavigationGuard = (
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+) => boolean | Promise<boolean>;
+
+export interface VStackActivatorAttributes {
+  onClick?: (ev: MouseEvent) => void;
+  onContextmenu?: (ev: MouseEvent) => void;
+  onMouseenter?: (ev: MouseEvent) => void;
+  onMouseleave?: (ev: MouseEvent) => void;
+}
+
+export interface VStackControlState {
+  isActive: boolean;
+  activator: HTMLElement | null;
+  closeReason: VStackCloseReason;
+  initialValue: any;
+  inputValue: any;
+  showing: boolean;
+  closing: boolean;
+  guardAnimating: boolean;
+  guardAnimateTimeId: number | null;
+  activateOrder: number;
+  timeoutId: number | null;
+  delayTimers: number[];
+  needRender: boolean;
+  isDestroyed: boolean;
+}
+
+export interface VStackCloseOptions {
+  force?: boolean;
+  reason?: VStackCloseReason;
+}
+
+export function isStackControl(source: unknown): source is VStackControl {
+  return (
+    !!source &&
+    typeof source === 'object' &&
+    (source as VStackControl).__isStackControl === true
+  );
+}
+
+export interface VStackControl {
+  readonly __isStackControl: true;
+  readonly isActive: boolean;
+  value: any;
+  readonly $service: VueStackService;
+  readonly color: ColorClassesControl;
+  readonly classes: any[];
+  readonly styles: StyleValue[];
+  readonly transitioning: boolean;
+  readonly activateOrder: number;
+  readonly timeout: number;
+  readonly persistent: boolean;
+  readonly isResolved: boolean;
+  readonly isCanceled: boolean;
+  readonly zIndex: number;
+  readonly focusRestorable: boolean;
+  readonly closeOnEsc: boolean;
+  readonly closeOnNavigation: boolean;
+  readonly openDelay: number;
+  readonly closeDelay: number;
+  readonly isDestroyed: boolean;
+  readonly contentRef: Ref<HTMLElement | null>;
+  readonly backdropRef: Ref<HTMLElement | null>;
+
+  /** @private */
+  readonly _: {
+    readonly state: VStackControlState;
+    readonly activatorAttrs: VStackActivatorAttributes;
+    readonly Transition: {
+      readonly Ctor: typeof Transition;
+      readonly name: string | undefined;
+    };
+    readonly keybord: UseKeybordRef;
+    readonly transitionListeners: {
+      onBeforeEnter: (el: HTMLElement) => void;
+      onAfterEnter: (el: HTMLElement) => void;
+      onEnterCancelled: (el: HTMLElement) => void;
+      onBeforeLeave: (el: HTMLElement) => void;
+      onAfterLeave: (el: HTMLElement) => void;
+      onLeaveCancelled: (el: HTMLElement) => void;
+    };
+    focusTrapper?: (ev: FocusEvent) => void;
+    setIsActive(isActive: boolean, withEmit?: boolean): void;
+    clearTimeoutId(): void;
+    runDelay(prop: number | DelayTimerProps, cb: () => any): void;
+    clearDelay(): void;
+    trapFocus(ev?: FocusEvent): boolean | void;
+    setupFocusTrapper(): void;
+    removeFocusTrapper(): void;
+    checkFocusTrap(): void;
+    setNeedRender(needRender: boolean): void;
+    outsideClickCloseConditional(ev: MouseEvent, pre?: boolean): boolean;
+    clearGuardEffect(): void;
+  };
+
+  show(activator?: VueStackActivatorPayload): Promise<void>;
+  toggle(activator?: VueStackActivatorPayload): Promise<void>;
+  close(opts?: VStackCloseOptions): Promise<void>;
+  resolve(payload?: any): Promise<void>;
+  cancel(force?: boolean): Promise<void>;
+  render(
+    fn: (
+      children: VNode[] | undefined,
+      opts: {
+        withClickOutside: (node: VNode) => VNode;
+      },
+    ) => VNode,
+  ): VNode;
+  toFront(): void;
+  resetValue(): void;
+  isFront(): boolean;
+  guardEffect(): void;
+}
+
+export const stackableEmits = createEmitDefine({
+  'update:modelValue': (modelValue: boolean) => true,
+  change: (modelValue: boolean) => true,
+  payload: (value: any) => true,
+  show: (control: VStackControl) => true,
+  close: (control: VStackControl) => true,
+  beforeEnter: (el: HTMLElement, control: VStackControl) => true,
+  afterEnter: (el: HTMLElement, control: VStackControl) => true,
+  enterCancelled: (el: HTMLElement, control: VStackControl) => true,
+  beforeLeave: (el: HTMLElement, control: VStackControl) => true,
+  afterLeave: (el: HTMLElement, control: VStackControl) => true,
+  leaveCancelled: (el: HTMLElement, control: VStackControl) => true,
+});
+
+export interface VStackActivatorPayload {
+  attrs: VStackActivatorAttributes;
+  control: VStackControl;
+}
+
+export type VStackSlots = {
+  default?: (control: VStackControl) => VNode[];
+  activator?: (payload: VStackActivatorPayload) => VNode[];
+};
+
+export interface CreateStackablePropsOptions
+  extends ColorSchemePropsStaticOptions {
+  defaultTransition?: string;
+  defaultFocusTrap?: boolean;
+  defaultFocusRestorable?: boolean;
+  defaultScrollLock?: boolean;
+}
+
+export function createStackableProps(opts: CreateStackablePropsOptions = {}) {
+  const {
+    defaultTransition = 'v-stack-fade',
+    defaultFocusTrap = false,
+    defaultFocusRestorable = false,
+    defaultScrollLock = false,
+  } = opts;
+
+  return {
+    ...colorSchemeProps(opts),
+    modelValue: Boolean,
+    value: null,
+    class: null,
+    style: null as unknown as PropType<StyleValue>,
+    transition: {
+      type: [String, Object] as PropType<string | typeof Transition>,
+      default: defaultTransition,
+    },
+    alwaysRender: Boolean,
+    backdrop: {
+      type: [Boolean, String] as PropType<boolean | string>,
+      default: false,
+    },
+    focusTrap: {
+      type: Boolean,
+      default: defaultFocusTrap,
+    },
+    focusRestorable: {
+      type: Boolean,
+      default: defaultFocusRestorable,
+    },
+    scrollLock: {
+      type: Boolean,
+      default: defaultScrollLock,
+    },
+    openOnHover: Boolean,
+    openOnContextmenu: Boolean,
+    openDelay: rawNumberProp(0),
+    closeDelay: rawNumberProp(200),
+    closeOnOutsideClick: {
+      type: Boolean,
+      default: true,
+    },
+    closeOnEsc: {
+      type: Boolean,
+      default: true,
+    },
+    closeOnNavigation: {
+      type: Boolean,
+      default: true,
+    },
+    persistent: Boolean,
+    zIndex: rawNumberProp(0),
+    timeout: rawNumberProp(0),
+    navigationGuard: {
+      type: [Boolean, Function] as PropType<boolean | VStackNavigationGuard>,
+      default: false,
+    },
+    guardEffect: {
+      type: [Boolean, String],
+      default: true,
+    },
+    ...stackableEmits.props,
+    'v-slots': undefined as unknown as PropType<VStackSlots>,
+  };
+}
+
+export type VStackProps = ExtractPropTypes<
+  ReturnType<typeof createStackableProps>
+>;
+export type VStackSetupContext = SetupContext<typeof stackableEmits.emits>;
+
+export function createStackableDefine(opts?: CreateStackablePropsOptions) {
+  return {
+    props: createStackableProps(opts),
+    emits: stackableEmits.emits,
+  };
+}

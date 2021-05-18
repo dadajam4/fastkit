@@ -1,5 +1,11 @@
 import { App } from 'vue';
-// import { VueColorSchemePlugin } from '@fastkit/vue-color-scheme';
+import { VueStackService, VueStackInjectionKey } from './service';
+
+declare module '@vue/runtime-core' {
+  export interface ComponentCustomProperties {
+    $vstack: VueStackService;
+  }
+}
 
 export class VueStackPlugin {
   static readonly installedApps = new Set<App>();
@@ -9,44 +15,15 @@ export class VueStackPlugin {
     if (installedApps.has(app)) return;
     const unmountApp = app.unmount;
     installedApps.add(app);
-    app.config.globalProperties.$vstack = this;
+
+    const $vstack = new VueStackService();
+    app.config.globalProperties.$vstack = $vstack;
+    app.provide(VueStackInjectionKey, $vstack);
 
     app.unmount = function () {
       installedApps.delete(app);
+      delete app.config.globalProperties.$vstack;
       unmountApp();
     };
   }
 }
-// export type VueStackPlugin<
-//   TN extends string,
-//   PN extends string,
-//   SN extends string,
-// > = ReturnType<Wrapper<TN, PN, SN>['build']>;
-
-// export function buildVueStack<
-//   TN extends string,
-//   PN extends string,
-//   SN extends string,
-// >(colorScheme: VueColorSchemePlugin<TN, PN, SN>) {
-//   const installedApps = new Set<App>();
-//   const { VColorSchemeProvider } = colorScheme.components;
-//   const VStack = buildVStack(VColorSchemeProvider);
-
-//   return {
-//     colorScheme,
-//     components: {
-//       VStack,
-//     },
-//     install(app: App) {
-//       if (installedApps.has(app)) return;
-//       const unmountApp = app.unmount;
-//       installedApps.add(app);
-//       app.config.globalProperties.$vstack = this;
-
-//       app.unmount = function () {
-//         installedApps.delete(app);
-//         unmountApp();
-//       };
-//     },
-//   };
-// }
