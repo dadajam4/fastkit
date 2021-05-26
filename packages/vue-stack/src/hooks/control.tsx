@@ -23,7 +23,7 @@ import {
   bodyScrollLockArgument,
   StyleValue,
 } from '@fastkit/vue-utils';
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
+import { useRouter } from 'vue-router';
 import {
   VStackControlState,
   VStackControl,
@@ -38,13 +38,44 @@ import { useStackRoot } from './root';
 
 export type VStackCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
-export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
+export interface UseStackControlOptions {
+  onContentMounted?: (content: HTMLElement) => any;
+  onContentDetached?: () => any;
+  transitionResolver?: () => string;
+}
+
+export function useStackControl(
+  props: VStackProps,
+  ctx: VStackSetupContext,
+  opts: UseStackControlOptions = {},
+) {
+  const { onContentMounted, onContentDetached, transitionResolver } = opts;
+
+  const router = useRouter();
+
+  const beforeEachHookRemover = router.beforeEach(async (to, from) => {
+    if (!control.isActive) return true;
+    const result = await navigationGuard.value(to, from);
+    if (!result) {
+      control.guardEffect();
+    }
+    return result;
+  });
+
+  const afterEachHookRemover = router.afterEach(() => {
+    if (control.closeOnNavigation) {
+      control.close({ force: true });
+    }
+  });
+
   const $vstack = useVueStack();
   const rootControl = useStackRoot();
-  const color = useColorClasses(props);
+  // const $colorScheme = useColorScheme();
+  // console.log($colorScheme.rootTheme);
+  const color = useColorClasses(props, { useRootThemeDefault: true });
   const state = reactive<VStackControlState>({
     // id,
-    isActive: props.modelValue,
+    isActive: props.lazyBoot ? false : props.modelValue,
     activator: null,
     closeReason: 'indeterminate',
     initialValue: props.value,
@@ -64,6 +95,7 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
   const persistent = computed(() => props.persistent);
   const closeOnEsc = computed(() => props.closeOnEsc);
   const closeOnNavigation = computed(() => props.closeOnNavigation);
+  const closeOnOutsideClick = computed(() => props.closeOnOutsideClick);
   const alwaysRender = computed(() => props.alwaysRender);
   const guardEffect = computed(() => props.guardEffect);
   const scrollLock = computed(() => props.scrollLock);
@@ -74,6 +106,7 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
   const backdropRef = ref<null | HTMLElement>(null);
   const focusTrap = computed(() => props.focusTrap);
   const focusRestorable = computed(() => props.focusRestorable);
+  const computedActivator = computed(() => props.activator);
   const backdrop = computed(() => {
     const { backdrop } = props;
     if (!backdrop) return;
@@ -191,16 +224,45 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
   });
 
   const TransitionDefine = computed(() => {
+    if (transitionResolver) {
+      return {
+        Ctor: Transition,
+        props: {
+          name: transitionResolver(),
+        },
+      };
+    }
     const { transition } = props;
     if (typeof transition === 'string') {
       return {
         Ctor: Transition,
-        name: transition,
+        props: {
+          name: transition,
+        },
       };
     } else {
+      // const { transition} = transition;
+      let Ctor: any = transition.transition;
+      let name: string | undefined;
+
+      if (typeof Ctor === 'string' || Ctor == null) {
+        name = Ctor || undefined;
+        Ctor = Transition;
+        // transition.props
+      }
+
+      const props = {
+        ...transition.props,
+      };
+
+      if (name) {
+        (props as any).name = name;
+      }
+      // if (!Ctor)
+      // transition.transition
       return {
         Ctor: Transition,
-        name: undefined,
+        props,
       };
     }
   });
@@ -248,6 +310,7 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
       onAfterLeave: (el) => {
         state.showing = false;
         state.closing = false;
+        onContentDetached && onContentDetached();
         nextTick(() => {
           !control.isActive && privateApi.setNeedRender(false);
         });
@@ -268,6 +331,7 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
     setIsActive(value, withEmit = true) {
       if (state.isActive === value) return;
       privateApi.clearTimeoutId();
+      value && triggerContentMountedTick();
       state.isActive = value;
 
       withEmit && ctx.emit('update:modelValue', value);
@@ -341,7 +405,12 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
       state.needRender = alwaysRender.value || needRender;
     },
     outsideClickCloseConditional(ev, pre) {
-      if (state.showing || !control.isFront() || $vstack.someTransitioning()) {
+      if (
+        !closeOnOutsideClick.value ||
+        state.showing ||
+        !control.isFront() ||
+        $vstack.someTransitioning()
+      ) {
         return false;
       }
 
@@ -438,13 +507,30 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
     get contentRef() {
       return contentRef;
     },
+    get activator() {
+      return state.activator;
+    },
     get backdropRef() {
       return backdropRef;
     },
     show(activator) {
-      const _activator =
-        (activator instanceof Event ? activator.target : activator) || null;
-      state.activator = (_activator as HTMLElement) || null;
+      let _activator: HTMLElement | null;
+      const propActivator = computedActivator.value;
+      if (propActivator === false) {
+        _activator = null;
+      } else if (propActivator) {
+        _activator = propActivator as HTMLElement;
+      } else {
+        if (activator instanceof Event) {
+          _activator = activator.target as HTMLElement;
+        } else if (activator instanceof Element) {
+          _activator = activator as HTMLElement;
+        } else {
+          _activator = document.activeElement as HTMLElement | null;
+        }
+      }
+
+      state.activator = _activator;
 
       // Fix for bubbling cue.
       return new Promise((resolve) =>
@@ -501,7 +587,7 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
         );
       });
     },
-    render(fn) {
+    render(fn, opts = {}) {
       const { needRender } = state;
       const { default: defaultSlot, activator: activatorSlot } =
         ctx.slots as VStackSlots;
@@ -554,15 +640,24 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
           });
         }
 
-        const { Ctor: TransitionCtor, name: transitionName } = TransitionDefine;
+        const { transition } = opts;
+        let $transition: VNode;
 
-        const $transition = (
-          <TransitionCtor
-            name={transitionName}
-            {...(transitionListeners as any)}>
-            {$child}
-          </TransitionCtor>
-        );
+        if (transition) {
+          $transition = cloneVNode(transition($child), transitionListeners);
+        } else {
+          const { Ctor: TransitionCtor, props: transitionProps } =
+            TransitionDefine;
+
+          $transition = (
+            <TransitionCtor
+              {...transitionProps}
+              {...(transitionListeners as any)}>
+              {$child}
+            </TransitionCtor>
+          );
+        }
+
         $contents.push(
           <Teleport to={rootContainer}>
             {[
@@ -587,8 +682,12 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
   });
 
   onMounted(() => {
+    if (props.lazyBoot && props.modelValue) {
+      control.show();
+    }
     if (control.isActive) {
       control.toFront();
+      triggerContentMountedTick();
       privateApi.checkFocusTrap();
     }
   });
@@ -599,6 +698,8 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
     privateApi.removeFocusTrapper();
     state.isDestroyed = true;
     state.activator = null;
+    beforeEachHookRemover();
+    afterEachHookRemover();
     $vstack.remove(control);
   });
 
@@ -607,7 +708,6 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
     (modelValue) => {
       privateApi.setIsActive(modelValue, false);
     },
-    { immediate: true },
   );
 
   watch(
@@ -646,20 +746,38 @@ export function useStackControl(props: VStackProps, ctx: VStackSetupContext) {
     { immediate: true },
   );
 
-  onBeforeRouteLeave(async (to, from) => {
-    if (!control.isActive) return true;
-    const result = await navigationGuard.value(to, from);
-    if (!result) {
-      control.guardEffect();
+  function triggerContentMountedTick(count = 0) {
+    const content = contentRef.value;
+    if (content) {
+      // this.autofocus();
+      onContentMounted && onContentMounted(content);
+      return;
     }
-    return result;
-  });
 
-  onBeforeRouteUpdate(() => {
-    if (control.closeOnNavigation) {
-      control.close({ force: true });
+    count++;
+
+    if (count < 3) {
+      nextTick(() => {
+        triggerContentMountedTick(count);
+      });
     }
-  });
+  }
+
+  // console.log(router);
+  // onBeforeRouteLeave(async (to, from) => {
+  //   if (!control.isActive) return true;
+  //   const result = await navigationGuard.value(to, from);
+  //   if (!result) {
+  //     control.guardEffect();
+  //   }
+  //   return result;
+  // });
+
+  // onBeforeRouteUpdate(() => {
+  //   if (control.closeOnNavigation) {
+  //     control.close({ force: true });
+  //   }
+  // });
 
   return control;
 }

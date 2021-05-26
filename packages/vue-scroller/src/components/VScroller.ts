@@ -1,22 +1,24 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, ExtractPropTypes } from 'vue';
 import { useScroller, UseScrollerSetting } from '../hooks';
+import { ExtractPropInput } from '@fastkit/vue-utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VScrollerSettings extends UseScrollerSetting {}
 
-export interface VScrollerProps {
-  settings?: VScrollerSettings | null;
-}
+export const scrollerProps = {
+  settings: {
+    type: Object as PropType<VScrollerSettings | null>,
+    default: null,
+  },
+};
+
+export type VScrollerProps = ExtractPropInput<typeof scrollerProps>;
+
+export type VScrollerResolvedProps = ExtractPropTypes<typeof scrollerProps>;
 
 export const VScroller = defineComponent({
   name: 'VScroller',
-  props: {
-    settings: {
-      type: Object as PropType<VScrollerSettings | null>,
-      default: null,
-    },
-  },
+  props: scrollerProps,
   setup(props, ctx) {
     const settings = props.settings || {};
     const scroller = useScroller({

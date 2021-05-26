@@ -1,7 +1,8 @@
 import './VStackDialog.scss';
-import { defineComponent } from 'vue';
+import { defineComponent, ExtractPropTypes } from 'vue';
 import { createStackableDefine, createStackActionProps } from '../schemes';
 import { useStackControl, useStackAction } from '../hooks';
+import { ExtractPropInput } from '@fastkit/vue-utils';
 
 const { props, emits } = createStackableDefine({
   defaultTransition: 'v-stack-slide-y',
@@ -10,15 +11,21 @@ const { props, emits } = createStackableDefine({
   defaultScrollLock: true,
 });
 
-const dialogProps = {
+export const stackDialogProps = {
   ...props,
   ...createStackActionProps(),
 };
 
+export type VStackDialogProps = ExtractPropInput<typeof stackDialogProps>;
+
+export type VStackDialogResolvedProps = ExtractPropTypes<
+  typeof stackDialogProps
+>;
+
 export const VStackDialog = defineComponent({
   name: 'VStackDialog',
   inheritAttrs: false,
-  props: dialogProps,
+  props: stackDialogProps,
   emits,
   setup(props, ctx) {
     const stackControl = useStackControl(props, ctx);
@@ -40,7 +47,9 @@ export const VStackDialog = defineComponent({
                 <div
                   class={['v-stack-dialog__content', color.colorClasses.value]}>
                   <div class="v-stack-dialog__body">{children}</div>
-                  <div class="v-stack-dialog__actions">{$actions}</div>
+                  {$actions.length > 0 && (
+                    <div class="v-stack-dialog__actions">{$actions}</div>
+                  )}
                 </div>,
               )}
             </div>
@@ -50,3 +59,5 @@ export const VStackDialog = defineComponent({
     });
   },
 });
+
+export type VStackDialogStatic = typeof VStackDialog;

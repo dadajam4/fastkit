@@ -1,6 +1,15 @@
 import { VNodeChild, PropType, ExtractPropTypes, VNode } from 'vue';
 import { VStackBtnProps } from '../components/VStackBtn';
 import { VStackControl } from './control';
+import type { VueStackService } from '../service';
+
+export type VStackActionMessageResolver = VNodeChild | (() => VNodeChild);
+
+export interface VStackActionMessageResolvers {
+  ok: VStackActionMessageResolver;
+  cancel: VStackActionMessageResolver;
+  close: VStackActionMessageResolver;
+}
 
 export type RawVStackActionContent =
   | VNodeChild
@@ -48,3 +57,48 @@ export interface VStackActionControl {
   readonly actions: VStackAction[];
   readonly $actions: VNode[];
 }
+
+export type VStackActionResolver = (service: VueStackService) => VStackAction;
+
+export const DEFAULT_ACTION_MESSAGES: VStackActionMessageResolvers = {
+  ok: 'OK',
+  cancel: 'CANCEL',
+  close: 'CLOSE',
+};
+
+export const DEFAULT_ACTIONS: Record<
+  keyof VStackActionMessageResolvers,
+  VStackActionResolver
+> = {
+  ok: (service) => {
+    return {
+      key: '__ok',
+      content: service.actionMessage('ok'),
+      color: service.primaryColor,
+      onClick: (control) => {
+        control.resolve(true);
+      },
+    };
+  },
+  cancel: (service) => {
+    return {
+      key: '__cancel',
+      content: service.actionMessage('cancel'),
+      color: service.primaryColor,
+      outlined: true,
+      onClick: (control) => {
+        control.resolve(false);
+      },
+    };
+  },
+  close: (service) => {
+    return {
+      key: '__close',
+      content: service.actionMessage('close'),
+      color: service.primaryColor,
+      onClick: (control) => {
+        control.close({ force: true });
+      },
+    };
+  },
+};

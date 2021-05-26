@@ -1,12 +1,23 @@
 import './Home.scss';
 import { defineComponent, ref } from 'vue';
-import { VStackBtn, VStackDialog } from '@fastkit/vue-stack';
+import {
+  VStackBtn,
+  VStackDialog,
+  VStackSnackbar,
+  VStackMenu,
+  useVueStack,
+} from '@fastkit/vue-stack';
 import { RouterLink } from 'vue-router';
+import { useColorScheme } from '@fastkit/vue-color-scheme';
 
 const component = defineComponent({
   name: 'HomeView',
   setup() {
+    const vueStack = useVueStack();
+    const colorScheme = useColorScheme();
     return {
+      vueStack,
+      colorScheme,
       disabled: ref(false),
       count: ref(0),
       stackActive: ref(false),
@@ -14,7 +25,7 @@ const component = defineComponent({
     };
   },
   render() {
-    const { scopeNames } = this.$color;
+    const { scopeNames } = this.colorScheme;
     return (
       <div style={{ padding: '20px' }}>
         <h2>Home</h2>
@@ -22,9 +33,39 @@ const component = defineComponent({
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/page2">page2</RouterLink>
 
+        <VStackBtn
+          onClick={() => {
+            this.vueStack.alert({
+              content: (ctrl) => {
+                return 'message';
+              },
+            });
+          }}>
+          click!
+        </VStackBtn>
+
+        <VStackSnackbar
+          top
+          v-slots={{
+            activator: ({ attrs }) => {
+              return [<VStackBtn {...attrs}>hoge</VStackBtn>];
+            },
+          }}>
+          あいうえお
+        </VStackSnackbar>
+
         <h1>App</h1>
-        <select v-model={this.$color.rootTheme}>
-          {this.$color.themeNames.map((t) => {
+
+        <VStackMenu
+          v-slots={{
+            activator: ({ attrs }) => {
+              return [<VStackBtn {...attrs}>メニューを開く</VStackBtn>];
+            },
+          }}>
+          これはメニューです
+        </VStackMenu>
+        <select v-model={this.colorScheme.rootTheme}>
+          {this.colorScheme.themeNames.map((t) => {
             return (
               <option value={t} key={t}>
                 {t}
@@ -56,8 +97,6 @@ const component = defineComponent({
         <VStackDialog
           backdrop
           persistent={this.persistent}
-          color="primary"
-          contained
           class={`my-stack--${this.count}`}
           v-model={this.stackActive}
           actions={[

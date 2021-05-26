@@ -14,11 +14,15 @@ import {
   ColorClassesControl,
 } from '@fastkit/vue-color-scheme';
 import { UseKeybordRef, StyleValue } from '@fastkit/vue-utils';
-import { createEmitDefine, rawNumberProp } from '@fastkit/vue-utils';
+import {
+  createEmitDefine,
+  rawNumberProp,
+  JavaScriptTransition,
+} from '@fastkit/vue-utils';
 
 type DelayTimerProps = 'openDelay' | 'closeDelay';
 
-export type VStackCloseReason = 'indeterminate' | 'resolved' | 'canceled';
+export type StackableCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
 export type VueStackActivatorPayload = HTMLElement | MouseEvent;
 
@@ -37,7 +41,7 @@ export interface VStackActivatorAttributes {
 export interface VStackControlState {
   isActive: boolean;
   activator: HTMLElement | null;
-  closeReason: VStackCloseReason;
+  closeReason: StackableCloseReason;
   initialValue: any;
   inputValue: any;
   showing: boolean;
@@ -53,7 +57,7 @@ export interface VStackControlState {
 
 export interface VStackCloseOptions {
   force?: boolean;
-  reason?: VStackCloseReason;
+  reason?: StackableCloseReason;
 }
 
 export function isStackControl(source: unknown): source is VStackControl {
@@ -86,6 +90,7 @@ export interface VStackControl {
   readonly closeDelay: number;
   readonly isDestroyed: boolean;
   readonly contentRef: Ref<HTMLElement | null>;
+  readonly activator: HTMLElement | null;
   readonly backdropRef: Ref<HTMLElement | null>;
 
   /** @private */
@@ -94,7 +99,8 @@ export interface VStackControl {
     readonly activatorAttrs: VStackActivatorAttributes;
     readonly Transition: {
       readonly Ctor: typeof Transition;
-      readonly name: string | undefined;
+      readonly props: any;
+      // readonly name: string | undefined;
     };
     readonly keybord: UseKeybordRef;
     readonly transitionListeners: {
@@ -131,6 +137,9 @@ export interface VStackControl {
         withClickOutside: (node: VNode) => VNode;
       },
     ) => VNode,
+    opts?: {
+      transition?: (child?: VNode) => VNode;
+    },
   ): VNode;
   toFront(): void;
   resetValue(): void;
@@ -165,27 +174,59 @@ export type VStackSlots = {
 export interface CreateStackablePropsOptions
   extends ColorSchemePropsStaticOptions {
   defaultTransition?: string;
+  /** @default false */
   defaultFocusTrap?: boolean;
+  /** @default false */
   defaultFocusRestorable?: boolean;
+  /** @default false */
   defaultScrollLock?: boolean;
+  /** @default true */
+  defaultCloseOnOutsideClick?: boolean;
+  /** @default true */
+  defaultCloseOnNavigation?: boolean;
+  /** @default 0 */
+  defaultTimeout?: number;
 }
 
-export function createStackableProps(opts: CreateStackablePropsOptions = {}) {
+export interface VStackObjectTransitionProp<
+  T extends string | JavaScriptTransition,
+> {
+  transition: T;
+  props?: T extends JavaScriptTransition ? T['props'] : typeof Transition.props;
+}
+
+export type RawVStackObjectTransitionProp<
+  T extends string | JavaScriptTransition,
+> = string | VStackObjectTransitionProp<T>;
+
+// const hoge: VStackObjectTransitionProp<typeof Transition> = {
+//   transition: Transition,
+// };
+
+export function createStackableProps<T extends string | JavaScriptTransition>(
+  opts: CreateStackablePropsOptions = {},
+) {
   const {
     defaultTransition = 'v-stack-fade',
     defaultFocusTrap = false,
     defaultFocusRestorable = false,
     defaultScrollLock = false,
+    defaultCloseOnOutsideClick = true,
+    defaultCloseOnNavigation = true,
+    defaultTimeout = 0,
   } = opts;
 
   return {
     ...colorSchemeProps(opts),
     modelValue: Boolean,
+    lazyBoot: Boolean,
     value: null,
     class: null,
     style: null as unknown as PropType<StyleValue>,
     transition: {
-      type: [String, Object] as PropType<string | typeof Transition>,
+      type: [String, Object, Function] as PropType<
+        RawVStackObjectTransitionProp<T>
+      >,
       default: defaultTransition,
     },
     alwaysRender: Boolean,
@@ -211,7 +252,7 @@ export function createStackableProps(opts: CreateStackablePropsOptions = {}) {
     closeDelay: rawNumberProp(200),
     closeOnOutsideClick: {
       type: Boolean,
-      default: true,
+      default: defaultCloseOnOutsideClick,
     },
     closeOnEsc: {
       type: Boolean,
@@ -219,11 +260,11 @@ export function createStackableProps(opts: CreateStackablePropsOptions = {}) {
     },
     closeOnNavigation: {
       type: Boolean,
-      default: true,
+      default: defaultCloseOnNavigation,
     },
     persistent: Boolean,
     zIndex: rawNumberProp(0),
-    timeout: rawNumberProp(0),
+    timeout: rawNumberProp(defaultTimeout),
     navigationGuard: {
       type: [Boolean, Function] as PropType<boolean | VStackNavigationGuard>,
       default: false,
@@ -231,6 +272,10 @@ export function createStackableProps(opts: CreateStackablePropsOptions = {}) {
     guardEffect: {
       type: [Boolean, String],
       default: true,
+    },
+    activator: {
+      type: [Object, Boolean] as PropType<Element | boolean | null>,
+      default: null,
     },
     ...stackableEmits.props,
     'v-slots': undefined as unknown as PropType<VStackSlots>,

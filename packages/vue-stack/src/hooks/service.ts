@@ -1,5 +1,5 @@
 import { inject } from 'vue';
-import { VueStackInjectionKey } from '../service';
+import { VueStackInjectionKey } from '../injections';
 import { VueStackError } from '../logger';
 
 export function useVueStack() {

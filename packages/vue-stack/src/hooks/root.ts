@@ -1,5 +1,5 @@
 import { inject } from 'vue';
-import { VStackRootInjectKey } from '../components/VStackRoot';
+import { VStackRootInjectKey } from '../injections';
 import { VueStackError } from '../logger';
 
 export function useStackRoot() {

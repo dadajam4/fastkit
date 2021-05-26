@@ -1,0 +1,69 @@
+@import '../styles/values.scss';
+
+.v-stack-snackbar {
+  position: fixed;
+  display: inline-flex;
+  vertical-align: bottom;
+  font-size: 14px;
+  border-radius: 2px;
+  box-shadow: $v-stack-snakbar-shadow;
+  transition: margin 0.3s $v-stack-easing-swing;
+
+  &--x-center {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &--top {
+    top: 24px;
+  }
+
+  &--top:not(.v-stack-snackbar--has-horizontal) {
+    top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  &--bottom {
+    bottom: 24px;
+  }
+
+  &--bottom:not(.v-stack-snackbar--has-horizontal) {
+    bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &--left {
+    left: 24px;
+  }
+
+  &--right {
+    right: 24px;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    padding: 14px 12px 14px 24px;
+    justify-content: space-between;
+    width: auto;
+    max-width: calc(100vw - 96px);
+    min-width: 288px;
+  }
+
+  &__body {
+    flex: 1 1 100%;
+    word-break: break-all;
+  }
+
+  &__actions {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding-left: 20px;
+  }
+
+  &__close {
+    margin: 0;
+  }
+}

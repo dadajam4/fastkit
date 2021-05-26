@@ -1,3 +1,4 @@
 export * from './control';
-// export * from './dialog';
 export * from './action';
+export * from './menu';
+export * from './dynamic';

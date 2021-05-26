@@ -1,12 +1,17 @@
 import './Home.scss';
 import { defineComponent, ref } from 'vue';
-import { VStackBtn, VStackDialog } from '@fastkit/vue-stack';
+import { VStackBtn, VStackDialog, useVueStack } from '@fastkit/vue-stack';
 import { RouterLink } from 'vue-router';
+import { useColorScheme } from '@fastkit/vue-color-scheme';
 
 const component = defineComponent({
   name: 'Page2View',
   setup() {
+    const vueStack = useVueStack();
+    const colorScheme = useColorScheme();
     return {
+      vueStack,
+      colorScheme,
       disabled: ref(false),
       count: ref(0),
       stackActive: ref(false),
@@ -14,7 +19,6 @@ const component = defineComponent({
     };
   },
   render() {
-    const { scopeNames } = this.$color;
     return (
       <div style={{ padding: '20px' }}>
         <h2>Home</h2>
@@ -23,8 +27,8 @@ const component = defineComponent({
         <RouterLink to="/page2">page2</RouterLink>
 
         <h1>Page2View</h1>
-        <select v-model={this.$color.rootTheme}>
-          {this.$color.themeNames.map((t) => {
+        <select v-model={this.colorScheme.rootTheme}>
+          {this.colorScheme.themeNames.map((t) => {
             return (
               <option value={t} key={t}>
                 {t}
@@ -100,7 +104,7 @@ const component = defineComponent({
           Disabled
         </label>
         <h3>contained</h3>
-        {scopeNames.map((scopeName) => {
+        {this.colorScheme.scopeNames.map((scopeName) => {
           return (
             <VStackBtn
               color={scopeName}
@@ -111,7 +115,7 @@ const component = defineComponent({
           );
         })}
         <h3>outlined</h3>
-        {scopeNames.map((scopeName) => {
+        {this.colorScheme.scopeNames.map((scopeName) => {
           return (
             <VStackBtn
               color={scopeName}
@@ -123,7 +127,7 @@ const component = defineComponent({
           );
         })}
         <h3>plain</h3>
-        {scopeNames.map((scopeName) => {
+        {this.colorScheme.scopeNames.map((scopeName) => {
           return (
             <VStackBtn
               color={scopeName}

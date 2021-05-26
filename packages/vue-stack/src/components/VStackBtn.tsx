@@ -5,19 +5,22 @@ import {
   navigationableEmits,
   navigationableProps,
   useNavigationable,
+  ExtractPropInput,
 } from '@fastkit/vue-utils';
 
-const props = {
+export const stackBtnProps = {
   ...colorSchemeProps({ defaultScope: 'base', defaultVariant: 'contained' }),
   ...navigationableProps,
   spacer: Boolean,
 };
 
-export type VStackBtnProps = Partial<ExtractPropTypes<typeof props>>;
+export type VStackBtnProps = ExtractPropInput<typeof stackBtnProps>;
+
+export type VStackBtnResolvedProps = ExtractPropTypes<typeof stackBtnProps>;
 
 export const VStackBtn = defineComponent({
   name: 'VStackBtn',
-  props,
+  props: stackBtnProps,
   emits: {
     ...navigationableEmits.emits,
   },

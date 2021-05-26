@@ -1,6 +1,7 @@
 import { computed } from 'vue';
 import {
   VStackControl,
+  VStackAction,
   VStackActionProps,
   VStackActionControl,
   resolveRawVStackActions,
@@ -8,13 +9,19 @@ import {
 } from '../schemes';
 import { VStackBtn } from '../components/VStackBtn';
 
+export interface UseStackActionOptions {
+  resolver?: (resolver: typeof resolveRawVStackActions) => VStackAction[];
+}
+
 export function useStackAction(
   props: VStackActionProps,
   control: VStackControl,
+  opts: UseStackActionOptions = {},
 ): VStackActionControl {
-  const actions = computed(() =>
-    resolveRawVStackActions(props.actions, control),
-  );
+  const actions = computed(() => {
+    if (opts.resolver) return opts.resolver(resolveRawVStackActions);
+    return resolveRawVStackActions(props.actions, control);
+  });
   const $actions = computed(() => {
     return actions.value.map((props) => {
       const content = resolveRawVStackActionContent(props.content, control);

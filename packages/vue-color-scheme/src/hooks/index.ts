@@ -6,8 +6,9 @@ import {
   PaletteName,
   ColorSchemeVariant,
 } from '../types';
-import { VueColorSchemeInjectionKey } from '../plugin';
+import { VueColorSchemeInjectionKey } from '../injections';
 import { ColorSchemeError } from '../logger';
+import type { VueColorSchemeService } from '../service';
 
 export interface ColorSchemeHooksProps {
   readonly theme?: ThemeName;
@@ -40,9 +41,19 @@ export function useColorVariantClasses(ctx: ColorSchemeHooksProps) {
   return colorVariantClasses;
 }
 
-export function useThemeClass(ctx: ColorSchemeHooksProps) {
+export function useThemeClass(
+  ctx: ColorSchemeHooksProps,
+  useRootThemeDefault?: boolean,
+) {
+  let service: VueColorSchemeService | undefined;
+  if (useRootThemeDefault) {
+    service = useColorScheme();
+  }
   const themeClass = computed(() => {
-    const { theme } = ctx;
+    let { theme } = ctx;
+    if (!theme && service) {
+      theme = service.rootTheme;
+    }
     return theme ? `${theme}-theme` : undefined;
   });
   return themeClass;
@@ -83,8 +94,11 @@ export interface ColorClassesControl {
 
 export function useColorClasses(
   ctx: ColorSchemeHooksProps,
+  opts: {
+    useRootThemeDefault?: boolean;
+  } = {},
 ): ColorClassesControl {
-  const themeClass = useThemeClass(ctx);
+  const themeClass = useThemeClass(ctx, opts.useRootThemeDefault);
   const scopeColorClass = useScopeColorClass(ctx);
   const textColorClass = useTextColorClass(ctx);
   const borderColorClass = useBorderColorClass(ctx);

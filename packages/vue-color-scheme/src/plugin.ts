@@ -1,19 +1,11 @@
-import { App, InjectionKey } from 'vue';
+import { App } from 'vue';
 import {
   RawVueColorSchemePluginSettings,
   VueColorSchemePluginSettings,
 } from './types';
+import { VueColorSchemeInjectionKey } from './injections';
 
 import { VueColorSchemeService } from './service';
-
-declare module '@vue/runtime-core' {
-  export interface ComponentCustomProperties {
-    $color: VueColorSchemeService;
-  }
-}
-
-export const VueColorSchemeInjectionKey: InjectionKey<VueColorSchemeService> =
-  Symbol();
 
 export class VueColorSchemePlugin {
   readonly installedApps = new Set<App>();
@@ -43,7 +35,6 @@ export class VueColorSchemePlugin {
 
     const $color = new VueColorSchemeService(this.settings);
 
-    app.config.globalProperties.$color = $color;
     app.provide(VueColorSchemeInjectionKey, $color);
 
     app.unmount = function () {
