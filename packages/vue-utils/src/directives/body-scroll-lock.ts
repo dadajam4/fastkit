@@ -88,7 +88,7 @@ export const bodyScrollLockDirective: BodyScrollLockDirective = {
   },
 };
 
-export function bodyScrollLockArgument(
+export function bodyScrollLockDirectiveArgument(
   bindingValue?: BodyScrollLockDirectiveBindingValue,
 ): [BodyScrollLockDirective, BodyScrollLockDirectiveBindingValue] {
   return [bodyScrollLockDirective, bindingValue];

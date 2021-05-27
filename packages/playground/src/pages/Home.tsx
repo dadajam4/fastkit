@@ -9,6 +9,7 @@ import {
 } from '@fastkit/vue-stack';
 import { RouterLink } from 'vue-router';
 import { useColorScheme } from '@fastkit/vue-color-scheme';
+import { VExpandTransition } from '@fastkit/vue-utils';
 
 const component = defineComponent({
   name: 'HomeView',
@@ -22,6 +23,7 @@ const component = defineComponent({
       count: ref(0),
       stackActive: ref(false),
       persistent: ref(false),
+      expanded: ref(false),
     };
   },
   render() {
@@ -63,6 +65,37 @@ const component = defineComponent({
             },
           }}>
           これはメニューです
+          <VStackBtn
+            onClick={(e) => {
+              this.expanded = !this.expanded;
+            }}>
+            click!!
+          </VStackBtn>
+          <VExpandTransition
+            onAfterEnter={(e) => {
+              console.log(e);
+            }}>
+            <div v-show={this.expanded} style={{ transition: 'all 0.35s' }}>
+              <p>
+                中身です。 中身です。 中身です。 中身です。 中身です。
+                中身です。
+              </p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+              <p>中身です。 中身です。</p>
+            </div>
+          </VExpandTransition>
         </VStackMenu>
         <select v-model={this.colorScheme.rootTheme}>
           {this.colorScheme.themeNames.map((t) => {

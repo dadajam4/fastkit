@@ -79,7 +79,6 @@ export function createJavaScriptTransition<
     const { slots } = ctx;
     const resolvedProps: TransitionProps = {
       css: false,
-      // ...listeners,
     };
     const listeners = {
       ...opts.render(props as any, ctx as any),
@@ -87,7 +86,6 @@ export function createJavaScriptTransition<
     javaScriptTransitionHookKeys.forEach((key) => {
       let _key = key.slice(2);
       _key = _key.charAt(0).toLowerCase() + _key.slice(1);
-
       (resolvedProps as any)[key] = (el: any, done: any) => {
         const fn = listeners[key] as any;
         fn && fn(el, done);

@@ -95,12 +95,9 @@ export const clickOutsideDirective: ClickOutsideDirective = {
     document.removeEventListener('click', fn, true);
     delete el[ClickOutsideDirectiveElementSymbol];
   },
-  // getSSRProps(binding, vnode) {
-  //   return undefined;
-  // },
 };
 
-export function clickOutsideArgument(
+export function clickOutsideDirectiveArgument(
   bindingValue: RawClickOutsideDirectiveBindingValue,
 ): [ClickOutsideDirective, RawClickOutsideDirectiveBindingValue] {
   return [clickOutsideDirective, bindingValue];

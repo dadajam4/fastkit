@@ -3,6 +3,7 @@ import {
   createJavaScriptTransition,
   ExtractPropInput,
 } from '@fastkit/vue-utils';
+import { addTransitionendEvent } from '@fastkit/helpers';
 
 const HORIZONTAL_MARGIN = 24;
 const SAFE_TIMEOUT = 1000;
@@ -125,23 +126,19 @@ export const VStackSnackbarTransition = createJavaScriptTransition({
         const beforeTimer = safeTimer;
 
         setOffset(el, true).then(() => {
-          removeOffset(el);
-          el.addEventListener(
-            'transitionend',
-            (ev) => {
+          addTransitionendEvent(
+            el,
+            () => {
               if (beforeTimer !== safeTimer) return;
-
-              const { propertyName } = ev;
-              if (propertyName.indexOf('margin') === 0) {
-                clearSafeTimer();
-                done();
-              }
+              clearSafeTimer();
+              done();
             },
             {
-              capture: false,
               once: true,
+              properties: (prop) => prop.indexOf('margin') === 0,
             },
           );
+          removeOffset(el);
         });
       },
       onAfterEnter: reset,
@@ -157,20 +154,16 @@ export const VStackSnackbarTransition = createJavaScriptTransition({
         const beforeTimer = safeTimer;
 
         setOffset(el).then(() => {
-          el.addEventListener(
-            'transitionend',
-            (ev) => {
+          addTransitionendEvent(
+            el,
+            () => {
               if (beforeTimer !== safeTimer) return;
-
-              const { propertyName } = ev;
-              if (propertyName.indexOf('margin') === 0) {
-                reset(el, true);
-                done();
-              }
+              reset(el, true);
+              done();
             },
             {
-              capture: false,
               once: true,
+              properties: (prop) => prop.indexOf('margin') === 0,
             },
           );
         });

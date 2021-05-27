@@ -19,8 +19,8 @@ import { useColorClasses } from '@fastkit/vue-color-scheme';
 import { toInt, attemptFocus, focusFirstDescendant } from '@fastkit/helpers';
 import {
   useKeybord,
-  clickOutsideArgument,
-  bodyScrollLockArgument,
+  clickOutsideDirectiveArgument,
+  bodyScrollLockDirectiveArgument,
   StyleValue,
 } from '@fastkit/vue-utils';
 import { useRouter } from 'vue-router';
@@ -611,7 +611,7 @@ export function useStackControl(
         let $child: VNode | undefined;
         if (needRender) {
           const children = defaultSlot && defaultSlot(control);
-          const _clickOutside = clickOutsideArgument({
+          const _clickOutside = clickOutsideDirectiveArgument({
             handler: (ev) => {
               control.close();
             },
@@ -625,7 +625,9 @@ export function useStackControl(
           const node = fn(children, { withClickOutside });
           const dirs: DirectiveArguments = [
             [vShow, control.isActive],
-            bodyScrollLockArgument(scrollLock.value && control.isActive),
+            bodyScrollLockDirectiveArgument(
+              scrollLock.value && control.isActive,
+            ),
           ];
           if (!usedClickOutside) {
             dirs.push(_clickOutside);

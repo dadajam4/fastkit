@@ -1,5 +1,6 @@
 import { PropType, RendererElement } from 'vue';
 import { createJavaScriptTransition } from '../utils';
+import { addTransitionendEvent } from '@fastkit/helpers';
 
 interface HTMLExpandElement extends HTMLElement {
   _parent?: (Node & ParentNode & HTMLElement) | null;
@@ -19,13 +20,13 @@ export const VExpandTransition = createJavaScriptTransition({
       type: String as PropType<'width' | 'height'>,
       default: 'height' as const,
     },
-    className: {
-      type: String as PropType<string>,
-      default: 'v-expand-transition' as const,
-    },
+    // className: {
+    //   type: String as PropType<string>,
+    //   default: 'v-expand-transition' as const,
+    // },
   },
   render(props) {
-    const { className, expand: sizeProperty } = props;
+    const { expand: sizeProperty } = props;
     const offsetProperty = `offset${
       sizeProperty.charAt(0).toUpperCase() + sizeProperty.slice(1)
     }` as 'offsetHeight' | 'offsetWidth';
@@ -44,9 +45,9 @@ export const VExpandTransition = createJavaScriptTransition({
 
     function afterLeave(_el: RendererElement) {
       const el = _el as HTMLExpandElement;
-      if (className && el._parent) {
-        el._parent.classList.remove(className);
-      }
+      // if (className && el._parent) {
+      //   el._parent.classList.remove(className);
+      // }
       resetStyles(el);
     }
 
@@ -61,7 +62,7 @@ export const VExpandTransition = createJavaScriptTransition({
           [sizeProperty]: el.style[sizeProperty],
         };
       },
-      onEnter(_el) {
+      onEnter(_el, done) {
         const el = _el as HTMLExpandElement;
 
         const initialStyle = el._initialStyle;
@@ -79,17 +80,21 @@ export const VExpandTransition = createJavaScriptTransition({
 
         el.style.transition = initialStyle.transition;
 
-        if (className && el._parent) {
-          el._parent.classList.add(className);
-        }
+        // if (className && el._parent) {
+        //   el._parent.classList.add(className);
+        // }
 
         requestAnimationFrame(() => {
+          addTransitionendEvent(el, done, {
+            once: true,
+            properties: sizeProperty,
+          });
           el.style[sizeProperty] = offset;
         });
       },
       onAfterEnter: resetStyles,
       onEnterCancelled: resetStyles,
-      onLeave(_el) {
+      onLeave(_el, done) {
         const el = _el as HTMLExpandElement;
         el._initialStyle = {
           transition: '',
@@ -102,7 +107,13 @@ export const VExpandTransition = createJavaScriptTransition({
         el.style[sizeProperty] = `${el[offsetProperty]}px`;
         void el.offsetHeight; // force reflow
 
-        requestAnimationFrame(() => (el.style[sizeProperty] = '0'));
+        requestAnimationFrame(() => {
+          addTransitionendEvent(el, done, {
+            once: true,
+            properties: sizeProperty,
+          });
+          el.style[sizeProperty] = '0';
+        });
       },
       onAfterLeave: afterLeave,
       onLeaveCancelled: afterLeave,

@@ -6,6 +6,7 @@ import {
   PropType,
   reactive,
   CSSProperties,
+  withDirectives,
 } from 'vue';
 import {
   createStackableDefine,
@@ -15,7 +16,11 @@ import {
   VStackMenuControl,
 } from '../schemes';
 import { useStackControl } from '../hooks';
-import { ExtractPropInput, useWindow } from '@fastkit/vue-utils';
+import {
+  ExtractPropInput,
+  useWindow,
+  resizeDirectiveArgument,
+} from '@fastkit/vue-utils';
 import { logger } from '../logger';
 
 const DEFAULT_EDGE_MARGIN = 20;
@@ -68,9 +73,10 @@ export const VStackMenu = defineComponent({
   setup(props, ctx) {
     const stackControl = useStackControl(props, ctx, {
       onContentMounted: () => {
-        startHandleResize();
+        updateRects();
+        // startHandleResize();
       },
-      onContentDetached: stopHandleResize,
+      // onContentDetached: stopHandleResize,
       transitionResolver,
     });
 
@@ -84,24 +90,6 @@ export const VStackMenu = defineComponent({
     const _distance = computed(() => props.distance);
     const _resizeWatchDebounce = computed(() => props.resizeWatchDebounce);
     const $window = useWindow();
-
-    let resizeHandle: (() => void) | null = null;
-
-    function startHandleResize() {
-      stopHandleResize();
-      resizeHandle = $window.onResize({
-        handler: updateRects,
-        immediate: true,
-        debounce: _resizeWatchDebounce.value,
-      });
-    }
-
-    function stopHandleResize() {
-      if (resizeHandle) {
-        resizeHandle();
-        resizeHandle = null;
-      }
-    }
 
     const _overlap = computed(() => props.overlap);
     const _edgeMargin = computed(() => props.edgeMargin);
@@ -430,11 +418,22 @@ export const VStackMenu = defineComponent({
     const { stackControl, stackMenuControl } = this;
     const { render, color } = stackControl;
     const { styles } = stackMenuControl;
+
     return render((children) => {
-      return (
+      return withDirectives(
         <div class={['v-stack-menu', color.colorClasses.value]} style={styles}>
-          {children}
-        </div>
+          {withDirectives(<div class="v-stack-menu__body">{children}</div>, [
+            resizeDirectiveArgument((payload) => {
+              stackMenuControl.updateRects();
+            }),
+          ])}
+        </div>,
+        [
+          resizeDirectiveArgument({
+            handler: stackMenuControl.updateRects,
+            root: true,
+          }),
+        ],
       );
     });
   },
