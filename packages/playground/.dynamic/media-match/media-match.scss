@@ -1,0 +1,138 @@
+/* stylelint-disable */
+/**
+ * This is auto generated file.
+ * Do not edit !!!
+ *
+ * @see: https://github.com/dadajam4/fastkit/tree/main/packages/media-match
+ */
+
+$media-matches: (
+  (
+    key: xs,
+    condition: all and (max-width:575px),
+  ),
+  (
+    key: smAndDown,
+    condition: all and (max-width:767px),
+  ),
+  (
+    key: narrow,
+    condition: all and (max-width:767px),
+  ),
+  (
+    key: smAndUp,
+    condition: all and (min-width:576px),
+  ),
+  (
+    key: sm,
+    condition: all and (min-width:576px) and (max-width:767px),
+  ),
+  (
+    key: mdAndDown,
+    condition: all and (max-width:1023px),
+  ),
+  (
+    key: mdAndUp,
+    condition: all and (min-width:768px),
+  ),
+  (
+    key: wide,
+    condition: all and (min-width:768px),
+  ),
+  (
+    key: md,
+    condition: all and (min-width:768px) and (max-width:1023px),
+  ),
+  (
+    key: lg,
+    condition: all and (min-width:1024px),
+  ),
+  (
+    key: xxs,
+    condition: (max-width:320px),
+  ),
+);
+
+$media-match-maps: (
+  xs: "all and (max-width:575px)",
+  smAndDown: "all and (max-width:767px)",
+  narrow: "all and (max-width:767px)",
+  smAndUp: "all and (min-width:576px)",
+  sm: "all and (min-width:576px) and (max-width:767px)",
+  mdAndDown: "all and (max-width:1023px)",
+  mdAndUp: "all and (min-width:768px)",
+  wide: "all and (min-width:768px)",
+  md: "all and (min-width:768px) and (max-width:1023px)",
+  lg: "all and (min-width:1024px)",
+  xxs: "(max-width:320px)",
+);
+
+$mq-each-target: null;
+$mq-each-prefix: null;
+$mq-each-prefix-org: null;
+
+@function media-match-to-string($list, $glue: '', $is-nested: false) {
+  $result: null;
+
+  @for $i from 1 through length($list) {
+    $e: nth($list, $i);
+
+    @if type-of($e) == list {
+      $result: $result#{media-match-to-string($e, $glue, true)};
+    } @else {
+      $result: if(
+        $i != length($list) or $is-nested,
+        $result#{$e}#{$glue},
+        $result#{$e}
+      );
+    }
+  }
+
+  @return $result;
+}
+
+// Multiple conditions can be specified
+@mixin mq($targets...) {
+  $conditions: ();
+  $len: length($targets);
+
+  @for $i from 1 through $len {
+    $target: nth($targets, $i);
+    $condition: null;
+
+    $condition: map-get($media-match-maps, $target);
+    $conditions: append($conditions, $condition);
+  }
+
+  $conditionsStr: media-match-to-string($conditions, ', ');
+
+  @media #{$conditionsStr} {
+    @content;
+  }
+}
+
+@mixin mq-each() {
+  $mq-each-target: null;
+  $mq-each-prefix: null;
+  $is-first: true;
+
+  @each $define in $media-matches {
+    $target: map-get($define, key);
+    $condition-target: map-get($define, condition);
+
+    $mq-each-target: $target;
+    $mq-each-prefix-org: #{$target + '-'};
+    $mq-each-prefix: if($is-first, '', $mq-each-prefix-org);
+    $is-first: false;
+
+    @if $condition-target == null {
+      @content;
+    }
+
+    @else {
+      @include mq($condition-target) {
+        @content;
+      }
+    }
+  }
+}

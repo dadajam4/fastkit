@@ -1,8 +1,10 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { MediaMatchSettings, MediaMatchCondition } from './schemes';
+import { MediaMatchSettings, MediaMatchCondition } from '../schemes';
 import { esbuildRequire } from '@fastkit/node-util';
-import { logger } from './logger';
+import { logger } from '../logger';
+import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
+import { EV } from '@fastkit/ev';
 
 const BANNER = `
 /**
@@ -18,7 +20,18 @@ export interface MediaMatchGeneratorOptions {
   dest: string;
 }
 
-export async function generator(opts: MediaMatchGeneratorOptions) {
+export interface MediaMatchGeneratorResult {
+  ts: {
+    path: string;
+  };
+  scss: {
+    path: string;
+  };
+}
+
+export async function generator(
+  opts: MediaMatchGeneratorOptions,
+): Promise<MediaMatchGeneratorResult> {
   const { src, dest } = opts;
   let settings: MediaMatchSettings;
   if (typeof src === 'string') {
@@ -97,6 +110,8 @@ export async function generator(opts: MediaMatchGeneratorOptions) {
   const mediaMatchKeys = mediaMatches.map(({ key }) => `'${key}'`).join(' | ');
 
   const TS_SOURCE = `
+// @ts-nocheck
+/* eslint-disable */
 ${BANNER}
 
 export type MediaMatchKey = ${mediaMatchKeys};
@@ -115,6 +130,7 @@ export const mediaMatches: MediaMatch[] = ${JSON.stringify(
   `.trim();
 
   const SCSS_SOURCE = `
+/* stylelint-disable */
 ${BANNER}
 
 $media-matches: (
@@ -136,6 +152,76 @@ $media-match-maps: (
     .map((match) => match.key + ': "' + match.condition + '"')
     .join(',\n  ')},
 );
+
+$mq-each-target: null;
+$mq-each-prefix: null;
+$mq-each-prefix-org: null;
+
+@function media-match-to-string($list, $glue: '', $is-nested: false) {
+  $result: null;
+
+  @for $i from 1 through length($list) {
+    $e: nth($list, $i);
+
+    @if type-of($e) == list {
+      $result: $result#{media-match-to-string($e, $glue, true)};
+    } @else {
+      $result: if(
+        $i != length($list) or $is-nested,
+        $result#{$e}#{$glue},
+        $result#{$e}
+      );
+    }
+  }
+
+  @return $result;
+}
+
+// Multiple conditions can be specified
+@mixin mq($targets...) {
+  $conditions: ();
+  $len: length($targets);
+
+  @for $i from 1 through $len {
+    $target: nth($targets, $i);
+    $condition: null;
+
+    $condition: map-get($media-match-maps, $target);
+    $conditions: append($conditions, $condition);
+  }
+
+  $conditionsStr: media-match-to-string($conditions, ', ');
+
+  @media #{$conditionsStr} {
+    @content;
+  }
+}
+
+@mixin mq-each() {
+  $mq-each-target: null;
+  $mq-each-prefix: null;
+  $is-first: true;
+
+  @each $define in $media-matches {
+    $target: map-get($define, key);
+    $condition-target: map-get($define, condition);
+
+    $mq-each-target: $target;
+    $mq-each-prefix-org: #{$target + '-'};
+    $mq-each-prefix: if($is-first, '', $mq-each-prefix-org);
+    $is-first: false;
+
+    @if $condition-target == null {
+      @content;
+    }
+
+    @else {
+      @include mq($condition-target) {
+        @content;
+      }
+    }
+  }
+}
   `.trim();
 
   await fs.ensureDir(dest);
@@ -146,4 +232,57 @@ $media-match-maps: (
     'created dynamic media match values:',
     ...[TS_DEST, SCSS_DEST].map((p) => `\n  -> ${p}`),
   );
+
+  return {
+    ts: { path: TS_DEST },
+    scss: { path: SCSS_DEST },
+  };
+}
+
+export interface MediaMatchGeneratorRunnerOptions {
+  src: string;
+  dest: string;
+  watch?: boolean;
+}
+
+export interface MediaMatchGeneratorRunnerEventMap {
+  load: ESbuildRequireResult<MediaMatchGeneratorResult>;
+}
+
+export class MediaMatchGeneratorRunner extends EV {
+  private runner: ESbuildRunner<MediaMatchGeneratorResult>;
+  readonly src: string;
+  readonly dest: string;
+
+  constructor(opts: MediaMatchGeneratorRunnerOptions) {
+    super();
+    this.src = opts.src;
+    this.dest = opts.dest;
+    this.resolver = this.resolver.bind(this);
+    this.runner = new ESbuildRunner({
+      entry: opts.src,
+      watch: opts.watch,
+      resolver: this.resolver,
+    });
+    this.runner.on('build', (result) => {
+      this.emit('load', result);
+    });
+  }
+
+  run() {
+    return this.runner.run();
+  }
+
+  async resolver(
+    result: ESbuildRequireResult<{
+      default: MediaMatchSettings;
+    }>,
+  ): Promise<MediaMatchGeneratorResult> {
+    const settings = result.exports.default;
+    const _result = await generator({
+      src: settings,
+      dest: this.dest,
+    });
+    return _result;
+  }
 }

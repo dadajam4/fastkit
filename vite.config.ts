@@ -6,6 +6,7 @@ import { PACKAGES_DIR, targets } from './core/utils';
 import { globalsPlugin } from './plugins/playground-globals';
 import { rawStylesPlugin } from './plugins/raw-styles';
 import { colorSchemeVitePlugin } from './packages/color-scheme/src/tool';
+import { mediaMatchVitePlugin } from './packages/media-match/src/tool';
 
 const fastkitAliases = Object.fromEntries(
   targets.map((target) => {
@@ -37,7 +38,11 @@ export default defineConfig({
     rawStylesPlugin(),
     colorSchemeVitePlugin({
       src: './packages/playground/src/config/color-scheme',
-      dest: DYNAMIC_DEST_DIR,
+      dest: path.join(DYNAMIC_DEST_DIR, 'color-scheme'),
+    }),
+    mediaMatchVitePlugin({
+      src: './packages/playground/src/config/media-match',
+      dest: path.join(DYNAMIC_DEST_DIR, 'media-match'),
     }),
   ],
 });

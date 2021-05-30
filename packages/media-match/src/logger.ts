@@ -4,4 +4,4 @@ const name = 'media-match';
 
 export const logger = new TinyLogger(name);
 
-export const ColorSchemeError = createTinyError(name);
+export const MediaMatchError = createTinyError(name);

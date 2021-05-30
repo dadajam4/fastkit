@@ -25,6 +25,7 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/playground#readme",
   "dependencies": {
     "@fastkit/color-scheme": "0.1.10",
+    "@fastkit/media-match": "0.1.10",
     "@fastkit/vue-color-scheme": "0.1.10",
     "@fastkit/vue-stack": "0.1.10",
     "@fastkit/tiny-logger": "0.1.10"

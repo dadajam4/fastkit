@@ -75,38 +75,3 @@ export function createMediaMatchSettings<
   };
   return _settings;
 }
-
-// const hoge = createMediaMatchSettings({
-//   breakPoints: [
-//     {
-//       key: 'xs',
-//       max: 575,
-//       description: 'Phone (Narrow)',
-//     },
-//     {
-//       key: 'sm',
-//       max: 767,
-//       description: 'Phone',
-//     },
-//     {
-//       key: 'md',
-//       max: 1023,
-//       description: 'Console or Tablet',
-//     },
-//     {
-//       key: 'lg',
-//       min: 1024,
-//       description: 'Console (Wide)',
-//     },
-//   ],
-//   customs: [
-//     {
-//       key: 'xxs',
-//       condition: '(max-width:320px)',
-//       description: 'Very narrow device',
-//     },
-//   ],
-// }).setAlias({
-//   narrow: 'smAndDown',
-//   wide: 'mdAndUp',
-// });

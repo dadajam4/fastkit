@@ -2,6 +2,10 @@
   "name": "@fastkit/media-match",
   "version": "0.1.10",
   "description": "@fastkit/media-match",
+  "buildOptions": {
+    "name": "MediaMatch",
+    "tool": true
+  },
   "main": "index.js",
   "module": "dist/media-match.esm-bundler.js",
   "files": [

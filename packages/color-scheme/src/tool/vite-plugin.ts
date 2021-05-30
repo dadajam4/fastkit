@@ -36,12 +36,13 @@ export function colorSchemeVitePlugin(opts: ColorSchemePluginOptions): Plugin {
   const { src } = opts;
 
   const rawEntryPoint = path.resolve(src);
+
   // const cacheName = entry.replace(/\//g, '_') + '.scss';
   // console.log('!!!', cacheName);
 
   return {
     name: 'colorScheme',
-    async config(config) {
+    async config(config, { command }) {
       const { dest: _dest } = opts;
 
       let dest: string;
@@ -57,7 +58,7 @@ export function colorSchemeVitePlugin(opts: ColorSchemePluginOptions): Plugin {
       const runner = new LoadColorSchemeRunner({
         entry: rawEntryPoint,
         dest,
-        watch: true,
+        watch: command === 'serve',
       });
 
       const { cachePaths } = (await runner.run()).exports;
