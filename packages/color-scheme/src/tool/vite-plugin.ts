@@ -1,12 +1,7 @@
 import { Plugin } from 'vite';
-import {
-  loadColorScheme,
-  // COLOR_SCHEME_LOADER_TYPES,
-  // ColorSchemeLoaderType,
-} from './loader';
+import { LoadColorSchemeRunner } from './loader';
 import path from 'path';
 import { findPackageDir } from '@fastkit/node-util';
-import chokidar from 'chokidar';
 import { ColorSchemeError } from '../logger';
 
 // const importSuffix = 'color-scheme';
@@ -59,30 +54,13 @@ export function colorSchemeVitePlugin(opts: ColorSchemePluginOptions): Plugin {
         dest = _dest;
       }
 
-      let watcher: chokidar.FSWatcher | null;
+      const runner = new LoadColorSchemeRunner({
+        entry: rawEntryPoint,
+        dest,
+        watch: true,
+      });
 
-      async function load() {
-        if (watcher) {
-          watcher.close();
-          watcher = null;
-        }
-
-        const loadResult = await loadColorScheme(rawEntryPoint, dest);
-
-        const watcherIgnoreRe = /^(node_modules|node-file:)/;
-
-        const { dependencies } = loadResult;
-        const filteredDependencies = dependencies.filter(
-          (d) => !watcherIgnoreRe.test(d),
-        );
-        if (filteredDependencies.length) {
-          watcher = chokidar.watch(filteredDependencies).on('change', load);
-        }
-
-        return loadResult;
-      }
-
-      const { cachePaths } = await load();
+      const { cachePaths } = (await runner.run()).exports;
 
       const cssOptions = {
         ...config.css,

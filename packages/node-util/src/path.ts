@@ -5,9 +5,9 @@ export async function resolveEntryPoint(
   rawEntryPoint: string,
   extensions: string | string[] = ['ts', 'js'],
 ) {
-  const { ext, base } = path.parse(rawEntryPoint);
+  const { ext } = path.parse(rawEntryPoint);
   if (ext) {
-    return base;
+    return rawEntryPoint;
   }
   if (await pathExists(rawEntryPoint, 'dir')) {
     for (const _ext of extensions) {

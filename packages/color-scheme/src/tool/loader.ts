@@ -3,7 +3,8 @@ import { toScssValues } from './to-scss-values';
 import fs from 'fs-extra';
 import path from 'path';
 import { render } from 'eta';
-import { esbuildRequire } from '@fastkit/node-util';
+import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
+import { EV } from '@fastkit/ev';
 
 const TEMPLATES_DIR = path.resolve(__dirname, 'assets/templates');
 
@@ -20,10 +21,6 @@ export interface TemplateScope {
 export type ColorSchemeLoaderResult = {
   entryPoint: string;
   dependencies: string[];
-  // scheme: ColorScheme<any, any, any, any>;
-  // json: ColorSchemeJSON<any, any, any, any>;
-  // info: ColorSchemeInfo<any, any, any>;
-  // scss: string;
   cachePaths: {
     scheme: string;
     json: string;
@@ -32,91 +29,116 @@ export type ColorSchemeLoaderResult = {
   };
 };
 
-export async function loadColorScheme(
-  rawEntryPoint: string,
-  dest: string,
-): Promise<ColorSchemeLoaderResult> {
-  const {
-    entryPoint,
-    exports: exportsResult,
-    dependencies,
-  } = await esbuildRequire(rawEntryPoint);
-  const { name: entryName } = path.parse(entryPoint);
-  // const cachePathPrefix = entryDir.replace(/\//g, '_') + '_';
-  const scheme = exportsResult.default as ColorScheme<any, any, any, any>;
-  const json = scheme.toJSON();
-  const scssValues = toScssValues(scheme);
-  // const cacheDir = await ensureCacheDir();
-  const templateScope: TemplateScope = {
-    scheme,
-    scssValues,
-    list: (source, divider = ', ') => {
-      return source.map((sourc) => `'${sourc}'`).join(divider);
-    },
+export interface LoadColorSchemeRunnerOptions {
+  entry: string;
+  dest: string;
+  watch?: boolean;
+}
+
+export interface LoadColorSchemeRunnerLoadResult {
+  cachePaths: {
+    json: string;
+    info: string;
+    scss: string;
   };
+}
 
-  await fs.ensureDir(dest);
+export interface LoadColorSchemeRunnerEventMap {
+  load: ESbuildRequireResult<LoadColorSchemeRunnerLoadResult>;
+}
 
-  async function generateScssCache() {
-    const fileName = entryName + '.scss';
-    const cachePath = path.join(dest, fileName);
-    const content = await renderTemplate('scss', templateScope);
-    await fs.writeFile(cachePath, content);
-    return {
-      content,
-      cachePath,
-    };
+export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
+  private runner: ESbuildRunner<LoadColorSchemeRunnerLoadResult>;
+  readonly dest: string;
+
+  constructor(opts: LoadColorSchemeRunnerOptions) {
+    super();
+
+    this.resolver = this.resolver.bind(this);
+    this.dest = opts.dest;
+
+    this.runner = new ESbuildRunner({
+      entry: opts.entry,
+      watch: opts.watch,
+      resolver: this.resolver,
+    });
+    this.runner.on('build', (result) => {
+      this.emit('load', result);
+    });
   }
 
-  async function generateInfoCache() {
-    const fileName = entryName + '.info.ts';
-    const cachePath = path.join(dest, fileName);
-    const content = await renderTemplate('info', templateScope);
-    await fs.writeFile(cachePath, content);
-    return {
-      content,
-      cachePath,
+  async resolver(
+    result: ESbuildRequireResult<{
+      default: ColorScheme<any, any, any, any>;
+    }>,
+  ): Promise<LoadColorSchemeRunnerLoadResult> {
+    const { entryPoint, exports } = result;
+    const { name: entryName } = path.parse(entryPoint);
+    const scheme = exports.default;
+    const { dest } = this;
+    const json = scheme.toJSON();
+    const scssValues = toScssValues(scheme);
+    const templateScope: TemplateScope = {
+      scheme,
+      scssValues,
+      list: (source, divider = ', ') => {
+        return source.map((sourc) => `'${sourc}'`).join(divider);
+      },
     };
+
+    await fs.ensureDir(this.dest);
+
+    async function generateScssCache() {
+      const fileName = entryName + '.scss';
+      const cachePath = path.join(dest, fileName);
+      const content = await renderTemplate('scss', templateScope);
+      await fs.writeFile(cachePath, content);
+      return {
+        content,
+        cachePath,
+      };
+    }
+
+    async function generateInfoCache() {
+      const fileName = entryName + '.info.ts';
+      const cachePath = path.join(dest, fileName);
+      const content = await renderTemplate('info', templateScope);
+      await fs.writeFile(cachePath, content);
+      return {
+        content,
+        cachePath,
+      };
+    }
+
+    async function generateJSONCache() {
+      const fileName = entryName + '.json';
+      const cachePath = path.join(dest, fileName);
+      const content = `export default ${JSON.stringify(json)};`;
+      return {
+        content,
+        cachePath,
+      };
+    }
+
+    const [scssResult, infoResult, jsonResult] = await Promise.all([
+      generateScssCache(),
+      generateInfoCache(),
+      generateJSONCache(),
+    ]);
+
+    const _result: LoadColorSchemeRunnerLoadResult = {
+      cachePaths: {
+        json: jsonResult.cachePath,
+        info: infoResult.cachePath,
+        scss: scssResult.cachePath,
+      },
+    };
+    return _result;
   }
 
-  async function generateJSONCache() {
-    const fileName = entryName + '.json';
-    const cachePath = path.join(dest, fileName);
-    const content = `export default ${JSON.stringify(json)};`;
-    return {
-      content,
-      cachePath,
-    };
+  run() {
+    return this.runner.run();
   }
-
-  async function generateSchemeCache() {
-    const fileName = entryName + '.ts';
-    const cachePath = path.join(dest, fileName);
-    const content = await fs.readFile(entryPoint, 'utf-8');
-    await fs.writeFile(cachePath, content);
-    return {
-      content,
-      cachePath,
-    };
-  }
-
-  const [scssResult, infoResult, jsonResult, schemeResult] = await Promise.all([
-    generateScssCache(),
-    generateInfoCache(),
-    generateJSONCache(),
-    generateSchemeCache(),
-  ]);
-
-  return {
-    entryPoint,
-    dependencies,
-    cachePaths: {
-      scheme: schemeResult.cachePath,
-      json: jsonResult.cachePath,
-      info: infoResult.cachePath,
-      scss: scssResult.cachePath,
-    },
-  };
 }
 
 type TemplateName = 'info' | 'scss';

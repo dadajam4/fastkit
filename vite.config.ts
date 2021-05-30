@@ -36,7 +36,7 @@ export default defineConfig({
     vue(),
     rawStylesPlugin(),
     colorSchemeVitePlugin({
-      src: './packages/playground/src/color-scheme',
+      src: './packages/playground/src/config/color-scheme',
       dest: DYNAMIC_DEST_DIR,
     }),
   ],

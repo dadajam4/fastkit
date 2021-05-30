@@ -431,7 +431,7 @@ export const VStackMenu = defineComponent({
         [
           resizeDirectiveArgument({
             handler: stackMenuControl.updateRects,
-            root: true,
+            rootMode: true,
           }),
         ],
       );
