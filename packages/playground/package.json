@@ -27,6 +27,7 @@
     "@fastkit/color-scheme": "0.1.10",
     "@fastkit/media-match": "0.1.10",
     "@fastkit/vue-color-scheme": "0.1.10",
+    "@fastkit/vue-media-match": "0.1.10",
     "@fastkit/vue-stack": "0.1.10",
     "@fastkit/tiny-logger": "0.1.10"
   }

@@ -1,0 +1,32 @@
+{
+  "name": "@fastkit/vue-media-match",
+  "version": "0.1.10",
+  "description": "@fastkit/vue-media-match",
+  "buildOptions": {
+    "name": "VueMediaMatch"
+  },
+  "main": "index.js",
+  "module": "dist/vue-media-match.esm-bundler.js",
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "types": "dist/vue-media-match.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-media-match#readme",
+  "dependencies": {
+    "@fastkit/helpers": "0.1.10",
+    "@fastkit/media-match": "0.1.10"
+  }
+}

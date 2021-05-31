@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { MediaMatchSettings, MediaMatchCondition } from '../schemes';
+import { MediaMatchSettings, MediaMatchDefine } from '../schemes';
 import { esbuildRequire } from '@fastkit/node-util';
 import { logger } from '../logger';
 import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
@@ -45,7 +45,7 @@ export async function generator(
   const TS_DEST = path.join(dest, 'media-match.ts');
   const SCSS_DEST = path.join(dest, 'media-match.scss');
 
-  const mediaMatches: MediaMatchCondition[] = [];
+  const mediaMatches: MediaMatchDefine[] = [];
 
   const { breakPoints, customs, aliases } = settings;
 

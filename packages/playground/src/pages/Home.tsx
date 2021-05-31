@@ -10,6 +10,7 @@ import {
 import { RouterLink } from 'vue-router';
 import { useColorScheme } from '@fastkit/vue-color-scheme';
 import { VExpandTransition } from '@fastkit/vue-utils';
+import { mediaQueryService } from '../plugins/media-query';
 
 const component = defineComponent({
   name: 'HomeView',
@@ -31,6 +32,7 @@ const component = defineComponent({
     return (
       <div style={{ padding: '20px' }}>
         <h2>Home</h2>
+        {mediaQueryService.matches('wide') ? 'wide' : 'narrow'}
 
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/page2">page2</RouterLink>

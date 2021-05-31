@@ -1,5 +1,5 @@
-export interface MediaMatchCondition {
-  key: string;
+export interface MediaMatchDefine<K extends string = string> {
+  key: K;
   condition: string;
   description: string;
 }
