@@ -1,29 +1,23 @@
 import { App } from 'vue';
-import {
-  RawVueColorSchemePluginSettings,
-  VueColorSchemePluginSettings,
-} from './types';
-import { VueColorSchemeInjectionKey } from './injections';
-
+import { VueColorSchemeServiceSettings, ThemeName } from './types';
 import { VueColorSchemeService } from './service';
 
 export class VueColorSchemePlugin {
   readonly installedApps = new Set<App>();
-  readonly settings: VueColorSchemePluginSettings;
+  readonly settings: VueColorSchemeServiceSettings;
 
-  constructor(settings: RawVueColorSchemePluginSettings) {
-    const {
-      defaultTheme: _defaultTheme,
-      themeNames,
-      scopeNames,
-      paletteNames,
-    } = settings;
-    const defaultTheme = _defaultTheme || themeNames[0];
+  constructor(
+    settings: Omit<VueColorSchemeServiceSettings, 'defaultTheme'> & {
+      defaultTheme?: ThemeName;
+    },
+  ) {
+    let { defaultTheme } = settings;
+    if (!defaultTheme) {
+      defaultTheme = settings.themeNames[0];
+    }
     this.settings = {
+      ...settings,
       defaultTheme,
-      themeNames,
-      scopeNames,
-      paletteNames,
     };
   }
 
@@ -34,8 +28,7 @@ export class VueColorSchemePlugin {
     installedApps.add(app);
 
     const $color = new VueColorSchemeService(this.settings);
-
-    app.provide(VueColorSchemeInjectionKey, $color);
+    $color.provide(app);
 
     app.unmount = function () {
       installedApps.delete(app);

@@ -16,19 +16,19 @@ import {
   DEFAULT_ACTIONS,
 } from './schemes/action';
 export { VueStackInjectionKey } from './injections';
-import { GeneratedScopeName } from '@fastkit/color-scheme';
+import { ScopeName } from '@fastkit/color-scheme';
 import { VStackDialogProps } from './components/VStackDialog';
 
 export interface VueStackServiceOptions {
   zIndex?: number;
   actionMessages?: Partial<VStackActionMessageResolvers>;
-  primaryColor: GeneratedScopeName;
+  primaryColor: ScopeName;
 }
 
 export class VueStackService {
   readonly controls: VStackControl[] = [];
   readonly zIndex: number;
-  readonly primaryColor: GeneratedScopeName;
+  readonly primaryColor: ScopeName;
   private _increment = 0;
   private readonly _dynamicSettings: Ref<VStackDynamicInternalSetting[]> = ref(
     [],

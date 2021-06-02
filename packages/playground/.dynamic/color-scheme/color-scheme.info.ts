@@ -1,29 +1,89 @@
+/* eslint-disable */
 import { ColorSchemeInfo } from '@fastkit/color-scheme';
 
-export const THEME_NAMES = Object.freeze(['light', 'dark'] as const);
-export type ColorThemeName = 'light' | 'dark';
+export interface ThemeSettings {
+  light: true;
+  dark: true;
+}
 
-export const PALETTE_NAMES = Object.freeze(['background', 'default', 'link', 'caption', 'backdrop', 'primary', 'secondary', 'gray', 'mono', 'info', 'success', 'warning', 'error', 'muted'] as const);
-export type ColorPaletteName = 'background' | 'default' | 'link' | 'caption' | 'backdrop' | 'primary' | 'secondary' | 'gray' | 'mono' | 'info' | 'success' | 'warning' | 'error' | 'muted';
+export interface PaletteSettings {
+  background: true;
+  default: true;
+  link: true;
+  caption: true;
+  backdrop: true;
+  primary: true;
+  secondary: true;
+  gray: true;
+  mono: true;
+  info: true;
+  success: true;
+  warning: true;
+  error: true;
+  muted: true;
+}
 
-export const SCOPE_NAMES = Object.freeze(['base', 'primary', 'secondary', 'gray', 'mono', 'info', 'success', 'warning', 'error', 'muted'] as const);
-export type ColorScopeName = 'base' | 'primary' | 'secondary' | 'gray' | 'mono' | 'info' | 'success' | 'warning' | 'error' | 'muted';
+export interface ScopeSettings {
+  base: true;
+  primary: true;
+  secondary: true;
+  gray: true;
+  mono: true;
+  info: true;
+  success: true;
+  warning: true;
+  error: true;
+  muted: true;
+}
 
-export const DEFAULT_THEME: ColorThemeName = 'light';
-
-export const colorScheme: ColorSchemeInfo<ColorThemeName, ColorPaletteName, ColorScopeName> = Object.freeze({
-  defaultTheme: DEFAULT_THEME,
-  themeNames: THEME_NAMES,
-  paletteNames: PALETTE_NAMES,
-  scopeNames: SCOPE_NAMES,
-});
-
-export default colorScheme;
+export type ThemeName = keyof ThemeSettings;
+export type PaletteName = keyof PaletteSettings;
+export type ScopeName = keyof ScopeSettings;
 
 declare module '@fastkit/color-scheme' {
-  export type GeneratedThemeName = ColorThemeName;
+  export interface ThemeSettings {
+      light: true;
+      dark: true;
+    }
 
-  export type GeneratedScopeName = ColorScopeName;
+  export interface PaletteSettings {
+      background: true;
+      default: true;
+      link: true;
+      caption: true;
+      backdrop: true;
+      primary: true;
+      secondary: true;
+      gray: true;
+      mono: true;
+      info: true;
+      success: true;
+      warning: true;
+      error: true;
+      muted: true;
+    }
 
-  export type GeneratedPaletteName = ColorPaletteName;
+  export interface ScopeSettings {
+      base: true;
+      primary: true;
+      secondary: true;
+      gray: true;
+      mono: true;
+      info: true;
+      success: true;
+      warning: true;
+      error: true;
+      muted: true;
+    }
 }
+
+export type ColorScheme = ColorSchemeInfo<ThemeName, PaletteName, ScopeName>;
+
+export const colorScheme: ColorScheme = {
+  defaultTheme: 'light',
+  themeNames: ['light', 'dark'],
+  paletteNames: ['background', 'default', 'link', 'caption', 'backdrop', 'primary', 'secondary', 'gray', 'mono', 'info', 'success', 'warning', 'error', 'muted'],
+  scopeNames: ['base', 'primary', 'secondary', 'gray', 'mono', 'info', 'success', 'warning', 'error', 'muted'],
+};
+
+export default colorScheme;

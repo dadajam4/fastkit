@@ -392,9 +392,9 @@ export interface ColorSchemeInfo<
   SN extends string,
 > {
   readonly defaultTheme: TN;
-  readonly themeNames: readonly TN[];
-  readonly paletteNames: readonly PN[];
-  readonly scopeNames: readonly SN[];
+  readonly themeNames: TN[];
+  readonly paletteNames: PN[];
+  readonly scopeNames: SN[];
 }
 
 export function colorSchemeInfoByScheme<
@@ -417,3 +417,22 @@ export interface ColorScheme<
   readonly scopeResolvers: ColorScopeResolvers<TN, PN, SN, OK>;
   toJSON(): ColorSchemeJSON<TN, PN, SN, OK>;
 }
+
+export interface ThemeSettings {} // eslint-disable-line @typescript-eslint/no-empty-interface
+export interface PaletteSettings {} // eslint-disable-line @typescript-eslint/no-empty-interface
+export interface ScopeSettings {} // eslint-disable-line @typescript-eslint/no-empty-interface
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+type ExtractKeys<T extends object> = keyof T extends never ? string : keyof T;
+
+export type ThemeName = ExtractKeys<ThemeSettings>;
+export type PaletteName = ExtractKeys<PaletteSettings>;
+export type ScopeName = ExtractKeys<ScopeSettings>;
+
+export const COLOR_SCHEME_VARIANTS = [
+  'contained',
+  'outlined',
+  'plain',
+] as const;
+
+export type ColorSchemeVariant = typeof COLOR_SCHEME_VARIANTS[number];

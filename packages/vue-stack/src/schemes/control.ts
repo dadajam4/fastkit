@@ -11,7 +11,7 @@ import { RouteLocationNormalized } from 'vue-router';
 import {
   colorSchemeProps,
   ColorSchemePropsStaticOptions,
-  ColorClassesControl,
+  ColorClassesResult,
 } from '@fastkit/vue-color-scheme';
 import { UseKeybordRef, StyleValue } from '@fastkit/vue-utils';
 import {
@@ -73,7 +73,7 @@ export interface VStackControl {
   readonly isActive: boolean;
   value: any;
   readonly $service: VueStackService;
-  readonly color: ColorClassesControl;
+  readonly color: ColorClassesResult;
   readonly classes: any[];
   readonly styles: StyleValue[];
   readonly transitioning: boolean;
