@@ -1,5 +1,11 @@
-// import { detectExternalModuleVersion } from './core/release';
+import { generate } from './packages/icon-font/src/tool';
+import path from 'path';
 
-// detectExternalModuleVersion('eta').then((result) => {
-//   console.log(result);
-// });
+const SRC = path.resolve('packages/playground/src/config/icon-font/svg');
+const DEST = path.resolve('test');
+
+generate({
+  name: 'hoge',
+  inputDir: SRC,
+  outputDir: DEST,
+});

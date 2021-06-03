@@ -133,6 +133,7 @@
     "yorkie": "^2.0.0"
   },
   "dependencies": {
+    "fantasticon": "^1.2.2",
     "modern-normalize": "^1.1.0",
     "rollup-plugin-postcss": "^4.0.0"
   }

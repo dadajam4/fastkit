@@ -39,6 +39,7 @@
     "@fastkit/color-scheme": "0.1.10",
     "@fastkit/ev": "0.1.10",
     "@fastkit/helpers": "0.1.10",
+    "@fastkit/icon-font": "0.1.10",
     "@fastkit/keybord": "0.1.10",
     "@fastkit/media-match": "0.1.10",
     "@fastkit/node-util": "0.1.10",

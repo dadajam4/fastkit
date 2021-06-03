@@ -110,8 +110,8 @@ export async function generator(
   const mediaMatchKeys = mediaMatches.map(({ key }) => `'${key}'`).join(' | ');
 
   const TS_SOURCE = `
-// @ts-nocheck
 /* eslint-disable */
+// @ts-nocheck
 ${BANNER}
 
 export type MediaMatchKey = ${mediaMatchKeys};
