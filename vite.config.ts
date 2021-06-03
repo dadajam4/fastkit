@@ -8,6 +8,7 @@ import { rawStylesPlugin } from './plugins/raw-styles';
 import { colorSchemeVitePlugin } from './packages/color-scheme/src/tool';
 import { mediaMatchVitePlugin } from './packages/media-match/src/tool';
 import { iconFontVitePlugin } from './packages/icon-font/src/tool';
+import { spriteImagesVitePlugin } from './packages/sprite-images/src/tool';
 
 const fastkitAliases = Object.fromEntries(
   targets.map((target) => {
@@ -48,6 +49,10 @@ export default defineConfig({
     iconFontVitePlugin({
       inputDir: './packages/playground/src/config/icon-font/svg',
       outputDir: path.join(DYNAMIC_DEST_DIR, 'icon-font'),
+    }),
+    spriteImagesVitePlugin({
+      src: './packages/playground/src/config/sprites',
+      dest: path.join(DYNAMIC_DEST_DIR, 'sprites'),
     }),
   ],
 });

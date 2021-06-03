@@ -45,6 +45,7 @@
     "@fastkit/node-util": "0.1.10",
     "@fastkit/rules": "0.1.10",
     "@fastkit/scroller": "0.1.10",
+    "@fastkit/sprite-images": "0.1.10",
     "@fastkit/tiny-logger": "0.1.10",
     "@fastkit/visibility": "0.1.10",
     "modern-normalize": "^1.1.0"
