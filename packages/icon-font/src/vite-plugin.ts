@@ -1,7 +1,6 @@
 import { Plugin } from 'vite';
 import { IconFontRunner } from './generator';
-import { RawIconFontOptions } from '../schemes';
-export { RawIconFontOptions } from '../schemes';
+import { RawIconFontOptions } from './schemes';
 
 export function iconFontVitePlugin(opts: RawIconFontOptions): Plugin {
   return {

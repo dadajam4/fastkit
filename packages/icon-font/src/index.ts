@@ -1,3 +1,3 @@
 export * from './schemes';
-
-export const IconFont = {};
+export * from './generator';
+export * from './vite-plugin';

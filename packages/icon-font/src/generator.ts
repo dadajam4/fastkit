@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import chokidar, { FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
-import { RawIconFontOptions, IconFontEntry, SvgOptions } from '../schemes';
+import { RawIconFontOptions, IconFontEntry, SvgOptions } from './schemes';
 
 export const DEFAULT_SVG_OPTIONS: Partial<SvgOptions> = {
   fixedWidth: true,
