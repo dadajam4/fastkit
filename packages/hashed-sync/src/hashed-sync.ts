@@ -8,7 +8,7 @@ import {
   CompareResult,
 } from './schemes';
 import { HashedSyncError } from './logger';
-import * as processors from './processors';
+import { processors } from './processors';
 
 export class HashedSync {
   /**

@@ -1,4 +1,4 @@
-import type * as processors from './processors';
+import type { processors } from './processors';
 
 /**
  * 更新情報種別

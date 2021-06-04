@@ -1,2 +1,7 @@
-export { copy } from './copy';
-export { imagemin } from './imagemin';
+import { copy } from './copy';
+import { imagemin } from './imagemin';
+
+export const processors = {
+  copy,
+  imagemin,
+};
