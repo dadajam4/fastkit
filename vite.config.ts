@@ -9,6 +9,9 @@ import { colorSchemeVitePlugin } from './packages/color-scheme/src/tool';
 import { mediaMatchVitePlugin } from './packages/media-match/src/tool';
 import { iconFontVitePlugin } from './packages/icon-font/src/tool';
 import { spriteImagesVitePlugin } from './packages/sprite-images/src/tool';
+import { hashedSyncVitePlugin } from './packages/hashed-sync/src';
+
+console.log(hashedSyncVitePlugin);
 
 const fastkitAliases = Object.fromEntries(
   targets.map((target) => {
@@ -30,6 +33,9 @@ export default defineConfig({
       ...fastkitAliases,
     },
   },
+  // optimizeDeps: {
+  //   include: ['imagemin'],
+  // },
   plugins: [
     globalsPlugin(),
     viteSSR(),
@@ -53,6 +59,10 @@ export default defineConfig({
     spriteImagesVitePlugin({
       src: './packages/playground/src/config/sprites',
       dest: path.join(DYNAMIC_DEST_DIR, 'sprites'),
+    }),
+    hashedSyncVitePlugin({
+      src: './packages/playground/src/config/sprites',
+      dest: path.join(DYNAMIC_DEST_DIR, 'sync'),
     }),
   ],
 });

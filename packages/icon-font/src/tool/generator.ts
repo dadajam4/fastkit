@@ -82,16 +82,18 @@ export class IconFontRunnerItem extends EV<{
 }> {
   readonly entry: IconFontEntry;
   private _watcher: FSWatcher | null = null;
+  watchMode: boolean;
 
-  constructor(entry: IconFontEntry) {
+  constructor(entry: IconFontEntry, watch = false) {
     super();
     this.entry = entry;
+    this.watchMode = watch;
     this.build = this.build.bind(this);
   }
 
   async run() {
     const result = await this.build();
-    if (!this._watcher) {
+    if (this.watchMode && !this._watcher) {
       const watchDir = path.resolve(this.entry.inputDir);
       this._watcher = chokidar.watch(watchDir, { ignoreInitial: true });
       this._watcher.on('all', this.build);
@@ -122,14 +124,14 @@ export class IconFontRunner extends EV<{
 }> {
   readonly items: IconFontRunnerItem[] = [];
 
-  constructor(opts: RawIconFontOptions) {
+  constructor(opts: RawIconFontOptions, watch?: boolean) {
     super();
 
     if (!Array.isArray(opts)) {
       opts = [opts];
     }
     opts.forEach((entry) => {
-      const item = new IconFontRunnerItem(entry);
+      const item = new IconFontRunnerItem(entry, watch);
       item.on('build', (result) => {
         this.emit('build', { item, result });
       });

@@ -6,8 +6,9 @@ export { RawIconFontOptions } from '../schemes';
 export function iconFontVitePlugin(opts: RawIconFontOptions): Plugin {
   return {
     name: 'iconFont',
-    async config(config) {
-      const runner = new IconFontRunner(opts);
+    async config(config, { command }) {
+      const watch = command === 'serve';
+      const runner = new IconFontRunner(opts, watch);
       await runner.run();
       return config;
     },
