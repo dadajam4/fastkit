@@ -163,7 +163,7 @@ export function isNotStrictEqual(value: any, requiredValue: any): boolean {
 
 /**
  * 値が一定以上の値であるか
- * value >= min
+ * value &gt;= min
  */
 export function isNotLessThan(value: any, min: any): boolean {
   const parsedValue = parseFloat(value);
@@ -179,7 +179,7 @@ export function isNotLessThan(value: any, min: any): boolean {
 
 /**
  * 値が一定を超える値であるか
- * value > min
+ * value &gt; min
  */
 export function isGreaterThan(value: any, min: any): boolean {
   const parsedValue = parseFloat(value);
@@ -195,7 +195,7 @@ export function isGreaterThan(value: any, min: any): boolean {
 
 /**
  * 値が一定以下の値であるか
- * value <= max
+ * value &lt;= max
  */
 export function isNotGreaterThan(value: any, max: any): boolean {
   const parsedValue = parseFloat(value);
@@ -211,7 +211,7 @@ export function isNotGreaterThan(value: any, max: any): boolean {
 
 /**
  * 値が一定未満の値であるか
- * value < max
+ * value &lt; max
  */
 export function isLessThan(value: any, max: any): boolean {
   const parsedValue = parseFloat(value);
@@ -227,7 +227,7 @@ export function isLessThan(value: any, max: any): boolean {
 
 /**
  * 値が一定の範囲内の値であるか
- * min <= value <= max
+ * min &lt;= value &lt;= max
  */
 export function isBetween(
   value: any,

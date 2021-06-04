@@ -1672,10 +1672,22 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
+"@types/svg2ttf@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/svg2ttf/-/svg2ttf-5.0.0.tgz#a8a5f423ca042085bd236059de67cdb24001fb3d"
+  integrity sha512-BJltrpZbxM6VmfzpUCm1A4OlGZZ/NO/SnP1g5tTkJ4lQRfIaDuW0oDAKOxJbdgBA6lWTtEAUpyEuZMGs81ly3A==
+
 "@types/svgicons2svgfont@^10.0.0":
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/@types/svgicons2svgfont/-/svgicons2svgfont-10.0.0.tgz#69985319273363a54f006cdc2cb933dedc51de07"
   integrity sha512-d3tZCnwCSskJNY54TfL6lSlqGw+SKWB/oxA3l+hGAhw/zbfc4zpGbEUTMCYD4bO0+bP/aTqk968RTKH8QkK7UQ==
+  dependencies:
+    "@types/node" "*"
+
+"@types/ttf2woff@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/ttf2woff/-/ttf2woff-2.0.0.tgz#d50f61a4e684a5fda13ed2022fca46edd992caa3"
+  integrity sha512-M/hVX/eY8/kxZX9VA3yClooiRwmcUTkJEoghMfN/P3nX0HKfo7rwbifaJSM0t7RSFPDxFcVOUGfGM6xAtjr0Rg==
   dependencies:
     "@types/node" "*"
 

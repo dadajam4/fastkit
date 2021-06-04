@@ -4,7 +4,7 @@ import { RulesError } from '../logger';
 
 /**
  * 値が一定未満の値であるか
- * value < max
+ * value &lt; max
  */
 export const lessThan = createRule<number>({
   name: 'lessThan',

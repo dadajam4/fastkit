@@ -3,7 +3,7 @@ import { createRule } from '../';
 
 /**
  * 値が一定の範囲内の値であるか
- * min <= value <= max
+ * min &lt;= value &lt;= max
  */
 export const between = createRule<{ min: number; max: number }>({
   name: 'between',

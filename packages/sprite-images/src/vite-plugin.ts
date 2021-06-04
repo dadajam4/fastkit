@@ -1,6 +1,6 @@
 import { Plugin } from 'vite';
 import { SpriteImagesRunner } from './generator';
-import { SpriteImagesOptions } from '../schemes';
+import { SpriteImagesOptions } from './schemes';
 
 export function spriteImagesVitePlugin(opts: SpriteImagesOptions): Plugin {
   return {
