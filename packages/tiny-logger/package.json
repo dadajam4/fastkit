@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/tiny-logger",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "@fastkit/tiny-logger",
   "buildOptions": {
     "name": "TinyLogger"

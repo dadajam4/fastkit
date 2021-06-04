@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "@fastkit/media-match",
   "buildOptions": {
     "name": "MediaMatch",
@@ -27,8 +27,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/media-match#readme",
   "dependencies": {
-    "@fastkit/ev": "0.1.11",
+    "@fastkit/ev": "0.1.12",
     "fs-extra": "^9.1.0",
-    "@fastkit/node-util": "0.1.11"
+    "@fastkit/node-util": "0.1.12"
   }
 }
