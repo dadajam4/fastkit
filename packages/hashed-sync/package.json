@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/hashed-sync",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "@fastkit/hashed-sync",
   "buildOptions": {
     "name": "HashedSync",
@@ -32,10 +32,10 @@
     "@types/folder-hash": "^4.0.0",
     "@types/imagemin": "^7.0.0",
     "@types/imagemin-mozjpeg": "^8.0.0",
-    "folder-hash": "^4.0.1",
+    "folder-hash": "^4.0.0",
     "fs-extra": "^9.1.0",
     "imagemin": "^8.0.0",
     "imagemin-mozjpeg": "^9.0.0",
-    "imagemin-pngquant": "^9.0.2"
+    "imagemin-pngquant": "^9.0.0"
   }
 }

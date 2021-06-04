@@ -1,3 +1,12 @@
+## [0.1.11](https://github.com/dadajam4/fastkit/compare/v0.1.10...v0.1.11) (2021-06-04)
+
+
+### Features
+
+* vue-media-match ([c20cc91](https://github.com/dadajam4/fastkit/commit/c20cc917efcf8936773d28a9e36c442895dc4001))
+
+
+
 ## [0.1.10](https://github.com/dadajam4/fastkit/compare/v0.1.9...v0.1.10) (2021-05-16)
 
 
