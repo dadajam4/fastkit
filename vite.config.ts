@@ -8,10 +8,8 @@ import { rawStylesPlugin } from './plugins/raw-styles';
 import { colorSchemeVitePlugin } from './packages/color-scheme/src/tool';
 import { mediaMatchVitePlugin } from './packages/media-match/src/tool';
 import { iconFontVitePlugin } from './packages/icon-font/src/tool';
-import { spriteImagesVitePlugin } from './packages/sprite-images/src/tool';
+import { spriteImagesVitePlugin } from './packages/sprite-images/src';
 import { hashedSyncVitePlugin } from './packages/hashed-sync/src';
-
-console.log(hashedSyncVitePlugin);
 
 const fastkitAliases = Object.fromEntries(
   targets.map((target) => {

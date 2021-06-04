@@ -2,6 +2,12 @@
   "name": "@fastkit/sprite-images",
   "version": "0.1.10",
   "description": "@fastkit/sprite-images",
+  "buildOptions": {
+    "name": "SpriteImages",
+    "formats": [
+      "cjs"
+    ]
+  },
   "main": "index.js",
   "module": "dist/sprite-images.esm-bundler.js",
   "files": [

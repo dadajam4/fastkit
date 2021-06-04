@@ -2,8 +2,8 @@ import fs from 'fs-extra';
 import path from 'path';
 import chokidar, { FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
-import { SpriteImagesOptions, SpriteImagesSettings } from '../schemes';
-import { logger } from '../logger';
+import { SpriteImagesOptions, SpriteImagesSettings } from './schemes';
+import { logger } from './logger';
 
 const Spritesmith = require('spritesmith');
 

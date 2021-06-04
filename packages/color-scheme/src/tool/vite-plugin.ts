@@ -33,7 +33,7 @@ export interface ColorSchemePluginOptions {
 export function colorSchemeVitePlugin(opts: ColorSchemePluginOptions): Plugin {
   // let server: ViteDevServer;
 
-  const { src } = opts;
+  const { src, dest: _dest } = opts;
 
   const rawEntryPoint = path.resolve(src);
 
@@ -43,8 +43,6 @@ export function colorSchemeVitePlugin(opts: ColorSchemePluginOptions): Plugin {
   return {
     name: 'colorScheme',
     async config(config, { command }) {
-      const { dest: _dest } = opts;
-
       let dest: string;
 
       if (!_dest) {
