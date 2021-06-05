@@ -4,7 +4,9 @@
   "description": "@fastkit/icon-font",
   "buildOptions": {
     "name": "IconFont",
-    "tool": true
+    "formats": [
+      "cjs"
+    ]
   },
   "main": "index.js",
   "module": "dist/icon-font.esm-bundler.js",
