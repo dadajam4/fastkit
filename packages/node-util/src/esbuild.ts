@@ -221,7 +221,8 @@ export class ESbuildRunner<T = any> extends EV<ESbuildRunnerEventMap<T>> {
     return result;
   }
 
-  close() {
+  dispose() {
     this.closeWatcher();
+    this.offAll();
   }
 }

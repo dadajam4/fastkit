@@ -56,8 +56,9 @@ export function mergeScopeResolverMaps<
   TN extends string = string,
   PN extends string = string,
   SN extends string = string,
+  VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
-  T = ColorScopeResolvers<TN, PN, SN, OK>,
+  T = ColorScopeResolvers<TN, PN, SN, VN, OK>,
 >(optionals: OK[], ...resolverMaps: T[]): T {
   const merged: any = {};
   resolverMaps.forEach((map) => {

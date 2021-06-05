@@ -67,7 +67,7 @@
       }
 
       @each $scope-name, $scope in $scopes {
-        $selector: '.' + $scope-name;
+        $selector: '.' + $scope-name + '-scope';
         #{$selector} {
           @each $key, $value in $scope {
             @if $key != 'name' {
@@ -88,58 +88,7 @@
     }
   }
 
-  .contained {
-    position: relative;
-    background-color: var(--main-color);
-    border-color: var(--border-color);
-    color: var(--text-color);
-
-    &.clickable {
-      box-shadow: 0 1px 1px var(--shadow-color);
-    }
-
-    &.clickable:hover,
-    &:focus {
-      background-color: var(--focus-color, var(--main-color));
-      border-color: var(--focusBorder-color, var(--border-color));
-      color: var(--focusText-color, var(--text-color));
-    }
-
-    &.clickable:focus {
-      box-shadow: 0 1px 1px var(--shadow-color), 0 1px 3px 2px var(--focusShadow-color);
-    }
-
-    &.clickable:active {
-      background-color: var(--active-color, var(--focus-color, var(--main-color)));
-      border-color: var(--activeBorder-color, var(--focusBorder-color, var(--border-color)));
-      color: var(--activeText-color, var(--focusText-color, var(--text-color)));
-    }
-  }
-
-  .outlined,
-  .plain {
-    position: relative;
-    background-color: transparent;
-    border-color: transparent;
-    color: var(--outlineText-color, var(--main-color));
-
-    &.clickable:hover,
-    &:focus {
-      background-color: var(--light-color);
-    }
-
-    &.clickable:active {
-      background-color: var(--deep-color);
-    }
-  }
-
-  .outlined {
-    border-color: var(--outlineBorder-color, var(--main-color));
-
-    &.clickable:focus {
-      box-shadow: 0 1px 3px 1px var(--focusShadow-color);
-    }
-  }
+  <%~ await it.allVariantsScss() %>
 
   @each $palette-name, $value in $palette {
     $_value: palette-color($palette-name);

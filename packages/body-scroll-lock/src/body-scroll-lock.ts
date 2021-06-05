@@ -1,6 +1,6 @@
 export interface BodyScrollOptions {
   reserveScrollBarGap?: boolean;
-  allowTouchMove?: (el: any) => boolean;
+  allowTouchMove?: (el: EventTarget) => boolean;
 }
 
 interface Lock {
@@ -9,9 +9,9 @@ interface Lock {
 }
 
 const isIosDevice =
-  typeof window !== 'undefined' &&
-  window.navigator &&
-  window.navigator.platform &&
+  __BROWSER__ &&
+  !!window.navigator &&
+  !!window.navigator.platform &&
   /iP(ad|hone|od)/.test(window.navigator.platform);
 type HandleScrollEvent = TouchEvent;
 

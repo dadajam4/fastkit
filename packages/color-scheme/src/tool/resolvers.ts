@@ -16,6 +16,9 @@ export const COLOR_SCOPE_OPTIONAL_KEYS = [
   'activeText',
   'outlineText',
   'outlineBorder',
+  'invert',
+  'focusInvert',
+  'activeInvert',
   // 'disabled',
   // 'disabledBorder',
   // 'disabledText',
@@ -85,6 +88,24 @@ export function scopeResolvers(
     outlineBorder: ({ main, outlineText }) => {
       const base = outlineText || main;
       return base.alpha(base.alpha() * 0.5);
+    },
+    invert: ({ theme }) => {
+      return theme.isLight ? '#fff' : '#000';
+    },
+    focusInvert: ({ theme, invert, main }) => {
+      if (invert) {
+        return invert.mix(main, 0.05);
+      }
+      return theme.isLight ? '#fff' : '#000';
+    },
+    activeInvert: ({ theme, invert, focusInvert, main }) => {
+      if (focusInvert) {
+        return focusInvert.mix(main, 0.06);
+      }
+      if (invert) {
+        return invert.mix(main, 0.03);
+      }
+      return theme.isLight ? '#fff' : '#000';
     },
     // disabled: false,
     // disabledBorder: false,

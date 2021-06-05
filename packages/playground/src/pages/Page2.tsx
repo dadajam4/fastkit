@@ -61,7 +61,7 @@ const component = defineComponent({
           backdrop
           persistent={this.persistent}
           color="primary"
-          contained
+          variant="contained"
           class={`my-stack--${this.count}`}
           v-model={this.stackActive}
           actions={[
@@ -69,7 +69,7 @@ const component = defineComponent({
               key: 'cancel',
               content: 'キャンセル',
               color: 'primary',
-              outlined: true,
+              variant: 'outlined',
               spacer: true,
               onClick: (control) => {
                 control.close({ force: true });
@@ -121,7 +121,7 @@ const component = defineComponent({
               color={scopeName}
               key={scopeName}
               disabled={this.disabled}
-              outlined>
+              variant="outlined">
               ボタン({scopeName || '*default'})
             </VStackBtn>
           );
@@ -133,7 +133,7 @@ const component = defineComponent({
               color={scopeName}
               key={scopeName}
               disabled={this.disabled}
-              plain>
+              variant="plain">
               ボタン({scopeName || '*default'})
             </VStackBtn>
           );

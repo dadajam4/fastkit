@@ -18,11 +18,12 @@ export function createColorScope<
   TN extends string = string,
   PN extends string = string,
   SN extends string = string,
+  VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
-  source: ColorScopeSource<TN, PN, SN, OK>,
-  ctx: ColorScopeContext<TN, PN, SN, OK>,
-): ColorScope<TN, PN, SN, OK> {
+  source: ColorScopeSource<TN, PN, SN, VN, OK>,
+  ctx: ColorScopeContext<TN, PN, SN, VN, OK>,
+): ColorScope<TN, PN, SN, VN, OK> {
   const { scheme, theme, palette, scopes } = ctx;
   const { optionals } = scheme;
   const { scopeResolvers } = theme;
@@ -31,7 +32,7 @@ export function createColorScope<
   // eslint-disable-next-line prefer-const
   let main: Color;
 
-  const scope: ColorScope<TN, PN, SN, OK> = {
+  const scope: ColorScope<TN, PN, SN, VN, OK> = {
     get scheme() {
       return scheme;
     },
@@ -89,7 +90,7 @@ export function createColorScope<
   });
 
   function resolve<R extends boolean>(
-    source: ColorScopeResolverResult | ColorScopeResolver<TN, PN, SN, OK>,
+    source: ColorScopeResolverResult | ColorScopeResolver<TN, PN, SN, VN, OK>,
     required?: R,
   ): R extends true ? Color : Color | void | null | false {
     if (typeof source === 'function') {
@@ -126,18 +127,19 @@ export function createColorScopeBucket<
   TN extends string = string,
   PN extends string = string,
   SN extends string = string,
+  VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
-  sources: ColorScopeSource<TN, PN, SN, OK>[] = [],
-  ctx: ColorScopesContext<TN, PN, SN, OK>,
+  sources: ColorScopeSource<TN, PN, SN, VN, OK>[] = [],
+  ctx: ColorScopesContext<TN, PN, SN, VN, OK>,
 ) {
   const scopes = createBucket<
     SN,
-    ColorScope<TN, PN, SN, OK>,
-    ColorScope<TN, PN, SN, OK>,
-    ColorScopesContext<TN, PN, SN, OK>,
+    ColorScope<TN, PN, SN, VN, OK>,
+    ColorScope<TN, PN, SN, VN, OK>,
+    ColorScopesContext<TN, PN, SN, VN, OK>,
     ColorScopeJSON<SN, OK>[],
-    ColorScopesBucket<TN, PN, SN, OK>
+    ColorScopesBucket<TN, PN, SN, VN, OK>
   >(
     'ColorScopes',
     (push, instance) => {

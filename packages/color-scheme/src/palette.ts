@@ -14,11 +14,12 @@ export function createPaletteItem<
   TN extends string = string,
   PN extends string = string,
   SN extends string = string,
+  VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
-  source: ColorPaletteItemSource<TN, PN, SN, OK>,
-  ctx: ColorPaletteItemContext<TN, PN, SN, OK>,
-): ColorPaletteItem<TN, PN, SN, OK> {
+  source: ColorPaletteItemSource<TN, PN, SN, VN, OK>,
+  ctx: ColorPaletteItemContext<TN, PN, SN, VN, OK>,
+): ColorPaletteItem<TN, PN, SN, VN, OK> {
   const { scheme, theme, palette } = ctx;
   const name = source[0];
   let valueSource = source[1];
@@ -29,7 +30,7 @@ export function createPaletteItem<
 
   const value = new Color(valueSource);
 
-  const paletteItem: ColorPaletteItem<TN, PN, SN, OK> = {
+  const paletteItem: ColorPaletteItem<TN, PN, SN, VN, OK> = {
     get source() {
       return source;
     },
@@ -65,18 +66,19 @@ export function createColorPaletteBucket<
   TN extends string = string,
   PN extends string = string,
   SN extends string = string,
+  VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
-  sources: ColorPaletteItemSource<TN, PN, SN, OK>[] = [],
-  ctx: ColorPaletteContext<TN, PN, SN, OK>,
+  sources: ColorPaletteItemSource<TN, PN, SN, VN, OK>[] = [],
+  ctx: ColorPaletteContext<TN, PN, SN, VN, OK>,
 ) {
   const palette = createBucket<
     PN,
-    ColorPaletteItem<TN, PN, SN, OK>,
+    ColorPaletteItem<TN, PN, SN, VN, OK>,
     Color,
-    ColorPaletteContext<TN, PN, SN, OK>,
+    ColorPaletteContext<TN, PN, SN, VN, OK>,
     ColorPaletteItemJSON<PN>[],
-    ColorPaletteBucket<TN, PN, SN, OK>
+    ColorPaletteBucket<TN, PN, SN, VN, OK>
   >(
     'ColorPalette',
     (push, instance) => {

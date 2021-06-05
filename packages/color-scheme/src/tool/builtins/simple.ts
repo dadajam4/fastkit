@@ -3,6 +3,7 @@ import { COLOR_SCOPE_OPTIONAL_KEYS, scopeResolvers } from '../resolvers';
 
 export function createSimpleColorScheme() {
   const scheme = createColorScheme({
+    variants: ['contained', 'inverted', 'outlined', 'plain'],
     optionals: COLOR_SCOPE_OPTIONAL_KEYS,
     scopeResolvers: scopeResolvers({
       lightText: '#fff',
@@ -60,6 +61,9 @@ export function createSimpleColorScheme() {
                 activeBorder: 'transparent',
                 outlineText: `rgba(${disabledBase}, 0.26)`,
                 outlineBorder: `rgba(${disabledBase}, 0.12)`,
+                invert: `rgba(${disabledBase}, 0.12)`,
+                focusInvert: `rgba(${disabledBase}, 0.12)`,
+                activeInvert: `rgba(${disabledBase}, 0.12)`,
               },
             ],
           };

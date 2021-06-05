@@ -3,14 +3,14 @@ import {
   ThemeName,
   PaletteName,
   ScopeName,
-  ColorSchemeVariant,
+  ColorVariant,
   ColorSchemeInfo,
 } from '@fastkit/color-scheme';
 export type {
   ThemeName,
   PaletteName,
   ScopeName,
-  ColorSchemeVariant,
+  ColorVariant,
 } from '@fastkit/color-scheme';
 
 export type PropKey = string | null | false | undefined;
@@ -26,14 +26,12 @@ export type ColorSchemeProps<
   TextColorProp extends PropKey = 'textColor',
   BorderColorProp extends PropKey = 'borderColor',
 > = {
-  [K in ColorSchemeVariant]: BooleanConstructor;
-} & {
-  defaultVariant: PropType<ColorSchemeVariant>;
+  variant: PropType<ColorVariant>;
 } & (ThemeProp extends string
-    ? {
-        [K in ThemeProp]: ColorSchemeValueProp<ThemeName>;
-      }
-    : never) & // eslint-disable-line @typescript-eslint/ban-types
+  ? {
+      [K in ThemeProp]: ColorSchemeValueProp<ThemeName>;
+    }
+  : never) & // eslint-disable-line @typescript-eslint/ban-types
   (ScopeProp extends string
     ? {
         [K in ScopeProp]: ColorSchemeValueProp<ScopeName>;
@@ -52,7 +50,7 @@ export type ColorSchemeProps<
 
 export interface ColorSchemePropsStaticOptions {
   defaultScope?: ScopeName;
-  defaultVariant?: ColorSchemeVariant | null | false;
+  defaultVariant?: ColorVariant;
 }
 
 export interface ColorSchemePropsOptions<
@@ -72,10 +70,7 @@ export interface ColorSchemeHooksProps {
   readonly color?: ScopeName;
   readonly textColor?: PaletteName;
   readonly borderColor?: PaletteName;
-  readonly contained?: boolean;
-  readonly outlined?: boolean;
-  readonly plain?: boolean;
-  readonly defaultVariant?: ColorSchemeVariant;
+  readonly variant?: ColorVariant;
 }
 
 export interface ColorClassesResult {

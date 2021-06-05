@@ -11,6 +11,7 @@ import { RouterLink } from 'vue-router';
 import { useColorScheme } from '@fastkit/vue-color-scheme';
 import { VExpandTransition } from '@fastkit/vue-utils';
 import { mediaQueryService } from '../plugins/media-query';
+import { colorScheme } from '../../.dynamic/color-scheme/color-scheme.info';
 
 const component = defineComponent({
   name: 'HomeView',
@@ -139,7 +140,7 @@ const component = defineComponent({
               key: 'cancel',
               content: 'キャンセル',
               color: 'primary',
-              outlined: true,
+              variant: 'outlined',
               spacer: true,
               onClick: (control) => {
                 control.close({ force: true });
@@ -173,41 +174,23 @@ const component = defineComponent({
           <input type="checkbox" v-model={this.disabled} />
           Disabled
         </label>
-        <h3>contained</h3>
-        {scopeNames.map((scopeName) => {
-          return (
-            <VStackBtn
-              color={scopeName}
-              key={scopeName}
-              disabled={this.disabled}>
-              ボタン({scopeName || '*default'})
-            </VStackBtn>
-          );
-        })}
-        <h3>outlined</h3>
-        {scopeNames.map((scopeName) => {
-          return (
-            <VStackBtn
-              color={scopeName}
-              key={scopeName}
-              disabled={this.disabled}
-              outlined>
-              ボタン({scopeName || '*default'})
-            </VStackBtn>
-          );
-        })}
-        <h3>plain</h3>
-        {scopeNames.map((scopeName) => {
-          return (
-            <VStackBtn
-              color={scopeName}
-              key={scopeName}
-              disabled={this.disabled}
-              plain>
-              ボタン({scopeName || '*default'})
-            </VStackBtn>
-          );
-        })}
+
+        {colorScheme.variants.map((variant) => (
+          <div key={variant}>
+            <h3>{variant}</h3>
+            {scopeNames.map((scopeName) => {
+              return (
+                <VStackBtn
+                  color={scopeName}
+                  key={scopeName}
+                  disabled={this.disabled}
+                  variant={variant}>
+                  ボタン({scopeName || '*default'})
+                </VStackBtn>
+              );
+            })}
+          </div>
+        ))}
       </div>
     );
   },

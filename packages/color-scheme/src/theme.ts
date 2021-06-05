@@ -21,12 +21,14 @@ export function createTheme<
   TN extends string,
   PN extends string,
   SN extends string,
+  VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
-  source: ColorThemeSource<TN, PN, SN, OK>,
-  ctx: ColorThemeContext<TN, PN, SN, OK>,
-): ColorTheme<TN, PN, SN, OK> {
+  source: ColorThemeSource<TN, PN, SN, VN, OK>,
+  ctx: ColorThemeContext<TN, PN, SN, VN, OK>,
+): ColorTheme<TN, PN, SN, VN, OK> {
   const { name, palette: paletteSource, scopes: scopesSource } = source;
+  // ctx.main.brightness()
 
   let _scopeDefaults: typeof source.scopeDefaults | null | false | void =
     source.scopeDefaults;
@@ -44,7 +46,7 @@ export function createTheme<
     _scopeResolvers,
   );
 
-  const scopeDefaults: ColorScopeDefaults<TN, PN, SN, OK> = {
+  const scopeDefaults: ColorScopeDefaults<TN, PN, SN, VN, OK> = {
     toJSON(): ColorScopeDefaultsJSON<OK> {
       const json: ColorScopeDefaultsJSON<OK> = {};
       for (const key of COLOR_SCOPE_DEFAULTS_KEYS) {
@@ -57,7 +59,9 @@ export function createTheme<
     },
   };
 
-  const theme: ColorTheme<TN, PN, SN, OK> = {
+  let isLight: boolean | null = null;
+
+  const theme: ColorTheme<TN, PN, SN, VN, OK> = {
     get source() {
       return source;
     },
@@ -88,8 +92,21 @@ export function createTheme<
     get scopeDefaults() {
       return scopeDefaults;
     },
-    toJSON(): ColorThemeJSON<TN, PN, SN, OK> {
-      const json: ColorThemeJSON<TN, PN, SN, OK> = {
+    get isLight() {
+      if (typeof isLight === 'boolean') return isLight;
+      const background = theme.palette('background' as any);
+      if (!background) {
+        isLight = true;
+      } else {
+        isLight = background.brightness() > 0.5;
+      }
+      return isLight;
+    },
+    get isDark() {
+      return !theme.isLight;
+    },
+    toJSON(): ColorThemeJSON<TN, PN, SN, VN, OK> {
+      const json: ColorThemeJSON<TN, PN, SN, VN, OK> = {
         name,
         palette: palette.toJSON(),
         scopes: scopes.toJSON(),
@@ -109,7 +126,7 @@ export function createTheme<
     for (const key of COLOR_SCOPE_DEFAULTS_KEYS) {
       const _defSource = _scopeDefaults[key];
       const main = new Color();
-      const scopeDefault: ColorScopeDefault<TN, PN, SN, OK> = {
+      const scopeDefault: ColorScopeDefault<TN, PN, SN, VN, OK> = {
         get defaults() {
           return scopeDefaults;
         },
@@ -179,18 +196,19 @@ export function createThemeBucket<
   TN extends string = string,
   PN extends string = string,
   SN extends string = string,
+  VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
-  sources: ColorThemeSource<TN, PN, SN, OK>[] = [],
-  ctx: ColorThemesContext<TN, PN, SN, OK>,
+  sources: ColorThemeSource<TN, PN, SN, VN, OK>[] = [],
+  ctx: ColorThemesContext<TN, PN, SN, VN, OK>,
 ) {
   const themes = createBucket<
     TN,
-    ColorTheme<TN, PN, SN, OK>,
-    ColorTheme<TN, PN, SN, OK>,
-    ColorThemesContext<TN, PN, SN, OK>,
-    ColorThemeJSON<TN, PN, SN, OK>[],
-    ColorThemeBucket<TN, PN, SN, OK>
+    ColorTheme<TN, PN, SN, VN, OK>,
+    ColorTheme<TN, PN, SN, VN, OK>,
+    ColorThemesContext<TN, PN, SN, VN, OK>,
+    ColorThemeJSON<TN, PN, SN, VN, OK>[],
+    ColorThemeBucket<TN, PN, SN, VN, OK>
   >(
     'ColorThemes',
     (push, instance) => {

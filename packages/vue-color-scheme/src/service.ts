@@ -1,7 +1,6 @@
 import { App, computed, inject, ref, Ref } from 'vue';
 import { useHead } from '@vueuse/head';
 import {
-  ColorSchemeVariant,
   PropKey,
   ColorSchemeProps,
   ColorSchemePropsOptions,
@@ -16,17 +15,7 @@ import { VueColorSchemeServiceInjectionKey } from './injections';
 export function useColorVariantClasses(props: ColorSchemeHooksProps) {
   const colorVariantClasses = computed(() => {
     const classes: string[] = [];
-    const { contained, outlined, plain, defaultVariant } = props;
-    let variant: ColorSchemeVariant | undefined;
-    if (contained) {
-      variant = 'contained';
-    } else if (outlined) {
-      variant = 'outlined';
-    } else if (plain) {
-      variant = 'plain';
-    } else if (defaultVariant) {
-      variant = defaultVariant;
-    }
+    const { variant } = props;
     variant && classes.push(variant);
     return classes;
   });
@@ -54,7 +43,7 @@ export function useThemeClass(
 export function useScopeColorClass(props: ColorSchemeHooksProps) {
   const scopeColorClass = computed(() => {
     const { color } = props;
-    return color ? `${color}` : undefined;
+    return color ? `${color}-scope` : undefined;
   });
   return scopeColorClass;
 }
@@ -154,10 +143,7 @@ export function colorSchemeProps<
     defaultVariant,
   } = opts;
   const props = {
-    contained: Boolean,
-    outlined: Boolean,
-    plain: Boolean,
-    defaultVariant: {
+    variant: {
       type: String,
       default: defaultVariant || undefined,
     },

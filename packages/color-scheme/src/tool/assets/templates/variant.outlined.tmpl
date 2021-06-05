@@ -1,0 +1,10 @@
+.<%= it.selector %> {
+  position: relative;
+  background-color: transparent;
+  border-color: var(--outlineBorder-color, var(--main-color));
+  color: var(--outlineText-color, var(--main-color));
+
+  &.clickable:focus {
+    box-shadow: 0 1px 3px 1px var(--focusShadow-color);
+  }
+}

@@ -1,22 +1,22 @@
-import { ColorScopeOptionalKey, ColorScheme } from '../color-scheme';
+import {
+  ColorScheme,
+  TemplateScope,
+  BULTIN_COLOR_VARIANTS,
+  BultinColorVariant,
+} from '../schemes';
 import { toScssValues } from './to-scss-values';
 import fs from 'fs-extra';
 import path from 'path';
 import { render } from 'eta';
 import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
 import { EV } from '@fastkit/ev';
+import { logger, ColorSchemeError } from '../logger';
 
 const TEMPLATES_DIR = path.resolve(__dirname, 'assets/templates');
 
 export const COLOR_SCHEME_LOADER_TYPES = ['info', 'json', 'scss'] as const;
 
 export type ColorSchemeLoaderType = typeof COLOR_SCHEME_LOADER_TYPES[number];
-
-export interface TemplateScope {
-  scheme: ColorScheme<any, any, any, any>;
-  scssValues: string;
-  list: (source: string[], divider?: string) => string;
-}
 
 export type ColorSchemeLoaderResult = {
   entryPoint: string;
@@ -81,8 +81,46 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
     const templateScope: TemplateScope = {
       scheme,
       scssValues,
-      list: (source, divider = ', ') => {
+      list(source, divider = ', ') {
         return source.map((sourc) => `'${sourc}'`).join(divider);
+      },
+      async builtinVariantScss(variant, selector) {
+        const tmpl = await getVariantTemplate(variant);
+        if (!selector) {
+          selector = variant;
+        }
+        const result = await render(tmpl, { selector });
+        return result || '';
+      },
+      async variantScss(variant) {
+        const variantSource = scheme.variantSources.find(
+          ({ name }) => name === variant,
+        );
+        if (!variantSource) {
+          logger.warn(`missing variant source "${variant}"`);
+          return '';
+        }
+
+        const { from, scss } = variantSource;
+        if (typeof scss === 'function') {
+          return scss(templateScope);
+        }
+        if (scss) return scss;
+
+        if (from && !BULTIN_COLOR_VARIANTS.includes(from)) {
+          throw new ColorSchemeError(`missing builtin variant "${from}"`);
+        }
+        const _from = from || variant;
+        if (BULTIN_COLOR_VARIANTS.includes(_from as any)) {
+          return templateScope.builtinVariantScss(_from as any, variant);
+        }
+        return '';
+      },
+      async allVariantsScss() {
+        const results = await Promise.all(
+          scheme.variants.map((variant) => templateScope.variantScss(variant)),
+        );
+        return results.join('\n');
       },
     };
 
@@ -148,13 +186,13 @@ async function getTemplate(name: TemplateName) {
   return fs.readFile(filePath, 'utf-8');
 }
 
-async function renderTemplate<
-  TN extends string,
-  PN extends string,
-  SN extends string,
-  OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
->(name: TemplateName, scope: TemplateScope) {
+async function getVariantTemplate(name: BultinColorVariant) {
+  const filePath = path.join(TEMPLATES_DIR, `variant.${name}.tmpl`);
+  return fs.readFile(filePath, 'utf-8');
+}
+
+async function renderTemplate(name: TemplateName, scope: TemplateScope) {
   const tmpl = await getTemplate(name);
-  const result = await render(tmpl, scope);
+  const result = await render(tmpl, scope, { async: true });
   return result || '';
 }

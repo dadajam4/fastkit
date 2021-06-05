@@ -11,8 +11,12 @@ export function createColorScheme<
   TN extends string,
   PN extends string,
   SN extends string,
+  VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
->(source: ColorSchemeSource<TN, PN, SN, OK>): ColorScheme<TN, PN, SN, OK> {
+>(
+  source: ColorSchemeSource<TN, PN, SN, VN, OK>,
+): ColorScheme<TN, PN, SN, VN, OK> {
+  const rawVariants = [...(source.variants || [])];
   const optionals = [...(source.optionals || [])];
   const themeNames: TN[] = [];
   const scopeNames: SN[] = [];
@@ -21,13 +25,28 @@ export function createColorScheme<
   if (typeof scopeResolvers === 'function') {
     scopeResolvers = scopeResolvers();
   }
+  const variantSources = rawVariants.map((rawVariant) => {
+    return typeof rawVariant === 'string'
+      ? {
+          name: rawVariant,
+        }
+      : rawVariant;
+  });
 
-  const scheme: ColorScheme<TN, PN, SN, OK> = {
+  const variants = variantSources.map(({ name }) => name);
+
+  const scheme: ColorScheme<TN, PN, SN, VN, OK> = {
     get defaultTheme() {
       return themeNames[0];
     },
     get source() {
       return source;
+    },
+    get variants() {
+      return variants;
+    },
+    get variantSources() {
+      return variantSources;
     },
     get optionals() {
       return optionals;
@@ -47,9 +66,10 @@ export function createColorScheme<
     get scopeResolvers() {
       return scopeResolvers;
     },
-    toJSON(): ColorSchemeJSON<TN, PN, SN, OK> {
+    toJSON(): ColorSchemeJSON<TN, PN, SN, VN, OK> {
       return {
         themes: themes.map((theme) => theme.toJSON()),
+        variants: variants.slice(),
         themeNames: themeNames.slice(),
         paletteNames: paletteNames.slice(),
         scopeNames: scopeNames.slice(),
