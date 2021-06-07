@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/body-scroll-lock",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "@fastkit/body-scroll-lock",
   "main": "index.js",
   "module": "dist/body-scroll-lock.esm-bundler.js",
