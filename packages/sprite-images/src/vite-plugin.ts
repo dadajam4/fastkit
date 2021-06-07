@@ -2,7 +2,11 @@ import { Plugin } from 'vite';
 import { SpriteImagesRunner } from './generator';
 import { SpriteImagesOptions } from './schemes';
 
-export function spriteImagesVitePlugin(opts: SpriteImagesOptions): Plugin {
+export type SpriteImagesVitePluginOptions = SpriteImagesOptions;
+
+export function spriteImagesVitePlugin(
+  opts: SpriteImagesVitePluginOptions,
+): Plugin {
   return {
     name: 'spriteImages',
     async config(config) {

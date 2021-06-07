@@ -25,12 +25,14 @@ import { ColorSchemeGenError } from './logger';
 //   }
 // }
 
-export interface ColorSchemePluginOptions {
+export interface ColorSchemeVitePluginOptions {
   src: string;
   dest?: string;
 }
 
-export function colorSchemeVitePlugin(opts: ColorSchemePluginOptions): Plugin {
+export function colorSchemeVitePlugin(
+  opts: ColorSchemeVitePluginOptions,
+): Plugin {
   // let server: ViteDevServer;
 
   const { src, dest: _dest } = opts;

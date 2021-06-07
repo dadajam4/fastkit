@@ -2,8 +2,10 @@ import { Plugin } from 'vite';
 import { HashedSyncOptions } from './schemes';
 import { HashedSync } from './hashed-sync';
 
+export type HashedSyncVitePluginOptions = Omit<HashedSyncOptions, 'watch'>;
+
 export function hashedSyncVitePlugin(
-  opts: Omit<HashedSyncOptions, 'watch'>,
+  opts: HashedSyncVitePluginOptions,
 ): Plugin {
   return {
     name: 'hashedSync',

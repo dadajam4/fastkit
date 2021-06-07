@@ -4,12 +4,14 @@ import path from 'path';
 import { findPackageDir } from '@fastkit/node-util';
 import { MediaMatchGenError } from './logger';
 
-export interface MediaMatchPluginOptions {
+export interface MediaMatchVitePluginOptions {
   src: string;
   dest?: string;
 }
 
-export function mediaMatchVitePlugin(opts: MediaMatchPluginOptions): Plugin {
+export function mediaMatchVitePlugin(
+  opts: MediaMatchVitePluginOptions,
+): Plugin {
   const { src } = opts;
   const rawEntryPoint = path.resolve(src);
   const { dest: _dest } = opts;

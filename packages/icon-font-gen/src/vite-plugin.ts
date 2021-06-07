@@ -2,7 +2,9 @@ import { Plugin } from 'vite';
 import { IconFontRunner } from './generator';
 import { RawIconFontOptions } from './schemes';
 
-export function iconFontVitePlugin(opts: RawIconFontOptions): Plugin {
+export type IconFontVitePlugin = RawIconFontOptions;
+
+export function iconFontVitePlugin(opts: IconFontVitePlugin): Plugin {
   return {
     name: 'iconFont',
     async config(config, { command }) {
