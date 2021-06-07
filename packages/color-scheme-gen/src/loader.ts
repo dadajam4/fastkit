@@ -3,14 +3,14 @@ import {
   TemplateScope,
   BULTIN_COLOR_VARIANTS,
   BultinColorVariant,
-} from '../schemes';
+} from '@fastkit/color-scheme';
 import { toScssValues } from './to-scss-values';
 import fs from 'fs-extra';
 import path from 'path';
 import { render } from 'eta';
 import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
 import { EV } from '@fastkit/ev';
-import { logger, ColorSchemeError } from '../logger';
+import { logger, ColorSchemeGenError } from './logger';
 
 const TEMPLATES_DIR = path.resolve(__dirname, 'assets/templates');
 
@@ -108,7 +108,7 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
         if (scss) return scss;
 
         if (from && !BULTIN_COLOR_VARIANTS.includes(from)) {
-          throw new ColorSchemeError(`missing builtin variant "${from}"`);
+          throw new ColorSchemeGenError(`missing builtin variant "${from}"`);
         }
         const _from = from || variant;
         if (BULTIN_COLOR_VARIANTS.includes(_from as any)) {

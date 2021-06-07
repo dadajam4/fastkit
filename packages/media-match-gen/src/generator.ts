@@ -1,9 +1,12 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { MediaMatchSettings, MediaMatchDefine } from '../schemes';
-import { esbuildRequire } from '@fastkit/node-util';
-import { logger } from '../logger';
-import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
+import { MediaMatchSettings, MediaMatchDefine } from './schemes';
+import {
+  esbuildRequire,
+  ESbuildRunner,
+  ESbuildRequireResult,
+} from '@fastkit/node-util';
+import { logger } from './logger';
 import { EV } from '@fastkit/ev';
 
 const BANNER = `
@@ -11,7 +14,7 @@ const BANNER = `
  * This is auto generated file.
  * Do not edit !!!
  *
- * @see: https://github.com/dadajam4/fastkit/tree/main/packages/media-match
+ * @see: https://github.com/dadajam4/fastkit/tree/main/packages/media-match-gen
  */
 `.trim();
 

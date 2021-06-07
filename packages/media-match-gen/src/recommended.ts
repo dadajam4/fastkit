@@ -1,4 +1,4 @@
-import { createMediaMatchSettings } from '../schemes';
+import { createMediaMatchSettings } from './schemes';
 
 export interface RecommendedSettingsOptions {
   xxsMaxWidth?: number;

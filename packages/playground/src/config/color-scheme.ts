@@ -1,5 +1,5 @@
-import { builtins } from '@fastkit/color-scheme/src/tool';
+import { createSimpleColorScheme } from '@fastkit/color-scheme-gen';
 
-const scheme = builtins.createSimpleColorScheme();
+const scheme = createSimpleColorScheme();
 
 export default scheme;

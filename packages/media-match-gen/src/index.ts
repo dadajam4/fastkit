@@ -1,3 +1,4 @@
-export * from './vite-plugin';
+export * from './schemes';
 export * from './generator';
 export * from './recommended';
+export * from './vite-plugin';

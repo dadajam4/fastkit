@@ -1,5 +1,5 @@
 import { ColorSource } from '@fastkit/color';
-import { ColorScopeResolvers, ColorScopeResolver } from '../color-scheme';
+import { ColorScopeResolvers, ColorScopeResolver } from '@fastkit/color-scheme';
 
 export const COLOR_SCOPE_OPTIONAL_KEYS = [
   'light',

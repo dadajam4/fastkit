@@ -1,4 +1,4 @@
-import { createColorScheme } from '../../color-scheme';
+import { createColorScheme } from '@fastkit/color-scheme';
 import { COLOR_SCOPE_OPTIONAL_KEYS, scopeResolvers } from '../resolvers';
 
 export function createSimpleColorScheme() {

@@ -1,7 +1,7 @@
 import { TinyLogger, createTinyError } from '@fastkit/tiny-logger';
 
-const name = 'icon-font';
+const name = 'color-scheme-gen';
 
 export const logger = new TinyLogger(name);
 
-export const IconFontError = createTinyError(name);
+export const ColorSchemeGenError = createTinyError(name);

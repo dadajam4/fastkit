@@ -3,8 +3,7 @@
   "version": "0.1.14",
   "description": "@fastkit/media-match",
   "buildOptions": {
-    "name": "MediaMatch",
-    "tool": true
+    "name": "MediaMatch"
   },
   "main": "index.js",
   "module": "dist/media-match.esm-bundler.js",
@@ -25,10 +24,5 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/media-match#readme",
-  "dependencies": {
-    "@fastkit/ev": "0.1.14",
-    "fs-extra": "^9.1.0",
-    "@fastkit/node-util": "0.1.14"
-  }
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/media-match#readme"
 }

@@ -2,7 +2,7 @@ import { Plugin } from 'vite';
 import { LoadColorSchemeRunner } from './loader';
 import path from 'path';
 import { findPackageDir } from '@fastkit/node-util';
-import { ColorSchemeError } from '../logger';
+import { ColorSchemeGenError } from './logger';
 
 // const importSuffix = 'color-scheme';
 
@@ -47,7 +47,7 @@ export function colorSchemeVitePlugin(opts: ColorSchemePluginOptions): Plugin {
 
       if (!_dest) {
         const pkgDir = await findPackageDir();
-        if (!pkgDir) throw new ColorSchemeError('missing package.json');
+        if (!pkgDir) throw new ColorSchemeGenError('missing package.json');
         dest = path.join(pkgDir, '.color-scheme');
       } else {
         dest = _dest;

@@ -1,4 +1,4 @@
-import { ColorScheme, COLOR_SCOPE_DEFAULTS_KEYS } from '../color-scheme';
+import { ColorScheme, COLOR_SCOPE_DEFAULTS_KEYS } from '@fastkit/color-scheme';
 
 export function toScssValues(scheme: ColorScheme<any, any, any, any>): string {
   const rows: string[] = [];

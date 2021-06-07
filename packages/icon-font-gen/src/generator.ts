@@ -20,7 +20,7 @@ const BANNER = `
  * This is auto generated file.
  * Do not edit !!!
  *
- * @see: https://github.com/dadajam4/fastkit/tree/main/packages/icon-font
+ * @see: https://github.com/dadajam4/fastkit/tree/main/packages/icon-font-gen
  */
 `.trim();
 

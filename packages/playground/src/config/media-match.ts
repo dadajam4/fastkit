@@ -1,3 +1,3 @@
-import { createRecommendedSettings } from '../../../media-match/src/tool';
+import { createRecommendedSettings } from '../../../media-match-gen/src';
 
 export default createRecommendedSettings();

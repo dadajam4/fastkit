@@ -1,20 +1,20 @@
 {
-  "name": "@fastkit/sprite-images",
+  "name": "@fastkit/icon-font-gen",
   "version": "0.1.14",
-  "description": "@fastkit/sprite-images",
+  "description": "@fastkit/icon-font-gen",
   "buildOptions": {
-    "name": "SpriteImages",
+    "name": "IconFont",
     "formats": [
       "cjs"
     ]
   },
   "main": "index.js",
-  "module": "dist/sprite-images.esm-bundler.js",
+  "module": "dist/icon-font-gen.esm-bundler.js",
   "files": [
     "index.js",
     "dist"
   ],
-  "types": "dist/sprite-images.d.ts",
+  "types": "dist/icon-font-gen.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"
@@ -27,13 +27,13 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/sprite-images#readme",
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/icon-font-gen#readme",
   "dependencies": {
     "@fastkit/ev": "0.1.14",
     "@fastkit/tiny-logger": "0.1.14",
     "chokidar": "^3.5.0",
+    "fantasticon": "^1.2.0",
     "fs-extra": "^9.1.0",
-    "spritesmith": "^3.4.0",
     "vite": "^2.1.5"
   }
 }

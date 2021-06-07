@@ -1,7 +1,7 @@
 import { TinyLogger, createTinyError } from '@fastkit/tiny-logger';
 
-const name = 'media-match';
+const name = 'icon-font-gen';
 
 export const logger = new TinyLogger(name);
 
-export const MediaMatchError = createTinyError(name);
+export const IconFontGenError = createTinyError(name);

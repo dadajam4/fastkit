@@ -5,9 +5,9 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { PACKAGES_DIR, targets } from './core/utils';
 import { globalsPlugin } from './plugins/playground-globals';
 import { rawStylesPlugin } from './plugins/raw-styles';
-import { colorSchemeVitePlugin } from './packages/color-scheme/src/tool';
-import { mediaMatchVitePlugin } from './packages/media-match/src/tool';
-import { iconFontVitePlugin } from './packages/icon-font/src';
+import { colorSchemeVitePlugin } from './packages/color-scheme-gen/src';
+import { mediaMatchVitePlugin } from './packages/media-match-gen/src';
+import { iconFontVitePlugin } from './packages/icon-font-gen/src';
 import { spriteImagesVitePlugin } from './packages/sprite-images/src';
 import { hashedSyncVitePlugin } from './packages/hashed-sync/src';
 
