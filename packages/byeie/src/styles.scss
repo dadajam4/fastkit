@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 .byeie {
   &,
   * {
@@ -120,7 +122,7 @@
     }
 
     &::before {
-      top: $size / 2;
+      top: math.div($size, 2);
       right: 0;
       left: 0;
       height: 1px;
@@ -129,7 +131,7 @@
     &::after {
       top: 0;
       bottom: 0;
-      left: $size / 2;
+      left: math.div($size, 2);
       width: 1px;
     }
   }

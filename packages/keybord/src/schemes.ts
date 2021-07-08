@@ -191,7 +191,7 @@ export interface Key {
   Korean: typeof Korean;
   Japanese: typeof Japanese;
   Function: typeof Function;
-  is<T extends KeyType | KeyType[]>(source: unknown, key: T): source is KeyType;
+  is<T extends KeyType | KeyType[]>(source: any, key: T): source is KeyType;
 }
 Key.Special = Special;
 Key.Modifier = Modifier;
