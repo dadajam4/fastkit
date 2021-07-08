@@ -3,8 +3,8 @@
 .v-stack-snackbar {
   position: fixed;
   display: inline-flex;
-  vertical-align: bottom;
   font-size: 14px;
+  vertical-align: bottom;
   border-radius: 2px;
   box-shadow: $v-stack-snakbar-shadow;
   transition: margin 0.3s $v-stack-easing-swing;
@@ -30,8 +30,8 @@
 
   &--bottom:not(.v-stack-snackbar--has-horizontal) {
     bottom: 0;
-    border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
   }
 
   &--left {
@@ -45,11 +45,11 @@
   &__inner {
     display: flex;
     align-items: center;
-    padding: 14px 12px 14px 24px;
     justify-content: space-between;
     width: auto;
-    max-width: calc(100vw - 96px);
     min-width: 288px;
+    max-width: calc(100vw - 96px);
+    padding: 14px 12px 14px 24px;
   }
 
   &__body {
@@ -59,8 +59,8 @@
 
   &__actions {
     flex: 0 0 auto;
-    white-space: nowrap;
     padding-left: 20px;
+    white-space: nowrap;
   }
 
   &__close {

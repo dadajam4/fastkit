@@ -3,15 +3,15 @@
 .v-stack-dialog {
   position: fixed;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
+  left: 0;
+  box-sizing: border-box;
   padding: 0;
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  box-sizing: border-box;
-  outline: 0;
   pointer-events: none;
+  outline: 0;
+  -webkit-overflow-scrolling: touch;
 
   &__scroller {
     display: table;
@@ -21,22 +21,22 @@
 
   &__centerer {
     display: table-cell;
-    vertical-align: middle;
     text-align: center;
+    vertical-align: middle;
   }
 
   &__content {
-    text-align: left;
     position: relative;
     display: inline-block;
-    margin: 24px;
-    border-radius: 2px;
-    box-shadow: $v-stack-dialog-shadow;
-    outline: 0;
     // background: var(--palette-background);
     // color: var(--palette-default);
     min-width: 280px;
+    margin: 24px;
+    text-align: left;
     pointer-events: auto;
+    border-radius: 2px;
+    outline: 0;
+    box-shadow: $v-stack-dialog-shadow;
   }
 
   &__header {

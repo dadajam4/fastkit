@@ -41,7 +41,6 @@
     "@fastkit/dynamic-src": "0.1.15",
     "@fastkit/ev": "0.1.15",
     "@fastkit/helpers": "0.1.15",
-    "@fastkit/icon-font": "0.1.15",
     "@fastkit/icon-font-gen": "0.1.15",
     "@fastkit/keybord": "0.1.15",
     "@fastkit/media-match": "0.1.15",

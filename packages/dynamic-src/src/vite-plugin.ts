@@ -40,7 +40,7 @@ export function dynamicSrcVitePlugin(
         plugins.push(colorSchemeVitePlugin(colorScheme));
       }
       if (hashedSync) {
-        plugins.push(hashedSyncVitePlugin(hashedSync));
+        plugins.push(hashedSyncVitePlugin(hashedSync) as Plugin);
       }
       if (iconFont) {
         plugins.push(iconFontVitePlugin(iconFont));

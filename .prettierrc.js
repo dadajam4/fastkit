@@ -16,11 +16,5 @@ module.exports = {
         "parser":"html"
       }
     },
-    {
-      "files": "*.scss",
-      "options": {
-        "singleQuote": false
-      }
-    },
   ],
 };

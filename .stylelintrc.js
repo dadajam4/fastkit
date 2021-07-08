@@ -5,9 +5,12 @@ module.exports = {
   ],
   extends: [
     'stylelint-config-standard',
-    'stylelint-config-prettier'
+    'stylelint-prettier/recommended',
+    'stylelint-config-prettier',
+    'stylelint-config-recess-order',
   ],
   rules: {
+    'prettier/prettier': true,
     'indentation': 2,
     'string-quotes': 'single',
     'at-rule-no-unknown': null,

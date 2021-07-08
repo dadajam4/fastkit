@@ -43,6 +43,15 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
         '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/ban-types': [
+          'error',
+          {
+            extendDefaults: true,
+            types: {
+              '{}': false,
+            },
+          },
+        ],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         'vue/one-component-per-file': 'off',
         'vue/require-explicit-emits': 'off',
