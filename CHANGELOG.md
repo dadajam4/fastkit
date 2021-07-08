@@ -1,3 +1,13 @@
+## [0.1.16](https://github.com/dadajam4/fastkit/compare/v0.1.15...v0.1.16) (2021-07-08)
+
+
+### Features
+
+* catcher ([4de12fe](https://github.com/dadajam4/fastkit/commit/4de12fe2085fad18417e000f63da7f2f4159db9d))
+* universal-logger ([8fc1a60](https://github.com/dadajam4/fastkit/commit/8fc1a60a3eff61c19715074d89e6f16e1854cb84))
+
+
+
 ## [0.1.15](https://github.com/dadajam4/fastkit/compare/v0.1.14...v0.1.15) (2021-06-07)
 
 

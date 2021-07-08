@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/sprite-images",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "@fastkit/sprite-images",
   "buildOptions": {
     "name": "SpriteImages",
@@ -29,11 +29,11 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/sprite-images#readme",
   "dependencies": {
-    "@fastkit/ev": "0.1.15",
-    "@fastkit/tiny-logger": "0.1.15",
+    "@fastkit/ev": "0.1.16",
+    "@fastkit/tiny-logger": "0.1.16",
     "chokidar": "^3.5.0",
     "fs-extra": "^9.1.0",
     "spritesmith": "^3.4.0",
-    "vite": "^2.3.0"
+    "vite": "^2.4.0"
   }
 }
