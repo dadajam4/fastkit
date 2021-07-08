@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/dynamic-src",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "@fastkit/dynamic-src",
   "buildOptions": {
     "name": "DynamicSrc",
@@ -29,11 +29,11 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/dynamic-src#readme",
   "dependencies": {
-    "@fastkit/color-scheme-gen": "0.1.16",
-    "@fastkit/hashed-sync": "0.1.16",
-    "@fastkit/icon-font-gen": "0.1.16",
-    "@fastkit/media-match-gen": "0.1.16",
-    "@fastkit/sprite-images": "0.1.16",
+    "@fastkit/color-scheme-gen": "0.1.17",
+    "@fastkit/hashed-sync": "0.1.17",
+    "@fastkit/icon-font-gen": "0.1.17",
+    "@fastkit/media-match-gen": "0.1.17",
+    "@fastkit/sprite-images": "0.1.17",
     "vite": "^2.4.0"
   }
 }
