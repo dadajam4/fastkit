@@ -1,4 +1,4 @@
-import { datadogLogs, LogsUserConfiguration } from '@datadog/browser-logs';
+import type { datadogLogs, LogsUserConfiguration } from '@datadog/browser-logs';
 import { Transport, LogLevelThreshold, LogLevel } from '../schemes';
 import { CloneTransformer, CloneOptions } from '../transformers/clone';
 
@@ -16,8 +16,9 @@ const LEVEL_MAPPINGS: Record<LogLevel, DatadogLevel> = {
   debug: 'debug',
 };
 
-function getDD(opts: LogsUserConfiguration) {
+function getDD(opts: LogsUserConfiguration): typeof datadogLogs {
   if (dd) return dd;
+  const { datadogLogs } = require('@datadog/browser-logs');
   datadogLogs.init({
     site: 'datadoghq.com',
     forwardErrorsToLogs: false,
