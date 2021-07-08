@@ -180,7 +180,15 @@ function createConfig(
           ...Object.keys(pkg.peerDependencies || {}),
           ...['path', 'url', 'stream'],
         ];
-  external.push('module', '@vueuse/head', 'chokidar', 'esbuild');
+  external.push(
+    'module',
+    '@vueuse/head',
+    'chokidar',
+    'esbuild',
+    'vite',
+    'postcss',
+    'nanoid',
+  );
 
   // the browser builds requires postcss to be available
   // as a global (e.g. http://wzrd.in/standalone/postcss)

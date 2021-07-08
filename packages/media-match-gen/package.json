@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match-gen",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "@fastkit/media-match-gen",
   "buildOptions": {
     "name": "MediaMatchGen",
@@ -29,10 +29,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/media-match-gen#readme",
   "dependencies": {
-    "@fastkit/ev": "0.1.17",
-    "@fastkit/media-match": "0.1.17",
-    "@fastkit/node-util": "0.1.17",
-    "@fastkit/tiny-logger": "0.1.17",
+    "@fastkit/ev": "0.1.18",
+    "@fastkit/media-match": "0.1.18",
+    "@fastkit/node-util": "0.1.18",
+    "@fastkit/tiny-logger": "0.1.18",
     "fs-extra": "^9.1.0",
     "vite": "^2.4.0"
   }
