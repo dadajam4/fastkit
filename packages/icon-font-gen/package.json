@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font-gen",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "@fastkit/icon-font-gen",
   "buildOptions": {
     "name": "IconFont",
@@ -32,8 +32,8 @@
     "vite": "^2.4.0"
   },
   "dependencies": {
-    "@fastkit/ev": "0.1.19",
-    "@fastkit/tiny-logger": "0.1.19",
+    "@fastkit/ev": "0.1.20",
+    "@fastkit/tiny-logger": "0.1.20",
     "chokidar": "^3.5.0",
     "fantasticon": "^1.2.0",
     "fs-extra": "^9.1.0"

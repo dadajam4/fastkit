@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/hashed-sync",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "@fastkit/hashed-sync",
   "buildOptions": {
     "name": "HashedSync",
