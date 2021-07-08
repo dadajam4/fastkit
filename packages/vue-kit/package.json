@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-kit",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "vue-kit",
   "main": "index.js",
   "module": "dist/vue-kit.esm-bundler.js",
@@ -35,11 +35,11 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-kit#readme",
   "dependencies": {
-    "fastkit": "0.1.20",
-    "@fastkit/vue-color-scheme": "0.1.20",
-    "@fastkit/vue-media-match": "0.1.20",
-    "@fastkit/vue-scroller": "0.1.20",
-    "@fastkit/vue-stack": "0.1.20",
-    "@fastkit/vue-utils": "0.1.20"
+    "fastkit": "0.1.21",
+    "@fastkit/vue-color-scheme": "0.1.21",
+    "@fastkit/vue-media-match": "0.1.21",
+    "@fastkit/vue-scroller": "0.1.21",
+    "@fastkit/vue-stack": "0.1.21",
+    "@fastkit/vue-utils": "0.1.21"
   }
 }
