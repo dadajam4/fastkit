@@ -35,6 +35,7 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/fastkit#readme",
   "dependencies": {
     "@fastkit/body-scroll-lock": "0.1.15",
+    "@fastkit/catcher": "0.1.15",
     "@fastkit/color": "0.1.15",
     "@fastkit/color-scheme": "0.1.15",
     "@fastkit/color-scheme-gen": "0.1.15",
@@ -50,6 +51,7 @@
     "@fastkit/scroller": "0.1.15",
     "@fastkit/sprite-images": "0.1.15",
     "@fastkit/tiny-logger": "0.1.15",
+    "@fastkit/universal-logger": "0.1.15",
     "@fastkit/visibility": "0.1.15",
     "modern-normalize": "^1.1.0"
   }

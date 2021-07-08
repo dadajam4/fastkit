@@ -58,6 +58,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.13.12",
     "@babel/types": "^7.13.14",
+    "@datadog/browser-logs": "^2.16.0",
     "@microsoft/api-extractor": "^7.13.2",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^18.0.0",

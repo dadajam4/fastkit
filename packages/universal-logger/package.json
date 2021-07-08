@@ -1,17 +1,14 @@
 {
-  "name": "@fastkit/tiny-logger",
+  "name": "@fastkit/universal-logger",
   "version": "0.1.15",
-  "description": "@fastkit/tiny-logger",
-  "buildOptions": {
-    "name": "TinyLogger"
-  },
+  "description": "@fastkit/universal-logger",
   "main": "index.js",
-  "module": "dist/tiny-logger.esm-bundler.js",
+  "module": "dist/universal-logger.esm-bundler.js",
   "files": [
     "index.js",
     "dist"
   ],
-  "types": "dist/tiny-logger.d.ts",
+  "types": "dist/universal-logger.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"
@@ -24,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/tiny-logger#readme",
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/universal-logger#readme",
   "dependencies": {
     "@fastkit/helpers": "0.1.15"
   }

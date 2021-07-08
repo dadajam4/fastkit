@@ -1,3 +1,5 @@
+import { ConsoleColorPaletteName, consoleColorString } from '@fastkit/helpers';
+
 const TINY_LOGGER_LOG_TYPES = [
   'debug',
   'info',
@@ -8,26 +10,14 @@ const TINY_LOGGER_LOG_TYPES = [
 
 export type TinyLoggerLogType = typeof TINY_LOGGER_LOG_TYPES[number];
 
-const PALETTE = {
-  reset: '\u001b[0m',
-  // black: '\u001b[30m',
-  red: '\u001b[31m',
-  green: '\u001b[32m',
-  yellow: '\u001b[33m',
-  // blue: '\u001b[34m',
-  magenta: '\u001b[35m',
-  cyan: '\u001b[36m',
-  // white: '\u001b[37m'
-};
-
 export const COLOR_MAP: {
-  [K in TinyLoggerLogType]?: string;
+  [K in TinyLoggerLogType]?: ConsoleColorPaletteName;
 } = {
-  debug: PALETTE.magenta,
-  info: PALETTE.cyan,
-  warn: PALETTE.yellow,
-  error: PALETTE.red,
-  success: PALETTE.green,
+  debug: 'magenta',
+  info: 'cyan',
+  warn: 'yellow',
+  error: 'red',
+  success: 'green',
 };
 
 export interface TinyLogger {
@@ -56,13 +46,10 @@ export class TinyLogger {
   }
 
   log(type: TinyLoggerLogType, message: string, ...args: any[]) {
-    const colorOpenTag = (colorEnable && COLOR_MAP[type]) || '';
-    const colorCloseTag = colorOpenTag ? PALETTE.reset : '';
+    const color = colorEnable && COLOR_MAP[type];
+    const body = color ? consoleColorString(message, color) : message;
     const fn = type === 'success' ? 'log' : type;
-    console[fn](
-      `${colorOpenTag}[${this.name}] ${message}${colorCloseTag}`,
-      ...args,
-    );
+    console[fn](body, ...args);
   }
 }
 
