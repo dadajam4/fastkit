@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match-gen",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "@fastkit/media-match-gen",
   "buildOptions": {
     "name": "MediaMatchGen",
@@ -32,10 +32,10 @@
     "vite": "^2.4.0"
   },
   "dependencies": {
-    "@fastkit/ev": "0.1.21",
-    "@fastkit/media-match": "0.1.21",
-    "@fastkit/node-util": "0.1.21",
-    "@fastkit/tiny-logger": "0.1.21",
+    "@fastkit/ev": "0.1.22",
+    "@fastkit/media-match": "0.1.22",
+    "@fastkit/node-util": "0.1.22",
+    "@fastkit/tiny-logger": "0.1.22",
     "fs-extra": "^9.1.0"
   }
 }

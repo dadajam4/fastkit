@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/dynamic-src",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "@fastkit/dynamic-src",
   "buildOptions": {
     "name": "DynamicSrc",
@@ -32,10 +32,10 @@
     "vite": "^2.4.0"
   },
   "dependencies": {
-    "@fastkit/color-scheme-gen": "0.1.21",
-    "@fastkit/hashed-sync": "0.1.21",
-    "@fastkit/icon-font-gen": "0.1.21",
-    "@fastkit/media-match-gen": "0.1.21",
-    "@fastkit/sprite-images": "0.1.21"
+    "@fastkit/color-scheme-gen": "0.1.22",
+    "@fastkit/hashed-sync": "0.1.22",
+    "@fastkit/icon-font-gen": "0.1.22",
+    "@fastkit/media-match-gen": "0.1.22",
+    "@fastkit/sprite-images": "0.1.22"
   }
 }
