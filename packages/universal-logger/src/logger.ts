@@ -90,7 +90,11 @@ export function combineFormater(...transformers: Transformer[]): Transformer {
   };
 }
 
-export function loggerBuilder(opts: LoggerBuilderOptions = {}) {
+export function loggerBuilder(opts: LoggerBuilderOptions = {}): {
+  getLogger: (name: string) => Logger;
+  getNamedSettings: (name: string) => NormalizedLoggerOptions;
+  Logger: typeof Logger;
+} {
   const { defaultSettings = {}, namedSettings = {} } = opts;
   const mergedNamedSettings = {} as MergedNamedSettings;
   const caches: {
