@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color-scheme-gen",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "@fastkit/color-scheme-gen",
   "buildOptions": {
     "name": "ColorSchemeGen",
@@ -32,11 +32,11 @@
     "vite": "^2.4.0"
   },
   "dependencies": {
-    "@fastkit/color": "0.1.18",
-    "@fastkit/color-scheme": "0.1.18",
-    "@fastkit/ev": "0.1.18",
-    "@fastkit/node-util": "0.1.18",
-    "@fastkit/tiny-logger": "0.1.18",
+    "@fastkit/color": "0.1.19",
+    "@fastkit/color-scheme": "0.1.19",
+    "@fastkit/ev": "0.1.19",
+    "@fastkit/node-util": "0.1.19",
+    "@fastkit/tiny-logger": "0.1.19",
     "fs-extra": "^9.1.0",
     "eta": "^1.12.0"
   }

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/ev",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "@fastkit/ev",
   "buildOptions": {
     "name": "EV"
