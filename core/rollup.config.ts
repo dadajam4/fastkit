@@ -188,6 +188,7 @@ function createConfig(
     'vite',
     'postcss',
     'nanoid',
+    '@datadog/browser-logs',
   );
 
   // the browser builds requires postcss to be available
