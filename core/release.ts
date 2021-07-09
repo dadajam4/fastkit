@@ -296,10 +296,15 @@ async function publishPackage(
     return;
   }
 
-  // const releaseTag = args.tag || null;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const releaseTag = args.tag || String(semver.prerelease(version)![0]) || null;
   // const releaseTag = 'beta';
+  let releaseTag = args.tag || null;
+  if (!releaseTag) {
+    const tmp = semver.prerelease(version);
+    if (tmp && typeof tmp[0] === 'string') {
+      releaseTag = tmp[0];
+    }
+  }
+  releaseTag = releaseTag || null;
 
   step(`Publishing ${pkgName}...`);
   try {

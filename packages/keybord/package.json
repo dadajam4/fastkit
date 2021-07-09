@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/keybord",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "@fastkit/keybord",
   "main": "index.js",
   "module": "dist/keybord.esm-bundler.js",
