@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/node-util",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "description": "@fastkit/node-util",
   "buildOptions": {
     "name": "NodeUtil",
@@ -29,8 +29,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/node-util#readme",
   "dependencies": {
-    "@fastkit/ev": "0.1.24",
-    "@fastkit/tiny-logger": "0.1.24",
+    "@fastkit/ev": "0.1.25",
+    "@fastkit/tiny-logger": "0.1.25",
     "chokidar": "^3.5.0",
     "fs-extra": "^9.1.0",
     "esbuild": "^0.12.8"
