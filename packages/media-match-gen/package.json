@@ -28,9 +28,6 @@
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/media-match-gen#readme",
-  "peerDependencies": {
-    "vite": ">=2.0.0"
-  },
   "dependencies": {
     "@fastkit/ev": "0.1.23",
     "@fastkit/media-match": "0.1.23",

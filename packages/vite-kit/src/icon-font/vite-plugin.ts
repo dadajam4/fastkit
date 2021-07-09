@@ -1,12 +1,11 @@
 import { Plugin } from 'vite';
-import { IconFontRunner } from './generator';
-import { RawIconFontOptions } from './schemes';
+import { IconFontRunner, RawIconFontOptions } from '@fastkit/icon-font-gen';
 
 export type IconFontVitePlugin = RawIconFontOptions;
 
 export function iconFontVitePlugin(opts: IconFontVitePlugin): Plugin {
   return {
-    name: 'iconFont',
+    name: 'vite:icon-font',
     async config(config, { command }) {
       const watch = command === 'serve';
       const runner = new IconFontRunner(opts, watch);

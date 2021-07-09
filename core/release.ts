@@ -219,27 +219,15 @@ async function detectExternalModuleVersion(
 ): Promise<string | null> {
   const cached = externalModuleVersionDetectedCache[dep];
   if (cached !== undefined) return cached;
-  // let version: string | null = null;
 
   await loadExternalPackages();
 
   const deps = rootPkg[depType];
   let version = (deps && deps[dep]) || null;
-  // const { dependencies, peerDependencies } = rootPkg;
-  // if (dependencies && dependencies[dep]) {
-  //   version = dependencies[dep];
-  // } else if (peerDependencies && peerDependencies[dep]) {
-  //   version = peerDependencies[dep];
-  // }
 
   if (!version) {
     for (const pkgName in externalPackages) {
       const deps = externalPackages[pkgName][depType] || {};
-      // const { peerDependencies, dependencies } = externalPackages[pkgName];
-      // const deps = {
-      //   ...dependencies,
-      //   ...peerDependencies,
-      // };
       if (deps[dep]) {
         version = deps[dep];
         break;

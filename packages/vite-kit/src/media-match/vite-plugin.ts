@@ -1,8 +1,8 @@
 import { Plugin } from 'vite';
-import { MediaMatchGeneratorRunner } from './generator';
+import { MediaMatchGeneratorRunner } from '@fastkit/media-match-gen';
 import path from 'path';
 import { findPackageDir } from '@fastkit/node-util';
-import { MediaMatchGenError } from './logger';
+import { ViteMediaMatchError } from './logger';
 
 export interface MediaMatchVitePluginOptions {
   src: string;
@@ -17,13 +17,13 @@ export function mediaMatchVitePlugin(
   const { dest: _dest } = opts;
 
   return {
-    name: 'mediaMatch',
+    name: 'vite:media-match',
     async config(config, { command }) {
       let dest: string;
 
       if (!_dest) {
         const pkgDir = await findPackageDir();
-        if (!pkgDir) throw new MediaMatchGenError('missing package.json');
+        if (!pkgDir) throw new ViteMediaMatchError('missing package.json');
         dest = path.join(pkgDir, '.media-match');
       } else {
         dest = _dest;

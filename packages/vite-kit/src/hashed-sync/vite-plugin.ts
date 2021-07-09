@@ -1,6 +1,5 @@
 import { Plugin } from 'vite';
-import { HashedSyncOptions } from './schemes';
-import { HashedSync } from './hashed-sync';
+import { HashedSync, HashedSyncOptions } from '@fastkit/hashed-sync';
 
 export type HashedSyncVitePluginOptions = Omit<HashedSyncOptions, 'watch'>;
 
@@ -8,7 +7,7 @@ export function hashedSyncVitePlugin(
   opts: HashedSyncVitePluginOptions,
 ): Plugin {
   return {
-    name: 'hashedSync',
+    name: 'vite:hashed-sync',
     async config(config, { command }) {
       const hashedSync = new HashedSync({
         ...opts,

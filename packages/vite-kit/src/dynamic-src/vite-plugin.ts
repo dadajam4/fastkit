@@ -3,20 +3,20 @@ import { Plugin, PluginOption } from 'vite';
 import {
   ColorSchemeVitePluginOptions,
   colorSchemeVitePlugin,
-} from '@fastkit/color-scheme-gen';
+} from '../color-scheme';
 import {
   HashedSyncVitePluginOptions,
   hashedSyncVitePlugin,
-} from '@fastkit/hashed-sync';
-import { IconFontVitePlugin, iconFontVitePlugin } from '@fastkit/icon-font-gen';
+} from '../hashed-sync';
+import { IconFontVitePlugin, iconFontVitePlugin } from '../icon-font';
 import {
   MediaMatchVitePluginOptions,
   mediaMatchVitePlugin,
-} from '@fastkit/media-match-gen';
+} from '../media-match';
 import {
   SpriteImagesVitePluginOptions,
   spriteImagesVitePlugin,
-} from '@fastkit/sprite-images';
+} from '../sprite-images';
 
 export interface DynamicSrcVitePluginOptions {
   colorScheme?: ColorSchemeVitePluginOptions;
@@ -30,7 +30,7 @@ export function dynamicSrcVitePlugin(
   opts: DynamicSrcVitePluginOptions,
 ): Plugin {
   return {
-    name: 'dynamicSrc',
+    name: 'vite:dynamic-src',
     config() {
       const { colorScheme, hashedSync, iconFont, mediaMatch, spriteImages } =
         opts;

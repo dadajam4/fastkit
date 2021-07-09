@@ -5,11 +5,13 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { PACKAGES_DIR, targets } from './core/utils';
 import { globalsPlugin } from './plugins/playground-globals';
 import { rawStylesPlugin } from './plugins/raw-styles';
-import { colorSchemeVitePlugin } from './packages/color-scheme-gen/src';
-import { mediaMatchVitePlugin } from './packages/media-match-gen/src';
-import { iconFontVitePlugin } from './packages/icon-font-gen/src';
-import { spriteImagesVitePlugin } from './packages/sprite-images/src';
-import { hashedSyncVitePlugin } from './packages/hashed-sync/src';
+import {
+  colorSchemeVitePlugin,
+  mediaMatchVitePlugin,
+  iconFontVitePlugin,
+  spriteImagesVitePlugin,
+  hashedSyncVitePlugin,
+} from './packages/vite-kit/src';
 
 const fastkitAliases = Object.fromEntries(
   targets.map((target) => {
