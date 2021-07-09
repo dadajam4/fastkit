@@ -1,5 +1,5 @@
 import path from 'path';
-// import _imagemin from 'imagemin';
+import _imagemin from 'imagemin';
 // import imageminWebp from 'imagemin-webp';
 // const imageminWebp = require('imagemin-webp');
 import imageminPngquant from 'imagemin-pngquant';
@@ -51,7 +51,7 @@ export const imagemin = createProcessor({
 
       const images = dir.updates.map((update) => update.src);
 
-      const { default: _imagemin } = await import('imagemin');
+      // const { default: _imagemin } = await import('imagemin');
       // import _imagemin from 'imagemin';
 
       await Promise.all([
