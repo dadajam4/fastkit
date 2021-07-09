@@ -150,5 +150,11 @@
     "vue-router": "^4.0.5",
     "yorkie": "^2.0.0"
   },
-  "dependencies": {}
+  "peerDependencies": {
+    "vite": ">=2.0.0",
+    "vue": ">=3.0.0",
+    "vue-router": ">=4.0.0"
+  },
+  "dependencies": {
+  }
 }

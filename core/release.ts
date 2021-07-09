@@ -215,27 +215,31 @@ async function loadExternalPackages() {
 
 async function detectExternalModuleVersion(
   dep: string,
+  depType: 'dependencies' | 'peerDependencies',
 ): Promise<string | null> {
   const cached = externalModuleVersionDetectedCache[dep];
   if (cached !== undefined) return cached;
-  let version: string | null = null;
+  // let version: string | null = null;
 
   await loadExternalPackages();
 
-  const { dependencies, peerDependencies } = rootPkg;
-  if (dependencies && dependencies[dep]) {
-    version = dependencies[dep];
-  } else if (peerDependencies && peerDependencies[dep]) {
-    version = peerDependencies[dep];
-  }
+  const deps = rootPkg[depType];
+  let version = (deps && deps[dep]) || null;
+  // const { dependencies, peerDependencies } = rootPkg;
+  // if (dependencies && dependencies[dep]) {
+  //   version = dependencies[dep];
+  // } else if (peerDependencies && peerDependencies[dep]) {
+  //   version = peerDependencies[dep];
+  // }
 
   if (!version) {
     for (const pkgName in externalPackages) {
-      const { peerDependencies, dependencies } = externalPackages[pkgName];
-      const deps = {
-        ...dependencies,
-        ...peerDependencies,
-      };
+      const deps = externalPackages[pkgName][depType] || {};
+      // const { peerDependencies, dependencies } = externalPackages[pkgName];
+      // const deps = {
+      //   ...dependencies,
+      //   ...peerDependencies,
+      // };
       if (deps[dep]) {
         version = deps[dep];
         break;
@@ -278,7 +282,7 @@ async function updateDeps(
       );
       deps[dep] = version;
     } else {
-      const version = await detectExternalModuleVersion(dep);
+      const version = await detectExternalModuleVersion(dep, depType);
       if (version) {
         console.log(
           chalk.yellow(`${pkg.name} -> ${depType} -> ${dep}@${version}`),

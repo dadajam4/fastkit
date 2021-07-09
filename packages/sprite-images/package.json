@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/sprite-images#readme",
   "peerDependencies": {
-    "vite": "^2.4.0"
+    "vite": ">=2.0.0"
   },
   "dependencies": {
     "@fastkit/ev": "0.1.23",

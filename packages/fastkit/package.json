@@ -52,7 +52,6 @@
     "@fastkit/sprite-images": "0.1.23",
     "@fastkit/tiny-logger": "0.1.23",
     "@fastkit/universal-logger": "0.1.23",
-    "@fastkit/visibility": "0.1.23",
-    "modern-normalize": "^1.1.0"
+    "@fastkit/visibility": "0.1.23"
   }
 }
