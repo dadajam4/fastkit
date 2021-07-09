@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@fastkit/color-scheme-gen": "0.1.23",
-    "@fastkit/dynamic-src": "0.1.23",
     "@fastkit/hashed-sync": "0.1.23",
     "@fastkit/icon-font-gen": "0.1.23",
     "@fastkit/media-match-gen": "0.1.23",
