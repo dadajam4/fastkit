@@ -10,13 +10,16 @@ export function getBrowserLanguage(defaultLanguage = 'en-US') {
 
 export type AvairableLanguage = 'en' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
 
-const urlLanguageRe = /(^|\/)(en|ja|ko|zh_cn|zh_tw|zh|ch)\//i;
+const urlLanguageRe = /(^|\/)(en|ja|ko|zh_cn|zh_tw|zh|ch)(\/|$)/i;
 
 export function getAvairableUrlLanguage(): AvairableLanguage | undefined {
   let result: AvairableLanguage | undefined;
-  const url = location.href;
+  const url = location.href.replace(/\-/g, '_');
   const match = url.match(urlLanguageRe);
-  const value = match && match[2];
+  let value = match && match[2];
+  if (value) {
+    value = value.toLowerCase();
+  }
   switch (value) {
     // 英語
     case 'en':

@@ -27,6 +27,9 @@ export default defineConfig({
       ...fastkitAliases,
     },
   },
+  server: {
+    host: '0.0.0.0',
+  },
   // optimizeDeps: {
   //   include: ['imagemin'],
   // },
