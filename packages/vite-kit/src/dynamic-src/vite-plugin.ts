@@ -1,4 +1,4 @@
-import { Plugin, PluginOption } from 'vite';
+import { Plugin } from 'vite';
 
 import {
   ColorSchemeVitePluginOptions,
@@ -28,33 +28,24 @@ export interface DynamicSrcVitePluginOptions {
 
 export function dynamicSrcVitePlugin(
   opts: DynamicSrcVitePluginOptions,
-): Plugin {
-  return {
-    name: 'vite:dynamic-src',
-    config() {
-      const { colorScheme, hashedSync, iconFont, mediaMatch, spriteImages } =
-        opts;
-      const plugins: PluginOption[] = [];
+): Plugin[] {
+  const { colorScheme, hashedSync, iconFont, mediaMatch, spriteImages } = opts;
+  const plugins: Plugin[] = [];
 
-      if (colorScheme) {
-        plugins.push(colorSchemeVitePlugin(colorScheme));
-      }
-      if (hashedSync) {
-        plugins.push(hashedSyncVitePlugin(hashedSync) as Plugin);
-      }
-      if (iconFont) {
-        plugins.push(iconFontVitePlugin(iconFont));
-      }
-      if (mediaMatch) {
-        plugins.push(mediaMatchVitePlugin(mediaMatch));
-      }
-      if (spriteImages) {
-        plugins.push(spriteImagesVitePlugin(spriteImages));
-      }
-
-      return {
-        plugins,
-      };
-    },
-  };
+  if (colorScheme) {
+    plugins.push(colorSchemeVitePlugin(colorScheme));
+  }
+  if (hashedSync) {
+    plugins.push(hashedSyncVitePlugin(hashedSync));
+  }
+  if (iconFont) {
+    plugins.push(iconFontVitePlugin(iconFont));
+  }
+  if (mediaMatch) {
+    plugins.push(mediaMatchVitePlugin(mediaMatch));
+  }
+  if (spriteImages) {
+    plugins.push(spriteImagesVitePlugin(spriteImages));
+  }
+  return plugins;
 }

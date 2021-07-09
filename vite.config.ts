@@ -5,13 +5,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { PACKAGES_DIR, targets } from './core/utils';
 import { globalsPlugin } from './plugins/playground-globals';
 import { rawStylesPlugin } from './plugins/raw-styles';
-import {
-  colorSchemeVitePlugin,
-  mediaMatchVitePlugin,
-  iconFontVitePlugin,
-  spriteImagesVitePlugin,
-  hashedSyncVitePlugin,
-} from './packages/vite-kit/src';
+import { dynamicSrcVitePlugin } from './packages/vite-kit/src';
 
 const fastkitAliases = Object.fromEntries(
   targets.map((target) => {
@@ -44,25 +38,27 @@ export default defineConfig({
     }),
     vue(),
     rawStylesPlugin(),
-    colorSchemeVitePlugin({
-      src: './packages/playground/src/config/color-scheme',
-      dest: path.join(DYNAMIC_DEST_DIR, 'color-scheme'),
-    }),
-    mediaMatchVitePlugin({
-      src: './packages/playground/src/config/media-match',
-      dest: path.join(DYNAMIC_DEST_DIR, 'media-match'),
-    }),
-    iconFontVitePlugin({
-      inputDir: './packages/playground/src/config/icon-font/svg',
-      outputDir: path.join(DYNAMIC_DEST_DIR, 'icon-font'),
-    }),
-    spriteImagesVitePlugin({
-      src: './packages/playground/src/config/sprites',
-      dest: path.join(DYNAMIC_DEST_DIR, 'sprites'),
-    }),
-    hashedSyncVitePlugin({
-      src: './packages/playground/src/config/sprites',
-      dest: path.join(DYNAMIC_DEST_DIR, 'sync'),
+    dynamicSrcVitePlugin({
+      colorScheme: {
+        src: './packages/playground/src/config/color-scheme',
+        dest: path.join(DYNAMIC_DEST_DIR, 'color-scheme'),
+      },
+      mediaMatch: {
+        src: './packages/playground/src/config/media-match',
+        dest: path.join(DYNAMIC_DEST_DIR, 'media-match'),
+      },
+      iconFont: {
+        inputDir: './packages/playground/src/config/icon-font/svg',
+        outputDir: path.join(DYNAMIC_DEST_DIR, 'icon-font'),
+      },
+      spriteImages: {
+        src: './packages/playground/src/config/sprites',
+        dest: path.join(DYNAMIC_DEST_DIR, 'sprites'),
+      },
+      hashedSync: {
+        src: './packages/playground/src/config/sprites',
+        dest: path.join(DYNAMIC_DEST_DIR, 'sync'),
+      },
     }),
   ],
 });
