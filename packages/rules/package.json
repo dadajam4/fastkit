@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/rules",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "description": "@fastkit/rules",
   "main": "index.js",
   "module": "dist/rules.esm-bundler.js",
@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/rules#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.1.22"
+    "@fastkit/helpers": "0.1.23"
   }
 }
