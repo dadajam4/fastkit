@@ -298,8 +298,8 @@ async function publishPackage(
 
   // const releaseTag = args.tag || null;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  // const releaseTag = args.tag || String(semver.prerelease(version)![0]) || null;
-  const releaseTag = 'beta';
+  const releaseTag = args.tag || String(semver.prerelease(version)![0]) || null;
+  // const releaseTag = 'beta';
 
   step(`Publishing ${pkgName}...`);
   try {

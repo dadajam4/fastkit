@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-kit",
-  "version": "0.1.28",
+  "version": "0.2.0",
   "description": "vue-kit",
   "main": "index.js",
   "module": "dist/vue-kit.esm-bundler.js",
@@ -38,11 +38,11 @@
     "vue": ">=3.0.0"
   },
   "dependencies": {
-    "fastkit": "0.1.28",
-    "@fastkit/vue-color-scheme": "0.1.28",
-    "@fastkit/vue-media-match": "0.1.28",
-    "@fastkit/vue-scroller": "0.1.28",
-    "@fastkit/vue-stack": "0.1.28",
-    "@fastkit/vue-utils": "0.1.28"
+    "fastkit": "0.2.0",
+    "@fastkit/vue-color-scheme": "0.2.0",
+    "@fastkit/vue-media-match": "0.2.0",
+    "@fastkit/vue-scroller": "0.2.0",
+    "@fastkit/vue-stack": "0.2.0",
+    "@fastkit/vue-utils": "0.2.0"
   }
 }

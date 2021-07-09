@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-stack",
-  "version": "0.1.28",
+  "version": "0.2.0",
   "description": "@fastkit/vue-stack",
   "buildOptions": {
     "name": "VueStack"
@@ -30,13 +30,13 @@
     "vue": ">=3.0.0"
   },
   "dependencies": {
-    "@fastkit/body-scroll-lock": "0.1.28",
-    "@fastkit/color-scheme": "0.1.28",
-    "@fastkit/visibility": "0.1.28",
-    "@fastkit/vue-color-scheme": "0.1.28",
-    "@fastkit/keybord": "0.1.28",
-    "@fastkit/helpers": "0.1.28",
-    "@fastkit/tiny-logger": "0.1.28",
-    "@fastkit/vue-utils": "0.1.28"
+    "@fastkit/body-scroll-lock": "0.2.0",
+    "@fastkit/color-scheme": "0.2.0",
+    "@fastkit/visibility": "0.2.0",
+    "@fastkit/vue-color-scheme": "0.2.0",
+    "@fastkit/keybord": "0.2.0",
+    "@fastkit/helpers": "0.2.0",
+    "@fastkit/tiny-logger": "0.2.0",
+    "@fastkit/vue-utils": "0.2.0"
   }
 }
