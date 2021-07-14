@@ -59,6 +59,7 @@ export interface FastkitAppConfig {
   };
   vue: boolean;
   overwrite?: boolean;
+  license: string;
 }
 
 export const DEPENDENCIE_VERSION_MAP: {
@@ -67,6 +68,7 @@ export const DEPENDENCIE_VERSION_MAP: {
 
 export const DEFAULT_DEPENDENCIES: string[] = [
   'yorkie',
+  'npm-run-all',
   '@types/jest',
   '@types/node',
   '@typescript-eslint/eslint-plugin',

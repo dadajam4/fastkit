@@ -1,16 +1,44 @@
+import './App.scss';
+
 import { defineComponent } from 'vue';
-import { RouterView } from 'vue-router';
+import { RouterView, RouterLink } from 'vue-router';
 import { useInjectTheme } from '@fastkit/vue-color-scheme';
 import { VStackRoot } from '@fastkit/vue-stack';
+import { useColorScheme } from '@fastkit/vue-color-scheme';
 
 export const App = defineComponent({
   name: 'App',
   setup() {
     useInjectTheme();
+    const colorScheme = useColorScheme();
+
+    return {
+      colorScheme,
+    };
   },
   render() {
     return (
       <VStackRoot class="app">
+        <nav class="app__toolbar">
+          <ul class="app__navigation">
+            <li class="app__navigation__item">
+              <RouterLink to="/">HOME</RouterLink>
+            </li>
+            <li class="app__navigation__item">
+              <RouterLink to="/page2">PAGE2</RouterLink>
+            </li>
+          </ul>
+
+          <select class="app__theme" v-model={this.colorScheme.rootTheme}>
+            {this.colorScheme.themeNames.map((t) => {
+              return (
+                <option value={t} key={t}>
+                  {t}
+                </option>
+              );
+            })}
+          </select>
+        </nav>
         <RouterView />
       </VStackRoot>
     );

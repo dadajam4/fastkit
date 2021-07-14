@@ -39,6 +39,7 @@ export async function prompt(opts: PromptOptions = {}) {
     eslint: {
       name: 'eslint-config',
     },
+    license: 'UNLICENSED',
   };
 
   const allDependencies: string[] = [];
@@ -71,6 +72,17 @@ export async function prompt(opts: PromptOptions = {}) {
       }
     });
   }
+
+  await _prompt<any>({
+    type: 'input',
+    name: 'license',
+    message: 'Please enter the type of license.',
+    initial: appConfig.license,
+    onCancel,
+  }).then((res) => {
+    const license = res.license.trim();
+    appConfig.license = license || appConfig.license;
+  });
 
   await _prompt<any>({
     type: 'input',

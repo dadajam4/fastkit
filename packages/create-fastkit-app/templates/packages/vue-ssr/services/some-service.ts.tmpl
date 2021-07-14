@@ -1,0 +1,21 @@
+import { reactive } from 'vue';
+
+export interface SomeServiceState {
+  count: number;
+}
+
+export class SomeService {
+  private state: SomeServiceState = reactive({ count: 0 });
+
+  get count() {
+    return this.state.count;
+  }
+
+  inc() {
+    this.state.count++;
+  }
+
+  constructor() {
+    this.inc();
+  }
+}

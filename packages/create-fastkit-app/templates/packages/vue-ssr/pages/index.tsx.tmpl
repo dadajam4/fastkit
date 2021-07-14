@@ -8,8 +8,6 @@ import {
   VStackMenu,
   useVueStack,
 } from '@fastkit/vue-stack';
-import { RouterLink } from 'vue-router';
-import { useColorScheme } from '@fastkit/vue-color-scheme';
 import { VExpandTransition } from '@fastkit/vue-utils';
 import { mediaQueryService } from '@/<%~ it.package.dirName %>/plugins/media-query';
 import { colorScheme } from '@/<%~ it.package.dirName %>/.dynamic/color-scheme/color-scheme.info';
@@ -18,12 +16,13 @@ import { SHARED_VALUE as SOME_VALUE } from '@/<%~ it.packages.shared.dirName %>'
 <%- } else { %>
 const SOME_VALUE = 'abcde';
 <%- } %>
+import { SomeService } from '@/web/services/some-service';
 
-const component = defineComponent({
+const HomeView = defineComponent({
   name: 'HomeView',
   setup() {
     const vueStack = useVueStack();
-    const colorScheme = useColorScheme();
+    const someService = new SomeService();
     return {
       vueStack,
       colorScheme,
@@ -32,17 +31,41 @@ const component = defineComponent({
       stackActive: ref(false),
       persistent: ref(false),
       expanded: ref(false),
+      someService,
     };
   },
   render() {
     const { scopeNames } = this.colorScheme;
     return (
       <div style={{ padding: '20px' }}>
-        <h2>Home ({SOME_VALUE})</h2>
-        {mediaQueryService.matches('wide') ? 'wide' : 'narrow'}
+        <h1>Here is Home</h1>
+        <pre>
+          <code>Service Value: {this.someService.count}</code>
+        </pre>
+        <button
+          type="button"
+          onClick={() => {
+            this.someService.inc();
+          }}>
+          increment
+        </button>
 
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/page2">page2</RouterLink>
+        <pre>
+          <code>
+            mediaQueryService:{' '}
+            {mediaQueryService.matches('wide')
+              ? 'wide'
+              : mediaQueryService.matches('narrow')
+              ? 'narrow'
+              : 'N/A'}
+          </code>
+        </pre>
+
+        <pre>
+          <code>SHARED_VALUE: {SOME_VALUE}</code>
+        </pre>
+
+        <hr />
 
         <VStackBtn
           onClick={() => {
@@ -52,78 +75,74 @@ const component = defineComponent({
               },
             });
           }}>
-          click!
+          Dialog!
         </VStackBtn>
 
         <VStackSnackbar
           top
           v-slots={{
             activator: ({ attrs }) => {
-              return [<VStackBtn {...attrs}>hoge</VStackBtn>];
+              return [<VStackBtn {...attrs}>Snackbar!</VStackBtn>];
             },
           }}>
-          あいうえお
+          Snackbar!
         </VStackSnackbar>
 
-        <h1>App</h1>
+        <hr />
 
         <VStackMenu
           v-slots={{
             activator: ({ attrs }) => {
-              return [<VStackBtn {...attrs}>メニューを開く</VStackBtn>];
+              return [<VStackBtn {...attrs}>MENU!</VStackBtn>];
             },
           }}>
-          これはメニューです
+          This is menu...
           <VStackBtn
             onClick={(e) => {
               this.expanded = !this.expanded;
             }}>
-            click!!
+            EXPAND...
           </VStackBtn>
           <VExpandTransition
             onAfterEnter={(e) => {
-              console.log(e);
+              console.log('onAfterEnter', e);
             }}>
             <div v-show={this.expanded} style={{ transition: 'all 0.35s' }}>
               <p>
-                中身です。 中身です。 中身です。 中身です。 中身です。
-                中身です。
+                Hello world!!! Hello world!!! Hello world!!! Hello world!!!
+                Hello world!!! Hello world!!! Hello world!!! Hello world!!!
               </p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
-              <p>中身です。 中身です。</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
+              <p>Hello world!!!</p>
             </div>
           </VExpandTransition>
         </VStackMenu>
-        <select v-model={this.colorScheme.rootTheme}>
-          {this.colorScheme.themeNames.map((t) => {
-            return (
-              <option value={t} key={t}>
-                {t}
-              </option>
-            );
-          })}
-        </select>
 
-        <button
-          type="button"
+        <hr />
+
+        <VStackBtn
           onClick={(e) => {
             this.count++;
           }}>
           Click!! {this.count}
-        </button>
-        <p>{JSON.stringify(this.stackActive)}</p>
+        </VStackBtn>
+
+        <hr />
+
         <div>
           <label>
             <input type="checkbox" v-model={this.persistent} />
@@ -133,7 +152,7 @@ const component = defineComponent({
         <div>
           <label>
             <input type="checkbox" v-model={this.stackActive} />
-            モデル{this.stackActive ? 'ON' : 'OFF'}
+            v-model: {this.stackActive ? 'ON' : 'OFF'}
           </label>
         </div>
         <VStackDialog
@@ -144,7 +163,7 @@ const component = defineComponent({
           actions={[
             {
               key: 'cancel',
-              content: 'キャンセル',
+              content: 'cancel !?',
               color: 'primary',
               variant: 'outlined',
               spacer: true,
@@ -166,15 +185,20 @@ const component = defineComponent({
             activator: ({ attrs, control }) => {
               return [
                 <VStackBtn {...attrs} color="primary">
-                  アクティベーター{control.isActive ? 'ON' : 'OFF'}
+                  Activator {control.isActive ? 'ON' : 'OFF'}
                 </VStackBtn>,
               ];
             },
           }}>
-          あいうえお
+          Oh What ...
         </VStackDialog>
-        <div class="primary fill">primary Scope</div>
-        <div class="error outline">primary Scope</div>
+
+        <hr />
+
+        <div class="primary-scope contained">primary-scope contained</div>
+        <div class="error-scope outlined">error-scope outlined</div>
+
+        <hr />
 
         <label>
           <input type="checkbox" v-model={this.disabled} />
@@ -191,7 +215,7 @@ const component = defineComponent({
                   key={scopeName}
                   disabled={this.disabled}
                   variant={variant}>
-                  ボタン({scopeName || '*default'})
+                  BUTTON ({scopeName || '*default'})
                 </VStackBtn>
               );
             })}
@@ -202,4 +226,4 @@ const component = defineComponent({
   },
 });
 
-export default component;
+export default HomeView;

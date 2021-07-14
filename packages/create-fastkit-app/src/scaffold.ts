@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { FastkitAppConfig } from './schemes';
+import { FastkitAppConfig, FastkitAppPackageConfig } from './schemes';
 import { getFlatFiles, processTemplate } from './utils';
 import chalk from 'chalk';
 
@@ -31,11 +31,20 @@ export async function scaffold(config: FastkitAppConfig) {
   }
   const _eslintExtensions = eslintExtensions.join(',');
   const _stylelintExtensions = stylelintExtensions.join(',');
+  const apps: FastkitAppPackageConfig[] = [];
+  const { backend, frontend } = config.packages;
+  backend && apps.push(backend);
+  frontend && apps.push(frontend);
+  const devs = apps.map(({ dirName }) => `dev:${dirName}`);
+  const builds = apps.map(({ dirName }) => `build:${dirName}`);
 
   const pkgJson = {
     name: config.name,
     version: '1.0.0',
+    license: config.license,
     scripts: {
+      dev: `run-p ${devs.join(' ')}`,
+      build: `run-p ${builds.join(' ')}`,
       eslint: `eslint . --ext ${_eslintExtensions}`,
       'eslint:fix': `eslint . --ext ${_eslintExtensions} --fix`,
       stylelint: `stylelint "**/*.{${_stylelintExtensions}}" --ignore-path .gitignore`,
@@ -44,7 +53,7 @@ export async function scaffold(config: FastkitAppConfig) {
       format: 'run-s eslint:fix stylelint:fix',
       typecheck: 'tsc --noEmit --skipLibCheck',
       test: 'jest --runInBand',
-    },
+    } as { [key: string]: string },
     gitHooks: {
       'pre-commit': 'lint-staged',
     },
@@ -55,6 +64,15 @@ export async function scaffold(config: FastkitAppConfig) {
     browserslist: ['last 2 versions'],
     dependencies: _dependencies,
   };
+
+  apps.forEach(({ dirName }) => {
+    pkgJson.scripts[`dev:${dirName}`] = `cd packages/${dirName} && npm run dev`;
+  });
+  apps.forEach(({ dirName }) => {
+    pkgJson.scripts[
+      `build:${dirName}`
+    ] = `cd packages/${dirName} && npm run build`;
+  });
 
   await fs.writeJSON(path.join(config.dest, 'package.json'), pkgJson, {
     spaces: 2,

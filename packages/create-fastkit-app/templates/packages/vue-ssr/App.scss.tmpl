@@ -1,0 +1,27 @@
+.app {
+  &__toolbar {
+    display: block;
+    display: flex;
+    padding: 20px;
+    border-bottom: solid 1px;
+  }
+
+  &__navigation {
+    display: flex;
+    margin: 0;
+
+    &__item {
+      & + & {
+        margin-left: 40px;
+      }
+
+      .router-link-active {
+        opacity: 0.3;
+      }
+    }
+  }
+
+  &__theme {
+    margin-left: auto;
+  }
+}

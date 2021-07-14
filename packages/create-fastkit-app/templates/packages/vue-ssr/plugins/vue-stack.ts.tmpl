@@ -1,0 +1,9 @@
+import '@fastkit/vue-stack/dist/vue-stack.css';
+
+import { App } from 'vue';
+
+import { installVueStackPlugin as _installVueStackPlugin } from '@fastkit/vue-stack';
+
+export function installVueStackPlugin(app: App) {
+  return _installVueStackPlugin(app, { primaryColor: 'primary' });
+}

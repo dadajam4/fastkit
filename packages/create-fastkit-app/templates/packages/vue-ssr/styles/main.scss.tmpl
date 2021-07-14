@@ -1,4 +1,8 @@
-<%- if (it.package.basestyle) { %>
-@import '@fastkit/stylebase/<%~ it.package.basestyle %>.css';
+<%- if (it.package.baseStyle) { %>
+@import '@fastkit/stylebase/<%~ it.package.baseStyle %>.css';
 <%- } %>
 @include dump-color-scheme(true);
+
+body {
+  font-size: 16px;
+}
