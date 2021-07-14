@@ -1,0 +1,14 @@
+import { RouteRecordRaw } from 'vue-router';
+
+export const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    component: () => import('@/<%~ it.package.dirName %>/pages/index'),
+    props: true,
+  },
+  {
+    path: '/page2',
+    component: () => import('@/<%~ it.package.dirName %>/pages/page2'),
+    props: true,
+  },
+];

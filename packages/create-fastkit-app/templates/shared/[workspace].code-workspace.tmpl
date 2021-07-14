@@ -1,0 +1,69 @@
+{
+	"folders": [
+		{
+			"name": "project-root",
+			"path": "."
+		},
+    <%- it.packageList.forEach(package => { %>
+		{
+			"path": "packages/<%~ package.dirName %>"
+		},
+    <%- }) %>
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.DS_Store": true,
+			"**/dist": true,
+			"coverage": true
+		},
+
+		// Force show recommendations
+		"extensions.showRecommendationsOnlyOnDemand": false,
+
+		// Use the project's typescript version
+		"typescript.tsdk": "node_modules/typescript/lib",
+
+		"vetur.format.defaultFormatter.html": "prettier",
+
+		// Editor base settings
+		"editor.formatOnSave": false,
+		"editor.formatOnPaste": false,
+		"editor.formatOnType": false,
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": false,
+			"source.fixAll.eslint": true,
+			"source.fixAll.stylelint": true
+		},
+
+		// ESLint base settings
+		"eslint.format.enable": true,
+		"eslint.validate": [
+			"vue",
+			"html",
+			"javascript",
+			"typescriptreact",
+			// "json",
+			"yaml",
+		],
+
+		// Stylelint base settings
+		"stylelint.validate": [
+			"css",
+			"scss",
+		],
+		"typescript.format.enable": false,
+		"javascript.format.enable": false,
+	},
+	"extensions": {
+		"recommendations": [
+			"editorconfig.editorconfig",
+			"sohamkamani.code-eol",
+			"dbaeumer.vscode-eslint",
+			"stylelint.vscode-stylelint",
+			"mikestead.dotenv",
+			"digitalbrainstem.javascript-ejs-support",
+		]
+	}
+}

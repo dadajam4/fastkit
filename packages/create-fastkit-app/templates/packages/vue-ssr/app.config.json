@@ -1,0 +1,8 @@
+{
+  "type": "frontend",
+  "description": "Frontend application using vite-ssr",
+  "vue": true,
+  "dependencies": [
+    "vite-ssr"
+  ]
+}

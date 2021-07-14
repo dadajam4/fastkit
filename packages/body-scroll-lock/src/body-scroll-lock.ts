@@ -132,6 +132,8 @@ export const disableBodyScroll = (
   targetElement: any,
   options?: BodyScrollOptions,
 ): void => {
+  if (!__BROWSER__) return;
+
   if (isIosDevice) {
     // targetElement must be provided, and disableBodyScroll must not have been
     // called on this targetElement before.
@@ -186,6 +188,8 @@ export const disableBodyScroll = (
 };
 
 export const clearAllBodyScrollLocks = (): void => {
+  if (!__BROWSER__) return;
+
   if (isIosDevice) {
     // Clear all locks ontouchstart/ontouchmove handlers, and the references.
     locks.forEach((lock: Lock) => {
@@ -213,6 +217,8 @@ export const clearAllBodyScrollLocks = (): void => {
 };
 
 export const enableBodyScroll = (targetElement: any): void => {
+  if (!__BROWSER__) return;
+
   if (isIosDevice) {
     if (!targetElement) {
       // eslint-disable-next-line no-console

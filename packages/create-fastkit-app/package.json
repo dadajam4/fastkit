@@ -1,0 +1,37 @@
+{
+  "name": "@fastkit/create-fastkit-app",
+  "version": "0.2.1",
+  "description": "@fastkit/create-fastkit-app",
+  "main": "index.js",
+  "bin": {
+    "create-fastkit-app": "lib/cli.js"
+  },
+  "module": "dist/create-fastkit-app.esm-bundler.js",
+  "files": [
+    "index.js",
+    "templates",
+    "dist",
+    "lib"
+  ],
+  "types": "dist/create-fastkit-app.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/create-fastkit-app#readme",
+  "dependencies": {
+    "cac": "^6.7.3",
+    "chalk": "^4.1.0",
+    "enquirer": "^2.3.0",
+    "eta": "^1.12.0",
+    "fs-extra": "^9.1.0"
+  }
+}

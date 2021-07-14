@@ -6,6 +6,7 @@ export type BuildType = 'esm-bundler' | 'esm-browser' | 'cjs' | 'global';
 // | 'global-runtime'
 
 export interface BuildOptions {
+  ignore?: boolean;
   env?: 'development' | 'production';
   formats?: BuildType[];
   prod?: boolean;

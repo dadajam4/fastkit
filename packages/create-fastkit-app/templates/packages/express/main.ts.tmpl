@@ -1,0 +1,18 @@
+import express from 'express';
+<% if (it.packages.shared) { %>
+import { SHARED_VALUE as SOME_VALUE } from '@/<%~ it.packages.shared.dirName %>';
+<%- } else { %>
+const SOME_VALUE = 'abcde';
+<%- } %>
+
+const app = express();
+
+app.get('/', (req, res, next) => {
+  res.json({
+    value: SOME_VALUE,
+  });
+});
+
+app.listen(<%~ it.package.port %>, '0.0.0.0', () => {
+  console.log('<%~ it.package.dirName %> is launched !!!');
+});

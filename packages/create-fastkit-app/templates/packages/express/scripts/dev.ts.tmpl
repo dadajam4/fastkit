@@ -1,0 +1,13 @@
+import path from 'path';
+import { nodepack } from '@fastkit/nodepack';
+import { esbuildTarget } from './config';
+
+const ROOT_DIR = path.resolve(__dirname, '..');
+
+nodepack({
+  target: esbuildTarget,
+  entry: path.join(ROOT_DIR, 'main.ts'),
+  dest: path.join(ROOT_DIR, 'dist'),
+  watch: true,
+  minify: false,
+});

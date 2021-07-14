@@ -89,7 +89,7 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
         if (!selector) {
           selector = variant;
         }
-        const result = await render(tmpl, { selector });
+        const result = await render(tmpl, { selector }, { async: true });
         return result || '';
       },
       async variantScss(variant) {

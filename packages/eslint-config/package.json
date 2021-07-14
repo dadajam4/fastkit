@@ -1,0 +1,36 @@
+{
+  "name": "@fastkit/eslint-config",
+  "version": "0.2.1",
+  "description": "@fastkit/eslint-config",
+  "buildOptions": {
+    "ignore": true
+  },
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/eslint-config#readme",
+  "peerDependencies": {
+    "eslint": "^7.23.0",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-html-parser": "^6.8.1",
+    "eslint-plugin-prettier": "^3.3.1"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "backend",
+  "description": "Backend application using Express",
+  "dependencies": [
+    "@fastkit/nodepack",
+    "@types/express",
+    "express"
+  ]
+}

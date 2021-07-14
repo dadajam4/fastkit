@@ -1,0 +1,37 @@
+{
+  "name": "@fastkit/stylelint-config",
+  "version": "0.2.1",
+  "description": "@fastkit/stylelint-config",
+  "buildOptions": {
+    "ignore": true
+  },
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "types": "dist/stylelint-config.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/stylelint-config#readme",
+  "peerDependencies": {
+    "stylelint": "^13.12.0"
+  },
+  "dependencies": {
+    "stylelint-config-css-modules": "^2.2.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-recess-order": "^2.4.0",
+    "stylelint-config-standard": "^22.0.0",
+    "stylelint-prettier": "^1.2.0",
+    "stylelint-scss": "^3.19.0"
+  }
+}

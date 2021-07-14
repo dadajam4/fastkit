@@ -1,0 +1,1 @@
+# @fastkit/eslint-config-vue

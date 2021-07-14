@@ -311,7 +311,9 @@ function createReplacePlugin(
     // this is only used during Fastkit's internal tests
     __TEST__: String(false),
     // If the build is expected to run directly in the browser (global / esm builds)
-    __BROWSER__: String(isBrowserBuild),
+    __BROWSER__: isBundlerESMBuild
+      ? `(typeof document !== 'undefined')`
+      : String(isBrowserBuild),
     __GLOBAL__: String(isGlobalBuild),
     __ESM_BUNDLER__: String(isBundlerESMBuild),
     __ESM_BROWSER__: String(isBrowserESMBuild),

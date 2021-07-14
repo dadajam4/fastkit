@@ -1,0 +1,63 @@
+import path from 'path';
+import { defineConfig } from 'vite';
+import vueJsx from '@vitejs/plugin-vue-jsx';
+import { dynamicSrcVitePlugin } from '@fastkit/vite-kit';
+import vue from '@vitejs/plugin-vue';
+import viteSSR from 'vite-ssr/plugin';
+
+const DYNAMIC_DEST_DIR = path.resolve(__dirname, '.dynamic');
+const CONFIG_DIR = path.resolve(__dirname, './config');
+const WORKSPACE_ROOT_DIR = path.resolve(__dirname, '../..');
+const PACKCAGES_DIR = path.resolve(__dirname, '..');
+
+export default defineConfig({
+  root: __dirname,
+  server: {
+    host: '0.0.0.0',
+    fs: {
+      strict: false,
+    },
+    <% if (it.packages.backend && it.package.proxy) { %>
+    proxy: {
+      '/<%~ it.packages.backend.dirName %>': {
+        target: 'http://localhost:<%~ it.packages.backend.port %>',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/<%~ it.packages.backend.dirName %>/, ''),
+      },
+    },
+    <% } %>
+  },
+  resolve: {
+    alias: {
+      '@@/': `${WORKSPACE_ROOT_DIR}/`,
+      '@/': `${PACKCAGES_DIR}/`,
+    },
+  },
+  plugins: [
+    viteSSR(),
+    vueJsx(),
+    vue(),
+    dynamicSrcVitePlugin({
+      colorScheme: {
+        src: path.join(CONFIG_DIR, 'color-scheme'),
+        dest: path.join(DYNAMIC_DEST_DIR, 'color-scheme'),
+      },
+      mediaMatch: {
+        src: path.join(CONFIG_DIR, 'media-match'),
+        dest: path.join(DYNAMIC_DEST_DIR, 'media-match'),
+      },
+      iconFont: {
+        inputDir: path.join(CONFIG_DIR, 'icon-font/svg'),
+        outputDir: path.join(DYNAMIC_DEST_DIR, 'icon-font'),
+      },
+      spriteImages: {
+        src: path.join(CONFIG_DIR, 'sprites'),
+        dest: path.join(DYNAMIC_DEST_DIR, 'sprites'),
+      },
+      hashedSync: {
+        src: path.join(CONFIG_DIR, 'sprites'),
+        dest: path.join(DYNAMIC_DEST_DIR, 'sync'),
+      },
+    }),
+  ],
+});

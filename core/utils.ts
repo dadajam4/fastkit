@@ -84,8 +84,15 @@ export const targets = (exports.targets = fs
     }
 
     try {
-      const pkg = require(PACKAGES_DIR.join(f, 'package.json'));
-      if (pkg.private && !pkg.buildOptions) {
+      const pkg = require(PACKAGES_DIR.join(
+        f,
+        'package.json',
+      )) as FastkitPackage;
+      const { buildOptions } = pkg;
+      if (
+        (pkg.private && !buildOptions) ||
+        (!!buildOptions && buildOptions.ignore)
+      ) {
         return false;
       }
     } catch (err) {

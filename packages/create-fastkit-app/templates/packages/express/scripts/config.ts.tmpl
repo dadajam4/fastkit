@@ -1,0 +1,35 @@
+import fs from 'fs';
+import path from 'path';
+
+export const nodeVersion = fs.readFileSync(
+  path.resolve(__dirname, '../../../.node-version'),
+  'utf-8',
+);
+
+export interface ParsedNodeVersion {
+  major: number;
+  minor: number;
+  patch: number;
+}
+
+export const parsedNodeVersion: ParsedNodeVersion = (() => {
+  const tmp = nodeVersion.match(/^v?(\d+)(\.(\d+))?(\.(\d+))?/);
+  if (!tmp) {
+    return {
+      major: 0,
+      minor: 0,
+      patch: 0,
+    };
+  }
+  const _major = tmp[1] || '0';
+  const _minor = tmp[3] || '0';
+  const _patch = tmp[5] || '0';
+
+  return {
+    major: parseInt(_major, 10),
+    minor: parseInt(_minor, 10),
+    patch: parseInt(_patch, 10),
+  };
+})();
+
+export const esbuildTarget = `node${parsedNodeVersion.major}.${parsedNodeVersion.minor}`;
