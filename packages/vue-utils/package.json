@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "@fastkit/vue-utils",
   "buildOptions": {
     "name": "VueUtils"
@@ -31,10 +31,10 @@
     "vue-router": ">=4.0.0"
   },
   "dependencies": {
-    "@fastkit/body-scroll-lock": "0.2.1",
-    "@fastkit/visibility": "0.2.1",
-    "@fastkit/keybord": "0.2.1",
-    "@fastkit/helpers": "0.2.1",
-    "@fastkit/tiny-logger": "0.2.1"
+    "@fastkit/body-scroll-lock": "0.2.2",
+    "@fastkit/visibility": "0.2.2",
+    "@fastkit/keybord": "0.2.2",
+    "@fastkit/helpers": "0.2.2",
+    "@fastkit/tiny-logger": "0.2.2"
   }
 }
