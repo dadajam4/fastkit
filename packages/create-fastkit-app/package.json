@@ -1,7 +1,7 @@
 {
-  "name": "@fastkit/create-fastkit-app",
+  "name": "create-fastkit-app",
   "version": "0.2.2",
-  "description": "@fastkit/create-fastkit-app",
+  "description": "create-fastkit-app",
   "main": "index.js",
   "bin": {
     "create-fastkit-app": "lib/cli.js"

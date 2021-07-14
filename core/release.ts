@@ -262,6 +262,7 @@ async function updateDeps(
   for (const dep of Object.keys(deps)) {
     if (
       dep === 'fastkit' ||
+      dep === 'create-fastkit-app' ||
       (dep.startsWith('@fastkit') &&
         packages.includes(dep.replace(/^@fastkit\//, '')))
     ) {

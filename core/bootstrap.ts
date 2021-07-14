@@ -32,7 +32,10 @@ files.forEach((shortName) => {
     return;
   }
 
-  const name = shortName === `fastkit` ? shortName : `@fastkit/${shortName}`;
+  const name =
+    shortName === `fastkit` || shortName === `create-fastkit-app`
+      ? shortName
+      : `@fastkit/${shortName}`;
   const pkgPath = path.join(packagesDir, shortName, `package.json`);
   const pkgExists = fs.existsSync(pkgPath);
   if (pkgExists) {
