@@ -6,12 +6,10 @@
     "ignore": true
   },
   "files": [
-    "index.js",
     "destyle.css",
     "normalize.css",
     "reset.css"
   ],
-  "types": "dist/stylebase.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"

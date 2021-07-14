@@ -116,6 +116,13 @@ export function fuzzyMatchTarget(
   const matched: string[] = [];
   partialTargets.forEach((partialTarget) => {
     for (const target of targets) {
+      if (
+        target === 'create-fastkit-app' &&
+        partialTargets.length === 1 &&
+        partialTargets[0] === 'fastkit'
+      ) {
+        continue;
+      }
       if (target.match(partialTarget)) {
         matched.push(target);
         if (!includeAllMatching) {
