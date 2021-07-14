@@ -118,6 +118,7 @@ async function main() {
 
   // update all package versions and inter-dependencies
   step('\nUpdating cross dependencies...');
+  require('./cfa-dependencies');
   await updateVersions(targetVersion);
 
   // build all packages with types

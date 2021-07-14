@@ -68,6 +68,7 @@ export const DEPENDENCIE_VERSION_MAP: {
 
 export const DEFAULT_DEPENDENCIES: string[] = [
   'yorkie',
+  'lint-staged',
   'npm-run-all',
   '@types/jest',
   '@types/node',
