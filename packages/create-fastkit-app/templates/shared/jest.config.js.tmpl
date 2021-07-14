@@ -1,13 +1,10 @@
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
-const { compilerOptions } = require('./tsconfig.base');
-
-const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {
-  prefix: '<rootDir>/',
-});
-
 module.exports = {
   transform: {
     '^.+\\.tsx?$': 'esbuild-jest',
+  },
+  moduleNameMapper: {
+    '^@@/(.*?)$': '<rootDir>',
+    '^@/(.*?)$': '<rootDir>/packages/$1',
   },
   // setupFilesAfterEnv: ['dotenv/config', './scripts/setupJestEnv.ts'],
   // globals: {
