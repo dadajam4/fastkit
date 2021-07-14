@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-scroller",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "@fastkit/vue-scroller",
   "buildOptions": {
     "name": "VueScroller"
@@ -27,10 +27,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-scroller#readme",
   "peerDependencies": {
-    "vue": ">=3.0.0"
+    "vue": "^3.1.0"
   },
   "dependencies": {
-    "@fastkit/vue-utils": "0.2.6",
-    "@fastkit/scroller": "0.2.6"
+    "@fastkit/vue-utils": "0.2.7",
+    "@fastkit/scroller": "0.2.7"
   }
 }
