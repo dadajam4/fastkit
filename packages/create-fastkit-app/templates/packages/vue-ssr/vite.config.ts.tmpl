@@ -17,7 +17,7 @@ export default defineConfig({
     fs: {
       strict: false,
     },
-    <% if (it.packages.backend && it.package.proxy) { %>
+<% if (it.packages.backend && it.package.proxy) { %>
     proxy: {
       '/<%~ it.packages.backend.dirName %>': {
         target: 'http://localhost:<%~ it.packages.backend.port %>',
@@ -25,7 +25,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/<%~ it.packages.backend.dirName %>/, ''),
       },
     },
-    <% } %>
+<% } %>
   },
   resolve: {
     alias: {

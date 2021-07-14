@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/scroller#readme",
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/scroller#readme",
   "dependencies": {
     "@fastkit/ev": "0.2.6",
     "@fastkit/visibility": "0.2.6",

@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/color#readme",
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/color#readme",
   "dependencies": {
     "@fastkit/tiny-logger": "0.2.6"
   }

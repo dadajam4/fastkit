@@ -103,6 +103,7 @@ export async function prompt(opts: PromptOptions = {}) {
     ...frontends.map((r) => ({
       value: r.name,
       name: r.name,
+      hint: r.description,
     })),
   ];
   await _prompt<any>({
@@ -162,6 +163,7 @@ export async function prompt(opts: PromptOptions = {}) {
     ...backends.map((r) => ({
       value: r.name,
       name: r.name,
+      hint: r.description,
     })),
   ];
   await _prompt<any>({

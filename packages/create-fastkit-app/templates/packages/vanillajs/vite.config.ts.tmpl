@@ -1,0 +1,30 @@
+import path from 'path';
+import { defineConfig } from 'vite';
+
+const WORKSPACE_ROOT_DIR = path.resolve(__dirname, '../..');
+const PACKCAGES_DIR = path.resolve(__dirname, '..');
+
+export default defineConfig({
+  root: __dirname,
+  server: {
+    host: '0.0.0.0',
+    fs: {
+      strict: false,
+    },
+<% if (it.packages.backend && it.package.proxy) { %>
+    proxy: {
+      '/<%~ it.packages.backend.dirName %>': {
+        target: 'http://localhost:<%~ it.packages.backend.port %>',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/<%~ it.packages.backend.dirName %>/, ''),
+      },
+    },
+<% } %>
+  },
+  resolve: {
+    alias: {
+      '@@/': `${WORKSPACE_ROOT_DIR}/`,
+      '@/': `${PACKCAGES_DIR}/`,
+    },
+  },
+});

@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-scroller#readme",
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-scroller#readme",
   "peerDependencies": {
     "vue": ">=3.0.0"
   },
