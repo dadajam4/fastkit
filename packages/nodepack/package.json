@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/nodepack",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "@fastkit/nodepack",
   "buildOptions": {
     "name": "Nodepack",
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/nodepack#readme",
   "dependencies": {
-    "@fastkit/tiny-logger": "0.2.2",
+    "@fastkit/tiny-logger": "0.2.3",
     "esbuild": "^0.12.8",
     "nodemon": "^2.0.0"
   }
