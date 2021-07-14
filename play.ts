@@ -4,6 +4,7 @@
 // prompt().then((res) => {
 //   console.log(res);
 // });
-require('./packages/create-fastkit-app/src/cli');
+const { cli } = require('./packages/create-fastkit-app/src/cli');
+cli();
 
 // console.log(process.version);

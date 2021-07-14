@@ -4,6 +4,24 @@ export const PACKAGE_TYPES = ['frontend', 'backend', 'other'] as const;
 
 export type PackageType = typeof PACKAGE_TYPES[number];
 
+export const BASE_STYLES = [
+  {
+    name: 'normalize',
+    value: 'normalize',
+    hint: 'A modern alternative to CSS resets',
+  },
+  {
+    name: 'reset',
+    value: 'reset',
+    hint: 'A tiny little reset that you can use as the basis of your CSS projects.',
+  },
+  {
+    name: 'destyle',
+    value: 'destyle',
+    hint: 'Opinionated reset stylesheet that provides a clean slate for styling your html.',
+  },
+];
+
 export interface FastkitAppPackageConfig {
   name: string;
   src: string;
@@ -11,6 +29,7 @@ export interface FastkitAppPackageConfig {
   dest: string;
   type: PackageType;
   vue?: boolean;
+  baseStyle?: string;
   port?: number;
   proxy?: boolean;
   description: string;
@@ -54,6 +73,7 @@ export const DEFAULT_DEPENDENCIES: string[] = [
   '@typescript-eslint/parser',
   'jest',
   'ts-jest',
+  'esbuild-register',
   'eslint',
   'eslint-config-prettier',
   'eslint-html-parser',

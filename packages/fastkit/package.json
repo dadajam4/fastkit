@@ -50,6 +50,7 @@
     "@fastkit/rules": "0.2.3",
     "@fastkit/scroller": "0.2.3",
     "@fastkit/sprite-images": "0.2.3",
+    "@fastkit/stylebase": "0.2.3",
     "@fastkit/tiny-logger": "0.2.3",
     "@fastkit/universal-logger": "0.2.3",
     "@fastkit/visibility": "0.2.3",

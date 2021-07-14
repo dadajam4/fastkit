@@ -13,7 +13,7 @@ import { useColorScheme } from '@fastkit/vue-color-scheme';
 import { VExpandTransition } from '@fastkit/vue-utils';
 import { mediaQueryService } from '@/<%~ it.package.dirName %>/plugins/media-query';
 import { colorScheme } from '@/<%~ it.package.dirName %>/.dynamic/color-scheme/color-scheme.info';
-<%- if (it.packages.shared) { %>
+<% if (it.packages.shared) { %>
 import { SHARED_VALUE as SOME_VALUE } from '@/<%~ it.packages.shared.dirName %>';
 <%- } else { %>
 const SOME_VALUE = 'abcde';

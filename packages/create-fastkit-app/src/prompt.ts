@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
 import { prompt as _prompt } from 'enquirer';
-import { FastkitAppConfig } from './schemes';
+import { FastkitAppConfig, BASE_STYLES } from './schemes';
 import {
   getAllPackageConfigs,
   getBaseDependencies,
@@ -106,6 +106,29 @@ export async function prompt(opts: PromptOptions = {}) {
       appConfig.packageList.push(hit);
       appConfig.packages[hit.name] = hit;
       appConfig.packages.frontend = hit;
+
+      const baseStyleChoices = [
+        {
+          name: 'None',
+          value: 'none',
+        },
+        ...BASE_STYLES,
+      ];
+
+      const { baseStyle } = await _prompt<any>({
+        type: 'select',
+        name: 'baseStyle',
+        message: 'Choose a base style.',
+        // initial: 1,
+        choices: baseStyleChoices,
+        onCancel,
+      });
+      const baseStyleHit =
+        baseStyle !== 'none' &&
+        baseStyleChoices.find((c) => c.value === baseStyle);
+      if (baseStyleHit) {
+        hit.baseStyle = baseStyleHit.value;
+      }
 
       await _prompt<any>({
         type: 'input',
@@ -214,9 +237,9 @@ export async function prompt(opts: PromptOptions = {}) {
   appConfig.vue = appConfig.packageList.some((pkg) => pkg.vue);
   if (appConfig.vue) {
     appConfig.eslint.name = 'eslint-config-vue';
-    allDependencies.push('@fastkit/eslint-config');
-  } else {
     allDependencies.push('@fastkit/eslint-config-vue');
+  } else {
+    allDependencies.push('@fastkit/eslint-config');
   }
   allDependencies.push(...getBaseDependencies(appConfig));
   appConfig.dependencies = toVersionMapedDependencies(
