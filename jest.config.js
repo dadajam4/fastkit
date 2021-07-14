@@ -1,5 +1,7 @@
 module.exports = {
-  preset: 'ts-jest',
+  transform: {
+    '^.+\\.tsx?$': 'esbuild-jest',
+  },
   setupFilesAfterEnv: ['./core/setupJestEnv.ts'],
   globals: {
     __DEV__: true,
@@ -17,6 +19,7 @@ module.exports = {
     'packages/*/src/**/*.ts',
     '!packages/playground/**',
     '!packages/size-check/**',
+    '!packages/create-fastkit-app/templates/**',
   ],
   watchPathIgnorePatterns: ['/node_modules/', '/dist/', '/.git/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],

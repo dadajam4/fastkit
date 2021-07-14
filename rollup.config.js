@@ -1,7 +1,6 @@
 const path = require('path');
+const { register } = require('esbuild-register/dist/node');
 
-require('ts-node').register({
-  project: path.resolve(__dirname, 'tsconfig.node.json'),
-});
+register();
 
 module.exports = require(path.resolve(__dirname, 'core/rollup.config.ts'));

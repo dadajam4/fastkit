@@ -6,7 +6,9 @@ const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {
 });
 
 module.exports = {
-  preset: 'ts-jest',
+  transform: {
+    '^.+\\.tsx?$': 'esbuild-jest',
+  },
   // setupFilesAfterEnv: ['dotenv/config', './scripts/setupJestEnv.ts'],
   // globals: {
   //   __SOME_GLOBAL_VALUE_1__: true,

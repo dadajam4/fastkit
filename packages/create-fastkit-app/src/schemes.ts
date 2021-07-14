@@ -75,7 +75,7 @@ export const DEFAULT_DEPENDENCIES: string[] = [
   '@typescript-eslint/eslint-plugin',
   '@typescript-eslint/parser',
   'jest',
-  'ts-jest',
+  'esbuild-jest',
   'esbuild-register',
   'eslint',
   'eslint-config-prettier',
