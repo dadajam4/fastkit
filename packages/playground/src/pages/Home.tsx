@@ -1,5 +1,5 @@
 import './Home.scss';
-import { defineComponent, ref, getCurrentInstance } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   VStackBtn,
   VStackDialog,
