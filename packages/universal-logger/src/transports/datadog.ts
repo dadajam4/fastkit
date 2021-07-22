@@ -42,7 +42,6 @@ export function DDTransport(settings: DDTransportSettings): Transport {
     level: settings.level,
     transformers: [CloneTransformer(settings.clone)],
     transport(payload) {
-      console.log(payload);
       if (!settings.config.clientToken) return;
 
       const dd = getDD();

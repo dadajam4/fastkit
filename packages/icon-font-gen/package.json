@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font-gen",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "@fastkit/icon-font-gen",
   "buildOptions": {
     "name": "IconFont",
@@ -29,8 +29,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/icon-font-gen#readme",
   "dependencies": {
-    "@fastkit/ev": "0.2.10",
-    "@fastkit/tiny-logger": "0.2.10",
+    "@fastkit/ev": "0.2.11",
+    "@fastkit/tiny-logger": "0.2.11",
     "chokidar": "^3.5.0",
     "fantasticon": "^1.2.0",
     "fs-extra": "^9.1.0"

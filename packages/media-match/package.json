@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "@fastkit/media-match",
   "buildOptions": {
     "name": "MediaMatch"
