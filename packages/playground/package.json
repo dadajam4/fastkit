@@ -24,11 +24,13 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/playground#readme",
   "dependencies": {
+    "@fastkit/catcher": "0.2.9",
     "@fastkit/color-scheme": "0.2.9",
     "@fastkit/media-match-gen": "0.2.9",
     "@fastkit/vue-color-scheme": "0.2.9",
     "@fastkit/vue-media-match": "0.2.9",
     "@fastkit/vue-stack": "0.2.9",
+    "@fastkit/universal-logger": "0.2.9",
     "@fastkit/tiny-logger": "0.2.9"
   }
 }

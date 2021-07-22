@@ -153,3 +153,5 @@ export const DEFAULT_COLOR_LEVEL_MAP: Record<
   trace: 'magenta',
   debug: 'magenta', // 'gray',
 };
+
+export const DEFAULT_LOGGER_NAME = 'default';

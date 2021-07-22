@@ -45,7 +45,7 @@ async function generateTS(entry: IconFontEntry, ids: string[]) {
 /* eslint-disable */
 // @ts-nocheck
 ${BANNER}
-export const Icon = ${ids.map((id) => `'${id}'`).join(' | ')};
+export type Icon = ${ids.map((id) => `'${id}'`).join(' | ')};
 export const ICONS = [${ids.map((id) => `'${id}'`).join(', ')}] as const;
   `.trim();
   const fileName = `${entry.name || 'icons'}.ts`;

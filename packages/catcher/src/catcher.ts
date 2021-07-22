@@ -77,15 +77,15 @@ export function build<
 
       this.data = data;
 
-      return new Proxy(this, {
-        get: (target, prop) => {
-          const value = data[prop as string];
-          return value === undefined ? (this as any)[prop] : value;
-        },
-        set: (target, prop, value) => {
-          data[prop as string] = value;
-          return true;
-        },
+      Object.keys(data).forEach((key) => {
+        Object.defineProperty(this, key, {
+          get: () => {
+            return this.data[key];
+          },
+          set: (value) => {
+            this.data[key] = value;
+          },
+        });
       });
     }
 

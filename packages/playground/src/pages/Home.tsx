@@ -1,5 +1,5 @@
 import './Home.scss';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, getCurrentInstance } from 'vue';
 import {
   VStackBtn,
   VStackDialog,
@@ -12,12 +12,20 @@ import { useColorScheme } from '@fastkit/vue-color-scheme';
 import { VExpandTransition } from '@fastkit/vue-utils';
 import { mediaQueryService } from '../plugins/media-query';
 import { colorScheme } from '../../.dynamic/color-scheme/color-scheme.info';
+import { getLogger } from '../logger';
+// import axios from 'axios';
+import { AppError } from '../error';
+
+const logger = getLogger('HomeView');
 
 const component = defineComponent({
   name: 'HomeView',
   setup() {
     const vueStack = useVueStack();
     const colorScheme = useColorScheme();
+
+    logger.info('home view is setuped.');
+
     return {
       vueStack,
       colorScheme,
@@ -38,8 +46,30 @@ const component = defineComponent({
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/page2">page2</RouterLink>
 
+        <hr />
+        <VStackBtn
+          onClick={(ev) => {
+            logger.info('clickしたー', ev);
+          }}>
+          INFOログ
+        </VStackBtn>
+
         <VStackBtn
           onClick={() => {
+            try {
+              (window as any).hogehoge();
+            } catch (_err) {
+              const err = new AppError(_err);
+              logger.error(err.toJSON());
+              throw err;
+            }
+          }}>
+          エラーをスローする
+        </VStackBtn>
+
+        <VStackBtn
+          onClick={(ev) => {
+            logger.trace('clicked!!!', ev);
             this.vueStack.alert({
               content: (ctrl) => {
                 return 'message';

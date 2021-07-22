@@ -12,6 +12,7 @@ import {
   LogLevelThreshold,
   levelToIndex,
   isAvairableLogLevel,
+  DEFAULT_LOGGER_NAME,
 } from './schemes';
 
 import { isPromise } from '@fastkit/helpers';
@@ -91,7 +92,7 @@ export function combineFormater(...transformers: Transformer[]): Transformer {
 }
 
 export function loggerBuilder(opts: LoggerBuilderOptions = {}): {
-  getLogger: (name: string) => Logger;
+  getLogger: (name?: string) => Logger;
   getNamedSettings: (name: string) => NormalizedLoggerOptions;
   Logger: typeof Logger;
 } {
@@ -139,7 +140,7 @@ export function loggerBuilder(opts: LoggerBuilderOptions = {}): {
     }
   }
 
-  function getLogger(name: string): BuildedLogger {
+  function getLogger(name: string = DEFAULT_LOGGER_NAME): BuildedLogger {
     const cache = caches[name];
     if (cache) return cache as BuildedLogger;
     const logger = new BuildedLogger(name);

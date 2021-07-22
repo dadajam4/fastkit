@@ -5,6 +5,7 @@ import {
   LogLevel,
   LogLevelThreshold,
   DEFAULT_COLOR_LEVEL_MAP,
+  DEFAULT_LOGGER_NAME,
 } from '../schemes';
 
 const CONSOLE_METHODS = [
@@ -49,9 +50,13 @@ export const ConsoleTransport = function (
     level: settings.level,
     transport(payload) {
       if (typeof console === 'undefined') return;
-      const { level, message, args } = payload;
+      const { level, message, args, logger } = payload;
+      const loggerName = logger.name;
       const func = LEVEL_MAPPING[level];
       let prefix = `[${level.toUpperCase()}]`;
+      if (loggerName && loggerName !== DEFAULT_LOGGER_NAME) {
+        prefix = `[${loggerName}]${prefix}`;
+      }
       if (settings.pretty) {
         const color = DEFAULT_COLOR_LEVEL_MAP[payload.level];
         if (color) {

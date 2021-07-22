@@ -1,4 +1,4 @@
-import type { datadogLogs, LogsUserConfiguration } from '@datadog/browser-logs';
+import type { datadogLogs, LogsInitConfiguration } from '@datadog/browser-logs';
 import { Transport, LogLevelThreshold, LogLevel } from '../schemes';
 import { CloneTransformer, CloneOptions } from '../transformers/clone';
 
@@ -18,7 +18,7 @@ const LEVEL_MAPPINGS: Record<LogLevel, DatadogLevel> = {
 
 export interface DDTransportSettings {
   dd: typeof datadogLogs;
-  config: LogsUserConfiguration;
+  config: LogsInitConfiguration;
   level?: LogLevelThreshold;
   clone?: CloneOptions;
 }
