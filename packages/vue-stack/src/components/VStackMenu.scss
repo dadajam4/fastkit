@@ -1,7 +1,7 @@
-@import '../styles/values.scss';
+@use '../styles/constants.scss';
 
 .v-stack-menu {
   overflow-y: auto;
   border-radius: 2px;
-  box-shadow: $v-stack-menu-shadow;
+  box-shadow: constants.$menu-shadow;
 }

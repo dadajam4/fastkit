@@ -57,7 +57,7 @@ export function mediaMatchVitePlugin(
         } else if (typeof _additionalData === 'function') {
           source = _additionalData(source, filename);
         }
-        return `@import "${scssCachePath}";\n${source}`;
+        return `@use "${scssCachePath}" as *;\n${source}`;
       };
       scssOptions.additionalData = additionalData;
       config.css = cssOptions;

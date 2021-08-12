@@ -83,7 +83,7 @@ export function colorSchemeVitePlugin(
         } else if (typeof _additionalData === 'function') {
           source = _additionalData(source, filename);
         }
-        return `@import "${cachePaths.scss}";\n${source}`;
+        return `@use "${cachePaths.scss}" as *;\n${source}`;
       };
       scssOptions.additionalData = additionalData;
       config.css = cssOptions;

@@ -1,3 +1,105 @@
-@import 'modern-normalize/modern-normalize.css';
+// @use 'modern-normalize/modern-normalize.css';
+@use '../../stylebase/normalize.css';
+@use './styles/core/index.scss';
+
+:root,
+[lang='en'] {
+  --locale-font: 'Noto Sans';
+}
+
+[lang='ja'] {
+  --locale-font: 'Noto Sans JP';
+}
+
+[lang='ko'] {
+  --locale-font: 'Noto Sans KR';
+}
+
+[lang='zh-cmn-Hant'] {
+  --locale-font: 'Noto Sans TC';
+}
+
+[lang='zh-cmn-Hans'] {
+  --locale-font: 'Noto Sans SC';
+}
+
+html {
+  font-family: 'Roboto', var(--locale-font), sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji';
+  font-size: 16px;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+// body {
+//   font-family: 'Roboto', var(--locale-font), sans-serif, 'Apple Color Emoji',
+//     'Segoe UI Emoji';
+// }
+
+// :root {
+//   --root-em: 10px !important;
+// }
 
 @include dump-color-scheme(true);
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @include palette-text(heading);
+}
+
+$typographies: (
+  'h1': (
+    size: 6rem,
+    weight: 300,
+    height: 1.2,
+    spacing: -0.015625em,
+  ),
+  'h2': (
+    size: 3.75rem,
+    weight: 300,
+    height: 1.2,
+    spacing: -0.0083333333em,
+  ),
+  'h3': (
+    size: 3rem,
+    weight: 400,
+    height: 1.2,
+    spacing: normal,
+  ),
+);
+
+@mixin typography($level) {
+  $settings: map-get($typographies, $level);
+
+  font-size: map-get($settings, size);
+  font-weight: map-get($settings, weight);
+  line-height: map-get($settings, height);
+  letter-spacing: map-get($settings, spacing);
+}
+
+h1,
+.text-h1 {
+  @include typography('h1');
+}
+
+h2,
+.text-h2 {
+  @include typography('h2');
+}
+
+h3,
+.text-h3 {
+  @include typography('h3');
+}

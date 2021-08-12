@@ -1,0 +1,33 @@
+$values: (
+  'h1': (
+    size: 6rem,
+    weight: 300,
+    height: 1.2,
+    spacing: -0.015625em,
+  ),
+  'h2': (
+    size: 3.75rem,
+    weight: 300,
+    height: 1.2,
+    spacing: -0.0083333333em,
+  ),
+  'h3': (
+    size: 3rem,
+    weight: 400,
+    height: 1.2,
+    spacing: normal,
+  ),
+);
+
+@function get($level) {
+  @return map-get($values, $level);
+}
+
+@mixin apply($level) {
+  $settings: get($level);
+
+  font-size: map-get($settings, size);
+  font-weight: map-get($settings, weight);
+  line-height: map-get($settings, height);
+  letter-spacing: map-get($settings, spacing);
+}

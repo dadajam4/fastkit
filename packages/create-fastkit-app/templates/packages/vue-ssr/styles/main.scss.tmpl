@@ -1,5 +1,5 @@
 <%- if (it.package.baseStyle) { %>
-@import '@fastkit/stylebase/<%~ it.package.baseStyle %>.css';
+@use '@fastkit/stylebase/<%~ it.package.baseStyle %>.css';
 <%- } %>
 @include dump-color-scheme(true);
 

@@ -1,4 +1,4 @@
-@import '../styles/values.scss';
+@use '../styles/constants.scss';
 
 .v-stack-dialog {
   position: fixed;
@@ -28,15 +28,13 @@
   &__content {
     position: relative;
     display: inline-block;
-    // background: var(--palette-background);
-    // color: var(--palette-default);
     min-width: 280px;
     margin: 24px;
     text-align: left;
     pointer-events: auto;
     border-radius: 2px;
     outline: 0;
-    box-shadow: $v-stack-dialog-shadow;
+    box-shadow: constants.$dialog-shadow;
   }
 
   &__header {
@@ -60,30 +58,4 @@
     justify-content: flex-end;
     padding: 8px;
   }
-
-  // &__action {
-  //   &--spacer {
-  //     margin-left: auto;
-  //   }
-  // }
-
-  // &[v-stack--outside-click-animate] {
-  //   animation-duration: 0.15s;
-  //   animation-name: v-stack-dialog-outside-click;
-  //   animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
-  // }
 }
-
-// @keyframes v-stack-dialog-outside-click {
-//   0% {
-//     transform: scale(1);
-//   }
-
-//   50% {
-//     transform: scale(1.03);
-//   }
-
-//   100% {
-//     transform: scale(1);
-//   }
-// }

@@ -176,7 +176,7 @@ export async function generate(opts: SpriteImagesOptions) {
   );
 
   const rows = dirs.map((dir) => {
-    return `@import './${dir.name}/${dir.name}-sprites.scss';`;
+    return `@use './${dir.name}/${dir.name}-sprites.scss' as *;`;
   });
 
   const DEST = path.join(dest, 'sprites.scss');

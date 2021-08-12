@@ -41,6 +41,11 @@ const component = defineComponent({
     return (
       <div style={{ padding: '20px' }}>
         <h2>Home</h2>
+
+        <p>
+          Typographyヘルパークラスを使用してテキストのサイズとスタイルを制御します。
+          これらの値は、 Material Design type specification に基づいています。
+        </p>
         {mediaQueryService.matches('wide') ? 'wide' : 'narrow'}
 
         <RouterLink to="/">Home</RouterLink>

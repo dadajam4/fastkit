@@ -1,4 +1,4 @@
-@import '../styles/values.scss';
+@use '../styles/constants.scss';
 
 .v-stack-snackbar {
   position: fixed;
@@ -6,8 +6,8 @@
   font-size: 14px;
   vertical-align: bottom;
   border-radius: 2px;
-  box-shadow: $v-stack-snakbar-shadow;
-  transition: margin 0.3s $v-stack-easing-swing;
+  box-shadow: constants.$snakbar-shadow;
+  transition: margin 0.3s constants.$easing-swing;
 
   &--x-center {
     left: 50%;

@@ -1,34 +1,78 @@
 import { createColorScheme } from '@fastkit/color-scheme';
 import { COLOR_SCOPE_OPTIONAL_KEYS, scopeResolvers } from '../resolvers';
+import { ColorSource, Color } from '@fastkit/color';
 
-export function createSimpleColorScheme() {
+export interface SimpleColorSchemeOptions {
+  background?: ColorSource;
+  foundation?: ColorSource;
+  default?: ColorSource;
+  heading?: ColorSource;
+  backdrop?: ColorSource;
+  primary?: ColorSource;
+  accent?: ColorSource;
+  success?: ColorSource;
+  info?: ColorSource;
+  warning?: ColorSource;
+  error?: ColorSource;
+  muted?: ColorSource;
+}
+
+export function createSimpleColorScheme(opts: SimpleColorSchemeOptions = {}) {
+  const {
+    background = '#fff',
+    foundation = '#eef5f9',
+    default: defaultPalette = '#607188',
+    heading = '#516073',
+    backdrop = 'rgba(131,151,172,.7)',
+    primary = '#28bebd',
+    accent = '#ec407a',
+    info = '#42a5f5',
+    success = primary,
+    warning = '#f8c200',
+    error = '#f44336',
+    muted = 'rgba(0, 0, 0, 0.38)',
+  } = opts;
+  const $background = new Color(background);
+  const $foundation = new Color(foundation);
+  const $default = new Color(defaultPalette);
+  const $heading = new Color(heading);
+  const $backdrop = new Color(backdrop);
+  const $primary = new Color(primary);
+  const $accent = new Color(accent);
+  const $success = new Color(success);
+  const $info = new Color(info);
+  const $warning = new Color(warning);
+  const $error = new Color(error);
+  const $muted = new Color(muted);
+
   const scheme = createColorScheme({
     variants: ['contained', 'inverted', 'outlined', 'plain'],
     optionals: COLOR_SCOPE_OPTIONAL_KEYS,
     scopeResolvers: scopeResolvers({
       lightText: '#fff',
-      darkText: 'rgba(0, 0, 0, 0.87)',
+      darkText: 'rgba(0, 0, 0, 0.87)', // 2f495e
     }),
     themes: [
       {
         name: 'light',
         palette: [
-          ['background', '#fff'],
-          ['default', 'rgba(0, 0, 0, 0.87)'],
-          ['link', '#1976d2'],
-          ['caption', 'rgba(0, 0, 0, 0.87)'],
-          ['backdrop', 'rgba(33, 33, 33, 0.46)'],
-          ['primary', '#1976d2'],
-          // ['secondary', '#424242'],
-          ['secondary', 'rgb(220, 0, 78)'],
-          ['gray', '#616161'],
+          ['background', $background.hex()],
+          ['foundation', $foundation.hex()],
+          ['default', $default.hex()],
+          ['heading', $heading.hex()],
+          ['link', $primary.hex()],
+          ['caption', $default.hex()],
+          ['backdrop', $backdrop.hex()],
+          ['primary', $primary.hex()],
+          ['accent', $accent.hex()],
+          // ['gray', '#616161'],
           // ['accent', '#FFA726'],
           ['mono', '#323232'],
-          ['info', 'rgb(33, 150, 243)'],
-          ['success', 'rgb(76, 175, 80)'],
-          ['warning', 'rgb(255, 152, 0)'],
-          ['error', 'rgb(244, 67, 54)'],
-          ['muted', 'rgba(0, 0, 0, 0.26)'],
+          ['info', $info.hex()],
+          ['success', $success.hex()],
+          ['warning', $warning.hex()],
+          ['error', $error.hex()],
+          ['muted', $muted.hex()],
         ],
         scopeDefaults: ({ palette, theme }) => {
           const disabledBase =
@@ -82,8 +126,9 @@ export function createSimpleColorScheme() {
             },
           ],
           ['primary', ({ palette }) => palette('primary')],
-          ['secondary', ({ palette }) => palette('secondary')],
-          ['gray', ({ palette }) => palette('gray')],
+          // ['accent', ({ palette }) => palette('accent')],
+          ['accent', ({ palette }) => palette('accent')],
+          // ['gray', ({ palette }) => palette('gray')],
           // ['accent', ({ palette }) => palette('accent')],
           ['mono', ({ palette }) => palette('mono')],
           // [
@@ -116,8 +161,6 @@ export function createSimpleColorScheme() {
           // ['caption', 'rgba(0, 0, 0, 0.87)'],
           // ['backdrop', 'rgba(33, 33, 33, 0.46)'],
           ['primary', '#90caf9'],
-          // // ['secondary', '#424242'],
-          ['secondary', 'rgb(244, 143, 177)'],
           // ['gray', '#616161'],
           // // ['accent', '#82b1ff'],
           // ['info', 'rgb(33, 150, 243)'],

@@ -4,6 +4,7 @@
 		"sohamkamani.code-eol",
 		"dbaeumer.vscode-eslint",
 		"stylelint.vscode-stylelint",
+    "mrmlnc.vscode-scss",
 		"mikestead.dotenv",
 		"digitalbrainstem.javascript-ejs-support"
   ]

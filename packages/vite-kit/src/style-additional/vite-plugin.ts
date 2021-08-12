@@ -1,9 +1,16 @@
 import { Plugin } from 'vite';
 import { resolve } from 'path';
 
+export interface SassAdditional {
+  src: string;
+  alias?: string;
+}
+
+export type RawSassAdditional = string | SassAdditional;
+
 export interface StyleAdditionalVitePluginOptions {
-  sass?: string[];
-  scss?: string[];
+  sass?: RawSassAdditional[];
+  scss?: RawSassAdditional[];
 }
 
 export function styleAdditionalVitePlugin(
@@ -24,8 +31,14 @@ export function styleAdditionalVitePlugin(
         const settings = opts[type];
         if (!settings || !settings.length) return;
 
-        const imports = settings
-          .map((style) => `@import '${resolve(style)}';`)
+        const uses = settings
+          .map((raw) => {
+            const additional: SassAdditional =
+              typeof raw === 'string' ? { src: raw } : raw;
+            const { src, alias } = additional;
+            const suffix = alias ? ` as ${alias}` : '';
+            return `@use '${resolve(src)}'${suffix};`;
+          })
           .join('\n');
 
         let options = preprocessorOptions[type];
@@ -40,7 +53,7 @@ export function styleAdditionalVitePlugin(
           } else if (typeof _additionalData === 'function') {
             source = _additionalData(source, filename);
           }
-          return `${imports}\n${source}`;
+          return `${uses}\n${source}`;
         };
         options.additionalData = additionalData;
       });
