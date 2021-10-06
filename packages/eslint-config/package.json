@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/eslint-config",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "description": "@fastkit/eslint-config",
   "buildOptions": {
     "ignore": true
@@ -23,14 +23,14 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/eslint-config#readme",
   "peerDependencies": {
-    "eslint": "^7.32.0",
-    "prettier": "^2.3.0"
+    "eslint": "^7.23.0",
+    "prettier": "^2.2.1"
   },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.29.0",
-    "@typescript-eslint/parser": "^4.29.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-html-parser": "^6.8.0",
-    "eslint-plugin-prettier": "^3.4.0"
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-html-parser": "^6.8.1",
+    "eslint-plugin-prettier": "^3.3.1"
   }
 }

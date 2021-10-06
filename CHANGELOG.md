@@ -1,3 +1,12 @@
+## [0.2.13](https://github.com/dadajam4/fastkit/compare/v0.2.12...v0.2.13) (2021-10-06)
+
+
+### Features
+
+* vue-app-layout ([5ed58ce](https://github.com/dadajam4/fastkit/commit/5ed58cec5607f5d98156fd87eae40084731f5257))
+
+
+
 ## [0.2.12](https://github.com/dadajam4/fastkit/compare/v0.2.11...v0.2.12) (2021-08-12)
 
 
