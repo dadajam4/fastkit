@@ -34,7 +34,6 @@
     "@fastkit/body-scroll-lock": "0.2.12",
     "@fastkit/visibility": "0.2.12",
     "@fastkit/keybord": "0.2.12",
-    "@fastkit/helpers": "0.2.12",
-    "@fastkit/tiny-logger": "0.2.12"
+    "@fastkit/helpers": "0.2.12"
   }
 }

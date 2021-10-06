@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/rules#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.2.12"
+    "@fastkit/helpers": "0.2.12",
+    "@fastkit/tiny-logger": "0.2.12"
   }
 }

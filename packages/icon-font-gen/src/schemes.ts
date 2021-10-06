@@ -1,5 +1,5 @@
 import { RunnerOptions } from 'fantasticon';
-import { SvgIcons2FontOptions } from 'svgicons2svgfont';
+import type { SvgIcons2FontOptions } from 'svgicons2svgfont';
 
 export type SvgOptions = Omit<
   SvgIcons2FontOptions,

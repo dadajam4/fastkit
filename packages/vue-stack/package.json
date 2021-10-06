@@ -31,11 +31,8 @@
     "vue-router": ">=4.0.0"
   },
   "dependencies": {
-    "@fastkit/body-scroll-lock": "0.2.12",
     "@fastkit/color-scheme": "0.2.12",
-    "@fastkit/visibility": "0.2.12",
     "@fastkit/vue-color-scheme": "0.2.12",
-    "@fastkit/keybord": "0.2.12",
     "@fastkit/helpers": "0.2.12",
     "@fastkit/tiny-logger": "0.2.12",
     "@fastkit/vue-utils": "0.2.12"

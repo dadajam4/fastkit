@@ -223,8 +223,25 @@ async function detectExternalModuleVersion(
 
   await loadExternalPackages();
 
-  const deps = rootPkg[depType];
-  let version = (deps && deps[dep]) || null;
+  const searchBucket: (
+    | 'dependencies'
+    | 'devDependencies'
+    | 'peerDependencies'
+  )[] = ['devDependencies', 'peerDependencies'];
+
+  if (!searchBucket.includes(depType)) {
+    searchBucket.unshift(depType);
+  }
+
+  let version: string | null = null;
+
+  for (const name of searchBucket) {
+    const deps = rootPkg[name];
+    version = (deps && deps[dep]) || null;
+    if (version) {
+      break;
+    }
+  }
 
   if (!version) {
     for (const pkgName in externalPackages) {

@@ -10,6 +10,7 @@
     "gen": "node -r esbuild-register core/bootstrap.ts --target ",
     "build": "node -r esbuild-register core/build.ts",
     "size": "node -r esbuild-register core/build.ts fastkit -p -f global",
+    "checkdeps": "node -r esbuild-register core/checkDeps.ts",
     "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
     "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
     "stylelint": "stylelint \"**/*.{css,scss,vue,html}\" --ignore-path .gitignore",

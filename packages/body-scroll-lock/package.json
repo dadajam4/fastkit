@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/body-scroll-lock#readme"
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/body-scroll-lock#readme",
+  "dependencies": {
+    "@fastkit/tiny-logger": "0.0.0"
+  }
 }
