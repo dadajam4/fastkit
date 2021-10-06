@@ -15,6 +15,7 @@ import { colorScheme } from '../../.dynamic/color-scheme/color-scheme.info';
 import { getLogger } from '../logger';
 // import axios from 'axios';
 import { AppError } from '../error';
+// import { VAppLayoutControl, VAppBar } from '@fastkit/vue-app-layout';
 
 const logger = getLogger('HomeView');
 
@@ -24,7 +25,14 @@ const component = defineComponent({
     const vueStack = useVueStack();
     const colorScheme = useColorScheme();
 
+    // VAppLayoutControl.appendTo('header', () => {
+    //   return <span>あああ</span>;
+    // });
+
     logger.info('home view is setuped.');
+
+    // const ctrl = VAppLayoutControl.use();
+    // console.log('●', ctrl.hoge);
 
     return {
       vueStack,
@@ -34,6 +42,8 @@ const component = defineComponent({
       stackActive: ref(false),
       persistent: ref(false),
       expanded: ref(false),
+      hoge: ref(0),
+      // ctrl,
     };
   },
   render() {
@@ -41,6 +51,8 @@ const component = defineComponent({
     return (
       <div style={{ padding: '20px' }}>
         <h2>Home</h2>
+
+        {/* <Teleport to={this.ctrl.hoge.value}>あいう</Teleport> */}
 
         <p>
           Typographyヘルパークラスを使用してテキストのサイズとスタイルを制御します。

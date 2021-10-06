@@ -112,7 +112,7 @@ export function currentScript(): HTMLScriptElement | null {
 
   try {
     throw new Error();
-  } catch (err) {
+  } catch (err: any) {
     const src = (/at [^(\r\n]*\((.*):.+:.+\)$/i.exec(err.stack) || [])[1];
     if (src) {
       const scripts = (document as Document).getElementsByTagName('script');

@@ -27,6 +27,7 @@
     "@fastkit/catcher": "0.2.12",
     "@fastkit/color-scheme": "0.2.12",
     "@fastkit/media-match-gen": "0.2.12",
+    "@fastkit/vue-app-layout": "0.2.12",
     "@fastkit/vue-color-scheme": "0.2.12",
     "@fastkit/vue-media-match": "0.2.12",
     "@fastkit/vue-stack": "0.2.12",

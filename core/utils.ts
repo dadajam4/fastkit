@@ -50,7 +50,7 @@ export async function findPackage(
         result = pkg;
         break;
       }
-    } catch (err) {
+    } catch (err: any) {
       if (!err.message.startsWith('Cannot find module')) {
         throw err;
       }
@@ -70,7 +70,7 @@ export async function pathExists(filepath: string, type?: 'file' | 'dir') {
     if (type === 'file') return stat.isFile();
     if (type === 'dir') return stat.isDirectory();
     return true;
-  } catch (err) {
+  } catch (err: any) {
     if (err.code === 'ENOENT') return false;
     throw err;
   }

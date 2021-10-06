@@ -32,7 +32,7 @@ export async function validate(
       errors.push(error);
       if (!forceAll) break;
     }
-  } catch (err) {
+  } catch (err: any) {
     let name = 'exception';
     let message = 'An unexpected error has occurred.';
     let fullPath: string | undefined;

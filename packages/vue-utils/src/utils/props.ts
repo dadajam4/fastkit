@@ -73,10 +73,9 @@ type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 export type ExtractPropInput<O> = O extends object
   ? {
       [K in RequiredKeys<O>]: InferPropType<O[K]>;
-    } &
-      {
-        [K in OptionalKeys<O>]?: InferPropType<O[K]>;
-      }
+    } & {
+      [K in OptionalKeys<O>]?: InferPropType<O[K]>;
+    }
   : {
       [K in string]: any;
     };

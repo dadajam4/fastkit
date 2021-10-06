@@ -34,7 +34,7 @@ export class MediaQueryService<K extends string = string> {
       _state[key] = false;
     });
 
-    this.state = reactive(_state) as MediaQueryServiceState<K>;
+    this.state = reactive<any>(_state);
     this.matches = this.matches.bind(this);
     this.flush = this.flush.bind(this);
 

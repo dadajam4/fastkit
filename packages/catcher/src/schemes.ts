@@ -74,7 +74,7 @@ export interface CatcherConstructor<
   Resolvers extends AnyResolvers = AnyResolvers,
   Normalizers extends AnyNormalizers = AnyNormalizers,
 > {
-  new (...args: ComputedArgs<Resolvers> | [string]): Catcher<
+  new (...args: ComputedArgs<Resolvers> | [string] | [unknown]): Catcher<
     ComputedResolvedTypes<Resolvers> & ComputedResolvedTypes<Normalizers>
   > &
     ComputedResolvedTypes<Resolvers> &

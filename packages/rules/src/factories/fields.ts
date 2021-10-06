@@ -10,11 +10,9 @@ interface Fields {
 
 export interface FieldsRuleConstraints<T extends Fields = Fields> {
   skipIfEmpty?: boolean;
-  rules: Partial<
-    {
-      [K in keyof T]: RecursiveArray<Rule> | FieldsRuleSettingsRule<T>;
-    }
-  >;
+  rules: Partial<{
+    [K in keyof T]: RecursiveArray<Rule> | FieldsRuleSettingsRule<T>;
+  }>;
 }
 
 export interface FieldsRuleSettings<T extends Fields = Fields>
