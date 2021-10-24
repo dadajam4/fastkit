@@ -1,4 +1,4 @@
-import { PropType, Prop } from '@vue/runtime-core';
+import { PropType, Prop, ComponentPropsOptions } from '@vue/runtime-core';
 
 export const rawNumberPropType = [String, Number] as PropType<string | number>;
 
@@ -79,3 +79,9 @@ export type ExtractPropInput<O> = O extends object
   : {
       [K in string]: any;
     };
+
+export function createPropsOptions<
+  PropsOptions extends Readonly<ComponentPropsOptions>,
+>(opts: PropsOptions): PropsOptions {
+  return opts;
+}

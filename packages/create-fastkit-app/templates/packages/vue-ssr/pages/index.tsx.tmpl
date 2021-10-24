@@ -3,9 +3,9 @@ import './index.scss';
 import { defineComponent, ref } from 'vue';
 import {
   VStackBtn,
-  VStackDialog,
-  VStackSnackbar,
-  VStackMenu,
+  VDialog,
+  VSnackbar,
+  VMenu,
   useVueStack,
 } from '@fastkit/vue-stack';
 import { VExpandTransition } from '@fastkit/vue-utils';
@@ -78,7 +78,7 @@ const HomeView = defineComponent({
           Dialog!
         </VStackBtn>
 
-        <VStackSnackbar
+        <VSnackbar
           top
           v-slots={{
             activator: ({ attrs }) => {
@@ -86,11 +86,11 @@ const HomeView = defineComponent({
             },
           }}>
           Snackbar!
-        </VStackSnackbar>
+        </VSnackbar>
 
         <hr />
 
-        <VStackMenu
+        <VMenu
           v-slots={{
             activator: ({ attrs }) => {
               return [<VStackBtn {...attrs}>MENU!</VStackBtn>];
@@ -130,7 +130,7 @@ const HomeView = defineComponent({
               <p>Hello world!!!</p>
             </div>
           </VExpandTransition>
-        </VStackMenu>
+        </VMenu>
 
         <hr />
 
@@ -155,7 +155,7 @@ const HomeView = defineComponent({
             v-model: {this.stackActive ? 'ON' : 'OFF'}
           </label>
         </div>
-        <VStackDialog
+        <VDialog
           backdrop
           persistent={this.persistent}
           class={`my-stack--${this.count}`}
@@ -191,7 +191,7 @@ const HomeView = defineComponent({
             },
           }}>
           Oh What ...
-        </VStackDialog>
+        </VDialog>
 
         <hr />
 

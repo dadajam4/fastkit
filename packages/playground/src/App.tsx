@@ -1,8 +1,7 @@
 import { defineComponent, Suspense, ref } from 'vue';
 import { RouterView } from 'vue-router';
 import { useInjectTheme } from '@fastkit/vue-color-scheme';
-import { VStackRoot } from '@fastkit/vue-stack';
-import { VAppLayout } from '@fastkit/vue-app-layout';
+import { VStackRoot, VAppLayout } from '@fastkit/vui';
 import { mediaQueryService } from './plugins/media-query';
 
 export const App = defineComponent({
@@ -31,8 +30,8 @@ export const App = defineComponent({
               control.releaseBackdrop('systembar', this.requestBackdrop);
               this.systemBarOpened = false;
             }
-          }}>
-          {VAppLayout.renderSlots({
+          }}
+          v-slots={{
             headerBar: ({ control }) => {
               return (
                 <div
@@ -113,8 +112,7 @@ export const App = defineComponent({
                 </div>
               );
             },
-          })}
-        </VAppLayout>
+          }}></VAppLayout>
       </VStackRoot>
     );
   },

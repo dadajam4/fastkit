@@ -1,6 +1,6 @@
 export * from './VStackRoot';
 export * from './VStackBtn';
 // export * from './VStack';
-export * from './VStackDialog';
-export * from './VStackSnackbar';
-export * from './VStackMenu';
+export * from './VDialog';
+export * from './VSnackbar';
+export * from './VMenu';

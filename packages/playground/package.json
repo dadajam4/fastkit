@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/playground#readme",
   "dependencies": {
+    "@fastkit/vui": "0.2.13",
     "@fastkit/catcher": "0.2.13",
     "@fastkit/color-scheme": "0.2.13",
     "@fastkit/media-match-gen": "0.2.13",

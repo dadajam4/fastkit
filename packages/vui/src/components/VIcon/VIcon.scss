@@ -1,0 +1,16 @@
+.v-icon {
+  user-select: none;
+  // -webkit-user-drag: none;
+
+  &--clickable {
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  &__body {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 150ms linear;
+  }
+}

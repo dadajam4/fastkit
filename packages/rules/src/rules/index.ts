@@ -15,5 +15,7 @@ export * from './required';
 export * from './filled';
 export * from './kana';
 export * from './alphaSpaces';
+export * from './date';
+export * from './multipleOf';
 export * from './creditCardHolder';
 export * from './validateIf';

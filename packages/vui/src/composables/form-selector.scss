@@ -1,0 +1,11 @@
+.v-form-selector {
+  &__body {
+    display: block;
+  }
+
+  &--stacked &__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

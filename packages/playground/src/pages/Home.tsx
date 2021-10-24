@@ -1,15 +1,15 @@
 import './Home.scss';
 import { defineComponent, ref } from 'vue';
 import {
-  VStackBtn,
-  VStackDialog,
-  VStackSnackbar,
-  VStackMenu,
+  VButton,
+  VDialog,
+  VSnackbar,
+  VMenu,
   useVueStack,
-} from '@fastkit/vue-stack';
+  useColorScheme,
+  VExpandTransition,
+} from '@fastkit/vui';
 import { RouterLink } from 'vue-router';
-import { useColorScheme } from '@fastkit/vue-color-scheme';
-import { VExpandTransition } from '@fastkit/vue-utils';
 import { mediaQueryService } from '../plugins/media-query';
 import { colorScheme } from '../../.dynamic/color-scheme/color-scheme.info';
 import { getLogger } from '../logger';
@@ -50,7 +50,17 @@ const component = defineComponent({
     const { scopeNames } = this.colorScheme;
     return (
       <div style={{ padding: '20px' }}>
-        <h2>Home</h2>
+        <h1>決済設定</h1>
+        <p>
+          Typographyヘルパークラスを使用してテキストのサイズとスタイルを制御します。
+          これらの値は、 Material Design type specification に基づいています。
+        </p>
+
+        <h2>これはheading2です</h2>
+        <h3>これはheading3です</h3>
+        <h4>これはheading4です</h4>
+        <h5>これはheading5です</h5>
+        <h6>これはheading6です</h6>
 
         {/* <Teleport to={this.ctrl.hoge.value}>あいう</Teleport> */}
 
@@ -58,20 +68,23 @@ const component = defineComponent({
           Typographyヘルパークラスを使用してテキストのサイズとスタイルを制御します。
           これらの値は、 Material Design type specification に基づいています。
         </p>
+
+        <h2>基本設定</h2>
+
         {mediaQueryService.matches('wide') ? 'wide' : 'narrow'}
 
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/page2">page2</RouterLink>
 
         <hr />
-        <VStackBtn
+        <VButton
           onClick={(ev) => {
             logger.info('clickしたー', ev);
           }}>
           INFOログ
-        </VStackBtn>
+        </VButton>
 
-        <VStackBtn
+        <VButton
           onClick={() => {
             try {
               (window as any).hogehoge();
@@ -82,9 +95,9 @@ const component = defineComponent({
             }
           }}>
           エラーをスローする
-        </VStackBtn>
+        </VButton>
 
-        <VStackBtn
+        <VButton
           onClick={(ev) => {
             logger.trace('clicked!!!', ev);
             this.vueStack.alert({
@@ -94,33 +107,31 @@ const component = defineComponent({
             });
           }}>
           click!
-        </VStackBtn>
+        </VButton>
 
-        <VStackSnackbar
+        <VSnackbar
           top
           v-slots={{
             activator: ({ attrs }) => {
-              return [<VStackBtn {...attrs}>hoge</VStackBtn>];
+              return [<VButton {...attrs}>hoge</VButton>];
             },
           }}>
           あいうえお
-        </VStackSnackbar>
+        </VSnackbar>
 
-        <h1>App</h1>
-
-        <VStackMenu
+        <VMenu
           v-slots={{
             activator: ({ attrs }) => {
-              return [<VStackBtn {...attrs}>メニューを開く</VStackBtn>];
+              return [<VButton {...attrs}>メニューを開く</VButton>];
             },
           }}>
           これはメニューです
-          <VStackBtn
+          <VButton
             onClick={(e) => {
               this.expanded = !this.expanded;
             }}>
             click!!
-          </VStackBtn>
+          </VButton>
           <VExpandTransition
             onAfterEnter={(e) => {
               console.log(e);
@@ -146,7 +157,7 @@ const component = defineComponent({
               <p>中身です。 中身です。</p>
             </div>
           </VExpandTransition>
-        </VStackMenu>
+        </VMenu>
         <select v-model={this.colorScheme.rootTheme}>
           {this.colorScheme.themeNames.map((t) => {
             return (
@@ -177,7 +188,7 @@ const component = defineComponent({
             モデル{this.stackActive ? 'ON' : 'OFF'}
           </label>
         </div>
-        <VStackDialog
+        <VDialog
           backdrop
           persistent={this.persistent}
           class={`my-stack--${this.count}`}
@@ -206,14 +217,14 @@ const component = defineComponent({
           v-slots={{
             activator: ({ attrs, control }) => {
               return [
-                <VStackBtn {...attrs} color="primary">
+                <VButton {...attrs} color="primary">
                   アクティベーター{control.isActive ? 'ON' : 'OFF'}
-                </VStackBtn>,
+                </VButton>,
               ];
             },
           }}>
           あいうえお
-        </VStackDialog>
+        </VDialog>
         <div class="primary fill">primary Scope</div>
         <div class="error outline">primary Scope</div>
 
@@ -227,13 +238,13 @@ const component = defineComponent({
             <h3>{variant}</h3>
             {scopeNames.map((scopeName) => {
               return (
-                <VStackBtn
+                <VButton
                   color={scopeName}
                   key={scopeName}
                   disabled={this.disabled}
                   variant={variant}>
                   ボタン({scopeName || '*default'})
-                </VStackBtn>
+                </VButton>
               );
             })}
           </div>

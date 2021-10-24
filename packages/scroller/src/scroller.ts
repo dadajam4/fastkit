@@ -17,8 +17,8 @@ import {
   ScrollToElementTarget,
   ScrollResult,
   ScrollerScrollOptions,
-  scrollToElementSettingsDefaults,
   ScrollToElementSettings,
+  scrollToElementSettingsDefaults as _scrollToElementSettingsDefaults,
   scrollBy,
   scrollTo,
   scrollToElement,
@@ -353,7 +353,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * [[Scroller.toElement]]のデフォルトオプションの設定を示します。
    */
   scrollToElementSettingsDefaults: ScrollerScrollToElementOptions = {
-    ...scrollToElementSettingsDefaults,
+    ..._scrollToElementSettingsDefaults,
   };
 
   scrollSizeOvserver?: ScrollSizeOvserverSetting;

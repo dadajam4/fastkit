@@ -8,11 +8,11 @@
   @each $drawer-position in $drawer-positions {
     $transition-to: if($drawer-position == left, -100%, 100%);
 
-    --v-app-layout-drawer-#{$drawer-position}-offset: 0px; // stylelint-disable-line length-zero-no-unit
+    --v-app-layout-drawer-#{$drawer-position}-offset: 0px;
     --v-app-layout-drawer-#{$drawer-position}-position: auto;
 
     &--drawer-#{$drawer-position} {
-      --v-app-layout-drawer-#{$drawer-position}-position: 0px; // stylelint-disable-line length-zero-no-unit
+      --v-app-layout-drawer-#{$drawer-position}-position: 0px;
       --v-app-layout-drawer-transition-to: #{$transition-to};
 
       transition: padding-#{$drawer-position} $drawer-transition;
@@ -32,8 +32,8 @@
   @each $vertial-position in $vertial-positions {
     $vec: if($vertial-position == header, top, bottom);
 
-    --v-app-layout-#{$vertial-position}-offset: 0px; // stylelint-disable-line length-zero-no-unit
-    --v-app-layout-#{$vertial-position}-bar-offset: 0px; // stylelint-disable-line length-zero-no-unit
+    --v-app-layout-#{$vertial-position}-offset: 0px;
+    --v-app-layout-#{$vertial-position}-bar-offset: 0px;
 
     &--has-fixed-#{$vertial-position} {
       --v-app-layout-#{$vertial-position}-offset: var(
@@ -52,7 +52,7 @@
     );
 
     @each $drawer-position in $drawer-positions {
-      --v-app-layout-#{$vertial-position}-#{$drawer-position}-offset: 0px; // stylelint-disable-line length-zero-no-unit
+      --v-app-layout-#{$vertial-position}-#{$drawer-position}-offset: 0px;
 
       &--drawer-static#{&}--drawer-#{$drawer-position}:not(#{&}--drawer-stick-#{$vertial-position}) {
         --v-app-layout-#{$vertial-position}-#{$drawer-position}-offset: var(

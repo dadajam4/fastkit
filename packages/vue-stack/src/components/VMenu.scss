@@ -1,0 +1,7 @@
+@use '../styles/constants.scss';
+
+.v-menu {
+  overflow-y: auto;
+  border-radius: 2px;
+  box-shadow: constants.$menu-shadow;
+}

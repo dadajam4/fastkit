@@ -42,6 +42,7 @@
     "@fastkit/ev": "0.2.13",
     "@fastkit/hashed-sync": "0.2.13",
     "@fastkit/helpers": "0.2.13",
+    "@fastkit/icon-font": "0.2.13",
     "@fastkit/icon-font-gen": "0.2.13",
     "@fastkit/keybord": "0.2.13",
     "@fastkit/media-match": "0.2.13",

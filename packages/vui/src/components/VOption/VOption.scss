@@ -1,0 +1,61 @@
+@use '../../styles/core.scss';
+
+.v-option {
+  position: relative;
+  display: flex;
+  width: 100%;
+  padding: 0.375em 1em;
+  cursor: pointer;
+  user-select: none;
+
+  input {
+    @include core.hidden-input-element;
+  }
+
+  &::before,
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    pointer-events: none;
+    content: '';
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  &::before {
+    background: currentColor;
+  }
+
+  &::after {
+    background: var(--palette-primary);
+  }
+
+  &:hover,
+  &:focus-within {
+    &::before {
+      opacity: 0.12;
+    }
+  }
+
+  &__label {
+    position: relative;
+    display: block;
+  }
+
+  &--selected::after {
+    opacity: 0.12;
+  }
+
+  &--selected &__label {
+    font-weight: 500;
+    color: var(--palette-primary);
+  }
+
+  &--has-not-value &__label {
+    font-style: italic;
+  }
+}

@@ -45,8 +45,15 @@ async function generateTS(entry: IconFontEntry, ids: string[]) {
 /* eslint-disable */
 // @ts-nocheck
 ${BANNER}
-export type Icon = ${ids.map((id) => `'${id}'`).join(' | ')};
-export const ICONS = [${ids.map((id) => `'${id}'`).join(', ')}] as const;
+import { registerIconNames } from '@fastkit/icon-font';
+declare module "@fastkit/icon-font" {
+  export interface IconNameMap {
+${ids.map((id) => `    '${id}': true,`).join('\n')}
+  }
+}
+registerIconNames([${ids.map((id) => `'${id}'`).join(', ')}]);
+export type { IconName } from '@fastkit/icon-font';
+export { ICON_NAMES } from '@fastkit/icon-font';
   `.trim();
   const fileName = `${entry.name || 'icons'}.ts`;
   const dest = path.resolve(entry.outputDir, fileName);

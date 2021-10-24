@@ -71,7 +71,19 @@ export interface Rule<C extends any = any> {
   validate: (value: any, options?: RuleValidateOptions) => RuleResult;
   message: string | ((value: any, ctx: RuleValidateContext<C>) => string);
   constraints: C;
+  fork(settings: {
+    name?: string;
+    constraints?: C;
+    message?: RuleSettingsMessage<C>;
+  }): Rule<C>;
+  _validate:
+    | ((value: any, constraints: C) => RuleSettingsValidatePayload)
+    | ((value: any) => RuleSettingsValidatePayload);
   _lastValidateOptions: RuleValidateOptions;
+  toJSON(): {
+    name: string;
+    constraints: C;
+  };
 }
 
 export function createRule<C extends any = any>(
@@ -114,6 +126,7 @@ export function createRule<C extends any = any>(
   rule.message = message || '';
   rule.constraints = constraints;
   rule._lastValidateOptions = {} as RuleValidateOptions;
+  rule._validate = validate;
 
   rule.validate = async (value: any, options: RuleValidateOptions = {}) => {
     rule._lastValidateOptions = options;
@@ -170,6 +183,26 @@ export function createRule<C extends any = any>(
         message,
       };
     }
+  };
+
+  rule.fork = function fork(settings: {
+    name?: string;
+    constraints?: C;
+    message?: string | ((value: any, ctx: RuleValidateContext<C>) => string);
+  }) {
+    return createRule({
+      name: settings.name || rule.$name,
+      constraints: settings.constraints || rule.constraints,
+      validate: rule._validate,
+      message: settings.message || rule.message,
+    });
+  };
+
+  rule.toJSON = function toJSON() {
+    return {
+      name: rule.$name,
+      constraints: rule.constraints,
+    };
   };
 
   return rule;

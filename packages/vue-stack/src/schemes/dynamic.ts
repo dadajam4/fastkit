@@ -1,16 +1,10 @@
 import { h, VNode, VNodeChild } from 'vue';
 
 import { VStackControl } from './control';
-import type {
-  VStackDialogStatic,
-  VStackDialogProps,
-} from '../components/VStackDialog';
-import type {
-  VStackSnackbarStatic,
-  VStackSnackbarProps,
-} from '../components/VStackSnackbar';
+import type { VDialogStatic, VDialogProps } from '../components/VDialog';
+import type { VSnackbarStatic, VSnackbarProps } from '../components/VSnackbar';
 
-// export type VStackDynamicCtor = VStackDialogStatic;
+// export type VStackDynamicCtor = VDialogStatic;
 
 export type VStackDynamicChildren =
   | VNodeChild
@@ -43,13 +37,13 @@ export interface VStackDynamicBaseSetting {
 }
 
 export interface VStackDynamicDialogSetting extends VStackDynamicBaseSetting {
-  Ctor: VStackDialogStatic;
-  props: Partial<VStackDialogProps>;
+  Ctor: VDialogStatic;
+  props: Partial<VDialogProps>;
 }
 
 export interface VStackDynamicSnackbarSetting extends VStackDynamicBaseSetting {
-  Ctor: VStackSnackbarStatic;
-  props: Partial<VStackSnackbarProps>;
+  Ctor: VSnackbarStatic;
+  props: Partial<VSnackbarProps>;
 }
 
 export type VStackDynamicSetting =
@@ -101,9 +95,9 @@ export function resolveVStackDynamicInput<
 }
 
 export type VStackDynamicDialogInput = VStackDynamicInput<
-  Partial<VStackDialogProps>
+  Partial<VDialogProps>
 >;
 
 export type VStackDynamicSnackbarInput = VStackDynamicInput<
-  Partial<VStackSnackbarProps>
+  Partial<VSnackbarProps>
 >;

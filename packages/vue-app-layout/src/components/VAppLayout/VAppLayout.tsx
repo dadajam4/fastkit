@@ -7,6 +7,7 @@ import {
   Transition,
   watch,
   withDirectives,
+  defineComponent,
 } from 'vue';
 import {
   VAppLayoutControl,
@@ -14,8 +15,8 @@ import {
   VAppLayoutControlBackdropPosition,
 } from './control';
 import {
-  defineComponentWithSlots,
   bodyScrollLockDirectiveArgument,
+  defineSlotsProps,
 } from '@fastkit/vue-utils';
 import { useRouter } from 'vue-router';
 
@@ -51,7 +52,7 @@ const VAppLayoutConditional = [
   Boolean,
 ] as PropType<RawVAppLayoutControlConditionalFn>;
 
-export const VAppLayout = defineComponentWithSlots({
+export const VAppLayout = defineComponent({
   name: 'VAppLayout',
   props: {
     header: Object as PropType<VAppLayoutVertialProps>,
@@ -61,6 +62,14 @@ export const VAppLayout = defineComponentWithSlots({
     drawer: Object as PropType<VAppLayoutDrawerProps>,
     drawerStatic: VAppLayoutConditional,
     viewportTag: String,
+    ...defineSlotsProps<{
+      default: VAppLayoutSlotPayload;
+      header: VAppLayoutSlotPayload;
+      footer: VAppLayoutSlotPayload;
+      headerBar: VAppLayoutSlotPayload;
+      footerBar: VAppLayoutSlotPayload;
+      drawer: VAppLayoutSlotPayload;
+    }>(),
   },
   emits: {
     clickBackdrop: (
@@ -68,14 +77,6 @@ export const VAppLayout = defineComponentWithSlots({
       position: VAppLayoutControlBackdropPosition,
       control: VAppLayoutControl,
     ) => true,
-  },
-  _slots: {
-    default: (payload: VAppLayoutSlotPayload) => true,
-    header: (payload: VAppLayoutSlotPayload) => true,
-    footer: (payload: VAppLayoutSlotPayload) => true,
-    headerBar: (payload: VAppLayoutSlotPayload) => true,
-    footerBar: (payload: VAppLayoutSlotPayload) => true,
-    drawer: (payload: VAppLayoutSlotPayload) => true,
   },
   setup(props) {
     const control = new VAppLayoutControl(props);

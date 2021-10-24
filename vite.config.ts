@@ -53,6 +53,7 @@ export default defineConfig({
       iconFont: {
         inputDir: './packages/playground/src/config/icon-font/svg',
         outputDir: path.join(DYNAMIC_DEST_DIR, 'icon-font'),
+        descent: 42,
       },
       spriteImages: {
         src: './packages/playground/src/config/sprites',

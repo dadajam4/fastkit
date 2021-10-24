@@ -6,6 +6,12 @@
 /* Document
    ========================================================================== */
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /**
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.
@@ -54,7 +60,6 @@ h1 {
  */
 
 hr {
-  box-sizing: content-box; /* 1 */
   height: 0; /* 1 */
   overflow: visible; /* 2 */
 }
@@ -171,6 +176,7 @@ textarea {
   font-family: inherit; /* 1 */
   font-size: 100%; /* 1 */
   line-height: 1.15; /* 1 */
+  color: inherit;
 }
 
 /**
@@ -245,7 +251,6 @@ fieldset {
  */
 
 legend {
-  box-sizing: border-box; /* 1 */
   display: table; /* 1 */
   max-width: 100%; /* 1 */
   padding: 0; /* 3 */
@@ -276,7 +281,6 @@ textarea {
 
 [type='checkbox'],
 [type='radio'] {
-  box-sizing: border-box; /* 1 */
   padding: 0; /* 2 */
 }
 

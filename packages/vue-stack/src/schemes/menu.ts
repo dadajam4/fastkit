@@ -1,6 +1,8 @@
 import { CSSProperties } from '@fastkit/vue-utils';
+import { Ref } from 'vue';
+import type { ResizeDirectivePayload } from '@fastkit/vue-utils';
 
-export interface VStackMenuRect {
+export interface VMenuRect {
   left: number;
   right: number;
   top: number;
@@ -9,14 +11,14 @@ export interface VStackMenuRect {
   height: number;
 }
 
-export interface VStackMenuState {
+export interface VMenuState {
   pageXOffset: number;
   pageYOffset: number;
-  rect: VStackMenuRect | null;
-  activatorRect: VStackMenuRect | null;
+  rect: VMenuRect | null;
+  activatorRect: VMenuRect | null;
 }
 
-export interface VStackMenuControl {
+export interface VMenuControl {
   readonly pageXOffset: number;
   readonly pageYOffset: number;
   readonly distance: number;
@@ -28,8 +30,9 @@ export interface VStackMenuControl {
   readonly maxRight: number;
   readonly maxBottom: number;
   readonly styles: CSSProperties;
+  readonly bodyRef: Ref<HTMLElement | null>;
   updatePageOffset(): void;
-  updateMenuRect(): void;
+  updateMenuRect(menuBodyRect?: ResizeDirectivePayload): void;
   updateActivatorRect(): void;
-  updateRects(): void;
+  updateRects(menuBodyRect?: ResizeDirectivePayload): void;
 }

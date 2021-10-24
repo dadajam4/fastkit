@@ -17,7 +17,7 @@ import {
 } from './schemes/action';
 export { VueStackInjectionKey } from './injections';
 import { ScopeName } from '@fastkit/color-scheme';
-import { VStackDialogProps } from './components/VStackDialog';
+import { VDialogProps } from './components/VDialog';
 
 export interface VueStackServiceOptions {
   zIndex?: number;
@@ -123,30 +123,30 @@ export class VueStackService {
 
   async dialog(
     resolvedInput: ResolvedVStackDynamicInput<
-      VStackDialogProps & {
+      VDialogProps & {
         content: VStackDynamicChildren;
       }
     >,
   ) {
-    const { VStackDialog } = await import('./components/VStackDialog');
+    const { VDialog } = await import('./components/VDialog');
     const { props, children } = resolvedInput;
     // if (!props.actions) {
     //   props.actions = [this.action('close')];
     // }
     return this.dynamic({
-      Ctor: markRaw(VStackDialog),
+      Ctor: markRaw(VDialog),
       props: markRaw(props),
       children,
     });
   }
   // async dialog(input: VStackDynamicDialogInput) {
-  //   const { VStackDialog } = await import('./components/VStackDialog');
+  //   const { VDialog } = await import('./components/VDialog');
   //   const { props, children } = resolveVStackDynamicInput(input);
   //   if (!props.actions) {
   //     props.actions = [this.action('close')];
   //   }
   //   return this.dynamic({
-  //     Ctor: markRaw(VStackDialog),
+  //     Ctor: markRaw(VDialog),
   //     props: markRaw(props),
   //     children,
   //   });
@@ -169,10 +169,10 @@ export class VueStackService {
   }
 
   async snackbar(input: VStackDynamicSnackbarInput) {
-    const { VStackSnackbar } = await import('./components/VStackSnackbar');
+    const { VSnackbar } = await import('./components/VSnackbar');
     const { props, children } = resolveVStackDynamicInput(input);
     return this.dynamic({
-      Ctor: markRaw(VStackSnackbar),
+      Ctor: markRaw(VSnackbar),
       props: markRaw(props),
       children,
     });

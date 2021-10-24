@@ -1,18 +1,7 @@
 import * as alphaHelper from './alphaHelper';
-
-/**
- * 値が空っぽでないか
- * 配列の場合はlengthをチェックする
- * falseは値として認めない（チェックボックスを考慮）
- * value === null
- * || value === undefined
- * || value === ''
- * || Array.isArray(value) && value.length === 0
- */
-export function isEmpty(value: any): boolean {
-  if (typeof value === 'function') return false;
-  return value == null || value === false || value.length === 0;
-}
+import { safeRemainderOperation } from '@fastkit/helpers';
+import { isEmpty } from '@fastkit/helpers';
+export { isEmpty } from '@fastkit/helpers';
 
 export function isRequired(value: any): boolean {
   return !isEmpty(value);
@@ -299,4 +288,14 @@ export function isKanaAlphaNumeric(value: unknown): value is string {
 export const creditCardHolderRe = /^[a-z\d ,\-./]+$/i;
 export function isCreditCardHolder(value: unknown) {
   return typeof value === 'string' && creditCardHolderRe.test(value);
+}
+
+export function isMultipleOf(value: any, step: number) {
+  if (typeof value === 'string') {
+    value = value.trim();
+    if (!value || isNaN(value)) return false;
+    value = Number(value);
+  }
+  if (typeof value !== 'number') return false;
+  return safeRemainderOperation(value, step) === 0;
 }

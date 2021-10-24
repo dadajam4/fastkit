@@ -30,6 +30,7 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/icon-font-gen#readme",
   "dependencies": {
     "@fastkit/ev": "0.2.13",
+    "@fastkit/icon-font": "0.2.13",
     "@fastkit/tiny-logger": "0.2.13",
     "chokidar": "^3.5.0",
     "fantasticon": "^1.2.2",

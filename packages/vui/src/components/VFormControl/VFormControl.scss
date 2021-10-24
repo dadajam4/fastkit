@@ -1,0 +1,43 @@
+.v-form-control {
+  display: flex;
+  flex-direction: column;
+  margin: var(--control-horizontal-margin) 0;
+
+  // --control-label-font-size: calc(var(--control-field-font-size) * 0.75); // 12
+  --my-label-color: var(--control-label-color);
+  --my-message-color: var(--control-message-color);
+
+  &--invalid {
+    --my-label-color: var(--main-color);
+    --my-message-color: var(--main-color);
+  }
+
+  &--disabled {
+    --my-label-color: var(--control-disabled-color);
+    --my-message-color: var(--control-disabled-color);
+  }
+
+  &__label {
+    align-self: flex-start;
+    font-size: var(--control-label-font-size);
+    font-weight: var(--control-label-font-weight);
+    line-height: var(--control-label-height);
+    color: var(--my-label-color);
+    letter-spacing: 0.00938em;
+  }
+
+  // &--disabled &__body {
+  //   user-select: none;
+  // }
+
+  &__info {
+    padding-top: 3px;
+  }
+
+  &__message {
+    margin: 0 var(--control-message-horizontal-margin);
+    font-size: var(--control-message-font-size);
+    line-height: 1.66;
+    color: var(--my-message-color);
+  }
+}

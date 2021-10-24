@@ -39,7 +39,9 @@
   },
   "dependencies": {
     "fastkit": "0.2.13",
+    "@fastkit/vue-app-layout": "0.2.13",
     "@fastkit/vue-color-scheme": "0.2.13",
+    "@fastkit/vue-form-control": "0.2.13",
     "@fastkit/vue-media-match": "0.2.13",
     "@fastkit/vue-scroller": "0.2.13",
     "@fastkit/vue-stack": "0.2.13",

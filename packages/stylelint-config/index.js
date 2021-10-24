@@ -13,5 +13,7 @@ module.exports = {
     'string-quotes': 'single',
     'at-rule-no-unknown': null,
     'scss/at-rule-no-unknown': true,
+    'length-zero-no-unit': null,
+    'value-keyword-case': null,
   },
 };

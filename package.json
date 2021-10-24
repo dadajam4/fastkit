@@ -119,6 +119,7 @@
     "imagemin": "^7.0.1",
     "imagemin-mozjpeg": "^9.0.0",
     "imagemin-pngquant": "^9.0.2",
+    "imask": "^6.2.2",
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "minimist": "^1.2.5",
