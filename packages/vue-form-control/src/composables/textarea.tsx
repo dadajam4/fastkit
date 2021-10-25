@@ -155,11 +155,12 @@ export class TextareaControl extends TextableControl {
       autocapitalize: this.autocapitalize,
       spellcheck: this.spellcheck,
       rows: this.rows,
+      maxlength: this.maxlength,
       onFocus: this.focusHandler,
       onBlur: this.blurHandler,
       value: this.value,
       onInput: (ev) => {
-        this.value = (ev.target as unknown as HTMLTextAreaElement).value;
+        this._setTextValue((ev.target as unknown as HTMLTextAreaElement).value);
       },
     };
     let el: VNode;

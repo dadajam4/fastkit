@@ -11,6 +11,7 @@ import {
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
   TypedSlot,
+  cleanupEmptyVNodeChild,
 } from '@fastkit/vue-utils';
 import { FormNodeControl, FormNodeError } from './node';
 
@@ -243,18 +244,18 @@ export class FormControl {
 
   renderLabel() {
     const { labelSlot: slot } = this;
-    return (slot && slot(this)) || undefined;
+    return (slot && cleanupEmptyVNodeChild(slot(this))) || undefined;
   }
 
   renderHint() {
     if (!this.focused) return;
     const { hintSlot: slot } = this;
-    return (slot && slot(this)) || undefined;
+    return (slot && cleanupEmptyVNodeChild(slot(this))) || undefined;
   }
 
   renderInfoAppends() {
     const { infoAppendsSlot: slot } = this;
-    return (slot && slot(this)) || undefined;
+    return (slot && cleanupEmptyVNodeChild(slot(this))) || undefined;
   }
 
   protected _getContextOrDir() {

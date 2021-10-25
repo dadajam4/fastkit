@@ -100,6 +100,9 @@ const component = defineComponent({
                       // autosize={{
                       //   maxRows: 5,
                       // }}
+                      maxlength="50"
+                      counter
+                      limit
                       v-model={this.textarea}
                     />
                     <VSelect
@@ -156,6 +159,8 @@ const component = defineComponent({
                       label="Outlined"
                       hint={() => 'This is outlined.'}
                       required
+                      counter
+                      maxlength="10"
                       variant="outlined"></VTextField>
 
                     <VTextField

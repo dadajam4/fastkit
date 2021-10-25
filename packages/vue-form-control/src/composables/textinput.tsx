@@ -189,6 +189,7 @@ export class TextInputControl extends TextableControl {
       autocomplete: this.autocomplete,
       autocapitalize: this.autocapitalize,
       spellcheck: this.spellcheck,
+      maxlength: this.maxlength,
       onFocus: this.focusHandler,
       onBlur: this.blurHandler,
       value: this.value,
@@ -196,7 +197,7 @@ export class TextInputControl extends TextableControl {
     const { mask } = this;
     if (!mask || !mask.mask) {
       attrs.onInput = (ev) => {
-        this.value = (ev.target as unknown as HTMLInputElement).value;
+        this._setTextValue((ev.target as unknown as HTMLInputElement).value);
       };
     }
     const el = <input {...attrs} ref={this._inputElement} />;

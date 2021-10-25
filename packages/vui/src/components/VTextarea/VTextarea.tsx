@@ -20,6 +20,7 @@ import {
   useControlField,
   useVui,
 } from '../../composables';
+import { VTextCounter } from '../VTextCounter';
 import { VUI_TEXTAREA_SYMBOL } from '../../injections';
 
 const { props, emits } = createTextareaSettings();
@@ -80,6 +81,11 @@ export const VTextarea = defineComponent({
               }}
             />
           ),
+          infoAppends: () => {
+            const { counterResult } = this;
+            if (!counterResult) return;
+            return <VTextCounter {...counterResult} />;
+          },
         }}
       />
     );

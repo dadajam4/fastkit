@@ -47,6 +47,7 @@ export class TinyLogger {
 
   log(type: TinyLoggerLogType, message: string, ...args: any[]) {
     const color = colorEnable && COLOR_MAP[type];
+    message = `[${this.name}] ${message}`;
     const body = color ? consoleColorString(message, color) : message;
     const fn = type === 'success' ? 'log' : type;
     console[fn](body, ...args);

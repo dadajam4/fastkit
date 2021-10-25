@@ -30,6 +30,7 @@ import {
   BuiltinTextFinishingFnName,
   BUILTIN_TEXT_FINISHINGS,
 } from '../schemes';
+import { logger } from '../logger';
 
 export type RawTextableFinishingProp =
   | TextFinishingFn
@@ -74,8 +75,21 @@ export function createTextableProps() {
       placeholder: String,
       autocapitalize: String as PropType<FormAutoCapitalize>,
       finishings: [String, Array] as PropType<RawTextableFinishingProp>,
+      counter: [Boolean, String, Number] as PropType<boolean | string | number>,
+      counterValue: Function as PropType<(value: string) => number>,
+      limit: Boolean,
     }),
   };
+}
+
+export interface TextableCounterSettings {
+  maxlength: number;
+  counterValue: (value: string) => number;
+}
+
+export interface TextableCounterResult {
+  length: number;
+  maxlength: number;
 }
 
 export type TextableProps = ExtractPropTypes<
@@ -111,6 +125,9 @@ export class TextableControl extends FormNodeControl<string> {
   protected _autocompleteable: AutocompleteableInputControl;
   protected _autocapitalize: ComputedRef<FormAutoCapitalize | undefined>;
   protected _finishings: ComputedRef<TextFinishingFn[] | undefined>;
+  protected _counterSettings: ComputedRef<TextableCounterSettings | undefined>;
+  protected _counterResult: ComputedRef<TextableCounterResult | undefined>;
+  protected _maxlengthLimit: ComputedRef<number | undefined>;
 
   get minlength() {
     return this._minlength.value;
@@ -138,6 +155,18 @@ export class TextableControl extends FormNodeControl<string> {
 
   get finishings() {
     return this._finishings.value;
+  }
+
+  get counterSettings() {
+    return this._counterSettings.value;
+  }
+
+  get counterResult() {
+    return this._counterResult.value;
+  }
+
+  get maxlengthLimit() {
+    return this._maxlengthLimit.value;
   }
 
   constructor(
@@ -168,6 +197,46 @@ export class TextableControl extends FormNodeControl<string> {
     this._finishings = computed(() =>
       resolveRawTextableFinishingProp(props.finishings),
     );
+    this._counterSettings = computed(() => {
+      let { counter } = props;
+      const maxlength = this._maxlength.value;
+      if (counter === true) {
+        if (maxlength == null) {
+          if (__DEV__) {
+            logger.warn(
+              'When setting the counter, you need to set the maxlength.',
+            );
+          }
+          return;
+        }
+        counter = maxlength;
+      }
+      if (!counter) {
+        return;
+      }
+      counter = toInt(counter);
+      return {
+        maxlength: counter,
+        counterValue: props.counterValue || ((value: string) => value.length),
+      };
+    });
+
+    this._counterResult = computed(() => {
+      const { counterSettings } = this;
+      if (!counterSettings) return;
+      return {
+        length: this.value.length,
+        maxlength: counterSettings.maxlength,
+      };
+    });
+
+    this._maxlengthLimit = computed(() => {
+      if (!props.limit) return;
+      return (
+        this.maxlength ||
+        (this.counterSettings && this.counterSettings.maxlength)
+      );
+    });
   }
 
   emptyValue() {
@@ -204,6 +273,14 @@ export class TextableControl extends FormNodeControl<string> {
     return rules;
   }
 
+  protected _setTextValue(value: string) {
+    const { maxlengthLimit } = this;
+    if (maxlengthLimit) {
+      value = value.slice(0, maxlengthLimit);
+    }
+    this.value = value;
+  }
+
   expose() {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const _self = this;
@@ -217,6 +294,8 @@ export class TextableControl extends FormNodeControl<string> {
       computedPattern: _self._pattern,
       computedPlaceholder: _self._placeholder,
       computedAutocapitalize: _self._autocapitalize,
+      counterSettings: _self._counterSettings,
+      counterResult: _self._counterResult,
     };
   }
 }

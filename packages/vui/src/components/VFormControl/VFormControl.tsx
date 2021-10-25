@@ -5,6 +5,7 @@ import {
   useFormControl,
   FormControlSlots,
   defineSlotsProps,
+  FormControl,
 } from '@fastkit/vue-kit';
 import { useVuiColorProvider, useVui } from '../../composables';
 
@@ -16,7 +17,7 @@ export const VFormControl = defineComponent({
     ...props,
     ...defineSlotsProps<
       FormControlSlots & {
-        default: void;
+        default: FormControl;
       }
     >(),
   },
@@ -64,7 +65,7 @@ export const VFormControl = defineComponent({
             </label>
           )}
           <div class="v-form-control__body">
-            {renderSlot(ctx.slots, 'default')}
+            {renderSlot(ctx.slots, 'default', control as any)}
             <div class="v-form-control__info">
               {!!message && (
                 <div class="v-form-control__message">{message}</div>

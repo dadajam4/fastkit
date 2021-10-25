@@ -19,6 +19,7 @@ import {
   createControlFieldProviderProps,
   useControlField,
 } from '../../composables';
+import { VTextCounter } from '../VTextCounter';
 import { VUI_TEXT_FIELD_SYMBOL } from '../../injections';
 
 const { props, emits } = createTextInputSettings();
@@ -76,14 +77,12 @@ export const VTextField = defineComponent({
                   }),
               }}
             />
-            // <div class="v-text-field__body">
-            //   {/* {renderSlot(this.$slots, 'default')} */}
-            //   {this.control.createElement({
-            //     class: 'v-text-field__input',
-            //   })}
-            //   {/* {!!this.firstError && <p>{this.firstError.message}</p>} */}
-            // </div>
           ),
+          infoAppends: () => {
+            const { counterResult } = this;
+            if (!counterResult) return;
+            return <VTextCounter {...counterResult} />;
+          },
         }}
       />
     );

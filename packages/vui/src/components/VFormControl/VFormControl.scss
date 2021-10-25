@@ -31,13 +31,28 @@
   // }
 
   &__info {
+    display: flex;
     padding-top: 3px;
   }
 
-  &__message {
+  &__message,
+  &__appends {
     margin: 0 var(--control-message-horizontal-margin);
     font-size: var(--control-message-font-size);
     line-height: 1.66;
     color: var(--my-message-color);
+  }
+
+  &__message {
+    flex: 1 0;
+    // margin: 0 var(--control-message-horizontal-margin);
+    // font-size: var(--control-message-font-size);
+    // line-height: 1.66;
+    // color: var(--my-message-color);
+  }
+
+  &__appends {
+    flex: 0 1;
+    margin-left: auto;
   }
 }

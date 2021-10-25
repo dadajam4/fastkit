@@ -1,4 +1,5 @@
 import type { VNode, VNodeTypes, VNodeChild, Slots } from '@vue/runtime-core';
+import { Comment, Text } from 'vue';
 
 export function findVNodeChild(
   vnode: VNode,
@@ -48,6 +49,28 @@ export function resolveVNodeChildOrSlots<Prop extends any = any>(
   }
 }
 
+export function cleanupEmptyVNodeChild(child: VNodeChild) {
+  if (!Array.isArray(child)) {
+    child = [child];
+  }
+  child = child.filter((row) => {
+    if (row == null || row === '' || row === false) return false;
+    if (typeof row !== 'object') return true;
+    if (Array.isArray(row)) return true;
+    if (row.type === Comment) return false;
+    if (row.type === Text) {
+      if (!row.children || !row.children.length) {
+        return false;
+      }
+    }
+    return true;
+  });
+  if (!child.length) {
+    return;
+  }
+  return child;
+}
+
 export function renderSlotOrEmpty(
   slots: Slots | { [key: string]: TypedSlot },
   name: string,
@@ -55,9 +78,5 @@ export function renderSlotOrEmpty(
 ) {
   const slot = slots[name];
   if (!slot) return;
-  const vnodes = slot(prop);
-  if (Array.isArray(vnodes)) {
-    if (!vnodes.length) return;
-  }
-  return vnodes;
+  return cleanupEmptyVNodeChild(slot(prop));
 }
