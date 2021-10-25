@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "@fastkit/vui",
   "main": "index.js",
   "module": "dist/vui.esm-bundler.js",
@@ -26,9 +26,9 @@
     "vue": "^3.2.19"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "0.3.1",
-    "@fastkit/icon-font": "0.3.1",
-    "@fastkit/tiny-logger": "0.3.1",
-    "@fastkit/vue-kit": "0.3.1"
+    "@fastkit/color-scheme": "0.3.2",
+    "@fastkit/icon-font": "0.3.2",
+    "@fastkit/tiny-logger": "0.3.2",
+    "@fastkit/vue-kit": "0.3.2"
   }
 }
