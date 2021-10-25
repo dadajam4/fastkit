@@ -19,10 +19,7 @@ import {
   defineSlotsProps,
 } from '@fastkit/vue-utils';
 import { useRouter } from 'vue-router';
-import {
-  resizeDirectiveArgument,
-  ResizeDirectivePayload,
-} from '@fastkit/vue-utils';
+import { resizeDirectiveArgument } from '@fastkit/vue-utils';
 
 const VERTICAL_POSITIONS = ['header', 'footer'] as const;
 
