@@ -72,7 +72,7 @@ export const VTextField = defineComponent({
               v-slots={{
                 ...this.$slots,
                 default: () =>
-                  this.nodeControl.createInputElement({
+                  this.textInputControl.createInputElement({
                     class: 'v-text-field__input__element',
                   }),
               }}

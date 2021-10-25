@@ -162,7 +162,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _focused = ref(false);
   protected _initialValue = ref<T | D>(null as unknown as T | D);
   protected _children: FormNodeControl[] = [];
-  protected _invalidChildren = ref<FormNodeControl[]>([]);
+  protected _invalidChildren = ref<this[]>([]);
   protected _validationErrors = ref<ValidationError[]>([]);
   protected _validateResolvers: ValidateResolver[] = [];
   protected _lastValidateValueChanged = true;
@@ -249,8 +249,8 @@ export class FormNodeControl<T = any, D = T> {
     return this._children;
   }
 
-  get invalidChildren() {
-    return this._invalidChildren.value as unknown as FormNodeControl<any>[];
+  get invalidChildren(): FormNodeControl[] {
+    return this._invalidChildren.value as unknown as FormNodeControl[];
   }
 
   get firstInvalidChild(): FormNodeControl | undefined {
@@ -889,22 +889,19 @@ export class FormNodeControl<T = any, D = T> {
   }
 
   expose() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const _self = this;
-
     return {
-      nodeControl: this,
+      nodeControl: this as FormNodeControl,
       currentValue: this._currentValue,
       computedTabindex: this._tabindex,
       validating: this._validating,
       autofocus: this.autofocus,
-      pending: computed(() => _self.pending),
-      focused: computed(() => _self.focused),
+      pending: computed(() => this.pending),
+      focused: computed(() => this.focused),
       initialValue: this._initialValue,
-      dirty: computed(() => _self.dirty),
-      pristine: computed(() => _self.pristine),
-      propRules: _self._propRules,
-      isRequired: _self._required,
+      dirty: computed(() => this.dirty),
+      pristine: computed(() => this.pristine),
+      propRules: this._propRules,
+      isRequired: this._required,
       errors: this._errors,
       firstError: this._firstError,
       hasMyError: this._hasMyError,
@@ -912,18 +909,18 @@ export class FormNodeControl<T = any, D = T> {
       isDisabled: this._isDisabled,
       isReadonly: this._isReadonly,
       canOperation: this._canOperation,
-      touched: computed(() => _self.touched),
-      untouched: computed(() => _self.untouched),
-      isDestroyed: computed(() => _self.isDestroyed),
-      invalid: computed(() => _self.invalid),
-      valid: computed(() => _self.valid),
-      shouldValidate: computed(() => _self._shouldValidate.value),
-      spellcheck: _self._spellcheck,
-      submiting: _self._submiting,
-      focus: _self.focus,
-      blur: _self.blur,
-      validateSelf: _self.validateSelf,
-      validate: _self.validate,
+      touched: computed(() => this.touched),
+      untouched: computed(() => this.untouched),
+      isDestroyed: computed(() => this.isDestroyed),
+      invalid: computed(() => this.invalid),
+      valid: computed(() => this.valid),
+      shouldValidate: computed(() => this._shouldValidate.value),
+      spellcheck: this._spellcheck,
+      submiting: this._submiting,
+      focus: this.focus,
+      blur: this.blur,
+      validateSelf: this.validateSelf,
+      validate: this.validate,
     };
   }
 }

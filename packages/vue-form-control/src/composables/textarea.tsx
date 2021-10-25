@@ -135,6 +135,7 @@ export class TextareaControl extends TextableControl {
 
     return {
       ...publicInterface,
+      textareaControl: this as TextareaControl,
       inputElementRef: _self._inputElement,
       autosizeSettings: this._autosize,
       focus: _self.focus,

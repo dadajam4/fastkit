@@ -29,13 +29,13 @@ export const VRadio = defineComponent({
     };
   },
   render() {
-    const { nodeControl } = this;
+    const { selectorItemControl } = this;
     return (
       <VCheckable
         class={[
           'v-radio',
           {
-            'v-radio--selected': nodeControl.selected,
+            'v-radio--selected': selectorItemControl.selected,
           },
           this.classes,
         ]}
@@ -44,7 +44,8 @@ export const VRadio = defineComponent({
         disabled={this.isDisabled}
         readonly={this.isReadonly}
         v-slots={{
-          input: () => nodeControl.createInputElement({ type: 'radio' }),
+          input: () =>
+            selectorItemControl.createInputElement({ type: 'radio' }),
           faux: () => <span class="v-radio__faux"></span>,
           label: () => renderSlot(this.$slots, 'default'),
         }}

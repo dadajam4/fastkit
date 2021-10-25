@@ -29,14 +29,14 @@ export const VSwitch = defineComponent({
     };
   },
   render() {
-    const { nodeControl } = this;
+    const { selectorItemControl } = this;
     return (
       <VCheckable
         class={[
           'v-switch',
           {
-            'v-switch--selected': nodeControl.selected,
-            'v-switch--disabled': nodeControl.isDisabled,
+            'v-switch--selected': selectorItemControl.selected,
+            'v-switch--disabled': selectorItemControl.isDisabled,
           },
           this.classes,
         ]}
@@ -45,7 +45,8 @@ export const VSwitch = defineComponent({
         disabled={this.isDisabled}
         readonly={this.isReadonly}
         v-slots={{
-          input: () => nodeControl.createInputElement({ type: 'checkbox' }),
+          input: () =>
+            selectorItemControl.createInputElement({ type: 'checkbox' }),
           icon: () => (
             <span class="v-switch__faux">
               <span class="v-switch__faux__pin"></span>

@@ -135,15 +135,14 @@ export class DateInputControl extends FormNodeControl<string> {
   }
 
   expose() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const _self = this;
+    // const _self = this as DateInputControl;
     const publicInterface = super.expose();
 
     return {
       ...publicInterface,
-      computedMin: _self._min,
-      computedMax: _self._max,
-      computedPrecision: _self._precision,
+      computedMin: this._min,
+      computedMax: this._max,
+      computedPrecision: this._precision,
     };
   }
 }

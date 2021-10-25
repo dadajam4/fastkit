@@ -84,7 +84,7 @@ export function defineFormSelectorComponent(
                       key: attrs.value,
                     },
                     slots: {
-                      default: () => attrs.label(this.nodeControl),
+                      default: () => attrs.label(this.selectorControl),
                     },
                   }),
                 )}

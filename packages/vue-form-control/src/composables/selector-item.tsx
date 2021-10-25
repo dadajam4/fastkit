@@ -228,6 +228,7 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
     const publicInterface = super.expose();
     return {
       ...publicInterface,
+      selectorItemControl: this as FormSelectorItemControl,
       selected: this._currentValue,
       computedMultiple: this._multiple,
       propValue: this.propValue,

@@ -107,14 +107,12 @@ export class FormSelectorItemGroupControl {
   }
 
   expose() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const _self = this;
     return {
-      groupControl: _self,
-      isDisabled: _self._disabled,
-      isNotSelected: _self._notSelected,
-      isAllSelected: _self._allSelected,
-      isIndeterminate: _self._indeterminate,
+      groupControl: this as FormSelectorItemGroupControl,
+      isDisabled: this._disabled,
+      isNotSelected: this._notSelected,
+      isAllSelected: this._allSelected,
+      isIndeterminate: this._indeterminate,
     };
   }
 }

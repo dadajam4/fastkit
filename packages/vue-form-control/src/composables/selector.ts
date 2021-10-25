@@ -441,6 +441,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     const publicInterface = super.expose();
     return {
       ...publicInterface,
+      selectorControl: this as FormSelectorControl,
       notSelected: this._notSelected,
       allSelected: this._allSelected,
       indeterminate: this._indeterminate,

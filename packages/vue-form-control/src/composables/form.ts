@@ -171,7 +171,7 @@ export class VueForm extends FormNodeControl {
     const publicInterface = super.expose();
     return {
       ...publicInterface,
-      form: this,
+      form: this as VueForm,
       formRef: () => this._formRef,
       nativeAction: this._nativeAction,
     };

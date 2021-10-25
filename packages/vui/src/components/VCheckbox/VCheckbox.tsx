@@ -35,13 +35,13 @@ export const VCheckbox = defineComponent({
     };
   },
   render() {
-    const { nodeControl, isIndeterminate } = this;
+    const { selectorItemControl, isIndeterminate } = this;
     return (
       <VCheckable
         class={[
           'v-checkbox',
           {
-            'v-checkbox--selected': nodeControl.selected,
+            'v-checkbox--selected': selectorItemControl.selected,
             'v-checkbox--indeterminate': isIndeterminate,
           },
           this.classes,
@@ -51,7 +51,8 @@ export const VCheckbox = defineComponent({
         disabled={this.isDisabled}
         readonly={this.isReadonly}
         v-slots={{
-          input: () => nodeControl.createInputElement({ type: 'checkbox' }),
+          input: () =>
+            selectorItemControl.createInputElement({ type: 'checkbox' }),
           faux: () => <span class="v-checkbox__faux"></span>,
           label: () => renderSlot(this.$slots, 'default'),
         }}

@@ -75,7 +75,7 @@ export const VTextarea = defineComponent({
               v-slots={{
                 ...this.$slots,
                 default: () =>
-                  this.nodeControl.createInputElement({
+                  this.textareaControl.createInputElement({
                     class: 'v-textarea__input__element',
                   }),
               }}

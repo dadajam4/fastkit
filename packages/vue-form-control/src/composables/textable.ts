@@ -282,8 +282,7 @@ export class TextableControl extends FormNodeControl<string> {
   }
 
   expose() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const _self = this;
+    const _self = this as TextableControl;
     const publicInterface = super.expose();
 
     return {

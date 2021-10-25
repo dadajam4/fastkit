@@ -1,7 +1,7 @@
 import {
   ref,
   Ref,
-  readonly,
+  // readonly,
   watch,
   onMounted,
   onUnmounted,
@@ -29,16 +29,16 @@ export type IMaskControlProps = ExtractPropTypes<
 
 export function useIMaskControl(
   props: IMaskControlProps,
-  {
-    el,
-    onAccept,
-    onComplete,
-  }: {
+  opts: {
+    // el: any;
+    // onAccept?: any;
+    // onComplete?: any;
     el: Ref<HTMLInputElement | null>;
     onAccept?: (ev: IMaskEvent) => void;
     onComplete?: (ev: IMaskEvent) => void;
   },
 ) {
+  const { el, onAccept, onComplete } = opts;
   const maskInput = computed(() => resolveIMaskInput(props.mask));
   const inputMask = ref<IMask.InputMask<AnyMaskedOptions> | null>(null);
   const masked = ref<string>('');
@@ -128,7 +128,8 @@ export function useIMaskControl(
   });
 
   return {
-    inputMask: readonly(inputMask),
+    // ...The definition is too deep and the compiler dies
+    inputMask: inputMask as any,
     masked,
     unmasked,
     typed,

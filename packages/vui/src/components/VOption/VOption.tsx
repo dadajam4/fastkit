@@ -39,9 +39,9 @@ export const VOption = defineComponent({
     };
   },
   render() {
-    const { nodeControl, classes } = this;
+    const { selectorItemControl, classes } = this;
     return (
-      <label class={classes} onClick={nodeControl.handleClickElement}>
+      <label class={classes} onClick={selectorItemControl.handleClickElement}>
         <span class="v-option__label">
           {renderSlot(this.$slots, 'default')}
         </span>

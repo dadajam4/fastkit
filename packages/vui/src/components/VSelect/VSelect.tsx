@@ -97,13 +97,13 @@ export const VSelect = defineComponent({
     };
   },
   render() {
-    const { nodeControl, selectorItems, selectedItems } = this;
+    const { nodeControl, selectorControl, selectorItems, selectedItems } = this;
     const children = (this.$slots.default && this.$slots.default()) || [];
     const propOptions = this.propItems.map((item) => {
       return (
         <VOption disabled={item.disabled} value={item.value} key={item.value}>
           {{
-            default: () => item.label(this.nodeControl),
+            default: () => item.label(selectorControl),
           }}
         </VOption>
       );

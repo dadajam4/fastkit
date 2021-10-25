@@ -169,6 +169,7 @@ export class TextInputControl extends TextableControl {
 
     return {
       ...publicInterface,
+      textInputControl: this as TextInputControl,
       computedMask: _self._mask,
       computedType: _self._type,
       inputElementRef: _self._inputElement,
