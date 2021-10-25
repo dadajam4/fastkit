@@ -1,8 +1,8 @@
-import './VTextField.scss';
+import './VTextarea.scss';
 import { defineComponent } from 'vue';
 import {
-  createTextInputSettings,
-  useTextInputControl,
+  createTextareaSettings,
+  useTextareaControl,
   createFormControlProps,
   FormControlSlots,
   defineSlotsProps,
@@ -18,13 +18,14 @@ import {
   useControl,
   createControlFieldProviderProps,
   useControlField,
+  useVui,
 } from '../../composables';
-import { VUI_TEXT_FIELD_SYMBOL } from '../../injections';
+import { VUI_TEXTAREA_SYMBOL } from '../../injections';
 
-const { props, emits } = createTextInputSettings();
+const { props, emits } = createTextareaSettings();
 
-export const VTextField = defineComponent({
-  name: 'VTextField',
+export const VTextarea = defineComponent({
+  name: 'VTextarea',
   props: {
     ...props,
     ...createFormControlProps(),
@@ -35,8 +36,10 @@ export const VTextField = defineComponent({
   },
   emits,
   setup(props, ctx) {
-    const inputControl = useTextInputControl(props, ctx, {
-      nodeType: VUI_TEXT_FIELD_SYMBOL,
+    const vui = useVui();
+    const inputControl = useTextareaControl(props, ctx, {
+      nodeType: VUI_TEXTAREA_SYMBOL,
+      defaultRows: vui.textareaRows,
     });
     const control = useControl(props);
     useControlField(props);
@@ -51,7 +54,7 @@ export const VTextField = defineComponent({
       <VFormControl
         nodeControl={this.nodeControl}
         focused={this.nodeControl.focused}
-        class={['v-text-field', this.classes]}
+        class={['v-textarea', this.classes]}
         label={this.label}
         hint={this.hint}
         onClickLabel={(ev) => {
@@ -61,28 +64,21 @@ export const VTextField = defineComponent({
           ...this.$slots,
           default: () => (
             <VControlField
-              class="v-text-field__input"
+              class="v-textarea__input"
+              autoHeight
               startAdornment={this.startAdornment}
               endAdornment={this.endAdornment}
               // onClickHost={(ev) => {
-              //   console.log(ev);
               //   this.focus();
               // }}
               v-slots={{
                 ...this.$slots,
                 default: () =>
                   this.nodeControl.createInputElement({
-                    class: 'v-text-field__input__element',
+                    class: 'v-textarea__input__element',
                   }),
               }}
             />
-            // <div class="v-text-field__body">
-            //   {/* {renderSlot(this.$slots, 'default')} */}
-            //   {this.control.createElement({
-            //     class: 'v-text-field__input',
-            //   })}
-            //   {/* {!!this.firstError && <p>{this.firstError.message}</p>} */}
-            // </div>
           ),
         }}
       />

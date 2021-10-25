@@ -13,6 +13,8 @@ import {
   VIcon,
   VSelect,
   VOption,
+  VTextarea,
+  VButton,
   // ICON_NAMES,
 } from '@fastkit/vui';
 import { RouterLink } from 'vue-router';
@@ -35,6 +37,7 @@ const component = defineComponent({
       switchGroup: ref<string[]>(['2']),
       fontSize: ref(16),
       select: ref('2'),
+      textarea: ref(''),
     };
   },
   render() {
@@ -83,158 +86,182 @@ const component = defineComponent({
               // form.lock(async (ctx) => {
               //   await new Promise((resolve) => setTimeout(resolve, 3000));
               // });
-            }}>
-            <VSelect
-              label="VSelect"
-              required
-              variant="filled"
-              v-model={this.select}
-              name="select1"
-              style={{ width: '240px' }}>
-              <VOption>選択してください</VOption>
-              <VOption value="1">Value1</VOption>
-              <VOption value="2">Value2</VOption>
-              <VOption value="3">Value3</VOption>
-            </VSelect>
-            <div>{JSON.stringify(this.select)}</div>
+            }}
+            v-slots={{
+              default: (form) => {
+                return (
+                  <>
+                    <VTextarea
+                      label="VTextarea"
+                      required
+                      variant="outlined"
+                      // rows="5"
+                      autosize
+                      // autosize={{
+                      //   maxRows: 5,
+                      // }}
+                      v-model={this.textarea}
+                    />
+                    <VSelect
+                      label="VSelect"
+                      required
+                      variant="filled"
+                      v-model={this.select}
+                      name="select1"
+                      style={{ width: '240px' }}>
+                      <VOption>選択してください</VOption>
+                      <VOption value="1">Value1</VOption>
+                      <VOption value="2">Value2</VOption>
+                      <VOption value="3">Value3</VOption>
+                    </VSelect>
+                    <div>{JSON.stringify(this.select)}</div>
 
-            <VSwitch v-model={this.switch} name="xx-2">
-              Switch
-            </VSwitch>
+                    <VSwitch v-model={this.switch} name="xx-2">
+                      Switch
+                    </VSwitch>
 
-            <div>
-              <VCheckbox name="xxx" value="1" v-model={this.check} required>
-                チェックボックス
-              </VCheckbox>
-              <div>{JSON.stringify(this.check)}</div>
-            </div>
+                    <div>
+                      <VCheckbox
+                        name="xxx"
+                        value="1"
+                        v-model={this.check}
+                        required>
+                        チェックボックス
+                      </VCheckbox>
+                      <div>{JSON.stringify(this.check)}</div>
+                    </div>
 
-            <VTextField
-              label="Flat"
-              hint={() => 'This is flat.'}
-              required
-              placeholder="Placeholder"
-              endAdornment={
-                <VIcon
-                  name="stamper-off"
-                  onClick={(ev) => {
-                    console.log('ev', ev);
-                  }}
-                />
-              }
-            />
-            <VTextField
-              label="Filled"
-              hint={() => 'This is filled.'}
-              required
-              startAdornment="https://"
-              endAdornment={<VIcon name="bell" />}
-              variant="filled"></VTextField>
-            <VTextField
-              label="Outlined"
-              hint={() => 'This is outlined.'}
-              required
-              variant="outlined"></VTextField>
+                    <VTextField
+                      label="Flat"
+                      hint={() => 'This is flat.'}
+                      required
+                      placeholder="Placeholder"
+                      endAdornment={
+                        <VIcon
+                          name="stamper-off"
+                          onClick={(ev) => {
+                            console.log('ev', ev);
+                          }}
+                        />
+                      }
+                    />
+                    <VTextField
+                      label="Filled"
+                      hint={() => 'This is filled.'}
+                      required
+                      startAdornment="https://"
+                      endAdornment={<VIcon name="bell" />}
+                      variant="filled"></VTextField>
+                    <VTextField
+                      label="Outlined"
+                      hint={() => 'This is outlined.'}
+                      required
+                      variant="outlined"></VTextField>
 
-            <VTextField
-              label="ラベル"
-              hint={() => 'ヒント'}
-              name="fuga"
-              v-model={this.text}
-              required
-              mask={'+{7}(000)000-00-00'}>
-              テキスト
-            </VTextField>
-            <div>{JSON.stringify(this.text)}</div>
+                    <VTextField
+                      label="ラベル"
+                      hint={() => 'ヒント'}
+                      name="fuga"
+                      v-model={this.text}
+                      required
+                      mask={'+{7}(000)000-00-00'}>
+                      テキスト
+                    </VTextField>
+                    <div>{JSON.stringify(this.text)}</div>
 
-            <VCheckboxGroup
-              label="Checkbox Group"
-              v-model={this.checkGroup}
-              items={[
-                {
-                  value: '1',
-                  label: 'Value1',
-                },
-                {
-                  value: '2',
-                  label: 'Value2',
-                },
-                {
-                  value: '3',
-                  label: (hoge) => {
-                    return `Value3(${hoge.valid})`;
-                  },
-                  disabled: true,
-                },
-              ]}
-              required>
-              {/* <VCheckbox value="1">Value1</VCheckbox>
+                    <VCheckboxGroup
+                      label="Checkbox Group"
+                      v-model={this.checkGroup}
+                      items={[
+                        {
+                          value: '1',
+                          label: 'Value1',
+                        },
+                        {
+                          value: '2',
+                          label: 'Value2',
+                        },
+                        {
+                          value: '3',
+                          label: (hoge) => {
+                            return `Value3(${hoge.valid})`;
+                          },
+                          disabled: true,
+                        },
+                      ]}
+                      required>
+                      {/* <VCheckbox value="1">Value1</VCheckbox>
           <VCheckbox value="2">Value2</VCheckbox>
           <VCheckbox value="3">Value3</VCheckbox>
           <VCheckbox value="4">
             長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。
           </VCheckbox> */}
-            </VCheckboxGroup>
-            <div>{JSON.stringify(this.checkGroup)}</div>
+                    </VCheckboxGroup>
+                    <div>{JSON.stringify(this.checkGroup)}</div>
 
-            <VRadioGroup
-              label="Radio Group"
-              v-model={this.radioGroup}
-              required
-              name="radio"
-              items={[
-                {
-                  value: '1',
-                  label: 'Value1',
-                },
-                {
-                  value: '2',
-                  label: 'Value2',
-                },
-                {
-                  value: '3',
-                  label: (hoge) => {
-                    return `Value3(${hoge.valid})`;
-                  },
-                  disabled: true,
-                },
-              ]}></VRadioGroup>
-            <div>{JSON.stringify(this.radioGroup)}</div>
+                    <VRadioGroup
+                      label="Radio Group"
+                      v-model={this.radioGroup}
+                      required
+                      name="radio"
+                      items={[
+                        {
+                          value: '1',
+                          label: 'Value1',
+                        },
+                        {
+                          value: '2',
+                          label: 'Value2',
+                        },
+                        {
+                          value: '3',
+                          label: (hoge) => {
+                            return `Value3(${hoge.valid})`;
+                          },
+                          disabled: true,
+                        },
+                      ]}></VRadioGroup>
+                    <div>{JSON.stringify(this.radioGroup)}</div>
 
-            <VSwitchGroup
-              label="Checkbox Group"
-              v-model={this.switchGroup}
-              multiple
-              items={[
-                {
-                  value: '1',
-                  label: 'Value1',
-                },
-                {
-                  value: '2',
-                  label: 'Value2',
-                  // disabled: true,
-                },
-                {
-                  value: '3',
-                  label: (hoge) => {
-                    return `Value3(${hoge.valid})`;
-                  },
-                  disabled: true,
-                },
-              ]}
-              required>
-              {/* <VCheckbox value="1">Value1</VCheckbox>
+                    <VSwitchGroup
+                      label="Checkbox Group"
+                      v-model={this.switchGroup}
+                      multiple
+                      items={[
+                        {
+                          value: '1',
+                          label: 'Value1',
+                        },
+                        {
+                          value: '2',
+                          label: 'Value2',
+                          // disabled: true,
+                        },
+                        {
+                          value: '3',
+                          label: (hoge) => {
+                            return `Value3(${hoge.valid})`;
+                          },
+                          disabled: true,
+                        },
+                      ]}
+                      required>
+                      {/* <VCheckbox value="1">Value1</VCheckbox>
           <VCheckbox value="2">Value2</VCheckbox>
           <VCheckbox value="3">Value3</VCheckbox>
           <VCheckbox value="4">
             長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。長いvalueが入ります。
           </VCheckbox> */}
-            </VSwitchGroup>
-            <div>{JSON.stringify(this.switchGroup)}</div>
+                    </VSwitchGroup>
+                    <div>{JSON.stringify(this.switchGroup)}</div>
 
-            <button type="submit">送信</button>
-          </VForm>
+                    <VButton type="submit" disabled={form.isDisabled}>
+                      送信
+                    </VButton>
+                  </>
+                );
+              },
+            }}></VForm>
 
           <hr />
           <RouterLink to="/">Home</RouterLink>

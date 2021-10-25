@@ -15,7 +15,7 @@ export interface ScrollToElementSettings {
    * 要素へスクロールする際、そのスクロール先をずらす際に設定します。<br>
    * x, y 個別に設定が可能ですが、シングルのnumberのみを指定した場合、x, y のそれぞれのオプションが有効な場合にのみその軸に設定されます。
    */
-  offset: number | { x: number; y: number };
+  offset: number | { x?: number; y?: number };
 
   /**
    * 横スクロールの可否を示します。
@@ -87,10 +87,14 @@ export function scrollToElement(
   const initialX = $container.scrollLeft;
 
   const targetY =
-    cumulativeOffsetTarget.top - cumulativeOffsetContainer.top + offset.y;
+    cumulativeOffsetTarget.top -
+    cumulativeOffsetContainer.top +
+    (offset.y || 0);
 
   const targetX =
-    cumulativeOffsetTarget.left - cumulativeOffsetContainer.left + offset.x;
+    cumulativeOffsetTarget.left -
+    cumulativeOffsetContainer.left +
+    (offset.x || 0);
 
   const diffX = x ? targetX - initialX : 0;
   const diffY = y ? targetY - initialY : 0;

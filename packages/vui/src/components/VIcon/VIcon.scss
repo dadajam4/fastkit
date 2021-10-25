@@ -1,9 +1,10 @@
 .v-icon {
-  user-select: none;
   // -webkit-user-drag: none;
+  // pointer-events: none;
+  user-select: none;
 
   &--clickable {
-    pointer-events: auto;
+    // pointer-events: auto;
     cursor: pointer;
   }
 

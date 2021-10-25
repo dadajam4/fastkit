@@ -17,6 +17,7 @@ export const VuiColorProviderInjectionKey: InjectionKey<VuiColorProvider> =
   Symbol();
 
 export const VUI_TEXT_FIELD_SYMBOL = 'vui-text-field';
+export const VUI_TEXTAREA_SYMBOL = 'vui-textarea';
 export const VUI_SELECT_SYMBOL = 'vui-select';
 export const VUI_OPTION_SYMBOL = 'vui-option';
 export const VUI_CHECKBOX_GROUP_SYMBOL = 'vui-checkbox-group';

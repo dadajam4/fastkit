@@ -6,7 +6,7 @@ import {
   FormControlSlots,
   defineSlotsProps,
 } from '@fastkit/vue-kit';
-import { useVuiColorProvider } from '../../composables';
+import { useVuiColorProvider, useVui } from '../../composables';
 
 const { props, emits } = createFormControlSettings();
 
@@ -25,6 +25,7 @@ export const VFormControl = defineComponent({
     const control = useFormControl(props, ctx);
     ctx.expose(control.expose());
 
+    const vui = useVui();
     const colorProvider = useVuiColorProvider();
 
     const classes = computed(() => [
@@ -41,7 +42,9 @@ export const VFormControl = defineComponent({
         'v-form-control--invalid': control.invalid,
         'v-form-control--valid': control.valid,
       },
-      colorProvider.className(control.invalid ? 'error' : 'primary'),
+      colorProvider.className(
+        control.invalid && !control.readonly ? 'error' : 'primary',
+      ),
     ]);
 
     return () => {
@@ -57,6 +60,7 @@ export const VFormControl = defineComponent({
                 ctx.emit('clickLabel', ev, control);
               }}>
               {label}
+              {control.required && vui.getRequiredChip()}
             </label>
           )}
           <div class="v-form-control__body">

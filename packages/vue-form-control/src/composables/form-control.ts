@@ -14,6 +14,8 @@ import {
 } from '@fastkit/vue-utils';
 import { FormNodeControl, FormNodeError } from './node';
 
+const EMPTY_MESSAGE = '\xa0'; // for keep height
+
 export function createFormControlProps() {
   return {
     ...createPropsOptions({
@@ -224,8 +226,10 @@ export class FormControl {
     this._untouched = computed(() =>
       getPropOrNodeControlValue('untouched', 'untouched'),
     );
-    this._required = computed(() =>
-      getPropOrNodeControlValue('required', 'isRequired'),
+    this._required = computed(
+      () =>
+        getPropOrNodeControlValue('required', 'isRequired') ||
+        (!!nc.value && nc.value.hasRequired),
     );
     this._invalid = computed(() =>
       getPropOrNodeControlValue('invalid', 'invalid'),
@@ -260,7 +264,7 @@ export class FormControl {
   }
 
   renderFirstError() {
-    if (this.disabled) {
+    if (this.disabled || this.readonly) {
       return;
     }
     const { firstError } = this;
@@ -274,9 +278,10 @@ export class FormControl {
   }
 
   renderMessage() {
+    if (this.disabled || this.readonly) return EMPTY_MESSAGE;
     const error = this.renderFirstError();
     if (error) return error;
-    return this.renderHint() || '\xa0'; // for keep height
+    return this.renderHint() || EMPTY_MESSAGE;
   }
 
   expose() {

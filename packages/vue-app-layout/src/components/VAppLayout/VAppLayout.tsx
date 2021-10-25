@@ -19,8 +19,14 @@ import {
   defineSlotsProps,
 } from '@fastkit/vue-utils';
 import { useRouter } from 'vue-router';
+import {
+  resizeDirectiveArgument,
+  ResizeDirectivePayload,
+} from '@fastkit/vue-utils';
 
 const VERTICAL_POSITIONS = ['header', 'footer'] as const;
+
+const VIEWPORT_OFFSETS = ['top', 'bottom'] as const;
 
 export interface VAppLayoutVertialProps {
   tag?: string;
@@ -101,8 +107,16 @@ export const VAppLayout = defineComponent({
       control.closeDrawer();
     });
 
+    const handleResizeDetector = (
+      key: typeof VIEWPORT_OFFSETS[number],
+      size: number,
+    ) => {
+      control.viewportOffsets[key] = size;
+    };
+
     return {
       control,
+      handleResizeDetector,
     };
   },
   render() {
@@ -236,6 +250,21 @@ export const VAppLayout = defineComponent({
         {footer}
         {headerBar}
         {footerBar}
+        <div class="v-app-layout__size-detect" aria-hidden>
+          {VIEWPORT_OFFSETS.map((offset) =>
+            withDirectives(
+              <div
+                class={`v-app-layout__size-detect__viewport-${offset}`}
+                key={offset}
+              />,
+              [
+                resizeDirectiveArgument((payload) => {
+                  this.handleResizeDetector(offset, payload.width);
+                }),
+              ],
+            ),
+          )}
+        </div>
       </div>
     );
   },

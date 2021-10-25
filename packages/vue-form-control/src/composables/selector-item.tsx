@@ -254,7 +254,7 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
         onFocus={this.focusHandler}
         onBlur={this.blurHandler}
         readonly={this.isReadonly}
-        disabled={this.isDisabled}
+        disabled={this.isDisabled || this.isReadonly}
         // v-model={this.selected}
         checked={this.selected}
         onChange={(ev) => {

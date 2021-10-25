@@ -11,8 +11,11 @@ import {
   provide,
   inject,
   onBeforeMount,
+  onMounted,
   onBeforeUnmount,
   UnwrapRef,
+  getCurrentInstance,
+  ComponentInternalInstance,
 } from 'vue';
 
 import {
@@ -192,6 +195,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _hasInvalidChild: ComputedRef<boolean>;
   protected _tabindex: ComputedRef<number>;
   protected _submiting: ComputedRef<boolean>;
+  protected _cii: ComponentInternalInstance | null = null;
 
   get name() {
     return this._name.value;
@@ -247,6 +251,18 @@ export class FormNodeControl<T = any, D = T> {
 
   get invalidChildren() {
     return this._invalidChildren.value as unknown as FormNodeControl<any>[];
+  }
+
+  get firstInvalidChild(): FormNodeControl | undefined {
+    return this.invalidChildren[0];
+  }
+
+  get firstInvalidEl() {
+    const { firstInvalidChild } = this;
+    if (firstInvalidChild) {
+      return firstInvalidChild.currentEl;
+    }
+    return null;
   }
 
   get validationErrors() {
@@ -373,6 +389,15 @@ export class FormNodeControl<T = any, D = T> {
     return this._submiting.value;
   }
 
+  get currentInstance() {
+    return this._cii;
+  }
+
+  get currentEl() {
+    const { currentInstance } = this;
+    return currentInstance && (currentInstance.vnode.el as HTMLElement | null);
+  }
+
   constructor(
     props: FormNodeProps,
     ctx: FormNodeContext<T, D>,
@@ -390,6 +415,10 @@ export class FormNodeControl<T = any, D = T> {
 
     this._parentNode = parentNode;
     this._parentForm = parentForm;
+
+    onMounted(() => {
+      this._cii = getCurrentInstance();
+    });
 
     provide(FormNodeInjectionKey, this);
 
@@ -588,6 +617,7 @@ export class FormNodeControl<T = any, D = T> {
       this.resetSelfValidates();
       this._parentNode = null;
       this._parentForm = null;
+      this._cii = null;
       this._isDestroyed = true;
       delete (this as any)._ctx;
     });

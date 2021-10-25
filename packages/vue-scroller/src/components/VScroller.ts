@@ -1,5 +1,5 @@
 import { defineComponent, PropType, ExtractPropTypes } from 'vue';
-import { useScroller, UseScrollerSetting } from '../hooks';
+import { useScrollerControl, UseScrollerSetting } from '../composables';
 import { ExtractPropInput } from '@fastkit/vue-utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -21,7 +21,7 @@ export const VScroller = defineComponent({
   props: scrollerProps,
   setup(props, ctx) {
     const settings = props.settings || {};
-    const scroller = useScroller({
+    const scroller = useScrollerControl({
       ...settings,
       el: settings.el || 'body',
     });

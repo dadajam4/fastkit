@@ -1,22 +1,18 @@
 @use '../../styles/core.scss';
 
-.v-text-field {
+.v-textarea {
   &__input {
     cursor: text;
 
     &__element {
       width: 100%;
       min-width: 0;
-      // width: calc(100% - 8px);
-      padding: 0;
+      padding: 8px 0;
       margin: 0;
-      overflow: hidden;
-      // margin: 0 8px;
       font-size: inherit;
       line-height: inherit;
-      text-overflow: ellipsis;
       letter-spacing: inherit;
-      white-space: nowrap;
+      resize: none;
       background: transparent;
       border: 0;
       border-radius: 0;

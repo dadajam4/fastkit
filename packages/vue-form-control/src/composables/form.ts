@@ -1,13 +1,13 @@
 import {
   ExtractPropTypes,
   SetupContext,
-  inject,
   provide,
   PropType,
   ComputedRef,
   computed,
   ref,
   onBeforeUnmount,
+  watch,
 } from 'vue';
 import { createPropsOptions } from '@fastkit/vue-utils';
 import {
@@ -40,6 +40,7 @@ export function createFormProps(options: FormOptions = {}) {
         type: Boolean,
         default: true,
       },
+      submiting: Boolean,
     }),
   };
 }
@@ -50,6 +51,7 @@ export function createFormEmits() {
   return {
     ...createFormNodeEmits(),
     submit: (form: VueForm, ev: Event) => true,
+    'update:submiting': (submiting: boolean, form: VueForm) => true,
   };
 }
 
@@ -64,8 +66,10 @@ export interface FormEmitOptions extends ReturnType<typeof createFormEmits> {}
 
 export type FormContext = SetupContext<FormEmitOptions>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FormOptions extends FormNodeControlBaseOptions {}
+export type VueFormHook = (form: VueForm) => any;
+export interface FormOptions extends FormNodeControlBaseOptions {
+  onAutoValidateError?: VueFormHook;
+}
 
 export class VueForm extends FormNodeControl {
   protected _formContext: FormContext;
@@ -75,6 +79,7 @@ export class VueForm extends FormNodeControl {
   protected _formRef = ref<HTMLFormElement | null>(null);
   protected _actionPromise = ref<Promise<any> | null>(null);
   protected _submiting: ComputedRef<boolean>;
+  protected _onAutoValidateError?: VueFormHook;
 
   get submiting() {
     return this._submiting.value;
@@ -99,9 +104,11 @@ export class VueForm extends FormNodeControl {
       return undefined;
     });
     this._submiting = computed(() => this._actionPromise.value !== null);
+    this._onAutoValidateError = options.onAutoValidateError;
 
     onBeforeUnmount(() => {
       this._actionPromise.value = null;
+      delete this._onAutoValidateError;
       delete (this as any)._formContext;
     });
 
@@ -109,6 +116,13 @@ export class VueForm extends FormNodeControl {
       const _fn = this[fn];
       this[fn] = _fn.bind(this) as any;
     });
+
+    watch(
+      () => this._submiting.value,
+      (submiting) => {
+        ctx.emit('update:submiting', submiting, this);
+      },
+    );
 
     provide(FormInjectionKey, this);
   }
@@ -141,10 +155,13 @@ export class VueForm extends FormNodeControl {
 
   async handleSubmit(ev: Event) {
     ev.preventDefault();
-    if (this.submiting) return;
+    if (this.submiting || this.isDisabled || this.isReadonly) return;
     if (this.autoValidate) {
       const valid = await this.validate();
-      if (!valid) return;
+      if (!valid) {
+        this._onAutoValidateError && this._onAutoValidateError(this);
+        return;
+      }
     }
     this._formContext.emit('submit', this, ev);
     this._doAction(ev);

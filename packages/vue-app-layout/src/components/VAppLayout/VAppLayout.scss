@@ -32,6 +32,8 @@
   @each $vertial-position in $vertial-positions {
     $vec: if($vertial-position == header, top, bottom);
 
+    // stylelint-disable-next-line prettier/prettier
+    --v-app-layout-viewport-#{$vec}: calc(var(--v-app-layout-#{$vertial-position}-offset) + var(--v-app-layout-#{$vertial-position}-bar-offset));
     --v-app-layout-#{$vertial-position}-offset: 0px;
     --v-app-layout-#{$vertial-position}-bar-offset: 0px;
 
@@ -70,12 +72,12 @@
     }
   }
 
-  $viewport-top-offset: calc(
-    var(--v-app-layout-header-offset) + var(--v-app-layout-header-bar-offset)
-  );
-  $viewport-bottom-offset: calc(
-    var(--v-app-layout-footer-offset) + var(--v-app-layout-footer-bar-offset)
-  );
+  // $viewport-top-offset: calc(
+  //   var(--v-app-layout-header-offset) + var(--v-app-layout-header-bar-offset)
+  // );
+  // $viewport-bottom-offset: calc(
+  //   var(--v-app-layout-footer-offset) + var(--v-app-layout-footer-bar-offset)
+  // );
 
   display: flex;
   flex-direction: column;
@@ -122,8 +124,8 @@
     flex: 1 1 100%;
     flex-direction: column;
     align-items: stretch;
-    padding-top: $viewport-top-offset;
-    padding-bottom: $viewport-bottom-offset;
+    padding-top: var(--v-app-layout-viewport-top);
+    padding-bottom: var(--v-app-layout-viewport-bottom);
   }
 
   &__header,
@@ -199,6 +201,26 @@
     &-enter-from,
     &-leave-to {
       transform: translateX(var(--v-app-layout-drawer-transition-to));
+    }
+  }
+
+  &__size-detect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateZ(0);
+
+    &__viewport-top {
+      width: var(--v-app-layout-viewport-top);
+    }
+
+    &__viewport-bottom {
+      width: var(--v-app-layout-viewport-bottom);
     }
   }
 }

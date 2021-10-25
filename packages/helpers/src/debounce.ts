@@ -67,7 +67,7 @@ export function debounce<FN extends Debouncable = Debouncable>(
     immediateOption,
   );
   const { handler, immediate } = resolved;
-  let { delay = 100 } = resolved;
+  let { delay = 166 } = resolved;
 
   let booted = false;
   let timerId: number | NodeJS.Timer | undefined;

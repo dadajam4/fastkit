@@ -7,7 +7,7 @@
   --my-label-color: var(--control-label-color);
   --my-message-color: var(--control-message-color);
 
-  &--invalid {
+  &--invalid:not(#{&}--readonly) {
     --my-label-color: var(--main-color);
     --my-message-color: var(--main-color);
   }

@@ -42,6 +42,7 @@ export const VRadio = defineComponent({
         checked={this.selected}
         invalid={this.invalid}
         disabled={this.isDisabled}
+        readonly={this.isReadonly}
         v-slots={{
           input: () => nodeControl.createInputElement({ type: 'radio' }),
           faux: () => <span class="v-radio__faux"></span>,

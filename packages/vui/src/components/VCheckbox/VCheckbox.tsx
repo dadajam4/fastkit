@@ -49,6 +49,7 @@ export const VCheckbox = defineComponent({
         checked={this.selected || isIndeterminate}
         invalid={this.invalid}
         disabled={this.isDisabled}
+        readonly={this.isReadonly}
         v-slots={{
           input: () => nodeControl.createInputElement({ type: 'checkbox' }),
           faux: () => <span class="v-checkbox__faux"></span>,

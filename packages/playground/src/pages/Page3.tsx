@@ -8,6 +8,7 @@ import {
   VOption,
   VTextField,
   VButton,
+  VTextarea,
 } from '@fastkit/vui';
 
 const component = defineComponent({
@@ -54,7 +55,10 @@ const component = defineComponent({
 
         <div style={{ flex: '1 1 100%' }}>
           <VSwitch v-model={this.switch}>test</VSwitch>
-          <VTextField v-model={this.text}></VTextField>
+          <VTextField
+            size={this.size}
+            disabled={this.disabled}
+            v-model={this.text}></VTextField>
           <VButton>hello</VButton>
           <VSelect
             label="VSelect"
@@ -82,6 +86,15 @@ const component = defineComponent({
             <VOption value="3">Value3</VOption>
           </VSelect>
           <div>{JSON.stringify(this.select)}</div>
+          <VTextarea
+            size={this.size}
+            disabled={this.disabled}
+            label="VTextarea"
+            required
+            rows="5"
+            variant="outlined"
+            autosize
+          />
         </div>
       </div>
     );

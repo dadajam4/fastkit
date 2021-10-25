@@ -3,10 +3,12 @@ import {
   InjectionKey,
   provide,
   inject,
+  onMounted,
   onBeforeUnmount,
   computed,
   ComputedRef,
 } from 'vue';
+import { getDocumentScroller } from '@fastkit/vue-scroller';
 
 export type VAppLayoutControlBackdropCondition = () => boolean;
 
@@ -31,6 +33,10 @@ export interface VAppLayoutControlState {
     VAppLayoutControlBackdropPosition,
     VAppLayoutControlBackdropCondition[]
   >;
+  viewportOffsets: {
+    top: number;
+    bottom: number;
+  };
 }
 
 export type VAppLayoutControlConditionalFn = () => boolean;
@@ -72,6 +78,10 @@ export class VAppLayoutControl {
 
   get drawerIsStatic() {
     return this.computedDrawerIsStatic.value;
+  }
+
+  get viewportOffsets() {
+    return this.state.viewportOffsets;
   }
 
   onClickBackdrop(handler: VAppLayoutControlBackdropHandler) {
@@ -141,6 +151,10 @@ export class VAppLayoutControl {
     });
   }
 
+  private _scrollerOffset() {
+    return -this.viewportOffsets.top;
+  }
+
   constructor(props: VAppLayoutControlProps) {
     this.state = reactive<VAppLayoutControlState>({
       drawerActive: false,
@@ -149,6 +163,10 @@ export class VAppLayoutControl {
         drawer: [],
         systembar: [],
         cover: [],
+      },
+      viewportOffsets: {
+        top: 0,
+        bottom: 0,
       },
     });
 
@@ -167,7 +185,15 @@ export class VAppLayoutControl {
       return computedDrawerStatic;
     });
 
+    this._scrollerOffset = this._scrollerOffset.bind(this);
+
     provide(VAppLayoutControl.injectionKey, this);
+
+    onMounted(() => {
+      _globalLayoutControl = this;
+      const scroller = getDocumentScroller();
+      scroller.setScrollToElementAddtionalOffset(this._scrollerOffset);
+    });
 
     onBeforeUnmount(() => {
       this.destroy();
@@ -178,5 +204,10 @@ export class VAppLayoutControl {
     this.closeDrawer();
     this.backdropHandlers = [];
     this.releaseBackdrops();
+    _globalLayoutControl = undefined;
+    const scroller = getDocumentScroller();
+    scroller.deleteScrollToElementAddtionalOffset();
   }
 }
+
+let _globalLayoutControl: VAppLayoutControl | undefined;

@@ -85,3 +85,39 @@ export function createPropsOptions<
 >(opts: PropsOptions): PropsOptions {
   return opts;
 }
+
+export type Booleanish = boolean | 'true' | 'false';
+
+export const BooleanishPropOption = {
+  type: [Boolean, String] as PropType<Booleanish>,
+  default: false,
+};
+
+export function resolveBooleanish(
+  source: Booleanish | undefined,
+  defaultValue = false,
+): boolean {
+  if (source == null) return defaultValue;
+  return typeof source === 'boolean' ? source : JSON.parse(source);
+}
+
+export type Numberish = string | number;
+
+export const NumberishPropOption = {
+  type: [Number, String] as PropType<Numberish>,
+};
+
+export function resolveNumberish<
+  T extends Numberish | undefined,
+  D extends number | undefined = undefined,
+>(
+  source: T,
+  defaultValue?: D,
+): D extends number
+  ? number
+  : T extends undefined
+  ? number | undefined
+  : number {
+  if (source == null) return defaultValue as any;
+  return typeof source === 'number' ? source : Number(source);
+}

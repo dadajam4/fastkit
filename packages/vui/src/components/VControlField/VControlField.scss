@@ -7,6 +7,8 @@
   height: var(--control-field-height);
   padding: 0 8px;
   font-size: var(--control-field-font-size);
+  line-height: var(--control-field-line-height);
+  letter-spacing: var(--control-field-letter-spacing);
 
   --my-bottom-color: var(--control-field-bottom-color);
   --my-bottom-hover-color: var(--control-field-bottom-hover-color);
@@ -16,11 +18,16 @@
   --my-outline-color: var(--control-field-outline-color);
   --my-outline-hover-color: var(--control-field-outline-hover-color);
 
-  &--invalid:not(#{&}--disabled) {
+  &--invalid:not(#{&}--disabled):not(#{&}--readonly) {
     --my-bottom-color: var(--main-color);
     --my-bottom-hover-color: var(--main-color);
     --my-outline-color: var(--main-color);
     --my-outline-hover-color: var(--main-color);
+  }
+
+  &--readonly {
+    // pointer-events: none !important;
+    cursor: default;
   }
 
   &--disabled {
@@ -72,6 +79,10 @@
   //   }
   // }
 
+  &--auto-height {
+    height: auto;
+  }
+
   &__body {
     display: flex;
     flex: 1 1 auto;
@@ -79,7 +90,7 @@
     align-self: stretch;
     // margin: 0 8px;
     margin: 0;
-    pointer-events: none;
+    // pointer-events: none;
 
     // color: #f00;
 
@@ -153,16 +164,16 @@
   }
 
   &__adornment {
-    pointer-events: none;
+    // pointer-events: none;
 
     $my-offset: 0.25em;
 
     &--start {
-      margin-right: $my-offset;
+      padding-right: $my-offset;
     }
 
     &--end {
-      margin-left: $my-offset;
+      padding-left: $my-offset;
     }
 
     .v-icon {

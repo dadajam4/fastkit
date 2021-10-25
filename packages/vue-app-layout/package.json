@@ -27,6 +27,7 @@
     "vue-router": "^4.0.5"
   },
   "dependencies": {
-    "@fastkit/vue-utils": "0.2.13"
+    "@fastkit/vue-utils": "0.2.13",
+    "@fastkit/vue-scroller": "0.2.13"
   }
 }

@@ -5,8 +5,9 @@ import {
   useForm,
   defineSlotsProps,
   renderSlotOrEmpty,
+  getDocumentScroller,
 } from '@fastkit/vue-kit';
-import { createControlProps, useControl } from '../../composables';
+import { createControlProps, useControl, useVui } from '../../composables';
 import { VUI_FORM_SYMBOL } from '../../injections';
 
 const { props, emits } = createFormSettings({
@@ -26,8 +27,17 @@ export const VForm = defineComponent({
   },
   emits,
   setup(props, ctx) {
+    const vui = useVui();
     const nodeControl = useForm(props, ctx as any, {
       nodeType: VUI_FORM_SYMBOL,
+      onAutoValidateError: () => {
+        const scroller = getDocumentScroller();
+        const { firstInvalidEl } = nodeControl;
+        firstInvalidEl &&
+          scroller.toElement(firstInvalidEl, {
+            offset: vui.getAutoScrollToElementOffsetTop(),
+          });
+      },
     });
     const classes = computed(() => {
       return [

@@ -39,6 +39,11 @@ import { defaultBaseSettings } from './scroll/schemes';
 
 export * from './scroll';
 
+export type ScrollToElementAddtionalOffset =
+  | number
+  | { x?: number; y?: number }
+  | ((scroller: Scroller) => number | { x?: number; y?: number } | undefined);
+
 /**
  * [[Scroller]]を任意のElementまでスクロールさせる際のオプションです。
  * 詳細は [[ScrollerScrollOptions]] 及び、 [[ScrollToElementSettings]] を参照してください。
@@ -692,6 +697,20 @@ export class Scroller extends EV<ScrollerEventMap> {
     this._setup();
   }
 
+  private _scrollToElementAddtionalOffset:
+    | ScrollToElementAddtionalOffset
+    | undefined;
+
+  setScrollToElementAddtionalOffset(
+    offset: ScrollToElementAddtionalOffset | undefined,
+  ) {
+    this._scrollToElementAddtionalOffset = offset;
+  }
+
+  deleteScrollToElementAddtionalOffset() {
+    delete this._scrollToElementAddtionalOffset;
+  }
+
   /**
    * インスタンスが実行可能になった際にresolveされるPromiseインスタンスを返却します。
    */
@@ -751,6 +770,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     delete (this as any)._scrollToResult;
     delete (this as any)._visibilityListener;
 
+    this.deleteScrollToElementAddtionalOffset();
     this._setState(ScrollerState.Destroyed);
     this.offAll();
   }
@@ -1389,6 +1409,33 @@ export class Scroller extends EV<ScrollerEventMap> {
       ...this.scrollToElementSettingsDefaults,
       ...source,
     };
+    let { _scrollToElementAddtionalOffset: addtionalOffset } = this;
+    if (!addtionalOffset) return merged;
+    if (typeof addtionalOffset === 'function') {
+      addtionalOffset = addtionalOffset(this);
+    }
+    if (!addtionalOffset) return merged;
+    if (typeof addtionalOffset === 'number') {
+      addtionalOffset = {
+        x: addtionalOffset,
+        y: addtionalOffset,
+      };
+    }
+    let { offset } = merged;
+    if (!offset) {
+      merged.offset = addtionalOffset;
+      return merged;
+    }
+    if (typeof offset === 'number') {
+      offset = {
+        x: offset,
+        y: offset,
+      };
+    }
+
+    offset.x = (offset.x || 0) + (addtionalOffset.x || 0);
+    offset.y = (offset.y || 0) + (addtionalOffset.y || 0);
+    merged.offset = offset;
     return merged;
   }
 

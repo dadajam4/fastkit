@@ -15,7 +15,7 @@
   cursor: pointer;
   user-select: none;
 
-  &--invalid {
+  &--invalid:not(#{&}--readonly) {
     --color: var(--main-color);
   }
 
@@ -23,6 +23,11 @@
     --color: var(--control-disabled-color);
     // --color: var(--main-color);
 
+    pointer-events: none;
+    cursor: default;
+  }
+
+  &--readonly {
     pointer-events: none;
     cursor: default;
   }

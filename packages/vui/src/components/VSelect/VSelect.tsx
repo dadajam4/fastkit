@@ -137,8 +137,8 @@ export const VSelect = defineComponent({
                     endAdornment={this.endAdornment}
                     // tabindex={this.computedTabindex}
                     focused={this.menuOpened}
-                    onClickHost={(ev) => {
-                      if (!control.isActive) {
+                    onClick={(ev) => {
+                      if (this.canOperation && !control.isActive) {
                         control.show(ev);
                       }
                     }}

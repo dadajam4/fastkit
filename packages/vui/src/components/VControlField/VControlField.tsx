@@ -54,11 +54,12 @@ export const VControlField = defineComponent({
   props: {
     ...createControlFieldProps(),
     focused: Boolean,
+    autoHeight: Boolean,
     ...defineSlotsProps<InputBoxSlots>(),
   },
   // _slots: inputBoxSlots,
   emits: {
-    clickHost: (ev: MouseEvent) => true,
+    click: (ev: MouseEvent) => true,
   },
   setup(props, ctx) {
     const parentNode = useParentFormNode();
@@ -68,9 +69,11 @@ export const VControlField = defineComponent({
 
     const disabled = computed(() => !!parentNode && parentNode.isDisabled);
     const invalid = computed(() => !!parentNode && parentNode.invalid);
-    const computedTabindex = computed(() =>
-      disabled.value ? -1 : props.tabindex,
-    );
+    const autoHeight = computed(() => props.autoHeight);
+    const readonly = computed(() => !!parentNode && parentNode.isReadonly);
+    // const computedTabindex = computed(() =>
+    //   disabled.value ? -1 : props.tabindex,
+    // );
     // const isOutlined = computed(() => inputBox.variant.value === 'outlined');
     const colorProvider = useVuiColorProvider();
 
@@ -81,10 +84,14 @@ export const VControlField = defineComponent({
         {
           'v-control-field--disabled': disabled.value,
           'v-control-field--invalid': invalid.value,
+          'v-control-field--readonly': readonly.value,
           'v-control-field--focused': props.focused,
+          'v-control-field--auto-height': autoHeight.value,
         },
         control.classes.value,
-        colorProvider.className(invalid.value ? 'error' : 'primary'),
+        colorProvider.className(
+          invalid.value && !readonly.value ? 'error' : 'primary',
+        ),
       ];
       return classes;
     });
@@ -113,9 +120,10 @@ export const VControlField = defineComponent({
     };
 
     const handleClick = (ev: MouseEvent) => {
-      if (ev.target === hostElRef.value) {
-        ctx.emit('clickHost', ev);
-      }
+      ctx.emit('click', ev);
+      // if (ev.target === hostElRef.value) {
+      //   ctx.emit('clickHost', ev);
+      // }
     };
 
     return {
@@ -123,7 +131,7 @@ export const VControlField = defineComponent({
       renderAdornment,
       hostElRef: () => hostElRef,
       handleClick,
-      computedTabindex,
+      // computedTabindex,
     };
   },
   render() {
@@ -131,7 +139,7 @@ export const VControlField = defineComponent({
       <div
         class={this.classes}
         onClick={this.handleClick}
-        tabindex={this.computedTabindex}
+        // tabindex={this.computedTabindex}
         ref={this.hostElRef()}>
         {this.renderAdornment('start')}
         <div class="v-control-field__body">

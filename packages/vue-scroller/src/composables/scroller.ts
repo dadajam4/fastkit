@@ -19,6 +19,7 @@ import {
   ScrollerScrollToElementOptions,
   ScrollToSideTargets,
   ScrollStopper,
+  ScrollToElementAddtionalOffset,
 } from '@fastkit/scroller';
 
 export type UseScrollerTarget = 'self' | 'body';
@@ -89,7 +90,7 @@ function createDefaultState(): UseScrollerState {
   ) as UseScrollerState;
 }
 
-export function useScroller(setting: UseScrollerSetting) {
+export function useScrollerControl(setting: UseScrollerSetting) {
   const isSelf = setting.el === 'self';
   const $target = isSelf ? null : undefined;
   const state = createDefaultState();
@@ -272,6 +273,16 @@ export function useScroller(setting: UseScrollerSetting) {
     removeScrollStopper(stopper: ScrollStopper) {
       return scroller.removeScrollStopper(stopper);
     },
+
+    setScrollToElementAddtionalOffset(
+      offset: ScrollToElementAddtionalOffset | undefined,
+    ) {
+      return scroller.setScrollToElementAddtionalOffset(offset);
+    },
+
+    deleteScrollToElementAddtionalOffset() {
+      return scroller.deleteScrollToElementAddtionalOffset();
+    },
   };
 
   if (isSelf) {
@@ -293,4 +304,13 @@ export function useScroller(setting: UseScrollerSetting) {
   return _scroller;
 }
 
-export type UseScroller = ReturnType<typeof useScroller>;
+export type UseScroller = ReturnType<typeof useScrollerControl>;
+
+let _documentScroller: UseScroller | undefined;
+
+export function getDocumentScroller() {
+  if (!_documentScroller) {
+    _documentScroller = useScrollerControl({ el: 'body' });
+  }
+  return _documentScroller;
+}
