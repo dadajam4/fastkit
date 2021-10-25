@@ -211,3 +211,7 @@ export class VAppLayoutControl {
 }
 
 let _globalLayoutControl: VAppLayoutControl | undefined;
+
+export function getGlobalLayoutControl() {
+  return _globalLayoutControl;
+}
