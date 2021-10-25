@@ -28,6 +28,8 @@
   "dependencies": {
     "@fastkit/helpers": "0.2.13",
     "@fastkit/rules": "0.2.13",
-    "@fastkit/vue-utils": "0.2.13"
+    "@fastkit/tiny-logger": "0.2.13",
+    "@fastkit/vue-utils": "0.2.13",
+    "imask": "^6.2.2"
   }
 }

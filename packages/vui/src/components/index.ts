@@ -12,4 +12,4 @@ export * from './VSelect';
 export * from './VTextField';
 export * from './VTextarea';
 export * from './VForm';
-export { VDialog, VMenu, VSnackbar } from '@fastkit/vue-stack';
+export { VDialog, VMenu, VSnackbar } from '@fastkit/vue-kit';

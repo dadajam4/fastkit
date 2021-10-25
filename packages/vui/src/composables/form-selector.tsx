@@ -1,14 +1,15 @@
 import './form-selector.scss';
 import { VNodeChild, renderSlot, defineComponent } from 'vue';
-import { defineSlotsProps, TypedSlot } from '@fastkit/vue-utils';
 import {
+  defineSlotsProps,
+  TypedSlot,
   createFormControlProps,
   createFormSelectorSettings,
   FormControlSlots,
   useFormSelectorControl,
   ResolvedFormSelectorItemData,
   FormNodeControl,
-} from '@fastkit/vue-form-control';
+} from '@fastkit/vue-kit';
 import { createControlProps, useControl } from './control';
 import { VFormControl } from '../components/VFormControl';
 

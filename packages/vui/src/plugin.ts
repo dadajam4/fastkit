@@ -3,9 +3,8 @@ import { VuiService, VuiServiceOptions, VuiInjectionKey } from './service';
 import {
   installVueStackPlugin,
   VueStackServiceOptions,
-} from '@fastkit/vue-stack';
-import { VueColorSchemePlugin } from '@fastkit/vue-color-scheme';
-
+  VueColorSchemePlugin,
+} from '@fastkit/vue-kit';
 export interface VuiPluginStackOptions
   extends Omit<VueStackServiceOptions, 'primaryColor'> {
   primaryColor?: VueStackServiceOptions['primaryColor'];

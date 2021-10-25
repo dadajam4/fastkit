@@ -5,8 +5,9 @@ import {
   useFormSelectorItemGroupControl,
   FormSelectorItemGroupControl,
   defineSlotsProps,
+  VNodeChildOrSlot,
+  resolveVNodeChildOrSlots,
 } from '@fastkit/vue-kit';
-import { VNodeChildOrSlot, resolveVNodeChildOrSlots } from '@fastkit/vue-utils';
 import { VUI_SELECT_SYMBOL } from '../../injections';
 
 export const VOptionGroup = defineComponent({

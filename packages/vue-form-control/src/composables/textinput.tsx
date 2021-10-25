@@ -21,7 +21,7 @@ import { TextInputType, IMaskTypedValue, IMaskEvent } from '../schemes';
 import { AnyMaskedOptions } from 'imask';
 import { notEmptyValue } from '@fastkit/helpers';
 import { createMaskControlProps } from './imask';
-import { useIMaskControl } from '@fastkit/vue-kit';
+import { useIMaskControl } from './imask';
 
 export function createTextInputProps() {
   return {

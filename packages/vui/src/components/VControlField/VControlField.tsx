@@ -1,14 +1,14 @@
 import './VControlField.scss';
 import { computed, PropType, renderSlot, ref, defineComponent } from 'vue';
 import {
+  useParentFormNode,
   renderSlotOrEmpty,
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
   TypedSlot,
   createPropsOptions,
   defineSlotsProps,
-} from '@fastkit/vue-utils';
-import { useParentFormNode } from '@fastkit/vue-kit';
+} from '@fastkit/vue-kit';
 import {
   createControlProps,
   useControl,
