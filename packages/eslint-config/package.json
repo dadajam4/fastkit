@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/eslint-config",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "@fastkit/eslint-config",
   "buildOptions": {
     "ignore": true
