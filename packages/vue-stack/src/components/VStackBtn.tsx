@@ -67,11 +67,25 @@ const VStackBtnImpl = defineComponent({
   },
 });
 
-export const VStackBtn = VStackBtnImpl as typeof VStackBtnImpl & {
+// export const VStackBtn = VStackBtnImpl as typeof VStackBtnImpl & {
+//   new (): {
+//     $props: VStackBtnProps;
+//     $emits: {
+//       click: (ev: MouseEvent) => true;
+//     };
+//   };
+// };
+
+// type Fuga = typeof VStackBtnImpl['emits'];
+
+export const VStackBtn = VStackBtnImpl as unknown as {
   new (): {
     $props: VStackBtnProps;
+    $emits: typeof VStackBtnImpl['emits'];
   };
 };
+
+// <VStackBtn></VStackBtn>;
 
 // type A = typeof VStackBtnImpl;
 // type B = A & {
