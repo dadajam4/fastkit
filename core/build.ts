@@ -267,10 +267,11 @@ async function build(target: string) {
 
     const hits: string[] = [];
     targets.forEach((target) => {
-      const matched = new RegExp(`"__${target}__"`, 'g');
+      const re = new RegExp(`"__${target}__"`, 'g');
+      const matched = dts.match(re);
       if (matched) {
         hits.push(target);
-        dts = dts.replace(matched, target);
+        dts = dts.replace(re, target);
       }
     });
 
@@ -303,9 +304,7 @@ async function build(target: string) {
       )} } from '@fastkit/color-scheme';\n${dts}`;
     }
 
-    console.log(hits);
     if (hits.length) {
-      console.log(dts);
       return dts;
     }
   }
@@ -316,7 +315,6 @@ async function build(target: string) {
     const dtsPath = path.resolve(pkgDir, pkg.types);
     if (await pathExists(typesDir, 'dir')) {
       const existing = await fs.readFile(dtsPath, 'utf-8');
-      // console.log(existing);
       const typeFiles = await fs.readdir(typesDir);
       const toAdd = await Promise.all(
         typeFiles.map((file) => {
