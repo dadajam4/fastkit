@@ -15,10 +15,10 @@ export type {
 
 export type PropKey = string | null | false | undefined;
 
-type ColorSchemeValueProp<T> = {
-  type: PropType<T | undefined>;
-  default: undefined;
-};
+// type ColorSchemeValueProp<T> = {
+//   type: PropType<T>;
+//   default: undefined;
+// };
 
 export type ColorSchemeProps<
   ThemeProp extends PropKey = 'theme',
@@ -29,22 +29,22 @@ export type ColorSchemeProps<
   variant: PropType<ColorVariant>;
 } & (ThemeProp extends string
   ? {
-      [K in ThemeProp]: ColorSchemeValueProp<ThemeName>;
+      [K in ThemeProp]: PropType<ThemeName>;
     }
   : never) & // eslint-disable-line @typescript-eslint/ban-types
   (ScopeProp extends string
     ? {
-        [K in ScopeProp]: ColorSchemeValueProp<ScopeName>;
+        [K in ScopeProp]: PropType<ScopeName>;
       }
     : {}) & // eslint-disable-line @typescript-eslint/ban-types
   (TextColorProp extends string
     ? {
-        [K in TextColorProp]: ColorSchemeValueProp<PaletteName>;
+        [K in TextColorProp]: PropType<PaletteName>;
       }
     : never) & // eslint-disable-line @typescript-eslint/ban-types
   (BorderColorProp extends string
     ? {
-        [K in BorderColorProp]: ColorSchemeValueProp<PaletteName>;
+        [K in BorderColorProp]: PropType<PaletteName>;
       }
     : never); // eslint-disable-line @typescript-eslint/ban-types
 
