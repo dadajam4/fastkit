@@ -262,9 +262,8 @@ async function build(target: string) {
     }
   }
 
-  function processColorTypes(dts: string) {
-    const targets = ['ThemeName', 'PaletteName', 'ScopeName', 'ColorVariant'];
-
+  function processTypesByTargets(dts: string, targets: string[], pkg: string) {
+    const importRe = new RegExp(`import {([^\\{\\}]+)} from '${pkg}'`);
     const hits: string[] = [];
     targets.forEach((target) => {
       const re = new RegExp(`"__${target}__"`, 'g');
@@ -274,9 +273,9 @@ async function build(target: string) {
         dts = dts.replace(re, target);
       }
     });
+    if (!hits.length) return;
 
-    const re = /import \{([^\{\}]+)\} from '@fastkit\/color-scheme'/;
-    const importMatched = dts.match(re);
+    const importMatched = dts.match(importRe);
     const imports = importMatched && importMatched[1];
     if (imports) {
       const mods = imports
@@ -294,17 +293,39 @@ async function build(target: string) {
       });
       if (appends.length) {
         dts = dts.replace(
-          re,
-          `import { $1, ${appends.join(', ')} } from '@fastkit/color-scheme'`,
+          importRe,
+          `import { $1, ${appends.join(', ')} } from '${pkg}'`,
         );
       }
     } else {
-      dts = `import { ${targets.join(
-        ', ',
-      )} } from '@fastkit/color-scheme';\n${dts}`;
+      dts = `import { ${targets.join(', ')} } from '${pkg}';\n${dts}`;
     }
 
     if (hits.length) {
+      return dts;
+    }
+  }
+
+  function processTypes(dts: string) {
+    let processed = false;
+    const settings: { targets: string[]; pkg: string }[] = [
+      // {
+      //   targets: ['ThemeName', 'PaletteName', 'ScopeName', 'ColorVariant'],
+      //   pkg: '@fastkit/color-scheme',
+      // },
+      {
+        targets: ['IconName'],
+        pkg: '@fastkit/icon-font',
+      },
+    ];
+    settings.forEach(({ targets, pkg }) => {
+      const result = processTypesByTargets(dts, targets, pkg);
+      if (result) {
+        processed = true;
+        dts = result;
+      }
+    });
+    if (processed) {
       return dts;
     }
   }
@@ -325,9 +346,9 @@ async function build(target: string) {
     }
     if (await pathExists(dtsPath, 'file')) {
       const dts = await fs.readFile(dtsPath, 'utf-8');
-      const colorProcessed = processColorTypes(dts);
-      if (colorProcessed) {
-        await fs.writeFile(dtsPath, colorProcessed);
+      const typeProcessed = processTypes(dts);
+      if (typeProcessed) {
+        await fs.writeFile(dtsPath, typeProcessed);
       }
     }
     console.log(dtsPath);
