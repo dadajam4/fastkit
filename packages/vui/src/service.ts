@@ -51,11 +51,11 @@ export class VuiService {
     this.requiredChip = requiredChip;
   }
 
-  color(colorType: keyof VuiServiceColorSettings) {
+  color(colorType: keyof VuiServiceColorSettings): ScopeName {
     return this.options.colors[colorType];
   }
 
-  icon(iconType: keyof VuiServiceIconSettings) {
+  icon(iconType: keyof VuiServiceIconSettings): IconName {
     return this.options.icons[iconType];
   }
 
