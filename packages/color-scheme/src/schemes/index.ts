@@ -485,12 +485,15 @@ export interface ScopeSettings {} // eslint-disable-line @typescript-eslint/no-e
 export interface ColorVariantSettings {} // eslint-disable-line @typescript-eslint/no-empty-interface
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-type ExtractKeys<T extends object> = keyof T extends never ? string : keyof T;
+type ExtractKeys<T extends object, D> = keyof T extends never ? D : keyof T;
 
-export type ThemeName = ExtractKeys<ThemeSettings>;
-export type PaletteName = ExtractKeys<PaletteSettings>;
-export type ScopeName = ExtractKeys<ScopeSettings>;
-export type ColorVariant = ExtractKeys<ColorVariantSettings>;
+export type ThemeName = ExtractKeys<ThemeSettings, '__ThemeName__'>;
+export type PaletteName = ExtractKeys<PaletteSettings, '__PaletteName__'>;
+export type ScopeName = ExtractKeys<ScopeSettings, '__ScopeName__'>;
+export type ColorVariant = ExtractKeys<
+  ColorVariantSettings,
+  '__ColorVariant__'
+>;
 
 export interface TemplateScope {
   scheme: ColorScheme<any, any, any, any>;

@@ -262,12 +262,61 @@ async function build(target: string) {
     }
   }
 
+  function processColorTypes(dts: string) {
+    const targets = ['ThemeName', 'PaletteName', 'ScopeName', 'ColorVariant'];
+
+    const hits: string[] = [];
+    targets.forEach((target) => {
+      const matched = new RegExp(`"__${target}__"`, 'g');
+      if (matched) {
+        hits.push(target);
+        dts = dts.replace(matched, target);
+      }
+    });
+
+    const re = /import \{([^\{\}]+)\} from '@fastkit\/color-scheme'/;
+    const importMatched = dts.match(re);
+    const imports = importMatched && importMatched[1];
+    if (imports) {
+      const mods = imports
+        .trim()
+        .split(',')
+        .map((row) => {
+          row = row.split(' as ')[0].trim();
+          return row;
+        });
+      const appends: string[] = [];
+      targets.forEach((target) => {
+        if (!mods.includes(target)) {
+          appends.push(target);
+        }
+      });
+      if (appends.length) {
+        dts = dts.replace(
+          re,
+          `import { $1, ${appends.join(', ')} } from '@fastkit/color-scheme'`,
+        );
+      }
+    } else {
+      dts = `import { ${targets.join(
+        ', ',
+      )} } from '@fastkit/color-scheme';\n${dts}`;
+    }
+
+    console.log(hits);
+    if (hits.length) {
+      console.log(dts);
+      return dts;
+    }
+  }
+
   async function moveDts() {
     // concat additional d.ts to rolled-up dts
     const typesDir = path.resolve(pkgDir, 'types');
+    const dtsPath = path.resolve(pkgDir, pkg.types);
     if (await pathExists(typesDir, 'dir')) {
-      const dtsPath = path.resolve(pkgDir, pkg.types);
       const existing = await fs.readFile(dtsPath, 'utf-8');
+      // console.log(existing);
       const typeFiles = await fs.readdir(typesDir);
       const toAdd = await Promise.all(
         typeFiles.map((file) => {
@@ -276,6 +325,14 @@ async function build(target: string) {
       );
       await fs.writeFile(dtsPath, existing + '\n' + toAdd.join('\n'));
     }
+    if (await pathExists(dtsPath, 'file')) {
+      const dts = await fs.readFile(dtsPath, 'utf-8');
+      const colorProcessed = processColorTypes(dts);
+      if (colorProcessed) {
+        await fs.writeFile(dtsPath, colorProcessed);
+      }
+    }
+    console.log(dtsPath);
     console.log(
       chalk.bold(chalk.green(`API Extractor completed successfully.`)),
     );

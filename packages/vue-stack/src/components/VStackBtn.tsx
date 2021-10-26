@@ -1,18 +1,6 @@
 import './VStackBtn.scss';
-import {
-  defineComponent,
-  ExtractPropTypes,
-  // PropType,
-  // AllowedComponentProps,
-  // ComponentCustomProps,
-  // VNodeProps,
-  // VNode,
-} from 'vue';
-import {
-  colorSchemeProps,
-  useColorClasses,
-  // ScopeName,
-} from '@fastkit/vue-color-scheme';
+import { defineComponent, ExtractPropTypes } from 'vue';
+import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
 import {
   navigationableEmits,
   navigationableProps,
@@ -21,16 +9,21 @@ import {
 } from '@fastkit/vue-utils';
 
 export const stackBtnProps = {
-  ...colorSchemeProps({ defaultScope: 'base', defaultVariant: 'contained' }),
+  ...colorSchemeProps({
+    defaultScope: 'base' as any,
+    defaultVariant: 'contained' as any,
+  }),
   ...navigationableProps,
   spacer: Boolean,
 };
+
+// type A = InferPropType<typeof stackBtnProps['color']>;
 
 export type VStackBtnProps = ExtractPropInput<typeof stackBtnProps>;
 
 export type VStackBtnResolvedProps = ExtractPropTypes<typeof stackBtnProps>;
 
-const VStackBtnImpl = defineComponent({
+export const VStackBtn = defineComponent({
   name: 'VStackBtn',
   props: stackBtnProps,
   emits: {
@@ -66,68 +59,3 @@ const VStackBtnImpl = defineComponent({
     );
   },
 });
-
-// export const VStackBtn = VStackBtnImpl as typeof VStackBtnImpl & {
-//   new (): {
-//     $props: VStackBtnProps;
-//     $emits: {
-//       click: (ev: MouseEvent) => true;
-//     };
-//   };
-// };
-
-// type Fuga = typeof VStackBtnImpl['emits'];
-
-export const VStackBtn = VStackBtnImpl as unknown as {
-  new (): {
-    $props: VStackBtnProps;
-    $emits: typeof VStackBtnImpl['emits'];
-  };
-};
-
-// <VStackBtn></VStackBtn>;
-
-// type A = typeof VStackBtnImpl;
-// type B = A & {
-//   new (): {
-//     $props: AllowedComponentProps &
-//       ComponentCustomProps &
-//       VNodeProps &
-//       VStackBtnProps & {
-//         /** abc */
-//         color?: ScopeName;
-//       };
-
-//     $slots: {
-//       default: (arg: { a: number }) => VNode[];
-//     };
-//   };
-// }
-
-// const Hoge = null as B;
-// <Hoge co></Hoge>
-
-// type FugaComponent<Props, Slots> = {
-//   new (): {
-//     $props: AllowedComponentProps & ComponentCustomProps & VNodeProps & Props;
-//     $slots: {
-//       default: (arg: { a: number }) => VNode[];
-//     };
-//   };
-// };
-
-// export const VStackBtn = VStackBtnImpl as unknown as {
-//   new (): {
-//     $props: AllowedComponentProps &
-//       ComponentCustomProps &
-//       VNodeProps &
-//       VStackBtnProps & {
-//         /** abc */
-//         hoge?: ScopeName;
-//       };
-
-//     $slots: {
-//       default: (arg: { a: number }) => VNode[];
-//     };
-//   };
-// };
