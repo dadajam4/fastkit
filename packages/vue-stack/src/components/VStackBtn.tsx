@@ -1,6 +1,18 @@
 import './VStackBtn.scss';
-import { defineComponent, ExtractPropTypes } from 'vue';
-import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
+import {
+  defineComponent,
+  ExtractPropTypes,
+  // PropType,
+  // AllowedComponentProps,
+  // ComponentCustomProps,
+  // VNodeProps,
+  // VNode,
+} from 'vue';
+import {
+  colorSchemeProps,
+  useColorClasses,
+  // ScopeName,
+} from '@fastkit/vue-color-scheme';
 import {
   navigationableEmits,
   navigationableProps,
@@ -18,7 +30,7 @@ export type VStackBtnProps = ExtractPropInput<typeof stackBtnProps>;
 
 export type VStackBtnResolvedProps = ExtractPropTypes<typeof stackBtnProps>;
 
-export const VStackBtn = defineComponent({
+const VStackBtnImpl = defineComponent({
   name: 'VStackBtn',
   props: stackBtnProps,
   emits: {
@@ -54,3 +66,54 @@ export const VStackBtn = defineComponent({
     );
   },
 });
+
+export const VStackBtn = VStackBtnImpl as typeof VStackBtnImpl & {
+  new (): {
+    $props: VStackBtnProps;
+  };
+};
+
+// type A = typeof VStackBtnImpl;
+// type B = A & {
+//   new (): {
+//     $props: AllowedComponentProps &
+//       ComponentCustomProps &
+//       VNodeProps &
+//       VStackBtnProps & {
+//         /** abc */
+//         color?: ScopeName;
+//       };
+
+//     $slots: {
+//       default: (arg: { a: number }) => VNode[];
+//     };
+//   };
+// }
+
+// const Hoge = null as B;
+// <Hoge co></Hoge>
+
+// type FugaComponent<Props, Slots> = {
+//   new (): {
+//     $props: AllowedComponentProps & ComponentCustomProps & VNodeProps & Props;
+//     $slots: {
+//       default: (arg: { a: number }) => VNode[];
+//     };
+//   };
+// };
+
+// export const VStackBtn = VStackBtnImpl as unknown as {
+//   new (): {
+//     $props: AllowedComponentProps &
+//       ComponentCustomProps &
+//       VNodeProps &
+//       VStackBtnProps & {
+//         /** abc */
+//         hoge?: ScopeName;
+//       };
+
+//     $slots: {
+//       default: (arg: { a: number }) => VNode[];
+//     };
+//   };
+// };

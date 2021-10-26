@@ -9,13 +9,15 @@ import {
   ExtractPropTypes,
   computed,
 } from 'vue';
-import IMask, { AnyMaskedOptions } from 'imask';
+// import IMask, { AnyMaskedOptions } from 'imask';
+import IMask from 'imask';
 import {
   IMaskInput,
   resolveIMaskInput,
   IMaskEvent,
   createIMaskEvent,
 } from '../schemes';
+type AnyMaskedOptions = any;
 
 export function createMaskControlProps() {
   return {

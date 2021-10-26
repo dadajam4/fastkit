@@ -18,10 +18,11 @@ import {
   TextableContext,
 } from './textable';
 import { TextInputType, IMaskTypedValue, IMaskEvent } from '../schemes';
-import { AnyMaskedOptions } from 'imask';
+// import { AnyMaskedOptions } from 'imask';
 import { notEmptyValue } from '@fastkit/helpers';
 import { createMaskControlProps } from './imask';
 import { useIMaskControl } from './imask';
+// type AnyMaskedOptions = any;
 
 export function createTextInputProps() {
   return {
@@ -70,7 +71,8 @@ export type TextInputContext = SetupContext<TextInputEmitOptions>;
 export interface TextInputControlOptions extends TextableControlOptions {}
 
 export class TextInputControl extends TextableControl {
-  protected _mask: ComputedRef<AnyMaskedOptions | undefined>;
+  // protected _mask: ComputedRef<AnyMaskedOptions | undefined>;
+  protected _mask: ComputedRef<any | undefined>;
   protected _type: ComputedRef<TextInputType>;
   protected _inputElement = ref<HTMLInputElement | null>(null);
   protected _masked: Ref<string>;

@@ -1,12 +1,13 @@
 import { DirectiveBinding, ObjectDirective } from 'vue';
-import IMask, { AnyMaskedOptions } from 'imask';
+// import IMask, { AnyMaskedOptions } from 'imask';
+import IMask from 'imask';
 import {
   createIMaskEvent,
   IMaskEventType,
   IMaskInput,
   resolveIMaskInput,
 } from '../schemes';
-
+type AnyMaskedOptions = any;
 export type IMaskDirectiveBindingValue = IMaskInput;
 
 export type IMaskDirectiveBinding =

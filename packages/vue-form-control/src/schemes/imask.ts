@@ -11,7 +11,9 @@ export function createIMaskEvent(
 
 export type IMaskTypedValue = string | number | Date;
 
-import IMask, { AnyMaskedOptions } from 'imask';
+// import IMask, { AnyMaskedOptions } from 'imask';
+import IMask from 'imask';
+type AnyMaskedOptions = any;
 
 export type IMaskInput =
   | AnyMaskedOptions
