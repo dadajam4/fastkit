@@ -29,6 +29,8 @@ import { ViteColorSchemeError } from './logger';
 export interface ColorSchemeVitePluginOptions {
   src: string;
   dest?: string;
+  onBooted?: () => any;
+  onBootError?: (err: unknown) => any;
 }
 
 export function colorSchemeVitePlugin(
@@ -36,7 +38,7 @@ export function colorSchemeVitePlugin(
 ): Plugin {
   // let server: ViteDevServer;
 
-  const { src, dest: _dest } = opts;
+  const { src, dest: _dest, onBooted, onBootError } = opts;
 
   const rawEntryPoint = path.resolve(src);
 
@@ -46,48 +48,56 @@ export function colorSchemeVitePlugin(
   return {
     name: 'vite:color-scheme',
     async config(config, { command }) {
-      let dest: string;
+      try {
+        let dest: string;
 
-      if (!_dest) {
-        const pkgDir = await findPackageDir();
-        if (!pkgDir) throw new ViteColorSchemeError('missing package.json');
-        dest = path.join(pkgDir, '.color-scheme');
-      } else {
-        dest = _dest;
-      }
-
-      const runner = new LoadColorSchemeRunner({
-        entry: rawEntryPoint,
-        dest,
-        watch: command === 'serve',
-      });
-
-      const { cachePaths } = (await runner.run()).exports;
-
-      const cssOptions = {
-        ...config.css,
-      };
-      cssOptions.preprocessorOptions = {
-        ...cssOptions.preprocessorOptions,
-      };
-      const { preprocessorOptions } = cssOptions;
-      preprocessorOptions.scss = {
-        ...preprocessorOptions.scss,
-      };
-      const scssOptions = preprocessorOptions.scss;
-
-      const _additionalData = scssOptions.additionalData;
-      const additionalData = (source: string, filename: string) => {
-        if (typeof _additionalData === 'string') {
-          source = _additionalData + source;
-        } else if (typeof _additionalData === 'function') {
-          source = _additionalData(source, filename);
+        if (!_dest) {
+          const pkgDir = await findPackageDir();
+          if (!pkgDir) throw new ViteColorSchemeError('missing package.json');
+          dest = path.join(pkgDir, '.color-scheme');
+        } else {
+          dest = _dest;
         }
-        return `@use "${cachePaths.scss}" as *;\n${source}`;
-      };
-      scssOptions.additionalData = additionalData;
-      config.css = cssOptions;
-      return config;
+
+        const runner = new LoadColorSchemeRunner({
+          entry: rawEntryPoint,
+          dest,
+          watch: command === 'serve',
+        });
+
+        const { cachePaths } = (await runner.run()).exports;
+
+        const cssOptions = {
+          ...config.css,
+        };
+        cssOptions.preprocessorOptions = {
+          ...cssOptions.preprocessorOptions,
+        };
+        const { preprocessorOptions } = cssOptions;
+        preprocessorOptions.scss = {
+          ...preprocessorOptions.scss,
+        };
+        const scssOptions = preprocessorOptions.scss;
+
+        const _additionalData = scssOptions.additionalData;
+        const additionalData = (source: string, filename: string) => {
+          if (typeof _additionalData === 'string') {
+            source = _additionalData + source;
+          } else if (typeof _additionalData === 'function') {
+            source = _additionalData(source, filename);
+          }
+          return `@use "${cachePaths.scss}" as *;\n${source}`;
+        };
+        scssOptions.additionalData = additionalData;
+        config.css = cssOptions;
+
+        onBooted && onBooted();
+
+        return config;
+      } catch (err) {
+        onBootError && onBootError(err);
+        throw err;
+      }
     },
     // configureServer(_server) {
     //   server = _server;

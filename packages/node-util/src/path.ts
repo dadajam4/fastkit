@@ -26,37 +26,6 @@ export async function resolveEntryPoint(
   return rawEntryPoint;
 }
 
-export async function findPackageDir(
-  from: string = process.cwd(),
-): Promise<string | undefined> {
-  let result: string | undefined;
-
-  if (await pathExists(from, 'file')) {
-    from = path.dirname(from);
-  }
-
-  while (true) {
-    const target = path.join(from, 'package.json');
-    try {
-      const pkg = require(target);
-      if (pkg) {
-        result = from;
-        break;
-      }
-    } catch (err: any) {
-      if (!err.message.startsWith('Cannot find module')) {
-        throw err;
-      }
-    }
-    const next = path.dirname(from);
-    if (next === from) {
-      break;
-    }
-    from = next;
-  }
-  return result;
-}
-
 export async function pathExists(filepath: string, type?: 'file' | 'dir') {
   try {
     const stat = await fs.stat(filepath);

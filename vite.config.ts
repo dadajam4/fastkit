@@ -51,9 +51,17 @@ export default defineConfig({
         dest: path.join(DYNAMIC_DEST_DIR, 'media-match'),
       },
       iconFont: {
-        inputDir: './packages/playground/src/config/icon-font/svg',
+        entries: [
+          {
+            inputDir: '@mdi',
+            name: 'mdi',
+          },
+          {
+            inputDir: './packages/playground/src/config/icon-font/svg',
+            descent: 42,
+          },
+        ],
         outputDir: path.join(DYNAMIC_DEST_DIR, 'icon-font'),
-        descent: 42,
       },
       spriteImages: {
         src: './packages/playground/src/config/sprites',

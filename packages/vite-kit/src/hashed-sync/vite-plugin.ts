@@ -1,7 +1,11 @@
 import { Plugin } from 'vite';
 import { HashedSync, HashedSyncOptions } from '@fastkit/hashed-sync';
 
-export type HashedSyncVitePluginOptions = Omit<HashedSyncOptions, 'watch'>;
+export interface HashedSyncVitePluginOptions
+  extends Omit<HashedSyncOptions, 'watch'> {
+  onBooted?: () => any;
+  onBootError?: (err: unknown) => any;
+}
 
 export function hashedSyncVitePlugin(
   opts: HashedSyncVitePluginOptions,
@@ -9,12 +13,22 @@ export function hashedSyncVitePlugin(
   return {
     name: 'vite:hashed-sync',
     async config(config, { command }) {
-      const hashedSync = new HashedSync({
-        ...opts,
-        watch: command === 'serve',
-      });
-      await hashedSync.loadAndSync();
-      return config;
+      const { onBooted, onBootError } = opts;
+
+      try {
+        const hashedSync = new HashedSync({
+          ...opts,
+          watch: command === 'serve',
+        });
+        await hashedSync.loadAndSync();
+
+        onBooted && onBooted();
+
+        return config;
+      } catch (err) {
+        onBootError && onBootError(err);
+        throw err;
+      }
     },
   };
 }

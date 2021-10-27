@@ -6,7 +6,7 @@ import { routes } from '~/routes';
 import byeie from '@fastkit/byeie';
 import { installVuiPlugin } from '@fastkit/vui';
 import { colorScheme } from '../.dynamic/color-scheme/color-scheme.info';
-import '../.dynamic/icon-font/icons';
+import '../.dynamic/icon-font';
 
 if (__BROWSER__) {
   // byeie({ deadline: 'recommended' });

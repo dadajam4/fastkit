@@ -3,7 +3,14 @@ import fs from 'fs-extra';
 import path from 'path';
 import chokidar, { FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
-import { RawIconFontOptions, IconFontEntry, SvgOptions } from './schemes';
+import {
+  IconFontOptions,
+  IconFontEntry,
+  SvgOptions,
+  resolveRawIconFontEntry,
+} from './schemes';
+import { installPackage, HashComparator } from '@fastkit/node-util';
+import { logger } from './logger';
 
 export const DEFAULT_SVG_OPTIONS: Partial<SvgOptions> = {
   fixedWidth: true,
@@ -45,14 +52,16 @@ async function generateTS(entry: IconFontEntry, ids: string[]) {
 /* eslint-disable */
 // @ts-nocheck
 ${BANNER}
-import { registerIconNames } from '@fastkit/icon-font';
+import { IconName, IconNameMap, registerIconNames } from '@fastkit/icon-font';
 declare module "@fastkit/icon-font" {
   export interface IconNameMap {
 ${ids.map((id) => `    '${id}': true,`).join('\n')}
   }
 }
-registerIconNames([${ids.map((id) => `'${id}'`).join(', ')}]);
-export type { IconName } from '@fastkit/icon-font';
+registerIconNames([
+  ${ids.map((id) => `'${id}'`).join(',\n  ')}
+]);
+export type { IconName, IconNameMap } from '@fastkit/icon-font';
 export { ICON_NAMES } from '@fastkit/icon-font';
   `.trim();
   const fileName = `${entry.name || 'icons'}.ts`;
@@ -67,19 +76,80 @@ export { ICON_NAMES } from '@fastkit/icon-font';
 
 export async function generateEntry(entry: IconFontEntry) {
   const options = mergeDefaults(entry);
-  await fs.emptyDir(entry.outputDir);
+
+  // mdi support
+  if (options.inputDir === '@mdi') {
+    const installedDir = await findOrInstallMDI();
+    options.inputDir = path.join(installedDir, 'svg');
+    if (options.descent == null) {
+      options.descent = 42;
+    }
+    if (options.prefix == null) {
+      options.prefix = 'mdi';
+    }
+    if (options.name == null) {
+      options.name = 'mdi';
+    }
+  }
+
+  const hash = new HashComparator(options.inputDir, options.outputDir);
+  const srcHash = await hash.hasChanged();
+  if (!srcHash) {
+    logger.info(`Has not chaged files. Skip process. >>> ${options.inputDir}`);
+    return;
+  }
+
+  await fs.ensureDir(options.outputDir);
   const result = await generateFonts(options);
-  const ids = Object.keys(result.codepoints);
-  await generateTS(entry, ids);
+  const prefix = options.prefix ? `${options.prefix}-` : '';
+  const ids = Object.keys(result.codepoints).map((key) => `${prefix}${key}`);
+  await generateTS(options, ids);
+  await hash.commit(srcHash);
   return result;
 }
 
-export async function generate(opts: RawIconFontOptions) {
-  if (!Array.isArray(opts)) {
-    opts = [opts];
-  }
+export async function generateIndex(opts: IconFontOptions) {
+  const { outputDir } = opts;
+  const entries = opts.entries.map((entry) =>
+    resolveRawIconFontEntry(opts.outputDir, entry),
+  );
+  const names = entries.map(({ name }) => name);
+  const tsCode = `
+/* eslint-disable */
+// @ts-nocheck
+import './index.css';
+${BANNER}
+${names
+  .map(
+    (name, index) =>
+      `import { IconName as IconName_${index}, IconNameMap as IconNameMap_${index} } from './${name}/${name}';`,
+  )
+  .join('\n')}
+export type { IconName } from '@fastkit/icon-font';
+export { ICON_NAMES } from '@fastkit/icon-font';
+  `.trim();
+  const tsDest = path.join(outputDir, 'index.ts');
+  await fs.writeFile(tsDest, tsCode);
 
-  return Promise.all(opts.map((entry) => generateEntry(entry)));
+  const cssCode = `
+/* stylelint-disable */
+${BANNER}
+${names.map((name) => `@import './${name}/${name}.css';`).join('\n')}
+  `.trim();
+  const cssDest = path.join(outputDir, 'index.css');
+  await fs.writeFile(cssDest, cssCode);
+}
+
+export async function generate(opts: IconFontOptions) {
+  await fs.emptyDir(opts.outputDir);
+  return Promise.all([
+    generateIndex(opts),
+    Promise.all(
+      opts.entries.map((entry) =>
+        generateEntry(resolveRawIconFontEntry(opts.outputDir, entry)),
+      ),
+    ),
+  ]);
 }
 
 type UnPromisify<T> = T extends Promise<infer U> ? U : T;
@@ -90,6 +160,10 @@ export class IconFontRunnerItem extends EV<{
   readonly entry: IconFontEntry;
   private _watcher: FSWatcher | null = null;
   watchMode: boolean;
+
+  get name() {
+    return this.entry.name;
+  }
 
   constructor(entry: IconFontEntry, watch = false) {
     super();
@@ -130,14 +204,20 @@ export class IconFontRunner extends EV<{
   };
 }> {
   readonly items: IconFontRunnerItem[] = [];
+  readonly outputDir: string;
+  private _opts: IconFontOptions;
+  private entries: IconFontEntry[] = [];
 
-  constructor(opts: RawIconFontOptions, watch?: boolean) {
+  constructor(opts: IconFontOptions, watch?: boolean) {
     super();
 
-    if (!Array.isArray(opts)) {
-      opts = [opts];
-    }
-    opts.forEach((entry) => {
+    this._opts = opts;
+    this.outputDir = opts.outputDir;
+    this.entries = opts.entries.map((entry) =>
+      resolveRawIconFontEntry(this.outputDir, entry),
+    );
+
+    this.entries.forEach((entry) => {
       const item = new IconFontRunnerItem(entry, watch);
       item.on('build', (result) => {
         this.emit('build', { item, result });
@@ -146,12 +226,26 @@ export class IconFontRunner extends EV<{
     });
   }
 
-  run() {
-    return Promise.all(this.items.map((item) => item.run()));
+  buildIndex() {
+    return generateIndex(this._opts);
+  }
+
+  async run() {
+    await fs.ensureDir(this.outputDir);
+    await Promise.all([
+      this.buildIndex(),
+      Promise.all(this.items.map((item) => item.run())),
+    ]);
   }
 
   destroy() {
     this.items.forEach((item) => item.destroy());
+    this.entries = [];
     this.offAll();
+    delete (this as any)._opts;
   }
+}
+
+function findOrInstallMDI() {
+  return installPackage('@mdi/svg', { dev: true });
 }

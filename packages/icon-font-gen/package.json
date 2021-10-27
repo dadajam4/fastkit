@@ -31,6 +31,7 @@
   "dependencies": {
     "@fastkit/ev": "0.3.10",
     "@fastkit/icon-font": "0.3.10",
+    "@fastkit/node-util": "0.3.10",
     "@fastkit/tiny-logger": "0.3.10",
     "chokidar": "^3.5.0",
     "fantasticon": "^1.2.2",

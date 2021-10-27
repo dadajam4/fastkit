@@ -1,10 +1,11 @@
-// import { prompt } from './packages/create-fastkit-app/src/cli';
+// const { cli } = require('./packages/create-fastkit-app/src/cli');
+// cli();
 
-// (global as any).__BROWSER__ = false;
-// prompt().then((res) => {
-//   console.log(res);
-// });
-const { cli } = require('./packages/create-fastkit-app/src/cli');
-cli();
+import { hashElement } from 'folder-hash';
 
-// console.log(process.version);
+async function main() {
+  const hash = await hashElement('./core');
+  console.log(hash);
+}
+
+main();

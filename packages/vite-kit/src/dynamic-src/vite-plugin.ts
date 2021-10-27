@@ -24,28 +24,98 @@ export interface DynamicSrcVitePluginOptions {
   iconFont?: IconFontVitePlugin;
   mediaMatch?: MediaMatchVitePluginOptions;
   spriteImages?: SpriteImagesVitePluginOptions;
+  onBooted?: () => any;
+  onBootError?: (err: unknown) => any;
 }
 
 export function dynamicSrcVitePlugin(
   opts: DynamicSrcVitePluginOptions,
 ): Plugin[] {
-  const { colorScheme, hashedSync, iconFont, mediaMatch, spriteImages } = opts;
+  const {
+    colorScheme,
+    hashedSync,
+    iconFont,
+    mediaMatch,
+    spriteImages,
+    onBooted,
+    onBootError,
+  } = opts;
   const plugins: Plugin[] = [];
+  const promises: Promise<any>[] = [];
+
+  function pushPlugin(
+    createPlugin: (
+      onBooted: () => any,
+      onBootError: (err: unknown) => any,
+    ) => Plugin,
+  ) {
+    const promise = new Promise<void>((resolve, reject) => {
+      const plugin = createPlugin(resolve, reject);
+      plugins.push(plugin);
+    });
+    promises.push(promise);
+  }
 
   if (colorScheme) {
-    plugins.push(colorSchemeVitePlugin(colorScheme));
+    pushPlugin((onBooted) => {
+      return colorSchemeVitePlugin({
+        ...colorScheme,
+        onBooted,
+      });
+    });
   }
+
   if (hashedSync) {
-    plugins.push(hashedSyncVitePlugin(hashedSync));
+    pushPlugin((onBooted) => {
+      return hashedSyncVitePlugin({
+        ...hashedSync,
+        onBooted,
+      });
+    });
   }
+
   if (iconFont) {
-    plugins.push(iconFontVitePlugin(iconFont));
+    pushPlugin((onBooted) => {
+      return iconFontVitePlugin({
+        ...iconFont,
+        onBooted,
+      });
+    });
   }
+
   if (mediaMatch) {
-    plugins.push(mediaMatchVitePlugin(mediaMatch));
+    pushPlugin((onBooted) => {
+      return mediaMatchVitePlugin({
+        ...mediaMatch,
+        onBooted,
+      });
+    });
   }
+
   if (spriteImages) {
-    plugins.push(spriteImagesVitePlugin(spriteImages));
+    pushPlugin((onBooted) => {
+      return spriteImagesVitePlugin({
+        ...spriteImages,
+        onBooted,
+      });
+    });
   }
+
+  const dynamicSrcPlugin: Plugin = {
+    name: 'vite:dynamic-src',
+    async config(config) {
+      try {
+        await Promise.all(promises);
+        onBooted && onBooted();
+        return config;
+      } catch (err) {
+        onBootError && onBootError(err);
+        throw err;
+      }
+    },
+  };
+
+  plugins.push(dynamicSrcPlugin);
+
   return plugins;
 }
