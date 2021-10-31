@@ -2,6 +2,10 @@
   "name": "@fastkit/vui",
   "version": "0.3.10",
   "description": "@fastkit/vui",
+  "buildOptions": {
+    "name": "Vui",
+    "tool": true
+  },
   "main": "index.js",
   "module": "dist/vui.esm-bundler.js",
   "files": [
@@ -23,12 +27,14 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vui#readme",
   "peerDependencies": {
+    "vite": "^2.1.5",
     "vue": "^3.2.19"
   },
   "dependencies": {
     "@fastkit/color-scheme": "0.3.10",
     "@fastkit/icon-font": "0.3.10",
     "@fastkit/tiny-logger": "0.3.10",
+    "@fastkit/vite-kit": "0.3.10",
     "@fastkit/vue-kit": "0.3.10"
   }
 }

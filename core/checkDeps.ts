@@ -38,6 +38,8 @@ type NormalizeSetting = [RawDepMatcher, string];
 
 const normalizeSettings: NormalizeSetting[] = [
   [/^@vue\//, 'vue'],
+  [/^@nuxt\//, 'nuxt3'],
+  [/^webfont\//, 'webfont'],
   [
     (dep, pkg) => {
       return pkg.name === '@fastkit/byeie';
@@ -117,9 +119,36 @@ async function extractDeps(sourcePath: string) {
     .map(({ fileName }) => fileName);
 }
 
+function findAllDependencies(
+  dependencies: FastkitPackage['dependencies'],
+  bucket: { [key: string]: string } = {},
+) {
+  if (!dependencies) return bucket;
+  const children = Object.keys(dependencies).filter(
+    (dep) => bucket[dep] == null,
+  );
+  children.forEach((dep) => {
+    let packagePath: string;
+    if (dep === 'fastkit') {
+      packagePath = PACKAGES_DIR.join('fastkit');
+    } else if (dep.startsWith('@fastkit')) {
+      packagePath = PACKAGES_DIR.join(dep.replace('@fastkit/', ''));
+    } else {
+      packagePath = ROOT_DIR.join('node_modules', dep);
+    }
+    const pkg = getPackage(packagePath);
+    Object.assign(bucket, pkg.dependencies);
+    findAllDependencies(pkg.dependencies, bucket);
+  });
+  return bucket;
+}
+
 async function checkPackage(packagePath: string) {
   const rootPkg = await getPackage(ROOT_DIR.toString());
   const pkg = await getPackage(packagePath);
+
+  const allDeps = findAllDependencies(pkg.dependencies);
+
   const sourceDirs: string[] = [];
   for (const dirName of SOURCE_DIRS) {
     const sourceDir = path.join(packagePath, dirName);
@@ -166,10 +195,10 @@ async function checkPackage(packagePath: string) {
 
   const missingDeps: string[] = [];
   const unnecessaryDeps: string[] = [];
-  const missingRootPkgVersions: string[] = [];
+  const missingPkgVersions: string[] = [];
 
   deps.forEach((dep) => {
-    if (!allPkgDeps[dep]) {
+    if (!allPkgDeps[dep] && !allDeps[dep]) {
       missingDeps.push(dep);
     }
   });
@@ -181,22 +210,22 @@ async function checkPackage(packagePath: string) {
     if (!deps.includes(dep)) {
       unnecessaryDeps.push(dep);
     }
-    if (!dep.startsWith('@fastkit') && !rootPkgAllDeps[dep]) {
-      missingRootPkgVersions.push(dep);
+    if (!dep.startsWith('@fastkit') && !rootPkgAllDeps[dep] && !allDeps[dep]) {
+      missingPkgVersions.push(dep);
     }
   });
 
   const hasInconsistencies =
     missingDeps.length > 0 ||
     unnecessaryDeps.length > 0 ||
-    missingRootPkgVersions.length > 0;
+    missingPkgVersions.length > 0;
 
   return {
     pkg,
     hasInconsistencies,
     missingDeps,
     unnecessaryDeps,
-    missingRootPkgVersions,
+    missingPkgVersions,
   };
 }
 
@@ -220,7 +249,7 @@ async function run() {
       hasInconsistencies,
       missingDeps,
       unnecessaryDeps,
-      missingRootPkgVersions,
+      missingPkgVersions,
     } = await checkPackage(packagePath);
 
     if (hasInconsistencies) {
@@ -239,11 +268,13 @@ async function run() {
           console.log(chalk.yellow(`    - ${dep}`));
         });
       }
-      if (missingRootPkgVersions.length) {
+      if (missingPkgVersions.length) {
         console.log(
-          chalk.yellow(`    Missing version(Root package.json) deps...`),
+          chalk.yellow(
+            `    Missing version(Root package.json or nested) deps...`,
+          ),
         );
-        missingRootPkgVersions.forEach((dep) => {
+        missingPkgVersions.forEach((dep) => {
           console.log(chalk.yellow(`    - ${dep}`));
         });
       }

@@ -5,4 +5,3 @@ export * from './media-match';
 export * from './sprite-images';
 export * from './style-additional';
 export * from './dynamic-src';
-export * from './vui';

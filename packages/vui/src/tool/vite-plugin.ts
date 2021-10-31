@@ -1,5 +1,5 @@
 import { Plugin } from 'vite';
-import { dynamicSrcVitePlugin } from '../dynamic-src';
+import { dynamicSrcVitePlugin } from '@fastkit/vite-kit';
 import path from 'path';
 import fs from 'fs-extra';
 import { findPackageDir } from '@fastkit/node-util';
@@ -85,7 +85,7 @@ export async function ViteVuiPlugin(
 
   if (!dynamicDest) {
     if (options.__dev) {
-      dynamicDest = path.resolve(__dirname, '../../_docs/src/.vui');
+      dynamicDest = path.resolve(__dirname, '../../../_docs/src/.vui');
     } else {
       dynamicDest = await defaultDynamicDest();
     }

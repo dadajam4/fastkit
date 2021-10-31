@@ -1,6 +1,6 @@
 import { defineNuxtConfig } from 'nuxt3';
 
-import { useVuiModule } from '@fastkit/vite-kit';
+import { useVuiModule } from '@fastkit/vui/dist/tool';
 
 const config = defineNuxtConfig({
   srcDir: './src',

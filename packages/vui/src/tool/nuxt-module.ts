@@ -4,7 +4,7 @@ import {
   ViteVuiPluginOptions,
   ViteVuiPluginResultSettings,
 } from './vite-plugin';
-import { ViteKitError } from '../logger';
+import { VuiError } from '../logger';
 import { render } from 'eta';
 import path from 'path';
 import fs from 'fs-extra';
@@ -45,7 +45,7 @@ async function renderTemplate({
     { async: true },
   );
   if (!result) {
-    throw new ViteKitError('template render error.');
+    throw new VuiError('template render error.');
   }
   return result;
 }
@@ -60,7 +60,7 @@ export const VuiModule = defineNuxtModule<VuiModuleOptions>({
     let vite = nuxtOptions.vite;
 
     if (vite === false) {
-      throw new ViteKitError(`vui needs vite.`);
+      throw new VuiError(`vui needs vite.`);
     }
 
     if (!vite || vite === true) {
@@ -93,9 +93,10 @@ export const VuiModule = defineNuxtModule<VuiModuleOptions>({
     if (options.__dev) {
       const destPath = path.resolve(
         __dirname,
-        '../../_docs/src/.vui',
+        '../../../_docs/src/.vui',
         'nuxt-vui-plugin.ts',
       );
+      await fs.ensureDir(path.dirname(destPath));
       fs.writeFile(
         destPath,
         // path.join(dest, 'vui-installer.ts'),
