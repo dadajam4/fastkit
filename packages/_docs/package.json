@@ -1,20 +1,20 @@
 {
   "private": true,
   "name": "@fastkit/docs",
-  "version": "0.3.10",
+  "version": "0.4.0",
   "description": "@fastkit/docs",
   "author": "dadajam4",
   "license": "MIT",
   "dependencies": {
-    "@fastkit/vui": "0.3.10",
-    "@fastkit/catcher": "0.3.10",
-    "@fastkit/color-scheme": "0.3.10",
-    "@fastkit/media-match-gen": "0.3.10",
-    "@fastkit/vue-app-layout": "0.3.10",
-    "@fastkit/vue-color-scheme": "0.3.10",
-    "@fastkit/vue-media-match": "0.3.10",
-    "@fastkit/vue-stack": "0.3.10",
-    "@fastkit/universal-logger": "0.3.10",
-    "@fastkit/tiny-logger": "0.3.10"
+    "@fastkit/vui": "0.4.0",
+    "@fastkit/catcher": "0.4.0",
+    "@fastkit/color-scheme": "0.4.0",
+    "@fastkit/media-match-gen": "0.4.0",
+    "@fastkit/vue-app-layout": "0.4.0",
+    "@fastkit/vue-color-scheme": "0.4.0",
+    "@fastkit/vue-media-match": "0.4.0",
+    "@fastkit/vue-stack": "0.4.0",
+    "@fastkit/universal-logger": "0.4.0",
+    "@fastkit/tiny-logger": "0.4.0"
   }
 }
