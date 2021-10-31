@@ -3,9 +3,15 @@ import { pathExists } from './path';
 import execa from 'execa';
 import { logger, NodeUtilError } from './logger';
 
+const DEV_RE = /\/fastkit\/packages\//;
+
 export async function findPackageDir(
   from: string = process.cwd(),
 ): Promise<string | undefined> {
+  if (DEV_RE.test(from)) {
+    return path.join(from, '../..');
+  }
+
   let result: string | undefined;
 
   if (await pathExists(from, 'file')) {

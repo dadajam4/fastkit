@@ -100,6 +100,5 @@ export function createJavaScriptTransition<
     ...(BaseTransition as any).props,
     ...opts.props,
   };
-  // console.log(opts.props, (Component.props as any).onEnter);
   return Component;
 }

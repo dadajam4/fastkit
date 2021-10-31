@@ -1,63 +1,51 @@
-import { reactive, nextTick } from 'vue';
-import { MediaMatchDefine } from '@fastkit/media-match';
+import { reactive, ref } from 'vue';
+import { MEDIA_MATCH_CONDITIONS } from '@fastkit/media-match';
+import type { MediaMatchCondition, MediaMatchKey } from '@fastkit/media-match';
 import { arrayRemove } from '@fastkit/helpers';
 
-export type MediaQueryServiceState<K extends string = string> = Record<
-  K,
-  boolean
->;
+export type MediaMatchServiceState = Record<MediaMatchKey, boolean>;
 
-export type MediaQueryListener<K extends string = string> = {
-  key: K;
+export type MediaMatchListener = {
+  key: MediaMatchKey;
   mql: MediaQueryList;
   handler: (ev: MediaQueryListEvent) => void;
   remove: () => void;
 };
 
-export interface MediaQueryServiceOptions {
-  manual?: boolean;
+type BootState = 'pending' | 'resvered' | 'ready';
+
+export interface VueMediaMatchService {
+  (key: MediaMatchKey): boolean;
+  state(): MediaMatchServiceState;
+  listeners(): MediaMatchListener[];
+  conditions(): MediaMatchCondition[];
+  bootState(): BootState;
+  isPending(): boolean;
+  isBooted(): boolean;
+  matches(key: MediaMatchKey): boolean;
+  flush(): void;
+  setup(): void;
+  dispose(): void;
 }
 
-export class MediaQueryService<K extends string = string> {
-  readonly defines: MediaMatchDefine<K>[];
-  readonly state: MediaQueryServiceState<K>;
-  readonly listeners: MediaQueryListener<K>[] = [];
+let _serviceCache: VueMediaMatchService | undefined;
 
-  constructor(
-    defines: MediaMatchDefine<K>[],
-    opts: MediaQueryServiceOptions = {},
-  ) {
-    this.defines = [...defines];
+function createVueMediaMatchService(): VueMediaMatchService {
+  const state = reactive({}) as MediaMatchServiceState;
+  const bootState = ref<BootState>('pending');
+  const listeners: MediaMatchListener[] = [];
 
-    const _state = {} as MediaQueryServiceState<K>;
-    defines.forEach(({ key }) => {
-      _state[key] = false;
-    });
+  MEDIA_MATCH_CONDITIONS.forEach(({ key }) => {
+    (state as any)[key] = false;
+  });
 
-    this.state = reactive<any>(_state);
-    this.matches = this.matches.bind(this);
-    this.flush = this.flush.bind(this);
+  const isPending = () => bootState.value === 'pending';
+  const isBooted = () => bootState.value === 'ready';
 
-    if (!opts.manual) {
-      this.setup();
-    }
-  }
-
-  matches(key: K) {
-    return this.state[key];
-  }
-
-  flush() {
-    const { state, listeners } = this;
-    for (const listener of listeners) {
-      state[listener.key] = listener.mql.matches;
-    }
-  }
-
-  setup() {
-    if (!__BROWSER__) return;
-    const { defines, state, listeners } = this;
-    defines.forEach((define) => {
+  function setup() {
+    if (!__BROWSER__ || !isPending()) return;
+    bootState.value = 'resvered';
+    MEDIA_MATCH_CONDITIONS.forEach((define) => {
       const { key, condition } = define;
       const mql = window.matchMedia(condition);
       const handler = (ev: MediaQueryListEvent) => {
@@ -67,7 +55,7 @@ export class MediaQueryService<K extends string = string> {
         mql.removeEventListener('change', handler);
         arrayRemove(listeners, listener);
       };
-      const listener: MediaQueryListener<K> = {
+      const listener: MediaMatchListener = {
         key,
         mql,
         handler,
@@ -77,14 +65,46 @@ export class MediaQueryService<K extends string = string> {
       state[key] = mql.matches;
       listeners.push(listener);
     });
-    nextTick(this.flush);
   }
 
-  dispose() {
-    const { state, listeners } = this;
+  function matches(key: MediaMatchKey) {
+    return state[key];
+  }
+
+  function flush() {
+    for (const listener of listeners) {
+      state[listener.key] = listener.mql.matches;
+    }
+  }
+
+  function dispose() {
     for (const listener of listeners) {
       state[listener.key] = false;
       listener.remove();
     }
   }
+
+  const service: VueMediaMatchService = function vueMediaMatchService(key) {
+    return matches(key);
+  };
+
+  service.state = () => state;
+  service.listeners = () => listeners;
+  service.conditions = () => MEDIA_MATCH_CONDITIONS;
+  service.bootState = () => bootState.value;
+  service.isPending = isPending;
+  service.isBooted = isBooted;
+  service.matches = matches;
+  service.flush = flush;
+  service.setup = setup;
+  service.dispose = dispose;
+
+  return service;
+}
+
+export function getVueMediaMatchService(): VueMediaMatchService {
+  if (!_serviceCache) {
+    _serviceCache = createVueMediaMatchService();
+  }
+  return _serviceCache;
 }

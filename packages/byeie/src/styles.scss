@@ -1,5 +1,7 @@
 @use 'sass:math';
 
+// stylelint-disable font-family-name-quotes
+
 .byeie {
   &,
   * {
@@ -141,6 +143,7 @@
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }

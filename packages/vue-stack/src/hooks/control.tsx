@@ -70,8 +70,6 @@ export function useStackControl(
 
   const $vstack = useVueStack();
   const rootControl = useStackRoot();
-  // const $colorScheme = useColorScheme();
-  // console.log($colorScheme.rootTheme);
   const color = useColorClasses(props, { useRootThemeDefault: true });
   const state = reactive<VStackControlState>({
     // id,
@@ -88,6 +86,7 @@ export function useStackControl(
     needRender: false,
     guardAnimating: false,
     guardAnimateTimeId: null,
+    booted: false,
     isDestroyed: false,
   });
 
@@ -588,7 +587,7 @@ export function useStackControl(
       });
     },
     render(fn, opts = {}) {
-      const { needRender } = state;
+      const { booted, needRender } = state;
       const { default: defaultSlot, activator: activatorSlot } =
         ctx.slots as VStackSlots;
       const { transitionListeners, Transition: TransitionDefine } = privateApi;
@@ -609,7 +608,7 @@ export function useStackControl(
 
       if (rootContainer) {
         let $child: VNode | undefined;
-        if (needRender) {
+        if (booted && needRender) {
           const children = defaultSlot && defaultSlot(control);
           const _clickOutside = clickOutsideDirectiveArgument({
             handler: (ev) => {
@@ -660,20 +659,22 @@ export function useStackControl(
           );
         }
 
-        $contents.push(
-          <Teleport to={rootContainer}>
-            {[
-              <Transition name="v-stack-fade">{backdrop.value}</Transition>,
-              $transition,
-            ]}
-          </Teleport>,
-        );
+        if (state.booted) {
+          $contents.push(
+            <Teleport to={rootContainer}>
+              {[
+                <Transition name="v-stack-fade">{backdrop.value}</Transition>,
+                $transition,
+              ]}
+            </Teleport>,
+          );
+        }
       }
 
       return (
         <>
           {$activator}
-          {...$contents}
+          {$contents}
         </>
       );
     },
@@ -684,6 +685,7 @@ export function useStackControl(
   });
 
   onMounted(() => {
+    state.booted = true;
     if (props.lazyBoot && props.modelValue) {
       control.show();
     }
@@ -764,22 +766,6 @@ export function useStackControl(
       });
     }
   }
-
-  // console.log(router);
-  // onBeforeRouteLeave(async (to, from) => {
-  //   if (!control.isActive) return true;
-  //   const result = await navigationGuard.value(to, from);
-  //   if (!result) {
-  //     control.guardEffect();
-  //   }
-  //   return result;
-  // });
-
-  // onBeforeRouteUpdate(() => {
-  //   if (control.closeOnNavigation) {
-  //     control.close({ force: true });
-  //   }
-  // });
 
   return control;
 }

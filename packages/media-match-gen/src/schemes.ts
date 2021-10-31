@@ -1,4 +1,9 @@
-export type { MediaMatchDefine } from '@fastkit/media-match';
+// export type { MediaMatchDefine } from '@fastkit/media-match';
+export interface MediaMatchDefine<K extends string = string> {
+  key: K;
+  condition: string;
+  description: string;
+}
 
 /**
  * breakPointsで定義したキーは

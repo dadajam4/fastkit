@@ -34,7 +34,7 @@
     "@fastkit/node-util": "0.3.10",
     "@fastkit/tiny-logger": "0.3.10",
     "chokidar": "^3.5.0",
-    "fantasticon": "^1.2.2",
-    "fs-extra": "^9.1.0"
+    "fs-extra": "^9.1.0",
+    "webfont": "^11.2.26"
   }
 }

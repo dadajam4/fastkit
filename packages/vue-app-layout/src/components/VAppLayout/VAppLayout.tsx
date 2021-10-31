@@ -2,7 +2,6 @@ import './VAppLayout.scss';
 
 import {
   PropType,
-  renderSlot,
   VNode,
   Transition,
   watch,
@@ -17,6 +16,7 @@ import {
 import {
   bodyScrollLockDirectiveArgument,
   defineSlotsProps,
+  renderSlotOrEmpty,
 } from '@fastkit/vue-utils';
 import { useRouter } from 'vue-router';
 import { resizeDirectiveArgument } from '@fastkit/vue-utils';
@@ -120,7 +120,7 @@ export const VAppLayout = defineComponent({
     const { $slots, control } = this;
     const ViewportTag = (this.viewportTag || 'div') as 'div';
     const slotPayload: VAppLayoutSlotPayload = { control };
-    const _default = renderSlot($slots, 'default');
+    const _default = renderSlotOrEmpty($slots, 'default');
 
     const classes = ['v-app-layout'];
 
@@ -207,7 +207,9 @@ export const VAppLayout = defineComponent({
 
     const { headerBar, header, drawer, footer, footerBar } = contents;
 
-    <div class="v-app-viewport">{renderSlot(this.$slots, 'default')}</div>;
+    <div class="v-app-viewport">
+      {renderSlotOrEmpty(this.$slots, 'default')}
+    </div>;
 
     if (control.drawerActive) {
       classes.push('v-app-layout--drawer-active');

@@ -1,8 +1,9 @@
 import './VOption.scss';
-import { defineComponent, renderSlot, computed } from 'vue';
+import { defineComponent, computed } from 'vue';
 import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
+  renderSlotOrEmpty,
 } from '@fastkit/vue-kit';
 import { createControlProps, useControl } from '../../composables';
 import { VUI_SELECT_SYMBOL, VUI_OPTION_SYMBOL } from '../../injections';
@@ -43,7 +44,7 @@ export const VOption = defineComponent({
     return (
       <label class={classes} onClick={selectorItemControl.handleClickElement}>
         <span class="v-option__label">
-          {renderSlot(this.$slots, 'default')}
+          {renderSlotOrEmpty(this.$slots, 'default')}
         </span>
       </label>
     );

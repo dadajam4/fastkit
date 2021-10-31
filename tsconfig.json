@@ -15,10 +15,17 @@
     "removeComments": false,
     "jsx": "preserve",
     "lib": ["esnext", "dom"],
-    "types": ["vite/client", "jest", "node"],
+    "types": [
+      "vite/client",
+      "jest",
+      "node",
+      "nuxt3/types",
+      "./nuxt",
+      "./packages/_docs/.nuxt/auto-imports"
+    ],
     "rootDir": ".",
     "paths": {
-      "~/*": ["packages/playground/src/*"],
+      "#app": ["./node_modules/nuxt3"],
       "@fastkit/*": ["packages/*/src"],
       "fastkit/*": ["packages/fastkit/src"]
     }
@@ -26,6 +33,7 @@
   "include": [
     "packages/global.d.ts",
     "packages/*/src",
+    "packages/_docs/src/.vui/vui.d.ts",
     "vite.config.ts",
     "plugins",
     "core"

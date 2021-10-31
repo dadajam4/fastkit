@@ -39,6 +39,7 @@
   // Stylelint base settings
   "stylelint.validate": [
     "css",
+    "postcss",
     "scss",
     // "html",
   ],

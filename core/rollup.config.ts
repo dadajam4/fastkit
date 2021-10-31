@@ -155,7 +155,7 @@ function createConfig(
         'core',
         'plugins',
         'vite.config.ts',
-        'packages/playground',
+        'packages/_docs',
       ],
     },
   });
@@ -189,6 +189,8 @@ function createConfig(
     'postcss',
     'nanoid',
     '@datadog/browser-logs',
+    '@nuxt',
+    'nuxt3',
   );
 
   // the browser builds requires postcss to be available
@@ -303,6 +305,7 @@ function createReplacePlugin(
   const replacements: RollupReplaceOptions['values'] = {
     __COMMIT__: `"${COMMIT}"`,
     __VERSION__: `"${mainVersion}"`,
+    __PLAY__: String(false),
     __DEV__: isBundlerESMBuild
       ? // preserve to be handled by bundlers
         `(process.env.NODE_ENV !== 'production')`

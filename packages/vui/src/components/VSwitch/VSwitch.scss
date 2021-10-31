@@ -65,8 +65,8 @@
         height: var(--icon-size);
         background: var(--my-pin-color);
         border-radius: 50%;
-        box-shadow: rgb(0 0 0 / 20%) 0 2px 1px -1px,
-          rgb(0 0 0 / 14%) 0 1px 1px 0, rgb(0 0 0 / 12%) 0 1px 3px 0;
+        box-shadow: rgb(0 0 0 / 0.2) 0 2px 1px -1px,
+          rgb(0 0 0 / 0.14) 0 1px 1px 0, rgb(0 0 0 / 0.12) 0 1px 3px 0;
         transform: scale(var(--control-checkable-faux-scale));
       }
     }

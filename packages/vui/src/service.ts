@@ -3,7 +3,7 @@ export { VuiInjectionKey } from './injections';
 import { VNodeChild } from 'vue';
 import { ScopeName } from '@fastkit/color-scheme';
 import type { IconName } from '@fastkit/icon-font';
-import { VueColorSchemePluginSettings } from '@fastkit/vue-kit';
+import type { VueColorSchemePluginSettings } from '@fastkit/vue-kit';
 
 const DEFAULT_AUTO_SCROLL_TO_ELEMENT_OFFSET_TOP = -20;
 const DEFAULT_TEXTAREA_ROWS = 3;

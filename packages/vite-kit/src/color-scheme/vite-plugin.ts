@@ -42,9 +42,6 @@ export function colorSchemeVitePlugin(
 
   const rawEntryPoint = path.resolve(src);
 
-  // const cacheName = entry.replace(/\//g, '_') + '.scss';
-  // console.log('!!!', cacheName);
-
   return {
     name: 'vite:color-scheme',
     async config(config, { command }) {

@@ -7,3 +7,6 @@ explorations
 TODOs.md
 *.log
 **/.dynamic/**/*
+.vui-installer.ts
+.vui
+.nuxt

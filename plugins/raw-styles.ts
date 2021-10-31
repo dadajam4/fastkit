@@ -1,7 +1,7 @@
 import { Plugin, TransformResult, ViteDevServer } from 'vite';
 import path from 'path';
 import sass from 'sass';
-import Fiber from 'fibers';
+// import Fiber from 'fibers';
 import postcss from 'postcss';
 // import cssnano from 'cssnano';
 import autoprefixer from 'autoprefixer';
@@ -13,15 +13,15 @@ const cssnano = require('cssnano');
 const idMatchRe = /(\.s?css)!raw(\?import)?$/;
 
 function processSass(file: string) {
-  const custom: any = {
-    fiber: Fiber,
-  };
+  // const custom: any = {
+  //   fiber: Fiber,
+  // };
   return new Promise<sass.Result>((resolve, reject) => {
     sass.render(
       {
         file: file,
         // data: code,
-        ...custom,
+        // ...custom,
         // sourceMap: true,
         // sourceMapContents: true,
       },

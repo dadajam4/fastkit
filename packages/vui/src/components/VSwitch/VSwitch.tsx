@@ -1,8 +1,9 @@
 import './VSwitch.scss';
-import { defineComponent, renderSlot } from 'vue';
+import { defineComponent } from 'vue';
 import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
+  renderSlotOrEmpty,
 } from '@fastkit/vue-kit';
 import { createControlProps, useControl } from '../../composables';
 import { VUI_SWITCH_GROUP_SYMBOL, VUI_SWITCH_SYMBOL } from '../../injections';
@@ -23,6 +24,10 @@ export const VSwitch = defineComponent({
       parentNodeType: VUI_SWITCH_GROUP_SYMBOL,
     });
     const control = useControl(props);
+    if (typeof window !== 'undefined') {
+      (window as any).yy = {};
+      (window as any).yy[String(Date.now())] = nodeControl;
+    }
     return {
       ...nodeControl.expose(),
       ...control,
@@ -37,6 +42,7 @@ export const VSwitch = defineComponent({
           {
             'v-switch--selected': selectorItemControl.selected,
             'v-switch--disabled': selectorItemControl.isDisabled,
+            xxxxx: selectorItemControl.booted,
           },
           this.classes,
         ]}
@@ -52,7 +58,7 @@ export const VSwitch = defineComponent({
               <span class="v-switch__faux__pin"></span>
             </span>
           ),
-          label: () => renderSlot(this.$slots, 'default'),
+          label: () => renderSlotOrEmpty(this.$slots, 'default'),
         }}
       />
     );

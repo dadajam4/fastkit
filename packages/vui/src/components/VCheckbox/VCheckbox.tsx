@@ -1,8 +1,9 @@
 import './VCheckbox.scss';
-import { defineComponent, renderSlot, computed } from 'vue';
+import { defineComponent, computed } from 'vue';
 import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
+  renderSlotOrEmpty,
 } from '@fastkit/vue-kit';
 import { createControlProps, useControl } from '../../composables';
 import {
@@ -54,7 +55,7 @@ export const VCheckbox = defineComponent({
           input: () =>
             selectorItemControl.createInputElement({ type: 'checkbox' }),
           faux: () => <span class="v-checkbox__faux"></span>,
-          label: () => renderSlot(this.$slots, 'default'),
+          label: () => renderSlotOrEmpty(this.$slots, 'default'),
         }}
       />
     );

@@ -1,13 +1,13 @@
 import './VControlField.scss';
-import { computed, PropType, renderSlot, ref, defineComponent } from 'vue';
+import { computed, PropType, ref, defineComponent } from 'vue';
 import {
   useParentFormNode,
-  renderSlotOrEmpty,
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
   TypedSlot,
   createPropsOptions,
   defineSlotsProps,
+  renderSlotOrEmpty,
 } from '@fastkit/vue-kit';
 import {
   createControlProps,
@@ -143,7 +143,7 @@ export const VControlField = defineComponent({
         ref={this.hostElRef()}>
         {this.renderAdornment('start')}
         <div class="v-control-field__body">
-          {renderSlot(this.$slots, 'default')}
+          {renderSlotOrEmpty(this.$slots, 'default')}
         </div>
         {this.renderAdornment('end')}
       </div>

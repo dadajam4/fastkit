@@ -110,14 +110,19 @@ export async function generator(
     }
   });
 
-  const mediaMatchKeys = mediaMatches.map(({ key }) => `'${key}'`).join(' | ');
-
   const TS_SOURCE = `
 /* eslint-disable */
 // @ts-nocheck
 ${BANNER}
 
-export type MediaMatchKey = ${mediaMatchKeys};
+import type { MediaMatchKey, MediaMatchKeyMap } from '@fastkit/media-match';
+import { registerMediaMatchConditions } from '@fastkit/media-match';
+
+declare module "@fastkit/media-match" {
+  export interface MediaMatchKeyMap {
+${mediaMatches.map(({ key }) => `    '${key}': true,`).join('\n')}
+  }
+}
 
 export interface MediaMatch {
   key: MediaMatchKey;
@@ -125,11 +130,13 @@ export interface MediaMatch {
   description: string;
 }
 
-export const mediaMatches: MediaMatch[] = ${JSON.stringify(
+export const mediaMatches = registerMediaMatchConditions(${JSON.stringify(
     mediaMatches,
     null,
-    '  ',
-  )};
+    2,
+  )});
+
+export type { MediaMatchKey } from '@fastkit/media-match';
   `.trim();
 
   const SCSS_SOURCE = `

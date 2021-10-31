@@ -1,5 +1,5 @@
 import './form-selector.scss';
-import { VNodeChild, renderSlot, defineComponent } from 'vue';
+import { VNodeChild, defineComponent } from 'vue';
 import {
   defineSlotsProps,
   TypedSlot,
@@ -9,6 +9,7 @@ import {
   useFormSelectorControl,
   ResolvedFormSelectorItemData,
   FormNodeControl,
+  renderSlotOrEmpty,
 } from '@fastkit/vue-kit';
 import { createControlProps, useControl } from './control';
 import { VFormControl } from '../components/VFormControl';
@@ -88,7 +89,7 @@ export function defineFormSelectorComponent(
                     },
                   }),
                 )}
-                {renderSlot(this.$slots, 'default')}
+                {renderSlotOrEmpty(this.$slots, 'default')}
               </div>
             ),
           }}

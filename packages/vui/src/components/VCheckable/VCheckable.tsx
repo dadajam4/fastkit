@@ -1,6 +1,6 @@
 import './VCheckable.scss';
-import { renderSlot, computed, defineComponent } from 'vue';
-import { defineSlotsProps } from '@fastkit/vue-kit';
+import { computed, defineComponent } from 'vue';
+import { defineSlotsProps, renderSlotOrEmpty } from '@fastkit/vue-kit';
 import { useVuiColorProvider } from '../../composables';
 
 export const VCheckable = defineComponent({
@@ -42,16 +42,18 @@ export const VCheckable = defineComponent({
     return () => (
       <label class={['v-checkable', classes.value]}>
         <span class="v-checkable__faux">
-          {renderSlot(ctx.slots, 'input')}
+          {renderSlotOrEmpty(ctx.slots, 'input')}
           {ctx.slots.icon ? (
-            renderSlot(ctx.slots, 'icon')
+            renderSlotOrEmpty(ctx.slots, 'icon')
           ) : (
             <span class="v-checkable__faux__icon">
-              {renderSlot(ctx.slots, 'faux')}
+              {renderSlotOrEmpty(ctx.slots, 'faux')}
             </span>
           )}
         </span>
-        <span class="v-checkable__label">{renderSlot(ctx.slots, 'label')}</span>
+        <span class="v-checkable__label">
+          {renderSlotOrEmpty(ctx.slots, 'label')}
+        </span>
       </label>
     );
   },

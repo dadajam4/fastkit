@@ -1,5 +1,5 @@
 import './VOptionGroup.scss';
-import { renderSlot, computed, PropType, defineComponent } from 'vue';
+import { computed, PropType, defineComponent } from 'vue';
 import {
   createFormSelectorItemGroupProps,
   useFormSelectorItemGroupControl,
@@ -7,6 +7,7 @@ import {
   defineSlotsProps,
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
+  renderSlotOrEmpty,
 } from '@fastkit/vue-kit';
 import { VUI_SELECT_SYMBOL } from '../../injections';
 
@@ -47,7 +48,7 @@ export const VOptionGroup = defineComponent({
     return (
       <div class={classes}>
         {!!label && <div class="v-option-group__label">{label}</div>}
-        {renderSlot(this.$slots, 'default')}
+        {renderSlotOrEmpty(this.$slots, 'default')}
       </div>
     );
   },

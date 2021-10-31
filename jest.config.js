@@ -17,7 +17,7 @@ module.exports = {
   coverageReporters: ['html', 'lcov', 'text'],
   collectCoverageFrom: [
     'packages/*/src/**/*.ts',
-    '!packages/playground/**',
+    '!packages/_docs/**',
     '!packages/size-check/**',
     '!packages/create-fastkit-app/templates/**',
   ],

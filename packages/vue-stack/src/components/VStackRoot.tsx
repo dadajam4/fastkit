@@ -1,10 +1,19 @@
 import './VStackRoot.scss';
 
-import { defineComponent, ref, Ref, provide, h, cloneVNode } from 'vue';
+import {
+  defineComponent,
+  ref,
+  Ref,
+  provide,
+  h,
+  cloneVNode,
+  onMounted,
+} from 'vue';
 import { useVueStack } from '../hooks';
 import { VStackControl } from '../schemes/control';
 import { normalizeVStackDynamicChildren } from '../schemes/dynamic';
 import { VStackRootInjectKey } from '../injections';
+import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 
 export interface VStackRootControl {
   root: Ref<HTMLElement | null>;
@@ -15,9 +24,14 @@ export const VStackRoot = defineComponent({
   setup(props, ctx) {
     const $vstack = useVueStack();
     const rootRef = ref<HTMLElement | null>(null);
+    const booted = ref(false);
     const control: VStackRootControl = {
       root: rootRef,
     };
+
+    onMounted(() => {
+      booted.value = true;
+    });
 
     provide(VStackRootInjectKey, control);
     return {
@@ -27,6 +41,7 @@ export const VStackRoot = defineComponent({
       rootRef() {
         return rootRef;
       },
+      booted,
     };
     // return () => (
     //   <div class="v-stack-root" ref={root}>
@@ -37,7 +52,6 @@ export const VStackRoot = defineComponent({
   },
   render() {
     const { settings, $slots } = this;
-    const { default: defaultSlot } = $slots;
 
     const $dynamicStacks = settings.map(
       ({ id: key, setting, resolve, remove }) => {
@@ -70,7 +84,7 @@ export const VStackRoot = defineComponent({
 
     return (
       <div class="v-stack-root" ref={this.rootRef()}>
-        {defaultSlot && defaultSlot()}
+        {renderSlotOrEmpty($slots, 'default')}
         {$dynamicStacks}
       </div>
     );

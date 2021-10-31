@@ -96,6 +96,7 @@
     &-leave-active {
       transition: opacity $drawer-transition;
     }
+
     &-enter-from,
     &-leave-to {
       opacity: 0;

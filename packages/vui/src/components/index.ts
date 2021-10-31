@@ -13,3 +13,4 @@ export * from './VTextField';
 export * from './VTextarea';
 export * from './VForm';
 export { VDialog, VMenu, VSnackbar } from '@fastkit/vue-kit';
+export * from './VTest';

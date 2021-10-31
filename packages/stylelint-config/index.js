@@ -1,5 +1,5 @@
 module.exports = {
-  syntax: 'css-in-js',
+  // syntax: 'css-in-js',
   plugins: ['stylelint-scss'],
   extends: [
     'stylelint-config-standard',
@@ -8,12 +8,31 @@ module.exports = {
     'stylelint-config-recess-order',
   ],
   rules: {
+    'at-rule-no-unknown': null,
+    'scss/at-rule-no-unknown': true,
     'prettier/prettier': true,
     indentation: 2,
     'string-quotes': 'single',
-    'at-rule-no-unknown': null,
-    'scss/at-rule-no-unknown': true,
     'length-zero-no-unit': null,
     'value-keyword-case': null,
+    'no-descending-specificity': null,
+    'declaration-block-trailing-semicolon': null,
+    'alpha-value-notation': 'number',
+    'color-function-notation': null,
+    'selector-class-pattern': null,
+    'custom-property-pattern': null,
+    'number-max-precision': 16,
+    // 'function-calc-no-unspaced-operator': false,
+    // 'function-linear-gradient-no-nonstandard-direction': false,
+    // 'function-calc-no-invalid': null,
   },
+  overrides: [
+    {
+      files: ['**/*.scss'],
+      customSyntax: 'postcss-scss',
+      rules: {
+        // 'function-calc-no-invalid': null,
+      },
+    },
+  ],
 };
