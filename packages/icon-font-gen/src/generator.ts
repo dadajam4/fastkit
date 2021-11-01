@@ -12,10 +12,9 @@ import {
   ICON_FONT_FORMAT_MAP,
 } from './schemes';
 import { HashComparator } from '@fastkit/node-util';
+import { UnPromisify } from '@fastkit/helpers';
 import { logger } from './logger';
 import webfont from 'webfont';
-
-type UnPromisify<T> = T extends Promise<infer U> ? U : T;
 
 export type IconFontEntryResult = {
   entry: IconFontEntry;
@@ -146,6 +145,9 @@ export async function generateEntry(
   const cssCode = `
 @font-face {
 font-family: "${options.fontName}";
+font-display: block;
+font-style: normal;
+font-weight: 400;
 src: ${src};
 }
 
@@ -155,6 +157,7 @@ i[class^="${cssPrefix}"]:before, i[class*=" ${cssPrefix}"]:before {
     font-weight: normal !important;
     font-variant: normal;
     text-transform: none;
+    text-rendering: auto;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -1,12 +1,21 @@
-import { VAppLayout, VStackRoot, useMediaMatch } from '@fastkit/vui';
-import { useInjectTheme } from '@fastkit/vue-color-scheme';
+import { VAppLayout, VApp, useMediaMatch } from '@fastkit/vui';
+// import { useRouter } from 'vue-router';
 
 const App = defineComponent({
   setup() {
     const systemBarOpened = ref(false);
     const requestBackdrop = () => true;
     const mm = useMediaMatch();
-    useInjectTheme();
+
+    // const router = useRouter();
+    // router.options.scrollBehavior = (to, from, savedPosition) => {
+    //   to.matched.forEach((m) => {
+    //     console.log(m.instances);
+    //   });
+    // };
+
+    // console.log(router);
+
     return {
       mm,
       systemBarOpened,
@@ -15,7 +24,7 @@ const App = defineComponent({
   },
   render() {
     return (
-      <VStackRoot>
+      <VApp>
         <VAppLayout
           header={{ fixed: true }}
           footer={{ spacer: true }}
@@ -116,7 +125,7 @@ const App = defineComponent({
             },
           }}
         />
-      </VStackRoot>
+      </VApp>
     );
   },
 });

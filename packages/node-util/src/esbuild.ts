@@ -87,6 +87,7 @@ export async function esbuildRequire<T = any>(
   const buildResult = await esbuild.build({
     // outfile
     entryPoints: [entryPoint],
+    external: ['esbuild'],
     bundle: true,
     tsconfig,
     platform: 'node',

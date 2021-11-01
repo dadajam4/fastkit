@@ -20,8 +20,18 @@ import {
 import { RouterLink } from 'vue-router';
 
 export default defineNuxtComponent({
-  setup() {
+  async setup() {
+    const { data } = await useAsyncData(
+      'page2',
+      async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return { success: true };
+      },
+      { defer: false },
+    );
+
     return {
+      data,
       size: ref<ControlSize>('md'),
       disabled: ref(false),
       readonly: ref(false),
@@ -37,6 +47,7 @@ export default defineNuxtComponent({
       fontSize: ref(16),
       select: ref('2'),
       textarea: ref(''),
+      hogehoge: true,
     };
   },
   render() {
@@ -266,6 +277,7 @@ export default defineNuxtComponent({
           <hr />
           <RouterLink to="/">Home</RouterLink>
           <RouterLink to="/page2">page2</RouterLink>
+          <RouterLink to="/page3">page3</RouterLink>
         </div>
       </div>
     );

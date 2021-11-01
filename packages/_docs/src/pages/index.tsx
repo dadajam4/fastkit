@@ -1,4 +1,3 @@
-import { defineNuxtComponent } from '#app';
 import { ref } from 'vue';
 
 import {
@@ -17,14 +16,28 @@ import { AppError } from '../error';
 const logger = getLogger('HomeView');
 
 export default defineNuxtComponent({
-  setup() {
+  // scrollBehavior: () => {
+  //   return Promise.resolve({ top: 0 });
+  //   // return Promise.resolve(false);
+  // },
+  async setup() {
     const vueStack = useVueStack();
     const colorScheme = useColorScheme();
     const mm = useMediaMatch();
 
     logger.info('home view is setuped.');
 
+    const { data } = await useAsyncData(
+      'home',
+      async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return { success: true };
+      },
+      { defer: false },
+    );
+
     return {
+      data,
       vueStack,
       colorScheme,
       disabled: ref(false),
@@ -39,7 +52,9 @@ export default defineNuxtComponent({
   render() {
     return (
       <div style={{ padding: '20px' }}>
-        <h1>決済設定</h1>
+        <h1>
+          決済設定<>{JSON.stringify(this.data)}</>
+        </h1>
         <p>
           Typographyヘルパークラスを使用してテキストのサイズとスタイルを制御します。
           これらの値は、 Material Design type specification に基づいています。
@@ -162,7 +177,7 @@ export default defineNuxtComponent({
           onClick={(e) => {
             this.count++;
           }}>
-          Click!! {this.count}
+          {`Click!! ${this.count}`}
         </button>
         <p>{JSON.stringify(this.stackActive)}</p>
         <div>
@@ -174,7 +189,7 @@ export default defineNuxtComponent({
         <div>
           <label>
             <input type="checkbox" v-model={this.stackActive} />
-            モデル{this.stackActive ? 'ON' : 'OFF'}
+            {`モデル${this.stackActive ? 'ON' : 'OFF'}`}
           </label>
         </div>
         <VDialog
@@ -207,7 +222,7 @@ export default defineNuxtComponent({
             activator: ({ attrs, control }) => {
               return [
                 <VButton {...attrs} color="primary">
-                  アクティベーター{control.isActive ? 'ON' : 'OFF'}
+                  {`アクティベーター${control.isActive ? 'ON' : 'OFF'}`}
                 </VButton>,
               ];
             },

@@ -10,6 +10,7 @@
     "@fastkit/catcher": "0.4.0",
     "@fastkit/color-scheme": "0.4.0",
     "@fastkit/media-match-gen": "0.4.0",
+    "@fastkit/nuxt-utils": "0.4.0",
     "@fastkit/vue-app-layout": "0.4.0",
     "@fastkit/vue-color-scheme": "0.4.0",
     "@fastkit/vue-media-match": "0.4.0",

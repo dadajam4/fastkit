@@ -1,7 +1,7 @@
 import path from 'path';
 import { pathExists } from './path';
 import execa from 'execa';
-import { logger, NodeUtilError } from './logger';
+import { NodeUtilError } from './logger';
 
 const DEV_RE = /\/fastkit\/packages\//;
 
@@ -135,7 +135,7 @@ export async function installPackage(
 
   if (skipWhenInstalled) {
     if (await pathExists(installedDir, 'dir')) {
-      logger.info(`${pkg} is already installed. skip install.`);
+      // logger.info(`${pkg} is already installed. skip install.`);
       return installedDir;
     }
   }

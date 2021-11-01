@@ -7,6 +7,8 @@ export interface HashedSyncVitePluginOptions
   onBootError?: (err: unknown) => any;
 }
 
+let hashedSync: HashedSync | undefined;
+
 export function hashedSyncVitePlugin(
   opts: HashedSyncVitePluginOptions,
 ): Plugin {
@@ -16,11 +18,13 @@ export function hashedSyncVitePlugin(
       const { onBooted, onBootError } = opts;
 
       try {
-        const hashedSync = new HashedSync({
-          ...opts,
-          watch: command === 'serve',
-        });
-        await hashedSync.loadAndSync();
+        if (!hashedSync) {
+          hashedSync = new HashedSync({
+            ...opts,
+            watch: command === 'serve',
+          });
+          await hashedSync.loadAndSync();
+        }
 
         onBooted && onBooted();
 
