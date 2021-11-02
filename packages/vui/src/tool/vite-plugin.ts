@@ -17,17 +17,18 @@ async function defaultDynamicDest() {
 }
 
 async function getBuiltinsDir() {
-  const cwd = process.cwd();
+  // const cwd = process.cwd();
   const pkgDir = await findPackageDir();
   if (!pkgDir) {
     throw new Error(`missing package directory`);
   }
 
   // For development...
-  if (/\/packages\/_docs/.test(cwd)) {
-    const result = path.resolve(cwd, '../vui/src/assets/builtins');
-    return result;
-  }
+  // console.log('■■■', cwd);
+  // if (cwd.endsWith('/docs')) {
+  //   const result = path.resolve(cwd, '../packages/vui/src/assets/builtins');
+  //   return result;
+  // }
 
   return path.join(pkgDir, 'node_modules/@fastkit/vui/dist/assets/builtins');
 }
@@ -85,7 +86,7 @@ export async function ViteVuiPlugin(
 
   if (!dynamicDest) {
     if (options.__dev) {
-      dynamicDest = path.resolve(__dirname, '../../../_docs/src/.vui');
+      dynamicDest = path.resolve(__dirname, '../../../../docs/.vui');
     } else {
       dynamicDest = await defaultDynamicDest();
     }

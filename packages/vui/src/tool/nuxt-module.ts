@@ -93,7 +93,7 @@ export const VuiModule = defineNuxtModule<VuiModuleOptions>({
     if (options.__dev) {
       const destPath = path.resolve(
         __dirname,
-        '../../../_docs/src/.vui',
+        '../../../../docs/.vui',
         'nuxt-vui-plugin.ts',
       );
       await fs.ensureDir(path.dirname(destPath));

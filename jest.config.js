@@ -17,9 +17,9 @@ module.exports = {
   coverageReporters: ['html', 'lcov', 'text'],
   collectCoverageFrom: [
     'packages/*/src/**/*.ts',
-    '!packages/_docs/**',
     '!packages/size-check/**',
     '!packages/create-fastkit-app/templates/**',
+    '!docs/**',
   ],
   watchPathIgnorePatterns: ['/node_modules/', '/dist/', '/.git/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],

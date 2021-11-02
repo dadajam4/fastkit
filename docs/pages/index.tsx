@@ -10,8 +10,8 @@ import {
   VExpandTransition,
   useMediaMatch,
 } from '@fastkit/vui';
-import { getLogger } from '../logger';
-import { AppError } from '../error';
+import { getLogger } from '~/logger';
+import { AppError } from '~/error';
 
 const logger = getLogger('HomeView');
 

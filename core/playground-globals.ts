@@ -2,7 +2,7 @@ import { Plugin } from 'vite';
 
 export function globalsPlugin(options = {}): Plugin {
   return {
-    name: 'globals',
+    name: 'playground:globals',
     transform(code, id, ssr) {
       if (/\.[jt]sx?$/.test(id)) {
         const values = {

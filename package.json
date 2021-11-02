@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "cd packages/_docs && nuxi dev",
+    "dev": "cd docs && nuxi dev",
     "gen": "node -r esbuild-register core/bootstrap.ts --target ",
     "build": "node -r esbuild-register core/build.ts",
     "size": "node -r esbuild-register core/build.ts fastkit -p -f global",

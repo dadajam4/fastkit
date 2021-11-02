@@ -45,7 +45,7 @@ const App = defineComponent({
                     width: '100%',
                     fontSize: '12px',
                   }}>
-                  システムバーです
+                  <>システムバーです</>
                   {/* <VSwitch></VSwitch> */}
                   <input
                     type="checkbox"

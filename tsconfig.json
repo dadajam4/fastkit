@@ -21,21 +21,58 @@
       "node",
       "nuxt3/types",
       "./nuxt",
-      "./packages/_docs/.nuxt/auto-imports"
+      "./docs/.nuxt/auto-imports"
     ],
     "rootDir": ".",
     "paths": {
-      "#app": ["./node_modules/nuxt3"],
       "@fastkit/*": ["packages/*/src"],
-      "fastkit/*": ["packages/fastkit/src"]
+      "fastkit/*": ["packages/fastkit/src"],
+      "~~": [
+        "./docs"
+      ],
+      "~~/*": [
+        "./docs/*"
+      ],
+      "@@": [
+        "./docs"
+      ],
+      "@@/*": [
+        "./docs/*"
+      ],
+      "~": [
+        "./docs"
+      ],
+      "~/*": [
+        "./docs/*"
+      ],
+      "@": [
+        "./docs"
+      ],
+      "@/*": [
+        "./docs/*"
+      ],
+      "assets": [
+        "./docs/assets"
+      ],
+      "public": [
+        "./docs/public"
+      ],
+      "public/*": [
+        "./docs/public/*"
+      ],
+      "#app": [
+        "./node_modules/nuxt3/dist/app"
+      ],
+      "#app/*": [
+        "./node_modules/nuxt3/dist/app/*"
+      ],
     }
   },
   "include": [
     "packages/global.d.ts",
     "packages/*/src",
-    "packages/_docs/src/.vui/vui.d.ts",
-    "vite.config.ts",
-    "plugins",
-    "core"
+    "core",
+    "docs",
+    "docs/.vui/vui.d.ts"
   ]
 }
