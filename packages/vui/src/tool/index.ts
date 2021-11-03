@@ -1,2 +1,2 @@
 export * from './vite-plugin';
-export * from './nuxt-module';
+// export * from './nuxt-module';

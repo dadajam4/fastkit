@@ -2,23 +2,72 @@ import { Plugin } from 'vite';
 import { dynamicSrcVitePlugin } from '@fastkit/vite-kit';
 import path from 'path';
 import fs from 'fs-extra';
-import { findPackageDir } from '@fastkit/node-util';
+import { findPackageDirSync } from '@fastkit/node-util';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
 import { VuiServiceOptions } from '@fastkit/vui';
+import { render } from 'eta';
+import { VuiError } from '../logger';
 
 const COLOR_DUMP_STYLE = `@include dump-color-scheme(true);`;
 
-async function defaultDynamicDest() {
-  const pkgDir = await findPackageDir();
-  if (!pkgDir) {
-    throw new Error(`missing package directory`);
-  }
-  return path.join(pkgDir, '.vui');
+const TEMPLATE = `
+/* eslint-disable */
+// @ts-nocheck
+import '@fastkit/vue-stack/dist/vue-stack.css';
+import '@fastkit/vue-app-layout/dist/vue-app-layout.css';
+import '@fastkit/vui/dist/vui.css';
+import './setup.scss';
+import type { App } from 'vue';
+import { installVuiPlugin as _installVuiPlugin } from '@fastkit/vui';
+import { colorScheme } from '<%~ it.colorScheme %>';
+import '<%~ it.mediaMatch %>';
+import './icon-font';
+
+export function installVui(app: App) {
+  _installVuiPlugin(app, {
+    colorScheme,
+    colors: <%~ it.colors %>,
+    icons: <%~ it.icons %>,
+  });
 }
 
-async function getBuiltinsDir() {
+export default installVui;
+`.trim();
+
+async function renderTemplate({
+  colorScheme,
+  mediaMatch,
+  colors,
+  icons,
+}: ViteVuiPluginResultSettings) {
+  const result = await render(
+    TEMPLATE,
+    {
+      colorScheme,
+      mediaMatch,
+      colors: JSON.stringify(colors),
+      icons: JSON.stringify(icons),
+    },
+    { async: true },
+  );
+  if (!result) {
+    throw new VuiError('template render error.');
+  }
+  return result;
+}
+
+function defaultDynamicDest() {
+  // const pkgDir = findPackageDirSync();
+  // if (!pkgDir) {
+  //   throw new Error(`missing package directory`);
+  // }
+  // return path.join(pkgDir, '.vui');
+  return path.resolve('.vui');
+}
+
+function getBuiltinsDir() {
   // const cwd = process.cwd();
-  const pkgDir = await findPackageDir();
+  const pkgDir = findPackageDirSync();
   if (!pkgDir) {
     throw new Error(`missing package directory`);
   }
@@ -59,12 +108,12 @@ export interface ViteVuiPluginResult {
   dest: string;
 }
 
-export async function ViteVuiPlugin(
+export function viteVuiPlugin(
   options: ViteVuiPluginOptions = {},
-): Promise<ViteVuiPluginResult> {
+): ViteVuiPluginResult {
   const plugins: (Plugin | Plugin[])[] = [];
 
-  const builtinsDir = await getBuiltinsDir();
+  const builtinsDir = getBuiltinsDir();
   const {
     colorScheme = path.join(builtinsDir, 'color-scheme'),
     mediaMatch = path.join(builtinsDir, 'media-match'),
@@ -82,14 +131,18 @@ export async function ViteVuiPlugin(
     __dev,
   } = options;
 
-  let { dynamicDest } = options;
+  let dynamicDest: string;
 
-  if (!dynamicDest) {
+  const { dynamicDest: _dynamicDest } = options;
+
+  if (!_dynamicDest) {
     if (options.__dev) {
       dynamicDest = path.resolve(__dirname, '../../../../docs/.vui');
     } else {
-      dynamicDest = await defaultDynamicDest();
+      dynamicDest = defaultDynamicDest();
     }
+  } else {
+    dynamicDest = _dynamicDest;
   }
 
   const colorSchemeSrc = path.resolve(colorScheme);
@@ -102,9 +155,9 @@ export async function ViteVuiPlugin(
 export {};
   `.trim();
 
-  await fs.ensureDir(dynamicDest);
-  await fs.writeFile(path.join(dynamicDest, 'setup.scss'), COLOR_DUMP_STYLE);
-  await fs.writeFile(path.join(dynamicDest, 'vui.d.ts'), dts);
+  fs.ensureDirSync(dynamicDest);
+  fs.writeFileSync(path.join(dynamicDest, 'setup.scss'), COLOR_DUMP_STYLE);
+  fs.writeFileSync(path.join(dynamicDest, 'vui.d.ts'), dts);
 
   let iconFontEntries: RawIconFontEntry[] = iconFont || [
     {
@@ -143,7 +196,12 @@ export {};
   const plugin: Plugin = {
     name: 'vite:vui',
     enforce: 'pre',
-    config(config) {
+    async config(config) {
+      await fs.writeFile(
+        path.join(dynamicDest, 'installer.ts'),
+        await renderTemplate(settings),
+      );
+
       const ssr = (config as any).ssr || {};
       ssr.noExternal = ssr.noExternal || [];
       ssr.noExternal.push(/\/vui\/dist\/assets\//);
@@ -155,15 +213,18 @@ export {};
   };
 
   plugins.push(plugin);
+
+  const settings = {
+    colorScheme: path.join(colorSchemeDest, 'color-scheme.info'),
+    mediaMatch: path.join(mediaMatchDest, 'media-match'),
+    colors,
+    icons,
+    __dev,
+  };
+
   return {
     plugins,
     dest: dynamicDest,
-    settings: {
-      colorScheme: path.join(colorSchemeDest, 'color-scheme.info'),
-      mediaMatch: path.join(mediaMatchDest, 'media-match'),
-      colors,
-      icons,
-      __dev,
-    },
+    settings,
   };
 }

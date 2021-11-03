@@ -1,6 +1,6 @@
 import { defineNuxtModule, addPluginTemplate } from '@nuxt/kit';
 import {
-  ViteVuiPlugin,
+  viteVuiPlugin,
   ViteVuiPluginOptions,
   ViteVuiPluginResultSettings,
 } from './vite-plugin';
@@ -71,7 +71,7 @@ export const NuxtVuiModule = defineNuxtModule<NuxtVuiModuleOptions>({
 
     const { iconFontDefaults } = options;
 
-    const { plugins, settings, dest } = await ViteVuiPlugin({
+    const { plugins, settings, dest } = await viteVuiPlugin({
       ...options,
       iconFontDefaults: {
         // @TODO url() import was broken...

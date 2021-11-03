@@ -1,5 +1,5 @@
 import path from 'path';
-import { pathExists } from './path';
+import { pathExists, pathExistsSync } from './path';
 import execa from 'execa';
 import { NodeUtilError } from './logger';
 
@@ -15,6 +15,41 @@ export async function findPackageDir(
   let result: string | undefined;
 
   if (await pathExists(from, 'file')) {
+    from = path.dirname(from);
+  }
+
+  while (true) {
+    const target = path.join(from, 'package.json');
+    try {
+      const pkg = require(target);
+      if (pkg) {
+        result = from;
+        break;
+      }
+    } catch (err: any) {
+      if (!err.message.startsWith('Cannot find module')) {
+        throw err;
+      }
+    }
+    const next = path.dirname(from);
+    if (next === from) {
+      break;
+    }
+    from = next;
+  }
+  return result;
+}
+
+export function findPackageDirSync(
+  from: string = process.cwd(),
+): string | undefined {
+  if (DEV_RE.test(from)) {
+    return path.join(from, '../..');
+  }
+
+  let result: string | undefined;
+
+  if (pathExistsSync(from, 'file')) {
     from = path.dirname(from);
   }
 

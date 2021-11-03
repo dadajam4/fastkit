@@ -34,10 +34,10 @@
         "./docs/*"
       ],
       "@@": [
-        "./docs"
+        "./playground"
       ],
       "@@/*": [
-        "./docs/*"
+        "./playground/*"
       ],
       "~": [
         "./docs"
@@ -46,10 +46,10 @@
         "./docs/*"
       ],
       "@": [
-        "./docs"
+        "./playground/src"
       ],
       "@/*": [
-        "./docs/*"
+        "./playground/src/*"
       ],
       "assets": [
         "./docs/assets"
@@ -73,6 +73,7 @@
     "packages/*/src",
     "core",
     "docs",
-    "docs/.vui/vui.d.ts"
+    "docs/.vui/vui.d.ts",
+    "playground"
   ]
 }

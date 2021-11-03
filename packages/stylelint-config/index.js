@@ -30,9 +30,10 @@ module.exports = {
     {
       files: ['**/*.scss'],
       customSyntax: 'postcss-scss',
-      rules: {
-        // 'function-calc-no-invalid': null,
-      },
+    },
+    {
+      files: ['**/*.html'],
+      customSyntax: 'postcss-html',
     },
   ],
 };
