@@ -14,7 +14,7 @@ import {
 import { HashComparator } from '@fastkit/node-util';
 import { UnPromisify } from '@fastkit/helpers';
 import { logger } from './logger';
-import webfont from 'webfont';
+import type webfont from 'webfont';
 
 export type IconFontEntryResult = {
   entry: IconFontEntry;
@@ -86,10 +86,8 @@ export async function generateEntry(
   }
 
   await fs.ensureDir(options.dest);
-  // const result = await generateFonts({
-  //   ...options,
-  //   prefix: cssPrefix,
-  // });
+
+  const webfont = await (await import('webfont')).default;
 
   const result = await webfont({
     files: options.src,

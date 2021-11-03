@@ -93,3 +93,15 @@ export async function resolveRawIconFontEntry(
 function findOrInstallMDI() {
   return installPackage('@mdi/svg', { dev: true });
 }
+
+export const DEFAULT_CONFIG_FILENAME = 'icon-font.config';
+
+export const DEFAULT_DEST_DIRNAME = '.icon-font';
+
+export interface IconFontConfig extends Omit<IconFontOptions, 'dest'> {
+  dest?: string;
+}
+
+export function ceateIconFontConfig(options: IconFontConfig) {
+  return options;
+}

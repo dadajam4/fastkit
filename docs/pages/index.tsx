@@ -20,6 +20,13 @@ export default defineNuxtComponent({
   //   return Promise.resolve({ top: 0 });
   //   // return Promise.resolve(false);
   // },
+  // data() {
+  //   returun {
+
+  //   }
+  // },
+  // hoge = 'fuga';
+
   async setup() {
     const vueStack = useVueStack();
     const colorScheme = useColorScheme();

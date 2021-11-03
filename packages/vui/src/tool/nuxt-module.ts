@@ -51,9 +51,9 @@ async function renderTemplate({
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface VuiModuleOptions extends ViteVuiPluginOptions {}
+export interface NuxtVuiModuleOptions extends ViteVuiPluginOptions {}
 
-export const VuiModule = defineNuxtModule<VuiModuleOptions>({
+export const NuxtVuiModule = defineNuxtModule<NuxtVuiModuleOptions>({
   async setup(options, nuxt) {
     const { options: nuxtOptions } = nuxt;
     nuxtOptions.build.transpile.push(/imask/);
@@ -113,8 +113,8 @@ export const VuiModule = defineNuxtModule<VuiModuleOptions>({
   },
 });
 
-export function useVuiModule(options?: VuiModuleOptions) {
-  return [VuiModule, options];
+export function useNuxtVuiModule(options?: NuxtVuiModuleOptions) {
+  return [NuxtVuiModule, options];
 }
 
-export default VuiModule;
+export default NuxtVuiModule;

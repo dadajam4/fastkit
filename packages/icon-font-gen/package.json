@@ -9,9 +9,13 @@
     ]
   },
   "main": "index.js",
+  "bin": {
+    "icon-font": "lib/cli.js"
+  },
   "module": "dist/icon-font-gen.esm-bundler.js",
   "files": [
     "index.js",
+    "lib",
     "dist"
   ],
   "types": "dist/icon-font-gen.d.ts",
@@ -33,6 +37,7 @@
     "@fastkit/icon-font": "0.4.0",
     "@fastkit/node-util": "0.4.0",
     "@fastkit/tiny-logger": "0.4.0",
+    "cac": "^6.7.11",
     "chokidar": "^3.5.0",
     "fs-extra": "^9.1.0",
     "webfont": "^11.2.26"

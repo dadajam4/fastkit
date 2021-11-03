@@ -1,8 +1,8 @@
 import { defineNuxtConfig } from 'nuxt3';
 
-import { useVuiModule } from '@fastkit/vui/dist/tool';
+import { useNuxtVuiModule } from '@fastkit/vui/dist/tool';
 import { globalsPlugin } from '../core/playground-globals';
-import { fastkitAliases, aliasesPlugin } from '../core/playground-aliases';
+// import { fastkitAliases, aliasesPlugin } from '../core/playground-aliases';
 
 const config = defineNuxtConfig({
   // rootDir: './docs',
@@ -34,14 +34,13 @@ const config = defineNuxtConfig({
     {
       setup(opts, nuxt) {
         const { options: nuxtOptions } = nuxt;
-        console.log(nuxtOptions.alias);
         nuxtOptions.alias = {
           ...nuxtOptions.alias,
           // ...fastkitAliases,
         };
       },
     },
-    useVuiModule({ __dev: true }),
+    useNuxtVuiModule({ __dev: true }),
   ],
   plugins: ['~~/.vui/nuxt-vui-plugin.ts'],
   meta: {
@@ -80,6 +79,7 @@ const config = defineNuxtConfig({
       },
     ],
   },
+  css: [`~/styles/index.scss`],
 });
 
 export default config;

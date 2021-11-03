@@ -84,6 +84,8 @@ export default defineNuxtComponent({
             onClick={(e) => {
               this.count++;
             }}>
+            <>click</>
+            <>{this.count}</>
             {`click ${this.count}`}
           </VButton>
 
