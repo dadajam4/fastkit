@@ -162,7 +162,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _focused = ref(false);
   protected _initialValue = ref<T | D>(null as unknown as T | D);
   protected _children: FormNodeControl[] = [];
-  protected _invalidChildren = ref<this[]>([]);
+  protected _invalidChildren = ref<(() => FormNodeControl)[]>([]);
   protected _validationErrors = ref<ValidationError[]>([]);
   protected _validateResolvers: ValidateResolver[] = [];
   protected _lastValidateValueChanged = true;
@@ -250,7 +250,7 @@ export class FormNodeControl<T = any, D = T> {
   }
 
   get invalidChildren(): FormNodeControl[] {
-    return this._invalidChildren.value as unknown as FormNodeControl[];
+    return this._invalidChildren.value.map((g) => g());
   }
 
   get firstInvalidChild(): FormNodeControl | undefined {
@@ -844,7 +844,7 @@ export class FormNodeControl<T = any, D = T> {
   private pushInvalidChild(node: FormNodeControl) {
     const { invalidChildren } = this;
     if (!invalidChildren.includes(node)) {
-      invalidChildren.push(node);
+      this._invalidChildren.value.push(() => node);
     }
   }
 
@@ -852,7 +852,7 @@ export class FormNodeControl<T = any, D = T> {
     const { invalidChildren } = this;
     const index = invalidChildren.indexOf(node);
     if (index !== -1) {
-      invalidChildren.splice(index, 1);
+      this._invalidChildren.value.splice(index, 1);
     }
   }
 

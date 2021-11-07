@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-runa",
-  "version": "0.4.0",
+  "version": "0.5.1",
   "description": "@fastkit/vite-runa",
   "buildOptions": {
     "name": "VitePage",
@@ -32,10 +32,10 @@
     "vue-router": "^4.0.0"
   },
   "dependencies": {
-    "@fastkit/helpers": "0.4.0",
-    "@fastkit/vue-page": "0.4.0",
+    "@fastkit/helpers": "0.5.1",
+    "@fastkit/vue-page": "0.5.1",
     "@vueuse/head": "^0.2.0",
-    "vite-plugin-pages": "^0.18.0",
-    "vite-ssr": "^0.14.0"
+    "vite-plugin-pages": "^0.18.2",
+    "vite-ssr": "^0.14.2"
   }
 }
