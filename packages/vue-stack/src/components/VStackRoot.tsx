@@ -9,7 +9,7 @@ import {
   cloneVNode,
   onMounted,
 } from 'vue';
-import { useVueStack } from '../hooks';
+import { useVueStack } from '../composables';
 import { VStackControl } from '../schemes/control';
 import { normalizeVStackDynamicChildren } from '../schemes/dynamic';
 import { VStackRootInjectKey } from '../injections';

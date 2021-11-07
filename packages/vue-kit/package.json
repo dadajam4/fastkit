@@ -43,6 +43,7 @@
     "@fastkit/vue-color-scheme": "0.4.0",
     "@fastkit/vue-form-control": "0.4.0",
     "@fastkit/vue-media-match": "0.4.0",
+    "@fastkit/vue-page": "0.4.0",
     "@fastkit/vue-scroller": "0.4.0",
     "@fastkit/vue-stack": "0.4.0",
     "@fastkit/vue-utils": "0.4.0"

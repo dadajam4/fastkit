@@ -42,3 +42,16 @@ export function objectIncludes(b: any, a: any): boolean {
 
   return false;
 }
+
+/**
+ * Returns `true` if it is a iterable object
+ **/
+export function isIterableObject<T = any>(source?: any): source is Iterable<T> {
+  return (
+    Array.isArray(source) ||
+    (source &&
+      typeof source === 'object' &&
+      source.constructor.name === 'Object') ||
+    false
+  );
+}

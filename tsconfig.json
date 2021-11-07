@@ -19,19 +19,16 @@
       "vite/client",
       "jest",
       "node",
-      "nuxt3/types",
-      "./nuxt",
-      "./docs/.nuxt/auto-imports"
     ],
     "rootDir": ".",
     "paths": {
       "@fastkit/*": ["packages/*/src"],
       "fastkit/*": ["packages/fastkit/src"],
       "~~": [
-        "./docs"
+        "./playground"
       ],
       "~~/*": [
-        "./docs/*"
+        "./playground/*"
       ],
       "@@": [
         "./playground"
@@ -40,10 +37,10 @@
         "./playground/*"
       ],
       "~": [
-        "./docs"
+        "./playground/src"
       ],
       "~/*": [
-        "./docs/*"
+        "./playground/src/*"
       ],
       "@": [
         "./playground/src"
@@ -51,29 +48,12 @@
       "@/*": [
         "./playground/src/*"
       ],
-      "assets": [
-        "./docs/assets"
-      ],
-      "public": [
-        "./docs/public"
-      ],
-      "public/*": [
-        "./docs/public/*"
-      ],
-      "#app": [
-        "./node_modules/nuxt3/dist/app"
-      ],
-      "#app/*": [
-        "./node_modules/nuxt3/dist/app/*"
-      ],
     }
   },
   "include": [
     "packages/global.d.ts",
     "packages/*/src",
     "core",
-    "docs",
-    "docs/.vui/vui.d.ts",
     "playground"
   ]
 }

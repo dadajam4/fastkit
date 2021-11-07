@@ -18,3 +18,7 @@ export function arrayRemove<T>(array: T[], entry: T) {
     array.splice(index, 1);
   }
 }
+
+export function range(length: number, offset = 0): number[] {
+  return Array.from(Array(length), (v, k) => k + offset);
+}

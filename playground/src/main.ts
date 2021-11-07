@@ -1,17 +1,19 @@
 import './main.scss';
-import viteSSR from 'vite-ssr';
+
 import { App } from './App';
-import { createHead } from '@vueuse/head';
 import { installVui } from '../.vui/installer';
+import { createVitePageRenderer } from '@fastkit/vite-page';
+import routes from 'virtual:generated-pages';
 
-const _hook = viteSSR(App, { routes: [] }, (ctx) => {
-  const { app } = ctx;
-  const head = createHead();
-  app.use(head);
-  installVui(app);
-  return { head };
+export default createVitePageRenderer(App, {
+  routes,
+  plugins: [
+    (ctx) => {
+      // console.log(ctx.router.options.routes);
+      // console.log('★', typeof window);
+      // const hoge = useRouter();
+      // console.log(ctx.router.options);
+      installVui(ctx.app);
+    },
+  ],
 });
-
-export default async function hook(url: string, cfg: any = {}) {
-  return _hook(url, cfg);
-}

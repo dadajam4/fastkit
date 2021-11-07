@@ -154,8 +154,8 @@ function createConfig(
         'test-dts',
         'core',
         'plugins',
-        // 'vite.config.ts',
-        // 'docs',
+        'vite.config.ts',
+        'playground',
       ],
     },
   });

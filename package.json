@@ -6,8 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "cd docs && nuxi dev",
-    "vite:dev": "cd playground && vite-ssr",
+    "dev": "cd playground && vite-ssr",
+    "build:docs": "cd playground && vite-ssr build",
     "gen": "node -r esbuild-register core/bootstrap.ts --target ",
     "build": "node -r esbuild-register core/build.ts",
     "size": "node -r esbuild-register core/build.ts fastkit -p -f global",
@@ -71,6 +71,7 @@
     "@types/express": "^4.17.13",
     "@types/folder-hash": "^4.0.1",
     "@types/fs-extra": "^9.0.13",
+    "@types/glob": "^7.2.0",
     "@types/imagemin": "^8.0.0",
     "@types/imagemin-mozjpeg": "^8.0.1",
     "@types/jest": "^27.0.2",
@@ -122,6 +123,7 @@
     "stylelint-prettier": "^1.2.0",
     "stylelint-scss": "^4.0.0",
     "typescript": "^4.4.4",
+    "vite-plugin-pages": "^0.18.2",
     "vite-ssr": "^0.14.2",
     "vue-eslint-parser": "^8.0.0",
     "webfont": "^11.2.26",

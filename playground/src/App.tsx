@@ -1,5 +1,7 @@
 import { defineComponent, ref } from 'vue';
-import { VAppLayout, VApp, useMediaMatch, VSelect } from '@fastkit/vui';
+import { VAppLayout, VApp, useMediaMatch } from '@fastkit/vui';
+import { VPage } from '@fastkit/vue-page';
+import { useVuePageControl, VPageLink } from '@fastkit/vue-page';
 
 export const App = defineComponent({
   name: 'App',
@@ -7,6 +9,7 @@ export const App = defineComponent({
     const systemBarOpened = ref(false);
     const requestBackdrop = () => true;
     const mm = useMediaMatch();
+    const page = useVuePageControl();
 
     return () => (
       <VApp>
@@ -30,7 +33,8 @@ export const App = defineComponent({
                     width: '100%',
                     fontSize: '12px',
                   }}>
-                  <>システムバーです</>
+                  <>システムバーです {JSON.stringify(page.preftechProgress)}</>
+                  <VPageLink to="/hoge">404リンク</VPageLink>
                   {/* <VSwitch></VSwitch> */}
                   <input
                     type="checkbox"
@@ -77,18 +81,7 @@ export const App = defineComponent({
                 </div>
               );
             },
-            default: () => (
-              <div>
-                <VSelect
-                  items={[
-                    {
-                      value: '1',
-                      label: 'あいう',
-                    },
-                  ]}
-                  placeholder="いあう"></VSelect>
-              </div>
-            ),
+            default: () => <VPage />,
             drawer: () => {
               return (
                 <div

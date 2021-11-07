@@ -16,7 +16,7 @@ import {
   VMenuState,
   VMenuControl,
 } from '../schemes';
-import { useStackControl } from '../hooks';
+import { useStackControl } from '../composables';
 import {
   ExtractPropInput,
   useWindow,

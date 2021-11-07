@@ -19,7 +19,7 @@ module.exports = {
     'packages/*/src/**/*.ts',
     '!packages/size-check/**',
     '!packages/create-fastkit-app/templates/**',
-    '!docs/**',
+    '!playground/**',
   ],
   watchPathIgnorePatterns: ['/node_modules/', '/dist/', '/.git/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],

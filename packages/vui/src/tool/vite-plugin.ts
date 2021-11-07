@@ -13,9 +13,11 @@ const COLOR_DUMP_STYLE = `@include dump-color-scheme(true);`;
 const TEMPLATE = `
 /* eslint-disable */
 // @ts-nocheck
+<% if (!it.__dev) { %>
 import '@fastkit/vue-stack/dist/vue-stack.css';
 import '@fastkit/vue-app-layout/dist/vue-app-layout.css';
 import '@fastkit/vui/dist/vui.css';
+<% } %>
 import './setup.scss';
 import type { App } from 'vue';
 import { installVuiPlugin as _installVuiPlugin } from '@fastkit/vui';
@@ -39,6 +41,7 @@ async function renderTemplate({
   mediaMatch,
   colors,
   icons,
+  __dev,
 }: ViteVuiPluginResultSettings) {
   const result = await render(
     TEMPLATE,
@@ -47,6 +50,7 @@ async function renderTemplate({
       mediaMatch,
       colors: JSON.stringify(colors),
       icons: JSON.stringify(icons),
+      __dev,
     },
     { async: true },
   );
@@ -136,11 +140,12 @@ export function viteVuiPlugin(
   const { dynamicDest: _dynamicDest } = options;
 
   if (!_dynamicDest) {
-    if (options.__dev) {
-      dynamicDest = path.resolve(__dirname, '../../../../docs/.vui');
-    } else {
-      dynamicDest = defaultDynamicDest();
-    }
+    // if (options.__dev) {
+    //   dynamicDest = path.resolve(__dirname, '../../../../docs/.vui');
+    // } else {
+    //   dynamicDest = defaultDynamicDest();
+    // }
+    dynamicDest = defaultDynamicDest();
   } else {
     dynamicDest = _dynamicDest;
   }

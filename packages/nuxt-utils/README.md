@@ -1,1 +1,0 @@
-# @fastkit/nuxt-utils

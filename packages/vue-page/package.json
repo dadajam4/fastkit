@@ -1,0 +1,25 @@
+{
+  "name": "@fastkit/vue-page",
+  "version": "0.4.0",
+  "description": "@fastkit/vue-page",
+  "main": "index.js",
+  "module": "dist/vue-page.esm-bundler.js",
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "types": "dist/vue-page.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-page#readme"
+}

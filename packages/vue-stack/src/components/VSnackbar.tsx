@@ -1,7 +1,7 @@
 import './VSnackbar.scss';
 import { defineComponent, ExtractPropTypes, computed } from 'vue';
 import { createStackableDefine, createStackActionProps } from '../schemes';
-import { useStackControl, useStackAction } from '../hooks';
+import { useStackControl, useStackAction } from '../composables';
 import {
   VSnackbarTransition,
   stackSnackbarTransitionProps,
