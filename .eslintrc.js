@@ -14,5 +14,12 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ['/node_modules/', '**/node_modules/', '/dist/', '**/dist/'],
+  ignorePatterns: [
+    '/node_modules/',
+    '**/node_modules/',
+    '/dist/',
+    '**/dist/',
+    '**/.vui/',
+    '**/vui.d.ts',
+  ],
 };

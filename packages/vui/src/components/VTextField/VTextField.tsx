@@ -65,10 +65,6 @@ export const VTextField = defineComponent({
               class="v-text-field__input"
               startAdornment={this.startAdornment}
               endAdornment={this.endAdornment}
-              // onClickHost={(ev) => {
-              //   console.log(ev);
-              //   this.focus();
-              // }}
               v-slots={{
                 ...this.$slots,
                 default: () =>

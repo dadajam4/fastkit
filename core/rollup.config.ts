@@ -8,7 +8,7 @@ import { ROOT_DIR, PACKAGES_DIR, getPackage } from './utils';
 import { BuildOptions, BuildType } from './schemes';
 import { Options as TerserOptions } from 'rollup-plugin-terser';
 import { babel } from '@rollup/plugin-babel';
-import { rawStylesPlugin } from '../plugins/raw-styles';
+import { rawStylesPlugin } from '../core/raw-styles';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import postcss from 'rollup-plugin-postcss';
 // import styles from 'rollup-plugin-styles';
@@ -155,7 +155,7 @@ function createConfig(
         'core',
         'plugins',
         'vite.config.ts',
-        'packages/playground',
+        'docs',
       ],
     },
   });
@@ -189,6 +189,8 @@ function createConfig(
     'postcss',
     'nanoid',
     '@datadog/browser-logs',
+    '@nuxt',
+    'nuxt3',
   );
 
   // the browser builds requires postcss to be available
@@ -303,6 +305,7 @@ function createReplacePlugin(
   const replacements: RollupReplaceOptions['values'] = {
     __COMMIT__: `"${COMMIT}"`,
     __VERSION__: `"${mainVersion}"`,
+    __PLAY__: String(false),
     __DEV__: isBundlerESMBuild
       ? // preserve to be handled by bundlers
         `(process.env.NODE_ENV !== 'production')`

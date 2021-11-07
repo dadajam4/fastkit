@@ -16,25 +16,6 @@ const getHeight = (el: HTMLElement): Promise<number> => {
       resolve(el.getBoundingClientRect().height);
     });
   });
-  // return Promise.resolve(0);
-  // return new Promise((resolve) => {
-  //   let ticked = 0;
-
-  //   const tick = () => {
-  //     const { height } = el.getBoundingClientRect();
-  //     if (height) {
-  //       resolve(height);
-  //     } else {
-  //       ticked++;
-  //       if (ticked > 0) {
-  //         console.log(ticked, height);
-  //         return resolve(0);
-  //       }
-  //       nextTick(tick);
-  //     }
-  //   };
-  //   tick();
-  // });
 };
 
 export const stackSnackbarTransitionProps = {

@@ -5,3 +5,5 @@ export function isPromise<T = any>(obj: any): obj is Promise<T> {
     typeof obj.then === 'function'
   );
 }
+
+export type UnPromisify<T> = T extends Promise<infer U> ? U : T;

@@ -2,7 +2,7 @@ import esbuild, { Plugin } from 'esbuild';
 import path from 'path';
 import fs from 'fs';
 // import Module from 'module';
-import { resolveEntryPoint } from './path';
+import { resolveEntryPoint, pathExists } from './path';
 import { findPackageDir } from './package';
 import { NodeUtilError } from './logger';
 import chokidar from 'chokidar';
@@ -50,6 +50,18 @@ export interface ESbuildRequireResult<T = any> {
   dependencies: string[];
 }
 
+export async function findTSConfigPath(
+  cwd: string = process.cwd(),
+): Promise<string | undefined> {
+  const target = path.join(cwd, 'tsconfig.json');
+  if (await pathExists(target, 'file')) {
+    return target;
+  }
+  const parentDir = path.join(cwd, '..');
+  if (parentDir === cwd) return;
+  return findTSConfigPath(parentDir);
+}
+
 export async function esbuildRequire<T = any>(
   rawEntryPoint: string,
   filename?: string,
@@ -64,7 +76,7 @@ export async function esbuildRequire<T = any>(
 
   const pkgDir = await findPackageDir();
   if (!pkgDir) throw new NodeUtilError('missing package.');
-  const tsconfig = path.join(pkgDir, 'tsconfig.json');
+  const tsconfig = await findTSConfigPath(pkgDir);
   const cacheName = entryPoint.replace(/\//g, '_');
   const cacheDir = path.join(
     pkgDir,
@@ -75,6 +87,7 @@ export async function esbuildRequire<T = any>(
   const buildResult = await esbuild.build({
     // outfile
     entryPoints: [entryPoint],
+    external: ['esbuild'],
     bundle: true,
     tsconfig,
     platform: 'node',

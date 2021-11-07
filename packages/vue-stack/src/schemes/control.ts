@@ -52,6 +52,7 @@ export interface VStackControlState {
   timeoutId: number | null;
   delayTimers: number[];
   needRender: boolean;
+  booted: boolean;
   isDestroyed: boolean;
 }
 

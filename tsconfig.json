@@ -15,19 +15,45 @@
     "removeComments": false,
     "jsx": "preserve",
     "lib": ["esnext", "dom"],
-    "types": ["vite/client", "jest", "node"],
+    "types": [
+      "vite/client",
+      "jest",
+      "node",
+    ],
     "rootDir": ".",
     "paths": {
-      "~/*": ["packages/playground/src/*"],
       "@fastkit/*": ["packages/*/src"],
-      "fastkit/*": ["packages/fastkit/src"]
+      "fastkit/*": ["packages/fastkit/src"],
+      "~~": [
+        "./docs"
+      ],
+      "~~/*": [
+        "./docs/*"
+      ],
+      "@@": [
+        "./docs"
+      ],
+      "@@/*": [
+        "./docs/*"
+      ],
+      "~": [
+        "./docs/src"
+      ],
+      "~/*": [
+        "./docs/src/*"
+      ],
+      "@": [
+        "./docs/src"
+      ],
+      "@/*": [
+        "./docs/src/*"
+      ],
     }
   },
   "include": [
     "packages/global.d.ts",
     "packages/*/src",
-    "vite.config.ts",
-    "plugins",
-    "core"
+    "core",
+    "docs"
   ]
 }

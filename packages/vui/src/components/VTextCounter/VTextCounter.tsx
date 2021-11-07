@@ -15,9 +15,7 @@ export const VTextCounter = defineComponent({
   },
   render() {
     return (
-      <span class="v-text-counter">
-        {this.length} / {this.maxlength}
-      </span>
+      <span class="v-text-counter">{`${this.length} / ${this.maxlength}`}</span>
     );
   },
 });

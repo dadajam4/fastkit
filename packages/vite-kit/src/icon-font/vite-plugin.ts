@@ -6,15 +6,19 @@ export interface IconFontVitePlugin extends IconFontOptions {
   onBootError?: (err: unknown) => any;
 }
 
+let runner: IconFontRunner | undefined;
+
 export function iconFontVitePlugin(opts: IconFontVitePlugin): Plugin {
   return {
     name: 'vite:icon-font',
     async config(config, { command }) {
       const { onBooted, onBootError } = opts;
       try {
-        const watch = command === 'serve';
-        const runner = new IconFontRunner(opts, watch);
-        await runner.run();
+        if (!runner) {
+          const watch = command === 'serve';
+          runner = new IconFontRunner(opts, watch);
+          await runner.run();
+        }
         onBooted && onBooted();
         return config;
       } catch (err) {

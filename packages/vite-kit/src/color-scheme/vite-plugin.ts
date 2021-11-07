@@ -4,6 +4,7 @@ import { LoadColorSchemeRunner } from '@fastkit/color-scheme-gen';
 import path from 'path';
 import { findPackageDir } from '@fastkit/node-util';
 import { ViteColorSchemeError } from './logger';
+import { UnPromisify } from '@fastkit/helpers';
 
 // const importSuffix = 'color-scheme';
 
@@ -33,6 +34,11 @@ export interface ColorSchemeVitePluginOptions {
   onBootError?: (err: unknown) => any;
 }
 
+let runner: LoadColorSchemeRunner | undefined;
+let cachePaths: UnPromisify<
+  ReturnType<LoadColorSchemeRunner['run']>
+>['exports']['cachePaths'];
+
 export function colorSchemeVitePlugin(
   opts: ColorSchemeVitePluginOptions,
 ): Plugin {
@@ -41,9 +47,6 @@ export function colorSchemeVitePlugin(
   const { src, dest: _dest, onBooted, onBootError } = opts;
 
   const rawEntryPoint = path.resolve(src);
-
-  // const cacheName = entry.replace(/\//g, '_') + '.scss';
-  // console.log('!!!', cacheName);
 
   return {
     name: 'vite:color-scheme',
@@ -59,13 +62,17 @@ export function colorSchemeVitePlugin(
           dest = _dest;
         }
 
-        const runner = new LoadColorSchemeRunner({
-          entry: rawEntryPoint,
-          dest,
-          watch: command === 'serve',
-        });
+        if (!runner) {
+          runner = new LoadColorSchemeRunner({
+            entry: rawEntryPoint,
+            dest,
+            watch: command === 'serve',
+          });
+        }
 
-        const { cachePaths } = (await runner.run()).exports;
+        if (!cachePaths) {
+          cachePaths = (await runner.run()).exports.cachePaths;
+        }
 
         const cssOptions = {
           ...config.css,

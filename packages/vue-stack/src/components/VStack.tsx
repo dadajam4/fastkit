@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import { createStackableDefine } from '../schemes';
 
-import { useStackControl } from '../hooks';
+import { useStackControl } from '../composables';
 
 const { props, emits } = createStackableDefine();
 

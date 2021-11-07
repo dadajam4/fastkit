@@ -309,10 +309,14 @@ async function build(target: string) {
   function processTypes(dts: string) {
     let processed = false;
     const settings: { targets: string[]; pkg: string }[] = [
-      // {
-      //   targets: ['ThemeName', 'PaletteName', 'ScopeName', 'ColorVariant'],
-      //   pkg: '@fastkit/color-scheme',
-      // },
+      {
+        targets: ['ThemeName', 'PaletteName', 'ScopeName', 'ColorVariant'],
+        pkg: '@fastkit/color-scheme',
+      },
+      {
+        targets: ['MediaMatchKey'],
+        pkg: '@fastkit/media-match',
+      },
       {
         targets: ['IconName'],
         pkg: '@fastkit/icon-font',

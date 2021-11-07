@@ -1,5 +1,5 @@
 export * from './types';
 export * from './utils';
-export * from './hooks';
+export * from './composables';
 export * from './components';
 export * from './directives';

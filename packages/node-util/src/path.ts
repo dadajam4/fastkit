@@ -37,3 +37,15 @@ export async function pathExists(filepath: string, type?: 'file' | 'dir') {
     throw err;
   }
 }
+
+export function pathExistsSync(filepath: string, type?: 'file' | 'dir') {
+  try {
+    const stat = fs.statSync(filepath);
+    if (type === 'file') return stat.isFile();
+    if (type === 'dir') return stat.isDirectory();
+    return true;
+  } catch (err: any) {
+    if (err.code === 'ENOENT') return false;
+    throw err;
+  }
+}

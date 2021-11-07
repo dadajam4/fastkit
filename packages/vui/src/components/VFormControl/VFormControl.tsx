@@ -1,11 +1,12 @@
 import './VFormControl.scss';
-import { renderSlot, computed, defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 import {
   createFormControlSettings,
   useFormControl,
   FormControlSlots,
   defineSlotsProps,
   FormControl,
+  renderSlotOrEmpty,
 } from '@fastkit/vue-kit';
 import { useVuiColorProvider, useVui } from '../../composables';
 
@@ -65,7 +66,7 @@ export const VFormControl = defineComponent({
             </label>
           )}
           <div class="v-form-control__body">
-            {renderSlot(ctx.slots, 'default', control as any)}
+            {renderSlotOrEmpty(ctx.slots, 'default', control as any)}
             <div class="v-form-control__info">
               {!!message && (
                 <div class="v-form-control__message">{message}</div>

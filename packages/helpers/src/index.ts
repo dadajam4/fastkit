@@ -10,6 +10,7 @@ export * from './buffer';
 export * from './date';
 export * from './clone';
 export * from './json';
+export * from './comparator';
 export * from './dom';
 export * from './debounce';
 export * from './console';

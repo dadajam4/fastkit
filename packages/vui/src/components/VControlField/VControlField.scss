@@ -115,7 +115,7 @@
   }
 
   &--flat:hover,
-  &--filled:hover { // stylelint-disable-line prettier/prettier, no-descending-specificity
+  &--filled:hover {
     &::before {
       border-color: var(--my-bottom-hover-color);
     }

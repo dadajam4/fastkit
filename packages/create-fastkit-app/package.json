@@ -1,6 +1,6 @@
 {
   "name": "create-fastkit-app",
-  "version": "0.3.10",
+  "version": "0.4.0",
   "description": "create-fastkit-app",
   "main": "index.js",
   "bin": {
@@ -28,10 +28,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/create-fastkit-app#readme",
   "dependencies": {
-    "cac": "^6.7.3",
+    "cac": "^6.7.11",
     "chalk": "^4.1.0",
     "enquirer": "^2.3.6",
-    "eta": "^1.12.1",
+    "eta": "^1.12.3",
     "fs-extra": "^9.1.0"
   }
 }

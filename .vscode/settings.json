@@ -42,8 +42,8 @@
     "scss",
     // "html",
   ],
-  // "css.validate": false,
-  // "scss.validate": false,
+  "css.validate": false,
+  "scss.validate": false,
   "typescript.format.enable": false,
   "javascript.format.enable": false,
 }

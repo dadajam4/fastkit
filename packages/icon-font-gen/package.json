@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font-gen",
-  "version": "0.3.10",
+  "version": "0.4.0",
   "description": "@fastkit/icon-font-gen",
   "buildOptions": {
     "name": "IconFont",
@@ -9,9 +9,13 @@
     ]
   },
   "main": "index.js",
+  "bin": {
+    "icon-font": "lib/cli.js"
+  },
   "module": "dist/icon-font-gen.esm-bundler.js",
   "files": [
     "index.js",
+    "lib",
     "dist"
   ],
   "types": "dist/icon-font-gen.d.ts",
@@ -29,12 +33,13 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/icon-font-gen#readme",
   "dependencies": {
-    "@fastkit/ev": "0.3.10",
-    "@fastkit/icon-font": "0.3.10",
-    "@fastkit/node-util": "0.3.10",
-    "@fastkit/tiny-logger": "0.3.10",
+    "@fastkit/ev": "0.4.0",
+    "@fastkit/icon-font": "0.4.0",
+    "@fastkit/node-util": "0.4.0",
+    "@fastkit/tiny-logger": "0.4.0",
+    "cac": "^6.7.11",
     "chokidar": "^3.5.0",
-    "fantasticon": "^1.2.2",
-    "fs-extra": "^9.1.0"
+    "fs-extra": "^9.1.0",
+    "webfont": "^11.2.26"
   }
 }

@@ -9,6 +9,8 @@ export interface SpriteImagesVitePluginOptions extends SpriteImagesOptions {
   onBootError?: (err: unknown) => any;
 }
 
+let runner: SpriteImagesRunner | undefined;
+
 export function spriteImagesVitePlugin(
   opts: SpriteImagesVitePluginOptions,
 ): Plugin {
@@ -17,8 +19,11 @@ export function spriteImagesVitePlugin(
     async config(config) {
       const { onBooted, onBootError } = opts;
       try {
-        const runner = new SpriteImagesRunner(opts);
-        await runner.run();
+        if (!runner) {
+          const runner = new SpriteImagesRunner(opts);
+          await runner.run();
+        }
+
         onBooted && onBooted();
         return config;
       } catch (err) {

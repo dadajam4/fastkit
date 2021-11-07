@@ -169,13 +169,6 @@ export const VSelect = defineComponent({
                         <div class="v-select__selections">
                           <div class="v-select__selections__inner">
                             {this.renderSelections(selectedItems)}
-                            {/* {selectedItems.map((item) => {
-                              return (
-                                <span class="v-select__selection">
-                                  {item.renderDefaultSlot()}
-                                </span>
-                              );
-                            })} */}
                           </div>
                         </div>,
                       ],

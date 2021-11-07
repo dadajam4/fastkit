@@ -3,6 +3,7 @@ import { MediaMatchGeneratorRunner } from '@fastkit/media-match-gen';
 import path from 'path';
 import { findPackageDir } from '@fastkit/node-util';
 import { ViteMediaMatchError } from './logger';
+import { UnPromisify } from '@fastkit/helpers';
 
 export interface MediaMatchVitePluginOptions {
   src: string;
@@ -10,6 +11,11 @@ export interface MediaMatchVitePluginOptions {
   onBooted?: () => any;
   onBootError?: (err: unknown) => any;
 }
+
+let runner: MediaMatchGeneratorRunner | undefined;
+let runnerExports: UnPromisify<
+  ReturnType<MediaMatchGeneratorRunner['run']>
+>['exports'];
 
 export function mediaMatchVitePlugin(
   opts: MediaMatchVitePluginOptions,
@@ -32,13 +38,19 @@ export function mediaMatchVitePlugin(
           dest = _dest;
         }
 
-        const runner = new MediaMatchGeneratorRunner({
-          src: rawEntryPoint,
-          dest,
-          watch: command === 'serve',
-        });
+        if (!runner) {
+          runner = new MediaMatchGeneratorRunner({
+            src: rawEntryPoint,
+            dest,
+            watch: command === 'serve',
+          });
+        }
 
-        const { scss } = (await runner.run()).exports;
+        if (!runnerExports) {
+          runnerExports = (await runner.run()).exports;
+        }
+
+        const { scss } = runnerExports;
         const scssCachePath = scss.path;
 
         const cssOptions = {

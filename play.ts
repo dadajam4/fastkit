@@ -1,11 +1,13 @@
 // const { cli } = require('./packages/create-fastkit-app/src/cli');
 // cli();
 
-import { hashElement } from 'folder-hash';
+// import { hashElement } from 'folder-hash';
 
-async function main() {
-  const hash = await hashElement('./core');
-  console.log(hash);
-}
+// async function main() {
+//   const hash = await hashElement('./core');
+//   console.log(hash);
+// }
 
-main();
+// main();
+
+import './plugins/playground-aliases';

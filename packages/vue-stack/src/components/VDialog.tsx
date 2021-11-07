@@ -1,7 +1,7 @@
 import './VDialog.scss';
 import { defineComponent, ExtractPropTypes } from 'vue';
 import { createStackableDefine, createStackActionProps } from '../schemes';
-import { useStackControl, useStackAction } from '../hooks';
+import { useStackControl, useStackAction } from '../composables';
 import { ExtractPropInput } from '@fastkit/vue-utils';
 
 const { props, emits } = createStackableDefine({
