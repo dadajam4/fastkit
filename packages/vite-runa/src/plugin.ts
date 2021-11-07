@@ -10,20 +10,20 @@ import {
 } from '@fastkit/vue-page';
 export * from '@fastkit/vue-page';
 
-export type VitePagePluginFn = (ctx: VuePageControl) => any | Promise<any>;
+export type ViteRunaPluginFn = (ctx: VuePageControl) => any | Promise<any>;
 
-export interface VitePagePlugin {
-  setup: VitePagePluginFn;
+export interface ViteRunaPlugin {
+  setup: ViteRunaPluginFn;
 }
 
-export type RawVitePagePlugin = VitePagePluginFn | VitePagePlugin;
+export type RawViteRunaPlugin = ViteRunaPluginFn | ViteRunaPlugin;
 
-function resolveRawVitePagePlugin(raw: RawVitePagePlugin) {
+function resolveRawViteRunaPlugin(raw: RawViteRunaPlugin) {
   return typeof raw === 'function' ? { setup: raw } : raw;
 }
 
-export function createVitePagePlugin(source: RawVitePagePlugin) {
-  return resolveRawVitePagePlugin(source);
+export function createViteRunaPlugin(source: RawViteRunaPlugin) {
+  return resolveRawViteRunaPlugin(source);
 }
 
 type ViteSSROptions = Parameters<typeof _viteSSR>[1];
@@ -36,18 +36,18 @@ type ViteSSROptions = Parameters<typeof _viteSSR>[1];
 //   }
 // }
 
-export interface VitePageOptions extends Omit<ViteSSROptions, 'routes'> {
+export interface ViteRunaOptions extends Omit<ViteSSROptions, 'routes'> {
   // ErrorComponent?: RawComponent;
   routes: RouteRecordRaw[];
-  plugins?: RawVitePagePlugin[];
+  plugins?: RawViteRunaPlugin[];
 }
 
-export type VitePageHook = (url: string, cfg?: any) => Promise<any>;
+export type ViteRunaHook = (url: string, cfg?: any) => Promise<any>;
 
-export async function createVitePageHook(
+export async function createViteRunaHook(
   App: any,
-  options: VitePageOptions,
-): Promise<VitePageHook> {
+  options: ViteRunaOptions,
+): Promise<ViteRunaHook> {
   const slots = {
     default: () => h(App),
   };
@@ -84,14 +84,14 @@ export async function createVitePageHook(
       (window as any).$vpage = pageControl;
     }
 
-    // const ctx: VitePageControl = {
+    // const ctx: ViteRunaControl = {
     //   app,
     //   router,
     // };
 
     if (plugins) {
       for (const _plugin of plugins) {
-        const plugin = resolveRawVitePagePlugin(_plugin);
+        const plugin = resolveRawViteRunaPlugin(_plugin);
         const result = plugin.setup(pageControl);
         if (isPromise(result)) {
           await result;
@@ -103,11 +103,11 @@ export async function createVitePageHook(
   return hook;
 }
 
-export function createVitePageRenderer(
+export function createViteRunaEntry(
   App: any,
-  options: VitePageOptions,
-): VitePageHook {
-  const hookPromise = createVitePageHook(App, options);
+  options: ViteRunaOptions,
+): ViteRunaHook {
+  const hookPromise = createViteRunaHook(App, options);
   return async function renderer(url: string, cfg: any = {}) {
     const hook = await hookPromise;
     return hook(url, cfg);

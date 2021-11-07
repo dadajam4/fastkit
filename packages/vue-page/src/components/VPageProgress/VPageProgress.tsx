@@ -14,10 +14,9 @@ export const VPageProgress = defineComponent({
     rtl: Boolean,
   },
   setup(props) {
-    const pageControl = useVuePageControl({
+    useVuePageControl({
       onStart: () => {
         start();
-        // console.log('onStart');
       },
       onFinish: () => {
         finish();
@@ -66,11 +65,11 @@ export const VPageProgress = defineComponent({
       _timer = null;
     }
 
-    function set(num: number) {
-      show.value = true;
-      canSucceed.value = true;
-      percent.value = Math.min(100, Math.max(0, Math.floor(num)));
-    }
+    // function set(num: number) {
+    //   show.value = true;
+    //   canSucceed.value = true;
+    //   percent.value = Math.min(100, Math.max(0, Math.floor(num)));
+    // }
 
     function increase(num: number) {
       percent.value = Math.min(100, Math.floor(percent.value + num));
@@ -80,13 +79,13 @@ export const VPageProgress = defineComponent({
       percent.value = Math.max(0, Math.floor(percent.value - num));
     }
 
-    function pause() {
-      _timer !== null && window.clearInterval(_timer);
-    }
+    // function pause() {
+    //   _timer !== null && window.clearInterval(_timer);
+    // }
 
-    function resume() {
-      startTimer();
-    }
+    // function resume() {
+    //   startTimer();
+    // }
 
     function finish() {
       percent.value = reversed.value ? 0 : 100;
@@ -104,9 +103,9 @@ export const VPageProgress = defineComponent({
       }, 500);
     }
 
-    function fail(error: unknown) {
-      canSucceed.value = false;
-    }
+    // function fail(error: unknown) {
+    //   canSucceed.value = false;
+    // }
 
     function start() {
       clear();
@@ -129,7 +128,6 @@ export const VPageProgress = defineComponent({
       _timer = window.setInterval(() => {
         if (typeof _cut === 'undefined') {
           _cut = 10000 / Math.floor(duration.value);
-          console.log(_cut);
         }
 
         if (skipTimerCount.value > 0) {

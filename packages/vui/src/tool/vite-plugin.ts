@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import { findPackageDirSync } from '@fastkit/node-util';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
-import { VuiServiceOptions } from '@fastkit/vui';
+import { VuiServiceOptions } from '../service';
 import { render } from 'eta';
 import { VuiError } from '../logger';
 

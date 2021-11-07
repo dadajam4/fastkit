@@ -35,6 +35,8 @@
     "@fastkit/icon-font": "0.4.0",
     "@fastkit/tiny-logger": "0.4.0",
     "@fastkit/vite-kit": "0.4.0",
-    "@fastkit/vue-kit": "0.4.0"
+    "@fastkit/vue-kit": "0.4.0",
+    "eta": "^1.12.3",
+    "fs-extra": "^9.1.0"
   }
 }
