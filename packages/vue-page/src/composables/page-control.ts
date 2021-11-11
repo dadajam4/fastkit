@@ -216,8 +216,6 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this.request = request;
     this.response = response;
     this.isClient = typeof window !== 'undefined';
-    // readonly request?: IncomingMessage;
-    // readonly response?: ServerResponse;
 
     this._ErrorComponent = ErrorComponent || VErrorPage;
     this._initialState = initialState;
@@ -348,6 +346,11 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
     this._closePrefetchs();
 
+    if (IN_WINDOW && !this.initialStateConsumed && this.pageError) {
+      this._initialStateConsumed = true;
+      return next();
+    }
+
     try {
       const { extracted, matched } = extractRouteMatchedItemsWithPrefetch(to);
       if (!matched.length) {
@@ -358,6 +361,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       }
 
       if (!extracted.length) {
+        this._initialStateConsumed = true;
         this._deletePageError();
         return next();
       }
@@ -366,6 +370,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       let queues = extracted.map((item) => {
         const queue = new VuePagePrefetchQueue(this, item);
         if (queue._setupPromise) {
+          console.log(queue._setupPromise);
           queueSetups.push(queue._setupPromise);
         }
         return queue;

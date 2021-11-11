@@ -1,5 +1,7 @@
+/// <reference types="vite-plugin-pages/client" />
+
 import { App, h } from 'vue';
-import { Router, RouteRecordRaw } from 'vue-router';
+import { Router } from 'vue-router';
 import _viteSSR from 'vite-ssr';
 import { createHead } from '@vueuse/head';
 import { isPromise, IN_WINDOW } from '@fastkit/helpers';
@@ -38,7 +40,7 @@ type ViteSSROptions = Parameters<typeof _viteSSR>[1];
 
 export interface ViteRunaOptions extends Omit<ViteSSROptions, 'routes'> {
   // ErrorComponent?: RawComponent;
-  routes: RouteRecordRaw[];
+  // routes: RouteRecordRaw[];
   plugins?: RawViteRunaPlugin[];
 }
 
@@ -52,7 +54,9 @@ export async function createViteRunaHook(
     default: () => h(App),
   };
   const RootApp = () => h(VPageRoot, null, slots);
-  const hook = _viteSSR(RootApp, { ...options }, async (_ctx) => {
+  const routes = (await import('virtual:generated-pages')).default;
+
+  const hook = _viteSSR(RootApp, { ...options, routes }, async (_ctx) => {
     const app = _ctx.app as App;
     const router = _ctx.router as Router;
     const initialState = _ctx.initialState;

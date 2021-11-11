@@ -191,6 +191,7 @@ function createConfig(
     '@datadog/browser-logs',
     '@nuxt',
     'nuxt3',
+    'virtual:generated-pages',
   );
 
   // the browser builds requires postcss to be available
