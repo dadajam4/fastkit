@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "@fastkit/vot",
   "buildOptions": {
     "name": "Vot",
@@ -36,8 +36,8 @@
     "vue-router": "^4.0.0"
   },
   "dependencies": {
-    "@fastkit/helpers": "0.5.1",
-    "@fastkit/vue-page": "0.5.1",
+    "@fastkit/helpers": "0.6.0",
+    "@fastkit/vue-page": "0.6.0",
     "@vueuse/head": "^0.2.0",
     "express": "^4.17.1",
     "vite-plugin-pages": "^0.18.2",
