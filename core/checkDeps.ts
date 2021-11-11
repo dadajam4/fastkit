@@ -42,6 +42,7 @@ const normalizeSettings: NormalizeSetting[] = [
   [/^@vitejs\//, 'vite'],
   [/^vite-ssr\//, 'vite-ssr'],
   [/^webfont\//, 'webfont'],
+  ['virtual:generated-pages', 'vite-plugin-pages'],
   [
     (dep, pkg) => {
       return pkg.name === '@fastkit/byeie';

@@ -2,9 +2,9 @@ import './main.scss';
 
 import { App } from './App';
 import { installVui } from '../.vui/installer';
-import { createViteRunaEntry } from '@fastkit/vite-runa';
+import { createVotEntry } from '@fastkit/vot';
 
-export default createViteRunaEntry(App, {
+export default createVotEntry(App, {
   plugins: [
     (ctx) => {
       installVui(ctx.app);

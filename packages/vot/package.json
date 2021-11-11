@@ -1,18 +1,22 @@
 {
-  "name": "@fastkit/vite-runa",
+  "name": "@fastkit/vot",
   "version": "0.5.1",
-  "description": "@fastkit/vite-runa",
+  "description": "@fastkit/vot",
   "buildOptions": {
-    "name": "VitePage",
+    "name": "Vot",
     "tool": true
   },
   "main": "index.js",
-  "module": "dist/vite-runa.esm-bundler.js",
+  "module": "dist/vot.esm-bundler.js",
   "files": [
     "index.js",
+    "bin",
     "dist"
   ],
-  "types": "dist/vite-runa.d.ts",
+  "bin": {
+    "vot": "bin/vot.js"
+  },
+  "types": "dist/vot.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"
@@ -25,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vite-runa#readme",
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vot#readme",
   "peerDependencies": {
     "vite": "^2.6.0",
     "vue": "^3.2.0",
@@ -36,6 +40,6 @@
     "@fastkit/vue-page": "0.5.1",
     "@vueuse/head": "^0.2.0",
     "vite-plugin-pages": "^0.18.2",
-    "vite-ssr": "^0.14.2"
+    "vite-ssr": "^0.14.3"
   }
 }

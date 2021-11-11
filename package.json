@@ -6,9 +6,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "cd docs && vite-ssr",
-    "build:docs": "cd docs && vite-ssr build",
-    "serve": "cd docs && node -r esbuild-register serve.js",
+    "dev": "cd docs && node ../packages/vot/bin/vot",
+    "build:docs": "cd docs && node ../packages/vot/bin/vot build",
+    "serve": "cd docs && node ../packages/vot/bin/vot serve",
     "preview": "yarn build:docs && yarn serve",
     "gen": "node -r esbuild-register core/bootstrap.ts --target ",
     "build": "node -r esbuild-register core/build.ts",
@@ -97,6 +97,8 @@
     "eslint-plugin-vue": "^7.20.0",
     "eta": "^1.12.3",
     "express": "^4.17.1",
+    "fastify": "^3.23.1",
+    "fastify-static": "^4.5.0",
     "folder-hash": "^4.0.1",
     "imagemin": "^8.0.1",
     "imagemin-mozjpeg": "^9.0.0",

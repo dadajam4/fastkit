@@ -9,13 +9,13 @@ type VueJsxOptions = Parameters<typeof vueJsx>[0];
 type ViteSSRPluginOpts = NonNullable<Parameters<typeof viteSSRPlugin>[0]>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ViteRunaPluginOptions extends ViteSSRPluginOpts {
+export interface VotPluginOptions extends ViteSSRPluginOpts {
   vue?: VuePluginOptions;
   jsx?: VueJsxOptions;
   pages?: PagesUserOptions;
 }
 
-export function viteRunaPlugin(options: ViteRunaPluginOptions = {}) {
+export function votPlugin(options: VotPluginOptions = {}) {
   const ssrPlugin = viteSSRPlugin(options);
   const { pages } = options;
   const pagesPlugin = Pages({
@@ -28,7 +28,7 @@ export function viteRunaPlugin(options: ViteRunaPluginOptions = {}) {
   const vueJsxPlugin = vueJsx(options.jsx);
 
   const plugin: Plugin = {
-    name: 'vite:page',
+    name: 'vite:vot',
   };
-  return [pagesPlugin, ssrPlugin, vuePlugin, vueJsxPlugin, plugin];
+  return [pagesPlugin, ...ssrPlugin, vuePlugin, vueJsxPlugin, plugin];
 }

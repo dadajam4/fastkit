@@ -12,20 +12,20 @@ import {
 } from '@fastkit/vue-page';
 export * from '@fastkit/vue-page';
 
-export type ViteRunaPluginFn = (ctx: VuePageControl) => any | Promise<any>;
+export type VotPluginFn = (ctx: VuePageControl) => any | Promise<any>;
 
-export interface ViteRunaPlugin {
-  setup: ViteRunaPluginFn;
+export interface VotPlugin {
+  setup: VotPluginFn;
 }
 
-export type RawViteRunaPlugin = ViteRunaPluginFn | ViteRunaPlugin;
+export type RawVotPlugin = VotPluginFn | VotPlugin;
 
-function resolveRawViteRunaPlugin(raw: RawViteRunaPlugin) {
+function resolveRawVotPlugin(raw: RawVotPlugin) {
   return typeof raw === 'function' ? { setup: raw } : raw;
 }
 
-export function createViteRunaPlugin(source: RawViteRunaPlugin) {
-  return resolveRawViteRunaPlugin(source);
+export function createVotPlugin(source: RawVotPlugin) {
+  return resolveRawVotPlugin(source);
 }
 
 type ViteSSROptions = Parameters<typeof _viteSSR>[1];
@@ -38,18 +38,18 @@ type ViteSSROptions = Parameters<typeof _viteSSR>[1];
 //   }
 // }
 
-export interface ViteRunaOptions extends Omit<ViteSSROptions, 'routes'> {
+export interface VotOptions extends Omit<ViteSSROptions, 'routes'> {
   // ErrorComponent?: RawComponent;
   // routes: RouteRecordRaw[];
-  plugins?: RawViteRunaPlugin[];
+  plugins?: RawVotPlugin[];
 }
 
-export type ViteRunaHook = (url: string, cfg?: any) => Promise<any>;
+export type VotHook = (url: string, cfg?: any) => Promise<any>;
 
-export async function createViteRunaHook(
+export async function createVotHook(
   App: any,
-  options: ViteRunaOptions,
-): Promise<ViteRunaHook> {
+  options: VotOptions,
+): Promise<VotHook> {
   const slots = {
     default: () => h(App),
   };
@@ -88,14 +88,14 @@ export async function createViteRunaHook(
       (window as any).$vpage = pageControl;
     }
 
-    // const ctx: ViteRunaControl = {
+    // const ctx: VotControl = {
     //   app,
     //   router,
     // };
 
     if (plugins) {
       for (const _plugin of plugins) {
-        const plugin = resolveRawViteRunaPlugin(_plugin);
+        const plugin = resolveRawVotPlugin(_plugin);
         const result = plugin.setup(pageControl);
         if (isPromise(result)) {
           await result;
@@ -107,11 +107,8 @@ export async function createViteRunaHook(
   return hook;
 }
 
-export function createViteRunaEntry(
-  App: any,
-  options: ViteRunaOptions,
-): ViteRunaHook {
-  const hookPromise = createViteRunaHook(App, options);
+export function createVotEntry(App: any, options: VotOptions): VotHook {
+  const hookPromise = createVotHook(App, options);
   return async function renderer(url: string, cfg: any = {}) {
     const hook = await hookPromise;
     return hook(url, cfg);
