@@ -39,6 +39,7 @@
     "@fastkit/helpers": "0.5.1",
     "@fastkit/vue-page": "0.5.1",
     "@vueuse/head": "^0.2.0",
+    "express": "^4.17.1",
     "vite-plugin-pages": "^0.18.2",
     "vite-ssr": "^0.14.3"
   }
