@@ -1,12 +1,12 @@
 {
   "name": "@fastkit/vot",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "@fastkit/vot",
   "buildOptions": {
     "name": "Vot",
     "tool": true
   },
-  "main": "index.js",
+  "main": "dist/vot.esm-bundler.js",
   "module": "dist/vot.esm-bundler.js",
   "files": [
     "index.js",
@@ -30,17 +30,18 @@
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vot#readme",
-  "peerDependencies": {
-    "vite": "^2.6.0",
-    "vue": "^3.2.0",
-    "vue-router": "^4.0.0"
-  },
   "dependencies": {
-    "@fastkit/helpers": "0.6.0",
-    "@fastkit/vue-page": "0.6.0",
+    "@fastkit/helpers": "0.6.1",
+    "@fastkit/vue-page": "0.6.1",
+    "@types/node": "^16.11.0",
+    "@vitejs/plugin-vue": "^1.9.0",
+    "@vitejs/plugin-vue-jsx": "^1.2.0",
     "@vueuse/head": "^0.2.0",
     "express": "^4.17.1",
     "vite-plugin-pages": "^0.18.2",
-    "vite-ssr": "^0.14.3"
+    "vite-ssr": "^0.14.3",
+    "vite": "^2.6.0",
+    "vue": "^3.2.0",
+    "vue-router": "^4.0.0"
   }
 }

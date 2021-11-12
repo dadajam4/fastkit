@@ -29,6 +29,12 @@ export function votPlugin(options: VotPluginOptions = {}) {
 
   const plugin: Plugin = {
     name: 'vite:vot',
+    config(config) {
+      config.optimizeDeps = config.optimizeDeps || {};
+      config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
+      config.optimizeDeps.exclude.push('@fastkit/vot');
+      return config;
+    },
   };
   return [pagesPlugin, ...ssrPlugin, vuePlugin, vueJsxPlugin, plugin];
 }
