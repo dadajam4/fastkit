@@ -1,13 +1,26 @@
 import path from 'path';
+import fs from 'fs-extra';
 import { pathExists, pathExistsSync } from './path';
 import execa from 'execa';
 import { NodeUtilError } from './logger';
 
 const DEV_RE = /\/fastkit\/packages\//;
 
+export async function isAvairableModuleDir(dir: string) {
+  if (!(await pathExists(dir, 'dir'))) return false;
+  const files = await fs.readdir(dir);
+  return files.filter((file) => !file.startsWith('.')).length > 0;
+}
+
+export function isAvairableModuleDirSync(dir: string) {
+  if (!pathExistsSync(dir, 'dir')) return false;
+  const files = fs.readdirSync(dir);
+  return files.filter((file) => !file.startsWith('.')).length > 0;
+}
+
 export async function findPackageDir(
   from: string = process.cwd(),
-  withModulesDir = false,
+  requireModuleDirectory = false,
 ): Promise<string | undefined> {
   if (DEV_RE.test(from)) {
     return path.join(from, '../..');
@@ -25,8 +38,8 @@ export async function findPackageDir(
       const pkg = require(target);
       if (pkg) {
         if (
-          !withModulesDir ||
-          (await pathExists(path.join(from, 'node_modules'), 'dir'))
+          !requireModuleDirectory ||
+          isAvairableModuleDir(path.join(from, 'node_modules'))
         ) {
           result = from;
           break;
@@ -48,7 +61,7 @@ export async function findPackageDir(
 
 export function findPackageDirSync(
   from: string = process.cwd(),
-  withModulesDir = false,
+  requireModuleDirectory = false,
 ): string | undefined {
   if (DEV_RE.test(from)) {
     return path.join(from, '../..');
@@ -66,8 +79,8 @@ export function findPackageDirSync(
       const pkg = require(target);
       if (pkg) {
         if (
-          !withModulesDir ||
-          pathExistsSync(path.join(from, 'node_modules'), 'dir')
+          !requireModuleDirectory ||
+          isAvairableModuleDirSync(path.join(from, 'node_modules'))
         ) {
           result = from;
         }
