@@ -39,7 +39,7 @@ export async function findPackageDir(
       if (pkg) {
         if (
           !requireModuleDirectory ||
-          isAvairableModuleDir(path.join(from, 'node_modules'))
+          (await isAvairableModuleDir(path.join(from, 'node_modules')))
         ) {
           result = from;
           break;
@@ -83,8 +83,8 @@ export function findPackageDirSync(
           isAvairableModuleDirSync(path.join(from, 'node_modules'))
         ) {
           result = from;
+          break;
         }
-        break;
       }
     } catch (err: any) {
       if (!err.message.startsWith('Cannot find module')) {
@@ -187,7 +187,7 @@ export async function installPackage(
     skipWhenInstalled?: boolean;
   } = {},
 ) {
-  const pkgDir = await findPackageDir();
+  const pkgDir = await findPackageDir(undefined, true);
   if (!pkgDir) {
     throw new NodeUtilError('missing package directory.');
   }
@@ -202,7 +202,7 @@ export async function installPackage(
 
   const pm = await detectPackageManager();
   const installCommand = pm === 'npm' ? 'install' : 'add';
-  const args = [installCommand];
+  const args = [pkg, installCommand];
   if (dev) {
     args.push('-D');
   }

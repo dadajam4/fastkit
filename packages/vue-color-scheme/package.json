@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-color-scheme",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "@fastkit/vue-color-scheme",
   "buildOptions": {
     "name": "VueColorScheme"
@@ -30,8 +30,8 @@
     "@vueuse/head": "^0.2.0"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "0.6.4",
-    "@fastkit/tiny-logger": "0.6.4",
-    "@fastkit/vue-utils": "0.6.4"
+    "@fastkit/color-scheme": "0.6.5",
+    "@fastkit/tiny-logger": "0.6.5",
+    "@fastkit/vue-utils": "0.6.5"
   }
 }

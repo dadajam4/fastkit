@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-kit",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "vue-kit",
   "main": "index.js",
   "module": "dist/vue-kit.esm-bundler.js",
@@ -38,14 +38,14 @@
     "vue": "^3.2.0"
   },
   "dependencies": {
-    "fastkit": "0.6.4",
-    "@fastkit/vue-app-layout": "0.6.4",
-    "@fastkit/vue-color-scheme": "0.6.4",
-    "@fastkit/vue-form-control": "0.6.4",
-    "@fastkit/vue-media-match": "0.6.4",
-    "@fastkit/vue-page": "0.6.4",
-    "@fastkit/vue-scroller": "0.6.4",
-    "@fastkit/vue-stack": "0.6.4",
-    "@fastkit/vue-utils": "0.6.4"
+    "fastkit": "0.6.5",
+    "@fastkit/vue-app-layout": "0.6.5",
+    "@fastkit/vue-color-scheme": "0.6.5",
+    "@fastkit/vue-form-control": "0.6.5",
+    "@fastkit/vue-media-match": "0.6.5",
+    "@fastkit/vue-page": "0.6.5",
+    "@fastkit/vue-scroller": "0.6.5",
+    "@fastkit/vue-stack": "0.6.5",
+    "@fastkit/vue-utils": "0.6.5"
   }
 }

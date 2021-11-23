@@ -3,11 +3,14 @@ import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { VPageProgress } from '../VPageProgress';
 import { useVuePageControl } from '../../composables/page-control';
 import { ClientOnly } from '../ClientOnly';
+import { useRouter } from 'vue-router';
 
 export const VPageRoot = defineComponent({
   name: 'VPageRoot',
   setup(props, ctx) {
     const control = useVuePageControl();
+
+    useRouter();
 
     return () => {
       const { pageError } = control;
