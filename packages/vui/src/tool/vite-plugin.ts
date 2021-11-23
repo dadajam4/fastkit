@@ -71,7 +71,7 @@ function defaultDynamicDest() {
 
 function getBuiltinsDir() {
   // const cwd = process.cwd();
-  const pkgDir = findPackageDirSync();
+  const pkgDir = findPackageDirSync(undefined, true);
   if (!pkgDir) {
     throw new Error(`missing package directory`);
   }

@@ -7,6 +7,7 @@ const DEV_RE = /\/fastkit\/packages\//;
 
 export async function findPackageDir(
   from: string = process.cwd(),
+  withModulesDir = false,
 ): Promise<string | undefined> {
   if (DEV_RE.test(from)) {
     return path.join(from, '../..');
@@ -23,8 +24,13 @@ export async function findPackageDir(
     try {
       const pkg = require(target);
       if (pkg) {
-        result = from;
-        break;
+        if (
+          !withModulesDir ||
+          (await pathExists(path.join(from, 'node_modules'), 'dir'))
+        ) {
+          result = from;
+          break;
+        }
       }
     } catch (err: any) {
       if (!err.message.startsWith('Cannot find module')) {
@@ -42,6 +48,7 @@ export async function findPackageDir(
 
 export function findPackageDirSync(
   from: string = process.cwd(),
+  withModulesDir = false,
 ): string | undefined {
   if (DEV_RE.test(from)) {
     return path.join(from, '../..');
@@ -58,7 +65,12 @@ export function findPackageDirSync(
     try {
       const pkg = require(target);
       if (pkg) {
-        result = from;
+        if (
+          !withModulesDir ||
+          pathExistsSync(path.join(from, 'node_modules'), 'dir')
+        ) {
+          result = from;
+        }
         break;
       }
     } catch (err: any) {
@@ -104,7 +116,7 @@ async function getTypeofLockFile(
   cwd?: string,
 ): Promise<PackageManagerName | null> {
   if (!cwd) {
-    cwd = await findPackageDir();
+    cwd = await findPackageDir(undefined, true);
   }
   if (!cwd) {
     cwd = '.';
