@@ -327,6 +327,14 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this._init();
   }
 
+  writeResponse(params: WriteResponse) {
+    const { _writeResponse } = this;
+    if (!_writeResponse) {
+      throw new Error('missing provided writeResponse function.');
+    }
+    return _writeResponse(params);
+  }
+
   onSuspensePending(Component: VNode) {
     if (!this.suspenseComponents.includes(Component)) {
       this._suspenseComponents.value.push(() => Component);
