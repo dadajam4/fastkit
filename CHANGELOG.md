@@ -1,3 +1,12 @@
+## [0.6.6](https://github.com/dadajam4/fastkit/compare/v0.6.5...v0.6.6) (2021-11-30)
+
+
+### Bug Fixes
+
+* unused writeResponse ([4e8f754](https://github.com/dadajam4/fastkit/commit/4e8f75436c68c67beb1b44a053d23042510af44c))
+
+
+
 ## [0.6.5](https://github.com/dadajam4/fastkit/compare/v0.6.4...v0.6.5) (2021-11-23)
 
 
