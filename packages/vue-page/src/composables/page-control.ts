@@ -13,8 +13,12 @@ import {
 import type {
   Router,
   RouteLocationNormalized,
-  NavigationGuardNext,
+  RouteQueryAndHash,
+  LocationAsPath,
+  LocationQueryRaw,
+  LocationAsRelativeRaw,
 } from 'vue-router';
+import { stringifyQuery } from 'vue-router';
 import { IN_WINDOW } from '@fastkit/helpers';
 import { extractRouteMatchedItems, RouteMatchedItem } from '@fastkit/vue-utils';
 import { ResolvedRouteLocation } from '../schemes';
@@ -25,7 +29,6 @@ import { VuePageError } from '../logger';
 import { VuePageControlError } from './page-error';
 import { VErrorPage } from '../components/VErrorPage';
 import type { ServerResponse, IncomingMessage } from 'http';
-// import type { IncomingMessage } from 'connect';
 
 type JSONPrimitiveValue = string | number | boolean | null | undefined;
 
@@ -45,6 +48,12 @@ export type VuePagePrefetchFn = (
 ) => void | Promise<void>;
 
 export type RawPrefetchContext = VuePagePrefetchFn | PrefetchContext;
+
+export interface WriteResponse {
+  status?: number;
+  statusText?: string;
+  headers?: Record<string, string>;
+}
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomOptions {
@@ -97,6 +106,48 @@ export function extractRouteMatchedItemsWithPrefetch(
 //   continuous?: boolean;
 // }
 
+export type VuePageControlMiddlewareFn = (
+  ctx: VuePageControl,
+) => void | Promise<void>;
+
+type RedirectOptions = {
+  statusCode?: number;
+};
+
+export type RawVuePageControlRedirectSpec =
+  | string
+  | (RouteQueryAndHash & LocationAsPath & RedirectOptions)
+  | (RouteQueryAndHash & LocationAsRelativeRaw & RedirectOptions);
+
+export interface VuePageControlRedirectSpec
+  extends RouteQueryAndHash,
+    LocationAsPath,
+    LocationAsRelativeRaw {
+  statusCode: number;
+  query?: LocationQueryRaw;
+}
+
+const DEFAULT_REDIRECT_STATUS = 302;
+
+function resolveRawVuePageControlRedirectSpec(
+  source: RawVuePageControlRedirectSpec,
+): VuePageControlRedirectSpec {
+  if (typeof source === 'string') {
+    source = { path: source };
+  }
+  const { statusCode = DEFAULT_REDIRECT_STATUS, query, hash } = source;
+  const { path } = source as LocationAsPath;
+  const { name, params } = source as LocationAsRelativeRaw;
+  return {
+    statusCode,
+    query,
+    hash,
+    path,
+    name,
+    params,
+  };
+}
+
 export interface VuePageControlSettings {
   app: App;
   router: Router;
@@ -105,6 +156,9 @@ export interface VuePageControlSettings {
   ErrorComponent?: Component;
   request?: IncomingMessage;
   response?: ServerResponse;
+  redirect?: (location: string, status?: number) => void;
+  writeResponse?: (params: WriteResponse) => void;
+  middleware?: VuePageControlMiddlewareFn[];
 }
 
 type RawProvided<T extends JSONData> =
@@ -144,7 +198,11 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   private _ErrorComponent: Component;
   readonly request?: IncomingMessage;
   readonly response?: ServerResponse;
+  private readonly _redirect?: (location: string, status?: number) => void;
+  private readonly _writeResponse?: (params: WriteResponse) => void;
   readonly isClient: boolean;
+  readonly middleware: VuePageControlMiddlewareFn[];
+  private _redirectSpec?: VuePageControlRedirectSpec;
 
   get isServer() {
     return !this.isClient;
@@ -210,12 +268,19 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       ErrorComponent,
       request,
       response,
+      redirect,
+      writeResponse,
+      middleware = [],
     } = settings;
+
     this.app = app;
     this.router = router;
     this.request = request;
     this.response = response;
     this.isClient = typeof window !== 'undefined';
+    this.middleware = middleware;
+    this._redirect = redirect;
+    this._writeResponse = writeResponse;
 
     this._ErrorComponent = ErrorComponent || VErrorPage;
     this._initialState = initialState;
@@ -325,6 +390,8 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
   ) {
+    delete this._redirectSpec;
+
     const { router } = this;
     this._beforeRoute.value = router.resolve(from);
     this._route.value = router.resolve(to);
@@ -336,19 +403,54 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this._prefetchQueues.value = [];
   }
 
+  redirect(redirectSpec: RawVuePageControlRedirectSpec) {
+    this._redirectSpec = resolveRawVuePageControlRedirectSpec(redirectSpec);
+  }
+
+  private _triggerRedirect() {
+    const { _redirectSpec } = this;
+    if (!_redirectSpec) return;
+    let { path, query, hash } = _redirectSpec;
+    const { statusCode, name, params } = _redirectSpec;
+    if (name) {
+      const tmp = this.router.resolve({ name, params, query, hash });
+      path = tmp.path;
+      query = tmp.query;
+      hash = tmp.hash;
+    }
+    const queryStr = query ? stringifyQuery(query) : query;
+    const queryAppends = queryStr
+      ? path.includes('?')
+        ? `&${queryStr}`
+        : `?${queryStr}`
+      : '';
+
+    const fullPath = `${path}${queryAppends}`;
+    if (this.isClient) {
+      window.location.replace(fullPath);
+      return false;
+    }
+
+    if (!this._redirect) {
+      throw new Error('required redirect function.');
+    }
+
+    this._redirect(fullPath, statusCode);
+  }
+
   private async _handleBeforeResolve(
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
-    next: NavigationGuardNext,
   ) {
     this._to.value = to;
     this._from.value = from;
 
     this._closePrefetchs();
+    delete this._redirectSpec;
 
     if (IN_WINDOW && !this.initialStateConsumed && this.pageError) {
       this._initialStateConsumed = true;
-      return next();
+      return;
     }
 
     try {
@@ -360,10 +462,21 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
         });
       }
 
+      for (const middlewareFn of this.middleware) {
+        await middlewareFn(this);
+        if (this._redirectSpec) {
+          break;
+        }
+      }
+
+      if (this._redirectSpec) {
+        return this._triggerRedirect();
+      }
+
       if (!extracted.length) {
         this._initialStateConsumed = true;
         this._deletePageError();
-        return next();
+        return;
       }
 
       const queueSetups: Promise<any>[] = [];
@@ -397,11 +510,8 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       this._initialStateConsumed = true;
 
       this._deletePageError();
-
-      next();
     } catch (_err) {
       this._setPageError(_err);
-      next();
     }
   }
 

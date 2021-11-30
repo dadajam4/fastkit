@@ -1,5 +1,5 @@
 import { defineComponent, ref } from 'vue';
-import { VAppLayout, VApp, useMediaMatch } from '@fastkit/vui';
+import { VAppLayout, VApp, useMediaMatch, VAppContainer } from '@fastkit/vui';
 import { VPage } from '@fastkit/vue-page';
 import { useVuePageControl, VPageLink } from '@fastkit/vue-page';
 
@@ -81,7 +81,11 @@ export const App = defineComponent({
                 </div>
               );
             },
-            default: () => <VPage />,
+            default: () => (
+              <VAppContainer>
+                <VPage />
+              </VAppContainer>
+            ),
             drawer: () => {
               return (
                 <div

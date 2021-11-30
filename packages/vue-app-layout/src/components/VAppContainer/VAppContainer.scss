@@ -1,0 +1,15 @@
+.v-app-container {
+  &--padded {
+    padding-right: var(--v-app-container-padding);
+    padding-left: var(--v-app-container-padding);
+  }
+
+  &--pulled {
+    margin-right: calc(-1 * var(--v-app-container-padding));
+    margin-left: calc(-1 * var(--v-app-container-padding));
+  }
+
+  &__inner {
+    width: 100%;
+  }
+}

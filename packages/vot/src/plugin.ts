@@ -9,6 +9,7 @@ import {
   installVuePageControl,
   VuePageControl,
   VPageRoot,
+  VuePageControlMiddlewareFn,
 } from '@fastkit/vue-page';
 export * from '@fastkit/vue-page';
 
@@ -30,18 +31,11 @@ export function createVotPlugin(source: RawVotPlugin) {
 
 type ViteSSROptions = Parameters<typeof _viteSSR>[1];
 
-// declare module '@fastkit/vue-page' {
-//   interface VuePageControl {
-//     // _ErrorComponent?: RawComponent;
-//     request?: IncomingMessage;
-//     response?: ServerResponse;
-//   }
-// }
-
 export interface VotOptions extends Omit<ViteSSROptions, 'routes'> {
   // ErrorComponent?: RawComponent;
   // routes: RouteRecordRaw[];
   plugins?: RawVotPlugin[];
+  middleware?: VuePageControlMiddlewareFn[];
 }
 
 export type VotHook = (url: string, cfg?: any) => Promise<any>;
@@ -59,21 +53,19 @@ export async function createVotHook(
   const hook = _viteSSR(RootApp, { ...options, routes }, async (_ctx) => {
     const app = _ctx.app as App;
     const router = _ctx.router as Router;
-    const initialState = _ctx.initialState;
-    const initialRoute = _ctx.initialRoute;
-    // _ctx.isClient;
-    const request = _ctx.request;
-    const response = _ctx.response;
-    // if (response) {
-    //   response.statusCode = 404;
-    // }
-    // request
-    // console.log(_ctx.response);
+    const {
+      initialState,
+      initialRoute,
+      request,
+      response,
+      writeResponse,
+      redirect,
+    } = _ctx;
 
     const head = createHead();
     app.use(head);
 
-    const { plugins } = options;
+    const { plugins, middleware } = options;
 
     const pageControl = installVuePageControl({
       app,
@@ -82,16 +74,14 @@ export async function createVotHook(
       initialRoute,
       request,
       response,
+      middleware,
+      writeResponse,
+      redirect,
     });
 
     if (IN_WINDOW) {
       (window as any).$vpage = pageControl;
     }
-
-    // const ctx: VotControl = {
-    //   app,
-    //   router,
-    // };
 
     if (plugins) {
       for (const _plugin of plugins) {
