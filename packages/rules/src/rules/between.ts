@@ -1,5 +1,5 @@
 import { isBetween } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 
 /**
  * 値が一定の範囲内の値であるか

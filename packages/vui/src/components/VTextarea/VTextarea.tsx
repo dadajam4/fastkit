@@ -18,10 +18,9 @@ import {
   useControl,
   createControlFieldProviderProps,
   useControlField,
-  useVui,
 } from '../../composables';
 import { VTextCounter } from '../VTextCounter';
-import { VUI_TEXTAREA_SYMBOL } from '../../injections';
+import { VUI_TEXTAREA_SYMBOL, useVui } from '../../injections';
 
 const { props, emits } = createTextareaSettings();
 

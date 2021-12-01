@@ -8,7 +8,7 @@ import {
   FormControl,
   renderSlotOrEmpty,
 } from '@fastkit/vue-kit';
-import { useVuiColorProvider, useVui } from '../../composables';
+import { useVuiColorProvider, useVui } from '../../injections';
 
 const { props, emits } = createFormControlSettings();
 

@@ -7,8 +7,8 @@ import {
   renderSlotOrEmpty,
   getDocumentScroller,
 } from '@fastkit/vue-kit';
-import { createControlProps, useControl, useVui } from '../../composables';
-import { VUI_FORM_SYMBOL } from '../../injections';
+import { createControlProps, useControl } from '../../composables';
+import { VUI_FORM_SYMBOL, useVui } from '../../injections';
 
 const { props, emits } = createFormSettings({
   nodeType: VUI_FORM_SYMBOL,

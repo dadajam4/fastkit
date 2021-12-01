@@ -1,5 +1,5 @@
 import { isUrl } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 
 export const url = createRule<void>({
   name: 'url',

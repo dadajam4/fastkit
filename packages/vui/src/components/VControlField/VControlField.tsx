@@ -14,8 +14,8 @@ import {
   useControl,
   createControlFieldProviderProps,
   useControlField,
-  useVuiColorProvider,
 } from '../../composables';
+import { useVuiColorProvider } from '../../injections';
 
 const ADORNMENT_POSITIONS = ['start', 'end'] as const;
 

@@ -1,5 +1,5 @@
 import { isKana, isKanaAlphaNumeric } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 
 export const kana = createRule<void>({
   name: 'kana',

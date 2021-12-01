@@ -1,5 +1,5 @@
 import { isMultipleOf } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 import { RulesError } from '../logger';
 
 export const multipleOf = createRule<number>({

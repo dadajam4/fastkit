@@ -1,5 +1,5 @@
 import { isPattern } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 
 export const pattern = createRule<string | RegExp>({
   name: 'pattern',

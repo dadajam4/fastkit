@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import { useVuePageControl } from '../../composables/page-control';
+import { useVuePageControl } from '../../injections';
 import { VuePageControlError } from '../../composables/page-error';
 
 export const VErrorPage = defineComponent({

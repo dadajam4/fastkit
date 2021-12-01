@@ -1,7 +1,7 @@
 import { defineComponent, h } from 'vue';
 import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { VPageProgress } from '../VPageProgress';
-import { useVuePageControl } from '../../composables/page-control';
+import { useVuePageControl } from '../../injections';
 import { ClientOnly } from '../ClientOnly';
 import { useRouter } from 'vue-router';
 

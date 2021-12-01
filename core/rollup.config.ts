@@ -186,6 +186,7 @@ function createConfig(
     'chokidar',
     'esbuild',
     'vite',
+    'vite-ssr/plugin',
     'postcss',
     'nanoid',
     '@datadog/browser-logs',
@@ -264,6 +265,23 @@ function createConfig(
       return external.includes(id) || externalRe.test(id);
     },
     plugins: [
+      {
+        name: '__skip-resolveDirective__',
+        options: (options) => {
+          options.onwarn = (warn, defaultHandler) => {
+            if (
+              warn.code === 'UNUSED_EXTERNAL_IMPORT' &&
+              warn.names &&
+              warn.names.length === 1 &&
+              warn.names[0] === 'resolveDirective'
+            ) {
+              return;
+            }
+            defaultHandler(warn);
+          };
+          return options;
+        },
+      },
       json({
         namedExports: false,
       }),

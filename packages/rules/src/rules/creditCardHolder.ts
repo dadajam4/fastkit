@@ -1,5 +1,5 @@
 import { isCreditCardHolder } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 
 export const creditCardHolder = createRule<void>({
   name: 'creditCardHolder',

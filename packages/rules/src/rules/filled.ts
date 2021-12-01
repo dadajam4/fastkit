@@ -1,5 +1,5 @@
 import { isFilled } from '../validators';
-import { rule } from '../';
+import { rule } from '../factories';
 
 export const filled = rule<void>({
   name: 'filled',

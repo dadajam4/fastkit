@@ -4,11 +4,9 @@ import {
   ComponentCustomOptions,
   ref,
   Ref,
-  inject,
   ComputedRef,
   computed,
   VNode,
-  onBeforeUnmount,
   Component,
   InjectionKey,
   reactive,
@@ -27,8 +25,7 @@ import { extractRouteMatchedItems, RouteMatchedItem } from '@fastkit/vue-utils';
 import { ResolvedRouteLocation } from '../schemes';
 import { isPromise } from '@fastkit/helpers';
 import { EV } from '@fastkit/ev';
-import { VuePageControlInjectionKey } from '../injections';
-import { VuePageError } from '../logger';
+import { useVuePageControl } from '../injections';
 import { VuePageControlError } from './page-error';
 import { VErrorPage } from '../components/VErrorPage';
 import type { ServerResponse, IncomingMessage } from 'http';
@@ -752,27 +749,6 @@ export interface UseVuePageControlOptions {
   onStart?: (progress: VuePagePreftechProgress) => any;
   onFinish?: (progress: VuePagePreftechProgress) => any;
   onError?: (error: VuePageControlError) => any;
-}
-
-export function useVuePageControl(opts: UseVuePageControlOptions = {}) {
-  const pageControl = inject(VuePageControlInjectionKey, null);
-  if (!pageControl) {
-    throw new VuePageError(`missing provided VuePageControl.`);
-  }
-
-  const { onStart, onFinish, onError } = opts;
-  if (onStart || onFinish) {
-    onStart && pageControl.on('start', onStart);
-    onFinish && pageControl.on('finish', onFinish);
-    onError && pageControl.on('error', onError);
-
-    onBeforeUnmount(() => {
-      onStart && pageControl.off('start', onStart);
-      onFinish && pageControl.off('finish', onFinish);
-      onError && pageControl.off('error', onError);
-    });
-  }
-  return pageControl;
 }
 
 export type PrefetchContext<T extends JSONData = JSONData> = {

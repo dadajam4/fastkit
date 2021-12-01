@@ -1,4 +1,4 @@
-import { InjectionKey } from 'vue';
+import { InjectionKey, inject, computed, provide } from 'vue';
 import type { VuiService } from './service';
 import type {
   ControlProvider,
@@ -27,3 +27,34 @@ export const VUI_RADIO_SYMBOL = 'vui-radio';
 export const VUI_SWITCH_GROUP_SYMBOL = 'vui-switch-group';
 export const VUI_SWITCH_SYMBOL = 'vui-switch';
 export const VUI_FORM_SYMBOL = 'vui-form';
+
+export function useVui() {
+  const vui = inject(VuiInjectionKey);
+  if (!vui) {
+    throw new Error('missing vui service');
+  }
+  return vui;
+}
+
+export function useVuiColorProvider(): VuiColorProvider {
+  const parent = inject(VuiColorProviderInjectionKey, null);
+  if (parent) {
+    return parent;
+  }
+
+  const vui = useVui();
+  const primary = computed(() => vui.color('primary'));
+  const error = computed(() => vui.color('error'));
+  const provider: VuiColorProvider = {
+    primary,
+    error,
+    className: (type) => {
+      const scope = provider[type].value;
+      return `${scope}-scope`;
+    },
+  };
+
+  provide(VuiColorProviderInjectionKey, provider);
+
+  return provider;
+}

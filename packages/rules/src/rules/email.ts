@@ -1,5 +1,5 @@
 import { isEmail, isMultipleEmail } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 
 export const email = createRule<void>({
   name: 'email',

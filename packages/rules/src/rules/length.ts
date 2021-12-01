@@ -1,5 +1,5 @@
 import { isLength, LengthCondition } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 
 export const length = createRule<number | LengthCondition>({
   name: 'length',

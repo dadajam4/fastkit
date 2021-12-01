@@ -8,7 +8,7 @@ import {
   h,
 } from 'vue';
 import { RouterView, RouteLocationNormalizedLoaded } from 'vue-router';
-import { useVuePageControl } from '../composables';
+import { useVuePageControl } from '../injections';
 
 const DEFAULT_TRANSITION = 'page';
 

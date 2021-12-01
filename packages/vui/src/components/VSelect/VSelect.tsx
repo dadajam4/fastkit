@@ -20,11 +20,10 @@ import {
   useControl,
   createControlFieldProviderProps,
   useControlField,
-  useVui,
 } from '../../composables';
-import { VUI_SELECT_SYMBOL } from '../../injections';
+import { VUI_SELECT_SYMBOL, useVui } from '../../injections';
 import { VIcon } from '../VIcon';
-import { VMenu } from '..';
+import { VMenu } from '../kits';
 import { VOption } from '../VOption';
 
 const { props, emits } = createFormSelectorSettings();

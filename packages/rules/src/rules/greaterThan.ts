@@ -1,5 +1,5 @@
 import { isGreaterThan } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 import { RulesError } from '../logger';
 
 /**

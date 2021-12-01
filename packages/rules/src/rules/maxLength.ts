@@ -1,5 +1,5 @@
 import { isMaxLength } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 import { RulesError } from '../logger';
 
 export const maxLength = createRule<number>({

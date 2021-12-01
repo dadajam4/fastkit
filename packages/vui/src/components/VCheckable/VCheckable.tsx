@@ -1,7 +1,7 @@
 import './VCheckable.scss';
 import { computed, defineComponent } from 'vue';
 import { defineSlotsProps, renderSlotOrEmpty } from '@fastkit/vue-kit';
-import { useVuiColorProvider } from '../../composables';
+import { useVuiColorProvider } from '../../injections';
 
 export const VCheckable = defineComponent({
   name: 'VCheckable',

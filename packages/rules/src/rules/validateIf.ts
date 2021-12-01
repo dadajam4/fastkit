@@ -1,5 +1,7 @@
-import { createRule, ValidateCancelSymbol, isRequired, Rule } from '../';
+import { createRule, Rule } from '../factories';
+import { ValidateCancelSymbol } from '../schemes';
 import { REQUIRED_SYMBOL } from './required';
+import { isRequired } from '../validators/general';
 
 export type ValidateIfChecker = (value: any) => boolean | void;
 

@@ -1,5 +1,5 @@
 import { isAlphaSpaces } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 
 /**
  * 半角英字＆スペース

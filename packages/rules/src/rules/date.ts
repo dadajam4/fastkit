@@ -4,7 +4,7 @@ import {
   dateIsBetween,
   BetweenDateConstraints,
 } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 
 /**
  * 日時が一定値以上か

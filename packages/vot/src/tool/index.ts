@@ -29,6 +29,21 @@ export function votPlugin(options: VotPluginOptions = {}) {
 
   const plugin: Plugin = {
     name: 'vite:vot',
+    options: (options) => {
+      options.onwarn = (warn, defaultHandler) => {
+        // Update this package.json to use a subpath pattern like "./*"
+        if (
+          warn.code === 'UNUSED_EXTERNAL_IMPORT' &&
+          warn.names &&
+          warn.names.length === 1 &&
+          warn.names[0] === 'resolveDirective'
+        ) {
+          return;
+        }
+        defaultHandler(warn);
+      };
+      return options;
+    },
     config(config) {
       config.optimizeDeps = config.optimizeDeps || {};
       config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];

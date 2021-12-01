@@ -1,5 +1,5 @@
 import { isRequired } from '../validators';
-import { rule } from '../';
+import { rule } from '../factories';
 
 export const REQUIRED_SYMBOL = 'required';
 

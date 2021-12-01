@@ -1,5 +1,5 @@
 import { defineComponent, computed, CSSProperties, ref, nextTick } from 'vue';
-import { useVuePageControl } from '../../composables';
+import { useVuePageControl } from '../../injections';
 import { NumberishPropOption, resolveNumberish } from '@fastkit/vue-utils';
 
 export const VPageProgress = defineComponent({

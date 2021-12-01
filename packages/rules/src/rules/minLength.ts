@@ -1,5 +1,5 @@
 import { isMinLength } from '../validators';
-import { createRule } from '../';
+import { createRule } from '../factories';
 import { RulesError } from '../logger';
 
 export const minLength = createRule<number>({
