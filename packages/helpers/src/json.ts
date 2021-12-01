@@ -1,3 +1,9 @@
+export type JSONPrimitiveValue = string | number | boolean | null | undefined;
+
+export type JSONData = JSONPrimitiveValue | JSONPrimitiveValue[] | JSONMapValue;
+
+export type JSONMapValue = { [key: string]: JSONData };
+
 export function safeJSONStringify<T>(
   obj: T,
   replacer?: (this: any, key: string, value: any) => any,

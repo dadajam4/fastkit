@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@fastkit/ev": "0.6.6",
+    "@fastkit/helpers": "0.6.6",
     "@fastkit/tiny-logger": "0.6.6",
     "@fastkit/vue-utils": "0.6.6"
   }

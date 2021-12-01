@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import {
   App,
   ComponentCustomOptions,
@@ -9,6 +10,8 @@ import {
   VNode,
   onBeforeUnmount,
   Component,
+  InjectionKey,
+  reactive,
 } from 'vue';
 import type {
   Router,
@@ -29,15 +32,10 @@ import { VuePageError } from '../logger';
 import { VuePageControlError } from './page-error';
 import { VErrorPage } from '../components/VErrorPage';
 import type { ServerResponse, IncomingMessage } from 'http';
+import { StateInjectionKey } from './state';
+import { JSONMapValue, JSONData } from '@fastkit/helpers';
 
-type JSONPrimitiveValue = string | number | boolean | null | undefined;
-
-type JSONData =
-  | JSONPrimitiveValue
-  | JSONPrimitiveValue[]
-  | { [key: string]: JSONData };
-
-type InitialState = { [key: string]: JSONData };
+type InitialState = JSONMapValue;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VuePageInjectionKey<T extends JSONData> extends String {}
@@ -110,6 +108,10 @@ export type VuePageControlMiddlewareFn = (
   ctx: VuePageControl,
 ) => void | Promise<void>;
 
+export function createMiddleware(source: VuePageControlMiddlewareFn) {
+  return source;
+}
+
 type RedirectOptions = {
   statusCode?: number;
 };
@@ -128,6 +130,8 @@ export interface VuePageControlRedirectSpec
 }
 
 const DEFAULT_REDIRECT_STATUS = 302;
+
+const STATE_BUCKET_SYMBOL = 'pgc-state';
 
 function resolveRawVuePageControlRedirectSpec(
   source: RawVuePageControlRedirectSpec,
@@ -185,7 +189,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   readonly router: Router;
   private _from: Ref<RouteLocationNormalized | null> = ref(null);
   private _to: Ref<RouteLocationNormalized | null> = ref(null);
-  private _initialState?: InitialState;
+  private _initialState: InitialState;
   private _beforeRoute: Ref<ResolvedRouteLocation | null> = ref(null);
   private _route: Ref<ResolvedRouteLocation>;
   private _stopFn?: () => void;
@@ -203,6 +207,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   readonly isClient: boolean;
   readonly middleware: VuePageControlMiddlewareFn[];
   private _redirectSpec?: VuePageControlRedirectSpec;
+  private _providedMap: Map<string | InjectionKey<any>, any> = new Map();
 
   get isServer() {
     return !this.isClient;
@@ -263,7 +268,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     const {
       app,
       router,
-      initialState,
+      initialState = {},
       initialRoute,
       ErrorComponent,
       request,
@@ -283,7 +288,14 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this._writeResponse = writeResponse;
 
     this._ErrorComponent = ErrorComponent || VErrorPage;
+
+    initialState[STATE_BUCKET_SYMBOL] = initialState[STATE_BUCKET_SYMBOL] || {};
+
+    initialState[STATE_BUCKET_SYMBOL] = reactive<any>(
+      initialState[STATE_BUCKET_SYMBOL],
+    );
     this._initialState = initialState;
+
     this._route = ref(initialRoute);
     this._runningQueues = computed(() =>
       this.prefetchQueues.filter((q) => q.running),
@@ -325,6 +337,62 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     }
 
     this._init();
+  }
+
+  async initState<T extends object>(
+    key: StateInjectionKey<T>,
+    initializer: () => T | Promise<T>,
+  ): Promise<T> {
+    const bucket = this.initialState[STATE_BUCKET_SYMBOL] as any;
+    let data = bucket[key as any] as T;
+    if (data === undefined) {
+      data =
+        typeof initializer === 'function' ? await initializer() : initializer;
+    }
+    bucket[key as any] = reactive(data);
+    this.app.provide(key as any, data);
+    return data;
+  }
+
+  useState<T  extends object>(key: StateInjectionKey<T>): T | undefined; // eslint-disable-line prettier/prettier
+  useState<T extends object>(key: StateInjectionKey<T>, defaultValue: T | (() => T)): T; // eslint-disable-line prettier/prettier
+  useState<T extends object>(
+    key: StateInjectionKey<T>,
+    defaultValue?: T | (() => T),
+  ): T | undefined {
+    const bucket = this.initialState[STATE_BUCKET_SYMBOL] as JSONMapValue;
+    let data = bucket[key as any] as T | undefined;
+    if (data === undefined) {
+      data = typeof defaultValue === 'function' ? defaultValue() : defaultValue;
+    }
+    return data;
+  }
+
+  provide<T>(key: InjectionKey<T> | string, value: T) {
+    this.app.provide(key, value);
+    this._providedMap.set(key, value);
+  }
+
+  inject<T>(key: InjectionKey<T> | string): T | undefined;
+  inject<T>(key: InjectionKey<T> | string, defaultValue: T, treatDefaultAsFactory?: false): T; // eslint-disable-line prettier/prettier
+  inject<T>(key: InjectionKey<T> | string, defaultValue: T | (() => T), treatDefaultAsFactory: true): T; // eslint-disable-line prettier/prettier
+  inject<T>(
+    key: InjectionKey<T> | string,
+    defaultValue?: T | (() => T),
+    treatDefaultAsFactory?: boolean,
+  ): T | undefined {
+    let value = this._providedMap.get(key);
+    if (value === undefined && defaultValue !== undefined) {
+      value =
+        treatDefaultAsFactory && typeof defaultValue === 'function'
+          ? (defaultValue as () => T)()
+          : defaultValue;
+    }
+    return value;
+  }
+
+  addMiddleware(middleware: VuePageControlMiddlewareFn) {
+    this.middleware.push(middleware);
   }
 
   writeResponse(params: WriteResponse) {

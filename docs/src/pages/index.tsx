@@ -2,13 +2,27 @@ import { defineComponent } from 'vue';
 import { VButton, VSelect, VAppContainer } from '@fastkit/vui';
 import { RouterLink } from 'vue-router';
 import { range } from '@fastkit/helpers';
+import { AuthSearvice } from '../plugins';
+import { useState } from '@fastkit/vot';
 
 export default defineComponent({
+  setup() {
+    const auth = AuthSearvice.use();
+    const hoge = useState(AuthSearvice.StateInjectionKey);
+    console.log('■', hoge);
+
+    return {
+      auth: auth.state,
+      isLoggedIn: () => auth.isLoggedIn,
+    };
+  },
   render() {
     return (
       <div>
         <VAppContainer>
-          <p>1</p>
+          <p>
+            1{JSON.stringify(this.auth.me)} {JSON.stringify(this.isLoggedIn())}
+          </p>
           <VAppContainer pulled>
             <p>2(pulled)</p>
             <VAppContainer>
