@@ -6,7 +6,7 @@ import { AuthSearvice } from '../plugins';
 import { useState } from '@fastkit/vot';
 
 export default defineComponent({
-  setup() {
+  setup(props, ctx) {
     const auth = AuthSearvice.use();
     const hoge = useState(AuthSearvice.StateInjectionKey);
     console.log('■', hoge);
@@ -17,12 +17,16 @@ export default defineComponent({
     };
   },
   render() {
+    console.log(this.$vpc);
     return (
       <div>
         <VAppContainer>
           <p>
             1{JSON.stringify(this.auth.me)} {JSON.stringify(this.isLoggedIn())}
           </p>
+          <VButton color="primary" href="https://google.com">
+            https://google.com
+          </VButton>
           <VAppContainer pulled>
             <p>2(pulled)</p>
             <VAppContainer>

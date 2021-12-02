@@ -99,6 +99,18 @@ export function useNavigationable(
       }
     }
 
+    if (!attrs.disabled) {
+      delete attrs.disabled;
+    }
+
+    if (!attrs.hreflang) {
+      delete attrs.hreflang;
+    }
+
+    if (!attrs.download) {
+      delete attrs.download;
+    }
+
     return {
       Tag,
       attrs,

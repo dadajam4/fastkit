@@ -80,7 +80,7 @@ export async function createVotHook(
     });
 
     if (IN_WINDOW) {
-      (window as any).$vpage = pageControl;
+      (window as any).$vpc = pageControl;
     }
 
     if (plugins) {
