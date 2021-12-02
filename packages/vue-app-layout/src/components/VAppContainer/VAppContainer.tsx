@@ -62,7 +62,6 @@ export const VAppContainer = defineComponent({
     return () => {
       return (
         <div class={classes.value}>
-          <div>{JSON.stringify(state.value)}</div>
           <div class="v-app-container__inner">
             {ctx.slots.default && ctx.slots.default()}
           </div>
