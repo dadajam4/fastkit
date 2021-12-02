@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "description": "@fastkit/vue-utils",
   "buildOptions": {
     "name": "VueUtils"
@@ -31,9 +31,9 @@
     "vue-router": "^4.0.0"
   },
   "dependencies": {
-    "@fastkit/body-scroll-lock": "0.6.7",
-    "@fastkit/visibility": "0.6.7",
-    "@fastkit/keybord": "0.6.7",
-    "@fastkit/helpers": "0.6.7"
+    "@fastkit/body-scroll-lock": "0.6.8",
+    "@fastkit/visibility": "0.6.8",
+    "@fastkit/keybord": "0.6.8",
+    "@fastkit/helpers": "0.6.8"
   }
 }
