@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/stylelint-config",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "@fastkit/stylelint-config",
   "buildOptions": {
     "ignore": true

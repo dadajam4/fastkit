@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-app-layout",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "@fastkit/vue-app-layout",
   "main": "index.js",
   "module": "dist/vue-app-layout.esm-bundler.js",
@@ -23,11 +23,11 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-app-layout#readme",
   "peerDependencies": {
-    "vue": "^3.2.0",
+    "vue": "^3.2.23",
     "vue-router": "^4.0.0"
   },
   "dependencies": {
-    "@fastkit/vue-utils": "0.6.9",
-    "@fastkit/vue-scroller": "0.6.9"
+    "@fastkit/vue-utils": "0.6.10",
+    "@fastkit/vue-scroller": "0.6.10"
   }
 }

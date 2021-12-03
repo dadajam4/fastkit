@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-kit",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "@fastkit/vite-kit",
   "main": "index.js",
   "module": "dist/vite-kit.esm-bundler.js",
@@ -23,15 +23,15 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vite-kit#readme",
   "peerDependencies": {
-    "vite": "^2.6.0"
+    "vite": "^2.6.14"
   },
   "dependencies": {
-    "@fastkit/color-scheme-gen": "0.6.9",
-    "@fastkit/hashed-sync": "0.6.9",
-    "@fastkit/icon-font-gen": "0.6.9",
-    "@fastkit/media-match-gen": "0.6.9",
-    "@fastkit/node-util": "0.6.9",
-    "@fastkit/sprite-images": "0.6.9",
-    "@fastkit/tiny-logger": "0.6.9"
+    "@fastkit/color-scheme-gen": "0.6.10",
+    "@fastkit/hashed-sync": "0.6.10",
+    "@fastkit/icon-font-gen": "0.6.10",
+    "@fastkit/media-match-gen": "0.6.10",
+    "@fastkit/node-util": "0.6.10",
+    "@fastkit/sprite-images": "0.6.10",
+    "@fastkit/tiny-logger": "0.6.10"
   }
 }
