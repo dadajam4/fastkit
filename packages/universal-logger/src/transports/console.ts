@@ -63,7 +63,15 @@ export const ConsoleTransport = function (
           prefix = consoleColorString(prefix, color);
         }
       }
-      console[func](prefix, message, ...args);
+      const chunks = [...args];
+      const firstArg = args[0];
+      if (
+        message !== firstArg &&
+        (!(firstArg instanceof Error) || firstArg.message !== message)
+      ) {
+        chunks.unshift(message);
+      }
+      console[func](prefix, ...chunks);
     },
   };
 };

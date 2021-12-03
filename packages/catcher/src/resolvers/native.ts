@@ -24,8 +24,11 @@ export interface NativeErrorOverrides {
 }
 
 export function nativeErrorResolver(
-  source: InstanceType<NativeErrorConstructor>,
+  source: string | InstanceType<NativeErrorConstructor>,
 ): NativeErrorOverrides | undefined {
+  if (typeof source === 'string') {
+    source = new Error(source);
+  }
   if (source && source instanceof Error) {
     const { constructor } = source;
     if (isNativeErrorConstructor(constructor)) {

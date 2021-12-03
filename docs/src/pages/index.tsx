@@ -4,14 +4,17 @@ import { RouterLink } from 'vue-router';
 import { range } from '@fastkit/helpers';
 import { AuthSearvice } from '../plugins';
 import { useState } from '@fastkit/vot';
+import { AppError } from '../error';
+import { getLogger } from '../logger';
 
 export default defineComponent({
   setup(props, ctx) {
     const auth = AuthSearvice.use();
     const hoge = useState(AuthSearvice.StateInjectionKey);
-    console.log('■', hoge);
+    const logger = getLogger('top');
 
     return {
+      logger,
       auth: auth.state,
       isLoggedIn: () => auth.isLoggedIn,
     };
@@ -23,6 +26,14 @@ export default defineComponent({
           <p>
             1{JSON.stringify(this.auth.me)} {JSON.stringify(this.isLoggedIn())}
           </p>
+          <button
+            onClick={(ev) => {
+              const error = AppError.from('zzzz');
+              this.logger.error(error);
+              this.logger.info('あいうえお', { message: 'あいうえお' });
+            }}>
+            error
+          </button>
           <VButton color="primary" href="https://google.com">
             https://google.com
           </VButton>
