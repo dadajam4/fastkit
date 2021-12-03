@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const vite = require('vite');
+const { proxyMiddleware } = require('../dist/tool');
 
 async function main() {
   const { path: configPath, config } = await vite.loadConfigFromFile({
@@ -20,6 +21,10 @@ async function main() {
   const { default: renderPage } = require(path.join(dist, 'server'));
 
   const server = express();
+
+  if (config.server.proxy) {
+    server.use(proxyMiddleware(null, config));
+  }
 
   // Serve every static asset route
   for (const asset of ssr.assets || []) {

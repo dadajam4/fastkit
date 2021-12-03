@@ -4,6 +4,8 @@ import { Plugin } from 'vite';
 import vue, { Options as VuePluginOptions } from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 
+export * from './proxy';
+
 type VueJsxOptions = Parameters<typeof vueJsx>[0];
 
 type ViteSSRPluginOpts = NonNullable<Parameters<typeof viteSSRPlugin>[0]>;

@@ -17,7 +17,6 @@ export default defineComponent({
     };
   },
   render() {
-    console.log(this.$vpc);
     return (
       <div>
         <VAppContainer>

@@ -1,3 +1,7 @@
+export function isObject(value: unknown): value is Record<string, any> {
+  return Object.prototype.toString.call(value) === '[object Object]';
+}
+
 // cloned from https://github.com/epoberezkin/fast-deep-equal with small changes
 export function objectIncludes(b: any, a: any): boolean {
   if (a === b) return true;

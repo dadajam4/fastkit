@@ -190,8 +190,9 @@ function createConfig(
     'postcss',
     'nanoid',
     '@datadog/browser-logs',
-    '@nuxt',
-    'nuxt3',
+    // '@nuxt',
+    // 'nuxt3',
+    'http-proxy',
     'virtual:generated-pages',
   );
 
