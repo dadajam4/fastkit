@@ -1,7 +1,7 @@
 import { DirectiveBinding, ObjectDirective } from 'vue';
 
 import { disableBodyScroll, enableBodyScroll } from '@fastkit/body-scroll-lock';
-import { pushDynamicStyle } from '@fastkit/helpers';
+import { pushDynamicStyle, IN_WINDOW } from '@fastkit/helpers';
 
 export type BodyScrollLockDirectiveBindingValue = boolean | undefined | void;
 
@@ -12,7 +12,7 @@ export const BODY_SCROLL_LOCK_ATTRIBUTE = 'data-body-scroll-lock';
 
 export const BODY_SCROLL_LOCK_SCROLLER_ATTRIBUTE = 'data-scroll-lock-scroller';
 
-if (__BROWSER__) {
+if (IN_WINDOW) {
   pushDynamicStyle(`[${BODY_SCROLL_LOCK_ATTRIBUTE}] { overflow: hidden; }`);
 }
 

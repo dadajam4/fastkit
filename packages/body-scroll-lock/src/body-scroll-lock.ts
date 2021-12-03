@@ -1,3 +1,5 @@
+import { IN_WINDOW } from '@fastkit/helpers';
+
 export interface BodyScrollOptions {
   reserveScrollBarGap?: boolean;
   allowTouchMove?: (el: EventTarget) => boolean;
@@ -9,7 +11,7 @@ interface Lock {
 }
 
 const isIosDevice =
-  __BROWSER__ &&
+  IN_WINDOW &&
   !!window.navigator &&
   !!window.navigator.platform &&
   /iP(ad|hone|od)/.test(window.navigator.platform);
@@ -132,7 +134,7 @@ export const disableBodyScroll = (
   targetElement: any,
   options?: BodyScrollOptions,
 ): void => {
-  if (!__BROWSER__) return;
+  if (!IN_WINDOW) return;
 
   if (isIosDevice) {
     // targetElement must be provided, and disableBodyScroll must not have been
@@ -188,7 +190,7 @@ export const disableBodyScroll = (
 };
 
 export const clearAllBodyScrollLocks = (): void => {
-  if (!__BROWSER__) return;
+  if (!IN_WINDOW) return;
 
   if (isIosDevice) {
     // Clear all locks ontouchstart/ontouchmove handlers, and the references.
@@ -217,7 +219,7 @@ export const clearAllBodyScrollLocks = (): void => {
 };
 
 export const enableBodyScroll = (targetElement: any): void => {
-  if (!__BROWSER__) return;
+  if (!IN_WINDOW) return;
 
   if (isIosDevice) {
     if (!targetElement) {

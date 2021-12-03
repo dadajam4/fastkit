@@ -24,6 +24,7 @@ import {
   ResizeDirectivePayload,
 } from '@fastkit/vue-utils';
 import { logger } from '../logger';
+import { IN_WINDOW } from '@fastkit/helpers';
 
 const DEFAULT_EDGE_MARGIN = 20;
 const DEFAULT_DISTANCE = 10;
@@ -299,7 +300,7 @@ export const VMenu = defineComponent({
     });
 
     function updatePageOffset() {
-      if (!__BROWSER__) return;
+      if (!IN_WINDOW) return;
       const { scrollingElement } = document;
       if (!scrollingElement) {
         logger.warn('missing document.scrollingElement try use polyfill');
@@ -369,7 +370,7 @@ export const VMenu = defineComponent({
     }
 
     function updateRects(menuBodyRect?: ResizeDirectivePayload) {
-      if (!__BROWSER__) return;
+      if (!IN_WINDOW) return;
       updatePageOffset();
       updateMenuRect(menuBodyRect);
       updateActivatorRect();

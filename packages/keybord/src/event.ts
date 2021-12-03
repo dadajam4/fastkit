@@ -1,3 +1,4 @@
+import { IN_WINDOW } from '@fastkit/helpers';
 import { KeyType, Key } from './schemes';
 
 export type KBEventName = 'keydown' | 'keypress' | 'keyup';
@@ -45,7 +46,7 @@ function createSetting(rawKBSettings: RawKBSettings): ComputedKBSetting[] {
     : [rawKBSettings];
   const computedSettings: ComputedKBSetting[] = [];
 
-  if (!__BROWSER__) return computedSettings;
+  if (!IN_WINDOW) return computedSettings;
 
   _settings.forEach((_setting) => {
     const { target = document, event = 'keydown', capture = false } = _setting;

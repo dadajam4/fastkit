@@ -16,7 +16,12 @@ import {
   cloneVNode,
 } from 'vue';
 import { useColorClasses } from '@fastkit/vue-color-scheme';
-import { toInt, attemptFocus, focusFirstDescendant } from '@fastkit/helpers';
+import {
+  toInt,
+  attemptFocus,
+  focusFirstDescendant,
+  IN_WINDOW,
+} from '@fastkit/helpers';
 import {
   useKeybord,
   clickOutsideDirectiveArgument,
@@ -392,7 +397,7 @@ export function useStackControl(
       }
     },
     checkFocusTrap() {
-      if (!__BROWSER__) return;
+      if (!IN_WINDOW) return;
       if (control.isActive && focusTrap.value) {
         privateApi.setupFocusTrapper();
       } else {

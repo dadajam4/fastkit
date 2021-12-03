@@ -1,7 +1,7 @@
 import { reactive, ref } from 'vue';
 import { MEDIA_MATCH_CONDITIONS } from '@fastkit/media-match';
 import type { MediaMatchCondition, MediaMatchKey } from '@fastkit/media-match';
-import { arrayRemove } from '@fastkit/helpers';
+import { arrayRemove, IN_WINDOW } from '@fastkit/helpers';
 
 export type MediaMatchServiceState = Record<MediaMatchKey, boolean>;
 
@@ -43,7 +43,7 @@ function createVueMediaMatchService(): VueMediaMatchService {
   const isBooted = () => bootState.value === 'ready';
 
   function setup() {
-    if (!__BROWSER__ || !isPending()) return;
+    if (!IN_WINDOW || !isPending()) return;
     bootState.value = 'resvered';
     MEDIA_MATCH_CONDITIONS.forEach((define) => {
       const { key, condition } = define;

@@ -1,7 +1,9 @@
+import { IN_WINDOW } from '@fastkit/helpers';
+
 let _hidden = 'hidden';
 let _visibilityChange = 'visibilitychange';
 
-if (__BROWSER__) {
+if (IN_WINDOW) {
   if (document.hidden !== undefined) {
     _hidden = 'hidden';
     _visibilityChange = 'visibilitychange';

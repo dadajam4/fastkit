@@ -3,6 +3,7 @@ import {
   visibilityManager,
   VisibilityStateListener,
 } from '@fastkit/visibility';
+import { IN_WINDOW } from '@fastkit/helpers';
 import { isDocumentElement, isBodyElement } from './util';
 import { logger } from './logger';
 
@@ -615,7 +616,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     const convertedSetting: Partial<ScrollerSetting> =
       typeof settingOrElementOrQueryString === 'string' ||
       settingOrElementOrQueryString === null ||
-      (__BROWSER__ && settingOrElementOrQueryString instanceof Element)
+      (IN_WINDOW && settingOrElementOrQueryString instanceof Element)
         ? (settingOrElementOrQueryString = {
             el: <Element | string>settingOrElementOrQueryString,
           })
@@ -654,7 +655,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     this._lastDirection = this._lastAxis === 'y' ? 'top' : 'left';
 
     // for SSR
-    if (!__BROWSER__) return;
+    if (!IN_WINDOW) return;
 
     // Add Visibility Listener
     visibilityManager.change(this._visibilityListener);
@@ -670,7 +671,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    */
   setElement(el?: Element | string | null) {
     if (el === null) return;
-    if (!__BROWSER__)
+    if (!IN_WINDOW)
       logger.error('Element can be set only when it is under DOM context.');
 
     this.stop();
@@ -1119,7 +1120,7 @@ export class Scroller extends EV<ScrollerEventMap> {
   }
 
   private _startScrollSizeOvserver() {
-    if (!__BROWSER__) return;
+    if (!IN_WINDOW) return;
 
     this._stopScrollSizeOvserver();
 

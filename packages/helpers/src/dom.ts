@@ -57,7 +57,7 @@ export function focusFirstDescendant(element: HTMLElement): boolean {
 }
 
 export function pushDynamicStyle(styleContent: string) {
-  if (!__BROWSER__) return;
+  if (!IN_WINDOW) return;
   const style = document.createElement('style');
   style.innerHTML = styleContent;
   document.head.appendChild(style);

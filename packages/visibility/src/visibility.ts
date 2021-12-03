@@ -1,4 +1,5 @@
 import { HIDDEN, VISIBILITY_CHANGE } from './constants';
+import { IN_WINDOW } from '@fastkit/helpers';
 
 export type VisibilityTypedCallback = (event: Event) => any;
 export type VisibilityStateListener = (
@@ -16,7 +17,7 @@ const states = ['visible', 'hidden'] as const;
 export type VisibilityState = typeof states[number];
 
 function getVisibilityState(): VisibilityState {
-  if (!__BROWSER__) return 'hidden';
+  if (!IN_WINDOW) return 'hidden';
   return document[HIDDEN] ? 'hidden' : 'visible';
 }
 
@@ -40,7 +41,7 @@ export class VisibilityManager {
   }
 
   constructor() {
-    if (__BROWSER__) {
+    if (IN_WINDOW) {
       document.addEventListener(
         VISIBILITY_CHANGE,
         (e) => {
