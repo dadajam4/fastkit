@@ -14,3 +14,4 @@ export * from './VTextarea';
 export * from './VForm';
 export * from './VApp';
 export * from './kits';
+export * from './loading';

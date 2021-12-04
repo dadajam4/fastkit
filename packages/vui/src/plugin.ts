@@ -5,9 +5,18 @@ import {
   VueStackServiceOptions,
   VueColorSchemePlugin,
 } from '@fastkit/vue-kit';
+
+// buttonDefaultScope: ScopeName;
+// buttonDefaultVariant: ColorVariant;
+
 export interface VuiPluginStackOptions
-  extends Omit<VueStackServiceOptions, 'primaryColor'> {
+  extends Omit<
+    VueStackServiceOptions,
+    'primaryColor' | 'buttonDefaultScope' | 'buttonDefaultVariant'
+  > {
   primaryColor?: VueStackServiceOptions['primaryColor'];
+  buttonDefaultScope?: VueStackServiceOptions['buttonDefaultScope'];
+  buttonDefaultVariant?: VueStackServiceOptions['buttonDefaultVariant'];
 }
 
 export interface VuiPluginOptions extends VuiServiceOptions {
@@ -23,7 +32,7 @@ export class VuiPlugin {
     const unmountApp = app.unmount;
     installedApps.add(app);
 
-    const { colors, colorScheme, stack } = opts;
+    const { colors, colorVariants, colorScheme, stack } = opts;
 
     // ColorScheme
     const vueColorSchemePlugin = new VueColorSchemePlugin(colorScheme);
@@ -32,6 +41,8 @@ export class VuiPlugin {
     // Stack
     installVueStackPlugin(app, {
       primaryColor: colors.primary,
+      buttonDefaultScope: colors.buttonDefault,
+      buttonDefaultVariant: colorVariants.buttonDefault,
       ...stack,
     });
 

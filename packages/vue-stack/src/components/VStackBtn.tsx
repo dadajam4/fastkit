@@ -7,17 +7,16 @@ import {
   useNavigationable,
   ExtractPropInput,
 } from '@fastkit/vue-utils';
+import { useVueStack } from '../composables';
 
 export const stackBtnProps = {
   ...colorSchemeProps({
-    defaultScope: 'base' as any,
-    defaultVariant: 'contained' as any,
+    // defaultScope: 'base' as any,
+    // defaultVariant: 'contained' as any,
   }),
   ...navigationableProps,
   spacer: Boolean,
 };
-
-// type A = InferPropType<typeof stackBtnProps['color']>;
 
 export type VStackBtnProps = ExtractPropInput<typeof stackBtnProps>;
 
@@ -30,7 +29,11 @@ export const VStackBtn = defineComponent({
     ...navigationableEmits.emits,
   },
   setup(props) {
-    const color = useColorClasses(props);
+    const vstack = useVueStack();
+    const color = useColorClasses({
+      color: () => props.color || vstack.buttonDefaultScope,
+      variant: () => props.variant || vstack.buttonDefaultVariant,
+    });
     const navigationable = useNavigationable(props);
     return {
       ...color,

@@ -1,16 +1,22 @@
 import { defineComponent } from 'vue';
-import { VButton, VSelect, VAppContainer } from '@fastkit/vui';
+import {
+  VButton,
+  VSelect,
+  VAppContainer,
+  VProgressCircular,
+  VProgressLinear,
+} from '@fastkit/vui';
 import { RouterLink } from 'vue-router';
 import { range } from '@fastkit/helpers';
 import { AuthSearvice } from '../plugins';
-import { useState } from '@fastkit/vot';
+// import { useState } from '@fastkit/vot';
 import { AppError } from '../error';
 import { getLogger } from '../logger';
 
 export default defineComponent({
   setup(props, ctx) {
     const auth = AuthSearvice.use();
-    const hoge = useState(AuthSearvice.StateInjectionKey);
+    // const hoge = useState(AuthSearvice.StateInjectionKey);
     const logger = getLogger('top');
 
     return {
@@ -26,6 +32,12 @@ export default defineComponent({
           <p>
             1{JSON.stringify(this.auth.me)} {JSON.stringify(this.isLoggedIn())}
           </p>
+          <VProgressCircular indeterminate></VProgressCircular>
+          <VProgressLinear
+            indeterminate
+            active
+            color="primary"></VProgressLinear>
+          <VProgressLinear indeterminate active></VProgressLinear>
           <button
             onClick={(ev) => {
               const error = AppError.from('zzzz');

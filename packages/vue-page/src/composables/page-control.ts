@@ -157,7 +157,7 @@ export interface VuePageControlSettings {
   ErrorComponent?: Component;
   request?: IncomingMessage;
   response?: ServerResponse;
-  redirect?: (location: string, status?: number) => void;
+  serverRedirect?: (location: string, status?: number) => void;
   writeResponse?: (params: WriteResponse) => void;
   middleware?: VuePageControlMiddlewareFn[];
 }
@@ -199,12 +199,16 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   private _ErrorComponent: Component;
   readonly request?: IncomingMessage;
   readonly response?: ServerResponse;
-  private readonly _redirect?: (location: string, status?: number) => void;
+  private readonly _serverRedirect?: (
+    location: string,
+    status?: number,
+  ) => void;
   private readonly _writeResponse?: (params: WriteResponse) => void;
   readonly isClient: boolean;
   readonly middleware: VuePageControlMiddlewareFn[];
   private _redirectSpec?: VuePageControlRedirectSpec;
   private _providedMap: Map<string | InjectionKey<any>, any> = new Map();
+  private _transitioning = ref(false);
 
   get isServer() {
     return !this.isClient;
@@ -259,6 +263,10 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     return this._ErrorComponent;
   }
 
+  get transitioning() {
+    return this._transitioning.value;
+  }
+
   constructor(settings: VuePageControlSettings) {
     super();
 
@@ -270,7 +278,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       ErrorComponent,
       request,
       response,
-      redirect,
+      serverRedirect,
       writeResponse,
       middleware = [],
     } = settings;
@@ -281,7 +289,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this.response = response;
     this.isClient = typeof window !== 'undefined';
     this.middleware = middleware;
-    this._redirect = redirect;
+    this._serverRedirect = serverRedirect;
     this._writeResponse = writeResponse;
 
     this._ErrorComponent = ErrorComponent || VErrorPage;
@@ -464,6 +472,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     from: RouteLocationNormalized,
   ) {
     delete this._redirectSpec;
+    this._transitioning.value = false;
 
     const { router } = this;
     this._beforeRoute.value = router.resolve(from);
@@ -478,6 +487,9 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
   redirect(redirectSpec: RawVuePageControlRedirectSpec) {
     this._redirectSpec = resolveRawVuePageControlRedirectSpec(redirectSpec);
+    if (!this.transitioning) {
+      this._triggerRedirect();
+    }
   }
 
   private _triggerRedirect() {
@@ -500,15 +512,20 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
     const fullPath = `${path}${queryAppends}`;
     if (this.isClient) {
-      window.location.replace(fullPath);
+      const isInSite = /(^[.]{1,2}\/)|(^\/(?!\/))/.test(fullPath);
+      if (isInSite) {
+        this.router.replace({ path, query, hash });
+      } else {
+        window.location.replace(fullPath);
+      }
       return false;
     }
 
-    if (!this._redirect) {
-      throw new Error('required redirect function.');
+    if (!this._serverRedirect) {
+      throw new Error('required server redirect function.');
     }
 
-    this._redirect(fullPath, statusCode);
+    this._serverRedirect(fullPath, statusCode);
   }
 
   private async _handleBeforeResolve(
@@ -534,6 +551,8 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
           message: 'This page could not be found',
         });
       }
+
+      this._transitioning.value = true;
 
       for (const middlewareFn of this.middleware) {
         await middlewareFn(this);

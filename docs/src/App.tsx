@@ -12,7 +12,7 @@ export const App = defineComponent({
     const page = useVuePageControl();
 
     return () => (
-      <VApp>
+      <VApp class="v-app">
         <VAppLayout
           header={{ fixed: true }}
           footer={{ spacer: true }}
@@ -33,7 +33,10 @@ export const App = defineComponent({
                     width: '100%',
                     fontSize: '12px',
                   }}>
-                  <>システムバーです {JSON.stringify(page.preftechProgress)}</>
+                  <>
+                    システムバーです {JSON.stringify(page.preftechProgress)} →{' '}
+                    {String(page.transitioning)}
+                  </>
                   <VPageLink to="/hoge">404リンク</VPageLink>
                   {/* <VSwitch></VSwitch> */}
                   <input

@@ -32,8 +32,6 @@ export function createVotPlugin(source: RawVotPlugin) {
 type ViteSSROptions = Parameters<typeof _viteSSR>[1];
 
 export interface VotOptions extends Omit<ViteSSROptions, 'routes'> {
-  // ErrorComponent?: RawComponent;
-  // routes: RouteRecordRaw[];
   plugins?: RawVotPlugin[];
   middleware?: VuePageControlMiddlewareFn[];
 }
@@ -76,7 +74,7 @@ export async function createVotHook(
       response,
       middleware,
       writeResponse,
-      redirect,
+      serverRedirect: redirect,
     });
 
     if (IN_WINDOW) {

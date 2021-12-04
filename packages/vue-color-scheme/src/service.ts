@@ -15,7 +15,7 @@ import { VueColorSchemeServiceInjectionKey } from './injections';
 export function useColorVariantClasses(props: ColorSchemeHooksProps) {
   const colorVariantClasses = computed(() => {
     const classes: string[] = [];
-    const { variant } = props;
+    const variant = resolveFnValue(props.variant);
     variant && classes.push(variant);
     return classes;
   });
@@ -31,7 +31,7 @@ export function useThemeClass(
     service = useColorScheme();
   }
   const themeClass = computed(() => {
-    let { theme } = props;
+    let theme = resolveFnValue(props.theme);
     if (!theme && service) {
       theme = service.rootTheme as any;
     }
@@ -40,25 +40,37 @@ export function useThemeClass(
   return themeClass;
 }
 
+export function toScopeColorClass(name: string) {
+  return `${name}-scope`;
+}
+
 export function useScopeColorClass(props: ColorSchemeHooksProps) {
   const scopeColorClass = computed(() => {
-    const { color } = props;
-    return color ? `${color}-scope` : undefined;
+    const color = resolveFnValue(props.color);
+    return color ? toScopeColorClass(color) : undefined;
   });
   return scopeColorClass;
 }
 
+export function toTextColorClass(name: string) {
+  return `${name}-text`;
+}
+
+function resolveFnValue<T extends string>(value?: T | (() => T)) {
+  return typeof value === 'function' ? value() : value;
+}
+
 export function useTextColorClass(props: ColorSchemeHooksProps) {
   const textColorClass = computed(() => {
-    const { textColor } = props;
-    return textColor ? `${textColor}-text` : undefined;
+    const textColor = resolveFnValue(props.textColor);
+    return textColor ? toTextColorClass(textColor) : undefined;
   });
   return textColorClass;
 }
 
 export function useBorderColorClass(props: ColorSchemeHooksProps) {
   const borderColorClass = computed(() => {
-    const { borderColor } = props;
+    const borderColor = resolveFnValue(props.borderColor);
     return borderColor ? `${borderColor}-border` : undefined;
   });
   return borderColorClass;
@@ -139,20 +151,20 @@ export function colorSchemeProps<
     color = 'color',
     textColor = 'textColor',
     borderColor = 'borderColor',
-    defaultScope,
-    defaultVariant,
+    // defaultScope,
+    // defaultVariant,
   } = opts;
   const props = {
     variant: {
       type: String,
-      default: defaultVariant || undefined,
+      // default: defaultVariant || undefined,
     },
   } as unknown as Props;
   if (theme) (props as any)[theme] = String;
   if (color)
     (props as any)[color] = {
       type: String,
-      default: defaultScope,
+      // default: defaultScope,
     };
   if (textColor) (props as any)[textColor] = String;
   if (borderColor) (props as any)[borderColor] = String;

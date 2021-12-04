@@ -16,19 +16,23 @@ import {
   DEFAULT_ACTIONS,
 } from './schemes/action';
 export { VueStackInjectionKey } from './injections';
-import { ScopeName } from '@fastkit/color-scheme';
+import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import { VDialogProps } from './components/VDialog';
 
 export interface VueStackServiceOptions {
   zIndex?: number;
   actionMessages?: Partial<VStackActionMessageResolvers>;
   primaryColor: ScopeName;
+  buttonDefaultScope: ScopeName;
+  buttonDefaultVariant: ColorVariant;
 }
 
 export class VueStackService {
   readonly controls: VStackControl[] = [];
   readonly zIndex: number;
   readonly primaryColor: ScopeName;
+  readonly buttonDefaultScope: ScopeName;
+  readonly buttonDefaultVariant: ColorVariant;
   private _increment = 0;
   private readonly _dynamicSettings: Ref<VStackDynamicInternalSetting[]> = ref(
     [],
@@ -40,9 +44,17 @@ export class VueStackService {
   }
 
   constructor(opts: VueStackServiceOptions) {
-    const { zIndex = 32767, actionMessages, primaryColor } = opts;
+    const {
+      zIndex = 32767,
+      actionMessages,
+      primaryColor,
+      buttonDefaultScope,
+      buttonDefaultVariant,
+    } = opts;
     this.zIndex = zIndex;
     this.primaryColor = primaryColor;
+    this.buttonDefaultScope = buttonDefaultScope;
+    this.buttonDefaultVariant = buttonDefaultVariant;
     this.actionMessages = {
       ...DEFAULT_ACTION_MESSAGES,
       ...actionMessages,

@@ -48,17 +48,17 @@ export type ColorSchemeProps<
       }
     : never); // eslint-disable-line @typescript-eslint/ban-types
 
-export interface ColorSchemePropsStaticOptions {
-  defaultScope?: ScopeName;
-  defaultVariant?: ColorVariant;
-}
+// export interface ColorSchemePropsStaticOptions {
+//   defaultScope?: ScopeName;
+//   defaultVariant?: ColorVariant;
+// }
 
 export interface ColorSchemePropsOptions<
   ThemeProp extends PropKey = 'theme',
   ScopeProp extends PropKey = 'color',
   TextColorProp extends PropKey = 'textColor',
   BorderColorProp extends PropKey = 'borderColor',
-> extends ColorSchemePropsStaticOptions {
+> /*extends ColorSchemePropsStaticOptions*/ {
   theme?: ThemeProp;
   color?: ScopeProp;
   textColor?: TextColorProp;
@@ -66,11 +66,11 @@ export interface ColorSchemePropsOptions<
 }
 
 export interface ColorSchemeHooksProps {
-  readonly theme?: ThemeName;
-  readonly color?: ScopeName;
-  readonly textColor?: PaletteName;
-  readonly borderColor?: PaletteName;
-  readonly variant?: ColorVariant;
+  readonly theme?: ThemeName | (() => ThemeName);
+  readonly color?: ScopeName | (() => ScopeName);
+  readonly textColor?: PaletteName | (() => PaletteName);
+  readonly borderColor?: PaletteName | (() => PaletteName);
+  readonly variant?: ColorVariant | (() => ColorVariant);
 }
 
 export interface ColorClassesResult {

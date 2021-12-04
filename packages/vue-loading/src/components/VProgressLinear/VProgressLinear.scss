@@ -1,0 +1,160 @@
+.v-progress-linear {
+  $transition-ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
+
+  position: relative;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: hidden;
+  background: transparent;
+
+  &--has-color {
+    color: var(--main-color);
+  }
+
+  &__bar {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: inherit;
+    transition: 0.2s $transition-ease-in-out;
+
+    &__determinate {
+      height: inherit;
+      background-color: currentColor;
+      // background-color: var(--main-color);
+      transition: 0.2s $transition-ease-in-out;
+    }
+
+    &__indeterminate {
+      background-color: currentColor;
+      // background-color: var(--main-color);
+
+      .long,
+      .short {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: auto;
+        height: inherit;
+        // background-color: inherit;
+        will-change: left, right;
+      }
+
+      &--active .long {
+        animation: v-indeterminate;
+        animation-duration: 2.2s;
+        animation-iteration-count: infinite;
+      }
+
+      &--active .short {
+        animation: v-indeterminate-short;
+        animation-duration: 2.2s;
+        animation-iteration-count: infinite;
+      }
+    }
+  }
+
+  &__background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: currentColor;
+    // background-color: var(--main-color);
+    transition: 0.3s ease-in;
+  }
+
+  &__content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+  }
+
+  &--query {
+    .v-progress-linear__bar__indeterminate {
+      &--active .long {
+        animation: v-query;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+      }
+
+      &--active .short {
+        animation: v-query-short;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+      }
+    }
+  }
+
+  @keyframes v-indeterminate {
+    0% {
+      right: 100%;
+      left: -90%;
+    }
+
+    60% {
+      right: 100%;
+      left: -90%;
+    }
+
+    100% {
+      right: -35%;
+      left: 100%;
+    }
+  }
+
+  @keyframes v-indeterminate-short {
+    0% {
+      right: 100%;
+      left: -200%;
+    }
+
+    60% {
+      right: -8%;
+      left: 107%;
+    }
+
+    100% {
+      right: -8%;
+      left: 107%;
+    }
+  }
+
+  @keyframes v-query {
+    0% {
+      right: -90%;
+      left: 100%;
+    }
+
+    60% {
+      right: -90%;
+      left: 100%;
+    }
+
+    100% {
+      right: 100%;
+      left: -35%;
+    }
+  }
+
+  @keyframes v-query-short {
+    0% {
+      right: -200%;
+      left: 100%;
+    }
+
+    60% {
+      right: 107%;
+      left: -8%;
+    }
+
+    100% {
+      right: 107%;
+      left: -8%;
+    }
+  }
+}

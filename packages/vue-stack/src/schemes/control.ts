@@ -10,7 +10,7 @@ import type { VueStackService } from '../service';
 import { RouteLocationNormalized } from 'vue-router';
 import {
   colorSchemeProps,
-  ColorSchemePropsStaticOptions,
+  // ColorSchemePropsStaticOptions,
   ColorClassesResult,
 } from '@fastkit/vue-color-scheme';
 import { UseKeybordRef, StyleValue } from '@fastkit/vue-utils';
@@ -172,9 +172,8 @@ export type VStackSlots = {
   activator?: (payload: VStackActivatorPayload) => VNode[];
 };
 
-export interface CreateStackablePropsOptions
-  extends ColorSchemePropsStaticOptions {
-  defaultTransition?: string;
+export interface CreateStackablePropsOptions {
+  /*extends ColorSchemePropsStaticOptions*/ defaultTransition?: string;
   /** @default false */
   defaultFocusTrap?: boolean;
   /** @default false */
@@ -218,7 +217,7 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
   } = opts;
 
   return {
-    ...colorSchemeProps(opts),
+    ...colorSchemeProps(/*opts*/),
     modelValue: Boolean,
     lazyBoot: Boolean,
     value: null,

@@ -1,7 +1,7 @@
 export { VuiInjectionKey } from './injections';
 
 import { VNodeChild } from 'vue';
-import { ScopeName } from '@fastkit/color-scheme';
+import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import type { IconName } from '@fastkit/icon-font';
 import type { VueColorSchemePluginSettings } from '@fastkit/vue-kit';
 
@@ -11,6 +11,12 @@ const DEFAULT_TEXTAREA_ROWS = 3;
 export interface VuiServiceColorSettings {
   primary: ScopeName;
   error: ScopeName;
+  buttonDefault: ScopeName;
+  // buttonDefaultVariant: ColorVariant;
+}
+
+export interface VuiServiceColorVariantSettings {
+  buttonDefault: ColorVariant;
 }
 
 export interface VuiServiceIconSettings {
@@ -22,6 +28,7 @@ export type VuiVNodeResolver = () => VNodeChild;
 export interface VuiServiceOptions {
   colorScheme: VueColorSchemePluginSettings;
   colors: VuiServiceColorSettings;
+  colorVariants: VuiServiceColorVariantSettings;
   icons: VuiServiceIconSettings;
   selectionSeparator?: VuiVNodeResolver;
   autoScrollToElementOffsetTop?: number | (() => number | undefined);
@@ -53,6 +60,12 @@ export class VuiService {
 
   color(colorType: keyof VuiServiceColorSettings): ScopeName {
     return this.options.colors[colorType];
+  }
+
+  colorVariant(
+    colorVariantType: keyof VuiServiceColorVariantSettings,
+  ): ColorVariant {
+    return this.options.colorVariants[colorVariantType];
   }
 
   icon(iconType: keyof VuiServiceIconSettings): IconName {
