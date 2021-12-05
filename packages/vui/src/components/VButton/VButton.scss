@@ -7,13 +7,15 @@
   align-items: center;
   justify-content: center;
   min-width: calc(var(--root-em) * 4);
-  height: calc(var(--root-em) * 2);
-  padding: 0 var(--root-em);
+  // height: calc(var(--root-em) * 2);
+  height: 2.285714285714286em;
+  // padding: 0 var(--root-em);
+  padding: 0 1em;
   // margin: 0;
   margin: calc(var(--root-em) * 0.375) calc(var(--root-em) * 0.5);
   overflow: hidden;
   font: inherit;
-  font-size: calc(var(--root-em) * 0.875);
+  // font-size: calc(var(--root-em) * 0.875);
   font-weight: 500;
   line-height: 1;
   text-decoration: none;
@@ -29,6 +31,24 @@
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), color 1ms;
   appearance: none;
 
+  &--sm {
+    // height: 2em;
+    // height: calc(var(--root-em) * 1.5); // 24
+    font-size: calc(var(--root-em) * 0.75); // 12
+  }
+
+  &--md {
+    // height: 2.285714285714286em;
+    // height: calc(var(--root-em) * 2); // 32
+    // font-size: calc(var(--root-em) * 0.875); // 14
+    font-size: calc(var(--root-em) * 0.875); // 14
+  }
+
+  &--lg {
+    // height: calc(var(--root-em) * 2.875); // 46
+    font-size: calc(var(--root-em) * 1.25); // 20
+  }
+
   &::-moz-focus-inner {
     border: 0;
   }
@@ -37,7 +57,33 @@
     cursor: default;
   }
 
-  // &--spacer {
-  //   margin-left: auto;
-  // }
+  &--spacer {
+    &-left {
+      margin-left: auto;
+    }
+
+    &-right {
+      margin-right: auto;
+    }
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: stretch;
+  }
+
+  &--loading &__content {
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  &__loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+  }
 }

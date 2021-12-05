@@ -127,6 +127,18 @@ export default defineComponent({
           Alert
         </VButton>
 
+        <div>
+          <VButton size="sm" loading={this.loading}>
+            small
+          </VButton>
+          <VButton size="md" loading={this.loading}>
+            midium
+          </VButton>
+          <VButton size="lg" loading={this.loading}>
+            large
+          </VButton>
+        </div>
+
         <VSelect
           items={[
             {
