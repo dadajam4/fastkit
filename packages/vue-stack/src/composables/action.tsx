@@ -4,13 +4,14 @@ import {
   VStackAction,
   VStackActionProps,
   VStackActionControl,
-  resolveRawVStackActions,
-  resolveRawVStackActionContent,
+  // resolveRawVStackActions,
+  // resolveRawVStackActionContent,
 } from '../schemes';
-import { VStackBtn } from '../components/VStackBtn';
+// import { VButton } from '../components/VButton';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface UseStackActionOptions {
-  resolver?: (resolver: typeof resolveRawVStackActions) => VStackAction[];
+  resolver?: (actions: VStackAction[]) => VStackAction[];
 }
 
 export function useStackAction(
@@ -18,27 +19,38 @@ export function useStackAction(
   control: VStackControl,
   opts: UseStackActionOptions = {},
 ): VStackActionControl {
+  const { resolver } = opts;
   const actions = computed(() => {
-    if (opts.resolver) return opts.resolver(resolveRawVStackActions);
-    return resolveRawVStackActions(props.actions, control);
+    const { actions: _actions } = props;
+    return resolver ? resolver(_actions) : _actions;
   });
   const $actions = computed(() => {
-    return actions.value.map((props) => {
-      const content = resolveRawVStackActionContent(props.content, control);
-      const { onClick } = props;
-      return (
-        <VStackBtn
-          {...{
-            ...props,
-            onClick: onClick
-              ? (ev: MouseEvent) => {
-                  onClick(control, ev);
-                }
-              : undefined,
-          }}>
-          {content}
-        </VStackBtn>
-      );
+    return actions.value.map((action) => {
+      const onClick = (control: VStackControl, ev: MouseEvent) => {
+        action.onClick && action.onClick(control, ev);
+      };
+
+      const content = action.content({
+        control,
+        key: action.key,
+        onClick,
+      });
+      return content;
+      // const content = resolveRawVStackActionContent(props.content, control);
+      // const { onClick } = props;
+      // return (
+      //   <VButton
+      //     {...{
+      //       ...props,
+      //       onClick: onClick
+      //         ? (ev: MouseEvent) => {
+      //             onClick(control, ev);
+      //           }
+      //         : undefined,
+      //     }}>
+      //     {content}
+      //   </VButton>
+      // );
     });
   });
 

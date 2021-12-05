@@ -217,7 +217,7 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
   } = opts;
 
   return {
-    ...colorSchemeProps(/*opts*/),
+    ...colorSchemeProps(),
     modelValue: Boolean,
     lazyBoot: Boolean,
     value: null,

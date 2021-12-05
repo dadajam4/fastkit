@@ -151,21 +151,12 @@ export function colorSchemeProps<
     color = 'color',
     textColor = 'textColor',
     borderColor = 'borderColor',
-    // defaultScope,
-    // defaultVariant,
   } = opts;
   const props = {
-    variant: {
-      type: String,
-      // default: defaultVariant || undefined,
-    },
+    variant: String,
   } as unknown as Props;
   if (theme) (props as any)[theme] = String;
-  if (color)
-    (props as any)[color] = {
-      type: String,
-      // default: defaultScope,
-    };
+  if (color) (props as any)[color] = String;
   if (textColor) (props as any)[textColor] = String;
   if (borderColor) (props as any)[borderColor] = String;
   return props;

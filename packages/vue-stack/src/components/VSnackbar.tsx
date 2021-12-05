@@ -42,11 +42,11 @@ export const VSnackbar = defineComponent({
   setup(props, ctx) {
     const stackControl = useStackControl(props, ctx);
     const actionControl = useStackAction(props, stackControl, {
-      resolver: (resolve) => {
-        if (props.actions.length === 0) {
+      resolver: (actions) => {
+        if (actions.length === 0) {
           return [stackControl.$service.action('close')];
         } else {
-          return resolve(props.actions, stackControl);
+          return actions;
         }
       },
     });

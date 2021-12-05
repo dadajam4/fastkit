@@ -1,10 +1,12 @@
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   VButton,
   VSelect,
   VAppContainer,
   VProgressCircular,
   VProgressLinear,
+  VCheckbox,
+  useVueStack,
 } from '@fastkit/vui';
 import { RouterLink } from 'vue-router';
 import { range } from '@fastkit/helpers';
@@ -18,11 +20,15 @@ export default defineComponent({
     const auth = AuthSearvice.use();
     // const hoge = useState(AuthSearvice.StateInjectionKey);
     const logger = getLogger('top');
+    const loading = ref(false);
+    const stack = useVueStack();
 
     return {
       logger,
       auth: auth.state,
       isLoggedIn: () => auth.isLoggedIn,
+      loading,
+      stack,
     };
   },
   render() {
@@ -46,7 +52,11 @@ export default defineComponent({
             }}>
             error
           </button>
-          <VButton color="primary" href="https://google.com">
+          <VCheckbox v-model={this.loading}>loading</VCheckbox>
+          <VButton
+            color="primary"
+            href="https://google.com"
+            loading={this.loading}>
             https://google.com
           </VButton>
           <VAppContainer pulled>
@@ -74,7 +84,49 @@ export default defineComponent({
           </li>
         </ul>
 
-        <VButton color="accent">あいうえお</VButton>
+        <VButton
+          color="accent"
+          onClick={() => {
+            this.stack.snackbar({
+              content: 'hello',
+              // actions: [
+              //   {
+              //     key: 'hello',
+              //     content: (ctx) => 'あああ',
+              //   },
+              // ],
+            });
+          }}>
+          Snackbar
+        </VButton>
+
+        <VButton
+          color="primary"
+          onClick={() => {
+            this.stack.alert('This is alert.');
+          }}>
+          Alert
+        </VButton>
+
+        <VButton
+          color="primary"
+          onClick={async () => {
+            const result = await this.stack.confirm('This is confirm.');
+            if (result) {
+              this.stack.snackbar({
+                content: () => 'OK!',
+                top: true,
+              });
+            } else {
+              this.stack.snackbar({
+                content: () => 'cancelled.',
+                // top: true,
+              });
+            }
+          }}>
+          Alert
+        </VButton>
+
         <VSelect
           items={[
             {

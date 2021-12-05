@@ -5,19 +5,10 @@ import {
   VueStackServiceOptions,
   VueColorSchemePlugin,
 } from '@fastkit/vue-kit';
+import { VButton } from './components/VButton';
 
-// buttonDefaultScope: ScopeName;
-// buttonDefaultVariant: ColorVariant;
-
-export interface VuiPluginStackOptions
-  extends Omit<
-    VueStackServiceOptions,
-    'primaryColor' | 'buttonDefaultScope' | 'buttonDefaultVariant'
-  > {
-  primaryColor?: VueStackServiceOptions['primaryColor'];
-  buttonDefaultScope?: VueStackServiceOptions['buttonDefaultScope'];
-  buttonDefaultVariant?: VueStackServiceOptions['buttonDefaultVariant'];
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface VuiPluginStackOptions extends VueStackServiceOptions {}
 
 export interface VuiPluginOptions extends VuiServiceOptions {
   stack?: VuiPluginStackOptions;
@@ -32,7 +23,7 @@ export class VuiPlugin {
     const unmountApp = app.unmount;
     installedApps.add(app);
 
-    const { colors, colorVariants, colorScheme, stack } = opts;
+    const { colorScheme, stack, uiSettings } = opts;
 
     // ColorScheme
     const vueColorSchemePlugin = new VueColorSchemePlugin(colorScheme);
@@ -40,9 +31,24 @@ export class VuiPlugin {
 
     // Stack
     installVueStackPlugin(app, {
-      primaryColor: colors.primary,
-      buttonDefaultScope: colors.buttonDefault,
-      buttonDefaultVariant: colorVariants.buttonDefault,
+      actions: {
+        ok: ({ bindings }) => (
+          <VButton {...uiSettings.dialogOk} {...bindings}>
+            OK
+          </VButton>
+        ),
+        cancel: ({ bindings }) => (
+          <VButton {...uiSettings.dialogCancel} {...bindings}>
+            CANCEL
+          </VButton>
+        ),
+        close: ({ bindings }) => (
+          <VButton {...uiSettings.dialogClose} {...bindings}>
+            CLOSE
+          </VButton>
+        ),
+        ...(stack ? stack.actions : {}),
+      },
       ...stack,
     });
 

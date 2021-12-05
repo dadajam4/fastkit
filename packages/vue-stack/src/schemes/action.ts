@@ -1,48 +1,25 @@
-import { VNodeChild, PropType, ExtractPropTypes, VNode } from 'vue';
-import { VStackBtnProps } from '../components/VStackBtn';
+import { VNodeChild, PropType, ExtractPropTypes } from 'vue';
 import { VStackControl } from './control';
 import type { VueStackService } from '../service';
 
-export type VStackActionMessageResolver = VNodeChild | (() => VNodeChild);
-
-export interface VStackActionMessageResolvers {
-  ok: VStackActionMessageResolver;
-  cancel: VStackActionMessageResolver;
-  close: VStackActionMessageResolver;
-}
-
-export type RawVStackActionContent =
-  | VNodeChild
-  | ((control: VStackControl) => VNodeChild);
-
-export interface VStackAction extends Omit<VStackBtnProps, 'onClick'> {
+export interface VStackActionContext {
+  control: VStackControl;
   key: string | number;
-  content?: RawVStackActionContent;
+  onClick: (control: VStackControl, ev: MouseEvent) => any;
+}
+
+export type VStackActionFn = (ctx: VStackActionContext) => VNodeChild;
+
+export interface VStackAction {
+  key: string | number;
+  content: VStackActionFn;
   onClick?: (control: VStackControl, ev: MouseEvent) => any;
-}
-
-export function resolveRawVStackActionContent(
-  source: RawVStackActionContent,
-  control: VStackControl,
-): VNodeChild {
-  return typeof source === 'function' ? source(control) : source;
-}
-
-export type RawVStackActions =
-  | VStackAction[]
-  | ((control: VStackControl) => VStackAction[]);
-
-export function resolveRawVStackActions(
-  source: RawVStackActions,
-  control: VStackControl,
-): VStackAction[] {
-  return typeof source === 'function' ? source(control) : source;
 }
 
 export function createStackActionProps() {
   return {
     actions: {
-      type: [Array, Function] as PropType<RawVStackActions>,
+      type: [Array] as PropType<VStackAction[]>,
       default: () => [],
     },
   };
@@ -55,50 +32,40 @@ export type VStackActionProps = ExtractPropTypes<
 export interface VStackActionControl {
   readonly control: VStackControl;
   readonly actions: VStackAction[];
-  readonly $actions: VNode[];
+  readonly $actions: VNodeChild[];
 }
 
-export type VStackActionResolver = (service: VueStackService) => VStackAction;
+export type VStackBuiltinActionType = 'ok' | 'cancel' | 'close';
 
-export const DEFAULT_ACTION_MESSAGES: VStackActionMessageResolvers = {
-  ok: 'OK',
-  cancel: 'CANCEL',
-  close: 'CLOSE',
-};
+export interface VStackBuiltinActionContext {
+  service: VueStackService;
+  control: VStackControl;
+  key: string | number;
+  bindings: {
+    onClick?: (ev: MouseEvent) => void;
+  };
+}
 
-export const DEFAULT_ACTIONS: Record<
-  keyof VStackActionMessageResolvers,
-  VStackActionResolver
+export type VStackBuiltinAction = (
+  context: VStackBuiltinActionContext,
+) => VNodeChild;
+
+export type VStackBuiltinActions = Record<
+  VStackBuiltinActionType,
+  VStackBuiltinAction
+>;
+
+export const BUILTIN_ACTION_HANDLERS: Record<
+  VStackBuiltinActionType,
+  (control: VStackControl, ev: MouseEvent) => any
 > = {
-  ok: (service) => {
-    return {
-      key: '__ok',
-      content: service.actionMessage('ok'),
-      color: service.primaryColor,
-      onClick: (control) => {
-        control.resolve(true);
-      },
-    };
+  ok: (control, ev) => {
+    control.resolve(true);
   },
-  cancel: (service) => {
-    return {
-      key: '__cancel',
-      content: service.actionMessage('cancel'),
-      color: service.primaryColor,
-      outlined: true,
-      onClick: (control) => {
-        control.resolve(false);
-      },
-    };
+  cancel: (control, ev) => {
+    control.resolve(false);
   },
-  close: (service) => {
-    return {
-      key: '__close',
-      content: service.actionMessage('close'),
-      color: service.primaryColor,
-      onClick: (control) => {
-        control.close({ force: true });
-      },
-    };
+  close: (control, ev) => {
+    control.close({ force: true });
   },
 };

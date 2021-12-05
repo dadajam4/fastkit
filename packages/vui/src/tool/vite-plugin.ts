@@ -28,8 +28,7 @@ import './icon-font';
 export function installVui(app: App) {
   _installVuiPlugin(app, {
     colorScheme,
-    colors: <%~ it.colors %>,
-    colorVariants: <%~ it.colorVariants %>,
+    uiSettings: <%~ it.uiSettings %>,
     icons: <%~ it.icons %>,
   });
 }
@@ -40,8 +39,7 @@ export default installVui;
 async function renderTemplate({
   colorScheme,
   mediaMatch,
-  colors,
-  colorVariants,
+  uiSettings,
   icons,
   __dev,
 }: ViteVuiPluginResultSettings) {
@@ -50,8 +48,7 @@ async function renderTemplate({
     {
       colorScheme,
       mediaMatch,
-      colors: JSON.stringify(colors),
-      colorVariants: JSON.stringify(colorVariants),
+      uiSettings: JSON.stringify(uiSettings),
       icons: JSON.stringify(icons),
       __dev,
     },
@@ -90,9 +87,7 @@ function getBuiltinsDir() {
 }
 
 export interface ViteVuiPluginOptions
-  extends Partial<
-    Pick<VuiServiceOptions, 'colors' | 'colorVariants' | 'icons'>
-  > {
+  extends Partial<Pick<VuiServiceOptions, 'uiSettings' | 'icons'>> {
   dynamicDest?: string;
   colorScheme?: string;
   mediaMatch?: string;
@@ -105,7 +100,7 @@ export interface ViteVuiPluginOptions
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ViteVuiPluginResultSettings
-  extends Pick<VuiServiceOptions, 'colors' | 'colorVariants' | 'icons'> {
+  extends Pick<VuiServiceOptions, 'uiSettings' | 'icons'> {
   colorScheme: string;
   mediaMatch: string;
   __dev?: boolean;
@@ -130,14 +125,27 @@ export function viteVuiPlugin(
     iconFontDefaults,
     onBooted,
     onBootError,
-    colors = {
-      primary: 'primary' as any,
-      error: 'error' as any,
-      buttonDefault: 'base' as any,
-    } as VuiServiceOptions['colors'],
-    colorVariants = {
-      buttonDefault: 'contained' as any,
+    uiSettings = {
+      primaryScope: 'primary' as any,
+      errorScope: 'error' as any,
+      buttonDefault: {
+        color: 'base' as any,
+        variant: 'contained' as any,
+      },
+      dialogOk: {
+        color: 'primary' as any,
+      },
     },
+
+    // colors = {
+    //   primary: 'primary' as any,
+    //   error: 'error' as any,
+    //   buttonDefault: 'base' as any,
+    //   dialogOk: 'primary' as any,
+    // } as VuiServiceOptions['colors'],
+    // colorVariants = {
+    //   buttonDefault: 'contained' as any,
+    // },
     icons = {
       menuDown: 'mdi-menu-down' as any,
     } as VuiServiceOptions['icons'],
@@ -231,8 +239,7 @@ export {};
   const settings = {
     colorScheme: path.join(colorSchemeDest, 'color-scheme.info'),
     mediaMatch: path.join(mediaMatchDest, 'media-match'),
-    colors,
-    colorVariants,
+    uiSettings,
     icons,
     __dev,
   };

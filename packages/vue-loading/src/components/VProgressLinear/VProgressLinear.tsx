@@ -7,20 +7,11 @@ import {
   PropType,
 } from 'vue';
 import { NumberishPropOption, resolveNumberish } from '@fastkit/vue-utils';
-import {
-  // colorSchemeProps,
-  // // toTextColorClass,
-  // useColorClasses,
-  useScopeColorClass,
-  ScopeName,
-} from '@fastkit/vue-color-scheme';
+import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 
 export const VProgressLinear = defineComponent({
   name: 'VProgressLinear',
   props: {
-    // ...colorSchemeProps({
-    //   // defaultScope: 'base' as any,
-    // }),
     color: String as PropType<ScopeName>,
     active: Boolean,
     indeterminate: Boolean,
@@ -42,10 +33,6 @@ export const VProgressLinear = defineComponent({
     const value = computed(() => resolveNumberish(props.value, 0));
     const indeterminate = computed(() => props.indeterminate);
     const query = computed(() => props.query);
-    // const { colorClasses } = useColorClasses(props);
-    // const colorClass = computed(
-    //   () => props.color && toTextColorClass(props.color),
-    // );
 
     const normalizedBufer = computed(() => {
       const _bufferValue = bufferValue.value;

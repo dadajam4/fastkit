@@ -8,16 +8,33 @@ import type { VueColorSchemePluginSettings } from '@fastkit/vue-kit';
 const DEFAULT_AUTO_SCROLL_TO_ELEMENT_OFFSET_TOP = -20;
 const DEFAULT_TEXTAREA_ROWS = 3;
 
-export interface VuiServiceColorSettings {
-  primary: ScopeName;
-  error: ScopeName;
-  buttonDefault: ScopeName;
-  // buttonDefaultVariant: ColorVariant;
+export interface VuiServiceUISettings {
+  primaryScope: ScopeName;
+  errorScope: ScopeName;
+  buttonDefault: {
+    color: ScopeName;
+    variant: ColorVariant;
+  };
+  dialogOk?: {
+    color?: ScopeName;
+    variant?: ColorVariant;
+  };
+  dialogCancel?: {
+    color?: ScopeName;
+    variant?: ColorVariant;
+  };
+  dialogClose?: {
+    color?: ScopeName;
+    variant?: ColorVariant;
+  };
 }
 
-export interface VuiServiceColorVariantSettings {
-  buttonDefault: ColorVariant;
-}
+// export interface VuiServiceColorVariantSettings {
+//   buttonDefault: ColorVariant;
+//   dialogOk?: ColorVariant;
+//   dialogCancel?: ColorVariant;
+//   dialogClose?: ColorVariant;
+// }
 
 export interface VuiServiceIconSettings {
   menuDown: IconName;
@@ -27,8 +44,9 @@ export type VuiVNodeResolver = () => VNodeChild;
 
 export interface VuiServiceOptions {
   colorScheme: VueColorSchemePluginSettings;
-  colors: VuiServiceColorSettings;
-  colorVariants: VuiServiceColorVariantSettings;
+  uiSettings: VuiServiceUISettings;
+  // colors: VuiServiceColorSettings;
+  // colorVariants: VuiServiceColorVariantSettings;
   icons: VuiServiceIconSettings;
   selectionSeparator?: VuiVNodeResolver;
   autoScrollToElementOffsetTop?: number | (() => number | undefined);
@@ -58,18 +76,30 @@ export class VuiService {
     this.requiredChip = requiredChip;
   }
 
-  color(colorType: keyof VuiServiceColorSettings): ScopeName {
-    return this.options.colors[colorType];
+  setting<K extends keyof VuiServiceUISettings>(
+    key: K,
+  ): VuiServiceUISettings[K] {
+    return this.options.uiSettings[key] as VuiServiceUISettings[K];
   }
 
-  colorVariant(
-    colorVariantType: keyof VuiServiceColorVariantSettings,
-  ): ColorVariant {
-    return this.options.colorVariants[colorVariantType];
-  }
+  // color<K extends keyof VuiServiceColorSettings>(
+  //   colorType: keyof VuiServiceColorSettings,
+  // ): VuiServiceColorSettings[K] {
+  //   return this.options.colors[colorType] as VuiServiceColorSettings[K];
+  // }
 
-  icon(iconType: keyof VuiServiceIconSettings): IconName {
-    return this.options.icons[iconType];
+  // colorVariant<K extends keyof VuiServiceColorVariantSettings>(
+  //   colorVariantType: K,
+  // ): VuiServiceColorVariantSettings[K] {
+  //   return this.options.colorVariants[
+  //     colorVariantType
+  //   ] as VuiServiceColorVariantSettings[K];
+  // }
+
+  icon<K extends keyof VuiServiceIconSettings>(
+    iconType: K,
+  ): VuiServiceIconSettings[K] {
+    return this.options.icons[iconType] as VuiServiceIconSettings[K];
   }
 
   getAutoScrollToElementOffsetTop() {

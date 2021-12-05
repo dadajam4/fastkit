@@ -10,55 +10,37 @@ import {
   VStackDynamicChildren,
 } from './schemes/dynamic';
 import {
-  VStackActionMessageResolvers,
   VStackAction,
-  DEFAULT_ACTION_MESSAGES,
-  DEFAULT_ACTIONS,
+  VStackBuiltinActionType,
+  VStackBuiltinActions,
+  BUILTIN_ACTION_HANDLERS,
 } from './schemes/action';
 export { VueStackInjectionKey } from './injections';
-import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
+// import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import { VDialogProps } from './components/VDialog';
 
 export interface VueStackServiceOptions {
   zIndex?: number;
-  actionMessages?: Partial<VStackActionMessageResolvers>;
-  primaryColor: ScopeName;
-  buttonDefaultScope: ScopeName;
-  buttonDefaultVariant: ColorVariant;
+  actions: VStackBuiltinActions;
 }
 
 export class VueStackService {
   readonly controls: VStackControl[] = [];
   readonly zIndex: number;
-  readonly primaryColor: ScopeName;
-  readonly buttonDefaultScope: ScopeName;
-  readonly buttonDefaultVariant: ColorVariant;
+  readonly builtinActions: VStackBuiltinActions;
   private _increment = 0;
   private readonly _dynamicSettings: Ref<VStackDynamicInternalSetting[]> = ref(
     [],
   );
-  readonly actionMessages: VStackActionMessageResolvers;
 
   get dynamicSettings() {
     return this._dynamicSettings.value;
   }
 
   constructor(opts: VueStackServiceOptions) {
-    const {
-      zIndex = 32767,
-      actionMessages,
-      primaryColor,
-      buttonDefaultScope,
-      buttonDefaultVariant,
-    } = opts;
+    const { zIndex = 32767, actions } = opts;
     this.zIndex = zIndex;
-    this.primaryColor = primaryColor;
-    this.buttonDefaultScope = buttonDefaultScope;
-    this.buttonDefaultVariant = buttonDefaultVariant;
-    this.actionMessages = {
-      ...DEFAULT_ACTION_MESSAGES,
-      ...actionMessages,
-    };
+    this.builtinActions = actions;
   }
 
   genId() {
@@ -131,8 +113,6 @@ export class VueStackService {
     });
   }
 
-  // ResolvedVStackDynamicInput
-
   async dialog(
     resolvedInput: ResolvedVStackDynamicInput<
       VDialogProps & {
@@ -190,20 +170,15 @@ export class VueStackService {
     });
   }
 
-  actionMessage(key: keyof VStackActionMessageResolvers) {
-    let child = this.actionMessages[key];
-    if (typeof child === 'function') {
-      child = child();
-    }
-    return child;
-  }
-
-  action(
-    key: keyof VStackActionMessageResolvers,
-    override?: Partial<VStackAction>,
-  ) {
-    const action = {
-      ...DEFAULT_ACTIONS[key](this),
+  action(key: VStackBuiltinActionType, override?: Partial<VStackAction>) {
+    const factory = this.builtinActions[key];
+    const _onClick = BUILTIN_ACTION_HANDLERS[key];
+    const action: VStackAction = {
+      key,
+      content: ({ control, key }) => {
+        const onClick = (ev: MouseEvent) => _onClick(control, ev);
+        return factory({ service: this, control, key, bindings: { onClick } });
+      },
       ...override,
     };
     return action;

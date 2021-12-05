@@ -2,7 +2,7 @@ import './index.scss';
 
 import { defineComponent, ref } from 'vue';
 import {
-  VStackBtn,
+  VButton,
   VDialog,
   VSnackbar,
   VMenu,
@@ -67,7 +67,7 @@ const HomeView = defineComponent({
 
         <hr />
 
-        <VStackBtn
+        <VButton
           onClick={() => {
             this.vueStack.alert({
               content: (ctrl) => {
@@ -76,13 +76,13 @@ const HomeView = defineComponent({
             });
           }}>
           Dialog!
-        </VStackBtn>
+        </VButton>
 
         <VSnackbar
           top
           v-slots={{
             activator: ({ attrs }) => {
-              return [<VStackBtn {...attrs}>Snackbar!</VStackBtn>];
+              return [<VButton {...attrs}>Snackbar!</VButton>];
             },
           }}>
           Snackbar!
@@ -93,16 +93,16 @@ const HomeView = defineComponent({
         <VMenu
           v-slots={{
             activator: ({ attrs }) => {
-              return [<VStackBtn {...attrs}>MENU!</VStackBtn>];
+              return [<VButton {...attrs}>MENU!</VButton>];
             },
           }}>
           This is menu...
-          <VStackBtn
+          <VButton
             onClick={(e) => {
               this.expanded = !this.expanded;
             }}>
             EXPAND...
-          </VStackBtn>
+          </VButton>
           <VExpandTransition
             onAfterEnter={(e) => {
               console.log('onAfterEnter', e);
@@ -134,12 +134,12 @@ const HomeView = defineComponent({
 
         <hr />
 
-        <VStackBtn
+        <VButton
           onClick={(e) => {
             this.count++;
           }}>
           Click!! {this.count}
-        </VStackBtn>
+        </VButton>
 
         <hr />
 
@@ -184,9 +184,9 @@ const HomeView = defineComponent({
           v-slots={{
             activator: ({ attrs, control }) => {
               return [
-                <VStackBtn {...attrs} color="primary">
+                <VButton {...attrs} color="primary">
                   Activator {control.isActive ? 'ON' : 'OFF'}
-                </VStackBtn>,
+                </VButton>,
               ];
             },
           }}>
@@ -210,13 +210,13 @@ const HomeView = defineComponent({
             <h3>{variant}</h3>
             {scopeNames.map((scopeName) => {
               return (
-                <VStackBtn
+                <VButton
                   color={scopeName}
                   key={scopeName}
                   disabled={this.disabled}
                   variant={variant}>
                   BUTTON ({scopeName || '*default'})
-                </VStackBtn>
+                </VButton>
               );
             })}
           </div>
