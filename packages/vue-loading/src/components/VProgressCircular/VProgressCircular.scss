@@ -3,6 +3,10 @@
   display: inline-flex;
   vertical-align: middle;
 
+  &--has-color {
+    color: var(--main-color);
+  }
+
   svg {
     position: absolute;
     top: 0;

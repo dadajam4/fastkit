@@ -1,16 +1,16 @@
 import './VProgressCircular.scss';
-import { defineComponent, computed, h } from 'vue';
+import { defineComponent, computed, h, PropType } from 'vue';
 import {
   NumberishPropOption,
   resolveNumberish,
   renderSlotOrEmpty,
 } from '@fastkit/vue-utils';
-import { colorSchemeProps, toTextColorClass } from '@fastkit/vue-color-scheme';
+import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 
 export const VProgressCircular = defineComponent({
   name: 'VProgressCircular',
   props: {
-    ...colorSchemeProps(),
+    color: String as PropType<ScopeName>,
     button: Boolean,
     indeterminate: Boolean,
     rotate: NumberishPropOption,
@@ -24,19 +24,18 @@ export const VProgressCircular = defineComponent({
     const size = computed(() => resolveNumberish(props.size, 32));
     const rotate = computed(() => resolveNumberish(props.rotate, 0));
     const indeterminate = computed(() => props.indeterminate);
-
     const circumference = computed(() => 2 * Math.PI * radius.value);
+    const colorClass = useScopeColorClass(props);
 
     const classes = computed(() => {
       const classes: any[] = [
         {
           'v-progress-circular--indeterminate': props.indeterminate,
           'v-progress-circular--button': props.button,
+          'v-progress-circular--has-color': !!colorClass.value,
         },
+        colorClass.value,
       ];
-      if (props.color) {
-        classes.push(toTextColorClass(props.color));
-      }
       return classes;
     });
 
