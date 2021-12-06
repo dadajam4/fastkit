@@ -249,7 +249,7 @@ export type ColorScopeDefaultResolver<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > = (
   ctx: ColorScopeDefault<TN, PN, SN, VN, OK>,
@@ -259,7 +259,7 @@ export type ColorScopeDefaultsResolver<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > = (ctx: {
   theme: ColorTheme<TN, PN, SN, VN, OK>;
@@ -274,7 +274,7 @@ export type ColorScopeDefaultsSource<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > = {
   [K in ColorScopeDefaultsKey]?:
@@ -292,7 +292,7 @@ export type ColorScopeDefaults<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > = {
   [K in ColorScopeDefaultsKey]?: ColorScopeDefault<TN, PN, SN, VN, OK>;
@@ -304,7 +304,7 @@ export interface ColorThemeSource<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > {
   readonly name: TN;
@@ -322,7 +322,7 @@ export type ColorThemeJSON<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > = {
   name: TN;
@@ -414,7 +414,7 @@ export interface ColorSchemeSource<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > {
   readonly variants?: readonly RawColorVariantSource<VN>[];
@@ -429,7 +429,7 @@ export interface ColorSchemeJSON<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > {
   optionals?: OK[];
@@ -444,7 +444,7 @@ export interface ColorSchemeInfo<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
 > {
   readonly defaultTheme: TN;
   readonly themeNames: TN[];
@@ -457,7 +457,7 @@ export function colorSchemeInfoByScheme<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
 >(
   scheme: ColorScheme<TN, PN, SN, VN, string>,
 ): ColorSchemeInfo<TN, PN, SN, VN> {
@@ -468,7 +468,7 @@ export interface ColorScheme<
   TN extends string,
   PN extends string,
   SN extends string,
-  VN extends string = string,
+  VN extends string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > extends ColorSchemeInfo<TN, PN, SN, VN> {
   readonly variantSources: ColorVariantSource<VN>[];

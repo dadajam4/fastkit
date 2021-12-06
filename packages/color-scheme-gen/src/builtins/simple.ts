@@ -120,8 +120,8 @@ export function createSimpleColorScheme(opts: SimpleColorSchemeOptions = {}) {
             {
               // text: ({ palette }) => palette('default'),
               // focusShadow: ({ palette }) => palette('default').alpha(0.3),
-              // light: ({ palette }) => palette('default').alpha(0.04),
-              // deep: ({ palette }) => palette('default').alpha(0.1),
+              light: ({ palette }) => palette('default').alpha(0.06),
+              deep: ({ palette }) => palette('default').alpha(0.12),
               outlineText: ({ palette }) => palette('default'),
             },
           ],

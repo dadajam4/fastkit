@@ -7,3 +7,4 @@ export * from './composables';
 export * from './components';
 export * from './service';
 export * from './plugin';
+export * from './injections';

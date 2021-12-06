@@ -48,7 +48,8 @@ async function generateTS(entry: IconFontEntry, ids: string[]) {
 /* eslint-disable */
 // @ts-nocheck
 ${BANNER}
-import { IconName, IconNameMap, registerIconNames } from '@fastkit/icon-font';
+import type { IconName, IconNameMap } from '@fastkit/icon-font';
+import { registerIconNames } from '@fastkit/icon-font';
 declare module "@fastkit/icon-font" {
   export interface IconNameMap {
 ${ids.map((id) => `    '${id}': true,`).join('\n')}
@@ -57,7 +58,7 @@ ${ids.map((id) => `    '${id}': true,`).join('\n')}
 export const ICON_NAMES = registerIconNames([
   ${ids.map((id) => `'${id}'`).join(',\n  ')}
 ]);
-export { IconName, IconNameMap } from '@fastkit/icon-font';
+export type { IconName, IconNameMap } from '@fastkit/icon-font';
   `.trim();
   const fileName = `${entry.name || 'icons'}.ts`;
   const dest = path.resolve(entry.dest, fileName);
@@ -190,7 +191,8 @@ ${BANNER}
 ${names
   .map(
     (name, index) =>
-      `import { IconName as IconName_${index}, IconNameMap as IconNameMap_${index} } from './${name}/${name}';`,
+      // `import { IconName as IconName_${index}, IconNameMap as IconNameMap_${index} } from './${name}/${name}';`,
+      `import './${name}/${name}';`,
   )
   .join('\n')}
 export type { IconName } from '@fastkit/icon-font';

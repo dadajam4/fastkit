@@ -1,6 +1,6 @@
 import './VIcon.scss';
 import { defineComponent, PropType, computed, CSSProperties } from 'vue';
-import { IconName } from '@fastkit/icon-font';
+import type { IconName } from '@fastkit/icon-font';
 
 export type { IconName } from '@fastkit/icon-font';
 export { ICON_NAMES } from '@fastkit/icon-font';

@@ -38,7 +38,8 @@ export default defineComponent({
           <p>
             1{JSON.stringify(this.auth.me)} {JSON.stringify(this.isLoggedIn())}
           </p>
-          <VProgressCircular indeterminate></VProgressCircular>
+          <VProgressCircular indeterminate />
+          <VProgressCircular indeterminate color="accent" />
           <VProgressLinear
             indeterminate
             active
@@ -81,6 +82,9 @@ export default defineComponent({
           </li>
           <li>
             <RouterLink to="/page3/child">page3/child</RouterLink>
+          </li>
+          <li>
+            <RouterLink to="/components">components</RouterLink>
           </li>
         </ul>
 

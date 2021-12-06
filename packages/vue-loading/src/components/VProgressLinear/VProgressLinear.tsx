@@ -183,8 +183,6 @@ export const VProgressLinear = defineComponent({
 
       const colorClass = useScopeColorClass(props);
 
-      // const classes = computed(() => [useScopeColorClass])
-
       return (
         <div
           class={[

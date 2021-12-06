@@ -85,5 +85,6 @@ export interface ColorClassesResult {
 export type VueColorSchemeServiceSettings = ColorSchemeInfo<
   ThemeName,
   PaletteName,
-  ScopeName
+  ScopeName,
+  ColorVariant
 >;

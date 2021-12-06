@@ -10,6 +10,7 @@ const DEFAULT_TEXTAREA_ROWS = 3;
 
 export interface VuiServiceUISettings {
   primaryScope: ScopeName;
+  plainVariant: ColorVariant;
   errorScope: ScopeName;
   buttonDefault: {
     color: ScopeName;

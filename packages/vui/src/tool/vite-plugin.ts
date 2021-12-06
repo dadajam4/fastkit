@@ -127,6 +127,7 @@ export function viteVuiPlugin(
     onBootError,
     uiSettings = {
       primaryScope: 'primary' as any,
+      plainVariant: 'plain' as any,
       errorScope: 'error' as any,
       buttonDefault: {
         color: 'base' as any,
