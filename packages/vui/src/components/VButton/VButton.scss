@@ -1,10 +1,12 @@
 @use 'sass:math';
 
 .v-button {
-  $base-height: 2.285714285714286em;
+  // $base-height: 2.285714285714286em;
+  $base-height: 2.571428571428571em;
 
   --padding: 1em;
   --height: #{$base-height};
+  --icon-margin: 0.6em;
 
   position: relative;
   display: inline-flex;
@@ -36,6 +38,11 @@
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), color 1ms;
   appearance: none;
 
+  &--plain {
+    color: inherit !important;
+    // color: inherit !important;
+  }
+
   &--sm {
     // height: 2em;
     // height: calc(var(--root-em) * 1.5); // 24
@@ -51,26 +58,28 @@
 
   &--lg {
     // height: calc(var(--root-em) * 2.875); // 46
-    font-size: calc(var(--root-em) * 1.25); // 20
+    font-size: calc(var(--root-em) * 1.375); // 20
   }
 
   &--rounded {
     --padding: 0;
 
-    aspect-ratio: 1 / 1;
     min-width: 0;
+    margin: calc(var(--root-em) * 0.125) calc(var(--root-em) * 0.125);
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
 
     --height: auto;
-
-    border-radius: 50%;
   }
 
   &--icon {
     // aspect-ratio: 1 / 1;
     min-width: 0;
 
-    --height: #{$base-height};
-    --padding: 1em;
+    // --height: #{$base-height};
+    // --height: calc(var);
+    --height: #{$base-height * 0.75};
+    --padding: 0em;
   }
 
   &::-moz-focus-inner {
@@ -101,6 +110,16 @@
   &--loading &__content {
     pointer-events: none;
     opacity: 0;
+  }
+
+  &__icon {
+    &--start {
+      margin-right: var(--icon-margin);
+    }
+
+    &--end {
+      margin-left: var(--icon-margin);
+    }
   }
 
   &__loading {

@@ -1,0 +1,14 @@
+.v-paper {
+  background-color: var(--palette-background);
+  border-radius: var(--control-field-radius);
+
+  &__header {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
+  &__footer {
+    border-bottom-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+  }
+}

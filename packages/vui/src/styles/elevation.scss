@@ -1,0 +1,9 @@
+@use './core.scss';
+
+$z: 24;
+@while $z >= 0 {
+  .elevation-#{$z} {
+    @include core.elevation($z, true);
+  }
+  $z: $z - 1;
+}

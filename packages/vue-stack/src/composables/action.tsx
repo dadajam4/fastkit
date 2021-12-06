@@ -4,12 +4,8 @@ import {
   VStackAction,
   VStackActionProps,
   VStackActionControl,
-  // resolveRawVStackActions,
-  // resolveRawVStackActionContent,
 } from '../schemes';
-// import { VButton } from '../components/VButton';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface UseStackActionOptions {
   resolver?: (actions: VStackAction[]) => VStackAction[];
 }
@@ -36,21 +32,6 @@ export function useStackAction(
         onClick,
       });
       return content;
-      // const content = resolveRawVStackActionContent(props.content, control);
-      // const { onClick } = props;
-      // return (
-      //   <VButton
-      //     {...{
-      //       ...props,
-      //       onClick: onClick
-      //         ? (ev: MouseEvent) => {
-      //             onClick(control, ev);
-      //           }
-      //         : undefined,
-      //     }}>
-      //     {content}
-      //   </VButton>
-      // );
     });
   });
 

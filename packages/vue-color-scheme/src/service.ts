@@ -13,13 +13,15 @@ import { ThemeName } from '@fastkit/color-scheme';
 import { VueColorSchemeServiceInjectionKey } from './injections';
 
 export function useColorVariantClasses(props: ColorSchemeHooksProps) {
-  const colorVariantClasses = computed(() => {
-    const classes: string[] = [];
-    const variant = resolveFnValue(props.variant);
-    variant && classes.push(variant);
-    return classes;
+  const result = computed(() => {
+    const value = resolveFnValue(props.variant);
+    const className = value ? value : undefined;
+    return {
+      value,
+      className,
+    };
   });
-  return colorVariantClasses;
+  return result;
 }
 
 export function useThemeClass(
@@ -30,14 +32,18 @@ export function useThemeClass(
   if (useRootThemeDefault) {
     service = useColorScheme();
   }
-  const themeClass = computed(() => {
-    let theme = resolveFnValue(props.theme);
-    if (!theme && service) {
-      theme = service.rootTheme as any;
+  const result = computed(() => {
+    let value = resolveFnValue(props.theme);
+    if (!value && service) {
+      value = service.rootTheme as any;
     }
-    return theme ? `${theme}-theme` : undefined;
+    const className = value ? `${value}-theme` : undefined;
+    return {
+      value,
+      className,
+    };
   });
-  return themeClass;
+  return result;
 }
 
 export function toScopeColorClass(name: string) {
@@ -45,35 +51,47 @@ export function toScopeColorClass(name: string) {
 }
 
 export function useScopeColorClass(props: ColorSchemeHooksProps) {
-  const scopeColorClass = computed(() => {
-    const color = resolveFnValue(props.color);
-    return color ? toScopeColorClass(color) : undefined;
+  const result = computed(() => {
+    const value = resolveFnValue(props.color);
+    const className = value ? toScopeColorClass(value) : undefined;
+    return {
+      value,
+      className,
+    };
   });
-  return scopeColorClass;
+  return result;
 }
 
 export function toTextColorClass(name: string) {
   return `${name}-text`;
 }
 
-function resolveFnValue<T extends string>(value?: T | (() => T)) {
+function resolveFnValue<T extends string>(value?: T | (() => T | undefined)) {
   return typeof value === 'function' ? value() : value;
 }
 
 export function useTextColorClass(props: ColorSchemeHooksProps) {
-  const textColorClass = computed(() => {
-    const textColor = resolveFnValue(props.textColor);
-    return textColor ? toTextColorClass(textColor) : undefined;
+  const result = computed(() => {
+    const value = resolveFnValue(props.textColor);
+    const className = value ? toTextColorClass(value) : undefined;
+    return {
+      value,
+      className,
+    };
   });
-  return textColorClass;
+  return result;
 }
 
 export function useBorderColorClass(props: ColorSchemeHooksProps) {
-  const borderColorClass = computed(() => {
-    const borderColor = resolveFnValue(props.borderColor);
-    return borderColor ? `${borderColor}-border` : undefined;
+  const result = computed(() => {
+    const value = resolveFnValue(props.borderColor);
+    const className = value ? `${value}-border` : undefined;
+    return {
+      value,
+      className,
+    };
   });
-  return borderColorClass;
+  return result;
 }
 
 export function useColorClasses(
@@ -82,30 +100,24 @@ export function useColorClasses(
     useRootThemeDefault?: boolean;
   } = {},
 ): ColorClassesResult {
-  const themeClass = useThemeClass(props, opts.useRootThemeDefault);
-  const scopeColorClass = useScopeColorClass(props);
-  const textColorClass = useTextColorClass(props);
-  const borderColorClass = useBorderColorClass(props);
-  const colorVariantClasses = useColorVariantClasses(props);
+  const theme = useThemeClass(props, opts.useRootThemeDefault);
+  const color = useScopeColorClass(props);
+  const textColor = useTextColorClass(props);
+  const borderColor = useBorderColorClass(props);
+  const variant = useColorVariantClasses(props);
 
   const colorClasses = computed(() => {
-    const classes = [
-      themeClass,
-      scopeColorClass,
-      textColorClass,
-      borderColorClass,
-      colorVariantClasses,
-    ]
-      .map((c) => c.value)
+    const classes = [theme, color, textColor, borderColor, variant]
+      .map((c) => c.value.className)
       .filter((c) => !!c) as string[];
     return classes;
   });
   return {
-    themeClass,
-    scopeColorClass,
-    textColorClass,
-    borderColorClass,
-    colorVariantClasses,
+    theme,
+    color,
+    textColor,
+    borderColor,
+    variant,
     colorClasses,
   };
 }

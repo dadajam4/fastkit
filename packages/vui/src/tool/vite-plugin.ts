@@ -128,6 +128,7 @@ export function viteVuiPlugin(
     uiSettings = {
       primaryScope: 'primary' as any,
       plainVariant: 'plain' as any,
+      containedVariant: 'contained' as any,
       errorScope: 'error' as any,
       buttonDefault: {
         color: 'base' as any,
@@ -137,16 +138,6 @@ export function viteVuiPlugin(
         color: 'primary' as any,
       },
     },
-
-    // colors = {
-    //   primary: 'primary' as any,
-    //   error: 'error' as any,
-    //   buttonDefault: 'base' as any,
-    //   dialogOk: 'primary' as any,
-    // } as VuiServiceOptions['colors'],
-    // colorVariants = {
-    //   buttonDefault: 'contained' as any,
-    // },
     icons = {
       menuDown: 'mdi-menu-down' as any,
     } as VuiServiceOptions['icons'],

@@ -1,5 +1,7 @@
 export * from './loading';
 export * from './kits';
+export * from './VPaper';
+export * from './VCard';
 export * from './VIcon';
 export * from './VButton';
 export * from './VCheckbox';
@@ -15,3 +17,4 @@ export * from './VTextField';
 export * from './VTextarea';
 export * from './VForm';
 export * from './VApp';
+export * from './VToolbar';

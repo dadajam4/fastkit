@@ -1,5 +1,14 @@
 import { defineComponent, ref } from 'vue';
-import { VAppLayout, VApp, useMediaMatch, VAppContainer } from '@fastkit/vui';
+import {
+  VAppLayout,
+  VApp,
+  useMediaMatch,
+  VAppContainer,
+  VToolbar,
+  VToolbarTitle,
+  VToolbarMenu,
+  VButton,
+} from '@fastkit/vui';
 import { VPage } from '@fastkit/vue-page';
 import { useVuePageControl, VPageLink } from '@fastkit/vue-page';
 
@@ -65,23 +74,40 @@ export const App = defineComponent({
             },
             header: ({ control }) => {
               return (
-                <div
-                  style={{
-                    background: '#fff',
-                    width: '100%',
-                    boxShadow: `0 1px 3px 0 rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 2px 1px -1px rgb(0 0 0 / 12%)`,
-                  }}>
+                <VToolbar>
                   {!control.drawerIsStatic && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        control.toggleDrawer();
-                      }}>
-                      toggle
-                    </button>
+                    <VToolbarMenu edge="start">
+                      <VButton
+                        icon="mdi-menu"
+                        size="lg"
+                        onClick={() => {
+                          control.toggleDrawer();
+                        }}
+                      />
+                    </VToolbarMenu>
                   )}
-                  あいへお
-                </div>
+                  <VToolbarTitle>ACCO CMS</VToolbarTitle>
+                  <VToolbarMenu edge="end">
+                    <VButton icon="mdi-account-circle" size="lg" />
+                  </VToolbarMenu>
+                </VToolbar>
+                // <div
+                //   style={{
+                //     background: '#fff',
+                //     width: '100%',
+                //     boxShadow: `0 1px 3px 0 rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 2px 1px -1px rgb(0 0 0 / 12%)`,
+                //   }}>
+                //   {!control.drawerIsStatic && (
+                //     <button
+                //       type="button"
+                //       onClick={(e) => {
+                //         control.toggleDrawer();
+                //       }}>
+                //       toggle
+                //     </button>
+                //   )}
+                //   あいへお
+                // </div>
               );
             },
             default: () => (

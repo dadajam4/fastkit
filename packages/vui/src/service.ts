@@ -11,6 +11,7 @@ const DEFAULT_TEXTAREA_ROWS = 3;
 export interface VuiServiceUISettings {
   primaryScope: ScopeName;
   plainVariant: ColorVariant;
+  containedVariant: ColorVariant;
   errorScope: ScopeName;
   buttonDefault: {
     color: ScopeName;
@@ -30,13 +31,6 @@ export interface VuiServiceUISettings {
   };
 }
 
-// export interface VuiServiceColorVariantSettings {
-//   buttonDefault: ColorVariant;
-//   dialogOk?: ColorVariant;
-//   dialogCancel?: ColorVariant;
-//   dialogClose?: ColorVariant;
-// }
-
 export interface VuiServiceIconSettings {
   menuDown: IconName;
 }
@@ -46,8 +40,6 @@ export type VuiVNodeResolver = () => VNodeChild;
 export interface VuiServiceOptions {
   colorScheme: VueColorSchemePluginSettings;
   uiSettings: VuiServiceUISettings;
-  // colors: VuiServiceColorSettings;
-  // colorVariants: VuiServiceColorVariantSettings;
   icons: VuiServiceIconSettings;
   selectionSeparator?: VuiVNodeResolver;
   autoScrollToElementOffsetTop?: number | (() => number | undefined);
@@ -82,20 +74,6 @@ export class VuiService {
   ): VuiServiceUISettings[K] {
     return this.options.uiSettings[key] as VuiServiceUISettings[K];
   }
-
-  // color<K extends keyof VuiServiceColorSettings>(
-  //   colorType: keyof VuiServiceColorSettings,
-  // ): VuiServiceColorSettings[K] {
-  //   return this.options.colors[colorType] as VuiServiceColorSettings[K];
-  // }
-
-  // colorVariant<K extends keyof VuiServiceColorVariantSettings>(
-  //   colorVariantType: K,
-  // ): VuiServiceColorVariantSettings[K] {
-  //   return this.options.colorVariants[
-  //     colorVariantType
-  //   ] as VuiServiceColorVariantSettings[K];
-  // }
 
   icon<K extends keyof VuiServiceIconSettings>(
     iconType: K,

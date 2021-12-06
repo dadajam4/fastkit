@@ -1,0 +1,10 @@
+.v-card-actions {
+  display: flex;
+  align-items: center;
+  padding: var(--card-actions-padding);
+
+  .v-btn {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

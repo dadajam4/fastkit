@@ -66,19 +66,42 @@ export interface ColorSchemePropsOptions<
 }
 
 export interface ColorSchemeHooksProps {
-  readonly theme?: ThemeName | (() => ThemeName);
-  readonly color?: ScopeName | (() => ScopeName);
-  readonly textColor?: PaletteName | (() => PaletteName);
-  readonly borderColor?: PaletteName | (() => PaletteName);
-  readonly variant?: ColorVariant | (() => ColorVariant);
+  readonly theme?: ThemeName | (() => ThemeName | undefined);
+  readonly color?: ScopeName | (() => ScopeName | undefined);
+  readonly textColor?: PaletteName | (() => PaletteName | undefined);
+  readonly borderColor?: PaletteName | (() => PaletteName | undefined);
+  readonly variant?: ColorVariant | (() => ColorVariant | undefined);
 }
 
 export interface ColorClassesResult {
-  themeClass: ComputedRef<string | undefined>;
-  scopeColorClass: ComputedRef<string | undefined>;
-  textColorClass: ComputedRef<string | undefined>;
-  borderColorClass: ComputedRef<string | undefined>;
-  colorVariantClasses: ComputedRef<string[]>;
+  // theme?: ThemeName;
+  // color?: ScopeName;
+  // variant?: ColorVariant;
+  theme: ComputedRef<{
+    value?: ThemeName;
+    classes?: string;
+  }>;
+  color: ComputedRef<{
+    value?: ScopeName;
+    classes?: string;
+  }>;
+  textColor: ComputedRef<{
+    value?: PaletteName;
+    classes?: string;
+  }>;
+  borderColor: ComputedRef<{
+    value?: PaletteName;
+    classes?: string;
+  }>;
+  variant: ComputedRef<{
+    value?: ColorVariant;
+    classes?: string;
+  }>;
+  // themeClass: ComputedRef<string | undefined>;
+  // scopeColorClass: ComputedRef<string | undefined>;
+  // textColorClass: ComputedRef<string | undefined>;
+  // borderColorClass: ComputedRef<string | undefined>;
+  // colorVariantClasses: ComputedRef<string[]>;
   colorClasses: ComputedRef<string[]>;
 }
 

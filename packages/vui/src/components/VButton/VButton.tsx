@@ -30,9 +30,19 @@ export type VButtonIcon = () => VNodeChild;
 
 export type RawVButtonIcon = IconName | VButtonIcon;
 
-function resolveRawVButtonIcon(raw?: RawVButtonIcon): VButtonIcon | undefined {
+function resolveRawVButtonIcon(
+  raw?: RawVButtonIcon,
+  type: 'main' | 'start' | 'end' = 'main',
+): VButtonIcon | undefined {
   if (!raw) return;
-  return typeof raw === 'function' ? raw : () => <VIcon name={raw} />;
+  return typeof raw === 'function'
+    ? raw
+    : () => (
+        <VIcon
+          class={['v-button__icon', `v-button__icon--${type}`]}
+          name={raw}
+        />
+      );
 }
 
 export const vueButtonProps = createPropsOptions({
@@ -42,6 +52,8 @@ export const vueButtonProps = createPropsOptions({
   loading: Boolean,
   rounded: Boolean,
   icon: [String, Function] as PropType<RawVButtonIcon>,
+  startIcon: [String, Function] as PropType<RawVButtonIcon>,
+  endIcon: [String, Function] as PropType<RawVButtonIcon>,
   ...createControlProps(),
 });
 
@@ -69,12 +81,25 @@ export const VButton = defineComponent({
       const _icon = resolveRawVButtonIcon(props.icon);
       return _icon && _icon();
     });
+    const startIcon = computed(() => {
+      const _icon = resolveRawVButtonIcon(props.startIcon, 'start');
+      return _icon && _icon();
+    });
+    const endIcon = computed(() => {
+      const _icon = resolveRawVButtonIcon(props.endIcon, 'end');
+      return _icon && _icon();
+    });
     const color = useColorClasses({
       color: () => props.color || defaults.color,
       variant: () =>
         props.variant ||
         (icon.value ? vui.setting('plainVariant') : defaults.variant),
     });
+    const isPlain = computed(
+      () =>
+        color.variant.value.value === vui.setting('plainVariant') &&
+        color.color.value.value === defaults.color,
+    );
     const navigationable = useNavigationable(props);
     const isLoading = computed(() => props.loading);
     const isDisabled = computed(() => props.disabled);
@@ -95,6 +120,7 @@ export const VButton = defineComponent({
         'v-button--loading': isLoading.value,
         'v-button--icon': !!icon.value,
         'v-button--rounded': isRounded.value,
+        'v-button--plain': isPlain.value,
       },
     ]);
 
@@ -121,8 +147,10 @@ export const VButton = defineComponent({
             ctx.emit('click', ev);
           }}>
           <span class="v-button__content">
+            {startIcon.value}
             {children}
             {icon.value}
+            {endIcon.value}
           </span>
           {isLoading.value && (
             <VProgressCircular
