@@ -298,7 +298,15 @@ async function build(target: string) {
         );
       }
     } else {
-      dts = `import { ${targets.join(', ')} } from '${pkg}';\n${dts}`;
+      const mods: string[] = [];
+      targets.forEach((target) => {
+        if (!dts.includes(`export declare type ${target} = `)) {
+          mods.push(target);
+        }
+      });
+      if (mods.length) {
+        dts = `import { ${targets.join(', ')} } from '${pkg}';\n${dts}`;
+      }
     }
 
     if (hits.length) {
