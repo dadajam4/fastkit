@@ -1,7 +1,12 @@
 .v-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25em;
   // -webkit-user-drag: none;
   // pointer-events: none;
   user-select: none;
+  aspect-ratio: 1 / 1;
 
   &--clickable {
     // pointer-events: auto;

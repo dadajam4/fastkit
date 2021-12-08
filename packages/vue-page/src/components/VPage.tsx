@@ -2,20 +2,20 @@ import {
   defineComponent,
   VNode,
   Transition,
-  Suspense,
+  // Suspense,
   ref,
   computed,
   h,
 } from 'vue';
 import { RouterView, RouteLocationNormalizedLoaded } from 'vue-router';
-import { useVuePageControl } from '../injections';
+// import { useVuePageControl } from '../injections';
 
 const DEFAULT_TRANSITION = 'page';
 
 export const VPage = defineComponent({
   name: 'VPage',
   setup() {
-    const pageControl = useVuePageControl();
+    // const pageControl = useVuePageControl();
     const currentComponent = ref<VNode | null>(null);
 
     const transition = computed(() => {
@@ -24,14 +24,17 @@ export const VPage = defineComponent({
       return DEFAULT_TRANSITION;
     });
 
-    function onSuspensePending(Component: VNode) {
-      currentComponent.value = Component;
-      pageControl.onSuspensePending(Component);
-    }
+    /**
+     * @TODO
+     */
+    // function onSuspensePending(Component: VNode) {
+    //   currentComponent.value = Component;
+    //   pageControl.onSuspensePending(Component);
+    // }
 
-    function onSuspenseResolved(Component: VNode) {
-      pageControl.onSuspenseResolved(Component);
-    }
+    // function onSuspenseResolved(Component: VNode) {
+    //   pageControl.onSuspenseResolved(Component);
+    // }
 
     return () => {
       return (
@@ -46,7 +49,11 @@ export const VPage = defineComponent({
             }) => {
               return [
                 <Transition name={transition.value} mode="out-in">
-                  <Suspense
+                  {Component
+                    ? // ? h(Component, { key: route.path })
+                      h(Component)
+                    : undefined}
+                  {/* <Suspense
                     onPending={() => onSuspensePending(Component)}
                     onResolve={() => onSuspenseResolved(Component)}
                     v-slots={{
@@ -56,7 +63,7 @@ export const VPage = defineComponent({
                             h(Component)
                           : undefined,
                     }}
-                  />
+                  /> */}
                 </Transition>,
               ];
             },

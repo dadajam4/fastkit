@@ -64,8 +64,11 @@ export interface NavigationableContext {
 
 export function useNavigationable(
   props: ExtractPropTypes<typeof navigationableProps>,
+  fallbackTag?: string | (() => string | undefined),
 ) {
   const ctx = computed<NavigationableContext>(() => {
+    const _fallbackTag =
+      typeof fallbackTag === 'function' ? fallbackTag() : fallbackTag;
     const { tag, to, href, disabled, name, charset, hreflang } = props;
     let Tag: NavigationableTag;
     const attrs: NavigationableAttrs = {
@@ -93,7 +96,7 @@ export function useNavigationable(
       attrs.ping = props.ping;
       attrs.referrerpolicy = props.referrerpolicy;
     } else {
-      Tag = tag || 'button';
+      Tag = tag || (!!props.type && 'button') || _fallbackTag || 'button';
       if (Tag === 'button') {
         attrs.type = props.type || 'button';
       }
@@ -111,10 +114,12 @@ export function useNavigationable(
       delete attrs.download;
     }
 
+    const clickable = Tag !== _fallbackTag;
+
     return {
       Tag,
       attrs,
-      classes: ['clickable'],
+      classes: clickable ? ['clickable'] : [],
     };
   });
   return ctx;

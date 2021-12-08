@@ -8,9 +8,12 @@ import {
   VToolbarTitle,
   VToolbarMenu,
   VButton,
+  VPaper,
+  VListTile,
+  VNavigation,
 } from '@fastkit/vui';
 import { VPage } from '@fastkit/vue-page';
-import { useVuePageControl, VPageLink } from '@fastkit/vue-page';
+// import { useVuePageControl } from '@fastkit/vue-page';
 
 export const App = defineComponent({
   name: 'App',
@@ -18,14 +21,14 @@ export const App = defineComponent({
     const systemBarOpened = ref(false);
     const requestBackdrop = () => true;
     const mm = useMediaMatch();
-    const page = useVuePageControl();
+    // const page = useVuePageControl();
 
     return () => (
       <VApp class="v-app">
         <VAppLayout
           header={{ fixed: true }}
           footer={{ spacer: true }}
-          drawer={{ stick: true }}
+          // drawer={{ stick: true }}
           drawerStatic={() => mm('lg')}
           onClickBackdrop={(ev, position, control) => {
             if (position === 'systembar') {
@@ -34,44 +37,44 @@ export const App = defineComponent({
             }
           }}
           v-slots={{
-            headerBar: ({ control }) => {
-              return (
-                <div
-                  style={{
-                    background: '#ff9800',
-                    width: '100%',
-                    fontSize: '12px',
-                  }}>
-                  <>
-                    システムバーです {JSON.stringify(page.preftechProgress)} →{' '}
-                    {String(page.transitioning)}
-                  </>
-                  <VPageLink to="/hoge">404リンク</VPageLink>
-                  {/* <VSwitch></VSwitch> */}
-                  <input
-                    type="checkbox"
-                    onChange={(ev) => {
-                      console.log(ev);
-                    }}
-                    onFocus={(ev) => {
-                      console.log(ev);
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      systemBarOpened.value = !systemBarOpened.value;
-                      if (systemBarOpened.value) {
-                        control.requestBackdrop('systembar', requestBackdrop);
-                      } else {
-                        control.releaseBackdrop('systembar', requestBackdrop);
-                      }
-                    }}>
-                    {systemBarOpened.value ? 'close' : 'open'}
-                  </button>
-                </div>
-              );
-            },
+            // headerBar: ({ control }) => {
+            //   return (
+            //     <div
+            //       style={{
+            //         background: '#ff9800',
+            //         width: '100%',
+            //         fontSize: '12px',
+            //       }}>
+            //       <>
+            //         システムバーです {JSON.stringify(page.preftechProgress)} →{' '}
+            //         {String(page.transitioning)}
+            //       </>
+            //       <VPageLink to="/hoge">404リンク</VPageLink>
+            //       {/* <VSwitch></VSwitch> */}
+            //       <input
+            //         type="checkbox"
+            //         onChange={(ev) => {
+            //           console.log(ev);
+            //         }}
+            //         onFocus={(ev) => {
+            //           console.log(ev);
+            //         }}
+            //       />
+            //       <button
+            //         type="button"
+            //         onClick={() => {
+            //           systemBarOpened.value = !systemBarOpened.value;
+            //           if (systemBarOpened.value) {
+            //             control.requestBackdrop('systembar', requestBackdrop);
+            //           } else {
+            //             control.releaseBackdrop('systembar', requestBackdrop);
+            //           }
+            //         }}>
+            //         {systemBarOpened.value ? 'close' : 'open'}
+            //       </button>
+            //     </div>
+            //   );
+            // },
             header: ({ control }) => {
               return (
                 <VToolbar>
@@ -91,23 +94,6 @@ export const App = defineComponent({
                     <VButton icon="mdi-account-circle" size="lg" />
                   </VToolbarMenu>
                 </VToolbar>
-                // <div
-                //   style={{
-                //     background: '#fff',
-                //     width: '100%',
-                //     boxShadow: `0 1px 3px 0 rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 2px 1px -1px rgb(0 0 0 / 12%)`,
-                //   }}>
-                //   {!control.drawerIsStatic && (
-                //     <button
-                //       type="button"
-                //       onClick={(e) => {
-                //         control.toggleDrawer();
-                //       }}>
-                //       toggle
-                //     </button>
-                //   )}
-                //   あいへお
-                // </div>
               );
             },
             default: () => (
@@ -117,13 +103,52 @@ export const App = defineComponent({
             ),
             drawer: () => {
               return (
-                <div
+                <VPaper
+                  color="secondary"
+                  square
                   style={{
                     background: '#222f3c',
                     width: '100%',
                   }}>
-                  drawer
-                </div>
+                  <VListTile startIcon="mdi-comma-box" endIcon="mdi-menu-down">
+                    施設管理
+                  </VListTile>
+                  <VListTile
+                    startIcon="mdi-comma-box"
+                    endIcon="mdi-menu-down"
+                    href="https://google.com">
+                    ブランド管理
+                  </VListTile>
+                  <VListTile
+                    startIcon="mdi-account-circle"
+                    endIcon={(gen) =>
+                      gen({ name: 'mdi-menu-down', rotate: 180 })
+                    }
+                    type="button">
+                    共通設定
+                  </VListTile>
+
+                  <VNavigation
+                    items={[
+                      {
+                        key: 1,
+                        label: '施設管理',
+                        to: '/',
+                        startIcon: '$empty',
+                      },
+                      {
+                        key: 2,
+                        label: 'Components',
+                        to: '/components',
+                      },
+                      {
+                        key: 3,
+                        label: '共通設定',
+                        to: '/page3',
+                      },
+                    ]}
+                  />
+                </VPaper>
               );
             },
             footer: () => {

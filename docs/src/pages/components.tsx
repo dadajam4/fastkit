@@ -11,6 +11,8 @@ import {
   VCard,
   VCardContent,
   VCardActions,
+  VTextField,
+  VListTile,
 } from '@fastkit/vui';
 
 export default defineComponent({
@@ -27,6 +29,33 @@ export default defineComponent({
     return (
       <div>
         <h1>Components</h1>
+
+        <VTextField label="施設名"></VTextField>
+
+        <VListTile startIcon="mdi-comma-box" endIcon="mdi-menu-down">
+          施設管理
+        </VListTile>
+        <VListTile
+          startIcon="mdi-comma-box"
+          endIcon="mdi-menu-down"
+          href="https://google.com">
+          ブランド管理
+        </VListTile>
+        <VListTile
+          startIcon="mdi-account-circle"
+          endIcon={(gen) => gen({ name: 'mdi-menu-down', rotate: 180 })}
+          type="button">
+          共通設定
+        </VListTile>
+
+        <VCard color="secondary">
+          <VCardContent>
+            <div>
+              <p>あいうえお</p>
+              <a href="https://google.com">https://google.com</a>
+            </div>
+          </VCardContent>
+        </VCard>
 
         <VCard
           v-slots={{
@@ -45,6 +74,8 @@ export default defineComponent({
           }}>
           <VCardContent>
             <h2>Toolbar</h2>
+
+            <a href="https://google.com">https://google.com</a>
 
             {/* <VToolbar
           v-slots={{

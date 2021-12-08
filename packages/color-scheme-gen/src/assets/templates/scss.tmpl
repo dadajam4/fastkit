@@ -34,10 +34,6 @@
   @at-root html#{&} {
     @include palette-background('foundation');
   }
-
-  a {
-    @include palette-text('link');
-  }
 }
 
 @mixin dump-color-scheme($with-foundation: false) {
@@ -54,6 +50,8 @@
     $scopes: map-get($theme, scopes);
 
     #{$selector} {
+      --link-color: #{palette-color(link)};
+
       @if $with-foundation {
         @include dump-theme-foundation;
       }
@@ -89,6 +87,12 @@
           }
         }
       }
+    }
+  }
+
+  @if $with-foundation {
+    a {
+      color: var(--link-color);
     }
   }
 

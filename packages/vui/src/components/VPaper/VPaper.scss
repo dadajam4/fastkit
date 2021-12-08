@@ -1,6 +1,29 @@
 .v-paper {
-  background-color: var(--palette-background);
-  border-radius: var(--control-field-radius);
+  --paper-radius: var(--control-field-radius);
+
+  &--plain {
+    --paper-background--color: var(--palette-background);
+    --paper-text-color: inherit;
+    --paper-link-color: var(--link-color);
+  }
+
+  &--has-color {
+    --paper-background--color: var(--main-color);
+    --paper-text-color: var(--text-color);
+    --paper-link-color: var(--nav-color);
+  }
+
+  color: var(--paper-text-color);
+  background-color: var(--paper-background--color);
+  border-radius: var(--paper-radius);
+
+  &--square {
+    --paper-radius: 0px;
+  }
+
+  a {
+    color: var(--paper-link-color);
+  }
 
   &__header {
     border-top-left-radius: inherit;

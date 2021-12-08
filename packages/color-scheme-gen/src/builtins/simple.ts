@@ -9,6 +9,7 @@ export interface SimpleColorSchemeOptions {
   heading?: ColorSource;
   backdrop?: ColorSource;
   primary?: ColorSource;
+  secondary?: ColorSource;
   accent?: ColorSource;
   success?: ColorSource;
   info?: ColorSource;
@@ -25,6 +26,7 @@ export function createSimpleColorScheme(opts: SimpleColorSchemeOptions = {}) {
     heading = '#516073',
     backdrop = 'rgba(131,151,172,.7)',
     primary = '#28bebd',
+    secondary = '#222f3c',
     accent = '#ec407a',
     info = '#42a5f5',
     success = primary,
@@ -38,6 +40,7 @@ export function createSimpleColorScheme(opts: SimpleColorSchemeOptions = {}) {
   const $heading = new Color(heading);
   const $backdrop = new Color(backdrop);
   const $primary = new Color(primary);
+  const $secondary = new Color(secondary);
   const $accent = new Color(accent);
   const $success = new Color(success);
   const $info = new Color(info);
@@ -64,6 +67,7 @@ export function createSimpleColorScheme(opts: SimpleColorSchemeOptions = {}) {
           ['caption', $default.hex()],
           ['backdrop', $backdrop.hex()],
           ['primary', $primary.hex()],
+          ['secondary', $secondary.hex()],
           ['accent', $accent.hex()],
           // ['gray', '#616161'],
           // ['accent', '#FFA726'],
@@ -126,7 +130,19 @@ export function createSimpleColorScheme(opts: SimpleColorSchemeOptions = {}) {
             },
           ],
           ['primary', ({ palette }) => palette('primary')],
-          // ['accent', ({ palette }) => palette('accent')],
+          [
+            'secondary',
+            ({ palette }) => palette('secondary'),
+            {
+              // #1c2732
+              // deep: ({ palette }) => palette('secondary').darken(0.7),
+              deep: '#1c2732',
+              nav: '#91a6bb',
+              navActive: '#fff',
+              caption: new Color('#91a6bb').alpha(0.5),
+              pin: '#ec407a',
+            },
+          ],
           ['accent', ({ palette }) => palette('accent')],
           // ['gray', ({ palette }) => palette('gray')],
           // ['accent', ({ palette }) => palette('accent')],

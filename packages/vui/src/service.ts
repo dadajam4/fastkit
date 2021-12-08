@@ -2,7 +2,7 @@ export { VuiInjectionKey } from './injections';
 
 import { VNodeChild } from 'vue';
 import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
-import type { IconName } from '@fastkit/icon-font';
+import type { IconName, RawIconProp } from './components/VIcon';
 import type { VueColorSchemePluginSettings } from '@fastkit/vue-kit';
 
 const DEFAULT_AUTO_SCROLL_TO_ELEMENT_OFFSET_TOP = -20;
@@ -33,6 +33,7 @@ export interface VuiServiceUISettings {
 
 export interface VuiServiceIconSettings {
   menuDown: IconName;
+  navigationExpand: RawIconProp;
 }
 
 export type VuiVNodeResolver = () => VNodeChild;

@@ -1,0 +1,31 @@
+.v-list-tile {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 0;
+  outline: 0;
+  appearance: none;
+
+  &__body {
+    // font-size: 0.8125rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  &__icon {
+    min-width: 2em;
+
+    &--end {
+      margin-left: auto;
+      text-align: right;
+    }
+  }
+}
