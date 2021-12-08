@@ -1,10 +1,9 @@
 import { PropType, ExtractPropTypes, computed, SetupContext } from 'vue';
 import { ButtonHTMLAttributes } from '@vue/runtime-dom';
 import { RouterLinkProps, RouteLocationRaw, RouterLink } from 'vue-router';
-// import { createEmitDefine } from './emits';
 
-export const navigationableEmits = {} as {
-  click: (ev: MouseEvent) => true;
+export const navigationableEmits = {
+  click: (ev: MouseEvent) => true,
 };
 
 export const navigationableProps = {
@@ -80,7 +79,10 @@ export function useNavigationable(
       hreflang,
     };
 
+    let clickable = false;
+
     if (to) {
+      clickable = true;
       Tag = RouterLink;
       attrs.to = to;
       attrs.replace = props.replace;
@@ -89,6 +91,7 @@ export function useNavigationable(
       attrs.custom = props.custom;
       attrs.ariaCurrentValue = props.ariaCurrentValue;
     } else if (href) {
+      clickable = true;
       Tag = tag || 'a';
       attrs.href = href;
       attrs.target = props.target;
@@ -101,6 +104,9 @@ export function useNavigationable(
       Tag = tag || (!!props.type && 'button') || _fallbackTag || 'button';
       if (Tag === 'button') {
         attrs.type = props.type || 'button';
+      }
+      if (Tag === 'a' || Tag === 'button' || typeof onClick === 'function') {
+        clickable = true;
       }
     }
 
@@ -116,7 +122,7 @@ export function useNavigationable(
       delete attrs.download;
     }
 
-    const clickable = Tag !== _fallbackTag || typeof onClick === 'function';
+    // const clickable = Tag !== _fallbackTag || typeof onClick === 'function';
 
     return {
       Tag,

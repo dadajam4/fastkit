@@ -4,7 +4,9 @@
     "**/.svn": true,
     "**/.DS_Store": true,
     "**/dist": true,
-    "coverage": true
+    "**/.vui": true,
+    "coverage": true,
+    "node_modules": true
   },
 
   // Force show recommendations

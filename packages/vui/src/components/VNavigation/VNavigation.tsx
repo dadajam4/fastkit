@@ -1,5 +1,5 @@
 import './VNavigation.scss';
-import { defineComponent, computed, PropType } from 'vue';
+import { defineComponent, computed, PropType, VNodeChild } from 'vue';
 import {
   NavigationItemInput,
   renderNavigationItemInput,
@@ -18,16 +18,23 @@ export const VNavigation = defineComponent({
       type: Boolean,
       default: true,
     },
+    caption: [String, Function] as PropType<VNodeChild | (() => VNodeChild)>,
   },
   setup(props, ctx) {
     const items = computed(() => props.items);
     const color = useScopeColorClass(props);
     const classes = computed(() => [color.value.className]);
     const startIconEmptySpace = computed(() => props.startIconEmptySpace);
+    const caption = computed(() => {
+      const c = props.caption;
+      return typeof c === 'function' ? c() : c;
+    });
 
     return () => {
+      const $caption = caption.value;
       return (
         <nav class={['v-navigation', classes.value]}>
+          {!!$caption && <div class="v-navigation__caption">{$caption}</div>}
           {items.value.map((item) =>
             renderNavigationItemInput(item, {
               class: 'v-navigation__item',

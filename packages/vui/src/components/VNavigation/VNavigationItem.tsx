@@ -7,6 +7,7 @@ import {
   VNodeProps,
   Fragment,
   ref,
+  watch,
 } from 'vue';
 import { createListTileProps, listTileEmits, VListTile } from '../VListTile';
 import {
@@ -14,12 +15,14 @@ import {
   renderSlotOrEmpty,
   VExpandTransition,
 } from '@fastkit/vue-utils';
-import { toRawIconProp } from '../VIcon/VIcon';
+// import { toRawIconProp } from '../VIcon/VIcon';
 import { useVui } from '../../injections';
+import { useRoute } from 'vue-router';
 
 export function createNavigationItemProps() {
   return {
-    ...createListTileProps<boolean>(),
+    ...createListTileProps(),
+    match: String,
   };
 }
 
@@ -78,7 +81,52 @@ export const VNavigationItem = defineComponent({
       return c && c.length ? c : undefined;
     });
 
-    const iconPayload = () => opened.value;
+    const to = computed(() => props.to);
+
+    const match = computed(() => {
+      const { match, to } = props;
+      if (match) return match;
+      if (!to) return;
+      if (typeof to === 'string') return to;
+      return (to as any).path as string | undefined;
+    });
+
+    const classes = computed(() => [
+      {
+        'v-navigation-item--opened': opened.value,
+      },
+    ]);
+
+    const route = useRoute();
+
+    // const classes = computed(() => [
+    //   // {
+    //   //   'v-navigation-item--matched': matched.value,
+    //   // },
+    // ]);
+
+    watch(
+      () => route.path,
+      (newPath) => {
+        const c = children.value;
+        const m = match.value;
+        if (!c || !m) {
+          // matched.value = false;
+          return;
+        }
+
+        if (newPath.match(m)) {
+          open();
+          // matched.value = true;
+        } else {
+          close();
+          // matched.value = false;
+        }
+      },
+      { immediate: true },
+    );
+
+    // const iconPayload = () => opened.value;
 
     const _props = computed(() => {
       const c = children.value;
@@ -87,10 +135,10 @@ export const VNavigationItem = defineComponent({
         endIcon = vui.icon('navigationExpand');
         if (typeof endIcon === 'string') {
           const name = endIcon;
-          endIcon = (gen, active) => {
+          endIcon = (gen) => {
             return gen({
               name,
-              rotate: active ? 180 : 0,
+              rotate: opened.value ? 180 : 0,
             });
           };
         }
@@ -103,11 +151,17 @@ export const VNavigationItem = defineComponent({
 
       delete __props.children;
 
+      // const _activeClass = props.activeClass;
+      // const activeClass = `v-navigation-item--active${
+      //   _activeClass ? ` ${_activeClass}` : ''
+      // }`;
+
       return {
         ...__props,
-        startIcon: toRawIconProp(__props.startIcon, iconPayload),
-        endIcon: toRawIconProp(__props.endIcon, iconPayload),
-      } as ExtractPropInput<ReturnType<typeof createListTileProps>>;
+        // activeClass,
+        // startIcon: toRawIconProp(__props.startIcon, iconPayload),
+        // endIcon: toRawIconProp(__props.endIcon, iconPayload),
+      };
     });
 
     function open() {
@@ -122,19 +176,45 @@ export const VNavigationItem = defineComponent({
       return opened.value ? close() : open();
     }
 
+    const onClick = (ev: MouseEvent) => {
+      if (!to.value) {
+        toggle();
+      }
+      ctx.emit('click', ev);
+    };
+
+    const onChangeActive = (isActive: boolean) => {
+      // if (isActive) {
+      //   // open();
+      //   // if (typeof window !== 'undefined') {
+      //   //   // open();
+      //   //   // console.log('hoge', window);
+      //   //   setTimeout(() => {
+      //   //     open();
+      //   //   }, 1000);
+      //   // }
+      //   // open();
+      //   // console.log(props);
+      //   // setTimeout(() => {
+      //   //   open();
+      //   // }, 500);
+      // }
+      ctx.emit('changeActive', isActive);
+    };
+
     return () => {
       const _children = children.value;
+      const fallbackTag = _children ? 'button' : undefined;
 
       return (
         <Fragment>
           <VListTile
             {..._props.value}
+            fallbackTag={fallbackTag}
             endIcon={_props.value.endIcon}
-            class="v-navigation-item"
-            onClick={(ev: MouseEvent) => {
-              toggle();
-              ev.preventDefault();
-            }}>
+            class={['v-navigation-item', classes.value]}
+            onClick={onClick}
+            onChangeActive={onChangeActive}>
             {renderSlotOrEmpty(ctx.slots, 'default')}
           </VListTile>
           {_children && (
@@ -143,6 +223,8 @@ export const VNavigationItem = defineComponent({
                 {_children.map((child) =>
                   renderNavigationItemInput(child, {
                     startIconEmptySpace: _props.value.startIconEmptySpace,
+                    // onClick,
+                    // onChangeActive,
                   }),
                 )}
               </div>

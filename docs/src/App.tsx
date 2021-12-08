@@ -8,9 +8,9 @@ import {
   VToolbarTitle,
   VToolbarMenu,
   VButton,
-  VPaper,
-  VListTile,
+  VDrawerLayout,
   VNavigation,
+  VPageLink,
 } from '@fastkit/vui';
 import { VPage } from '@fastkit/vue-page';
 // import { useVuePageControl } from '@fastkit/vue-page';
@@ -89,7 +89,7 @@ export const App = defineComponent({
                       />
                     </VToolbarMenu>
                   )}
-                  <VToolbarTitle>ACCO CMS</VToolbarTitle>
+                  <VToolbarTitle>TITLE</VToolbarTitle>
                   <VToolbarMenu edge="end">
                     <VButton icon="mdi-account-circle" size="lg" />
                   </VToolbarMenu>
@@ -103,43 +103,61 @@ export const App = defineComponent({
             ),
             drawer: () => {
               return (
-                <VPaper
+                <VDrawerLayout
                   color="secondary"
-                  square
-                  style={{
-                    background: '#222f3c',
-                    width: '100%',
-                  }}>
-                  {/* <VListTile startIcon="mdi-comma-box" endIcon="mdi-menu-down">
-                    施設管理
-                  </VListTile>
-                  <VListTile
-                    startIcon="mdi-comma-box"
-                    endIcon="mdi-menu-down"
-                    href="https://google.com">
-                    ブランド管理
-                  </VListTile>
-                  <VListTile
-                    startIcon="mdi-account-circle"
-                    endIcon={(gen) =>
-                      gen({ name: 'mdi-menu-down', rotate: 180 })
-                    }
-                    type="button">
-                    共通設定
-                  </VListTile> */}
-
+                  v-slots={{
+                    header: () => (
+                      <VPageLink
+                        to="/"
+                        style={{
+                          background: 'var(--deep-color)',
+                          width: '100%',
+                          alignSelf: 'stretch',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          textDecoration: 'none',
+                          color: '#fff',
+                        }}>
+                        Fastkit
+                      </VPageLink>
+                    ),
+                    footer: () => (
+                      <div
+                        style={{
+                          background: 'var(--deep-color)',
+                          width: '100%',
+                          alignSelf: 'stretch',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          textDecoration: 'none',
+                          color: '#fff',
+                          height: '100px',
+                        }}>
+                        FOOTER
+                      </div>
+                    ),
+                  }}
+                  // square
+                  // style={{
+                  //   background: '#222f3c',
+                  //   width: '100%',
+                  // }}
+                >
                   <VNavigation
+                    caption="Navigation"
                     items={[
                       {
-                        key: 1,
+                        key: 'getting-started',
                         label: 'Getting Started',
-                        // to: '/getting-started',
+                        to: '/getting-started',
                         startIcon: 'mdi-text-box-outline',
                         children: [
                           {
-                            key: 1,
+                            key: 'installation',
                             label: 'Installation',
-                            to: '/getting-started/Installation',
+                            to: '/getting-started/installation',
                           },
                           {
                             key: 'usage',
@@ -149,19 +167,116 @@ export const App = defineComponent({
                         ],
                       },
                       {
-                        key: 2,
+                        key: 'components',
                         label: 'Components',
                         to: '/components',
                         startIcon: 'mdi-switch',
+                        children: [
+                          {
+                            key: 'buttons',
+                            label: 'Buttons',
+                            to: '/components/buttons',
+                          },
+                          {
+                            key: 'forms',
+                            label: 'Forms',
+                            to: '/components/forms',
+                          },
+                        ],
                       },
-                      // {
-                      //   key: 3,
-                      //   label: '共通設定',
-                      //   to: '/page3',
-                      // },
+                      {
+                        key: 'page3',
+                        label: 'Page3',
+                        to: '/page3',
+                        startIcon: 'mdi-switch',
+                      },
+                      {
+                        key: 'settings',
+                        label: 'Settings',
+                        match: '/settings',
+                        startIcon: 'mdi-switch',
+                        children: [
+                          {
+                            key: 'basic',
+                            label: 'Basic',
+                            to: '/settings/basic',
+                          },
+                          {
+                            key: 'custom',
+                            label: 'Custom',
+                            to: '/settings/custom',
+                          },
+                        ],
+                      },
                     ]}
                   />
-                </VPaper>
+
+                  <VNavigation
+                    caption="Navigation"
+                    items={[
+                      {
+                        key: 'getting-started',
+                        label: 'Getting Started',
+                        to: '/getting-started',
+                        startIcon: 'mdi-text-box-outline',
+                        children: [
+                          {
+                            key: 'installation',
+                            label: 'Installation',
+                            to: '/getting-started/installation',
+                          },
+                          {
+                            key: 'usage',
+                            label: 'Usage',
+                            to: '/getting-started/usage',
+                          },
+                        ],
+                      },
+                      {
+                        key: 'components',
+                        label: 'Components',
+                        to: '/components',
+                        startIcon: 'mdi-switch',
+                        children: [
+                          {
+                            key: 'buttons',
+                            label: 'Buttons',
+                            to: '/components/buttons',
+                          },
+                          {
+                            key: 'forms',
+                            label: 'Forms',
+                            to: '/components/forms',
+                          },
+                        ],
+                      },
+                      {
+                        key: 'page3',
+                        label: 'Page3',
+                        to: '/page3',
+                        startIcon: 'mdi-switch',
+                      },
+                      {
+                        key: 'settings',
+                        label: 'Settings',
+                        match: '/settings',
+                        startIcon: 'mdi-switch',
+                        children: [
+                          {
+                            key: 'basic',
+                            label: 'Basic',
+                            to: '/settings/basic',
+                          },
+                          {
+                            key: 'custom',
+                            label: 'Custom',
+                            to: '/settings/custom',
+                          },
+                        ],
+                      },
+                    ]}
+                  />
+                </VDrawerLayout>
               );
             },
             footer: () => {

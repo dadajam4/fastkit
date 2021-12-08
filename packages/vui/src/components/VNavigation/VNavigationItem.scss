@@ -1,5 +1,14 @@
 .v-navigation-item {
+  &--opened {
+    --tile-background: var(--tile-active-background);
+    // --tile-text-color: var(--tile-text-active-color);
+  }
+
   &__expand {
     transition: height 0.2s;
+
+    .v-navigation-item {
+      --tile-background: var(--tile-active-background);
+    }
   }
 }

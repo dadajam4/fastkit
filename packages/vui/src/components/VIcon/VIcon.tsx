@@ -19,35 +19,34 @@ type IconGenerator = (input: IconPropInout) => VNodeChild;
 
 type EmptyIconSymbol = '$empty';
 
-export type RawIconProp<T = void> =
-  | IconName
-  | EmptyIconSymbol
-  | ((gen: IconGenerator, ctx: T) => VNodeChild);
+type ToggleableIconHook = (gen: IconGenerator, ctx: boolean) => VNodeChild;
 
-export function toRawIconProp<T = void>(
-  prop: RawIconProp<T>,
-  payload: () => T,
-): RawIconProp {
-  if (!prop || typeof prop !== 'function') {
-    return prop;
-  }
-  const fn = (gen: IconGenerator): VNodeChild => {
-    const t = payload();
-    return prop(gen, t);
-  };
-  return fn;
-}
+export type RawIconProp = IconName | EmptyIconSymbol | ToggleableIconHook;
+
+// export function toRawIconProp<T = void>(
+//   prop: RawIconProp<T>,
+//   payload: () => T,
+// ): RawIconProp {
+//   if (!prop || typeof prop !== 'function') {
+//     return prop;
+//   }
+//   const fn = (gen: IconGenerator): VNodeChild => {
+//     const t = payload();
+//     return prop(gen, t);
+//   };
+//   return fn;
+// }
 
 // export const rawRawIconProp = [String, Function] as PropType<RawIconProp>;
 const _rawIconProp = [String, Function];
 
-export function rawIconProp<T = void>() {
-  return _rawIconProp as PropType<RawIconProp<T>>;
+export function rawIconProp() {
+  return _rawIconProp as PropType<RawIconProp>;
 }
 
-export function resolveRawIconProp<T = void>(
-  payload: T,
-  prop?: RawIconProp<T>,
+export function resolveRawIconProp(
+  payload: boolean,
+  prop?: RawIconProp,
   extraProps?: Record<string, unknown> & VNodeProps,
 ): VNodeChild {
   if (!prop) return;
