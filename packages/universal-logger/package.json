@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/universal-logger",
-  "version": "0.6.14",
+  "version": "0.6.15",
   "description": "@fastkit/universal-logger",
   "main": "index.js",
   "module": "dist/universal-logger.esm-bundler.js",
@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/universal-logger#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.6.14"
+    "@fastkit/helpers": "0.6.15"
   }
 }
