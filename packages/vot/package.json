@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot",
-  "version": "0.6.12",
+  "version": "0.6.13",
   "description": "@fastkit/vot",
   "buildOptions": {
     "name": "Vot",
@@ -31,8 +31,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vot#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.6.12",
-    "@fastkit/vue-page": "0.6.12",
+    "@fastkit/helpers": "0.6.13",
+    "@fastkit/vue-page": "0.6.13",
     "@types/http-proxy": "^1.17.7",
     "@types/node": "^16.11.11",
     "@vitejs/plugin-vue": "^1.10.1",
