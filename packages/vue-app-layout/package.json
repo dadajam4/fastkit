@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-app-layout",
-  "version": "0.6.13",
+  "version": "0.6.14",
   "description": "@fastkit/vue-app-layout",
   "main": "index.js",
   "module": "dist/vue-app-layout.esm-bundler.js",
@@ -27,7 +27,7 @@
     "vue-router": "^4.0.0"
   },
   "dependencies": {
-    "@fastkit/vue-utils": "0.6.13",
-    "@fastkit/vue-scroller": "0.6.13"
+    "@fastkit/vue-utils": "0.6.14",
+    "@fastkit/vue-scroller": "0.6.14"
   }
 }
