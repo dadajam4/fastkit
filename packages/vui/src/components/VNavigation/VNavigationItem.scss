@@ -1,3 +1,5 @@
-// .v-navigation-item {
-
-// }
+.v-navigation-item {
+  &__expand {
+    transition: height 0.2s;
+  }
+}

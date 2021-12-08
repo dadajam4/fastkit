@@ -24,23 +24,39 @@ export type RawIconProp<T = void> =
   | EmptyIconSymbol
   | ((gen: IconGenerator, ctx: T) => VNodeChild);
 
-// export const rawRawIconProp = [String, Function] as PropType<RawIconProp>;
-const _rawRawIconProp = [String, Function];
-
-export function rawRawIconProp<T = void>() {
-  return _rawRawIconProp as PropType<RawIconProp<T>>;
+export function toRawIconProp<T = void>(
+  prop: RawIconProp<T>,
+  payload: () => T,
+): RawIconProp {
+  if (!prop || typeof prop !== 'function') {
+    return prop;
+  }
+  const fn = (gen: IconGenerator): VNodeChild => {
+    const t = payload();
+    return prop(gen, t);
+  };
+  return fn;
 }
 
-export function resolveRawIconProp(
-  prop?: RawIconProp,
+// export const rawRawIconProp = [String, Function] as PropType<RawIconProp>;
+const _rawIconProp = [String, Function];
+
+export function rawIconProp<T = void>() {
+  return _rawIconProp as PropType<RawIconProp<T>>;
+}
+
+export function resolveRawIconProp<T = void>(
+  payload: T,
+  prop?: RawIconProp<T>,
   extraProps?: Record<string, unknown> & VNodeProps,
 ): VNodeChild {
   if (!prop) return;
 
   return typeof prop === 'function' ? (
-    prop((input: IconPropInout) => (
-      <VIcon {...input} {...(extraProps as any)} />
-    ))
+    prop(
+      (input: IconPropInout) => <VIcon {...input} {...(extraProps as any)} />,
+      payload,
+    )
   ) : (
     <VIcon {...(extraProps as any)} name={prop} />
   );

@@ -1,11 +1,11 @@
-import { PropType, ExtractPropTypes, computed } from 'vue';
+import { PropType, ExtractPropTypes, computed, SetupContext } from 'vue';
 import { ButtonHTMLAttributes } from '@vue/runtime-dom';
 import { RouterLinkProps, RouteLocationRaw, RouterLink } from 'vue-router';
-import { createEmitDefine } from './emits';
+// import { createEmitDefine } from './emits';
 
-export const navigationableEmits = createEmitDefine({
-  click: (ev: MouseEvent) => true,
-});
+export const navigationableEmits = {} as {
+  click: (ev: MouseEvent) => true;
+};
 
 export const navigationableProps = {
   tag: String,
@@ -30,7 +30,6 @@ export const navigationableProps = {
   ping: String,
   referrerpolicy: String,
   type: String as PropType<ButtonHTMLAttributes['type']>,
-  ...navigationableEmits.props,
 } as const;
 
 export type NavigationableTag = any;
@@ -60,12 +59,15 @@ export interface NavigationableContext {
   Tag: NavigationableTag;
   attrs: NavigationableAttrs;
   classes: string[];
+  clickable: boolean;
 }
 
 export function useNavigationable(
   props: ExtractPropTypes<typeof navigationableProps>,
   fallbackTag?: string | (() => string | undefined),
+  setupContext?: SetupContext,
 ) {
+  const onClick = setupContext && setupContext.attrs.onClick;
   const ctx = computed<NavigationableContext>(() => {
     const _fallbackTag =
       typeof fallbackTag === 'function' ? fallbackTag() : fallbackTag;
@@ -114,11 +116,12 @@ export function useNavigationable(
       delete attrs.download;
     }
 
-    const clickable = Tag !== _fallbackTag;
+    const clickable = Tag !== _fallbackTag || typeof onClick === 'function';
 
     return {
       Tag,
       attrs,
+      clickable,
       classes: clickable ? ['clickable'] : [],
     };
   });

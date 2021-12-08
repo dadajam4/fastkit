@@ -36,6 +36,7 @@ export interface IconFontEntry extends IconFontSettings {
   name: string;
   fontName: string;
   formats?: IconFontFormat[];
+  startUnicode?: number;
   prefix: string;
   src: string;
   dest: string;
@@ -74,6 +75,9 @@ export async function resolveRawIconFontEntry(
     }
     if (entry.name == null) {
       entry.name = 'mdi';
+    }
+    if (entry.startUnicode == null) {
+      entry.startUnicode = 0xea0;
     }
   }
 

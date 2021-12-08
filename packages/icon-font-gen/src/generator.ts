@@ -90,6 +90,10 @@ export async function generateEntry(
 
   const webfont = await (await import('webfont')).default;
 
+  const { startUnicode = 0xea01 } = options;
+
+  let i = startUnicode;
+
   const result = await webfont({
     files: options.src,
     fontName: options.fontName,
@@ -101,6 +105,12 @@ export async function generateEntry(
     round: options.round,
     descent: options.descent,
     addHashInFontUrl: options.addHashInFontUrl,
+    glyphTransformFn: (obj) => {
+      const char = String.fromCodePoint(i);
+      obj.unicode = [char];
+      i++;
+      return obj;
+    },
   });
 
   const buildedFormats: { format: IconFontFormat; code: string | Buffer }[] =
@@ -127,7 +137,10 @@ export async function generateEntry(
   result.glyphsData!.forEach(({ metadata }) => {
     if (!metadata) return;
     const { name, unicode } = metadata;
-    if (!unicode) return;
+    if (!unicode) {
+      return;
+    }
+
     const code = unicode[0].charCodeAt(0).toString(16);
     glyphs.push({ name, code });
   });
@@ -141,25 +154,25 @@ export async function generateEntry(
     })
     .join(',');
 
-  const cssCode = `
+  const cssCode = `/* stylelint-disable */
 @font-face {
-font-family: "${options.fontName}";
-font-display: block;
-font-style: normal;
-font-weight: 400;
-src: ${src};
+  font-family: "${options.fontName}";
+  font-display: block;
+  font-style: normal;
+  font-weight: 400;
+  src: ${src};
 }
 
 i[class^="${cssPrefix}"]:before, i[class*=" ${cssPrefix}"]:before {
-    font-family: ${options.fontName} !important;
-    font-style: normal;
-    font-weight: normal !important;
-    font-variant: normal;
-    text-transform: none;
-    text-rendering: auto;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: ${options.fontName} !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 ${glyphs
   .map(({ name, code }) => {

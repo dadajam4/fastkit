@@ -1,21 +1,51 @@
 .v-list-tile {
+  --tile-background: var(--main-color, transparent);
+  --tile-active-background: var(--deep-color, transparent);
+  --tile-text-color: var(--text-color);
+  --tile-text-active-color: var(--text-color);
+  --tile-pin-color: var(--pin-color);
+  --paper-link-color: var(--tile-text-color);
+
+  // &--has-color {
+  //   --tile-text-color: var(--nav-color);
+  //   --tile-text-active-color: var(--navActive-color, var(--nav-color));
+  // }
+
   display: flex;
   align-items: center;
   width: 100%;
   padding: 10px;
-  color: inherit;
+  color: var(--tile-text-color);
   text-align: left;
   text-decoration: none;
-  background: transparent;
+  user-select: none;
+  background: var(--tile-background);
   border: 0;
   border-left: 3px solid transparent;
   border-radius: 0;
   outline: 0;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   appearance: none;
 
+  &--clickable {
+    cursor: pointer;
+
+    --tile-text-color: var(--nav-color);
+    --tile-text-active-color: var(--navActive-color, var(--nav-color));
+
+    // --tile-text-active-color: var(--navActive-color, var(--tile-text-color));
+
+    &:hover,
+    &:focus {
+      --tile-background: var(--tile-active-background);
+      --tile-text-color: var(--tile-text-active-color);
+    }
+  }
+
   &__body {
-    // font-size: 0.8125rem;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
+    // font-size: 0.75rem;
     font-weight: 500;
     line-height: 1.5;
   }

@@ -110,7 +110,7 @@ export const App = defineComponent({
                     background: '#222f3c',
                     width: '100%',
                   }}>
-                  <VListTile startIcon="mdi-comma-box" endIcon="mdi-menu-down">
+                  {/* <VListTile startIcon="mdi-comma-box" endIcon="mdi-menu-down">
                     施設管理
                   </VListTile>
                   <VListTile
@@ -126,26 +126,39 @@ export const App = defineComponent({
                     }
                     type="button">
                     共通設定
-                  </VListTile>
+                  </VListTile> */}
 
                   <VNavigation
                     items={[
                       {
                         key: 1,
-                        label: '施設管理',
-                        to: '/',
-                        startIcon: '$empty',
+                        label: 'Getting Started',
+                        // to: '/getting-started',
+                        startIcon: 'mdi-text-box-outline',
+                        children: [
+                          {
+                            key: 1,
+                            label: 'Installation',
+                            to: '/getting-started/Installation',
+                          },
+                          {
+                            key: 'usage',
+                            label: 'Usage',
+                            to: '/getting-started/usage',
+                          },
+                        ],
                       },
                       {
                         key: 2,
                         label: 'Components',
                         to: '/components',
+                        startIcon: 'mdi-switch',
                       },
-                      {
-                        key: 3,
-                        label: '共通設定',
-                        to: '/page3',
-                      },
+                      // {
+                      //   key: 3,
+                      //   label: '共通設定',
+                      //   to: '/page3',
+                      // },
                     ]}
                   />
                 </VPaper>

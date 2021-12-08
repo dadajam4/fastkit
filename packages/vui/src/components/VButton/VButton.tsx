@@ -71,7 +71,7 @@ export const VButton = defineComponent({
   name: 'VButton',
   props: vueButtonProps,
   emits: {
-    ...navigationableEmits.emits,
+    ...navigationableEmits,
   },
   setup(props, ctx) {
     const vui = useVui();

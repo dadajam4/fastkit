@@ -14,11 +14,7 @@ import {
   ColorClassesResult,
 } from '@fastkit/vue-color-scheme';
 import { UseKeybordRef, StyleValue } from '@fastkit/vue-utils';
-import {
-  createEmitDefine,
-  rawNumberProp,
-  JavaScriptTransition,
-} from '@fastkit/vue-utils';
+import { rawNumberProp, JavaScriptTransition } from '@fastkit/vue-utils';
 
 type DelayTimerProps = 'openDelay' | 'closeDelay';
 
@@ -148,7 +144,7 @@ export interface VStackControl {
   guardEffect(): void;
 }
 
-export const stackableEmits = createEmitDefine({
+export const stackableEmits = {
   'update:modelValue': (modelValue: boolean) => true,
   change: (modelValue: boolean) => true,
   payload: (value: any) => true,
@@ -160,7 +156,7 @@ export const stackableEmits = createEmitDefine({
   beforeLeave: (el: HTMLElement, control: VStackControl) => true,
   afterLeave: (el: HTMLElement, control: VStackControl) => true,
   leaveCancelled: (el: HTMLElement, control: VStackControl) => true,
-});
+};
 
 export interface VStackActivatorPayload {
   attrs: VStackActivatorAttributes;
@@ -277,7 +273,6 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
       type: [Object, Boolean] as PropType<Element | boolean | null>,
       default: null,
     },
-    ...stackableEmits.props,
     'v-slots': undefined as unknown as PropType<VStackSlots>,
   };
 }
@@ -285,11 +280,11 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
 export type VStackProps = ExtractPropTypes<
   ReturnType<typeof createStackableProps>
 >;
-export type VStackSetupContext = SetupContext<typeof stackableEmits.emits>;
+export type VStackSetupContext = SetupContext<typeof stackableEmits>;
 
 export function createStackableDefine(opts?: CreateStackablePropsOptions) {
   return {
     props: createStackableProps(opts),
-    emits: stackableEmits.emits,
+    emits: stackableEmits,
   };
 }

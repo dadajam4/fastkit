@@ -140,6 +140,14 @@ export function viteVuiPlugin(
     },
     icons = {
       menuDown: 'mdi-menu-down' as any,
+      navigationExpand: 'mdi-menu-down' as any,
+      // navigationExpand: (gen, active) => {
+      //   return gen({
+      //     name: 'mdi-menu-down' as any,
+      //     rotate: active ? 180 : 0,
+      //   });
+      // },
+      ...options.icons,
     } as VuiServiceOptions['icons'],
     __dev,
   } = options;
