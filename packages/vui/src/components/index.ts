@@ -4,6 +4,7 @@ export * from './VPaper';
 export * from './VCard';
 export * from './VIcon';
 export * from './VButton';
+export * from './VPagination';
 export * from './VListTile';
 export * from './VDrawerLayout';
 export * from './VHero';

@@ -238,6 +238,17 @@
   // card
   --card-content-padding: 1rem; // 16px
   --card-actions-padding: 0.5rem; // 8px
+
+  // pagination
+  --pagination-item-radius: 2px;
+  --pagination-item-font-size: var(--root-em);
+  --pagination-item-size: calc(var(--root-em) * 2);
+  --pagination-item-margin: calc(var(--root-em) * 0.5);
+  --pagination-item-font-size-dense: calc(
+    var(--pagination-item-font-size) * 0.625
+  );
+  --pagination-item-size-dense: calc(var(--pagination-item-size) * 0.8125);
+  --pagination-item-margin-dense: calc(var(--pagination-item-margin) * 0.75);
 }
 
 :root,

@@ -151,6 +151,11 @@ export default defineComponent({
                           label: 'Forms',
                           to: '/vui/components/forms',
                         },
+                        {
+                          key: 'pagination',
+                          label: 'Pagination',
+                          to: '/vui/components/pagination',
+                        },
                       ],
                     },
                   ]}

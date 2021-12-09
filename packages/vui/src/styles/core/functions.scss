@@ -33,3 +33,30 @@
   transition: box-shadow $duration $easing;
   will-change: box-shadow;
 }
+
+@mixin remove-tap-highlight() {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  &::-moz-focus-inner {
+    border: 0;
+  }
+}
+
+@mixin button-reset() {
+  @include remove-tap-highlight;
+
+  padding: 0;
+  touch-action: manipulation;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  appearance: none;
+
+  &,
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
