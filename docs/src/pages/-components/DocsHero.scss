@@ -1,0 +1,17 @@
+.v-docs-hero {
+  --hero-background-color: var(--main-color);
+  --hero-text-color: var(--text-color);
+
+  padding: 20px 30px;
+  margin: 0;
+  color: var(--hero-text-color);
+  background-color: var(--hero-background-color);
+
+  &__title {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 300;
+    line-height: 1;
+    color: inherit;
+  }
+}

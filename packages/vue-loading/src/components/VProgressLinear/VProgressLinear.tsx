@@ -187,10 +187,10 @@ export const VProgressLinear = defineComponent({
         <div
           class={[
             'v-progress-linear',
-            colorClass.value,
+            colorClass.value.className,
             {
               'v-progress-linear--query': query.value,
-              'v-progress-linear--has-color': !!colorClass.value,
+              'v-progress-linear--has-color': !!colorClass.value.value,
             },
           ]}
           style={{

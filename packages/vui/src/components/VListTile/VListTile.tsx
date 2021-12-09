@@ -31,6 +31,7 @@ export function createListTileProps() {
       },
       startIconEmptySpace: Boolean,
       color: String as PropType<ScopeName>,
+      exactMatch: Boolean,
     }),
   };
 }
@@ -69,7 +70,7 @@ export const VListTile = defineComponent({
 
     const isActive = computed(() => {
       if (!hasTo.value) return false;
-      return link.isActive.value;
+      return props.exactMatch ? link.isExactActive.value : link.isActive.value;
     });
 
     const color = useScopeColorClass(props);

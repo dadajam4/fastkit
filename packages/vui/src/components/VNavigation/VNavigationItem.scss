@@ -1,7 +1,7 @@
 .v-navigation-item {
   &--opened {
     --tile-background: var(--tile-active-background);
-    // --tile-text-color: var(--tile-text-active-color);
+    --tile-text-color: var(--tile-text-active-color);
   }
 
   &__expand {

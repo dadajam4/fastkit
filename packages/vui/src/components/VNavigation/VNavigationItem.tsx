@@ -110,6 +110,7 @@ export const VNavigationItem = defineComponent({
       (newPath) => {
         const c = children.value;
         const m = match.value;
+
         if (!c || !m) {
           // matched.value = false;
           return;

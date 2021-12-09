@@ -75,6 +75,9 @@ export default defineComponent({
             <RouterLink to="/">Home</RouterLink>
           </li>
           <li>
+            <RouterLink to="/vui">Vui</RouterLink>
+          </li>
+          <li>
             <RouterLink to="/page2">page2</RouterLink>
           </li>
           <li>

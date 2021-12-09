@@ -32,9 +32,9 @@ export const VProgressCircular = defineComponent({
         {
           'v-progress-circular--indeterminate': props.indeterminate,
           'v-progress-circular--button': props.button,
-          'v-progress-circular--has-color': !!colorClass.value,
+          'v-progress-circular--has-color': !!colorClass.value.value,
         },
-        colorClass.value,
+        colorClass.value.className,
       ];
       return classes;
     });

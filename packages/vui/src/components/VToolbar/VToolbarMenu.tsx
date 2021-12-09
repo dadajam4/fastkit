@@ -1,34 +1,26 @@
 import './VToolbarMenu.scss';
-import { defineComponent, computed, PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { renderSlotOrEmpty } from '@fastkit/vue-utils';
+import { VButton, vueButtonProps } from '../VButton';
 
 export type VToolbarMenuEdge = 'start' | 'end';
 
 export const VToolbarMenu = defineComponent({
   name: 'VToolbarMenu',
-  props: {
-    edge: {
-      type: String as PropType<VToolbarMenuEdge>,
-      required: true,
-    },
-  },
+  inheritAttrs: false,
+  props: {} as typeof vueButtonProps,
   setup(props, ctx) {
-    const edge = computed(() => props.edge);
     return () => {
-      const children = renderSlotOrEmpty(ctx.slots, 'default');
-      const hasChildren = !!children && children.length > 0;
-
+      const color = props.color || 'base';
+      const variant = props.variant || 'plain';
       return (
-        <div
-          class={[
-            'v-toolbar-menu',
-            `v-toolbar-menu--${edge.value}`,
-            {
-              [`v-toolbar-menu--empty`]: !hasChildren,
-            },
-          ]}>
-          {children}
-        </div>
+        <VButton
+          {...ctx.attrs}
+          color={color}
+          variant={variant}
+          class={['v-toolbar-menu']}>
+          {renderSlotOrEmpty(ctx.slots)}
+        </VButton>
       );
     };
   },

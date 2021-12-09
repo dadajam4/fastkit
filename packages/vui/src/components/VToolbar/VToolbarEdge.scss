@@ -1,0 +1,27 @@
+// @use '../../styles/core.scss';
+
+.v-toolbar-edge {
+  display: flex;
+  flex: 0 0;
+  align-items: center;
+  align-self: stretch;
+
+  &:empty,
+  &--empty {
+    display: none;
+  }
+
+  $my-negative-margin: calc(-1 * var(--root-em) * 0.75); // -12
+  $my-margin: calc(var(--root-em) * 0.75); // -12
+
+  &--start {
+    margin-right: $my-margin;
+    margin-left: $my-negative-margin;
+  }
+
+  &--end {
+    padding-left: $my-margin;
+    margin-right: $my-negative-margin;
+    margin-left: auto;
+  }
+}

@@ -73,7 +73,7 @@ export function cleanupEmptyVNodeChild(child: VNodeChild) {
 
 export function renderSlotOrEmpty(
   slots: Slots | { [key: string]: TypedSlot },
-  name: string,
+  name = 'default',
   prop?: { [key: string]: unknown },
 ) {
   const slot = slots[name];

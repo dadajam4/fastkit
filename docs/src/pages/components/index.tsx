@@ -7,7 +7,7 @@ import {
   useVui,
   VToolbar,
   VToolbarTitle,
-  VToolbarMenu,
+  VToolbarEdge,
   VCard,
   VCardContent,
   VCardActions,
@@ -61,14 +61,14 @@ export default defineComponent({
           v-slots={{
             header: () => (
               <VToolbar color="primary">
-                <VToolbarMenu edge="start">
+                <VToolbarEdge edge="start">
                   <VButton icon="mdi-menu" size="lg" />
-                </VToolbarMenu>
+                </VToolbarEdge>
                 <VToolbarTitle>ACCO CMS</VToolbarTitle>
-                <VToolbarMenu edge="end">
+                <VToolbarEdge edge="end">
                   <VButton icon="mdi-menu" size="lg" />
                   <VButton icon="mdi-account-circle" size="lg" />
-                </VToolbarMenu>
+                </VToolbarEdge>
               </VToolbar>
             ),
           }}>
@@ -85,25 +85,25 @@ export default defineComponent({
           }}
         /> */}
             <VToolbar color="primary">
-              <VToolbarMenu edge="start">
+              <VToolbarEdge edge="start">
                 <VButton icon="mdi-menu" size="lg" />
-              </VToolbarMenu>
+              </VToolbarEdge>
               <VToolbarTitle>ACCO CMS</VToolbarTitle>
-              <VToolbarMenu edge="end">
+              <VToolbarEdge edge="end">
                 <VButton icon="mdi-menu" size="lg" />
                 <VButton icon="mdi-account-circle" size="lg" />
-              </VToolbarMenu>
+              </VToolbarEdge>
             </VToolbar>
 
             <VToolbar color="accent" dense>
-              <VToolbarMenu edge="start">
+              <VToolbarEdge edge="start">
                 <VButton icon="mdi-menu" size="lg" />
-              </VToolbarMenu>
+              </VToolbarEdge>
               <VToolbarTitle>ACCO CMS</VToolbarTitle>
-              <VToolbarMenu edge="end">
+              <VToolbarEdge edge="end">
                 <VButton icon="mdi-menu" size="lg" />
                 <VButton icon="mdi-account-circle" size="lg" />
-              </VToolbarMenu>
+              </VToolbarEdge>
             </VToolbar>
 
             <h2>Icons</h2>
