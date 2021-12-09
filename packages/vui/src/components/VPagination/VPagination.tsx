@@ -15,7 +15,7 @@ import {
 } from '@fastkit/vue-utils';
 import { range, isPromise } from '@fastkit/helpers';
 import { useRouter, RouterLink, useRoute } from 'vue-router';
-import { VIcon } from '../VIcon';
+import { resolveRawIconProp } from '../VIcon';
 import {
   resizeDirectiveArgument,
   getRouteQuery,
@@ -257,11 +257,12 @@ export const VPagination = defineComponent({
             if (type === 'truncate') {
               return <span>...</span>;
             }
+
             const isPrev = type === 'prev';
-            const name = isPrev ? 'chevron-left' : 'chevron-right';
-            return (
-              <VIcon class="v-pagination__item__icon" name={name as any} />
-            );
+            const icon = isPrev ? vui.icon('prev') : vui.icon('next');
+            return resolveRawIconProp(false, icon, {
+              class: 'v-pagination__item__icon',
+            });
           })();
 
       const onClick = (ev: MouseEvent) => {

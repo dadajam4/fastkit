@@ -142,6 +142,8 @@ export function viteVuiPlugin(
     icons = {
       menuDown: 'mdi-menu-down' as any,
       navigationExpand: 'mdi-menu-down' as any,
+      prev: 'mdi-chevron-left' as any,
+      next: 'mdi-chevron-right' as any,
       // navigationExpand: (gen, active) => {
       //   return gen({
       //     name: 'mdi-menu-down' as any,

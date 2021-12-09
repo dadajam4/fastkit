@@ -34,6 +34,8 @@ export interface VuiServiceUISettings {
 export interface VuiServiceIconSettings {
   menuDown: IconName;
   navigationExpand: RawIconProp;
+  prev: RawIconProp;
+  next: RawIconProp;
 }
 
 export type VuiVNodeResolver = () => VNodeChild;
