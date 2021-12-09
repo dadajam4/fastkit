@@ -16,7 +16,7 @@ const TEMPLATE = `
 <% if (!it.__dev) { %>
 import '@fastkit/vue-stack/dist/vue-stack.css';
 import '@fastkit/vue-app-layout/dist/vue-app-layout.css';
-import '@fastkit/vue-app-layout/dist/vue-loading.css';
+import '@fastkit/vue-loading/dist/vue-loading.css';
 import '@fastkit/vui/dist/vui.css';
 <% } %>
 import './setup.scss';
