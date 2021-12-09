@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-page",
-  "version": "0.6.18",
+  "version": "0.6.19",
   "description": "@fastkit/vue-page",
   "main": "index.js",
   "module": "dist/vue-page.esm-bundler.js",
@@ -27,9 +27,9 @@
     "vue-router": "^4.0.0"
   },
   "dependencies": {
-    "@fastkit/ev": "0.6.18",
-    "@fastkit/helpers": "0.6.18",
-    "@fastkit/tiny-logger": "0.6.18",
-    "@fastkit/vue-utils": "0.6.18"
+    "@fastkit/ev": "0.6.19",
+    "@fastkit/helpers": "0.6.19",
+    "@fastkit/tiny-logger": "0.6.19",
+    "@fastkit/vue-utils": "0.6.19"
   }
 }
