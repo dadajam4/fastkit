@@ -92,7 +92,7 @@ export default defineComponent({
                     {
                       key: 'components',
                       label: 'Components',
-                      // to: '/docs/components',
+                      // to: '/vui/components',
                       match: '/vui/components',
                       startIcon: 'mdi-toggle-switch-off-outline',
                       children: [
@@ -100,6 +100,56 @@ export default defineComponent({
                           key: 'buttons',
                           label: 'Buttons',
                           to: '/vui/components/buttons',
+                        },
+                        {
+                          key: 'icons',
+                          label: 'Icons',
+                          to: '/vui/components/icons',
+                        },
+                        {
+                          key: 'loadings',
+                          label: 'Loadings',
+                          to: '/vui/components/loadings',
+                        },
+                        {
+                          key: 'cards',
+                          label: 'Cards',
+                          to: '/vui/components/cards',
+                        },
+                        {
+                          key: 'text-fields',
+                          label: 'Text fields',
+                          to: '/vui/components/text-fields',
+                        },
+                        {
+                          key: 'textareas',
+                          label: 'Textareas',
+                          to: '/vui/components/textareas',
+                        },
+                        {
+                          key: 'selects',
+                          label: 'Selects',
+                          to: '/vui/components/selects',
+                        },
+                        {
+                          key: 'checkboxes',
+                          label: 'Checkboxes',
+                          to: '/vui/components/checkboxes',
+                        },
+                        {
+                          key: 'radio-buttons',
+                          label: 'Radio buttons',
+                          to: '/vui/components/radio-buttons',
+                        },
+                        {
+                          key: 'switches',
+                          label: 'Switches',
+                          to: '/vui/components/switches',
+                        },
+                        {
+                          key: 'forms',
+                          label: 'Forms',
+                          to: '/vui/components/forms',
                         },
                       ],
                     },

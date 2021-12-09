@@ -17,5 +17,14 @@ export default defineConfig({
       '/google': 'https://google.com',
     },
   },
-  plugins: [globalsPlugin(), aliasesPlugin(), votPlugin(), ...viteVui.plugins],
+  plugins: [
+    globalsPlugin(),
+    aliasesPlugin(),
+    votPlugin({
+      pages: {
+        exclude: ['**/-components/*'],
+      },
+    }),
+    ...viteVui.plugins,
+  ],
 });

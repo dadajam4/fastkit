@@ -1,6 +1,6 @@
-import './buttons.scss';
 import { defineComponent, ref } from 'vue';
 import {
+  VHero,
   VButton,
   useVueStack,
   useVui,
@@ -12,7 +12,7 @@ import {
   VSwitch,
   ICON_NAMES,
 } from '@fastkit/vui';
-import { DocsHero, DocsSection } from '../../../-components';
+import { DocsSection } from '../../../-components';
 
 export default defineComponent({
   setup() {
@@ -44,8 +44,8 @@ export default defineComponent({
   },
   render() {
     return (
-      <div class="pg-vui-components-buttons">
-        <DocsHero>Buttons</DocsHero>
+      <div class="pg-docs-components-buttons">
+        <VHero>Buttons</VHero>
         <DocsSection title="Basic">
           <VButton
             startIcon="mdi-cursor-default-click"

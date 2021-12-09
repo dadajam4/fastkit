@@ -6,6 +6,7 @@ export * from './VIcon';
 export * from './VButton';
 export * from './VListTile';
 export * from './VDrawerLayout';
+export * from './VHero';
 // export * from './VAccordion';
 export * from './VNavigation';
 export * from './VCheckbox';
