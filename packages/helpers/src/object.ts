@@ -59,3 +59,31 @@ export function isIterableObject<T = any>(source?: any): source is Iterable<T> {
     false
   );
 }
+
+/**
+ * @see: https://github.com/vuejs/vue-router/blob/c69ff7bd60228fb79acd764c3fdae91015a49103/src/util/route.js#L96
+ */
+export function isObjectEqual<T extends any>(
+  a: T = {} as T,
+  b: unknown,
+): b is T {
+  // handle null value #1566
+  if (!a || !b) return a === b;
+  if (!isObject(b)) return false;
+  const aKeys = Object.keys(a as any);
+  const bKeys = Object.keys(b);
+  if (aKeys.length !== bKeys.length) {
+    return false;
+  }
+  return aKeys.every((key) => {
+    const aVal = (a as any)[key];
+    const bVal = b[key];
+    // query values can be null and undefined
+    if (aVal == null || bVal == null) return aVal === bVal;
+    // check nested equality
+    if (typeof aVal === 'object' && typeof bVal === 'object') {
+      return isObjectEqual(aVal, bVal);
+    }
+    return String(aVal) === String(bVal);
+  });
+}

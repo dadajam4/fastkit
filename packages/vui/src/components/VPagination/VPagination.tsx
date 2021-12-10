@@ -13,14 +13,10 @@ import {
   rawNumberPropType,
   resolveNumberish,
 } from '@fastkit/vue-utils';
-import { range, isPromise } from '@fastkit/helpers';
-import { useRouter, RouterLink, useRoute } from 'vue-router';
+import { isPromise } from '@fastkit/helpers';
+import { useRouter, RouterLink } from 'vue-router';
 import { resolveRawIconProp } from '../VIcon';
-import {
-  resizeDirectiveArgument,
-  getRouteQuery,
-  getQueryMergedLocation,
-} from '@fastkit/vue-utils';
+import { resizeDirectiveArgument } from '@fastkit/vue-utils';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 import { useVui } from '../../injections';
 
@@ -86,7 +82,6 @@ export const VPagination = defineComponent({
     const vui = useVui();
     const elRef = ref<HTMLElement | null>(null);
     const router = useRouter();
-    const route = useRoute();
     const internalValue = ref(1);
     const containerWidth = ref(0);
     const itemSize = ref(0);
@@ -106,11 +101,22 @@ export const VPagination = defineComponent({
     const computedPage = computed(() => {
       const { routeQuery } = props;
       if (routeQuery) {
-        return getRouteQuery(route.query, routeQuery, Number, 1);
+        return vui.location.getQuery(routeQuery, Number, 1);
       }
       return internalValue.value;
     });
-    const _range = (from: number, to: number) => range(to - from, from);
+
+    const _range = (from: number, to: number) => {
+      const range: number[] = [];
+
+      from = from > 0 ? from : 1;
+
+      for (let i = from; i <= to; i++) {
+        range.push(i);
+      }
+
+      return range;
+    };
 
     const computedItems = computed<ItemSource[]>(() => {
       const maxButtons = computedNumbersLength.value;
@@ -150,10 +156,7 @@ export const VPagination = defineComponent({
 
     const isTransitioning = computed(() => {
       const { routeQuery } = props;
-      if (!routeQuery) return false;
-      // @TODO
-      // return this.$location.isQueryOnlyTransitioning(routeQuery);
-      return false;
+      return vui.location.isQueryOnlyTransitioning(routeQuery);
     });
 
     const isDisabled = computed(() => props.disabled || isTransitioning.value);
@@ -231,18 +234,14 @@ export const VPagination = defineComponent({
     }
 
     function createRoutableLocationByPage(page: number, routeQuery: string) {
-      return getQueryMergedLocation(
-        {
-          [routeQuery]: page,
-        },
-        route,
-      );
+      return vui.location.getQueryMergedLocation({
+        [routeQuery]: page,
+      });
     }
 
     function genItem(source: ItemSource, index: number) {
       const { number, page, active, disabled } = createPageInfo(source);
       const type = number ? 'num' : source;
-      // const staticClass = `pagination__item`;
       const classes = [
         'v-pagination__item',
         {

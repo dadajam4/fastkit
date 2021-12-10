@@ -57,6 +57,7 @@ export const VTextarea = defineComponent({
         class={['v-textarea', this.classes]}
         label={this.label}
         hint={this.hint}
+        hiddenInfo={this.hiddenInfo}
         onClickLabel={(ev) => {
           this.focus();
         }}

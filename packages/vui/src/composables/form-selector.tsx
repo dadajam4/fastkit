@@ -64,6 +64,7 @@ export function defineFormSelectorComponent(
         <VFormControl
           nodeControl={this.nodeControl}
           focused={this.nodeControl.focused}
+          hiddenInfo={this.hiddenInfo}
           class={[
             'v-form-selector',
             className,

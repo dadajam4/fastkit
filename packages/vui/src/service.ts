@@ -4,6 +4,8 @@ import { VNodeChild } from 'vue';
 import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import type { IconName, RawIconProp } from './components/VIcon';
 import type { VueColorSchemePluginSettings } from '@fastkit/vue-kit';
+import type { Router } from 'vue-router';
+import { LocationService } from '@fastkit/vue-utils';
 
 const DEFAULT_AUTO_SCROLL_TO_ELEMENT_OFFSET_TOP = -20;
 const DEFAULT_TEXTAREA_ROWS = 3;
@@ -36,11 +38,13 @@ export interface VuiServiceIconSettings {
   navigationExpand: RawIconProp;
   prev: RawIconProp;
   next: RawIconProp;
+  sort: RawIconProp;
 }
 
 export type VuiVNodeResolver = () => VNodeChild;
 
 export interface VuiServiceOptions {
+  router: Router;
   colorScheme: VueColorSchemePluginSettings;
   uiSettings: VuiServiceUISettings;
   icons: VuiServiceIconSettings;
@@ -57,6 +61,8 @@ export class VuiService {
   readonly autoScrollToElementOffsetTop?: number | (() => number | undefined);
   readonly textareaRows?: number;
   readonly requiredChip?: VuiVNodeResolver;
+  readonly router: Router;
+  readonly location: LocationService;
 
   constructor(options: VuiServiceOptions) {
     this.options = options;
@@ -70,6 +76,10 @@ export class VuiService {
     this.autoScrollToElementOffsetTop = autoScrollToElementOffsetTop;
     this.textareaRows = textareaRows;
     this.requiredChip = requiredChip;
+    this.router = options.router;
+    this.location = new LocationService({
+      router: this.router,
+    });
   }
 
   setting<K extends keyof VuiServiceUISettings>(

@@ -249,6 +249,18 @@
   );
   --pagination-item-size-dense: calc(var(--pagination-item-size) * 0.8125);
   --pagination-item-margin-dense: calc(var(--pagination-item-margin) * 0.75);
+
+  // table
+  --table-vertical-margin: calc(var(--root-em) * 1.25);
+  --table-font-size: calc(var(--root-em) * 0.75);
+  --table-caption-font-size: calc(var(--root-em) * 1);
+  --table-caption-font-weight: regular;
+  --table-caption-vertical-margin: calc(var(--root-em) * 0.625);
+  --table-cell-height: calc(var(--root-em) * 3.125);
+  --table-cell-vertial-padding: calc(var(--root-em) * 0.3125);
+  --table-cell-horizontal-padding: calc(var(--root-em) * 1);
+  --table-header-color: var(--palette-primary);
+  --table-header-font-weight: 500;
 }
 
 :root,

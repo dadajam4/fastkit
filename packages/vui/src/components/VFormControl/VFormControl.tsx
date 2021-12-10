@@ -67,14 +67,16 @@ export const VFormControl = defineComponent({
           )}
           <div class="v-form-control__body">
             {renderSlotOrEmpty(ctx.slots, 'default', control as any)}
-            <div class="v-form-control__info">
-              {!!message && (
-                <div class="v-form-control__message">{message}</div>
-              )}
-              {!!appends && (
-                <div class="v-form-control__appends">{appends}</div>
-              )}
-            </div>
+            {!props.hiddenInfo && (
+              <div class="v-form-control__info">
+                {!!message && (
+                  <div class="v-form-control__message">{message}</div>
+                )}
+                {!!appends && (
+                  <div class="v-form-control__appends">{appends}</div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       );

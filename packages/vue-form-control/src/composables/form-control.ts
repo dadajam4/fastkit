@@ -40,6 +40,7 @@ export function createFormControlProps() {
       required: Boolean,
       invalid: Boolean,
       valid: Boolean,
+      hiddenInfo: Boolean,
     }),
   };
 }

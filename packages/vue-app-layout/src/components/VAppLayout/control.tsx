@@ -9,6 +9,7 @@ import {
   ComputedRef,
 } from 'vue';
 import { getDocumentScroller } from '@fastkit/vue-scroller';
+import { useWindow } from '@fastkit/vue-utils';
 
 export type VAppLayoutControlBackdropCondition = () => boolean;
 
@@ -67,6 +68,7 @@ export class VAppLayoutControl {
     VAppLayoutControlBackdropPosition | undefined
   >;
   readonly computedDrawerIsStatic: ComputedRef<boolean>;
+  readonly window = useWindow();
 
   get drawerActive() {
     return this.state.drawerActive;
@@ -82,6 +84,23 @@ export class VAppLayoutControl {
 
   get viewportOffsets() {
     return this.state.viewportOffsets;
+  }
+
+  get viewportHeight() {
+    const { top, bottom } = this.viewportOffsets;
+    // const { height } = this.window;
+    return this.window.height - top - bottom;
+  }
+
+  calicurateViewHeight(height: number | string, adds = 0, minHeight = 0) {
+    if (typeof height === 'number')
+      return `${Math.max(height + adds, minHeight)}px`;
+    const perMatch = height.match(/([\d.]+)%$/);
+    if (!perMatch) return height;
+    const num = Number(perMatch[1]);
+    return isNaN(num)
+      ? height
+      : `${Math.max((this.viewportHeight * num) / 100 + adds, minHeight)}px`;
   }
 
   onClickBackdrop(handler: VAppLayoutControlBackdropHandler) {

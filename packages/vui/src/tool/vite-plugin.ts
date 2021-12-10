@@ -21,16 +21,18 @@ import '@fastkit/vui/dist/vui.css';
 <% } %>
 import './setup.scss';
 import type { App } from 'vue';
-import { installVuiPlugin as _installVuiPlugin } from '@fastkit/vui';
+import type { Router } from 'vue-router';
+import { installVuiPlugin as _installVuiPlugin, VuiPluginOptions } from '@fastkit/vui';
 import { colorScheme } from '<%~ it.colorScheme %>';
 import '<%~ it.mediaMatch %>';
 import './icon-font';
 
-export function installVui(app: App) {
-  _installVuiPlugin(app, {
+export function installVui(settings: { app: App, router: Router }) {
+  _installVuiPlugin(settings.app, {
     colorScheme,
     uiSettings: <%~ it.uiSettings %>,
     icons: <%~ it.icons %>,
+    ...settings,
   });
 }
 
@@ -144,6 +146,7 @@ export function viteVuiPlugin(
       navigationExpand: 'mdi-menu-down' as any,
       prev: 'mdi-chevron-left' as any,
       next: 'mdi-chevron-right' as any,
+      sort: 'mdi-chevron-down' as any,
       // navigationExpand: (gen, active) => {
       //   return gen({
       //     name: 'mdi-menu-down' as any,

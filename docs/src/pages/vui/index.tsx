@@ -156,6 +156,11 @@ export default defineComponent({
                           label: 'Pagination',
                           to: '/vui/components/pagination',
                         },
+                        {
+                          key: 'data-tables',
+                          label: 'Data tables',
+                          to: '/vui/components/data-tables',
+                        },
                       ],
                     },
                   ]}

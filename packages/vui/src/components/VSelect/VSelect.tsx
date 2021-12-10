@@ -115,6 +115,7 @@ export const VSelect = defineComponent({
         class={['v-select', this.classes]}
         label={this.label}
         hint={this.hint}
+        hiddenInfo={this.hiddenInfo}
         onClickLabel={(ev) => {
           this.focus();
         }}
@@ -138,7 +139,17 @@ export const VSelect = defineComponent({
                     focused={this.menuOpened}
                     onClick={(ev) => {
                       if (this.canOperation && !control.isActive) {
-                        control.show(ev);
+                        let t = ev.target as HTMLElement;
+                        const count = 0;
+                        let hit = false;
+                        while (count < 5) {
+                          if (t.classList.contains('v-select__input')) {
+                            hit = true;
+                            break;
+                          }
+                          t = t.parentElement as HTMLElement;
+                        }
+                        control.show(hit ? t : ev);
                       }
                     }}
                     v-slots={{

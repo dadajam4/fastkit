@@ -15,7 +15,6 @@ import {
   renderSlotOrEmpty,
   VExpandTransition,
 } from '@fastkit/vue-utils';
-// import { toRawIconProp } from '../VIcon/VIcon';
 import { useVui } from '../../injections';
 import { useRoute } from 'vue-router';
 

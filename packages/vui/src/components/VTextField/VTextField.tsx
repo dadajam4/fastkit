@@ -52,6 +52,7 @@ export const VTextField = defineComponent({
       <VFormControl
         nodeControl={this.nodeControl}
         focused={this.nodeControl.focused}
+        hiddenInfo={this.hiddenInfo}
         class={['v-text-field', this.classes]}
         label={this.label}
         hint={this.hint}

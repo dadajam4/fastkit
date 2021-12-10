@@ -5,7 +5,10 @@ import type {
   RouteRecordNormalized,
   LocationQueryRaw,
   RouteLocationNormalizedLoaded,
+  _RouteLocationBase,
+  LocationQuery,
 } from 'vue-router';
+import { isObjectEqual } from '@fastkit/helpers';
 
 type RawRouteComponent = RouteComponent | (() => Promise<RouteComponent>);
 
@@ -55,8 +58,11 @@ export function extractRouteMatchedItems(route: RouteLocationNormalized) {
   return results;
 }
 
-function getMergedQuery(query: LocationQueryRaw, overrides: LocationQueryRaw) {
-  const _query = JSON.parse(JSON.stringify(overrides)) as LocationQueryRaw;
+export function getMergedRouteQuery(
+  query: LocationQueryRaw,
+  overrides: LocationQuery,
+) {
+  const _query = JSON.parse(JSON.stringify(overrides)) as LocationQuery;
 
   Object.entries(query).forEach(([key, value]) => {
     if (Array.isArray(value)) {
@@ -64,12 +70,12 @@ function getMergedQuery(query: LocationQueryRaw, overrides: LocationQueryRaw) {
         if (typeof v === 'number') v = String(v);
         return v;
       });
-      _query[key] = values;
+      _query[key] = values as string[];
     } else if (value === null) {
       delete _query[key];
     } else {
       if (typeof value === 'number') value = String(value);
-      _query[key] = value;
+      _query[key] = value as string;
     }
   });
   return _query;
@@ -77,29 +83,33 @@ function getMergedQuery(query: LocationQueryRaw, overrides: LocationQueryRaw) {
 export function getQueryMergedLocation(
   query: LocationQueryRaw,
   route: RouteLocationNormalizedLoaded,
-) {
+): _RouteLocationBase {
   return {
+    ...route,
     // name: route.name,
-    path: route.path,
+    // path: route.path,
     // ...route,
-    query: getMergedQuery(query, route.query),
+    query: getMergedRouteQuery(query, route.query),
   };
 }
 
-type QueryType = StringConstructor | NumberConstructor | BooleanConstructor;
+export type RouteQueryType =
+  | StringConstructor
+  | NumberConstructor
+  | BooleanConstructor;
 
-export function getRouteQuery(bucket: LocationQueryRaw, key: string): string | undefined; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQueryRaw, key: string, type: undefined, defaultValue: string): string; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQueryRaw, key: string, type: StringConstructor): string | undefined; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQueryRaw, key: string, type: StringConstructor, defaultValue: string): string; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQueryRaw, key: string, type: NumberConstructor): number | undefined; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQueryRaw, key: string, type: NumberConstructor, defaultValue: number): number; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQueryRaw, key: string, type: BooleanConstructor): boolean; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQueryRaw, key: string, type: BooleanConstructor, defaultValue: boolean): boolean; // eslint-disable-line prettier/prettier
+export function getRouteQuery(bucket: LocationQuery, key: string): string | undefined; // eslint-disable-line prettier/prettier
+export function getRouteQuery(bucket: LocationQuery, key: string, type: undefined, defaultValue: string): string; // eslint-disable-line prettier/prettier
+export function getRouteQuery(bucket: LocationQuery, key: string, type: StringConstructor): string | undefined; // eslint-disable-line prettier/prettier
+export function getRouteQuery(bucket: LocationQuery, key: string, type: StringConstructor, defaultValue: string): string; // eslint-disable-line prettier/prettier
+export function getRouteQuery(bucket: LocationQuery, key: string, type: NumberConstructor): number | undefined; // eslint-disable-line prettier/prettier
+export function getRouteQuery(bucket: LocationQuery, key: string, type: NumberConstructor, defaultValue: number): number; // eslint-disable-line prettier/prettier
+export function getRouteQuery(bucket: LocationQuery, key: string, type: BooleanConstructor): boolean; // eslint-disable-line prettier/prettier
+export function getRouteQuery(bucket: LocationQuery, key: string, type: BooleanConstructor, defaultValue: boolean): boolean; // eslint-disable-line prettier/prettier
 export function getRouteQuery(
-  bucket: LocationQueryRaw,
+  bucket: LocationQuery,
   key: string,
-  type: QueryType = String,
+  type: RouteQueryType = String,
   defaultValue?: string | number | boolean,
 ): string | number | boolean | undefined {
   const _value = bucket[key];
@@ -119,5 +129,49 @@ export function getRouteQuery(
       if (['0', '-1', 'false', 'off'].includes(lower)) return false;
     }
     return defaultValue;
+  }
+}
+
+export const trailingSlashRE = /\/?$/;
+
+export function removeTrailingSlash(str: string) {
+  return str.replace(trailingSlashRE, '');
+}
+
+export interface SameRouteCheckOptions {
+  hash?: boolean;
+  query?: boolean;
+  params?: boolean;
+}
+
+/**
+ * @see: https://github.com/vuejs/vue-router/blob/c69ff7bd60228fb79acd764c3fdae91015a49103/src/util/route.js#L73
+ */
+export function isSameRoute(
+  a: _RouteLocationBase,
+  b?: _RouteLocationBase,
+  opts?: SameRouteCheckOptions,
+): boolean {
+  const includeHash = (opts && opts.hash) || true;
+  const includeQuery = (opts && opts.query) || true;
+  const includeParams = (opts && opts.params) || true;
+
+  if (!b) {
+    return false;
+  } else if (a.path && b.path) {
+    return (
+      removeTrailingSlash(a.path) === removeTrailingSlash(b.path) &&
+      (!includeHash || a.hash === b.hash) &&
+      (!includeQuery || isObjectEqual(a.query, b.query))
+    );
+  } else if (a.name && b.name) {
+    return (
+      a.name === b.name &&
+      (!includeHash || a.hash === b.hash) &&
+      (!includeQuery || isObjectEqual(a.query, b.query)) &&
+      (!includeParams || isObjectEqual(a.params, b.params))
+    );
+  } else {
+    return false;
   }
 }

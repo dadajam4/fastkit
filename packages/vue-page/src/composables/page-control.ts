@@ -21,8 +21,13 @@ import type {
 } from 'vue-router';
 import { stringifyQuery } from 'vue-router';
 import { IN_WINDOW } from '@fastkit/helpers';
-import { extractRouteMatchedItems, RouteMatchedItem } from '@fastkit/vue-utils';
-import { ResolvedRouteLocation } from '../schemes';
+import {
+  extractRouteMatchedItems,
+  RouteMatchedItem,
+  getRouteQuery,
+  RouteQueryType,
+} from '@fastkit/vue-utils';
+import { ResolvedRouteLocation, WatchQueryOption } from '../schemes';
 import { isPromise } from '@fastkit/helpers';
 import { EV } from '@fastkit/ev';
 import { useVuePageControl } from '../injections';
@@ -30,12 +35,14 @@ import { VuePageControlError } from './page-error';
 import { VErrorPage } from '../components/VErrorPage';
 import type { ServerResponse, IncomingMessage } from 'http';
 import { StateInjectionKey } from './state';
-import { JSONMapValue, JSONData } from '@fastkit/helpers';
+// import { JSONMapValue, JSONData } from '@fastkit/helpers';
 
-type InitialState = JSONMapValue;
+// type JSONData = Record<string, unknown>;
+type InitialState = Record<string, unknown>;
+// type InitialState = JSONMapValue;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface VuePageInjectionKey<T extends JSONData> extends String {}
+export interface VuePageInjectionKey<T> extends String {}
 
 export type VuePagePrefetchFn = (
   this: void,
@@ -53,26 +60,45 @@ export interface WriteResponse {
 declare module '@vue/runtime-core' {
   export interface ComponentCustomOptions {
     prefetch?: RawPrefetchContext;
+    watchQuery?: WatchQueryOption;
   }
 }
 
-function extractPrefetch(Component: unknown) {
-  if (
+function isComponentCustomOptions(
+  Component: unknown,
+): Component is ComponentCustomOptions {
+  return (
     (!!Component && typeof Component === 'object') ||
     typeof Component === 'function'
-  ) {
-    let { prefetch } = Component as ComponentCustomOptions;
-    if (prefetch && typeof prefetch === 'object') {
-      prefetch = prefetch.prefetch;
-    }
-    if (typeof prefetch === 'function') {
-      return prefetch;
+  );
+}
+
+function extractPrefetch(Component: unknown) {
+  if (!isComponentCustomOptions(Component)) return;
+  let { prefetch } = Component;
+  if (prefetch && typeof prefetch === 'object') {
+    prefetch = prefetch.prefetch;
+  }
+  if (typeof prefetch === 'function') {
+    return prefetch;
+  }
+}
+
+function updateWatchQueryOption(Component: unknown, queries: string[]) {
+  if (!isComponentCustomOptions(Component)) return;
+  if (Component.watchQuery === true) return;
+  Component.watchQuery = Component.watchQuery || [];
+  const { watchQuery } = Component;
+  for (const query of queries) {
+    if (!watchQuery.includes(query)) {
+      watchQuery.push(query);
     }
   }
 }
 
 interface RouteMatchedItemWithPrefetch extends RouteMatchedItem {
   prefetch: RawPrefetchContext;
+  updateQueries(queries: string[]): void;
 }
 
 export function extractRouteMatchedItemsWithPrefetch(
@@ -83,7 +109,10 @@ export function extractRouteMatchedItemsWithPrefetch(
   matched.forEach((_item) => {
     const prefetch = extractPrefetch(_item.Component);
     if (prefetch) {
-      extracted.push({ ..._item, prefetch });
+      function updateQueries(queries: string[]) {
+        updateWatchQueryOption(_item.Component, queries);
+      }
+      extracted.push({ ..._item, prefetch, updateQueries });
     }
   });
   return {
@@ -129,6 +158,7 @@ export interface VuePageControlRedirectSpec
 const DEFAULT_REDIRECT_STATUS = 302;
 
 const STATE_BUCKET_SYMBOL = 'pgc-state';
+const QUERY_BUCKET_SYMBOL = 'pgc-query';
 
 function resolveRawVuePageControlRedirectSpec(
   source: RawVuePageControlRedirectSpec,
@@ -162,9 +192,7 @@ export interface VuePageControlSettings {
   middleware?: VuePageControlMiddlewareFn[];
 }
 
-type RawProvided<T extends JSONData> =
-  | T
-  | ((queue: VuePagePrefetchQueue) => T | Promise<T>);
+type RawProvided<T> = T | ((queue: VuePagePrefetchQueue) => T | Promise<T>);
 
 export interface VuePagePreftechProgress {
   resolved: number;
@@ -295,6 +323,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this._ErrorComponent = ErrorComponent || VErrorPage;
 
     initialState[STATE_BUCKET_SYMBOL] = initialState[STATE_BUCKET_SYMBOL] || {};
+    initialState[QUERY_BUCKET_SYMBOL] = initialState[QUERY_BUCKET_SYMBOL] || {};
 
     initialState[STATE_BUCKET_SYMBOL] = reactive<any>(
       initialState[STATE_BUCKET_SYMBOL],
@@ -344,6 +373,25 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this._init();
   }
 
+  /** @private */
+  _getQueryBucket(provideKey: string): string[] {
+    const obj = this.initialState[QUERY_BUCKET_SYMBOL] as any;
+    let bucket = obj[provideKey] as string[];
+    if (!bucket) {
+      bucket = [];
+      obj[provideKey] = bucket;
+    }
+    return bucket;
+  }
+
+  /** @private */
+  _pushQueryToBucket(provideKey: string, query: string) {
+    const bucket = this._getQueryBucket(provideKey);
+    if (!bucket.includes(query)) {
+      bucket.push(query);
+    }
+  }
+
   async initState<T extends object>(
     key: StateInjectionKey<T>,
     initializer: () => T | Promise<T>,
@@ -365,7 +413,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     key: StateInjectionKey<T>,
     defaultValue?: T | (() => T),
   ): T | undefined {
-    const bucket = this.initialState[STATE_BUCKET_SYMBOL] as JSONMapValue;
+    const bucket = this.initialState[STATE_BUCKET_SYMBOL] as any;
     let data = bucket[key as any] as T | undefined;
     if (data === undefined) {
       data = typeof defaultValue === 'function' ? defaultValue() : defaultValue;
@@ -421,7 +469,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     }
   }
 
-  setInitialState(key: string, data: JSONData) {
+  setInitialState(key: string, data: any) {
     if (this.initialState) {
       this.initialState[key] = data;
     }
@@ -435,15 +483,20 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     return v;
   }
 
-  injectData<T extends JSONData, D extends T | undefined>(
+  injectData<T, D extends T | undefined, N extends Boolean>(
     key: VuePageInjectionKey<T>,
     defaultData?: D,
-  ): T | D {
+    allowNull?: N,
+  ): D extends T ? T : N extends true ? T | D : T {
     const queue = this.prefetchQueues.find(
       ({ _provideKey }) => _provideKey === key,
     );
     const data = queue && queue.resolvedData;
-    return (data === undefined ? defaultData : data) as T | D;
+    const result = data === undefined ? defaultData : data;
+    if (!allowNull && result == null) {
+      throw new Error(`missing provided data. "${key}"`);
+    }
+    return result as any;
   }
 
   private _stop() {
@@ -573,9 +626,8 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
       const queueSetups: Promise<any>[] = [];
       let queues = extracted.map((item) => {
-        const queue = new VuePagePrefetchQueue(this, item);
+        const queue = new VuePagePrefetchQueue(this, item, to);
         if (queue._setupPromise) {
-          console.log(queue._setupPromise);
           queueSetups.push(queue._setupPromise);
         }
         return queue;
@@ -586,6 +638,13 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       this.emit('start', this.preftechProgress);
 
       await Promise.all(queueSetups);
+
+      queues.forEach((queue) => {
+        const { item, provideKey } = queue;
+        if (provideKey) {
+          item.updateQueries(this._getQueryBucket(provideKey));
+        }
+      });
 
       const providePromises: Promise<any>[] = [];
 
@@ -600,7 +659,6 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       await Promise.all(providePromises);
 
       this._initialStateConsumed = true;
-
       this._deletePageError();
     } catch (_err) {
       this._setPageError(_err);
@@ -624,7 +682,6 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
   private _writeStates(status: number) {
     if (IN_WINDOW || !this.response) return;
-    // console.log()
     if (this.response.headersSent) return;
     this.response.statusCode = status;
   }
@@ -637,6 +694,7 @@ export interface VuePagePrefetchQueueEventMap {
 export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
   readonly control: VuePageControl;
   readonly item: RouteMatchedItemWithPrefetch;
+  readonly route: RouteLocationNormalized;
   private readonly _resolved = ref(false);
   private readonly _canceled = ref(false);
   private readonly _running: ComputedRef<boolean>;
@@ -667,23 +725,35 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
     return this._resolvedData;
   }
 
-  get route() {
-    return this.control.route;
+  get params() {
+    return this.route.params;
   }
 
-  get routeParams() {
-    return this.route.params;
+  get query() {
+    return this.route.query;
   }
 
   get running() {
     return this._running.value;
   }
 
-  constructor(control: VuePageControl, item: RouteMatchedItemWithPrefetch) {
+  constructor(
+    control: VuePageControl,
+    item: RouteMatchedItemWithPrefetch,
+    to: RouteLocationNormalized,
+  ) {
     super();
 
     this.control = control;
     this.item = item;
+    this.route = to;
+
+    (
+      ['close', 'cancel', 'provide', 'injectOtherQueue', 'getQuery'] as const
+    ).forEach((fn) => {
+      const _fn = this[fn];
+      this[fn] = _fn.bind(this) as any;
+    });
     this._running = computed(() => {
       return !this.resolved && !this.canceled;
     });
@@ -694,13 +764,39 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
         : item.prefetch.prefetch;
 
     this._setupPromise = prefetchFn(this);
+  }
 
-    (['close', 'cancel', 'provide', 'injectOtherQueue'] as const).forEach(
-      (fn) => {
-        const _fn = this[fn];
-        this[fn] = _fn.bind(this) as any;
-      },
-    );
+  getQuery(key: string): string | undefined;
+  // eslint-disable-next-line no-dupe-class-members
+  getQuery(key: string, type: undefined, defaultValue: string): string;
+  // eslint-disable-next-line no-dupe-class-members
+  getQuery(key: string, type: StringConstructor): string | undefined;
+  // eslint-disable-next-line no-dupe-class-members
+  getQuery(key: string, type: StringConstructor, defaultValue: string): string;
+  // eslint-disable-next-line no-dupe-class-members
+  getQuery(key: string, type: NumberConstructor): number | undefined;
+  // eslint-disable-next-line no-dupe-class-members
+  getQuery(key: string, type: NumberConstructor, defaultValue: number): number;
+  // eslint-disable-next-line no-dupe-class-members
+  getQuery(key: string, type: BooleanConstructor): boolean;
+  // eslint-disable-next-line no-dupe-class-members
+  getQuery(
+    key: string,
+    type: BooleanConstructor,
+    defaultValue: boolean,
+  ): boolean;
+  // eslint-disable-next-line no-dupe-class-members
+  getQuery(
+    key: string,
+    type: RouteQueryType = String,
+    defaultValue?: string | number | boolean,
+  ): string | number | boolean | undefined {
+    const { provideKey } = this;
+    if (!provideKey) {
+      throw new Error('missing provideKey');
+    }
+    this.control._pushQueryToBucket(provideKey, key);
+    return getRouteQuery(this.query, key, type as any, defaultValue as any);
   }
 
   close() {
@@ -718,10 +814,7 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
     return this.close();
   }
 
-  provide<T extends JSONData>(
-    key: VuePageInjectionKey<T>,
-    data: RawProvided<T>,
-  ) {
+  provide<T>(key: VuePageInjectionKey<T>, data: RawProvided<T>) {
     this._provideKey = key as string;
     let promise: Promise<any>;
 
@@ -732,7 +825,7 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
       if (typeof data !== 'function') {
         promise = Promise.resolve(data);
       } else {
-        const payload = data(this);
+        const payload = (data as any)(this);
         promise = isPromise(payload) ? payload : Promise.resolve(payload);
       }
     }
@@ -747,7 +840,7 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
     });
   }
 
-  injectOtherQueue<T extends JSONData, D extends T | undefined>(
+  injectOtherQueue<T, D extends T | undefined>(
     key: VuePageInjectionKey<T>,
     defaultData?: D,
   ): Promise<T | D> {
@@ -770,13 +863,16 @@ export interface UseVuePageControlOptions {
   onError?: (error: VuePageControlError) => any;
 }
 
-export type PrefetchContext<T extends JSONData = JSONData> = {
+export type PrefetchContext<T = any> = {
   key: VuePageInjectionKey<T>;
   prefetch: VuePagePrefetchFn;
-  inject: <D extends T | undefined>(defaultValue?: D) => T | D;
+  inject: <D extends T | undefined, N extends Boolean>(
+    defaultValue?: D,
+    allowNull?: N,
+  ) => D extends T ? T : N extends true ? T | D : T;
 };
 
-export function createPrefetch<T extends JSONData>(
+export function createPrefetch<T>(
   key: VuePageInjectionKey<T>,
   data: RawProvided<T>,
 ): PrefetchContext<T> {
@@ -784,9 +880,12 @@ export function createPrefetch<T extends JSONData>(
     queue.provide(key, data);
   };
 
-  function inject<D extends T | undefined>(defaultValue?: D) {
+  function inject<D extends T | undefined, N extends Boolean>(
+    defaultValue?: D,
+    allowNull?: N,
+  ): D extends T ? T : N extends true ? T | D : T {
     const pageControl = useVuePageControl();
-    return pageControl.injectData(key, defaultValue);
+    return pageControl.injectData(key, defaultValue, allowNull);
   }
 
   return { key, prefetch, inject };
