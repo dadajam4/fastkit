@@ -1,5 +1,5 @@
 import { reactive } from 'vue';
-import type { UnwrapNestedRefs } from '@vue/reactivity';
+// import type { UnwrapNestedRefs } from '@vue/reactivity';
 import type {
   Router,
   _RouteLocationBase,
@@ -48,7 +48,7 @@ export interface LocationServiceContext {
 }
 
 export class LocationService {
-  readonly state: UnwrapNestedRefs<LocationServiceState>;
+  readonly state: LocationServiceState;
   readonly router: Router;
 
   get currentRoute() {
