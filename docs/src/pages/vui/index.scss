@@ -19,15 +19,19 @@
   }
 
   .pg-columns {
+    $sub-width: 160px;
+    $margin: 20px;
+
     display: flex;
 
     &__main {
       flex: 1 1 100%;
+      max-width: calc(100% - #{$sub-width + $margin});
     }
 
     &__sub {
-      flex: 0 0 160px;
-      padding-left: 10px;
+      flex: 0 0 $sub-width;
+      padding-left: $margin;
     }
   }
 }

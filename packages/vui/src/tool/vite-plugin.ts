@@ -17,6 +17,7 @@ const TEMPLATE = `
 import '@fastkit/vue-stack/dist/vue-stack.css';
 import '@fastkit/vue-app-layout/dist/vue-app-layout.css';
 import '@fastkit/vue-loading/dist/vue-loading.css';
+import '@fastkit/vue-scroller/dist/vue-scroller.css';
 import '@fastkit/vui/dist/vui.css';
 <% } %>
 import './setup.scss';
@@ -136,6 +137,9 @@ export function viteVuiPlugin(
       buttonDefault: {
         color: 'base' as any,
         variant: 'contained' as any,
+      },
+      tabDefault: {
+        color: 'accent' as any,
       },
       dialogOk: {
         color: 'primary' as any,

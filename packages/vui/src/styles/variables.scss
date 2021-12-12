@@ -261,6 +261,12 @@
   --table-cell-horizontal-padding: calc(var(--root-em) * 1);
   --table-header-color: var(--palette-primary);
   --table-header-font-weight: 500;
+
+  // tabs
+  --tabs-height: calc(var(--root-em) * 3);
+  --tabs-bar-height: calc(var(--root-em) * 0.375);
+  // --tabs-color: var(--main-color);
+  --tabs-font-size: calc(var(--root-em) * 0.875);
 }
 
 :root,

@@ -161,6 +161,11 @@ export default defineComponent({
                           label: 'Data tables',
                           to: '/vui/components/data-tables',
                         },
+                        {
+                          key: 'tabs',
+                          label: 'Tabs',
+                          to: '/vui/components/tabs',
+                        },
                       ],
                     },
                   ]}

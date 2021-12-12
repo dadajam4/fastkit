@@ -1,10 +1,18 @@
-import { reactive } from 'vue';
+import {
+  reactive,
+  watch,
+  WatchCallback,
+  WatchOptions,
+  onBeforeUnmount,
+  nextTick,
+} from 'vue';
 // import type { UnwrapNestedRefs } from '@vue/reactivity';
 import type {
   Router,
   _RouteLocationBase,
   RouteLocationRaw,
   LocationQueryRaw,
+  RouteLocationNormalizedLoaded,
 } from 'vue-router';
 import {
   isSameRoute,
@@ -53,6 +61,47 @@ export class LocationService {
 
   get currentRoute() {
     return this.router.currentRoute.value;
+  }
+
+  watchRoute<Immediate extends Readonly<boolean> = false>(
+    cb: WatchCallback<
+      RouteLocationNormalizedLoaded,
+      Immediate extends true
+        ? RouteLocationNormalizedLoaded | undefined
+        : RouteLocationNormalizedLoaded
+    >,
+    options?: WatchOptions<Immediate> & { autoStop?: boolean },
+  ) {
+    let stoped = false;
+    let autoStop = options && options.autoStop;
+    if (autoStop == null) {
+      autoStop = true;
+    }
+
+    const stopHandle = watch(
+      this.router.currentRoute,
+      (currentRoute, oldValue, onInvalidate) => {
+        if (stoped) return;
+        if (autoStop) {
+          nextTick(() => {
+            if (stoped) return;
+            cb(currentRoute, oldValue, onInvalidate);
+          });
+        } else {
+          cb(currentRoute, oldValue, onInvalidate);
+        }
+      },
+      options,
+    );
+
+    if (autoStop) {
+      onBeforeUnmount(() => {
+        stoped = true;
+        stopHandle();
+      });
+    }
+
+    return stopHandle;
   }
 
   get transitioningTo() {

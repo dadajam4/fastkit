@@ -1,10 +1,4 @@
-import {
-  onMounted,
-  onBeforeUnmount,
-  reactive,
-  ref,
-  ComponentPublicInstance,
-} from 'vue';
+import { onMounted, onBeforeUnmount, reactive, ref, Ref } from 'vue';
 import {
   Scroller,
   ScrollerSetting,
@@ -94,6 +88,7 @@ export function useScrollerControl(setting: UseScrollerSetting) {
   const isSelf = setting.el === 'self';
   const $target = isSelf ? null : undefined;
   const state = createDefaultState();
+  const elementRef = ref<null | HTMLElement>(null);
   const scroller = new Scroller({
     ...setting,
     el: $target,
@@ -101,6 +96,9 @@ export function useScrollerControl(setting: UseScrollerSetting) {
   scroller.observe(state);
 
   const _scroller = {
+    get elementRef() {
+      return elementRef;
+    },
     get scroller() {
       return scroller;
     },
@@ -182,6 +180,10 @@ export function useScrollerControl(setting: UseScrollerSetting) {
 
     ready() {
       return scroller.ready();
+    },
+
+    element() {
+      return elementRef.value;
     },
 
     start() {
@@ -286,12 +288,12 @@ export function useScrollerControl(setting: UseScrollerSetting) {
   };
 
   if (isSelf) {
-    const selfEl = ref<null | Element | ComponentPublicInstance>(null);
+    // const selfEl = ref<null | Element | ComponentPublicInstance>(null);
     onMounted(() => {
-      let el = selfEl.value;
+      let el = elementRef.value;
       if (!el) return;
       if (!(el instanceof Element)) {
-        el = el.$el;
+        el = (el as any).$el;
       }
       if (!(el instanceof Element)) return;
       scroller.setElement(el);
@@ -314,3 +316,5 @@ export function getDocumentScroller() {
   }
   return _documentScroller;
 }
+
+export type ScrollerControl = ReturnType<typeof useScrollerControl>;

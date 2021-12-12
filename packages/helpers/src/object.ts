@@ -87,3 +87,15 @@ export function isObjectEqual<T extends any>(
     return String(aVal) === String(bVal);
   });
 }
+
+export function objectFromArray<R, K extends string | number | symbol, T>(
+  rows: R[],
+  cb: (row: R, index: number) => [K, T],
+) {
+  const entries = new Map(
+    rows.map((row, index) => {
+      return cb(row, index);
+    }),
+  );
+  return Object.fromEntries(entries);
+}

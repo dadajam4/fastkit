@@ -1,3 +1,19 @@
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace;
+}
+
+code {
+  padding: 0.2em 0.4em;
+  font-size: 85%;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.87); // @TODO
+  background-color: rgba(0, 0, 0, 0.05); // @TODO
+  border-radius: 3px; // @TODO
+}
+
 table {
   display: table;
   max-width: 100%;

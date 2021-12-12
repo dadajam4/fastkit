@@ -1,0 +1,73 @@
+@use '../../styles/core.scss';
+
+.v-tab {
+  @include core.button-reset;
+
+  --tab-content-color: var(--palette-caption);
+  --tab-content-focus-color: var(--main-color);
+  --tab-content-opacity: 0.7;
+
+  position: relative;
+  z-index: 3;
+  display: flex;
+  // flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  height: var(--tabs-height);
+  padding: 0 1.25em;
+  font: inherit;
+  font-size: var(--tabs-font-size);
+  // color: inherit;
+  white-space: nowrap;
+  user-select: none;
+  transition: color 0.6s;
+
+  &::before {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    // top: 0;
+    left: 0;
+    z-index: 1;
+    height: 2px;
+    content: '';
+    background-color: var(--tab-content-focus-color);
+    border-radius: inherit;
+    transition: all 0.25s;
+    transform: scaleX(0);
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    line-height: 1.2;
+    color: var(--tab-content-color);
+    text-align: center;
+    opacity: var(--tab-content-opacity);
+    transition: all 0.25s ease;
+  }
+
+  &__icon {
+    margin-right: 8px;
+    font-size: 120%;
+  }
+
+  &:hover {
+    --tab-content-color: var(--tab-content-focus-color);
+  }
+
+  &--active {
+    --tab-content-color: rgba(0, 0, 0, 0.87);
+
+    pointer-events: none;
+    background: var(--tabs-color);
+
+    --tab-content-opacity: 1;
+
+    &::before {
+      transform: scaleX(1);
+    }
+  }
+}

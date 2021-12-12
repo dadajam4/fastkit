@@ -1,0 +1,49 @@
+$my-offset: 30px;
+
+.v-tabs {
+  position: relative;
+  width: 100%;
+  height: var(--tabs-height);
+  overflow: hidden;
+
+  &::before {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    height: 2px;
+    content: '';
+    background: currentColor;
+    opacity: 0.25;
+  }
+
+  &__scroller {
+    width: 100%;
+    height: calc(var(--tabs-height) + #{$my-offset});
+
+    &__container {
+      padding-bottom: $my-offset;
+    }
+  }
+
+  &__content {
+    position: relative;
+    display: inline-flex;
+    align-items: stretch;
+    min-width: 100%;
+    vertical-align: bottom;
+
+    // &::after {
+    //   position: absolute;
+    //   right: 0;
+    //   bottom: 0;
+    //   left: 0;
+    //   z-index: 1;
+    //   display: block;
+    //   height: var(--tabs-bar-height);
+    //   pointer-events: none;
+    //   content: '';
+    // }
+  }
+}

@@ -19,6 +19,9 @@ export interface VuiServiceUISettings {
     color: ScopeName;
     variant: ColorVariant;
   };
+  tabDefault: {
+    color: ScopeName;
+  };
   dialogOk?: {
     color?: ScopeName;
     variant?: ColorVariant;

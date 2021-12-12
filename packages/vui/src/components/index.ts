@@ -22,6 +22,7 @@ export * from './VSelect';
 export * from './VTextField';
 export * from './VTextarea';
 export * from './VForm';
+export * from './VTabs';
 export * from './VDataTable';
 export * from './VApp';
 export * from './VToolbar';
