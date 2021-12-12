@@ -6,14 +6,18 @@ import {
   ScopeName,
   VSelect,
   VTabsItem,
+  VContentSwitcher,
 } from '@fastkit/vui';
-import { DocsSection } from '../../../-components';
+import { DocsSection } from '../../../../-components';
 import { range, objectFromArray } from '@fastkit/helpers';
+import { VPage } from '@fastkit/vue-page';
 
 export default defineComponent({
   setup() {
     const vui = useVui();
     const tab1 = ref('');
+    const tab2 = ref('');
+    const tab3 = ref('');
     const color = ref<ScopeName | undefined>();
 
     const colors = vui.options.colorScheme.scopeNames;
@@ -62,7 +66,11 @@ export default defineComponent({
     };
 
     return {
+      createSlots,
+      vui,
       tab1,
+      tab2,
+      tab3,
       mockItems1,
       colors,
       color,
@@ -79,6 +87,11 @@ export default defineComponent({
                 color={this.color}
                 items={this.mockItems1}
                 v-model={this.tab1}
+              />
+              <VContentSwitcher
+                v-model={this.tab1}
+                order={this.mockItems1}
+                v-slots={this.createSlots(this.mockItems1)}
               />
               <p>
                 <code>{this.tab1}</code>
@@ -97,6 +110,44 @@ export default defineComponent({
               />
             </div>
           </div>
+        </DocsSection>
+
+        <DocsSection title="Routable">
+          <VTabs
+            items={this.mockItems1}
+            v-model={this.tab2}
+            withQuery
+            router={(value) => {
+              return {
+                path: this.$route.path,
+                query: {
+                  ...this.$route.query,
+                  tab2: value,
+                },
+              };
+            }}
+          />
+          <VContentSwitcher
+            v-model={this.tab2}
+            order={this.mockItems1}
+            v-slots={this.createSlots(this.mockItems1)}
+          />
+        </DocsSection>
+
+        <DocsSection title="Routable with nested routes(Use router-view sample)">
+          <VTabs
+            items={this.mockItems1}
+            v-model={this.tab3}
+            router={(value) => {
+              return {
+                path: `/vui/components/tabs/${value}`,
+                query: {
+                  ...this.vui.location.currentRoute.query,
+                },
+              };
+            }}
+          />
+          <VPage />
         </DocsSection>
       </div>
     );

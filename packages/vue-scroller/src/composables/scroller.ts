@@ -1,4 +1,4 @@
-import { onMounted, onBeforeUnmount, reactive, ref, Ref } from 'vue';
+import { onMounted, onBeforeUnmount, reactive, ref } from 'vue';
 import {
   Scroller,
   ScrollerSetting,

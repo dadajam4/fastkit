@@ -28,6 +28,8 @@ export interface VTabsItemLabelSlotCtx {
 
 export type VTabsItemLabelSlot = (ctx: VTabsItemLabelSlotCtx) => VNodeChild;
 
+export type VTabsRouterHandler = (value: string) => RouteLocationRaw;
+
 export interface VTabsItem {
   value: string;
   icon?: RawIconProp;
@@ -58,7 +60,7 @@ export const VTabs = defineComponent({
     /**
      * ルーター同期する場合設定する
      */
-    router: Function,
+    router: Function as PropType<VTabsRouterHandler>,
 
     /**
      * ルーティング連携を行う際に、クエリベースのURLマッチングを行う

@@ -3,6 +3,19 @@
   --root-spacing: 4px;
 
   // =============================================
+  // transitions
+  // =============================================
+  --transition-fast-out-slow-in: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-linear-out-slow-in: cubic-bezier(0, 0, 0.2, 1);
+  --transition-fast-out-linear-in: cubic-bezier(0.4, 0, 1, 1);
+  --transition-ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
+  --transition-fast-in-fast-out: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-swing: cubic-bezier(0.25, 0.8, 0.5, 1);
+  --transition-primary: var(--transition-swing);
+  --transition-tab: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  --transition-fade: 0.2s;
+
+  // =============================================
   // typographies
   // =============================================
   --typo-fallback-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
