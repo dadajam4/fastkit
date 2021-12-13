@@ -1,13 +1,11 @@
-@use '../styles/constants.scss';
-
 .v-snackbar {
   position: fixed;
   display: inline-flex;
   font-size: 14px;
   vertical-align: bottom;
   border-radius: 2px;
-  box-shadow: constants.$snakbar-shadow;
-  transition: margin 0.3s constants.$easing-swing;
+  box-shadow: var(--snakbar-shadow);
+  transition: margin 0.3s var(--stack-easing-swing);
 
   &--x-center {
     left: 50%;

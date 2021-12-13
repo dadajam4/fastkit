@@ -36,7 +36,7 @@ const { props, emits } = createStackableDefine({
   defaultScrollLock: true,
 });
 
-const stackMenuProps = {
+export const stackMenuProps = {
   ...props,
   ...createStackActionProps(),
   top: Boolean,
@@ -64,6 +64,8 @@ const stackMenuProps = {
   // ...createSnackbarPositionProps(),
 };
 
+export const stackMenuEmits = emits;
+
 export type VMenuProps = ExtractPropInput<typeof stackMenuProps>;
 
 export type VMenuResolvedProps = ExtractPropTypes<typeof stackMenuProps>;
@@ -72,7 +74,7 @@ export const VMenu = defineComponent({
   name: 'VMenu',
   inheritAttrs: false,
   props: stackMenuProps,
-  emits,
+  emits: stackMenuEmits,
   setup(props, ctx) {
     const stackControl = useStackControl(props, ctx, {
       onContentMounted: () => {

@@ -11,6 +11,7 @@ import {
   VSelect,
   VSwitch,
   ICON_NAMES,
+  VTooltip,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
 
@@ -62,9 +63,18 @@ export default defineComponent({
             color="info">
             Google
           </VButton>
-          <VButton color="info" to="/vui">
-            Home
-          </VButton>
+          <VTooltip
+            v-slots={{
+              activator: ({ attrs }) => {
+                return [
+                  <VButton color="info" {...attrs}>
+                    Tooltip
+                  </VButton>,
+                ];
+              },
+            }}>
+            <div>あいいえお</div>
+          </VTooltip>
         </DocsSection>
 
         <DocsSection title="Styles">

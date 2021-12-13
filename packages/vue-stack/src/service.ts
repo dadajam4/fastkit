@@ -149,6 +149,9 @@ export class VueStackService {
     if (!resolvedInput.props.actions) {
       resolvedInput.props.actions = [this.action('ok')];
     }
+    if (resolvedInput.props.backdrop == null) {
+      resolvedInput.props.backdrop = true;
+    }
     return this.dialog(resolvedInput);
   }
 
@@ -156,6 +159,9 @@ export class VueStackService {
     const resolvedInput = resolveVStackDynamicInput(input);
     if (!resolvedInput.props.actions) {
       resolvedInput.props.actions = [this.action('cancel'), this.action('ok')];
+    }
+    if (resolvedInput.props.backdrop == null) {
+      resolvedInput.props.backdrop = true;
     }
     return this.dialog(resolvedInput);
   }
