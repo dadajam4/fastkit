@@ -131,7 +131,7 @@ export function useNavigationable(
 
     if (to) {
       clickable = true;
-      Tag = opts.RouterLink || RouterLink;
+      Tag = opts.RouterLink || _defaultRouterLink;
       dynamicAttrs.to = to;
       dynamicAttrs.replace = props.replace;
       dynamicAttrs.activeClass = props.activeClass;
