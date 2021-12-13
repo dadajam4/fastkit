@@ -237,9 +237,14 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   private _redirectSpec?: VuePageControlRedirectSpec;
   private _providedMap: Map<string | InjectionKey<any>, any> = new Map();
   private _transitioning = ref(false);
+  private _serverRedirected = ref(false);
 
   get isServer() {
     return !this.isClient;
+  }
+
+  get serverRedirected() {
+    return this._serverRedirected.value;
   }
 
   get from() {
@@ -578,6 +583,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       throw new Error('required server redirect function.');
     }
 
+    this._serverRedirected.value = true;
     this._serverRedirect(fullPath, statusCode);
   }
 

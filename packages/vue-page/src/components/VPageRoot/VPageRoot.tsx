@@ -13,6 +13,10 @@ export const VPageRoot = defineComponent({
     useRouter();
 
     return () => {
+      if (control.serverRedirected) {
+        return [];
+      }
+
       const { pageError } = control;
       const content = pageError
         ? h(control.ErrorComponent as any, { key: 'error' })
