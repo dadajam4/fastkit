@@ -1,5 +1,12 @@
 import './VNavigation.scss';
-import { defineComponent, computed, PropType, VNodeChild } from 'vue';
+import {
+  defineComponent,
+  computed,
+  PropType,
+  VNodeChild,
+  onBeforeUpdate,
+  ref,
+} from 'vue';
 import {
   NavigationItemInput,
   renderNavigationItemInput,
@@ -29,6 +36,22 @@ export const VNavigation = defineComponent({
       const c = props.caption;
       return typeof c === 'function' ? c() : c;
     });
+    const itemsRef = ref<{ key: string | number; ref: any }[]>([]);
+
+    onBeforeUpdate(() => {
+      itemsRef.value = [];
+    });
+
+    function setItemRef(item: NavigationItemInput, itemRef: any) {
+      itemsRef.value.push({ key: item.key, ref: itemRef });
+    }
+
+    function onItemActivated(item: NavigationItemInput) {
+      itemsRef.value.forEach(({ key, ref }) => {
+        if (key === item.key) return;
+        ref.close();
+      });
+    }
 
     return () => {
       const $caption = caption.value;
@@ -39,6 +62,14 @@ export const VNavigation = defineComponent({
             renderNavigationItemInput(item, {
               class: 'v-navigation__item',
               startIconEmptySpace: startIconEmptySpace.value,
+              ref: (ref: any) => {
+                setItemRef(item, ref);
+              },
+              onChangeActive: (isActive: boolean) => {
+                if (isActive /* && item.children && item.children.length*/) {
+                  onItemActivated(item);
+                }
+              },
             }),
           )}
         </nav>

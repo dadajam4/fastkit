@@ -92,10 +92,15 @@ export default defineComponent({
                     {
                       key: 'components',
                       label: 'Components',
-                      // to: '/vui/components',
-                      match: '/vui/components',
+                      to: '/vui/components',
+                      // match: '/vui/components',
                       startIcon: 'mdi-toggle-switch-off-outline',
                       children: [
+                        {
+                          key: 'usage',
+                          label: 'Usage',
+                          to: '/vui/components',
+                        },
                         {
                           key: 'buttons',
                           label: 'Buttons',

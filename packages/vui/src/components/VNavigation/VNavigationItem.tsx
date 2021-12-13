@@ -22,6 +22,10 @@ export function createNavigationItemProps() {
   return {
     ...createListTileProps(),
     match: String,
+    // key: {
+    //   type: [String, Number],
+    //   required: true,
+    // },
   };
 }
 
@@ -80,7 +84,7 @@ export const VNavigationItem = defineComponent({
       return c && c.length ? c : undefined;
     });
 
-    const to = computed(() => props.to);
+    const to = computed(() => ctx.attrs.to);
 
     const match = computed(() => {
       const { match, to } = props;
@@ -165,6 +169,7 @@ export const VNavigationItem = defineComponent({
     });
 
     function open() {
+      if (!children.value) return;
       opened.value = true;
     }
 
@@ -178,8 +183,12 @@ export const VNavigationItem = defineComponent({
 
     const onClick = (ev: MouseEvent) => {
       if (!to.value) {
-        toggle();
+        return toggle();
       }
+      open();
+      // if (!to.value) {
+      //   toggle();
+      // }
       // ctx.emit('click', ev);
     };
 
@@ -201,6 +210,10 @@ export const VNavigationItem = defineComponent({
       // }
       ctx.emit('changeActive', isActive);
     };
+
+    ctx.expose({
+      close,
+    });
 
     return () => {
       const _children = children.value;

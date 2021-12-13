@@ -58,9 +58,9 @@ export const VListTile = defineComponent({
       resolveRawIconProp(false, props.endIcon),
     );
 
-    const hasTo = computed(() => !!props.to);
+    const hasTo = computed(() => !!ctx.attrs.to);
 
-    const link = useLink({ to: props.to || '' });
+    const link = useLink({ to: (ctx.attrs.to as any) || '' });
 
     const isActive = computed(() => {
       if (!hasTo.value) return false;
