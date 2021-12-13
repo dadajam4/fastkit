@@ -10,22 +10,21 @@ import {
 import { rawIconProp, resolveRawIconProp } from '../VIcon';
 import {
   renderSlotOrEmpty,
-  navigationableEmits,
-  navigationableProps,
-  useNavigationable,
+  navigationableInheritProps,
   createPropsOptions,
 } from '@fastkit/vue-utils';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 import { useLink } from 'vue-router';
+import { VLink } from '@fastkit/vue-utils';
 
 export function createListTileProps() {
   const icon = rawIconProp();
   return {
-    ...navigationableProps,
+    ...navigationableInheritProps,
     ...createPropsOptions({
       startIcon: icon,
       endIcon: icon,
-      fallbackTag: {
+      linkFallbackTag: {
         type: String,
         default: 'div',
       },
@@ -37,12 +36,12 @@ export function createListTileProps() {
 }
 
 export const listTileEmits = {
-  ...navigationableEmits,
   changeActive: (isActive: boolean) => true,
 };
 
 export const VListTile = defineComponent({
   name: 'VListTile',
+  inheritAttrs: false,
   props: createListTileProps(),
   emits: {
     ...listTileEmits,
@@ -58,11 +57,6 @@ export const VListTile = defineComponent({
     const endIcon: ComputedRef<VNodeChild> = computed(() =>
       resolveRawIconProp(false, props.endIcon),
     );
-    const navigationable = useNavigationable(
-      props,
-      () => props.fallbackTag,
-      ctx as any,
-    );
 
     const hasTo = computed(() => !!props.to);
 
@@ -77,14 +71,10 @@ export const VListTile = defineComponent({
     const classes: ComputedRef<any[]> = computed(() => {
       const _color = color.value;
       const hasColor = !!_color.value;
-      const _navigationable = navigationable.value;
-      const clickable = _navigationable.clickable;
 
       return [
         color.value.className,
-        _navigationable.classes,
         {
-          'v-list-tile--clickable': clickable,
           'v-list-tile--plain': !hasColor,
           'v-list-tile--has-color': hasColor,
           'v-list-tile--active': isActive.value,
@@ -105,15 +95,12 @@ export const VListTile = defineComponent({
     return () => {
       const _startIcon = startIcon.value;
       const _endIcon = endIcon.value;
-      const { Tag, attrs } = navigationable.value;
 
       return (
-        <Tag
+        <VLink
+          {...ctx.attrs}
           class={['v-list-tile', classes.value]}
-          {...attrs}
-          onClick={(ev: MouseEvent) => {
-            ctx.emit('click', ev);
-          }}>
+          clickableClassName="v-list-tile--clickable">
           {_startIcon && (
             <span class="v-list-tile__icon v-list-tile__icon--start">
               {_startIcon}
@@ -127,7 +114,7 @@ export const VListTile = defineComponent({
               {_endIcon}
             </span>
           )}
-        </Tag>
+        </VLink>
       );
     };
   },

@@ -166,6 +166,11 @@ export default defineComponent({
                           label: 'Tabs',
                           to: '/vui/components/tabs',
                         },
+                        {
+                          key: 'breadcrumbs',
+                          label: 'Breadcrumbs',
+                          to: '/vui/components/breadcrumbs',
+                        },
                       ],
                     },
                   ]}

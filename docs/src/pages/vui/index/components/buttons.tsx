@@ -55,6 +55,16 @@ export default defineComponent({
             }}>
             Button
           </VButton>
+          <VButton
+            href="https://google.com"
+            target="_blank"
+            startIcon="mdi-google"
+            color="info">
+            Google
+          </VButton>
+          <VButton color="info" to="/vui">
+            Home
+          </VButton>
         </DocsSection>
 
         <DocsSection title="Styles">

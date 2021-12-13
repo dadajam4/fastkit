@@ -90,6 +90,9 @@
   --typo-subtitle2-height: 1.57;
   --typo-subtitle2-spacing: 0.00714em;
 
+  // small
+  --typo-sm-size: calc(var(--root-em) * 0.875);
+
   // // body1
   // --typo-body1-size: 1rem;
   // --typo-body1-weight: 400;
@@ -280,6 +283,9 @@
   --tabs-bar-height: calc(var(--root-em) * 0.375);
   // --tabs-color: var(--main-color);
   --tabs-font-size: calc(var(--root-em) * 0.875);
+
+  // breadcrumbs
+  --breadcrumbs-font-size: var(--typo-sm-size);
 }
 
 :root,

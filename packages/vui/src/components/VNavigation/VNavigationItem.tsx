@@ -180,7 +180,7 @@ export const VNavigationItem = defineComponent({
       if (!to.value) {
         toggle();
       }
-      ctx.emit('click', ev);
+      // ctx.emit('click', ev);
     };
 
     const onChangeActive = (isActive: boolean) => {
@@ -209,6 +209,7 @@ export const VNavigationItem = defineComponent({
       return (
         <Fragment>
           <VListTile
+            {...ctx.attrs}
             {..._props.value}
             fallbackTag={fallbackTag}
             endIcon={_props.value.endIcon}

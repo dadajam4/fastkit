@@ -5,7 +5,8 @@ import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import type { IconName, RawIconProp } from './components/VIcon';
 import type { VueColorSchemePluginSettings } from '@fastkit/vue-kit';
 import type { Router } from 'vue-router';
-import { LocationService } from '@fastkit/vue-utils';
+import { RouterLink } from 'vue-router';
+import { LocationService, setDefaultRouterLink } from '@fastkit/vue-utils';
 
 const DEFAULT_AUTO_SCROLL_TO_ELEMENT_OFFSET_TOP = -20;
 const DEFAULT_TEXTAREA_ROWS = 3;
@@ -48,6 +49,7 @@ export type VuiVNodeResolver = () => VNodeChild;
 
 export interface VuiServiceOptions {
   router: Router;
+  RouterLink?: typeof RouterLink;
   colorScheme: VueColorSchemePluginSettings;
   uiSettings: VuiServiceUISettings;
   icons: VuiServiceIconSettings;
@@ -69,6 +71,8 @@ export class VuiService {
 
   constructor(options: VuiServiceOptions) {
     this.options = options;
+    this.configure();
+
     const {
       selectionSeparator = () => ', ',
       autoScrollToElementOffsetTop = DEFAULT_AUTO_SCROLL_TO_ELEMENT_OFFSET_TOP,
@@ -83,6 +87,15 @@ export class VuiService {
     this.location = new LocationService({
       router: this.router,
     });
+  }
+
+  configure(options?: Partial<VuiServiceOptions>) {
+    options && Object.assign(this.options, options);
+    setDefaultRouterLink(this.getRouterLink());
+  }
+
+  getRouterLink() {
+    return this.options.RouterLink || RouterLink;
   }
 
   setting<K extends keyof VuiServiceUISettings>(

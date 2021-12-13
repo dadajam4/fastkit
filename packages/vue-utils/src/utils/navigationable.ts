@@ -1,35 +1,51 @@
-import { PropType, ExtractPropTypes, computed, SetupContext } from 'vue';
+import {
+  PropType,
+  ExtractPropTypes,
+  computed,
+  SetupContext,
+  CSSProperties,
+} from 'vue';
 import { ButtonHTMLAttributes } from '@vue/runtime-dom';
 import { RouterLinkProps, RouteLocationRaw, RouterLink } from 'vue-router';
 
-export const navigationableEmits = {
-  click: (ev: MouseEvent) => true,
+let _defaultRouterLink = RouterLink;
+
+export function setDefaultRouterLink(Component: typeof RouterLink) {
+  _defaultRouterLink = Component;
+}
+
+export const navigationableInheritProps = {} as unknown as {
+  tag: PropType<string>;
+  class: PropType<any>;
+  style: PropType<CSSProperties>;
+  to: PropType<RouteLocationRaw>;
+  replace: PropType<boolean>;
+  activeClass: PropType<string>;
+  exactActiveClass: PropType<string>;
+  custom: PropType<boolean>;
+  ariaCurrentValue: {
+    type: PropType<RouterLinkProps['ariaCurrentValue']>;
+    default: 'page';
+  };
+  disabled: PropType<boolean>;
+  href: PropType<string>;
+  target: PropType<string>;
+  rel: PropType<string>;
+  name: PropType<string>;
+  charset: PropType<string>;
+  hreflang: PropType<string>;
+  download: PropType<boolean | string>;
+  media: PropType<string>;
+  ping: PropType<string>;
+  referrerpolicy: PropType<string>;
+  type: PropType<ButtonHTMLAttributes['type']>;
+  linkFallbackTag: PropType<string | (() => string | undefined)>;
+  onClick: PropType<(ev: MouseEvent) => any>;
 };
 
-export const navigationableProps = {
-  tag: String,
-  to: [String, Object] as PropType<RouteLocationRaw>,
-  replace: Boolean,
-  activeClass: String,
-  exactActiveClass: String,
-  custom: Boolean,
-  ariaCurrentValue: {
-    type: String as PropType<RouterLinkProps['ariaCurrentValue']>,
-    default: 'page',
-  },
-  disabled: Boolean,
-  href: String,
-  target: String,
-  rel: String,
-  name: String,
-  charset: String,
-  hreflang: String,
-  download: [Boolean, String] as PropType<boolean | string>,
-  media: String,
-  ping: String,
-  referrerpolicy: String,
-  type: String as PropType<ButtonHTMLAttributes['type']>,
-} as const;
+export type NavigationableInheritProps = ExtractPropTypes<
+  typeof navigationableInheritProps
+>;
 
 export type NavigationableTag = any;
 
@@ -56,59 +72,108 @@ export interface NavigationableAttrs {
 
 export interface NavigationableContext {
   Tag: NavigationableTag;
-  attrs: NavigationableAttrs;
-  classes: string[];
+  attrs: Record<string, unknown>;
   clickable: boolean;
 }
 
+export interface UseNavigationableOptions {
+  clickableClassName?: string | (() => string | undefined);
+  RouterLink?: typeof RouterLink;
+}
+
 export function useNavigationable(
-  props: ExtractPropTypes<typeof navigationableProps>,
-  fallbackTag?: string | (() => string | undefined),
-  setupContext?: SetupContext,
+  setupContext: SetupContext<any>,
+  opts: UseNavigationableOptions = {},
 ) {
-  const onClick = setupContext && setupContext.attrs.onClick;
   const ctx = computed<NavigationableContext>(() => {
-    const _fallbackTag =
-      typeof fallbackTag === 'function' ? fallbackTag() : fallbackTag;
-    const { tag, to, href, disabled, name, charset, hreflang } = props;
+    const ctxAttrs = { ...setupContext.attrs } as any;
+    const props: NavigationableInheritProps = { ...ctxAttrs };
+    let { clickableClassName } = opts;
+    if (typeof clickableClassName === 'function') {
+      clickableClassName = clickableClassName();
+    }
+
+    delete ctxAttrs.tag;
+    delete ctxAttrs.to;
+    delete ctxAttrs.class;
+    delete ctxAttrs.replace;
+    delete ctxAttrs.activeClass;
+    delete ctxAttrs.exactActiveClass;
+    delete ctxAttrs.ariaCurrentValue;
+    delete ctxAttrs.disabled;
+    delete ctxAttrs.href;
+    delete ctxAttrs.target;
+    delete ctxAttrs.rel;
+    delete ctxAttrs.name;
+    delete ctxAttrs.charset;
+    delete ctxAttrs.hreflang;
+    delete ctxAttrs.download;
+    delete ctxAttrs.media;
+    delete ctxAttrs.ping;
+    delete ctxAttrs.referrerpolicy;
+    delete ctxAttrs.type;
+    delete ctxAttrs.linkFallbackTag;
+    delete ctxAttrs.onClick;
+
+    const { onClick } = props;
+
+    const { linkFallbackTag } = props;
+    const fallbackTag =
+      typeof linkFallbackTag === 'function'
+        ? linkFallbackTag()
+        : linkFallbackTag;
+    const { tag, to, href } = props;
     let Tag: NavigationableTag;
-    const attrs: NavigationableAttrs = {
-      disabled,
-      name,
-      charset,
-      hreflang,
-    };
+
+    const dynamicAttrs: Record<string, unknown> = {};
 
     let clickable = false;
 
     if (to) {
       clickable = true;
-      Tag = RouterLink;
-      attrs.to = to;
-      attrs.replace = props.replace;
-      attrs.activeClass = props.activeClass;
-      attrs.exactActiveClass = props.exactActiveClass;
-      attrs.custom = props.custom;
-      attrs.ariaCurrentValue = props.ariaCurrentValue;
+      Tag = opts.RouterLink || RouterLink;
+      dynamicAttrs.to = to;
+      dynamicAttrs.replace = props.replace;
+      dynamicAttrs.activeClass = props.activeClass;
+      dynamicAttrs.exactActiveClass = props.exactActiveClass;
+      dynamicAttrs.custom = props.custom;
+      dynamicAttrs.ariaCurrentValue = props.ariaCurrentValue;
     } else if (href) {
       clickable = true;
       Tag = tag || 'a';
-      attrs.href = href;
-      attrs.target = props.target;
-      attrs.rel = props.rel;
-      attrs.download = props.download;
-      attrs.media = props.media;
-      attrs.ping = props.ping;
-      attrs.referrerpolicy = props.referrerpolicy;
+      dynamicAttrs.href = href;
+      dynamicAttrs.target = props.target;
+      dynamicAttrs.rel = props.rel;
+      dynamicAttrs.download = props.download;
+      dynamicAttrs.media = props.media;
+      dynamicAttrs.ping = props.ping;
+      dynamicAttrs.referrerpolicy = props.referrerpolicy;
     } else {
-      Tag = tag || (!!props.type && 'button') || _fallbackTag || 'button';
+      Tag = tag || (!!props.type && 'button') || fallbackTag || 'button';
       if (Tag === 'button') {
-        attrs.type = props.type || 'button';
+        dynamicAttrs.type = props.type || 'button';
       }
       if (Tag === 'a' || Tag === 'button' || typeof onClick === 'function') {
         clickable = true;
       }
     }
+
+    const classes = [];
+    if (props.class) {
+      classes.push(props.class);
+    }
+    if (clickable) {
+      classes.push('clickable');
+      if (clickableClassName) {
+        classes.push(clickableClassName);
+      }
+    }
+
+    const attrs: Record<string, unknown> = {
+      ...ctxAttrs,
+      ...dynamicAttrs,
+      class: classes,
+    };
 
     if (!attrs.disabled) {
       delete attrs.disabled;
@@ -122,13 +187,20 @@ export function useNavigationable(
       delete attrs.download;
     }
 
-    // const clickable = Tag !== _fallbackTag || typeof onClick === 'function';
+    if (onClick) {
+      attrs.onClick = (ev: MouseEvent) => {
+        if (attrs.disabled) {
+          ev.preventDefault();
+          return;
+        }
+        onClick(ev);
+      };
+    }
 
     return {
       Tag,
       attrs,
       clickable,
-      classes: clickable ? ['clickable'] : [],
     };
   });
   return ctx;

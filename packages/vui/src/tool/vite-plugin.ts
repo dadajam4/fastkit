@@ -23,6 +23,7 @@ import '@fastkit/vui/dist/vui.css';
 import './setup.scss';
 import type { App } from 'vue';
 import type { Router } from 'vue-router';
+import { VPageLink } from '@fastkit/vue-page';
 import { installVuiPlugin as _installVuiPlugin, VuiPluginOptions } from '@fastkit/vui';
 import { colorScheme } from '<%~ it.colorScheme %>';
 import '<%~ it.mediaMatch %>';
@@ -30,6 +31,7 @@ import './icon-font';
 
 export function installVui(settings: { app: App, router: Router }) {
   _installVuiPlugin(settings.app, {
+    RouterLink: VPageLink,
     colorScheme,
     uiSettings: <%~ it.uiSettings %>,
     icons: <%~ it.icons %>,

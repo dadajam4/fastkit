@@ -8,9 +8,7 @@ import {
 } from 'vue';
 import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
 import {
-  navigationableEmits,
-  navigationableProps,
-  useNavigationable,
+  navigationableInheritProps,
   ExtractPropInput,
   createPropsOptions,
   renderSlotOrEmpty,
@@ -21,6 +19,7 @@ import { VProgressCircular } from '../loading';
 import { ControlSize } from '../../schemes/control';
 import { VIcon } from '../VIcon';
 import type { IconName } from '../VIcon';
+import { VLink } from '@fastkit/vue-utils';
 
 export type VButtonSpacer = 'left' | 'right';
 
@@ -47,7 +46,7 @@ function resolveRawVButtonIcon(
 
 export const vueButtonProps = createPropsOptions({
   ...colorSchemeProps(),
-  ...navigationableProps,
+  ...navigationableInheritProps,
   spacer: [Boolean, String] as PropType<RawVButtonSpacer>,
   loading: Boolean,
   rounded: Boolean,
@@ -69,10 +68,8 @@ const LOADING_SIZE_MAP: Record<ControlSize, number> = {
 
 export const VButton = defineComponent({
   name: 'VButton',
+  inheritAttrs: false,
   props: vueButtonProps,
-  emits: {
-    ...navigationableEmits,
-  },
   setup(props, ctx) {
     const vui = useVui();
     const control = useControl(props);
@@ -100,9 +97,8 @@ export const VButton = defineComponent({
         color.variant.value.value === vui.setting('plainVariant') &&
         color.color.value.value === defaults.color,
     );
-    const navigationable = useNavigationable(props);
     const isLoading = computed(() => props.loading);
-    const isDisabled = computed(() => props.disabled);
+    // const isDisabled = computed(() => props.disabled);
     const isRounded = computed(() => props.rounded || !!icon.value);
 
     const spacer = computed<VButtonSpacer | undefined>(() => {
@@ -113,7 +109,7 @@ export const VButton = defineComponent({
 
     const classes = computed(() => [
       color.colorClasses.value,
-      navigationable.value.classes,
+      // navigationable.value.classes,
       spacer.value ? `v-button--spacer-${spacer.value}` : undefined,
       `v-button--${control.size.value}`,
       {
@@ -125,27 +121,9 @@ export const VButton = defineComponent({
     ]);
 
     return () => {
-      const { Tag, attrs } = navigationable.value;
-      const children = renderSlotOrEmpty(ctx.slots, 'default');
-      const _attrs = {
-        ...attrs,
-      };
-      if (isDisabled.value) {
-        _attrs.disabled = true;
-      }
+      const children = renderSlotOrEmpty(ctx.slots);
       return (
-        <Tag
-          class={['v-button', classes.value]}
-          {..._attrs}
-          onClick={(ev: MouseEvent) => {
-            if (isDisabled.value || isLoading.value) {
-              ev.preventDefault();
-              if (isDisabled.value) {
-                return;
-              }
-            }
-            ctx.emit('click', ev);
-          }}>
+        <VLink {...ctx.attrs} class={['v-button', classes.value]}>
           <span class="v-button__content">
             {startIcon.value}
             {children}
@@ -159,7 +137,7 @@ export const VButton = defineComponent({
               size={LOADING_SIZE_MAP[control.size.value]}
             />
           )}
-        </Tag>
+        </VLink>
       );
     };
   },
