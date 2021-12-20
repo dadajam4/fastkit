@@ -16,7 +16,7 @@ function processSass(file: string) {
   // const custom: any = {
   //   fiber: Fiber,
   // };
-  return new Promise<sass.Result>((resolve, reject) => {
+  return new Promise<sass.LegacyResult>((resolve, reject) => {
     sass.render(
       {
         file: file,
@@ -26,7 +26,11 @@ function processSass(file: string) {
         // sourceMapContents: true,
       },
       (err, result) => {
-        return err ? reject(err) : resolve(result);
+        return err
+          ? reject(err)
+          : result
+          ? resolve(result)
+          : reject(new Error('missing sass render result.'));
       },
     );
   });
@@ -83,7 +87,7 @@ export function rawStylesPlugin(options?: BuildOptions['rawStyles']): Plugin {
 
   return {
     name: 'rawStyles',
-    resolveId(id, parent, importer, ssr) {
+    resolveId(id, parent) {
       if (parent && idMatchRe.test(id)) {
         const dir = path.dirname(parent);
         const resolved = path.resolve(dir, id);
