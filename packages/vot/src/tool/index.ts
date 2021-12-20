@@ -3,6 +3,7 @@ import Pages, { UserOptions as PagesUserOptions } from 'vite-plugin-pages';
 import { Plugin } from 'vite';
 import vue, { Options as VuePluginOptions } from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
+import { Server } from 'connect';
 
 export * from './proxy';
 
@@ -10,16 +11,24 @@ type VueJsxOptions = Parameters<typeof vueJsx>[0];
 
 type ViteSSRPluginOpts = NonNullable<Parameters<typeof viteSSRPlugin>[0]>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface VotConfigureServerContext {
+  use: Server['use'];
+}
+
+export type VotConfigureServerFn = (
+  ctx: VotConfigureServerContext,
+) => (() => void) | void | Promise<(() => void) | void>;
+
 export interface VotPluginOptions extends ViteSSRPluginOpts {
   vue?: VuePluginOptions;
   jsx?: VueJsxOptions;
   pages?: PagesUserOptions;
+  configureServer?: VotConfigureServerFn;
 }
 
 export function votPlugin(options: VotPluginOptions = {}) {
   const ssrPlugin = viteSSRPlugin(options);
-  const { pages } = options;
+  const { pages, configureServer } = options;
   const pagesPlugin = Pages({
     pagesDir: 'src/pages',
     extensions: ['vue', 'ts', 'tsx'],
@@ -53,5 +62,14 @@ export function votPlugin(options: VotPluginOptions = {}) {
       return config;
     },
   };
+
+  if (configureServer) {
+    plugin.configureServer = function (server) {
+      const { middlewares } = server;
+      const use = middlewares.use.bind(middlewares);
+      return configureServer({ use });
+    };
+  }
+
   return [pagesPlugin, ...ssrPlugin, vuePlugin, vueJsxPlugin, plugin];
 }

@@ -12,6 +12,9 @@ async function main() {
 
   const port = (config.server && config.server.port) || 3000;
 
+  const votPlugin = findPlugin('vite:vot');
+  const configureServer = votPlugin && votPlugin.configureServer;
+
   const dist = path.resolve(root, 'dist');
 
   const { ssr } = require(path.join(dist, 'server/package.json'));
@@ -24,6 +27,11 @@ async function main() {
 
   if (config.server.proxy) {
     server.use(proxyMiddleware(null, config));
+  }
+
+  if (configureServer) {
+    const use = server.use.bind(server);
+    await configureServer({ middlewares: { use } });
   }
 
   // Serve every static asset route
@@ -59,6 +67,18 @@ async function main() {
       reject(err);
     }
   });
+
+  function findPlugin(pluginName, buckets = config.plugins) {
+    for (const row of buckets) {
+      if (Array.isArray(row)) {
+        const hit = findPlugin(pluginName, row);
+        if (hit) return hit;
+      }
+      if (row.name === pluginName) {
+        return row;
+      }
+    }
+  }
 }
 
 main();

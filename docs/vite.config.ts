@@ -24,6 +24,11 @@ export default defineConfig({
       pages: {
         exclude: ['**/-components/*'],
       },
+      configureServer({ use }) {
+        use('/healthcheck', (req, res) => {
+          res.writeHead(200).end();
+        });
+      },
     }),
     ...viteVui.plugins,
   ],
