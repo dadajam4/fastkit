@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui",
-  "version": "0.6.34",
+  "version": "0.6.35",
   "description": "@fastkit/vui",
   "buildOptions": {
     "name": "Vui",
@@ -27,15 +27,15 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vui#readme",
   "peerDependencies": {
-    "vite": "^2.6.14",
+    "vite": "2.6.14",
     "vue": "^3.2.20"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "0.6.34",
-    "@fastkit/icon-font": "0.6.34",
-    "@fastkit/tiny-logger": "0.6.34",
-    "@fastkit/vite-kit": "0.6.34",
-    "@fastkit/vue-kit": "0.6.34",
+    "@fastkit/color-scheme": "0.6.35",
+    "@fastkit/icon-font": "0.6.35",
+    "@fastkit/tiny-logger": "0.6.35",
+    "@fastkit/vite-kit": "0.6.35",
+    "@fastkit/vue-kit": "0.6.35",
     "eta": "^1.12.3",
     "fs-extra": "^9.1.0",
     "@tiptap/starter-kit": "^2.0.0-beta.163",
