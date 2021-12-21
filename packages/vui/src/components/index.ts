@@ -21,6 +21,7 @@ export * from './VOptionGroup';
 export * from './VSelect';
 export * from './VTextField';
 export * from './VTextarea';
+export * from './VWysiwygEditor';
 export * from './VForm';
 export * from './VTabs';
 export * from './VBreadcrumbs';

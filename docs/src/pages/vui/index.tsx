@@ -132,6 +132,11 @@ export default defineComponent({
                           to: '/vui/components/textareas',
                         },
                         {
+                          key: 'wysiwygs',
+                          label: 'Wysiwygs',
+                          to: '/vui/components/wysiwygs',
+                        },
+                        {
                           key: 'selects',
                           label: 'Selects',
                           to: '/vui/components/selects',

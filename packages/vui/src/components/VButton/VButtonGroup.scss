@@ -1,0 +1,23 @@
+.v-button-group {
+  display: inline-flex;
+  align-items: stretch;
+
+  &__item {
+    position: relative;
+    margin: 0;
+
+    &--has-left {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &--has-right {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:focus {
+      z-index: 1;
+    }
+  }
+}

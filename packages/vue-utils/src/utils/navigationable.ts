@@ -100,7 +100,7 @@ export function useNavigationable(
     delete ctxAttrs.activeClass;
     delete ctxAttrs.exactActiveClass;
     delete ctxAttrs.ariaCurrentValue;
-    delete ctxAttrs.disabled;
+    // delete ctxAttrs.disabled;
     delete ctxAttrs.href;
     delete ctxAttrs.target;
     delete ctxAttrs.rel;

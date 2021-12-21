@@ -65,16 +65,17 @@
     --padding: 0;
 
     min-width: 0;
+    aspect-ratio: 1 / 1;
     margin: calc(var(--root-em) * 0.125) calc(var(--root-em) * 0.125);
     border-radius: 50%;
-    aspect-ratio: 1 / 1;
 
     --height: auto;
   }
 
   &--icon {
     // aspect-ratio: 1 / 1;
-    min-width: 0;
+    min-width: #{$base-height * 0.75};
+    margin: calc(var(--root-em) * 0.125) calc(var(--root-em) * 0.125);
 
     // --height: #{$base-height};
     // --height: calc(var);

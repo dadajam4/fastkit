@@ -76,9 +76,6 @@ export async function resolveRawIconFontEntry(
     if (entry.name == null) {
       entry.name = 'mdi';
     }
-    if (entry.startUnicode == null) {
-      entry.startUnicode = 0xea0;
-    }
   }
 
   const name = entry.name || path.basename(entry.src);

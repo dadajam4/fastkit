@@ -90,7 +90,8 @@ export async function generateEntry(
 
   const webfont = await (await import('webfont')).default;
 
-  const { startUnicode = 0xea01 } = options;
+  // const { startUnicode = 0xea01 } = options;
+  const { startUnicode = 0xba01 } = options;
 
   let i = startUnicode;
 

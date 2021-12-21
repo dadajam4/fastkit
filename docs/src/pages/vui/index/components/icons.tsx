@@ -16,7 +16,10 @@ export default defineComponent({
         <VHero>Icons</VHero>
         <DocsSection title="Icons">
           {this.icons.map((icon) => (
-            <VIcon key={icon} name={icon} />
+            <div>
+              <VIcon key={icon} name={icon} />
+              {icon}
+            </div>
           ))}
         </DocsSection>
       </div>

@@ -87,7 +87,8 @@ export const VNavigationItem = defineComponent({
     const to = computed(() => ctx.attrs.to);
 
     const match = computed(() => {
-      const { match, to } = props;
+      const { match } = props;
+      const { to } = ctx.attrs;
       if (match) return match;
       if (!to) return;
       if (typeof to === 'string') return to;

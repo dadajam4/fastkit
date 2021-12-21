@@ -12,6 +12,7 @@ import {
   VSwitch,
   ICON_NAMES,
   VTooltip,
+  VButtonGroup,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
 
@@ -136,20 +137,47 @@ export default defineComponent({
         </DocsSection>
 
         <DocsSection title="Icon Button">
-          {this.icons.map((icon, i) => {
-            const color = this.colors[i % this.colors.length];
-            const size = CONTROL_SIZES[i % CONTROL_SIZES.length];
-            const variant = this.variants[i % this.variants.length];
-            return (
-              <VButton
-                key={icon}
-                icon={icon}
-                color={color}
-                variant={variant}
-                size={size}
-              />
-            );
-          })}
+          {[true, false].map((rounded) => (
+            <div>
+              {this.icons.map((icon, i) => {
+                const color = this.colors[i % this.colors.length];
+                const size = CONTROL_SIZES[i % CONTROL_SIZES.length];
+                const variant = this.variants[i % this.variants.length];
+                return (
+                  <VButton
+                    key={icon}
+                    icon={icon}
+                    color={color}
+                    variant={variant}
+                    size={size}
+                    rounded={rounded}
+                  />
+                );
+              })}
+            </div>
+          ))}
+        </DocsSection>
+
+        <DocsSection title="Grouping">
+          <div>
+            <VButtonGroup variant="contained">
+              <VButton icon="mdi-color-helper" />
+              <VButton icon="mdi-format-bold" />
+              <VButton icon="mdi-format-italic" color="primary" />
+              <VButton icon="mdi-format-list-bulleted" />
+              <VButton icon="mdi-format-list-numbered" />
+              <VButton icon="mdi-link" />
+              <VButton icon="mdi-link-off" disabled />
+            </VButtonGroup>
+          </div>
+
+          <div>
+            <VButtonGroup variant="contained" size="sm" color="mono">
+              <VButton>Bold</VButton>
+              <VButton>Italic</VButton>
+              <VButton color="info">Strike</VButton>
+            </VButtonGroup>
+          </div>
         </DocsSection>
       </div>
     );

@@ -99,7 +99,9 @@ export const VButton = defineComponent({
     );
     const isLoading = computed(() => props.loading);
     // const isDisabled = computed(() => props.disabled);
-    const isRounded = computed(() => props.rounded || !!icon.value);
+    // const isRounded = computed(() =>
+    //   props.rounded != null ? props.rounded : !!icon.value,
+    // );
 
     const spacer = computed<VButtonSpacer | undefined>(() => {
       const _spacer = props.spacer;
@@ -115,7 +117,7 @@ export const VButton = defineComponent({
       {
         'v-button--loading': isLoading.value,
         'v-button--icon': !!icon.value,
-        'v-button--rounded': isRounded.value,
+        'v-button--rounded': props.rounded,
         'v-button--plain': isPlain.value,
       },
     ]);
