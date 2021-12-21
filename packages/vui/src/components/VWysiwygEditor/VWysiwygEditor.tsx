@@ -95,9 +95,9 @@ export const VWysiwygEditor = defineComponent({
                           editor={editor}>
                           <VButton
                             size="sm"
-                            color={
-                              editor.isActive('bold') ? 'primary' : 'muted'
-                            }
+                            // color={
+                            //   editor.isActive('bold') ? 'primary' : 'muted'
+                            // }
                             onClick={() => {
                               editor.chain().focus().toggleBold().run();
                             }}>

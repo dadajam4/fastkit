@@ -184,6 +184,8 @@ function createConfig(
     'module',
     '@vueuse/head',
     'chokidar',
+    '@tiptap/starter-kit',
+    '@tiptap/starter-kit',
     'esbuild',
     'vite',
     'vite-ssr/plugin',
