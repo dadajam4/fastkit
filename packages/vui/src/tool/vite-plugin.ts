@@ -153,6 +153,16 @@ export function viteVuiPlugin(
       prev: 'mdi-chevron-left' as any,
       next: 'mdi-chevron-right' as any,
       sort: 'mdi-chevron-down' as any,
+      editorTextColor: 'mdi-format-color-text' as any,
+      editorformatBold: 'mdi-format-bold' as any,
+      editorformatUnderline: 'mdi-format-underline' as any,
+      editorformatItalic: 'mdi-format-italic' as any,
+      editorformatListBulleted: 'mdi-format-list-bulleted' as any,
+      editorformatListNumbered: 'mdi-format-list-numbered' as any,
+      editorLink: 'mdi-link' as any,
+      editorLinkOff: 'mdi-link-off' as any,
+      editorUndo: 'mdi-undo-variant' as any,
+      editorRedo: 'mdi-redo-variant' as any,
       // navigationExpand: (gen, active) => {
       //   return gen({
       //     name: 'mdi-menu-down' as any,

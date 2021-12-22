@@ -14,6 +14,7 @@ const { props, emits } = createStackableDefine({
 export const stackDialogProps = {
   ...props,
   ...createStackActionProps(),
+  dense: Boolean,
 };
 
 export type VDialogProps = ExtractPropInput<typeof stackDialogProps>;
@@ -38,7 +39,14 @@ export const VDialog = defineComponent({
     const { $actions } = this.actionControl;
     return render((children, { withClickOutside }) => {
       return (
-        <div class="v-dialog" tabindex="0">
+        <div
+          class={[
+            'v-dialog',
+            {
+              'v-dialog--dense': this.dense,
+            },
+          ]}
+          tabindex="0">
           <div class="v-dialog__scroller">
             <div class="v-dialog__centerer">
               {withClickOutside(

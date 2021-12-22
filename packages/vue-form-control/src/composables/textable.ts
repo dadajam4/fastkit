@@ -225,7 +225,7 @@ export class TextableControl extends FormNodeControl<string> {
       const { counterSettings } = this;
       if (!counterSettings) return;
       return {
-        length: this.value.length,
+        length: this.validationValue.length,
         maxlength: counterSettings.maxlength,
       };
     });

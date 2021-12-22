@@ -8,6 +8,7 @@ import {
   ref,
   Ref,
   watch,
+  onMounted,
 } from 'vue';
 import { createPropsOptions } from '@fastkit/vue-utils';
 import {
@@ -158,6 +159,17 @@ export class TextInputControl extends TextableControl {
     });
 
     this._type = computed(() => props.type);
+
+    /**
+     * @TODO ちゃんとする
+     */
+    onMounted(() => {
+      if (props.autofocus) {
+        setTimeout(() => {
+          this.focus();
+        }, 250);
+      }
+    });
   }
 
   emptyValue() {

@@ -14,6 +14,12 @@ export interface VuiPluginOptions extends VuiServiceOptions {
   stack?: VuiPluginStackOptions;
 }
 
+declare module '@vue/runtime-core' {
+  export interface ComponentCustomProperties {
+    $vui: VuiService;
+  }
+}
+
 export class VuiPlugin {
   static readonly installedApps = new Set<App>();
 
@@ -53,7 +59,7 @@ export class VuiPlugin {
     });
 
     // Vui
-    const $vui = new VuiService(opts);
+    const $vui = new VuiService(opts, app.config.globalProperties.$vstack);
     app.provide(VuiInjectionKey, $vui);
     app.config.globalProperties.$vui = $vui;
 

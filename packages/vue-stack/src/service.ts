@@ -9,6 +9,11 @@ import {
   ResolvedVStackDynamicInput,
   VStackDynamicChildren,
 } from './schemes/dynamic';
+export {
+  type VStackDynamicDialogInput,
+  type VStackDynamicInput,
+  resolveVStackDynamicInput,
+} from './schemes/dynamic';
 import {
   VStackAction,
   VStackBuiltinActionType,
@@ -176,14 +181,23 @@ export class VueStackService {
     });
   }
 
-  action(key: VStackBuiltinActionType, override?: Partial<VStackAction>) {
+  action(
+    key: VStackBuiltinActionType,
+    override?: Partial<VStackAction>,
+    attrs?: Record<string, unknown>,
+  ) {
     const factory = this.builtinActions[key];
     const _onClick = BUILTIN_ACTION_HANDLERS[key];
     const action: VStackAction = {
       key,
       content: ({ control, key }) => {
         const onClick = (ev: MouseEvent) => _onClick(control, ev);
-        return factory({ service: this, control, key, bindings: { onClick } });
+        return factory({
+          service: this,
+          control,
+          key,
+          bindings: { onClick, ...attrs },
+        });
       },
       ...override,
     };

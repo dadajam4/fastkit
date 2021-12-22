@@ -1,5 +1,5 @@
 import type { VNode, VNodeTypes, VNodeChild, Slots } from '@vue/runtime-core';
-import { Comment, Text } from 'vue';
+import { Comment, Text, Fragment, isVNode } from 'vue';
 
 export function findVNodeChild(
   vnode: VNode,
@@ -79,4 +79,8 @@ export function renderSlotOrEmpty(
   const slot = slots[name];
   if (!slot) return;
   return cleanupEmptyVNodeChild(slot(prop));
+}
+
+export function isFragment(child: VNodeChild): child is VNode {
+  return isVNode(child) && child.type === Fragment;
 }

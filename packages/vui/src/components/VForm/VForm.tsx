@@ -24,6 +24,7 @@ export const VForm = defineComponent({
     ...props,
     ...createControlProps(),
     ...defineSlotsProps<VFormSlots>(),
+    disableAutoScroll: Boolean,
   },
   emits,
   setup(props, ctx) {
@@ -31,6 +32,7 @@ export const VForm = defineComponent({
     const nodeControl = useForm(props, ctx as any, {
       nodeType: VUI_FORM_SYMBOL,
       onAutoValidateError: () => {
+        if (props.disableAutoScroll) return;
         const scroller = getDocumentScroller();
         const { firstInvalidEl } = nodeControl;
         firstInvalidEl &&

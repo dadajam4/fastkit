@@ -21,19 +21,28 @@ import {
 } from '../../composables';
 import { VTextCounter } from '../VTextCounter';
 import { VUI_TEXT_FIELD_SYMBOL } from '../../injections';
+import { ExtractPropInput } from '@fastkit/vue-utils';
 
 const { props, emits } = createTextInputSettings();
 
-export const VTextField = defineComponent({
-  name: 'VTextField',
-  props: {
+function createTextFieldProps() {
+  return {
     ...props,
     ...createFormControlProps(),
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),
     ...defineSlotsProps<FormControlSlots & InputBoxSlots>(),
-  },
+  };
+}
+
+export type TextFieldInput = ExtractPropInput<
+  ReturnType<typeof createTextFieldProps>
+>;
+
+export const VTextField = defineComponent({
+  name: 'VTextField',
+  props: createTextFieldProps(),
   emits,
   setup(props, ctx) {
     const inputControl = useTextInputControl(props, ctx, {

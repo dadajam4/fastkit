@@ -3,7 +3,7 @@ import './VButtonGroup.scss';
 import { defineComponent, isVNode, cloneVNode, VNodeChild, VNode } from 'vue';
 import { colorSchemeProps } from '@fastkit/vue-color-scheme';
 import { createControlProps } from '../../composables';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
+import { renderSlotOrEmpty, isFragment } from '@fastkit/vue-utils';
 import { VButton } from './VButton';
 
 type VButtonGroupChild =
@@ -27,9 +27,13 @@ export const VButtonGroup = defineComponent({
     return () => {
       let buttonLength = 0;
 
-      const children: VButtonGroupChild[] = (
-        renderSlotOrEmpty(ctx.slots) || []
-      ).map((node) => {
+      let tmp = renderSlotOrEmpty(ctx.slots) || [];
+
+      if (tmp.length === 1 && isFragment(tmp[0])) {
+        tmp = tmp[0].children as any;
+      }
+
+      const children: VButtonGroupChild[] = tmp.map((node) => {
         if (!isVNode(node) || node.type !== VButton) {
           return {
             isButton: false,
@@ -44,15 +48,7 @@ export const VButtonGroup = defineComponent({
           node,
         };
       });
-      // const children = renderSlotOrEmpty(ctx.slots) || [];
-      // const $children = children.map((child) => {
-      //   if (!isVNode(child) || child.type !== VButton) return child;
-      //   const $child = cloneVNode(child, {
-      //     ...props,
-      //     ...child.props,
-      //   });
-      //   return $child;
-      // });
+
       let buttonIndex = 0;
 
       const $children = children.map((child) => {

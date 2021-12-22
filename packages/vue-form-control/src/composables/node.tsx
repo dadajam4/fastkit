@@ -75,6 +75,7 @@ function cheepClone<T = any>(source: T): T {
 export interface FormNodeControlBaseOptions {
   nodeType?: FormNodeType;
   defaultValidateTiming?: ValidateTiming;
+  validationValue?: () => any;
 }
 
 export interface FormNodeControlOptions<T = any, D = T>
@@ -196,6 +197,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _tabindex: ComputedRef<number>;
   protected _submiting: ComputedRef<boolean>;
   protected _cii: ComponentInternalInstance | null = null;
+  protected _validationValueGetter?: () => any;
 
   get name() {
     return this._name.value;
@@ -227,6 +229,13 @@ export class FormNodeControl<T = any, D = T> {
 
   set value(value) {
     this._currentValue.value = value;
+  }
+
+  get validationValue() {
+    if (this._validationValueGetter) {
+      return this._validationValueGetter();
+    }
+    return this.value;
   }
 
   get focused() {
@@ -409,6 +418,7 @@ export class FormNodeControl<T = any, D = T> {
 
     this.nodeType = nodeType;
     this.autofocus = props.autofocus;
+    this._validationValueGetter = options.validationValue;
 
     const parentNode = useParentFormNode();
     const parentForm = useParentForm();
@@ -774,7 +784,7 @@ export class FormNodeControl<T = any, D = T> {
 
       const { rules } = this;
 
-      const result = (await validate(this.value, rules)) || [];
+      const result = (await validate(this.validationValue, rules)) || [];
 
       // const result: VFormNodeErrors = [];
       // for (const fn of _rules) {

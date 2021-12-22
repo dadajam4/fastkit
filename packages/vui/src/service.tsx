@@ -3,10 +3,28 @@ export { VuiInjectionKey } from './injections';
 import { VNodeChild } from 'vue';
 import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import type { IconName, RawIconProp } from './components/VIcon';
-import type { VueColorSchemePluginSettings } from '@fastkit/vue-kit';
+import {
+  type VueColorSchemePluginSettings,
+  type VueStackService,
+  type VDialogProps,
+  resolveVStackDynamicInput,
+} from '@fastkit/vue-kit';
 import type { Router } from 'vue-router';
 import { RouterLink } from 'vue-router';
 import { LocationService, setDefaultRouterLink } from '@fastkit/vue-utils';
+import { VForm } from './components/VForm';
+import { VTextField, TextFieldInput } from './components/VTextField';
+import { VueForm } from '@fastkit/vue-form-control';
+// import { VButton } from './components/VButton';
+
+// const hoge: VStackDynamicDialogInput = {
+//   ba
+// }
+export interface VuiPromptOptions extends Partial<VDialogProps> {
+  input?: Omit<TextFieldInput, 'modelValue'> & { initialValue?: string };
+}
+
+export type RawVuiPromptOptions = string | VuiPromptOptions;
 
 const DEFAULT_AUTO_SCROLL_TO_ELEMENT_OFFSET_TOP = -20;
 const DEFAULT_TEXTAREA_ROWS = 3;
@@ -43,6 +61,16 @@ export interface VuiServiceIconSettings {
   prev: RawIconProp;
   next: RawIconProp;
   sort: RawIconProp;
+  editorTextColor: IconName;
+  editorformatBold: IconName;
+  editorformatUnderline: IconName;
+  editorformatItalic: IconName;
+  editorformatListBulleted: IconName;
+  editorformatListNumbered: IconName;
+  editorLink: IconName;
+  editorLinkOff: IconName;
+  editorUndo: IconName;
+  editorRedo: IconName;
 }
 
 export type VuiVNodeResolver = () => VNodeChild;
@@ -68,8 +96,9 @@ export class VuiService {
   readonly requiredChip?: VuiVNodeResolver;
   readonly router: Router;
   readonly location: LocationService;
+  readonly stack: VueStackService;
 
-  constructor(options: VuiServiceOptions) {
+  constructor(options: VuiServiceOptions, stackService: VueStackService) {
     this.options = options;
     this.configure();
 
@@ -87,6 +116,7 @@ export class VuiService {
     this.location = new LocationService({
       router: this.router,
     });
+    this.stack = stackService;
   }
 
   configure(options?: Partial<VuiServiceOptions>) {
@@ -121,5 +151,91 @@ export class VuiService {
   getRequiredChip() {
     const { requiredChip } = this;
     return requiredChip && requiredChip();
+  }
+
+  dialog(...args: Parameters<VueStackService['dialog']>) {
+    return this.stack.dialog(...args);
+  }
+
+  alert(...args: Parameters<VueStackService['alert']>) {
+    return this.stack.alert(...args);
+  }
+
+  confirm(...args: Parameters<VueStackService['confirm']>) {
+    return this.stack.confirm(...args);
+  }
+
+  snackbar(...args: Parameters<VueStackService['snackbar']>) {
+    return this.stack.snackbar(...args);
+  }
+
+  prompt(rawOptions: RawVuiPromptOptions = {}) {
+    const options: VuiPromptOptions =
+      typeof rawOptions === 'string'
+        ? {
+            input: {
+              label: rawOptions,
+            },
+          }
+        : {
+            ...rawOptions,
+          };
+
+    options.input = {
+      ...options.input,
+    };
+
+    options.dense = true;
+
+    let { initialValue: value = '' } = options.input;
+    const { size } = options.input;
+
+    delete options.input.initialValue;
+
+    let form: VueForm | undefined;
+
+    options.actions = options.actions || [
+      this.stack.action('cancel', undefined, { size }),
+      this.stack.action('ok', undefined, {
+        size,
+        onClick: () => {
+          if (form) {
+            const ev = new Event('submit');
+            form.handleSubmit(ev);
+          }
+        },
+      }),
+    ];
+
+    const resolved = resolveVStackDynamicInput({
+      ...options,
+      content: (stack) => {
+        return (
+          <VForm
+            disableAutoScroll
+            size={size}
+            onVnodeMounted={(vnode) => {
+              form = (vnode.component as any).ctx.form as VueForm;
+            }}
+            onVnodeBeforeUnmount={() => {
+              form = undefined;
+            }}
+            onSubmit={(ev) => {
+              stack.resolve(value);
+            }}>
+            <VTextField
+              {...options.input}
+              modelValue={value}
+              onChange={(ev) => {
+                stack.value = ev;
+                value = ev;
+              }}
+            />
+          </VForm>
+        );
+      },
+    });
+
+    return this.dialog(resolved);
   }
 }

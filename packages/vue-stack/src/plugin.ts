@@ -5,6 +5,12 @@ import {
   VueStackInjectionKey,
 } from './service';
 
+declare module '@vue/runtime-core' {
+  export interface ComponentCustomProperties {
+    $vstack: VueStackService;
+  }
+}
+
 export class VueStackPlugin {
   static readonly installedApps = new Set<App>();
 
@@ -16,6 +22,7 @@ export class VueStackPlugin {
 
     const $vstack = new VueStackService(opts);
     app.provide(VueStackInjectionKey, $vstack);
+    app.config.globalProperties.$vstack = $vstack;
 
     app.unmount = function () {
       installedApps.delete(app);

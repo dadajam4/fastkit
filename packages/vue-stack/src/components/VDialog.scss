@@ -49,11 +49,19 @@
     line-height: 1.5;
   }
 
+  &--dense &__body {
+    padding-bottom: 0;
+  }
+
   &__actions {
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     padding: 8px;
+  }
+
+  &--dense &__actions {
+    padding-top: 0;
   }
 }
