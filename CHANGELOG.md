@@ -1,3 +1,12 @@
+## [0.6.36](https://github.com/dadajam4/fastkit/compare/v0.6.35...v0.6.36) (2021-12-22)
+
+
+### Features
+
+* wysiwyg editor ([e466085](https://github.com/dadajam4/fastkit/commit/e466085ce7c3515362e2583a3b98a13355c1b484))
+
+
+
 ## [0.6.35](https://github.com/dadajam4/fastkit/compare/v0.6.34...v0.6.35) (2021-12-21)
 
 
