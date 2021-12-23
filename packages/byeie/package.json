@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/byeie",
-  "version": "0.6.36",
+  "version": "0.6.37",
   "description": "@fastkit/byeie",
   "buildOptions": {
     "name": "BrowserWarn",
