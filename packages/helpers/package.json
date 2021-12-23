@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/helpers",
-  "version": "0.6.38",
+  "version": "0.6.39",
   "description": "@fastkit/helpers",
   "buildOptions": {
     "name": "Helpers"
