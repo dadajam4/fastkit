@@ -41,6 +41,10 @@
   &--plain {
     color: inherit !important;
     // color: inherit !important;
+
+    &[disabled] {
+      opacity: 0.5;
+    }
   }
 
   &--sm {

@@ -8,11 +8,15 @@ export const WysiwygLinkTool: WysiwygEditorToolFactory<LinkOptions> = (
 ) => {
   const tool: WysiwygEditorTool = {
     key: 'link',
-    icon: ({ editor }) => {
-      return vui.icon(editor.isActive('link') ? 'editorLinkOff' : 'editorLink');
-    },
-    // icon: vui.icon('editorLink'),
+    // icon: ({ editor }) => {
+    //   return vui.icon(editor.isActive('link') ? 'editorLinkOff' : 'editorLink');
+    // },
+    icon: vui.icon('editorLink'),
     active: ({ editor }) => editor.isActive('link'),
+    // disabled: ({ editor }) => {
+    //   const { $from, $to } = editor.view.state.selection;
+    //   return $to.pos - $from.pos === 0;
+    // },
     onClick: async ({ vui, editor }) => {
       const { href = '' } = editor.getAttributes('link');
       const result = await vui.prompt({
@@ -30,7 +34,6 @@ export const WysiwygLinkTool: WysiwygEditorToolFactory<LinkOptions> = (
       }
 
       const range = editor.chain().focus().extendMarkRange('link');
-      console.log(range);
 
       if (!result) {
         range.unsetLink().run();

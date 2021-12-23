@@ -1,11 +1,38 @@
 @use '../../styles/core.scss';
 
 .v-wysiwyg-editor {
-  // .ProseMirror {
-  //   p {
-  //     margin: 0;
-  //   }
-  // }
+  &--sm {
+    --min-height: var(--wysiwyg-min-height-sm);
+    --max-height: var(--wysiwyg-max-height-sm);
+  }
+
+  &--md {
+    --min-height: var(--wysiwyg-min-height-md);
+    --max-height: var(--wysiwyg-max-height-md);
+  }
+
+  &--lg {
+    --min-height: var(--wysiwyg-min-height-lg);
+    --max-height: var(--wysiwyg-max-height-lg);
+  }
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__floating-toolbar {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    z-index: 1;
+  }
+
+  &__body {
+    position: relative;
+    max-height: var(--max-height);
+    // max-height: 200px;
+    overflow: auto;
+  }
 
   &__input {
     cursor: text;
@@ -15,37 +42,19 @@
       min-width: 0;
       padding: 8px 0;
       margin: 0;
-
-      .ProseMirror {
-        outline: none;
-      }
-
-      p {
-        margin: 0;
-      }
-      // font-size: inherit;
-      // line-height: inherit;
-      // letter-spacing: inherit;
-      // resize: none;
-      // background: transparent;
-      // border: 0;
-      // border-radius: 0;
-      // outline: 0;
-
-      // &:-webkit-autofill {
-      //   @include core.auto-fill-cancel;
-      //   // color: inherit !important;
-      //   // box-shadow: 0 0 0 1000px get-color(field) inset;
-      // }
-
-      // &::-ms-clear {
-      //   display: none;
-      // }
-
-      // &::placeholder {
-      //   font-style: italic;
-      //   color: var(--control-disabled-color);
-      // }
     }
+
+    &__prose {
+      min-height: var(--min-height);
+      outline: none;
+    }
+  }
+
+  &--disabled-min-heihgt &__input__prose {
+    min-height: 0;
+  }
+
+  &--disabled-max-heihgt &__body {
+    max-height: none;
   }
 }

@@ -53,6 +53,9 @@ export const VWysiwygEditor = defineComponent({
       type: Array as PropType<RawWysiwygEditorTool[]>,
       default: () => [],
     },
+    floatingToolbar: Boolean,
+    disabledMinHeight: Boolean,
+    disabledMaxHeight: Boolean,
   },
   emits: {
     ...createTextableEmits(),
@@ -93,6 +96,16 @@ export const VWysiwygEditor = defineComponent({
 
     watch(() => inputControl.canOperation, updateEditable);
 
+    watch(
+      () => props.modelValue,
+      (modelValue) => {
+        editor.value &&
+          editor.value.commands.setContent(
+            modelValue == null ? '' : modelValue,
+          );
+      },
+    );
+
     const editor = useEditor({
       onCreate: ({ editor }) => {
         textRef.value = editor.getText();
@@ -118,6 +131,8 @@ export const VWysiwygEditor = defineComponent({
       },
     });
 
+    // editor.value.state.doc.content
+
     const focus = (
       position?: FocusPosition,
       options?: {
@@ -136,19 +151,23 @@ export const VWysiwygEditor = defineComponent({
       editor: editor.value,
     }));
 
-    const createTools = (floating = false) => {
+    const createTools = (bubbleMenu = false) => {
       const { value: settings } = wysiwygSettings;
       const { value: context } = wysiwygContext;
-      const tools = floating
+      const tools = bubbleMenu
         ? settings.tools.filter((t) => !!t.floating)
         : settings.tools;
       const _editor = editor.value;
       const variant = vui.setting(
-        floating ? 'containedVariant' : 'plainVariant',
+        bubbleMenu ? 'containedVariant' : 'plainVariant',
       );
 
       return (
-        <VButtonGroup variant={variant}>
+        <VButtonGroup
+          class={{
+            'v-wysiwyg-editor__floating-toolbar': props.floatingToolbar,
+          }}
+          variant={variant}>
           {tools.map(({ key, icon, onClick, disabled, active }) => {
             const isActive =
               !!_editor && resolveContextableValue(context, active);
@@ -195,7 +214,15 @@ export const VWysiwygEditor = defineComponent({
       <VFormControl
         nodeControl={this.nodeControl}
         focused={this.nodeControl.focused}
-        class={['v-wysiwyg-editor', this.classes]}
+        class={[
+          'v-wysiwyg-editor',
+          this.classes,
+          `v-wysiwyg-editor--${this.size}`,
+          {
+            'v-wysiwyg-editor--disabled-min-heihgt': this.disabledMinHeight,
+            'v-wysiwyg-editor--disabled-max-heihgt': this.disabledMaxHeight,
+          },
+        ]}
         label={this.label}
         hint={this.hint}
         hiddenInfo={this.hiddenInfo}
@@ -208,38 +235,42 @@ export const VWysiwygEditor = defineComponent({
             const { editor } = this;
 
             return (
-              <Fragment>
+              <div class="v-wysiwyg-editor__wrapper">
                 {!this.isReadonly && this.createTools()}
-                <VControlField
-                  class="v-wysiwyg-editor__input"
-                  autoHeight
-                  startAdornment={this.startAdornment}
-                  endAdornment={this.endAdornment}
-                  // onClickHost={(ev) => {
-                  //   this.focus();
-                  // }}
-                  v-slots={{
-                    ...this.$slots,
-                    default: () => {
-                      return (
-                        <Fragment>
-                          <EditorContent
-                            class="v-wysiwyg-editor__input__element wysiwyg"
-                            editor={editor}
-                          />
-                          {!!editor && !this.isReadonly && (
-                            <BubbleMenu
-                              class="v-wysiwyg-editor__bubble-menu"
-                              editor={editor}>
-                              {this.createTools(true)}
-                            </BubbleMenu>
-                          )}
-                        </Fragment>
-                      );
-                    },
-                  }}
-                />
-              </Fragment>
+                <div class="v-wysiwyg-editor__body">
+                  <VControlField
+                    class="v-wysiwyg-editor__input"
+                    autoHeight
+                    startAdornment={this.startAdornment}
+                    endAdornment={this.endAdornment}
+                    // onClickHost={(ev) => {
+                    //   this.focus();
+                    // }}
+                    v-slots={{
+                      ...this.$slots,
+                      default: () => {
+                        return (
+                          <Fragment>
+                            <EditorContent
+                              class="v-wysiwyg-editor__input__element wysiwyg"
+                              editor={editor}
+                            />
+                            {!this.floatingToolbar &&
+                              !!editor &&
+                              !this.isReadonly && (
+                                <BubbleMenu
+                                  class="v-wysiwyg-editor__bubble-menu"
+                                  editor={editor}>
+                                  {this.createTools(true)}
+                                </BubbleMenu>
+                              )}
+                          </Fragment>
+                        );
+                      },
+                    }}
+                  />
+                </div>
+              </div>
             );
           },
           infoAppends: () => {

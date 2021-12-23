@@ -161,6 +161,16 @@
   --control-switch-track-width: 2.125em; // 34
   --control-switch-track-height: 0.875em; // 14
 
+  // =============================================
+  // wysiwygs
+  // =============================================
+  --wysiwyg-min-height-sm: 3em;
+  --wysiwyg-min-height-md: 6em;
+  --wysiwyg-min-height-lg: 9em;
+  --wysiwyg-max-height-sm: 9em;
+  --wysiwyg-max-height-md: 13em;
+  --wysiwyg-max-height-lg: 16em;
+
   // shadows
   --shadow-key-umbra-opacity: rgba(0, 0, 0, 0.2);
   --shadow-key-penumbra-opacity: rgba(0, 0, 0, 0.14);

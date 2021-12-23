@@ -66,6 +66,9 @@ export default defineComponent({
     const variant = ref<ControlFieldVariant>('flat');
     const disabled = ref(false);
     const readonly = ref(false);
+    const floating = ref(false);
+    const disabledMinHeight = ref(false);
+    const disabledMaxHeight = ref(false);
 
     return {
       text1,
@@ -73,6 +76,9 @@ export default defineComponent({
       variant,
       disabled,
       readonly,
+      floating,
+      disabledMinHeight,
+      disabledMaxHeight,
     };
   },
   render() {
@@ -96,6 +102,18 @@ export default defineComponent({
           />
         </DocsSection>
 
+        <DocsSection title="Floating toolbar">
+          <VWysiwygEditor
+            label="日本語"
+            tools={tools}
+            v-model={this.text1}
+            counter={100}
+            // maxlength="100"
+            variant="filled"
+            floatingToolbar
+          />
+        </DocsSection>
+
         <DocsSection title="Styles">
           <div class="pg-columns">
             <div class="pg-columns__main">
@@ -109,9 +127,12 @@ export default defineComponent({
                   counter
                   maxlength="100"
                   size={this.size}
+                  floatingToolbar={this.floating}
                   disabled={this.disabled}
                   readonly={this.readonly}
                   variant={variant}
+                  disabledMinHeight={this.disabledMinHeight}
+                  disabledMaxHeight={this.disabledMaxHeight}
                 />
               ))}
             </div>
@@ -130,6 +151,15 @@ export default defineComponent({
               </VSwitch>
               <VSwitch size="sm" v-model={this.readonly}>
                 Readonly
+              </VSwitch>
+              <VSwitch size="sm" v-model={this.floating}>
+                Floating
+              </VSwitch>
+              <VSwitch size="sm" v-model={this.disabledMinHeight}>
+                Disabled min height
+              </VSwitch>
+              <VSwitch size="sm" v-model={this.disabledMaxHeight}>
+                Disabled max height
               </VSwitch>
             </div>
           </div>
