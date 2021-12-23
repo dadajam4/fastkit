@@ -68,7 +68,7 @@ export default defineComponent({
             v-slots={{
               activator: ({ attrs }) => {
                 return [
-                  <VButton color="info" {...attrs}>
+                  <VButton color="info" {...(attrs as any)}>
                     Tooltip
                   </VButton>,
                 ];

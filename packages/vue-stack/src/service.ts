@@ -1,5 +1,6 @@
 import { Ref, ref, markRaw } from 'vue';
 import { VStackControl } from './schemes/control';
+export type { VStackControl } from './schemes/control';
 import {
   VStackDynamicSetting,
   VStackDynamicInternalSetting,
