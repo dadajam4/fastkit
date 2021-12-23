@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-form-control",
-  "version": "0.6.37",
+  "version": "0.6.38",
   "description": "@fastkit/vue-form-control",
   "main": "index.js",
   "module": "dist/vue-form-control.esm-bundler.js",
@@ -26,10 +26,10 @@
     "vue": "^3.2.20"
   },
   "dependencies": {
-    "@fastkit/helpers": "0.6.37",
-    "@fastkit/rules": "0.6.37",
-    "@fastkit/tiny-logger": "0.6.37",
-    "@fastkit/vue-utils": "0.6.37",
+    "@fastkit/helpers": "0.6.38",
+    "@fastkit/rules": "0.6.38",
+    "@fastkit/tiny-logger": "0.6.38",
+    "@fastkit/vue-utils": "0.6.38",
     "imask": "^6.2.2"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-media-match",
-  "version": "0.6.37",
+  "version": "0.6.38",
   "description": "@fastkit/vue-media-match",
   "buildOptions": {
     "name": "VueMediaMatch"
@@ -29,7 +29,7 @@
     "vue": "^3.2.20"
   },
   "dependencies": {
-    "@fastkit/helpers": "0.6.37",
-    "@fastkit/media-match": "0.6.37"
+    "@fastkit/helpers": "0.6.38",
+    "@fastkit/media-match": "0.6.38"
   }
 }
