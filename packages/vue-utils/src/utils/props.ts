@@ -1,5 +1,7 @@
 import { PropType, Prop, ComponentPropsOptions } from '@vue/runtime-core';
 
+import { HTMLAttributes } from 'vue';
+
 export const rawNumberPropType = [String, Number] as PropType<string | number>;
 
 export type RawNumberProp<D extends number | string | undefined = undefined> =
@@ -121,3 +123,10 @@ export function resolveNumberish<
   if (source == null) return defaultValue as any;
   return typeof source === 'number' ? source : Number(source);
 }
+
+export type HTMLAttributesPropOptions = {
+  [K in keyof HTMLAttributes]-?: PropType<HTMLAttributes[K]>;
+};
+
+export const htmlAttributesPropOptions =
+  undefined as unknown as HTMLAttributesPropOptions;

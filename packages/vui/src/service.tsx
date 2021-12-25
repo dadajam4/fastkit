@@ -15,11 +15,8 @@ import { LocationService, setDefaultRouterLink } from '@fastkit/vue-utils';
 import { VForm } from './components/VForm';
 import { VTextField, TextFieldInput } from './components/VTextField';
 import { VueForm } from '@fastkit/vue-form-control';
-// import { VButton } from './components/VButton';
+import { getDocumentScroller } from '@fastkit/vue-scroller';
 
-// const hoge: VStackDynamicDialogInput = {
-//   ba
-// }
 export interface VuiPromptOptions extends Partial<VDialogProps> {
   input?: Omit<TextFieldInput, 'modelValue'> & { initialValue?: string };
 }
@@ -97,6 +94,10 @@ export class VuiService {
   readonly router: Router;
   readonly location: LocationService;
   readonly stack: VueStackService;
+
+  get scroller() {
+    return getDocumentScroller();
+  }
 
   constructor(options: VuiServiceOptions, stackService: VueStackService) {
     this.options = options;

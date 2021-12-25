@@ -1,11 +1,16 @@
 import { defineComponent } from 'vue';
-import { VHero } from '@fastkit/vui';
+import { VHero, VButton } from '@fastkit/vui';
 
 export default defineComponent({
   render() {
     return (
       <div>
-        <VHero>Components</VHero>
+        <VHero
+          v-slots={{
+            adornment: () => <VButton>hoge</VButton>,
+          }}>
+          Components
+        </VHero>
       </div>
     );
   },

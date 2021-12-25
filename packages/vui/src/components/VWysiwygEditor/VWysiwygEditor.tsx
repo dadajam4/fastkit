@@ -188,6 +188,7 @@ export const VWysiwygEditor = defineComponent({
 
             return (
               <VButton
+                tabindex={-1}
                 key={key}
                 icon={iconName}
                 onClick={(ev) => onClick(context, ev)}

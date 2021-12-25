@@ -10,6 +10,7 @@ import {
   VSelect,
   TEXT_INPUT_TYPES,
   TextInputType,
+  VIcon,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
 
@@ -44,6 +45,7 @@ export default defineComponent({
             hint="これは入力ヒントテキストです。"
             counter
             maxlength="10"
+            endAdornment={<VIcon name="mdi-access-point"></VIcon>}
             v-slots={
               {
                 error: (error: any) => {

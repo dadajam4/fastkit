@@ -5,7 +5,6 @@ import {
   computed,
   PropType,
   VNodeChild,
-  HTMLAttributes,
 } from 'vue';
 import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
 import {
@@ -13,6 +12,7 @@ import {
   ExtractPropInput,
   createPropsOptions,
   renderSlotOrEmpty,
+  htmlAttributesPropOptions,
 } from '@fastkit/vue-utils';
 import { useVui } from '../../injections';
 import { createControlProps, useControl } from '../../composables';
@@ -46,9 +46,7 @@ function resolveRawVButtonIcon(
 }
 
 export const vueButtonProps = createPropsOptions({
-  ...(undefined as unknown as {
-    [K in keyof HTMLAttributes]-?: PropType<HTMLAttributes[K]>;
-  }),
+  ...htmlAttributesPropOptions,
   ...colorSchemeProps(),
   ...navigationableInheritProps,
   spacer: [Boolean, String] as PropType<RawVButtonSpacer>,

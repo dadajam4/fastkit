@@ -1,6 +1,7 @@
 .v-form-control {
   display: flex;
   flex-direction: column;
+  max-width: 100%;
   margin: var(--control-horizontal-margin) 0;
 
   // --control-label-font-size: calc(var(--control-field-font-size) * 0.75); // 12
