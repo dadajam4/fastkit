@@ -18,7 +18,7 @@ export function createRecommendedSettings(
   } = opts;
 
   return createMediaMatchSettings({
-    breakPoints: [
+    breakpoints: [
       {
         key: 'xs',
         max: xsMaxWidth,

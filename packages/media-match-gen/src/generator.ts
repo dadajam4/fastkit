@@ -50,14 +50,14 @@ export async function generator(
 
   const mediaMatches: MediaMatchDefine[] = [];
 
-  const { breakPoints, customs, aliases } = settings;
+  const { breakpoints, customs, aliases } = settings;
 
-  breakPoints.forEach((breakPoint, index) => {
-    const { key } = breakPoint;
-    const beforeDefine = breakPoints[index - 1];
+  breakpoints.forEach((breakpoint, index) => {
+    const { key } = breakpoint;
+    const beforeDefine = breakpoints[index - 1];
     const beforeMax = beforeDefine && beforeDefine.max;
     const min = beforeMax != null ? beforeMax + 1 : null;
-    const max = breakPoint.max || null;
+    const max = breakpoint.max || null;
 
     if (min && max) {
       mediaMatches.push(
@@ -86,7 +86,7 @@ export async function generator(
     mediaMatches.push({
       key,
       condition,
-      description: breakPoint.description || `>= ${min}px & <= ${max}px`,
+      description: breakpoint.description || `>= ${min}px & <= ${max}px`,
     });
   });
 
