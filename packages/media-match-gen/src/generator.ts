@@ -208,25 +208,30 @@ $mq-each-prefix-org: null;
 }
 
 @mixin mq-each() {
-  $mq-each-target: null;
-  $mq-each-prefix: null;
+  $mq-each-target: null !global;
+  $mq-each-prefix: null !global;
+  $mq-each-prefix-org: null !global;
   $is-first: true;
 
   @each $define in $media-matches {
     $target: map-get($define, key);
-    $condition-target: map-get($define, condition);
+    $target-condition: map-get($define, condition);
 
-    $mq-each-target: $target;
-    $mq-each-prefix-org: #{$target + '-'};
-    $mq-each-prefix: if($is-first, '', $mq-each-prefix-org);
+    $mq-each-target: $target !global;
+    $mq-each-prefix-org: #{$target + '-'} !global;
+    $mq-each-prefix: if($is-first, '', $mq-each-prefix-org) !global;
     $is-first: false;
 
-    @if $condition-target == null {
+    @if $target-condition == null {
       @content;
     }
 
     @else {
-      @include mq($condition-target) {
+      // @media #{$target-condition} {
+      //   @content;
+      // }
+
+      @include mq($target) {
         @content;
       }
     }
