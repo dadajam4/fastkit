@@ -1,5 +1,6 @@
 export * from './loading';
 export * from './kits';
+export * from './VGrid';
 export * from './VPaper';
 export * from './VCard';
 export * from './VIcon';

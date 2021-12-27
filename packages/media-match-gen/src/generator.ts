@@ -50,44 +50,59 @@ export async function generator(
 
   const mediaMatches: MediaMatchDefine[] = [];
 
-  const { breakpoints, customs, aliases } = settings;
+  let { breakpoints } = settings;
+  const { customs } = settings;
 
-  breakpoints.forEach((breakpoint, index) => {
-    const { key } = breakpoint;
-    const beforeDefine = breakpoints[index - 1];
-    const beforeMax = beforeDefine && beforeDefine.max;
-    const min = beforeMax != null ? beforeMax + 1 : null;
-    const max = breakpoint.max || null;
+  breakpoints = breakpoints.sort((a, b) => {
+    const am = a.min;
+    const bm = b.min;
+    if (am < bm) return -1;
+    if (am > bm) return 1;
+    return 0;
+  });
 
-    if (min && max) {
-      mediaMatches.push(
-        {
-          key: `${key}AndDown`,
-          condition: ['all', `(max-width:${max}px)`].join(' and '),
-          description: `<= ${max}px`,
-        },
-        {
-          key: `${key}AndUp`,
-          condition: ['all', `(min-width:${min}px)`].join(' and '),
-          description: `>= ${min}px`,
-        },
-      );
-    }
-
-    const conditions = ['all'];
-    if (min) {
-      conditions.push(`(min-width:${min}px)`);
-    }
-    if (max) {
-      conditions.push(`(max-width:${max}px)`);
-    }
-    const condition = conditions.join(' and ');
-
+  breakpoints.forEach((breakpoint /*, index*/) => {
+    const { key, min, description } = breakpoint;
+    // const beforeDefine = breakpoints[index - 1];
+    // const nextDefine = breakpoints[index - 1];
+    // const beforeMax = beforeDefine && beforeDefine.max;
+    // const min = beforeMax != null ? beforeMax + 1 : null;
+    // const max = breakpoint.max || null;
     mediaMatches.push({
       key,
-      condition,
-      description: breakpoint.description || `>= ${min}px & <= ${max}px`,
+      condition: ['all', `(min-width:${min}px)`].join(' and '),
+      description: description || `>= ${min}px`,
     });
+
+    // if (min && max) {
+    //   mediaMatches.push(
+    //     {
+    //       key: `${key}AndDown`,
+    //       condition: ['all', `(max-width:${max}px)`].join(' and '),
+    //       description: `<= ${max}px`,
+    //     },
+    //     {
+    //       key: `${key}AndUp`,
+    //       condition: ['all', `(min-width:${min}px)`].join(' and '),
+    //       description: `>= ${min}px`,
+    //     },
+    //   );
+    // }
+
+    // const conditions = ['all'];
+    // if (min) {
+    //   conditions.push(`(min-width:${min}px)`);
+    // }
+    // if (max) {
+    //   conditions.push(`(max-width:${max}px)`);
+    // }
+    // const condition = conditions.join(' and ');
+
+    // mediaMatches.push({
+    //   key,
+    //   condition,
+    //   description: breakpoint.description || `>= ${min}px & <= ${max}px`,
+    // });
   });
 
   customs.forEach((custom) => {
@@ -97,18 +112,18 @@ export async function generator(
     });
   });
 
-  Object.keys(aliases).forEach((key) => {
-    const target = aliases[key];
-    const same = mediaMatches.find((match) => match.key === target);
-    if (same) {
-      const index = mediaMatches.indexOf(same);
-      mediaMatches.splice(index + 1, 0, {
-        ...same,
-        key,
-        description: `Alias for '${target}'`,
-      });
-    }
-  });
+  // Object.keys(aliases).forEach((key) => {
+  //   const target = aliases[key];
+  //   const same = mediaMatches.find((match) => match.key === target);
+  //   if (same) {
+  //     const index = mediaMatches.indexOf(same);
+  //     mediaMatches.splice(index + 1, 0, {
+  //       ...same,
+  //       key,
+  //       description: `Alias for '${target}'`,
+  //     });
+  //   }
+  // });
 
   const TS_SOURCE = `
 /* eslint-disable */

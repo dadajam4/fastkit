@@ -5,16 +5,9 @@ export interface MediaMatchDefine<K extends string = string> {
   description: string;
 }
 
-/**
- * breakpointsで定義したキーは
- * [key]AndDown
- * [key]AndUp
- * の条件も自動生成されます。
- */
 export interface MediaMatchBreakpoint<K extends string = string> {
   key: K;
-  min?: number;
-  max?: number;
+  min: number;
   description?: string;
 }
 
@@ -37,21 +30,12 @@ export type ComputedMediaMatchKey<K extends string> =
   | `${K}AndDown`
   | `${K}AndUp`;
 
-/**
- * 特定の条件に別名でも参照したい時に設定してください。
- */
-export interface MediaMatchAliases<K extends string, C extends string> {
-  [key: string]: ComputedMediaMatchKey<K> | C;
-}
-
 export interface MediaMatchSettings<
   K extends string = string,
   C extends string = string,
 > {
   breakpoints: MediaMatchBreakpoint<K>[];
   customs: MediaMatchCustom<C>[];
-  aliases: MediaMatchAliases<K, C>;
-  setAlias(aliasSettings: MediaMatchAliases<K, C>): this;
 }
 
 export function createMediaMatchSettings<
@@ -65,14 +49,6 @@ export function createMediaMatchSettings<
   const _settings: MediaMatchSettings<K, C> = {
     breakpoints,
     customs,
-    aliases: {},
-    setAlias(aliasSettings) {
-      this.aliases = {
-        ...this.aliases,
-        ...aliasSettings,
-      };
-      return this;
-    },
   };
   return _settings;
 }

@@ -10,7 +10,8 @@
   "module": "dist/vui.esm-bundler.js",
   "files": [
     "index.js",
-    "dist"
+    "dist",
+    "src"
   ],
   "types": "dist/vui.d.ts",
   "repository": {

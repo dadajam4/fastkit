@@ -1,0 +1,155 @@
+// *************************
+// * .mt-0 : margin-top: 0;
+// * .mr-1h : margin-right: 12px;
+// * .ml-n2 : margin-left: - 16px;
+// * .m-1 : margin: 8px;
+// * .mx-auto : margin-left: auto; margin-right: auto;
+// * .mx-2 : margin-left: 16px; margin-right: 16px;
+// * .my-0 : margin-top: 0; margin-bottom: 0;
+// * .mt-1--xs: margin-top: 8px; (only xs media)
+// *************************
+
+$property-map: (
+  (
+    selector: 'm',
+    prop: 'margin',
+    has-negative: true,
+    has-auto: true,
+  ),
+  (
+    selector: 'p',
+    prop: 'padding',
+    has-negative: false,
+    has-auto: false,
+  )
+);
+
+$sides-map: (
+  (
+    selector: '',
+    props: (
+      'all',
+    ),
+  ),
+  (
+    selector: 'x',
+    props: (
+      'left',
+      'right',
+    ),
+  ),
+  (
+    selector: 'y',
+    props: (
+      'top',
+      'bottom',
+    ),
+  ),
+  (
+    selector: 't',
+    props: (
+      'top',
+    ),
+  ),
+  (
+    selector: 'b',
+    props: (
+      'bottom',
+    ),
+  ),
+  (
+    selector: 'l',
+    props: (
+      'left',
+    ),
+  ),
+  (
+    selector: 'r',
+    props: (
+      'right',
+    ),
+  )
+);
+
+@mixin spacing($breakpoint-suffix: '') {
+  @each $property-info in $property-map {
+    $prop-selector: map-get($property-info, selector);
+    $prop-name: map-get($property-info, prop);
+    $has-negative: map-get($property-info, has-negative);
+    $has-auto: map-get($property-info, has-auto);
+
+    @each $sides-info in $sides-map {
+      $sides-selector: map-get($sides-info, selector);
+      $sides-props: map-get($sides-info, props);
+      $base-selector: '.' + #{$prop-selector}#{$sides-selector};
+
+      @if ($has-auto) {
+        #{$base-selector}-auto#{$breakpoint-suffix} {
+          @each $sides-prop in $sides-props {
+            $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+
+            #{$prop-name}#{$prop-suffix}: auto;
+          }
+        }
+      }
+
+      @for $i from 0 through 10 {
+        $base-value: if(
+          $i == 0,
+          0,
+          if($i == 1, var(--root-spacing), calc(var(--root-spacing) * #{$i}))
+        );
+        $half-value: calc(var(--root-spacing) * #{$i + 0.5});
+
+        #{$base-selector}-#{$i}#{$breakpoint-suffix} {
+          @each $sides-prop in $sides-props {
+            $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+
+            #{$prop-name}#{$prop-suffix}: $base-value;
+          }
+        }
+
+        #{$base-selector}-#{$i}h#{$breakpoint-suffix} {
+          @each $sides-prop in $sides-props {
+            $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+
+            #{$prop-name}#{$prop-suffix}: $half-value;
+          }
+        }
+      }
+
+      @if ($has-negative) {
+        @for $i from 1 through 10 {
+          $base-value: if(
+            $i == 1,
+            calc(var(--root-spacing) * -1),
+            calc(var(--root-spacing) * -#{$i})
+          );
+          $half-value: calc(var(--root-spacing) * -#{$i + 0.5});
+
+          #{$base-selector}-n#{$i}#{$breakpoint-suffix} {
+            @each $sides-prop in $sides-props {
+              $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+
+              #{$prop-name}#{$prop-suffix}: $base-value;
+            }
+          }
+
+          #{$base-selector}-n#{$i}h#{$breakpoint-suffix} {
+            @each $sides-prop in $sides-props {
+              $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+
+              #{$prop-name}#{$prop-suffix}: $half-value;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include spacing();
+
+@include mq-each() {
+  @include spacing($breakpoint-suffix: '--' + $mq-each-target);
+}

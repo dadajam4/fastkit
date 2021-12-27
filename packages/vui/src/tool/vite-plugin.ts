@@ -8,6 +8,12 @@ import { VuiServiceOptions } from '../service';
 import { render } from 'eta';
 import { VuiError } from '../logger';
 
+const VUI_PACKAGE_DIR = path.resolve(__dirname, '../..');
+const STYLE_AFTER_EFFECTS_PATH = path.join(
+  VUI_PACKAGE_DIR,
+  'src/styles/after-effects.scss',
+);
+
 const COLOR_DUMP_STYLE = `@include dump-color-scheme(true);`;
 
 const TEMPLATE = `
@@ -28,6 +34,7 @@ import { installVuiPlugin as _installVuiPlugin, VuiPluginOptions } from '@fastki
 import { colorScheme } from '<%~ it.colorScheme %>';
 import '<%~ it.mediaMatch %>';
 import './icon-font';
+import '${STYLE_AFTER_EFFECTS_PATH}';
 
 export function installVui(settings: { app: App, router: Router }) {
   _installVuiPlugin(settings.app, {

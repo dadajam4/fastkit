@@ -1,6 +1,6 @@
 :root {
   --root-em: 16px;
-  --root-spacing: 4px;
+  --root-spacing: 8px;
 
   // =============================================
   // transitions
@@ -151,7 +151,7 @@
   --control-label-height: 1.4375em;
   --control-message-color: rgba(0, 0, 0, 0.6);
   --control-message-font-size: 0.75em; // 12
-  --control-message-horizontal-margin: var(--root-spacing);
+  --control-message-horizontal-margin: calc(var(--root-spacing) * 0.5);
   --control-checkable-outer-size: 2em; // 42
   --control-checkable-icon-size: 1em; // 20
   --control-checkable-faux-scale: 1.2;
