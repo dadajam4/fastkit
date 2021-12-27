@@ -304,8 +304,8 @@ $props-map: (
       $selector: map-get($value-info, selector);
       $value: map-get($value-info, value);
 
-      .#{selector}#{$breakpoint-suffix} {
-        #{$prop}: $value;
+      .#{$selector}#{$breakpoint-suffix} {
+        #{$prop}: unquote($value);
       }
     }
   }
@@ -337,55 +337,6 @@ $props-map: (
   @include grid-spacing($breakpoint-suffix);
   @include grid-spacing($breakpoint-suffix, 'x');
   @include grid-spacing($breakpoint-suffix, 'y');
-
-  // @for $i from 1 through 10 {
-  //   $base-value: if(
-  //     $i == 0,
-  //     0,
-  //     if($i == 1, var(--root-spacing), calc(var(--root-spacing) * #{$i}))
-  //   );
-  //   $half-value: calc(var(--root-spacing) * #{$i + 0.5});
-  //   $negative-base-value: if(
-  //     $i == 1,
-  //     calc(var(--root-spacing) * -1),
-  //     calc(var(--root-spacing) * -#{$i})
-  //   );
-  //   $negative-half-value: calc(var(--root-spacing) * -#{$i + 0.5});
-  //   $container-width: if(
-  //     $i == 0,
-  //     100%,
-  //     if(
-  //       $i == 1,
-  //       calc(100% + var(--root-spacing)),
-  //       calc(100% + (var(--root-spacing) * #{$i}))
-  //     )
-  //   );
-  //   $container-width-half: calc(100% + (var(--root-spacing) * #{$i + 0.5}));
-
-  //   .grid-spacing-#{$i}#{$breakpoint-suffix} {
-  //     width: $container-width;
-  //     margin-top: $negative-base-value;
-  //     margin-left: $negative-base-value;
-
-  //     & > .grid-item {
-  //       padding-top: $base-value;
-  //       padding-left: $base-value;
-  //     }
-  //   }
-
-  //   .grid-spacing-#{$i}h#{$breakpoint-suffix} {
-  //     width: $container-width-half;
-  //     margin-top: $negative-base-value;
-  //     margin-left: $negative-base-value;
-
-  //     & > .grid-item {
-  //       padding-top: $half-value;
-  //       padding-left: $half-value;
-  //     }
-  //   }
-  // }
-
-  // .grid-spacing
 }
 
 @include display-flow();

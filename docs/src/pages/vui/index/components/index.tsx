@@ -24,9 +24,9 @@ export default defineComponent({
           </VGridItem>
         </VGridContainer>
 
-        <VGridContainer class="mt-4">
+        <VGridContainer class="mt-4" justifyContent={'center'}>
           <VGridItem xs={8} md={6}>
-            <VCard>xs12 / md4</VCard>
+            <VCard>xs8 / md6</VCard>
           </VGridItem>
         </VGridContainer>
       </div>

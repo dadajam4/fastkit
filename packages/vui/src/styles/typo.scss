@@ -5,8 +5,7 @@
   //   color: var(--palette-heading);
   // }
 
-  h#{$level},
-  .text-h#{$level} {
+  h#{$level} {
     @include core.typo('h' + $level);
   }
 }
