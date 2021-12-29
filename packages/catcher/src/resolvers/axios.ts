@@ -1,4 +1,5 @@
 import type { AxiosError, AxiosRequestConfig } from 'axios';
+import { createCatcherResolver } from '../schemes';
 
 function isAxiosError(source: unknown): source is AxiosError {
   return (
@@ -48,10 +49,10 @@ export interface AxiosErrorInfo {
 }
 
 export interface AxiosErrorOverrides {
-  name: string;
-  message: string;
-  stack?: string;
-  axios: AxiosErrorInfo;
+  // name: string;
+  // message: string;
+  // stack?: string;
+  axiosError: AxiosErrorInfo;
 }
 
 export function toAxiosErrorInfo(source: AxiosError): AxiosErrorInfo {
@@ -86,15 +87,16 @@ export function toAxiosErrorInfo(source: AxiosError): AxiosErrorInfo {
   };
 }
 
-export function axiosErrorResolver(
-  source: AxiosError,
-): AxiosErrorOverrides | undefined {
-  if (!isAxiosError(source)) return;
-  const axiosError = toAxiosErrorInfo(source);
-  return {
-    name: axiosError.name,
-    message: axiosError.message,
-    stack: axiosError.stack,
-    axios: axiosError,
-  };
-}
+export const axiosErrorResolver = createCatcherResolver(
+  function axiosErrorResolver(source, ctx): AxiosErrorOverrides | undefined {
+    if (!isAxiosError(source)) return;
+
+    const axiosError = toAxiosErrorInfo(source);
+
+    ctx.resolve();
+
+    return {
+      axiosError,
+    };
+  },
+);

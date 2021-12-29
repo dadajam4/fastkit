@@ -14,7 +14,8 @@ interface ErrorImplements {
 
 type ExcludeNullableReturnType<T> = T extends (...args: any[]) => any
   ? (
-      ...args: Parameters<T>
+      // ...args: Parameters<T>
+      args: Parameters<T>[0],
     ) => Partial<Exclude<ReturnType<T>, void | undefined | null>>
   : (...args: any[]) => {};
 
@@ -24,59 +25,118 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
   ? I
   : never;
 
-export type AnyResolver = (source: any) => AnyData | void | undefined | null;
+export type ResolverContext = {
+  resolve: () => void;
+};
+
+export type AnyResolver = (
+  exceptionInfo: unknown,
+  ctx: ResolverContext,
+) => AnyData | void | undefined | null;
 
 export type AnyResolvers = AnyResolver[];
+
+export function createCatcherResolver<Resolver extends AnyResolver>(
+  resolver: Resolver,
+) {
+  return resolver;
+}
 
 type MergeParametersAndReturnTypes<
   Resolvers extends AnyResolvers = AnyResolvers,
 > = Resolvers extends (infer T)[] ? ExcludeNullableReturnType<T> : never;
 
-type ComputedArgs<Resolvers extends AnyResolvers = AnyResolvers> = Parameters<
-  MergeParametersAndReturnTypes<[...BultinErrorResolvers, ...Resolvers]>
->;
-
 type ComputedResolvedTypes<Resolvers extends AnyResolvers = AnyResolvers> =
   UnionToIntersection<
-    ReturnType<
-      MergeParametersAndReturnTypes<[...BultinErrorResolvers, ...Resolvers]>
-    >
+    ReturnType<MergeParametersAndReturnTypes<[...Resolvers]>>
   >;
 
-export type AnyNormalizer = (
-  data: AnyData,
-) => AnyData | void | undefined | null;
+export type ResolvedCatcherData<Resolvers extends AnyResolvers = AnyResolvers> =
+  ComputedResolvedTypes<[...BultinErrorResolvers, ...Resolvers]>;
 
-export type AnyNormalizers = AnyNormalizer[];
+export type AnyNormalizer<Resolvers extends AnyResolvers = AnyResolvers> = (
+  resolvedData: ResolvedCatcherData<Resolvers>,
+) => (exceptionInfo: any) => AnyData | void | undefined | null;
+
+export function createCatcherNomalizer<
+  Normalizer extends AnyNormalizer<Resolvers>,
+  Resolvers extends AnyResolvers = AnyResolvers,
+>(nomalizer: Normalizer, _resolvers?: Resolvers): Normalizer {
+  return nomalizer;
+}
 
 export interface CatcherBuilderOptions<
   Resolvers extends AnyResolvers,
-  Normalizers extends AnyNormalizers,
+  Normalizer extends AnyNormalizer<Resolvers>,
 > {
   defaultName?: string;
   resolvers?: Resolvers;
-  normalizers?: Normalizers;
+  normalizer: Normalizer;
 }
 
 export type CatcherData<T = AnyData> = T & {
-  $_catcherCaught: true;
+  $__catcher: true;
 };
 
-export interface Catcher<T = AnyData> extends Error {
+export interface Catcher<
+  Resolvers extends AnyResolvers = AnyResolvers,
+  T = AnyData,
+> extends Error {
   readonly isCatcher: true;
   readonly data: CatcherData<T>;
-  source: any;
-  toJSON(): ErrorImplements & CatcherData<T>;
+  readonly resolvedData: ResolvedCatcherData<Resolvers>;
+  readonly source?: Catcher<Resolvers, T>;
+  readonly histories: Catcher<Resolvers, T>[];
+  readonly messages: string[];
+  // source: any;
+  toJSON(): ErrorImplements & CatcherData<T> & { messages: string[] };
   toJSONString(indent?: number | boolean): string;
 }
 
 export interface CatcherConstructor<
   Resolvers extends AnyResolvers = AnyResolvers,
-  Normalizers extends AnyNormalizers = AnyNormalizers,
+  Normalizer extends AnyNormalizer = AnyNormalizer,
 > {
-  new (...args: ComputedArgs<Resolvers> | [string] | [unknown]): Catcher<
-    ComputedResolvedTypes<Resolvers> & ComputedResolvedTypes<Normalizers>
+  // new (
+  //   exceptionInfo: Parameters<ReturnType<Normalizer>>[0],
+  //   overrides?: Partial<ReturnType<ReturnType<Normalizer>> & ErrorImplements>,
+  // ): Catcher<Resolvers, ReturnType<ReturnType<Normalizer>>> &
+  //   ReturnType<ReturnType<Normalizer>>;
+
+  /**
+   * Create an error instance based on the error information.
+   */
+  new (errorInfo: Parameters<ReturnType<Normalizer>>[0]): Catcher<
+    Resolvers,
+    ReturnType<ReturnType<Normalizer>>
   > &
-    ComputedResolvedTypes<Resolvers> &
-    ComputedResolvedTypes<Normalizers>;
+    ReturnType<ReturnType<Normalizer>>;
+
+  /**
+   * Create an error instance based on the error information.
+   */
+  create(
+    errorInfo: Parameters<ReturnType<Normalizer>>[0],
+  ): Catcher<Resolvers, ReturnType<ReturnType<Normalizer>>> &
+    ReturnType<ReturnType<Normalizer>>;
+
+  /**
+   * Create an error instance based on an unknown exception.
+   * The fields of the error instance can be overwritten by specifying an object as the second argument.
+   */
+  from(
+    unknownException: unknown,
+    overrides?: Partial<ReturnType<ReturnType<Normalizer>> & ErrorImplements>,
+  ): Catcher<Resolvers, ReturnType<ReturnType<Normalizer>>> &
+    ReturnType<ReturnType<Normalizer>>;
+  // new (
+  //   exceptionInfo: Parameters<ReturnType<Normalizer>>[0],
+  //   overrides?: Partial<ReturnType<ReturnType<Normalizer>> & ErrorImplements>,
+  // ): Catcher<Resolvers, ReturnType<ReturnType<Normalizer>>> &
+  //   ReturnType<ReturnType<Normalizer>>;
+  // resolve(
+  //   exceptionInfo: Parameters<ReturnType<Normalizer>>[0] | undefined,
+  //   overrides?: Partial<ReturnType<ReturnType<Normalizer>> & ErrorImplements>,
+  // ): Catcher<Resolvers, ReturnType<ReturnType<Normalizer>>> &
+  //   ReturnType<ReturnType<Normalizer>>;
 }

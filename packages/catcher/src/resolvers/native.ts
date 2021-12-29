@@ -1,39 +1,44 @@
-const NativeErrorConstructors = [
-  EvalError,
-  RangeError,
-  ReferenceError,
-  SyntaxError,
-  TypeError,
-  URIError,
-  Error,
-] as const;
+// const NativeErrorConstructors = [
+//   EvalError,
+//   RangeError,
+//   ReferenceError,
+//   SyntaxError,
+//   TypeError,
+//   URIError,
+//   Error,
+// ] as const;
 
-type NativeErrorConstructor = typeof NativeErrorConstructors[number];
+// type NativeErrorConstructor = typeof NativeErrorConstructors[number];
 
-function isNativeErrorConstructor(
-  source: unknown,
-): source is NativeErrorConstructor {
-  return NativeErrorConstructors.includes(source as any);
-}
+// function isNativeErrorConstructor(
+//   source: unknown,
+// ): source is NativeErrorConstructor {
+//   return NativeErrorConstructors.includes(source as any);
+// }
 
 export interface NativeErrorOverrides {
-  isNativeError: boolean;
-  message: string;
-  stack?: string;
-  name: string;
+  // isNativeError: boolean;
+  // message: string;
+  // stack?: string;
+  // name: string;
+  nativeError?: Error;
 }
 
 export function nativeErrorResolver(
-  source: string | InstanceType<NativeErrorConstructor>,
+  source: unknown,
+  // source: string | InstanceType<NativeErrorConstructor>,
 ): NativeErrorOverrides | undefined {
-  if (typeof source === 'string') {
-    source = new Error(source);
-  }
+  // if (typeof source === 'string') {
+  //   source = new Error(source);
+  // }
   if (source && source instanceof Error) {
-    const { constructor } = source;
-    if (isNativeErrorConstructor(constructor)) {
-      const { message, stack, name } = source;
-      return { message, stack, name, isNativeError: true };
-    }
+    return {
+      nativeError: source,
+    };
+    // const { constructor } = source;
+    // if (isNativeErrorConstructor(constructor)) {
+    //   const { message, stack, name } = source;
+    //   return { message, stack, name, isNativeError: true };
+    // }
   }
 }
