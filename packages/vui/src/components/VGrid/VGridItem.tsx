@@ -1,7 +1,7 @@
 import './VGridItem.scss';
 
-import { defineComponent, PropType, computed } from 'vue';
-import { MediaMatchKey, MEDIA_MATCH_CONDITIONS } from '@fastkit/media-match';
+import { defineComponent, computed } from 'vue';
+// import { MediaMatchKey, MEDIA_MATCH_CONDITIONS } from '@fastkit/media-match';
 import { htmlAttributesPropOptions } from '@fastkit/vue-utils';
 import { RawGridValueProp, extractRawGridValueClasses } from './schemes';
 
@@ -21,10 +21,10 @@ export type GridItemNumberSizeValue =
 
 export type GridItemSizeValue = GridItemNumberSizeValue | 'auto';
 
-type MQSizeProps = Record<
-  MediaMatchKey,
-  PropType<GridItemSizeValue | undefined>
->;
+// type MQSizeProps = Record<
+//   MediaMatchKey,
+//   PropType<GridItemSizeValue | undefined>
+// >;
 
 export type GridItemAlignValue =
   | 'flex-start'
@@ -55,7 +55,8 @@ export const VGridItem = defineComponent({
       type: String,
       default: 'div',
     },
-    ...(undefined as unknown as MQSizeProps),
+    // ...(undefined as unknown as MQSizeProps),
+    size: undefined as unknown as RawGridValueProp<GridItemSizeValue>,
     align: undefined as unknown as RawGridValueProp<GridItemAlignValue>,
     justify: undefined as unknown as RawGridValueProp<GridItemJustifyValue>,
     order: undefined as unknown as RawGridValueProp<number | string>,
@@ -68,25 +69,28 @@ export const VGridItem = defineComponent({
         ...ctx.attrs,
       };
 
-      const { align, justify, order } = props;
+      const { size, align, justify, order } = props;
 
+      delete attrs.size;
       delete attrs.align;
       delete attrs.justify;
       delete attrs.order;
 
+      size != null &&
+        classes.push(extractRawGridValueClasses(size, 'grid-size-'));
       align && classes.push(extractRawGridValueClasses(align, 'self-align-'));
       justify &&
         classes.push(extractRawGridValueClasses(justify, 'self-justify-'));
       order != null &&
         classes.push(extractRawGridValueClasses(order, 'order-'));
 
-      MEDIA_MATCH_CONDITIONS.forEach(({ key }) => {
-        const v = attrs[key];
-        delete attrs[key];
-        if (v != null) {
-          classes.push(`grid-size-${v}--${key}`);
-        }
-      });
+      // MEDIA_MATCH_CONDITIONS.forEach(({ key }) => {
+      //   const v = attrs[key];
+      //   delete attrs[key];
+      //   if (v != null) {
+      //     classes.push(`grid-size-${v}--${key}`);
+      //   }
+      // });
 
       return {
         classes,
