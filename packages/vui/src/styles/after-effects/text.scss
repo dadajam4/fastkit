@@ -50,7 +50,7 @@ $props-map: (
   }
 
   @for $level from 1 through 6 {
-    .text-h#{$level} {
+    .text-h#{$level}#{$breakpoint-suffix} {
       margin: var(--typo-h#{$level}-margin);
       font-size: var(--typo-h#{$level}-size);
       font-weight: var(--typo-h#{$level}-weight);
@@ -68,7 +68,7 @@ $props-map: (
       $selector: map-get($value-info, selector);
       $value: map-get($value-info, value);
 
-      .#{selector}#{$breakpoint-suffix} {
+      .#{$selector}#{$breakpoint-suffix} {
         #{$prop}: unquote($value);
       }
     }
@@ -77,7 +77,7 @@ $props-map: (
   @for $i from 1 through 9 {
     $weight: $i * 100;
 
-    .font-weight-#{$i}#{$breakpoint-suffix} {
+    .font-weight-#{$weight}#{$breakpoint-suffix} {
       font-weight: $weight;
     }
   }
