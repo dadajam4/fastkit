@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font",
-  "version": "0.6.39",
+  "version": "0.6.40",
   "description": "@fastkit/icon-font",
   "main": "index.js",
   "module": "dist/icon-font.esm-bundler.js",
