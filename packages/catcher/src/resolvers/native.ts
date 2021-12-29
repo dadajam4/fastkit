@@ -1,3 +1,5 @@
+import { createCatcherResolver } from '../schemes';
+
 // const NativeErrorConstructors = [
 //   EvalError,
 //   RangeError,
@@ -24,21 +26,23 @@ export interface NativeErrorOverrides {
   nativeError?: Error;
 }
 
-export function nativeErrorResolver(
-  source: unknown,
-  // source: string | InstanceType<NativeErrorConstructor>,
-): NativeErrorOverrides | undefined {
-  // if (typeof source === 'string') {
-  //   source = new Error(source);
-  // }
-  if (source && source instanceof Error) {
-    return {
-      nativeError: source,
-    };
-    // const { constructor } = source;
-    // if (isNativeErrorConstructor(constructor)) {
-    //   const { message, stack, name } = source;
-    //   return { message, stack, name, isNativeError: true };
+export const nativeErrorResolver = createCatcherResolver(
+  function nativeErrorResolver(
+    source: unknown,
+    // source: string | InstanceType<NativeErrorConstructor>,
+  ): NativeErrorOverrides | undefined {
+    // if (typeof source === 'string') {
+    //   source = new Error(source);
     // }
-  }
-}
+    if (source && source instanceof Error) {
+      return {
+        nativeError: source,
+      };
+      // const { constructor } = source;
+      // if (isNativeErrorConstructor(constructor)) {
+      //   const { message, stack, name } = source;
+      //   return { message, stack, name, isNativeError: true };
+      // }
+    }
+  },
+);
