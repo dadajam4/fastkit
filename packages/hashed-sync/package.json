@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/hashed-sync",
-  "version": "0.6.41",
+  "version": "0.6.42",
   "description": "@fastkit/hashed-sync",
   "buildOptions": {
     "name": "HashedSync",
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/hashed-sync#readme",
   "dependencies": {
-    "@fastkit/tiny-logger": "0.6.41",
+    "@fastkit/tiny-logger": "0.6.42",
     "folder-hash": "^4.0.1",
     "fs-extra": "^9.1.0",
     "imagemin": "^8.0.1",

@@ -1,3 +1,7 @@
+## [0.6.42](https://github.com/dadajam4/fastkit/compare/v0.6.41...v0.6.42) (2021-12-29)
+
+
+
 ## [0.6.41](https://github.com/dadajam4/fastkit/compare/v0.6.40...v0.6.41) (2021-12-29)
 
 
