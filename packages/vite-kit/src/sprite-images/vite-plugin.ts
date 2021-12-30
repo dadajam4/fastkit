@@ -5,8 +5,8 @@ import {
 } from '@fastkit/sprite-images';
 
 export interface SpriteImagesVitePluginOptions extends SpriteImagesOptions {
-  onBooted?: () => any;
-  onBootError?: (err: unknown) => any;
+  onBooted?: (() => any) | (() => Promise<any>);
+  onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }
 
 let runner: SpriteImagesRunner | undefined;
@@ -24,10 +24,10 @@ export function spriteImagesVitePlugin(
           await runner.run();
         }
 
-        onBooted && onBooted();
+        onBooted && (await onBooted());
         return config;
       } catch (err) {
-        onBootError && onBootError(err);
+        onBootError && (await onBootError(err));
         throw err;
       }
     },

@@ -8,8 +8,8 @@ import { UnPromisify } from '@fastkit/helpers';
 export interface MediaMatchVitePluginOptions {
   src: string;
   dest?: string;
-  onBooted?: () => any;
-  onBootError?: (err: unknown) => any;
+  onBooted?: (() => any) | (() => Promise<any>);
+  onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }
 
 let runner: MediaMatchGeneratorRunner | undefined;
@@ -77,11 +77,11 @@ export function mediaMatchVitePlugin(
         scssOptions.additionalData = additionalData;
         config.css = cssOptions;
 
-        onBooted && onBooted();
+        onBooted && (await onBooted());
 
         return config;
       } catch (err) {
-        onBootError && onBootError(err);
+        onBootError && (await onBootError(err));
         throw err;
       }
     },

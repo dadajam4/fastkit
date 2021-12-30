@@ -24,8 +24,8 @@ export interface DynamicSrcVitePluginOptions {
   iconFont?: IconFontVitePlugin;
   mediaMatch?: MediaMatchVitePluginOptions;
   spriteImages?: SpriteImagesVitePluginOptions;
-  onBooted?: () => any;
-  onBootError?: (err: unknown) => any;
+  onBooted?: (() => any) | (() => Promise<any>);
+  onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }
 
 export function dynamicSrcVitePlugin(
@@ -45,8 +45,8 @@ export function dynamicSrcVitePlugin(
 
   function pushPlugin(
     createPlugin: (
-      onBooted: () => any,
-      onBootError: (err: unknown) => any,
+      onBooted: (() => any) | (() => Promise<any>),
+      onBootError: ((err: unknown) => any) | ((err: unknown) => Promise<any>),
     ) => Plugin,
   ) {
     const promise = new Promise<void>((resolve, reject) => {
@@ -106,10 +106,10 @@ export function dynamicSrcVitePlugin(
     async config(config) {
       try {
         await Promise.all(promises);
-        onBooted && onBooted();
+        onBooted && (await onBooted());
         return config;
       } catch (err) {
-        onBootError && onBootError(err);
+        onBootError && (await onBootError(err));
         throw err;
       }
     },

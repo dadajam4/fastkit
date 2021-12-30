@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/rules",
-  "version": "0.6.42",
+  "version": "0.6.43",
   "description": "@fastkit/rules",
   "main": "index.js",
   "module": "dist/rules.esm-bundler.js",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/rules#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.6.42",
-    "@fastkit/tiny-logger": "0.6.42"
+    "@fastkit/helpers": "0.6.43",
+    "@fastkit/tiny-logger": "0.6.43"
   }
 }

@@ -3,8 +3,8 @@ import { HashedSync, HashedSyncOptions } from '@fastkit/hashed-sync';
 
 export interface HashedSyncVitePluginOptions
   extends Omit<HashedSyncOptions, 'watch'> {
-  onBooted?: () => any;
-  onBootError?: (err: unknown) => any;
+  onBooted?: (() => any) | (() => Promise<any>);
+  onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }
 
 let hashedSync: HashedSync | undefined;
@@ -26,11 +26,11 @@ export function hashedSyncVitePlugin(
           await hashedSync.loadAndSync();
         }
 
-        onBooted && onBooted();
+        onBooted && (await onBooted());
 
         return config;
       } catch (err) {
-        onBootError && onBootError(err);
+        onBootError && (await onBootError(err));
         throw err;
       }
     },

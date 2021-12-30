@@ -106,8 +106,8 @@ export interface ViteVuiPluginOptions
   mediaMatch?: string;
   iconFont?: RawIconFontEntry[];
   iconFontDefaults?: IconFontSettings;
-  onBooted?: () => any;
-  onBootError?: (err: unknown) => any;
+  onBooted?: (() => any) | (() => Promise<any>);
+  onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
   __dev?: boolean;
 }
 

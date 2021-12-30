@@ -2,8 +2,8 @@ import { Plugin } from 'vite';
 import { IconFontRunner, IconFontOptions } from '@fastkit/icon-font-gen';
 
 export interface IconFontVitePlugin extends IconFontOptions {
-  onBooted?: () => any;
-  onBootError?: (err: unknown) => any;
+  onBooted?: (() => any) | (() => Promise<any>);
+  onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }
 
 let runner: IconFontRunner | undefined;
@@ -19,10 +19,10 @@ export function iconFontVitePlugin(opts: IconFontVitePlugin): Plugin {
           runner = new IconFontRunner(opts, watch);
           await runner.run();
         }
-        onBooted && onBooted();
+        onBooted && (await onBooted());
         return config;
       } catch (err) {
-        onBootError && onBootError(err);
+        onBootError && (await onBootError(err));
         throw err;
       }
     },

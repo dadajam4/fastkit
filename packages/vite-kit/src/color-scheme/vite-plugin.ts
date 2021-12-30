@@ -30,7 +30,7 @@ import { UnPromisify } from '@fastkit/helpers';
 export interface ColorSchemeVitePluginOptions {
   src: string;
   dest?: string;
-  onBooted?: () => any;
+  onBooted?: (() => any) | (() => Promise<any>);
   onBootError?: (err: unknown) => any;
 }
 
@@ -98,7 +98,7 @@ export function colorSchemeVitePlugin(
         scssOptions.additionalData = additionalData;
         config.css = cssOptions;
 
-        onBooted && onBooted();
+        onBooted && (await onBooted());
 
         return config;
       } catch (err) {
