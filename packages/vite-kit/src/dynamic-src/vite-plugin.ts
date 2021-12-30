@@ -28,6 +28,9 @@ export interface DynamicSrcVitePluginOptions {
   onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }
 
+let booted = false;
+let bootWait: Promise<any> | undefined;
+
 export function dynamicSrcVitePlugin(
   opts: DynamicSrcVitePluginOptions,
 ): Plugin[] {
@@ -103,10 +106,16 @@ export function dynamicSrcVitePlugin(
 
   const dynamicSrcPlugin: Plugin = {
     name: 'vite:dynamic-src',
-    async config(config) {
+    async config(config, env) {
       try {
         await Promise.all(promises);
-        onBooted && (await onBooted());
+        if (onBooted) {
+          if (!booted) {
+            booted = true;
+            bootWait = onBooted();
+          }
+          await bootWait;
+        }
         return config;
       } catch (err) {
         onBootError && (await onBootError(err));

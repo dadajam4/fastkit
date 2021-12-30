@@ -7,6 +7,9 @@ import { votPlugin } from '../packages/vot/dist/tool';
 
 const viteVui = viteVuiPlugin({
   __dev: true,
+  onBooted: () => {
+    console.log('★ onBooted');
+  },
 });
 
 export default defineConfig({
