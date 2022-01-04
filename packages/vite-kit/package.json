@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-kit",
-  "version": "0.6.44",
+  "version": "0.6.45",
   "description": "@fastkit/vite-kit",
   "main": "index.js",
   "module": "dist/vite-kit.esm-bundler.js",
@@ -26,12 +26,12 @@
     "vite": "2.6.14"
   },
   "dependencies": {
-    "@fastkit/color-scheme-gen": "0.6.44",
-    "@fastkit/hashed-sync": "0.6.44",
-    "@fastkit/icon-font-gen": "0.6.44",
-    "@fastkit/media-match-gen": "0.6.44",
-    "@fastkit/node-util": "0.6.44",
-    "@fastkit/sprite-images": "0.6.44",
-    "@fastkit/tiny-logger": "0.6.44"
+    "@fastkit/color-scheme-gen": "0.6.45",
+    "@fastkit/hashed-sync": "0.6.45",
+    "@fastkit/icon-font-gen": "0.6.45",
+    "@fastkit/media-match-gen": "0.6.45",
+    "@fastkit/node-util": "0.6.45",
+    "@fastkit/sprite-images": "0.6.45",
+    "@fastkit/tiny-logger": "0.6.45"
   }
 }
