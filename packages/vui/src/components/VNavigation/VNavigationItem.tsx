@@ -22,6 +22,11 @@ export function createNavigationItemProps() {
   return {
     ...createListTileProps(),
     match: String,
+    depth: {
+      type: Number,
+      default: 0,
+    },
+    nested: Boolean,
     // key: {
     //   type: [String, Number],
     //   required: true,
@@ -98,6 +103,7 @@ export const VNavigationItem = defineComponent({
     const classes = computed(() => [
       {
         'v-navigation-item--opened': opened.value,
+        [`v-navigation-item--depth-${props.depth}`]: props.depth > 0,
       },
     ]);
 
@@ -238,6 +244,7 @@ export const VNavigationItem = defineComponent({
                 {_children.map((child) =>
                   renderNavigationItemInput(child, {
                     startIconEmptySpace: _props.value.startIconEmptySpace,
+                    depth: props.nested ? props.depth + 1 : props.depth,
                     // onClick,
                     // onChangeActive,
                   }),

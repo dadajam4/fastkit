@@ -101,3 +101,19 @@ export function objectFromArray<R, K extends string | number | symbol, T>(
   );
   return Object.fromEntries(entries);
 }
+
+export function removeUndef<T extends Record<string, unknown>>(
+  obj: T,
+  deep?: boolean,
+): T {
+  return Object.keys(obj).reduce((result, key) => {
+    let value: any = obj[key];
+    if (value !== undefined) {
+      if (deep && value && typeof value === 'object') {
+        value = removeUndef(value, true);
+      }
+      (result as any)[key] = value;
+    }
+    return result;
+  }, {}) as T;
+}

@@ -296,6 +296,11 @@
 
   // breadcrumbs
   --breadcrumbs-font-size: var(--typo-sm-size);
+
+  // =============================================
+  // tiles
+  // =============================================
+  --list-tile-padding: calc(var(--root-em) * 0.625);
 }
 
 :root,

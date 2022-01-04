@@ -90,6 +90,39 @@ export default defineComponent({
                       exactMatch: true,
                     },
                     {
+                      key: 'test',
+                      label: 'Test',
+                      to: '/vui/test',
+                      startIcon: 'mdi-toggle-switch-off-outline',
+                      children: [
+                        {
+                          key: 'child1',
+                          label: 'child1',
+                          to: '/vui/test/child1',
+                        },
+                        {
+                          key: 'child2',
+                          label: 'child2',
+                          to: '/vui/test/child2',
+                          nested: true,
+                          startIcon: 'mdi-toggle-switch-off-outline',
+                          children: [
+                            {
+                              key: 'index',
+                              label: 'index',
+                              to: '/vui/test/child2',
+                              startIcon: 'mdi-toggle-switch-off-outline',
+                            },
+                            {
+                              key: 'child1',
+                              label: 'child1',
+                              to: '/vui/test/child2/child1',
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
                       key: 'components',
                       label: 'Components',
                       to: '/vui/components',
