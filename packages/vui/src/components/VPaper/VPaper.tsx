@@ -1,14 +1,19 @@
 import './VPaper.scss';
 import { defineComponent, computed, PropType, VNodeProps } from 'vue';
 import { createElevationProps, useElevation } from '../../composables';
-import { renderSlotOrEmpty, defineSlotsProps } from '@fastkit/vue-utils';
+import {
+  renderSlotOrEmpty,
+  defineSlotsProps,
+  htmlAttributesPropOptions,
+} from '@fastkit/vue-utils';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 
 export function createPaperBaseProps() {
   return {
+    ...htmlAttributesPropOptions,
     color: String as PropType<ScopeName>,
     tag: {
-      type: String,
+      type: [String, Object] as PropType<any>,
       default: 'div',
     },
     ...defineSlotsProps<{
@@ -34,6 +39,7 @@ export function createPaperProps() {
 
 export const VPaper = defineComponent({
   name: 'VPaper',
+  inheritAttrs: false,
   props: createPaperProps(),
   setup(props, ctx) {
     const tag = computed(() => props.tag);
@@ -44,7 +50,7 @@ export const VPaper = defineComponent({
       scope.value.className,
       {
         'v-paper--plain': !scope.value.value,
-        'v-paper--has-color': !!scope.value.value,
+        'v-paper--has-color': !!scope.value.value || !!ctx.attrs.disabled,
         'v-paper--square': props.square,
       },
     ]);
@@ -57,20 +63,22 @@ export const VPaper = defineComponent({
       const header = renderSlotOrEmpty(ctx.slots, 'header');
       const footer = renderSlotOrEmpty(ctx.slots, 'footer');
       return (
-        <TagName class={['v-paper', classes.value]}>
-          {header && (
-            <div class="v-paper__header" {...headerProps.value}>
-              {header}
+        <TagName class={['v-paper', classes.value]} {...ctx.attrs}>
+          <div class="v-paper__inner">
+            {header && (
+              <div class="v-paper__header" {...headerProps.value}>
+                {header}
+              </div>
+            )}
+            <div class="v-paper__body" {...bodyProps.value}>
+              {renderSlotOrEmpty(ctx.slots, 'default')}
             </div>
-          )}
-          <div class="v-paper__body" {...bodyProps.value}>
-            {renderSlotOrEmpty(ctx.slots, 'default')}
+            {footer && (
+              <div class="v-paper__footer" {...footerProps.value}>
+                {footer}
+              </div>
+            )}
           </div>
-          {footer && (
-            <div class="v-paper__footer" {...footerProps.value}>
-              {footer}
-            </div>
-          )}
         </TagName>
       );
     };

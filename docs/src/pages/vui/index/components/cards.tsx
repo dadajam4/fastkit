@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   VHero,
   useVui,
@@ -6,6 +6,7 @@ import {
   VCardContent,
   VCardActions,
   VButton,
+  VCheckbox,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
 
@@ -14,9 +15,11 @@ export default defineComponent({
     const vui = useVui();
 
     const colors = vui.options.colorScheme.scopeNames;
+    const disabled = ref(false);
 
     return {
       colors,
+      disabled,
     };
   },
   render() {
@@ -58,6 +61,30 @@ export default defineComponent({
                 <VCardContent>Hello world</VCardContent>
               </VCard>
             ))}
+          </div>
+        </DocsSection>
+
+        <DocsSection title="Link & Clickable">
+          <div>
+            <VCheckbox v-model={this.disabled}>disabled</VCheckbox>
+
+            <VCard
+              class="my-2"
+              href="https://google.com"
+              target="_blank"
+              disabled={this.disabled}>
+              <VCardContent>This is link</VCardContent>
+            </VCard>
+
+            <VCard
+              class="my-2"
+              color="primary"
+              onClick={(ev) => {
+                console.log(ev);
+              }}
+              disabled={this.disabled}>
+              <VCardContent>Clickable</VCardContent>
+            </VCard>
           </div>
         </DocsSection>
       </div>

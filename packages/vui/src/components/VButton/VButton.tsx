@@ -13,6 +13,7 @@ import {
   createPropsOptions,
   renderSlotOrEmpty,
   htmlAttributesPropOptions,
+  VLink,
 } from '@fastkit/vue-utils';
 import { useVui } from '../../injections';
 import { createControlProps, useControl } from '../../composables';
@@ -20,7 +21,6 @@ import { VProgressCircular } from '../loading';
 import { ControlSize } from '../../schemes/control';
 import { VIcon } from '../VIcon';
 import type { IconName } from '../VIcon';
-import { VLink } from '@fastkit/vue-utils';
 
 export type VButtonSpacer = 'left' | 'right';
 

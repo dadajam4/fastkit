@@ -13,15 +13,21 @@
     --paper-link-color: var(--nav-color);
   }
 
+  display: block;
   color: var(--paper-text-color);
   background-color: var(--paper-background--color);
   border-radius: var(--paper-radius);
+
+  &__inner {
+    position: relative;
+    border-radius: inherit;
+  }
 
   &--square {
     --paper-radius: 0px;
   }
 
-  a {
+  a:not(.v-paper) {
     color: var(--paper-link-color);
   }
 
