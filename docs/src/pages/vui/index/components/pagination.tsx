@@ -18,7 +18,7 @@ export default defineComponent({
         <VHero>Pagination</VHero>
         <DocsSection title="Basic">
           <VPagination length="32" v-model={this.page1} />
-          <div>現在 {this.page1} ページ目です</div>
+          <div>{`現在 ${this.page1} ページ目です`}</div>
         </DocsSection>
 
         <DocsSection title="Dense">

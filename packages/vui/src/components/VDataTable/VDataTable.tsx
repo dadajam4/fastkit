@@ -443,7 +443,9 @@ export const VDataTable = defineComponent({
         <div class="v-data-table__controls">
           <div class="v-data-table__controls__info">
             <small class="v-data-table__controls__info__length">
-              全 {total} 件中 {offset + 1} 件 〜 {offset + length} 件を表示
+              {`全 ${total} 件中 ${offset + 1} 件 〜 ${
+                offset + length
+              } 件を表示`}
             </small>
           </div>
           <div class="v-data-table__controls__select-limit">
