@@ -54,11 +54,7 @@ export default defineComponent({
           value,
           () => {
             return range(_range, 1).map((n) => {
-              return (
-                <div>
-                  コンテンツ{value} - 行 {n}
-                </div>
-              );
+              return <div>{`コンテンツ${value} - 行 ${n}`}</div>;
             });
           },
         ];

@@ -17,6 +17,7 @@ export const VDrawerLayout = defineComponent({
       return (
         <VPaper
           class="v-drawer-layout"
+          innerClass="v-drawer-layout__inner"
           {...paperProps.value}
           square
           headerProps={{

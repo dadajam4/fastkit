@@ -77,6 +77,7 @@ export const VPagination = defineComponent({
   props: paginationProps(),
   emits: {
     change: (page: number) => true,
+    'update:modelValue': (page: number) => true,
   },
   setup(props, ctx) {
     const vui = useVui();

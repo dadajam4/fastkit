@@ -15,9 +15,14 @@ import {
   VButtonGroup,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
+import { useHead } from '@vueuse/head';
 
 export default defineComponent({
   setup() {
+    useHead({
+      title: 'Buttons',
+    });
+
     const vui = useVui();
     const stack = useVueStack();
     const size = ref<ControlSize>('md');
