@@ -1,18 +1,9 @@
 .v-drawer-layout {
-  // display: flex;
-  // flex-direction: column;
-  // align-items: stretch;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: 100%;
   height: 100%;
-
-  &__inner {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    height: 100%;
-  }
 
   &__header {
     display: flex;

@@ -10,6 +10,7 @@ import {
 } from '@fastkit/vui';
 import { DocsSection } from '../../../../-components';
 import { range, objectFromArray } from '@fastkit/helpers';
+import { VPage } from '@fastkit/vue-page';
 
 export default defineComponent({
   setup() {
@@ -53,7 +54,11 @@ export default defineComponent({
           value,
           () => {
             return range(_range, 1).map((n) => {
-              return <div key={n}>{`コンテンツ${value} - 行 ${n}`}</div>;
+              return (
+                <div>
+                  コンテンツ{value} - 行 {n}
+                </div>
+              );
             });
           },
         ];
@@ -88,10 +93,10 @@ export default defineComponent({
                 order={this.mockItems1}
                 v-slots={this.createSlots(this.mockItems1)}
               />
-              {/* <p>
+              <p>
                 <code>{this.tab1}</code>
                 を選択しています。
-              </p> */}
+              </p>
             </div>
             <div class="pg-columns__sub">
               <VSelect
@@ -107,7 +112,7 @@ export default defineComponent({
           </div>
         </DocsSection>
 
-        {/* <DocsSection title="Routable">
+        <DocsSection title="Routable">
           <VTabs
             items={this.mockItems1}
             v-model={this.tab2}
@@ -143,7 +148,7 @@ export default defineComponent({
             }}
           />
           <VPage />
-        </DocsSection> */}
+        </DocsSection>
       </div>
     );
   },

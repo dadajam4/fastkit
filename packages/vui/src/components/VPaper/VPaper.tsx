@@ -34,7 +34,6 @@ export function createPaperProps() {
     headerProps: Object as PropType<ARGS>,
     bodyProps: Object as PropType<ARGS>,
     footerProps: Object as PropType<ARGS>,
-    innerClass: [String, Array, Object] as PropType<any>,
   };
 }
 
@@ -65,7 +64,7 @@ export const VPaper = defineComponent({
       const footer = renderSlotOrEmpty(ctx.slots, 'footer');
       return (
         <TagName class={['v-paper', classes.value]} {...ctx.attrs}>
-          <div class={['v-paper__inner', props.innerClass]}>
+          <div class="v-paper__inner">
             {header && (
               <div class="v-paper__header" {...headerProps.value}>
                 {header}

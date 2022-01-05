@@ -27,9 +27,9 @@
     --paper-radius: 0px;
   }
 
-  // a:not(.v-paper) {
-  //   color: var(--paper-link-color);
-  // }
+  a:not(.v-paper) {
+    color: var(--paper-link-color);
+  }
 
   &__header {
     border-top-left-radius: inherit;

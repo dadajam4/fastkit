@@ -1,5 +1,5 @@
-import { defineComponent } from 'vue';
-import { VHero } from '@fastkit/vui';
+import { defineComponent, ref } from 'vue';
+import { VHero, VLink } from '@fastkit/vui';
 
 export default defineComponent({
   render() {
