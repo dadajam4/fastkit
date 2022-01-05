@@ -1,3 +1,13 @@
+## [0.6.47](https://github.com/dadajam4/fastkit/compare/v0.6.46...v0.6.47) (2022-01-05)
+
+
+### Reverts
+
+* Revert "chore: test" ([76e8386](https://github.com/dadajam4/fastkit/commit/76e8386ef8fc7cbcda8f25afc4d7c7bd30ac407d))
+* Revert "release: v0.6.46" ([5a955a5](https://github.com/dadajam4/fastkit/commit/5a955a5fa9f4d0f34f71edd9cef385e810306ed9))
+
+
+
 ## [0.6.45](https://github.com/dadajam4/fastkit/compare/v0.6.44...v0.6.45) (2022-01-04)
 
 
