@@ -9,7 +9,7 @@
     ]
   },
   "main": "index.js",
-  "module": "dist/sprite-images.esm-bundler.js",
+  "module": "dist/sprite-images.mjs",
   "files": [
     "index.js",
     "dist"

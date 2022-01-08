@@ -17,7 +17,7 @@
     }
   },
   "main": "index.js",
-  "module": "dist/byeie.esm-bundler.js",
+  "module": "dist/byeie.mjs",
   "unpkg": "dist/byeie.global.js",
   "jsdelivr": "dist/byeie.global.js",
   "files": [

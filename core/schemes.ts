@@ -1,6 +1,6 @@
 import { Options as AutoprefixerOptions } from 'autoprefixer';
 
-export type BuildType = 'esm-bundler' | 'esm-browser' | 'cjs' | 'global';
+export type BuildType = 'esm-bundler' /* | 'esm-browser'*/ | 'cjs' | 'global';
 // | 'esm-bundler-runtime'
 // | 'esm-browser-runtime'
 // | 'global-runtime'

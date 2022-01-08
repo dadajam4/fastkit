@@ -6,7 +6,7 @@
   "bin": {
     "create-fastkit-app": "lib/cli.js"
   },
-  "module": "dist/create-fastkit-app.esm-bundler.js",
+  "module": "dist/create-fastkit-app.mjs",
   "files": [
     "index.js",
     "templates",

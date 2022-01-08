@@ -3,7 +3,7 @@
   "version": "0.6.47",
   "description": "@fastkit/vue-app-layout",
   "main": "index.js",
-  "module": "dist/vue-app-layout.esm-bundler.js",
+  "module": "dist/vue-app-layout.mjs",
   "files": [
     "index.js",
     "dist"

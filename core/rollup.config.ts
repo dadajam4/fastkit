@@ -44,13 +44,13 @@ interface NormalizedOutputOptions extends Omit<OutputOptions, 'file'> {
 
 const outputConfigs: Record<BuildType, NormalizedOutputOptions> = {
   'esm-bundler': {
-    file: resolve(`dist/${name}.esm-bundler.js`),
+    file: resolve(`dist/${name}.mjs`),
     format: `es`,
   },
-  'esm-browser': {
-    file: resolve(`dist/${name}.esm-browser.js`),
-    format: `es`,
-  },
+  // 'esm-browser': {
+  //   file: resolve(`dist/${name}.esm-browser.js`),
+  //   format: `es`,
+  // },
   cjs: {
     file: resolve(`dist/${name}.cjs.js`),
     format: `cjs`,
@@ -90,7 +90,7 @@ if (NODE_ENV === 'production') {
     if (format === 'cjs') {
       packageConfigs.push(createProductionConfig(format));
     }
-    if (/^(global|esm-browser)/.test(format)) {
+    if (/^(global)/.test(format)) {
       packageConfigs.push(createMinifiedConfig(format));
     }
   });
@@ -129,7 +129,7 @@ function createConfig(
   const isProductionBuild =
     __DEV__ === 'false' || /\.prod\.js$/.test(output.file || '');
   const isBundlerESMBuild = /esm-bundler/.test(format);
-  const isBrowserESMBuild = /esm-browser/.test(format);
+  // const isBrowserESMBuild = /esm-browser/.test(format);
   const isNodeBuild = format === 'cjs';
   const isGlobalBuild = /global/.test(format);
 
@@ -167,19 +167,18 @@ function createConfig(
 
   // const entryFile = `src/index.ts`;
 
-  const external =
-    isGlobalBuild || isBrowserESMBuild
-      ? packageOptions.enableNonBrowserBranches
-        ? []
-        : // normal browser builds - non-browser only imports are tree-shaken,
-          // they are only listed here to suppress warnings.
-          ['source-map', '@babel/parser', 'estree-walker']
-      : // Node / esm-bundler builds. Externalize everything.
-        [
-          ...Object.keys(pkg.dependencies || {}),
-          ...Object.keys(pkg.peerDependencies || {}),
-          ...['path', 'url', 'stream'],
-        ];
+  const external = isGlobalBuild
+    ? packageOptions.enableNonBrowserBranches
+      ? []
+      : // normal browser builds - non-browser only imports are tree-shaken,
+        // they are only listed here to suppress warnings.
+        ['source-map', '@babel/parser', 'estree-walker']
+    : // Node / esm-bundler builds. Externalize everything.
+      [
+        ...Object.keys(pkg.dependencies || {}),
+        ...Object.keys(pkg.peerDependencies || {}),
+        ...['path', 'url', 'stream'],
+      ];
   external.push(
     'module',
     '@vueuse/head',
@@ -217,8 +216,7 @@ function createConfig(
         ]
       : [];
 
-  const externalRe =
-    isGlobalBuild || isBrowserESMBuild ? /^(vue)/ : /^(vue|@fastkit)/;
+  const externalRe = isGlobalBuild ? /^(vue)/ : /^(vue|@fastkit)/;
 
   // if (packageOptions.styles) {
   //   _plugins.push(styles(packageOptions.styles));
@@ -296,9 +294,8 @@ function createConfig(
       createReplacePlugin(
         isProductionBuild,
         isBundlerESMBuild,
-        isBrowserESMBuild,
         // isBrowserBuild?
-        (isGlobalBuild || isBrowserESMBuild || isBundlerESMBuild) &&
+        (isGlobalBuild || isBundlerESMBuild) &&
           !packageOptions.enableNonBrowserBranches,
         isGlobalBuild,
         isNodeBuild,
@@ -321,7 +318,6 @@ function createConfig(
 function createReplacePlugin(
   isProduction: boolean,
   isBundlerESMBuild: boolean,
-  isBrowserESMBuild: boolean,
   isBrowserBuild: boolean,
   isGlobalBuild: boolean,
   isNodeBuild: boolean,
@@ -343,7 +339,6 @@ function createReplacePlugin(
       : String(isBrowserBuild),
     __GLOBAL__: String(isGlobalBuild),
     __ESM_BUNDLER__: String(isBundlerESMBuild),
-    __ESM_BROWSER__: String(isBrowserESMBuild),
     // is targeting Node (SSR)?
     __NODE_JS__: String(isNodeBuild),
   };

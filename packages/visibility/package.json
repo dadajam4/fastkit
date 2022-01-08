@@ -6,7 +6,7 @@
     "name": "visibilityManager"
   },
   "main": "index.js",
-  "module": "dist/visibility.esm-bundler.js",
+  "module": "dist/visibility.mjs",
   "files": [
     "index.js",
     "dist"

@@ -6,7 +6,7 @@
     "name": "Helpers"
   },
   "main": "index.js",
-  "module": "dist/helpers.esm-bundler.js",
+  "module": "dist/helpers.mjs",
   "files": [
     "index.js",
     "dist"

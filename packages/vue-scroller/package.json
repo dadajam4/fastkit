@@ -6,7 +6,7 @@
     "name": "VueScroller"
   },
   "main": "index.js",
-  "module": "dist/vue-scroller.esm-bundler.js",
+  "module": "dist/vue-scroller.mjs",
   "files": [
     "index.js",
     "dist"

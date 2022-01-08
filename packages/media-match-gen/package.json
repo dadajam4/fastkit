@@ -9,7 +9,7 @@
     ]
   },
   "main": "index.js",
-  "module": "dist/media-match-gen.esm-bundler.js",
+  "module": "dist/media-match-gen.mjs",
   "files": [
     "index.js",
     "dist"

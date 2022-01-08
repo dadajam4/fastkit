@@ -7,7 +7,7 @@
     "tool": true
   },
   "main": "index.js",
-  "module": "dist/vui.esm-bundler.js",
+  "module": "dist/vui.mjs",
   "files": [
     "index.js",
     "dist",

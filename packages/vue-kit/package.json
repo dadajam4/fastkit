@@ -3,7 +3,7 @@
   "version": "0.6.47",
   "description": "vue-kit",
   "main": "index.js",
-  "module": "dist/vue-kit.esm-bundler.js",
+  "module": "dist/vue-kit.mjs",
   "files": [
     "index.js",
     "dist"
@@ -16,8 +16,7 @@
     "formats": [
       "esm-bundler",
       "cjs",
-      "global",
-      "esm-browser"
+      "global"
     ]
   },
   "repository": {

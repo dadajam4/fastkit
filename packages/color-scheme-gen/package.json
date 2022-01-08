@@ -9,7 +9,7 @@
     ]
   },
   "main": "index.js",
-  "module": "dist/color-scheme-gen.esm-bundler.js",
+  "module": "dist/color-scheme-gen.mjs",
   "files": [
     "index.js",
     "dist"

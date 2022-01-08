@@ -6,7 +6,7 @@
     "name": "VueStack"
   },
   "main": "index.js",
-  "module": "dist/vue-stack.esm-bundler.js",
+  "module": "dist/vue-stack.mjs",
   "files": [
     "index.js",
     "dist"

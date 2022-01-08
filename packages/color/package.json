@@ -6,7 +6,7 @@
     "name": "Color"
   },
   "main": "index.js",
-  "module": "dist/color.esm-bundler.js",
+  "module": "dist/color.mjs",
   "files": [
     "index.js",
     "dist"

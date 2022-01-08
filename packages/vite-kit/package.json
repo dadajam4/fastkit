@@ -3,7 +3,7 @@
   "version": "0.6.47",
   "description": "@fastkit/vite-kit",
   "main": "index.js",
-  "module": "dist/vite-kit.esm-bundler.js",
+  "module": "dist/vite-kit.mjs",
   "files": [
     "index.js",
     "dist"

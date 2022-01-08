@@ -6,7 +6,7 @@
     "name": "EV"
   },
   "main": "index.js",
-  "module": "dist/ev.esm-bundler.js",
+  "module": "dist/ev.mjs",
   "files": [
     "index.js",
     "dist"

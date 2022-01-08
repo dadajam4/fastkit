@@ -3,7 +3,7 @@
   "version": "0.6.47",
   "description": "@fastkit/body-scroll-lock",
   "main": "index.js",
-  "module": "dist/body-scroll-lock.esm-bundler.js",
+  "module": "dist/body-scroll-lock.mjs",
   "files": [
     "index.js",
     "dist"

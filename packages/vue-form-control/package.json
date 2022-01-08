@@ -3,7 +3,7 @@
   "version": "0.6.47",
   "description": "@fastkit/vue-form-control",
   "main": "index.js",
-  "module": "dist/vue-form-control.esm-bundler.js",
+  "module": "dist/vue-form-control.mjs",
   "files": [
     "index.js",
     "dist"

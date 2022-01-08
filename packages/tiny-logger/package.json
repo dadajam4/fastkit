@@ -6,7 +6,7 @@
     "name": "TinyLogger"
   },
   "main": "index.js",
-  "module": "dist/tiny-logger.esm-bundler.js",
+  "module": "dist/tiny-logger.mjs",
   "files": [
     "index.js",
     "dist"

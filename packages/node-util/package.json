@@ -9,7 +9,7 @@
     ]
   },
   "main": "index.js",
-  "module": "dist/node-util.esm-bundler.js",
+  "module": "dist/node-util.mjs",
   "files": [
     "index.js",
     "dist"

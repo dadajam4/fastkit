@@ -6,7 +6,7 @@
     "name": "VueUtils"
   },
   "main": "index.js",
-  "module": "dist/vue-utils.esm-bundler.js",
+  "module": "dist/vue-utils.mjs",
   "files": [
     "index.js",
     "dist"

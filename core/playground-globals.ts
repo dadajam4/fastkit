@@ -13,7 +13,6 @@ export function globalsPlugin(options = {}): Plugin {
           __TEST__: false,
           __DEV__: true,
           __ESM_BUNDLER__: false,
-          __ESM_BROWSER__: false,
           __VERSION__: JSON.stringify('0.0.0'),
           __BROWSER__: !ssr,
           __NODE_JS__: ssr,

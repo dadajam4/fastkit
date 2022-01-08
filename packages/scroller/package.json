@@ -6,7 +6,7 @@
     "name": "Scroller"
   },
   "main": "index.js",
-  "module": "dist/scroller.esm-bundler.js",
+  "module": "dist/scroller.mjs",
   "files": [
     "index.js",
     "dist"

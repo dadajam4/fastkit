@@ -3,7 +3,7 @@
   "version": "0.6.47",
   "description": "@fastkit/keybord",
   "main": "index.js",
-  "module": "dist/keybord.esm-bundler.js",
+  "module": "dist/keybord.mjs",
   "files": [
     "index.js",
     "dist"

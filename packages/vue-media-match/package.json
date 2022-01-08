@@ -6,7 +6,7 @@
     "name": "VueMediaMatch"
   },
   "main": "index.js",
-  "module": "dist/vue-media-match.esm-bundler.js",
+  "module": "dist/vue-media-match.mjs",
   "files": [
     "index.js",
     "dist"

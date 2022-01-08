@@ -9,7 +9,7 @@
     ]
   },
   "main": "index.js",
-  "module": "dist/hashed-sync.esm-bundler.js",
+  "module": "dist/hashed-sync.mjs",
   "files": [
     "index.js",
     "dist"

@@ -6,8 +6,8 @@
     "name": "Vot",
     "tool": true
   },
-  "main": "dist/vot.esm-bundler.js",
-  "module": "dist/vot.esm-bundler.js",
+  "main": "index.js",
+  "module": "dist/vot.mjs",
   "files": [
     "index.js",
     "bin",

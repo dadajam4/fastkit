@@ -3,7 +3,7 @@
   "version": "0.6.47",
   "description": "@fastkit/vue-page",
   "main": "index.js",
-  "module": "dist/vue-page.esm-bundler.js",
+  "module": "dist/vue-page.mjs",
   "files": [
     "index.js",
     "dist"

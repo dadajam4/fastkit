@@ -6,7 +6,7 @@
     "name": "MediaMatch"
   },
   "main": "index.js",
-  "module": "dist/media-match.esm-bundler.js",
+  "module": "dist/media-match.mjs",
   "files": [
     "index.js",
     "dist"

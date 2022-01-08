@@ -6,7 +6,7 @@
     "name": "VueColorScheme"
   },
   "main": "index.js",
-  "module": "dist/vue-color-scheme.esm-bundler.js",
+  "module": "dist/vue-color-scheme.mjs",
   "files": [
     "index.js",
     "dist"

@@ -3,7 +3,7 @@
   "version": "0.6.47",
   "description": "@fastkit/universal-logger",
   "main": "index.js",
-  "module": "dist/universal-logger.esm-bundler.js",
+  "module": "dist/universal-logger.mjs",
   "files": [
     "index.js",
     "dist"

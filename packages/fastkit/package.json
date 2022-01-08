@@ -3,7 +3,7 @@
   "version": "0.6.47",
   "description": "fastkit",
   "main": "index.js",
-  "module": "dist/fastkit.esm-bundler.js",
+  "module": "dist/fastkit.mjs",
   "files": [
     "index.js",
     "dist"
@@ -16,8 +16,7 @@
     "formats": [
       "esm-bundler",
       "cjs",
-      "global",
-      "esm-browser"
+      "global"
     ]
   },
   "repository": {

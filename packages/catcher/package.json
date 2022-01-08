@@ -6,7 +6,7 @@
     "name": "Catcher"
   },
   "main": "index.js",
-  "module": "dist/catcher.esm-bundler.js",
+  "module": "dist/catcher.mjs",
   "files": [
     "index.js",
     "dist"

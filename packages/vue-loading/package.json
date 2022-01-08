@@ -6,7 +6,7 @@
     "name": "VueLoading"
   },
   "main": "index.js",
-  "module": "dist/vue-loading.esm-bundler.js",
+  "module": "dist/vue-loading.mjs",
   "files": [
     "index.js",
     "dist"

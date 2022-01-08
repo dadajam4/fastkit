@@ -10,7 +10,6 @@ module.exports = {
     __BROWSER__: false,
     __GLOBAL__: false,
     __ESM_BUNDLER__: true,
-    __ESM_BROWSER__: false,
     __NODE_JS__: true,
   },
   coverageDirectory: 'coverage',
