@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/tiny-logger",
-  "version": "0.7.1",
+  "version": "0.7.5",
   "description": "@fastkit/tiny-logger",
   "buildOptions": {
     "name": "TinyLogger"
@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/tiny-logger#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.7.1"
+    "@fastkit/helpers": "0.7.5"
   }
 }

@@ -139,17 +139,25 @@ export const VWysiwygEditor = defineComponent({
         scrollIntoView?: boolean | undefined;
       },
     ) => {
+      if (!editor.value) return;
       return editor.value.chain().focus(position, options);
     };
 
     const blur = () => {
+      if (!editor.value) return;
       return editor.value.chain().blur();
     };
 
-    const wysiwygContext = computed<WysiwygEditorContext>(() => ({
-      vui,
-      editor: editor.value,
-    }));
+    const wysiwygContext = computed<WysiwygEditorContext>(() => {
+      const _editor = editor.value;
+      if (!_editor) {
+        throw new Error('missing editor value');
+      }
+      return {
+        vui,
+        editor: _editor,
+      };
+    });
 
     const createTools = (bubbleMenu = false) => {
       const { value: settings } = wysiwygSettings;
