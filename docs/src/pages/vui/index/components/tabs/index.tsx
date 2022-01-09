@@ -89,10 +89,10 @@ export default defineComponent({
                 order={this.mockItems1}
                 v-slots={this.createSlots(this.mockItems1)}
               />
-              <p>
+              {/* <p>
                 <code>{this.tab1}</code>
                 を選択しています。
-              </p>
+              </p> */}
             </div>
             <div class="pg-columns__sub">
               <VSelect

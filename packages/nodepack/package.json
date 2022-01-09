@@ -30,7 +30,7 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/nodepack#readme",
   "dependencies": {
     "@fastkit/tiny-logger": "0.7.1",
-    "esbuild": "^0.13.0",
+    "esbuild": "^0.13.15",
     "nodemon": "^2.0.14"
   }
 }
