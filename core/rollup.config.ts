@@ -189,6 +189,7 @@ function createConfig(
     '@tiptap/vue-3',
     'esbuild',
     'vite',
+    'vite-ssr',
     'vite-ssr/plugin',
     'postcss',
     'nanoid',
