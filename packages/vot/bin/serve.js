@@ -44,6 +44,8 @@ async function main() {
     const url =
       request.protocol + '://' + request.get('host') + request.originalUrl;
 
+    console.log('[url]', url);
+
     const { html, status, statusText, headers } = await renderPage(url, {
       manifest,
       preload: true,

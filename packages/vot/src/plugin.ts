@@ -2,7 +2,8 @@
 
 import { App, h } from 'vue';
 import { Router } from 'vue-router';
-import _viteSSR from 'vite-ssr';
+// import _viteSSR from 'vite-ssr';
+import { createEntry } from './vue/entry';
 import { createHead } from '@vueuse/head';
 import { isPromise, IN_WINDOW } from '@fastkit/helpers';
 import {
@@ -29,7 +30,7 @@ export function createVotPlugin(source: RawVotPlugin) {
   return resolveRawVotPlugin(source);
 }
 
-type ViteSSROptions = Parameters<typeof _viteSSR>[1];
+type ViteSSROptions = Parameters<typeof createEntry>[1];
 
 export interface VotOptions extends Omit<ViteSSROptions, 'routes'> {
   plugins?: RawVotPlugin[];
@@ -48,51 +49,55 @@ export async function createVotHook(
   const RootApp = () => h(VPageRoot, null, slots);
   const routes = (await import('virtual:generated-pages')).default;
 
-  const hook = _viteSSR(RootApp, { ...options, routes }, async (_ctx) => {
-    const app = _ctx.app as App;
-    const router = _ctx.router as Router;
-    const {
-      initialState,
-      initialRoute,
-      request,
-      response,
-      writeResponse,
-      redirect,
-    } = _ctx;
+  const hook = await createEntry(
+    RootApp,
+    { ...options, routes },
+    async (_ctx) => {
+      const app = _ctx.app as App;
+      const router = _ctx.router as Router;
+      const {
+        initialState,
+        initialRoute,
+        request,
+        response,
+        writeResponse,
+        redirect,
+      } = _ctx;
 
-    const head = createHead();
-    app.use(head);
+      const head = createHead();
+      app.use(head);
 
-    const { plugins, middleware } = options;
+      const { plugins, middleware } = options;
 
-    const pageControl = installVuePageControl({
-      app,
-      router,
-      initialState,
-      initialRoute,
-      request,
-      response,
-      middleware,
-      writeResponse,
-      serverRedirect: redirect,
-    });
+      const pageControl = installVuePageControl({
+        app,
+        router,
+        initialState,
+        initialRoute,
+        request,
+        response,
+        middleware,
+        writeResponse,
+        serverRedirect: redirect,
+      });
 
-    if (IN_WINDOW) {
-      (window as any).$vpc = pageControl;
-    }
+      if (IN_WINDOW) {
+        (window as any).$vpc = pageControl;
+      }
 
-    if (plugins) {
-      for (const _plugin of plugins) {
-        const plugin = resolveRawVotPlugin(_plugin);
-        const result = plugin.setup(pageControl);
-        if (isPromise(result)) {
-          await result;
+      if (plugins) {
+        for (const _plugin of plugins) {
+          const plugin = resolveRawVotPlugin(_plugin);
+          const result = plugin.setup(pageControl);
+          if (isPromise(result)) {
+            await result;
+          }
         }
       }
-    }
-    return { head };
-  });
-  return hook;
+      return { head };
+    },
+  );
+  return hook as any;
 }
 
 export function createVotEntry(App: any, options: VotOptions): VotHook {

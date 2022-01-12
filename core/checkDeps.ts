@@ -40,7 +40,7 @@ const normalizeSettings: NormalizeSetting[] = [
   [/^@vue\//, 'vue'],
   [/^@nuxt\//, 'nuxt3'],
   [/^@vitejs\//, 'vite'],
-  [/^vite-ssr\//, 'vite-ssr'],
+  // [/^vite-ssr\//, 'vite-ssr'],
   [/^webfont\//, 'webfont'],
   ['virtual:generated-pages', 'vite-plugin-pages'],
   [

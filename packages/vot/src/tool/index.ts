@@ -1,4 +1,4 @@
-import viteSSRPlugin from 'vite-ssr/plugin';
+import { ViteSsrPlugin } from './plugin';
 import Pages, { UserOptions as PagesUserOptions } from 'vite-plugin-pages';
 import { Plugin } from 'vite';
 import vue, { Options as VuePluginOptions } from '@vitejs/plugin-vue';
@@ -6,10 +6,14 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { Server } from 'connect';
 
 export * from './proxy';
+export * from './build';
+export * from './dev';
+export * from './cli';
+export * from './plugin';
 
 type VueJsxOptions = Parameters<typeof vueJsx>[0];
 
-type ViteSSRPluginOpts = NonNullable<Parameters<typeof viteSSRPlugin>[0]>;
+type ViteSSRPluginOpts = NonNullable<Parameters<typeof ViteSsrPlugin>[0]>;
 
 export interface VotConfigureServerContext {
   use: Server['use'];
@@ -27,7 +31,7 @@ export interface VotPluginOptions extends ViteSSRPluginOpts {
 }
 
 export function votPlugin(options: VotPluginOptions = {}) {
-  const ssrPlugin = viteSSRPlugin(options);
+  const ssrPlugin = ViteSsrPlugin(options);
   const { pages, configureServer } = options;
   const pagesPlugin = Pages({
     pagesDir: 'src/pages',
