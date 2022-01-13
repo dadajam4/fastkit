@@ -22,6 +22,5 @@ export function createEntry(
   hook?: CreateEntryHook,
 ): any {
   const entry = typeof window === 'undefined' ? serverEntry : clientEntry;
-  console.log(typeof window === 'undefined', entry);
   return entry(App, options, hook);
 }
