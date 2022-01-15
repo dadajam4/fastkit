@@ -43,6 +43,9 @@ export function votPlugin(options: VotPluginOptions = {}) {
       return options;
     },
     config(config, env) {
+      // const isSSR = !!config.build?.ssr;
+      // console.log('■ isSSR', isSSR);
+
       return {
         define: {
           __CONTAINER_ID__: JSON.stringify(options.containerId || 'app'),
@@ -71,29 +74,33 @@ export function votPlugin(options: VotPluginOptions = {}) {
       // config.optimizeDeps.exclude.push('virtual:generated-pages');
       // return config;
     },
-    // configResolved: (config) => {
-    //   // const libPath = `/${lib}`;
-
-    //   // config.resolve.alias.push({
-    //   //   find: /^vite-ssr(\/core|\/vue)?$/,
-    //   //   replacement:
-    //   //     pluginName +
-    //   //     libPath +
-    //   //     (config.build.ssr ? entryServer : entryClient),
-    //   //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //   //   // @ts-ignore
-    //   //   _viteSSR: true,
-    //   // });
-
-    //   // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //   // // @ts-ignore
-    //   // config.optimizeDeps = config.optimizeDeps || {};
-    //   // config.optimizeDeps.include = config.optimizeDeps.include || [];
-    //   // config.optimizeDeps.include.push(
-    //   //   pluginName + libPath + entryClient,
-    //   //   pluginName + libPath + entryServer,
-    //   // );
-    // },
+    configResolved: (config) => {
+      // const isSSR = !!config.build.ssr;
+      // console.log('■ isSSR', isSSR);
+      // (config as any).define = {
+      //   ...config.define,
+      //   __VOT_SSR__: JSON.stringify(isSSR),
+      // };
+      // const libPath = `/${lib}`;
+      // config.resolve.alias.push({
+      //   find: /^vite-ssr(\/core|\/vue)?$/,
+      //   replacement:
+      //     pluginName +
+      //     libPath +
+      //     (config.build.ssr ? entryServer : entryClient),
+      //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //   // @ts-ignore
+      //   _viteSSR: true,
+      // });
+      // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // // @ts-ignore
+      // config.optimizeDeps = config.optimizeDeps || {};
+      // config.optimizeDeps.include = config.optimizeDeps.include || [];
+      // config.optimizeDeps.include.push(
+      //   pluginName + libPath + entryClient,
+      //   pluginName + libPath + entryServer,
+      // );
+    },
     // resolveId(source, importer, { ssr }) {
     //   console.log('---', source);
     //   return undefined;

@@ -196,6 +196,7 @@ function createConfig(
     // 'nuxt3',
     'http-proxy',
     'virtual:generated-pages',
+    'node-fetch',
   );
 
   // the browser builds requires postcss to be available

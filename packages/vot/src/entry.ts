@@ -8,6 +8,10 @@ export function createEntry(
   options: CreateEntryOptions,
   hook?: Hook,
 ): AnyHandlerResult {
-  const _createEntry = __NODE_JS__ ? createServerEntry : createClientEntry;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const _createEntry = import.meta.env.SSR
+    ? createServerEntry
+    : createClientEntry;
   return _createEntry(App, options, hook);
 }
