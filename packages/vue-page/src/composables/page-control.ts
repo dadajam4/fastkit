@@ -51,11 +51,15 @@ export type VuePagePrefetchFn = (
 
 export type RawPrefetchContext = VuePagePrefetchFn | PrefetchContext;
 
-export interface WriteResponse {
+export interface WrittenResponse {
   status?: number;
   statusText?: string;
   headers?: Record<string, string>;
 }
+
+export type WriteResponseFn = (params: WrittenResponse) => void;
+
+export type RedirectFn = (location: string, status?: number) => void;
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomOptions {
@@ -187,8 +191,8 @@ export interface VuePageControlSettings {
   ErrorComponent?: Component;
   request?: IncomingMessage;
   response?: ServerResponse;
-  serverRedirect?: (location: string, status?: number) => void;
-  writeResponse?: (params: WriteResponse) => void;
+  serverRedirect?: RedirectFn;
+  writeResponse?: WriteResponseFn;
   middleware?: VuePageControlMiddlewareFn[];
 }
 
@@ -227,11 +231,8 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   private _ErrorComponent: Component;
   readonly request?: IncomingMessage;
   readonly response?: ServerResponse;
-  private readonly _serverRedirect?: (
-    location: string,
-    status?: number,
-  ) => void;
-  private readonly _writeResponse?: (params: WriteResponse) => void;
+  private readonly _serverRedirect?: RedirectFn;
+  private readonly _writeResponse?: WriteResponseFn;
   readonly isClient: boolean;
   readonly middleware: VuePageControlMiddlewareFn[];
   private _redirectSpec?: VuePageControlRedirectSpec;
@@ -453,7 +454,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this.middleware.push(middleware);
   }
 
-  writeResponse(params: WriteResponse) {
+  writeResponse(params: WrittenResponse) {
     const { _writeResponse } = this;
     if (!_writeResponse) {
       throw new Error('missing provided writeResponse function.');

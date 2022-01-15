@@ -8,6 +8,7 @@ declare let __ESM_BUNDLER__: boolean;
 declare let __NODE_JS__: boolean;
 declare let __COMMIT__: string;
 declare let __VERSION__: string;
+declare let __CONTAINER_ID__: string;
 
 declare module '*.css!raw' {
   const rawStyle: string;

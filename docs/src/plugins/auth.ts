@@ -52,7 +52,7 @@ export interface AuthState {
 export const authPlugin = createVotPlugin({
   async setup(ctx) {
     const state = await ctx.initState(AuthStateInjectionKey, async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
       return {
         me: null,
       };

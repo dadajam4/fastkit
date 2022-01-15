@@ -1,29 +1,17 @@
 import { createSSRApp } from 'vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import createClientContext from '../core/entry-client.js';
-import { getFullPath, withoutSuffix } from '../utils/route';
-import { addPagePropsGetterToRoutes } from './utils';
-import type { ClientHandler, Context } from './types';
+import { deserializeState } from './utils/deserialize-state';
+import { useClientRedirect } from './utils/response';
+import { getFullPath, withoutSuffix } from './utils/route';
+import type { ClientHandler, VotContext } from './schemes';
 
-import { provideContext } from './components.js';
-export { ClientOnly, useContext } from './components.js';
+import { provideContext } from './injections';
 
-export const viteSSR: ClientHandler = async function viteSSR(
+export const createEntry: ClientHandler = async function createClientEntry(
   App,
-  {
-    routes,
-    base,
-    routerOptions = {},
-    pageProps = { passToPage: true },
-    debug = {},
-    ...options
-  },
+  { routes, base, routerOptions = {}, debug = {}, ...options },
   hook,
 ) {
-  if (pageProps && pageProps.passToPage) {
-    addPagePropsGetterToRoutes(routes);
-  }
-
   const app = createSSRApp(App);
 
   const url = new URL(window.location.href);
@@ -33,12 +21,29 @@ export const viteSSR: ClientHandler = async function viteSSR(
     history: createWebHistory(routeBase),
     routes: routes as RouteRecordRaw[],
   });
+  const { transformState = deserializeState } = options;
 
-  const context: Context = (await createClientContext({
-    ...options,
+  // Deserialize the state included in the DOM
+  const initialState = await transformState(
+    (window as any).__INITIAL_STATE__,
+    deserializeState,
+  );
+
+  // Browser redirect utilities
+  const { redirect, writeResponse } = useClientRedirect((location) =>
+    router.push(location),
+  );
+
+  const context: VotContext = {
     url,
-    spaRedirect: (location) => router.push(location),
-  })) as any;
+    isClient: true,
+    initialState,
+    redirect,
+    writeResponse,
+    app,
+    router,
+    initialRoute: router.resolve(getFullPath(url, routeBase)),
+  };
 
   provideContext(app, context);
 
@@ -54,17 +59,10 @@ export const viteSSR: ClientHandler = async function viteSSR(
   });
 
   if (hook) {
-    await hook({
-      app,
-      router,
-      initialRoute: router.resolve(getFullPath(url, routeBase)),
-      ...context,
-    });
+    await hook(context);
   }
 
   app.use(router);
-
-  // console.log('★', app);
 
   if (debug.mount !== false) {
     // this will hydrate the app
@@ -83,4 +81,4 @@ export const viteSSR: ClientHandler = async function viteSSR(
   }
 };
 
-export default viteSSR;
+// export default viteSSR;

@@ -2,16 +2,15 @@ import type { ServerResponse } from 'http';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { performance } from 'perf_hooks';
-import connect, { NextHandleFunction } from 'connect';
+import { NextHandleFunction } from 'connect';
 import {
   createServer as createViteServer,
   InlineConfig,
   ViteDevServer,
 } from 'vite';
 import chalk from 'chalk';
-import { getEntryPoint, getPluginOptions } from '../../config';
-
-import type { WriteResponse } from '../../utils/types';
+import { getPluginOptions, getEntryPoint } from '../utils';
+import type { WrittenResponse, SsrOptions } from '../../schemes';
 
 // This cannot be imported from utils due to ESM <> CJS issues
 const isRedirect = ({ status = 0 } = {}) => status >= 300 && status < 400;
@@ -22,26 +21,22 @@ function fixEntryPoint(vite: ViteDevServer) {
   // replaces the plugin behavior in the config and seems
   // to keep the entry-client for the SPA.
   for (const alias of vite.config.resolve.alias || []) {
-    // console.log('uuu', (alias as any)._viteSSR);
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (alias._viteSSR === true) {
+    if ((alias as any)._viteSSR === true) {
       alias.replacement = alias.replacement.replace('client', 'server');
     }
   }
 }
 
-export interface SsrOptions {
-  plugin?: string;
-  ssr?: string;
-  getRenderContext?: (params: {
-    url: string;
-    request: connect.IncomingMessage;
-    response: ServerResponse;
-    resolvedEntryPoint: Record<string, any>;
-  }) => Promise<WriteResponse>;
-}
+// export interface SsrOptions {
+//   plugin?: string;
+//   ssr?: string;
+//   getRenderContext?: (params: {
+//     url: string;
+//     request: connect.IncomingMessage;
+//     response: ServerResponse;
+//     resolvedEntryPoint: Record<string, any>;
+//   }) => Promise<WrittenResponse>;
+// }
 
 export const createSSRDevHandler = (
   server: ViteDevServer,
@@ -63,7 +58,7 @@ export const createSSRDevHandler = (
     return await server.transformIndexHtml(url, indexHtml);
   }
 
-  function writeHead(response: ServerResponse, params: WriteResponse = {}) {
+  function writeHead(response: ServerResponse, params: WrittenResponse = {}) {
     if (params.status) {
       response.statusCode = params.status;
     }
@@ -108,18 +103,18 @@ export const createSSRDevHandler = (
       const render = resolvedEntryPoint.render || resolvedEntryPoint;
 
       const protocol =
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        request.protocol ||
+        (request as any).protocol ||
         (request.headers.referer || '').split(':')[0] ||
         'http';
 
       const url = protocol + '://' + request.headers.host + request.originalUrl;
 
       // This context might contain initialState provided by other plugins
+      const { getRenderContext } = options;
+
       const context =
-        (options.getRenderContext &&
-          (await options.getRenderContext({
+        (getRenderContext &&
+          (await getRenderContext({
             url,
             request,
             response,
@@ -127,7 +122,6 @@ export const createSSRDevHandler = (
           }))) ||
         {};
 
-      // This is used by Vitedge
       writeHead(response, context);
       if (isRedirect(context)) {
         return response.end();
@@ -162,9 +156,12 @@ export const createSSRDevHandler = (
   return handleSsrRequest;
 };
 
-export async function createSsrServer(
-  options: InlineConfig & { polyfills?: boolean } = {},
-) {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface CreateSsrServerOptions extends InlineConfig {
+  polyfills?: boolean;
+}
+
+export async function createSsrServer(options: CreateSsrServerOptions = {}) {
   // Enable SSR in the plugin
   process.env.__DEV_MODE_SSR = 'true';
 
@@ -173,19 +170,16 @@ export async function createSsrServer(
     server: options.server || { ...options },
   });
 
-  // if (options.polyfills !== false) {
-  //   if (!globalThis.fetch) {
-  //     const fetch = await import('node-fetch');
-  //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //     // @ts-ignore
-  //     globalThis.fetch = fetch.default || fetch;
-  //   }
-  // }
+  if (options.polyfills !== false) {
+    if (!globalThis.fetch) {
+      const fetch = await import('node-fetch');
+      (globalThis as any).fetch = fetch.default || fetch;
+    }
+  }
 
-  const isMiddlewareMode =
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    options?.middlewareMode || options?.server?.middlewareMode;
+  const isMiddlewareMode = !!(
+    (options as any).middlewareMode || options.server?.middlewareMode
+  );
 
   return new Proxy(viteServer, {
     get(target, prop, receiver) {
@@ -218,19 +212,12 @@ export function printServerInfo(server: ViteDevServer) {
       { clear: !server.config.logger.hasWarned },
     );
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     server.printUrls();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (globalThis.__ssr_start_time) {
+    const ssr_start_time = (globalThis as any).__ssr_start_time;
+    if (ssr_start_time) {
       ssrReadyMessage += chalk.cyan(
-        ` ready in ${Math.round(
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          performance.now() - globalThis.__ssr_start_time,
-        )}ms.`,
+        ` ready in ${Math.round(performance.now() - ssr_start_time)}ms.`,
       );
     }
   }

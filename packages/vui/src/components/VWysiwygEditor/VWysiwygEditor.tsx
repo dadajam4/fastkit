@@ -149,10 +149,11 @@ export const VWysiwygEditor = defineComponent({
     };
 
     const wysiwygContext = computed<WysiwygEditorContext>(() => {
-      const _editor = editor.value;
-      if (!_editor) {
-        throw new Error('missing editor value');
-      }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const _editor = editor.value!;
+      // if (!_editor) {
+      //   throw new Error('missing editor value');
+      // }
       return {
         vui,
         editor: _editor,

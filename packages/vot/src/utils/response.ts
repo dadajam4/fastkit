@@ -1,13 +1,13 @@
 import { defer } from './defer';
-import type { WriteResponse } from './types';
+import type { WrittenResponse, WriteResponseFn, RedirectFn } from '../schemes';
 
 const isRedirect = ({ status = 0 }) => status >= 300 && status < 400;
 
 export function useSsrResponse() {
-  const deferred = defer<WriteResponse>();
-  const response = {} as WriteResponse;
+  const deferred = defer<WrittenResponse>();
+  const response = {} as WrittenResponse;
 
-  const writeResponse = (params: WriteResponse) => {
+  const writeResponse: WriteResponseFn = (params) => {
     Object.assign(response, params);
     if (isRedirect(params)) {
       // Stop waiting for rendering when redirecting
@@ -25,7 +25,7 @@ export function useSsrResponse() {
   };
 }
 
-const externalRedirect = (location: string) => {
+const externalRedirect: RedirectFn = (location) => {
   window.location.href = location;
 };
 

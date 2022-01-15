@@ -1,53 +1,24 @@
 /// <reference types="vite-plugin-pages/client" />
 
-import { App, h } from 'vue';
+import { App, h, Component } from 'vue';
 import { Router } from 'vue-router';
-// import _viteSSR from 'vite-ssr';
-import { createEntry } from './vue/entry';
+import { createEntry } from './entry';
 import { createHead } from '@vueuse/head';
 import { isPromise, IN_WINDOW } from '@fastkit/helpers';
-import {
-  installVuePageControl,
-  VuePageControl,
-  VPageRoot,
-  VuePageControlMiddlewareFn,
-} from '@fastkit/vue-page';
+import { installVuePageControl, VPageRoot } from '@fastkit/vue-page';
+import { resolveRawVotPlugin, CreateEntryOptions } from './schemes';
 export * from '@fastkit/vue-page';
 
-export type VotPluginFn = (ctx: VuePageControl) => any | Promise<any>;
-
-export interface VotPlugin {
-  setup: VotPluginFn;
-}
-
-export type RawVotPlugin = VotPluginFn | VotPlugin;
-
-function resolveRawVotPlugin(raw: RawVotPlugin) {
-  return typeof raw === 'function' ? { setup: raw } : raw;
-}
-
-export function createVotPlugin(source: RawVotPlugin) {
-  return resolveRawVotPlugin(source);
-}
-
-type ViteSSROptions = Parameters<typeof createEntry>[1];
-
-export interface VotOptions extends Omit<ViteSSROptions, 'routes'> {
-  plugins?: RawVotPlugin[];
-  middleware?: VuePageControlMiddlewareFn[];
-}
-
-export type VotHook = (url: string, cfg?: any) => Promise<any>;
-
 export async function createVotHook(
-  App: any,
-  options: VotOptions,
-): Promise<VotHook> {
+  App: Component,
+  options: CreateEntryOptions,
+) {
   const slots = {
     default: () => h(App),
   };
   const RootApp = () => h(VPageRoot, null, slots);
-  const routes = (await import('virtual:generated-pages')).default;
+  const routes =
+    options.routes || (await import('virtual:generated-pages')).default;
 
   const hook = await createEntry(
     RootApp,
@@ -81,10 +52,12 @@ export async function createVotHook(
         serverRedirect: redirect,
       });
 
+      // Set page control reference for global window
       if (IN_WINDOW) {
         (window as any).$vpc = pageControl;
       }
 
+      // Install plugins
       if (plugins) {
         for (const _plugin of plugins) {
           const plugin = resolveRawVotPlugin(_plugin);
@@ -94,16 +67,17 @@ export async function createVotHook(
           }
         }
       }
+
       return { head };
     },
   );
-  return hook as any;
+  return hook;
 }
 
-export function createVotEntry(App: any, options: VotOptions): VotHook {
+export function createVotEntry(App: Component, options: CreateEntryOptions) {
   const hookPromise = createVotHook(App, options);
   return async function renderer(url: string, cfg: any = {}) {
     const hook = await hookPromise;
-    return hook(url, cfg);
+    return hook ? hook(url, cfg) : undefined;
   };
 }

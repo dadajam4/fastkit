@@ -1,5 +1,5 @@
 import {
-  build as _build,
+  build as viteBuild,
   InlineConfig,
   ResolvedConfig,
   mergeConfig,
@@ -12,8 +12,8 @@ import {
   getPluginOptions,
   INDEX_HTML,
   resolveViteConfig,
-  BuildOptions,
-} from '../../config';
+} from '../utils';
+import { BuildOptions } from '../../schemes';
 import type {
   RollupOutput,
   RollupWatcher,
@@ -83,7 +83,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
               replace({
                 preventAssignment: true,
                 values: {
-                  __VITE_SSR_HTML__: () => indexHtmlTemplate,
+                  __VOT_HTML__: () => indexHtmlTemplate,
                 },
               }),
             ],
@@ -96,7 +96,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
       ),
     ) as NonNullable<BuildOptions['serverOptions']>;
 
-    const clientResult = await _build(clientBuildOptions);
+    const clientResult = await viteBuild(clientBuildOptions);
 
     const isWatching = Object.prototype.hasOwnProperty.call(
       clientResult,
@@ -124,7 +124,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
           );
 
           // Build SSR bundle with the new index.html
-          await _build(serverBuildOptions);
+          await viteBuild(serverBuildOptions);
           await generatePackageJson(
             viteConfig,
             clientBuildOptions,
@@ -152,7 +152,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
         ) as OutputAsset
       )?.source as string;
 
-      await _build(serverBuildOptions);
+      await viteBuild(serverBuildOptions);
 
       // index.html file is not used in SSR and might be
       // served by mistake.

@@ -1,8 +1,6 @@
-import { createSsrServer } from './server';
+import { createSsrServer, CreateSsrServerOptions } from './server';
 
-export const startServer = (options: Parameters<typeof createSsrServer>[0]) =>
+export * from './server';
+
+export const startServer = (options?: CreateSsrServerOptions) =>
   createSsrServer(options).then((server) => server.listen());
-
-export { createSsrServer };
-
-export type { SsrOptions } from './server';

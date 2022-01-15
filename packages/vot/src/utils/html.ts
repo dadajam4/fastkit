@@ -27,9 +27,7 @@ export function renderPreloadLinks(files: string[]) {
   return link;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const containerId = __CONTAINER_ID__ as string;
+const containerId = __CONTAINER_ID__;
 
 const containerRE = new RegExp(
   `<div id="${containerId}"([\\s\\w\\-"'=[\\]]*)><\\/div>`,
@@ -47,8 +45,6 @@ export function buildHtmlDocument(
   template: string,
   { htmlAttrs, bodyAttrs, headTags, body, initialState }: DocParts,
 ) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   if (__DEV__) {
     if (template.indexOf(`id="${containerId}"`) === -1) {
       console.warn(
@@ -72,7 +68,6 @@ export function buildHtmlDocument(
   return template.replace(
     containerRE,
     // Use function parameter here to avoid replacing `$1` in body or initialState.
-    // https://github.com/frandiox/vite-ssr/issues/123
     (_, d1) =>
       `<div id="${containerId}" data-server-rendered="true"${d1 || ''}>${
         body || ''

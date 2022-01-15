@@ -1,3 +1,4 @@
+import './wysiwygs.scss';
 import { defineComponent, ref } from 'vue';
 import {
   VHero,
@@ -83,7 +84,7 @@ export default defineComponent({
   },
   render() {
     return (
-      <div class="pg-docs-components-icons">
+      <div class="pg-docs-components-wysiwygs">
         <VHero>Wysiwygs</VHero>
         <DocsSection title="Basic">
           <VWysiwygEditor
