@@ -10,7 +10,7 @@ import {
 } from 'vite';
 import chalk from 'chalk';
 import { getPluginOptions, getEntryPoint } from '../utils';
-import type { WrittenResponse, SsrOptions } from '../../schemes';
+import type { WrittenResponse, SsrOptions } from '../../vot';
 
 // This cannot be imported from utils due to ESM <> CJS issues
 const isRedirect = ({ status = 0 } = {}) => status >= 300 && status < 400;

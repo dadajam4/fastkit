@@ -13,7 +13,7 @@ import {
   INDEX_HTML,
   resolveViteConfig,
 } from '../utils';
-import { BuildOptions } from '../../schemes';
+import { BuildOptions } from '../../vot';
 import type {
   RollupOutput,
   RollupWatcher,

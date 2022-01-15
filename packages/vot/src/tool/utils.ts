@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { resolveConfig, ResolvedConfig } from 'vite';
-import { VotPluginOptions } from '../schemes';
+import { VotPluginOptions } from '../vot';
 
 export const INDEX_HTML = 'index.html';
 

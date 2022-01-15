@@ -2,14 +2,14 @@ import Pages from 'vite-plugin-pages';
 import { Plugin } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import { VotPluginOptions } from '../schemes';
+import { VotPluginOptions } from '../vot';
 import { createSSRDevHandler } from './dev/server';
 
 export * from './proxy';
 export * from './build';
 export * from './dev';
 export * from './cli';
-export * from '../schemes';
+export * from '../vot';
 
 export function votPlugin(options: VotPluginOptions = {}) {
   const { pages, configureServer } = options;
