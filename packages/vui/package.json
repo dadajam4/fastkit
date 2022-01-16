@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui",
-  "version": "0.7.11",
+  "version": "0.7.12",
   "description": "@fastkit/vui",
   "buildOptions": {
     "name": "Vui",
@@ -32,11 +32,11 @@
     "vue": "^3.2.26"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "0.7.11",
-    "@fastkit/icon-font": "0.7.11",
-    "@fastkit/tiny-logger": "0.7.11",
-    "@fastkit/vite-kit": "0.7.11",
-    "@fastkit/vue-kit": "0.7.11",
+    "@fastkit/color-scheme": "0.7.12",
+    "@fastkit/icon-font": "0.7.12",
+    "@fastkit/tiny-logger": "0.7.12",
+    "@fastkit/vite-kit": "0.7.12",
+    "@fastkit/vue-kit": "0.7.12",
     "@tiptap/extension-link": "^2.0.0-beta.35",
     "@tiptap/extension-underline": "^2.0.0-beta.22",
     "@tiptap/starter-kit": "^2.0.0-beta.168",
