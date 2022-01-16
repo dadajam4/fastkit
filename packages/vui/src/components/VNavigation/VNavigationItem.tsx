@@ -192,7 +192,8 @@ export const VNavigationItem = defineComponent({
       if (!to.value) {
         return toggle();
       }
-      open();
+      // console.log('★');
+      // open();
       // if (!to.value) {
       //   toggle();
       // }
