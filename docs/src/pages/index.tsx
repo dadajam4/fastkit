@@ -36,7 +36,9 @@ export default defineComponent({
       <div>
         <VAppContainer>
           <p>
-            1{JSON.stringify(this.auth.me)} {JSON.stringify(this.isLoggedIn())}
+            {`1${JSON.stringify(this.auth.me)} ${JSON.stringify(
+              this.isLoggedIn(),
+            )}`}
           </p>
           <VProgressCircular indeterminate />
           <VProgressCircular indeterminate color="accent" />
@@ -155,7 +157,7 @@ export default defineComponent({
           ]}
           placeholder="Placeholder"></VSelect>
         {range(100, 1).map((i) => (
-          <p key={i}>This is Text.{i}</p>
+          <p key={i}>{`This is Text.${i}`}</p>
         ))}
       </div>
     );

@@ -42,7 +42,7 @@ export default defineComponent({
         <VPage />
         {/* <RouterView></RouterView> */}
         {range(100, 1).map((i) => (
-          <p key={i}>This is Text.{i}</p>
+          <p key={i}>{`This is Text.${i}`}</p>
         ))}
       </div>
     );
