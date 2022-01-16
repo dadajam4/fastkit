@@ -19,6 +19,8 @@ import {
 import { range } from '@fastkit/helpers';
 import { DocsSection } from '../../../-components';
 
+const DYNAMIC_KEYS = ['k1', 'k2'] as const;
+
 export default defineComponent({
   setup() {
     const size = ref<ControlSize>('md');
@@ -27,6 +29,11 @@ export default defineComponent({
     const readonly = ref(false);
     const form1Sending = ref(false);
     const form2Sending = ref(false);
+    const dynamicKey = ref<typeof DYNAMIC_KEYS[number]>(DYNAMIC_KEYS[0]);
+    const dynamicInput = ref({
+      k1: '',
+      k2: '',
+    });
     const items: FormSelectorItemData[] = range(5, 1).map((i) => ({
       value: String(i),
       label: `アイテム${i}`,
@@ -59,6 +66,8 @@ export default defineComponent({
       submit2,
       form1Sending,
       form2Sending,
+      dynamicKey,
+      dynamicInput,
     };
   },
   render() {
@@ -71,59 +80,93 @@ export default defineComponent({
             disabled={this.form1Sending}
             onSubmit={(form) => {
               this.submit1();
-            }}>
-            <VTextField
-              label="氏名"
-              required
-              hint="これは入力ヒントテキストです。"
-              counter
-              maxlength="10"
-            />
+            }}
+            v-slots={{
+              default: (form) => (
+                <>
+                  <div>{form.invalidChildren.length}</div>
+                  <VButton
+                    onClick={() => {
+                      this.$vui.snackbar({
+                        content: 'An Error has Ocured hoge is [Number].',
+                        timeout: 0,
+                        color: 'error',
+                      });
+                    }}>
+                    Snack
+                  </VButton>
+                  <VTextField
+                    label="氏名"
+                    required
+                    hint="これは入力ヒントテキストです。"
+                    counter
+                    maxlength="10"
+                  />
 
-            <VTextarea
-              label="ひとことコメント"
-              required
-              hint="これは入力ヒントテキストです。"
-              counter
-              maxlength="100"
-            />
+                  <VSelect
+                    label="Dynamic input key"
+                    items={DYNAMIC_KEYS.map((key) => ({
+                      value: key,
+                      label: key,
+                    }))}
+                    v-model={this.dynamicKey}
+                  />
+                  <VTextField
+                    key={this.dynamicKey}
+                    label={`Dynamic input - ${this.dynamicKey}`}
+                    required
+                    hint="これは入力ヒントテキストです。"
+                    counter
+                    maxlength="10"
+                    v-model={this.dynamicInput[this.dynamicKey]}
+                  />
 
-            <VSelect
-              label="居住地"
-              items={items}
-              required
-              hint="これは入力ヒントテキストです。"
-            />
+                  <VTextarea
+                    label="ひとことコメント"
+                    required
+                    hint="これは入力ヒントテキストです。"
+                    counter
+                    maxlength="100"
+                  />
 
-            <VCheckboxGroup
-              label="趣味"
-              required
-              hint="これは入力ヒントテキストです。"
-              stacked={false}
-              items={items}
-            />
+                  <VSelect
+                    label="居住地"
+                    items={items}
+                    required
+                    hint="これは入力ヒントテキストです。"
+                  />
 
-            <VSwitchGroup
-              label="持ち物"
-              required
-              hint="これは入力ヒントテキストです。"
-              stacked={false}
-              items={items}
-            />
+                  <VCheckboxGroup
+                    label="趣味"
+                    required
+                    hint="これは入力ヒントテキストです。"
+                    stacked={false}
+                    items={items}
+                  />
 
-            <div style={{ margin: '20px 0' }}>
-              <VCheckbox required>利用規約に同意する</VCheckbox>
-            </div>
+                  <VSwitchGroup
+                    label="持ち物"
+                    required
+                    hint="これは入力ヒントテキストです。"
+                    stacked={false}
+                    items={items}
+                  />
 
-            <VButton
-              color="accent"
-              endIcon="mdi-send"
-              type="submit"
-              loading={this.form1Sending}
-              disabled={this.form1Sending}>
-              Send
-            </VButton>
-          </VForm>
+                  <div style={{ margin: '20px 0' }}>
+                    <VCheckbox required>利用規約に同意する</VCheckbox>
+                  </div>
+
+                  <VButton
+                    color="accent"
+                    endIcon="mdi-send"
+                    type="submit"
+                    loading={this.form1Sending}
+                    disabled={this.form1Sending}>
+                    Send
+                  </VButton>
+                </>
+              ),
+            }}></VForm>
         </DocsSection>
 
         <DocsSection title="Styles">

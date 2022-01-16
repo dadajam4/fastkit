@@ -849,6 +849,7 @@ export class FormNodeControl<T = any, D = T> {
     if (index !== -1) {
       _children.splice(index, 1);
     }
+    this.removeInvalidChild(node);
   }
 
   private pushInvalidChild(node: FormNodeControl) {
