@@ -14,6 +14,7 @@ import {
   VTextField,
   VListTile,
 } from '@fastkit/vui';
+import { numeric, length } from '@fastkit/rules';
 
 export default defineComponent({
   setup() {
@@ -30,7 +31,7 @@ export default defineComponent({
       <div>
         <h1>Components</h1>
 
-        <VTextField label="施設名"></VTextField>
+        <VTextField label="施設名" rules={[numeric, length(2)]}></VTextField>
 
         <VListTile startIcon="mdi-comma-box" endIcon="mdi-menu-down">
           施設管理
