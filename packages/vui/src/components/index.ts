@@ -11,6 +11,7 @@ export * from './VDrawerLayout';
 export * from './VHero';
 // export * from './VAccordion';
 export * from './VNavigation';
+export * from './VFormControl';
 export * from './VCheckbox';
 export * from './VCheckboxGroup';
 export * from './VRadio';
