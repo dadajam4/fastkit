@@ -170,6 +170,7 @@ export function viteVuiPlugin(
       editorLinkOff: 'mdi-link-off' as any,
       editorUndo: 'mdi-undo-variant' as any,
       editorRedo: 'mdi-redo-variant' as any,
+      hinttip: 'mdi-help-circle-outline' as any,
       // navigationExpand: (gen, active) => {
       //   return gen({
       //     name: 'mdi-menu-down' as any,

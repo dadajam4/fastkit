@@ -235,6 +235,7 @@ export const VWysiwygEditor = defineComponent({
         ]}
         label={this.label}
         hint={this.hint}
+        hinttip={this.hinttip}
         hiddenInfo={this.hiddenInfo}
         onClickLabel={(ev) => {
           this.focus('start', { scrollIntoView: true });

@@ -99,12 +99,15 @@ export default defineComponent({
                     label="氏名"
                     required
                     hint="これは入力ヒントテキストです。"
+                    hinttip="氏名を入力とは"
                     counter
                     maxlength="10"
                   />
 
                   <VSelect
                     label="Dynamic input key"
+                    hint="これは入力ヒントテキストです。"
+                    hinttip
                     items={DYNAMIC_KEYS.map((key) => ({
                       value: key,
                       label: key,

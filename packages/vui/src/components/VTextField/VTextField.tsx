@@ -65,6 +65,7 @@ export const VTextField = defineComponent({
         class={['v-text-field', this.classes]}
         label={this.label}
         hint={this.hint}
+        hinttip={this.hinttip}
         onClickLabel={(ev) => {
           this.focus();
         }}

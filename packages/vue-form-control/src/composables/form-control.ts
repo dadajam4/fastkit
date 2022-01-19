@@ -5,6 +5,7 @@ import {
   computed,
   ComputedRef,
   onBeforeUnmount,
+  VNodeChild,
 } from 'vue';
 import {
   createPropsOptions,
@@ -23,6 +24,9 @@ export function createFormControlProps() {
       nodeControl: {} as PropType<FormNodeControl>,
       label: {} as PropType<VNodeChildOrSlot>,
       hint: {} as PropType<VNodeChildOrSlot>,
+      hinttip: [Boolean, String, Function] as PropType<
+        boolean | string | (() => VNodeChild)
+      >,
       infoAppends: {} as PropType<VNodeChildOrSlot>,
       validating: Boolean,
       pending: Boolean,
@@ -72,13 +76,17 @@ export interface FormControlSlots {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface FormControlOptions {}
+export interface FormControlOptions {
+  hinttipPrepend?: () => VNodeChild;
+}
 
 export class FormControl {
   protected _ctx: FormControlContext | undefined;
   protected _nodeControl: ComputedRef<FormNodeControl | undefined>;
   protected _labelSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
   protected _hintSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
+  protected _hinttip: ComputedRef<VNodeChild>;
+  protected _hinttipPrepend?: () => VNodeChild;
   protected _infoAppendsSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
   protected _validating: ComputedRef<boolean>;
   protected _pending: ComputedRef<boolean>;
@@ -170,7 +178,11 @@ export class FormControl {
     return this._infoAppendsSlot.value;
   }
 
-  constructor(props: FormControlProps, ctx: FormControlContext) {
+  constructor(
+    props: FormControlProps,
+    ctx: FormControlContext,
+    options: FormControlOptions = {},
+  ) {
     const { slots } = ctx;
 
     this._ctx = ctx;
@@ -185,6 +197,22 @@ export class FormControl {
     this._hintSlot = computed(() =>
       resolveVNodeChildOrSlots(props.hint, slots.hint),
     );
+
+    this._hinttipPrepend = options.hinttipPrepend;
+
+    this._hinttip = computed(() => {
+      const { hinttip } = props;
+      if (!hinttip) return;
+      if (typeof hinttip === 'function') return hinttip();
+      const children: VNodeChild[] = [];
+      if (this._hinttipPrepend) {
+        children.push(this._hinttipPrepend());
+      }
+      if (typeof hinttip !== 'boolean') {
+        children.push(hinttip);
+      }
+      return children;
+    });
 
     this._infoAppendsSlot = computed(() =>
       resolveVNodeChildOrSlots(props.infoAppends, slots.infoAppends),
@@ -248,8 +276,8 @@ export class FormControl {
     return (slot && cleanupEmptyVNodeChild(slot(this))) || undefined;
   }
 
-  renderHint() {
-    if (!this.focused) return;
+  renderHint(allowNotFocused?: boolean) {
+    if (!allowNotFocused && !this.focused) return;
     const { hintSlot: slot } = this;
     return (slot && cleanupEmptyVNodeChild(slot(this))) || undefined;
   }
@@ -283,13 +311,33 @@ export class FormControl {
     if (this.disabled || this.readonly) return EMPTY_MESSAGE;
     const error = this.renderFirstError();
     if (error) return error;
-    return this.renderHint() || EMPTY_MESSAGE;
+    return (!this._hinttip.value && this.renderHint()) || EMPTY_MESSAGE;
+  }
+
+  renderHinttip():
+    | {
+        tip: VNodeChild;
+        hint: VNodeChild;
+      }
+    | undefined {
+    const { value: hinttip } = this._hinttip;
+    if (!hinttip) {
+      return;
+    }
+    const hint = this.renderHint(true);
+    if (!hint) return;
+
+    return {
+      tip: hinttip,
+      hint,
+    };
   }
 
   expose() {
     return {
       labelSlot: this._labelSlot,
       hintSlot: this._hintSlot,
+      hinttip: this._hinttip,
       infoAppendsSlot: this._infoAppendsSlot,
     };
   }
@@ -298,7 +346,8 @@ export class FormControl {
 export function useFormControl(
   props: FormControlProps,
   ctx: FormControlContext,
+  options?: FormControlOptions,
 ) {
-  const control = new FormControl(props, ctx);
+  const control = new FormControl(props, ctx, options);
   return control;
 }

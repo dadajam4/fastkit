@@ -9,6 +9,8 @@ import {
   renderSlotOrEmpty,
 } from '@fastkit/vue-kit';
 import { useVuiColorProvider, useVui } from '../../injections';
+import { VIcon } from '../VIcon';
+import { VTooltip } from '../kits';
 
 const { props, emits } = createFormControlSettings();
 
@@ -24,10 +26,19 @@ export const VFormControl = defineComponent({
   },
   emits,
   setup(props, ctx) {
-    const control = useFormControl(props, ctx);
+    const vui = useVui();
+
+    const control = useFormControl(props, ctx, {
+      hinttipPrepend: () => (
+        <VIcon
+          class="v-form-control__label__hinttip__icon"
+          name={vui.icon('hinttip')}
+        />
+      ),
+    });
+
     ctx.expose(control.expose());
 
-    const vui = useVui();
     const colorProvider = useVuiColorProvider();
 
     const classes = computed(() => [
@@ -53,6 +64,8 @@ export const VFormControl = defineComponent({
       const label = control.renderLabel();
       const message = control.renderMessage();
       const appends = control.renderInfoAppends();
+      const hinttip = control.renderHinttip();
+
       return (
         <div class={['v-form-control', classes.value]}>
           {label && (
@@ -63,6 +76,25 @@ export const VFormControl = defineComponent({
               }}>
               {label}
               {control.required && vui.getRequiredChip()}
+              {hinttip && (
+                <VTooltip
+                  top
+                  openOnHover={false}
+                  v-slots={{
+                    activator: (ctx) => (
+                      <a
+                        class="v-form-control__label__hinttip"
+                        href="javascript:void(0)"
+                        {...ctx.attrs}>
+                        {hinttip.tip}
+                      </a>
+                    ),
+                  }}>
+                  <div class="v-form-control__label__hinttip__hint">
+                    {hinttip.hint}
+                  </div>
+                </VTooltip>
+              )}
             </label>
           )}
           <div class="v-form-control__body">

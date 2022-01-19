@@ -68,6 +68,7 @@ export interface VuiServiceIconSettings {
   editorLinkOff: IconName;
   editorUndo: IconName;
   editorRedo: IconName;
+  hinttip: IconName;
 }
 
 export type VuiVNodeResolver = () => VNodeChild;

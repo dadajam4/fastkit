@@ -1,1 +1,1 @@
-export { VDialog, VMenu, VSnackbar } from '@fastkit/vue-kit';
+export { VDialog, VMenu, VSnackbar, VTooltip } from '@fastkit/vue-kit';

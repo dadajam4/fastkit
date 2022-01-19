@@ -75,6 +75,7 @@ export function defineFormSelectorComponent(
           ]}
           label={this.label}
           hint={this.hint}
+          hinttip={this.hinttip}
           v-slots={{
             ...this.$slots,
             default: () => (

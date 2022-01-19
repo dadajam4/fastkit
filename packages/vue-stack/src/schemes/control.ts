@@ -2,6 +2,7 @@ import {
   Ref,
   Transition,
   VNode,
+  VNodeChild,
   PropType,
   ExtractPropTypes,
   SetupContext,
@@ -129,7 +130,7 @@ export interface VStackControl {
   cancel(force?: boolean): Promise<void>;
   render(
     fn: (
-      children: VNode[] | undefined,
+      children: VNodeChild | undefined,
       opts: {
         withClickOutside: (node: VNode) => VNode;
       },
@@ -164,8 +165,8 @@ export interface VStackActivatorPayload {
 }
 
 export type VStackSlots = {
-  default?: (control: VStackControl) => VNode[];
-  activator?: (payload: VStackActivatorPayload) => VNode[];
+  default?: (control: VStackControl) => VNodeChild;
+  activator?: (payload: VStackActivatorPayload) => VNodeChild;
 };
 
 export interface CreateStackablePropsOptions {
