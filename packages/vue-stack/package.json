@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-stack",
-  "version": "0.7.17",
+  "version": "0.7.18",
   "description": "@fastkit/vue-stack",
   "buildOptions": {
     "name": "VueStack"
@@ -31,10 +31,10 @@
     "vue-router": "^4.0.12"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "0.7.17",
-    "@fastkit/vue-color-scheme": "0.7.17",
-    "@fastkit/helpers": "0.7.17",
-    "@fastkit/tiny-logger": "0.7.17",
-    "@fastkit/vue-utils": "0.7.17"
+    "@fastkit/color-scheme": "0.7.18",
+    "@fastkit/vue-color-scheme": "0.7.18",
+    "@fastkit/helpers": "0.7.18",
+    "@fastkit/tiny-logger": "0.7.18",
+    "@fastkit/vue-utils": "0.7.18"
   }
 }
