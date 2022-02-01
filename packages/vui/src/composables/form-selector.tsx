@@ -76,6 +76,7 @@ export function defineFormSelectorComponent(
           label={this.label}
           hint={this.hint}
           hinttip={this.hinttip}
+          requiredChip={this.requiredChip}
           v-slots={{
             ...this.$slots,
             default: () => (

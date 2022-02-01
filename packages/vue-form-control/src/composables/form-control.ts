@@ -18,6 +18,8 @@ import { FormNodeControl, FormNodeError } from './node';
 
 const EMPTY_MESSAGE = '\xa0'; // for keep height
 
+export type RequiredChipSource = (() => VNodeChild) | string | boolean;
+
 export function createFormControlProps() {
   return {
     ...createPropsOptions({
@@ -45,6 +47,7 @@ export function createFormControlProps() {
       invalid: Boolean,
       valid: Boolean,
       hiddenInfo: Boolean,
+      requiredChip: {} as PropType<RequiredChipSource>,
     }),
   };
 }

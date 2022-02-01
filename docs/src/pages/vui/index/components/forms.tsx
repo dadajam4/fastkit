@@ -15,6 +15,7 @@ import {
   VTextField,
   VButton,
   useVueStack,
+  VRadioGroup,
 } from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
 import { DocsSection } from '../../../-components';
@@ -84,6 +85,23 @@ export default defineComponent({
             v-slots={{
               default: (form) => (
                 <>
+                  <VRadioGroup
+                    label="公開状態"
+                    items={[
+                      {
+                        value: '1',
+                        label: '非公開',
+                      },
+                      {
+                        value: '2',
+                        label: '公開',
+                      },
+                    ]}
+                  />
+
+                  <VButton color="base">保存</VButton>
+                  <VButton color="primary">繁栄</VButton>
+
                   <div>{form.invalidChildren.length}</div>
                   <VButton
                     onClick={() => {
@@ -96,12 +114,13 @@ export default defineComponent({
                     Snack
                   </VButton>
                   <VTextField
+                    // label={() => <>氏名 *</>}
                     label="氏名"
+                    requiredChip={false}
+                    hint="10文字以内で入力してほしい！"
+                    // hinttip="氏名を入力とは"
                     required
-                    hint="これは入力ヒントテキストです。"
-                    hinttip="氏名を入力とは"
-                    counter
-                    maxlength="10"
+                    counter={10}
                   />
 
                   <VSelect

@@ -1,5 +1,5 @@
 import './VFormControl.scss';
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, VNodeChild } from 'vue';
 import {
   createFormControlSettings,
   useFormControl,
@@ -7,12 +7,40 @@ import {
   defineSlotsProps,
   FormControl,
   renderSlotOrEmpty,
+  RequiredChipSource,
 } from '@fastkit/vue-kit';
 import { useVuiColorProvider, useVui } from '../../injections';
+import type { VuiService } from '../../service';
 import { VIcon } from '../VIcon';
 import { VTooltip } from '../kits';
 
 const { props, emits } = createFormControlSettings();
+
+export function createRequiredChipRenderer(
+  required: () => boolean,
+  props: {
+    requiredChip?: RequiredChipSource;
+  },
+  vui: VuiService = useVui(),
+) {
+  return () => {
+    if (!required()) return;
+    let chip: VNodeChild;
+    const { requiredChip } = props;
+    if (requiredChip === false) return;
+    if (requiredChip) {
+      if (typeof requiredChip === 'string') {
+        chip = requiredChip;
+      } else if (typeof requiredChip === 'function') {
+        chip = requiredChip();
+      }
+    }
+    if (chip === undefined) {
+      chip = vui.getRequiredChip();
+    }
+    return chip;
+  };
+}
 
 export const VFormControl = defineComponent({
   name: 'VFormControl',
@@ -27,7 +55,6 @@ export const VFormControl = defineComponent({
   emits,
   setup(props, ctx) {
     const vui = useVui();
-
     const control = useFormControl(props, ctx, {
       hinttipPrepend: () => (
         <VIcon
@@ -60,6 +87,12 @@ export const VFormControl = defineComponent({
       ),
     ]);
 
+    const getRequiredChip = createRequiredChipRenderer(
+      () => control.required,
+      props,
+      vui,
+    );
+
     return () => {
       const label = control.renderLabel();
       const message = control.renderMessage();
@@ -75,7 +108,7 @@ export const VFormControl = defineComponent({
                 ctx.emit('clickLabel', ev, control);
               }}>
               {label}
-              {control.required && vui.getRequiredChip()}
+              {getRequiredChip()}
               {hinttip && (
                 <VTooltip
                   top
