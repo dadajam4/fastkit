@@ -45,6 +45,7 @@ export default defineComponent({
             v-model={this.select1}
             items={items}
             required
+            clearable
             hint="これは入力ヒントテキストです。"
             v-slots={
               {

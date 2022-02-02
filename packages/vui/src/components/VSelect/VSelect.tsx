@@ -25,6 +25,7 @@ import { VUI_SELECT_SYMBOL, useVui } from '../../injections';
 import { VIcon } from '../VIcon';
 import { VMenu } from '../kits';
 import { VOption } from '../VOption';
+import { VButton } from '..';
 
 const { props, emits } = createFormSelectorSettings();
 
@@ -184,11 +185,24 @@ export const VSelect = defineComponent({
                           </div>
                         </div>,
                       ],
-                      endAdornment: () => (
-                        <VIcon
-                          name={this.iconName}
-                          rotate={this.menuOpened ? 180 : 0}></VIcon>
-                      ),
+                      endAdornment: () =>
+                        (this.clearable && this.nodeControl.value != null && (
+                          <VButton
+                            key="clear"
+                            icon={this.$vui.icon('clear')}
+                            rounded
+                            onClick={(ev) => {
+                              ev.stopPropagation();
+                              this.nodeControl.clear();
+                            }}
+                          />
+                        )) || (
+                          <VIcon
+                            key="icon"
+                            name={this.iconName}
+                            rotate={this.menuOpened ? 180 : 0}
+                          />
+                        ),
                     }}
                   />,
                 ],

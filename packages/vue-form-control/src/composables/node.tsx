@@ -101,6 +101,7 @@ export function createFormNodeProps<T, D = T>(
       spellcheck: Boolean,
       viewonly: Boolean,
       required: Boolean,
+      clearable: Boolean,
       validateTiming: {
         type: String as PropType<ValidateTiming>,
         default: defaultValidateTiming || 'touch',
