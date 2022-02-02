@@ -28,11 +28,13 @@ import { VDialogProps } from './components/VDialog';
 export interface VueStackServiceOptions {
   zIndex?: number;
   actions: VStackBuiltinActions;
+  snackbarDefaultPosition?: 'top' | 'bottom';
 }
 
 export class VueStackService {
   readonly controls: VStackControl[] = [];
   readonly zIndex: number;
+  readonly snackbarDefaultPosition: 'top' | 'bottom';
   readonly builtinActions: VStackBuiltinActions;
   private _increment = 0;
   private readonly _dynamicSettings: Ref<VStackDynamicInternalSetting[]> = ref(
@@ -44,9 +46,10 @@ export class VueStackService {
   }
 
   constructor(opts: VueStackServiceOptions) {
-    const { zIndex = 32767, actions } = opts;
+    const { zIndex = 32767, actions, snackbarDefaultPosition = 'top' } = opts;
     this.zIndex = zIndex;
     this.builtinActions = actions;
+    this.snackbarDefaultPosition = snackbarDefaultPosition;
   }
 
   genId() {

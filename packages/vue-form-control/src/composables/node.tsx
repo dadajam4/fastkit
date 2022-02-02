@@ -16,6 +16,7 @@ import {
   UnwrapRef,
   getCurrentInstance,
   ComponentInternalInstance,
+  nextTick,
 } from 'vue';
 
 import {
@@ -199,6 +200,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _submiting: ComputedRef<boolean>;
   protected _cii: ComponentInternalInstance | null = null;
   protected _validationValueGetter?: () => any;
+  protected _validationSkip = false;
 
   get name() {
     return this._name.value;
@@ -692,7 +694,8 @@ export class FormNodeControl<T = any, D = T> {
   }
 
   resetSelfValue() {
-    this._value.value = cheepClone(this.initialValue);
+    // this._value.value = cheepClone(this.initialValue);
+    this.value = cheepClone(this.initialValue);
   }
 
   resetValue() {
@@ -726,9 +729,28 @@ export class FormNodeControl<T = any, D = T> {
     this.resetSelfValidates();
   }
 
+  skipValidation(fn: (...args: any) => any) {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        this._validationSkip = true;
+        fn();
+        nextTick(() => {
+          nextTick(() => {
+            this._validationSkip = false;
+            resolve();
+          });
+        });
+      } catch (_err) {
+        this._validationSkip = false;
+        reject(_err);
+      }
+    });
+  }
+
   reset() {
-    this.resetValue();
-    this.resetValidates();
+    return this.skipValidation(() => this.resetValue()).then(() => {
+      this.resetValidates();
+    });
   }
 
   clearSelf() {

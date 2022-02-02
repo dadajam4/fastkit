@@ -50,13 +50,16 @@ export const VSnackbar = defineComponent({
         }
       },
     });
+
+    const { snackbarDefaultPosition } = stackControl.$service;
+
     const snackPosition = computed<SnackPosition>(() => {
       let { top, bottom, left } = props;
       const { right } = props;
 
       if (top === bottom) {
-        top = false;
-        bottom = true;
+        top = snackbarDefaultPosition === 'top';
+        bottom = !top;
       }
 
       if (left && right) {
