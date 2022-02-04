@@ -100,7 +100,6 @@ export interface FormSelectorControlOptions extends FormNodeControlBaseOptions {
 
 export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   readonly parentNodeType?: FormNodeType;
-  readonly multiple: boolean;
   protected _itemGetters = ref<FormSelectorItemControl['_get'][]>([]);
   protected _items: ComputedRef<FormSelectorItemControl[]>;
   protected _notSelected: ComputedRef<boolean>;
@@ -154,8 +153,6 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     this.onSelectItem = options.onSelectItem;
     // this._syncValueForChoies = this._syncValueForChoies.bind(this);
-
-    this.multiple = props.multiple;
 
     this._items = computed(() => {
       return this._itemGetters.value.map((_get) => _get());
@@ -234,9 +231,18 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   protected _recalcValues(changedSelectorItem?: FormSelectorItemControl) {
     if (this.multiple) {
       const values: (string | number)[] = [];
+      const currentValues = this._safeMultipleValues();
+      const usedValues: (string | number)[] = [];
       this.items.forEach((item) => {
-        if (item.selected && item.propValue != null) {
-          values.push(item.propValue);
+        const { propValue } = item;
+        propValue != null && usedValues.push(propValue);
+        if (item.selected && propValue != null) {
+          values.push(propValue);
+        }
+      });
+      currentValues.forEach((v) => {
+        if (!usedValues.includes(v)) {
+          values.push(v);
         }
       });
       this._currentValue.value = values;

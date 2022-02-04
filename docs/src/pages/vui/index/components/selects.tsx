@@ -15,6 +15,7 @@ import { DocsSection } from '../../../-components';
 export default defineComponent({
   setup() {
     const select1 = ref<string | null>(null);
+    const select2 = ref<string[]>(['3', '5']);
 
     const size = ref<ControlSize>('md');
     const variant = ref<ControlFieldVariant>('flat');
@@ -27,6 +28,7 @@ export default defineComponent({
 
     return {
       select1,
+      select2,
       items,
       size,
       variant,
@@ -44,6 +46,27 @@ export default defineComponent({
             label="コメント"
             v-model={this.select1}
             items={items}
+            required
+            clearable
+            hint="これは入力ヒントテキストです。"
+            v-slots={
+              {
+                error: (error: any) => {
+                  if (error.name === 'required') {
+                    return '必須項目です。';
+                  }
+                },
+              } as any
+            }
+          />
+        </DocsSection>
+
+        <DocsSection title="Multiple">
+          <VSelect
+            label="コメント"
+            v-model={this.select2}
+            items={items}
+            multiple
             required
             clearable
             hint="これは入力ヒントテキストです。"

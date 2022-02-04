@@ -157,6 +157,7 @@ export type FormNodeContext<T, D = T> = SetupContext<FormNodeEmitOptions<T, D>>;
 export class FormNodeControl<T = any, D = T> {
   readonly nodeType?: FormNodeType;
   readonly autofocus: boolean;
+  readonly __multiple: boolean;
   protected _ctx: FormNodeContext<T, D>;
   protected _parentNode: FormNodeControl | null;
   protected _parentForm: VueForm | null;
@@ -410,6 +411,10 @@ export class FormNodeControl<T = any, D = T> {
     return currentInstance && (currentInstance.vnode.el as HTMLElement | null);
   }
 
+  get multiple() {
+    return this.__multiple;
+  }
+
   constructor(
     props: FormNodeProps,
     ctx: FormNodeContext<T, D>,
@@ -419,6 +424,7 @@ export class FormNodeControl<T = any, D = T> {
 
     const { nodeType } = options;
 
+    this.__multiple = (props as any).multiple || false;
     this.nodeType = nodeType;
     this.autofocus = props.autofocus;
     this._validationValueGetter = options.validationValue;
