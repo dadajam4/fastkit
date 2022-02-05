@@ -50,6 +50,28 @@ export interface VuiServiceUISettings {
     color?: ScopeName;
     variant?: ColorVariant;
   };
+  noDataMessage?: VNodeChild | (() => VNodeChild);
+  noResultsMessage?: VNodeChild | (() => VNodeChild);
+}
+
+export type RawVuiServiceUISettings = Partial<VuiServiceUISettings>;
+
+export function mergeVuiServiceUISettings(
+  base: VuiServiceUISettings,
+  overrides?: RawVuiServiceUISettings,
+): VuiServiceUISettings {
+  if (!overrides) {
+    return base;
+  }
+  const merged: VuiServiceUISettings = {
+    ...base,
+  };
+  Object.entries(overrides).forEach(([key, value]) => {
+    if (value) {
+      (merged as any)[key] = value;
+    }
+  });
+  return merged;
 }
 
 export interface VuiServiceIconSettings {
@@ -72,6 +94,26 @@ export interface VuiServiceIconSettings {
   clear: IconName;
 }
 
+export type RawVuiServiceIconSettings = Partial<VuiServiceIconSettings>;
+
+export function mergeVuiServiceIconSettings(
+  base: VuiServiceIconSettings,
+  overrides?: RawVuiServiceIconSettings,
+): VuiServiceIconSettings {
+  if (!overrides) {
+    return base;
+  }
+  const merged: VuiServiceIconSettings = {
+    ...base,
+  };
+  Object.entries(overrides).forEach(([key, value]) => {
+    if (value) {
+      (merged as any)[key] = value;
+    }
+  });
+  return merged;
+}
+
 export type VuiVNodeResolver = () => VNodeChild;
 
 export interface VuiServiceOptions {
@@ -84,6 +126,36 @@ export interface VuiServiceOptions {
   autoScrollToElementOffsetTop?: number | (() => number | undefined);
   textareaRows?: number;
   requiredChip?: VuiVNodeResolver;
+}
+
+export interface RawVuiServiceOptions
+  extends Omit<Partial<VuiServiceOptions>, 'uiSettings' | 'icons'> {
+  uiSettings?: RawVuiServiceUISettings;
+  icons?: RawVuiServiceIconSettings;
+}
+
+export function mergeVuiServiceOptions(
+  base: VuiServiceOptions,
+  overrides?: RawVuiServiceOptions,
+): VuiServiceOptions {
+  if (!overrides) {
+    return base;
+  }
+  const merged: VuiServiceOptions = {
+    ...base,
+    uiSettings: mergeVuiServiceUISettings(
+      base.uiSettings,
+      overrides.uiSettings,
+    ),
+    icons: mergeVuiServiceIconSettings(base.icons, overrides.icons),
+  };
+  const excludes = ['uiSettings', 'icons'];
+  Object.entries(overrides).forEach(([key, value]) => {
+    if (value && !excludes.includes(key)) {
+      (merged as any)[key] = value;
+    }
+  });
+  return merged;
 }
 
 export class VuiService {

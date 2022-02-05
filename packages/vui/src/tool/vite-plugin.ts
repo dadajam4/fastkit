@@ -30,20 +30,21 @@ import './setup.scss';
 import type { App } from 'vue';
 import type { Router } from 'vue-router';
 import { VPageLink } from '@fastkit/vue-page';
-import { installVuiPlugin as _installVuiPlugin, VuiPluginOptions } from '@fastkit/vui';
+import { installVuiPlugin as _installVuiPlugin, RawVuiPluginOptions, mergeVuiPluginOptions } from '@fastkit/vui';
 import { colorScheme } from '<%~ it.colorScheme %>';
 import '<%~ it.mediaMatch %>';
 import './icon-font';
 import '${STYLE_AFTER_EFFECTS_PATH}';
 
-export function installVui(settings: { app: App, router: Router }) {
-  _installVuiPlugin(settings.app, {
+export function installVui(settings: { app: App, router: Router }, options?: RawVuiPluginOptions) {
+  const merged = mergeVuiPluginOptions({
     RouterLink: VPageLink,
     colorScheme,
     uiSettings: <%~ it.uiSettings %>,
     icons: <%~ it.icons %>,
     ...settings,
-  });
+  }, options);
+  _installVuiPlugin(settings.app, merged);
 }
 
 export default installVui;

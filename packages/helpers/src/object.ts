@@ -1,3 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
+  : T;
+
 export function isObject<T extends Record<string, any> = Record<string, any>>(
   value: unknown,
 ): value is T {

@@ -127,6 +127,11 @@ export const VDataTable = defineComponent({
     },
 
     /**
+     * 検索クエリ名
+     */
+    searchQuery: [String, Array] as PropType<string | string[]>,
+
+    /**
      * リミット件数クエリ名
      */
     limitQuery: {
@@ -172,6 +177,10 @@ export const VDataTable = defineComponent({
     selectable: Boolean,
     fixedHeader: Boolean,
     maxHeight: [Number, String],
+    // eslint-disable-next-line vue/require-prop-types
+    noDataMessage: {} as PropType<VNodeChild | (() => VNodeChild)>,
+    // eslint-disable-next-line vue/require-prop-types
+    noResultsMessage: {} as PropType<VNodeChild | (() => VNodeChild)>,
   },
   emits: {
     input: (selecteds: string[]) => true,
@@ -196,6 +205,45 @@ export const VDataTable = defineComponent({
       ret.push(...headers.filter((h) => !h.hidden));
       return ret;
     });
+
+    const searchQueryValues = computed<string[]>(() => {
+      let { searchQuery } = props;
+      if (!searchQuery) {
+        return [];
+      }
+      if (!Array.isArray(searchQuery)) {
+        searchQuery = [searchQuery];
+      }
+      const values: string[] = [];
+      searchQuery.forEach((query) => {
+        const value = vui.location.getQuery(query);
+        if (value == null || value === '') {
+          return;
+        }
+        if (typeof value === 'object' && !Object.keys(value).length) {
+          return;
+        }
+        values.push(value);
+      });
+      return values;
+    });
+
+    const emptyMessage = computed(() => {
+      let message: VNodeChild | (() => VNodeChild);
+      if (searchQueryValues.value.length) {
+        message =
+          props.noResultsMessage ||
+          vui.setting('noResultsMessage') ||
+          'No search results found.'; // 検索結果が見つかりませんでした。
+      } else {
+        message =
+          props.noDataMessage ||
+          vui.setting('noDataMessage') ||
+          'No data was available.'; // データはありませんでした。
+      }
+      return typeof message === 'function' ? message() : message;
+    });
+
     const classesRef = computed(() => [
       {
         'v-data-table--fixed-header': props.fixedHeader,
@@ -724,7 +772,7 @@ export const VDataTable = defineComponent({
           <div class="v-data-table__body container-pull">
             {isEmpty ? (
               <div class="v-data-table__empty--message">
-                {/* {this.computedEmptyMessage} */}
+                {emptyMessage.value}
               </div>
             ) : (
               <VPaper

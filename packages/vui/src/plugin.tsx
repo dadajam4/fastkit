@@ -1,5 +1,11 @@
 import { App } from 'vue';
-import { VuiService, VuiServiceOptions, VuiInjectionKey } from './service';
+import {
+  VuiService,
+  VuiServiceOptions,
+  RawVuiServiceOptions,
+  mergeVuiServiceOptions,
+  VuiInjectionKey,
+} from './service';
 import {
   installVueStackPlugin,
   VueStackServiceOptions,
@@ -12,6 +18,25 @@ export interface VuiPluginStackOptions extends VueStackServiceOptions {}
 
 export interface VuiPluginOptions extends VuiServiceOptions {
   stack?: VuiPluginStackOptions;
+}
+
+export interface RawVuiPluginOptions extends RawVuiServiceOptions {
+  stack?: VuiPluginStackOptions;
+}
+
+export function mergeVuiPluginOptions(
+  base: VuiPluginOptions,
+  override?: RawVuiPluginOptions,
+): VuiPluginOptions {
+  if (!override) return base;
+  const merged: VuiPluginOptions = mergeVuiServiceOptions(base, override);
+  if (override.stack) {
+    merged.stack = {
+      ...merged.stack,
+      ...override.stack,
+    };
+  }
+  return merged;
 }
 
 declare module '@vue/runtime-core' {

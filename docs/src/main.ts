@@ -8,7 +8,12 @@ import { authPlugin } from './plugins';
 export default createVotEntry(App, {
   plugins: [
     (ctx) => {
-      installVui(ctx);
+      installVui(ctx, {
+        uiSettings: {
+          noDataMessage: 'データはありませんでした。',
+          noResultsMessage: '検索結果が見つかりませんでした。',
+        },
+      });
     },
     authPlugin,
   ],
