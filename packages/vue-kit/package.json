@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-kit",
-  "version": "0.7.22",
+  "version": "0.7.23",
   "description": "vue-kit",
   "main": "index.js",
   "module": "dist/vue-kit.mjs",
@@ -37,15 +37,15 @@
     "vue": "^3.2.26"
   },
   "dependencies": {
-    "fastkit": "0.7.22",
-    "@fastkit/vue-app-layout": "0.7.22",
-    "@fastkit/vue-color-scheme": "0.7.22",
-    "@fastkit/vue-form-control": "0.7.22",
-    "@fastkit/vue-loading": "0.7.22",
-    "@fastkit/vue-media-match": "0.7.22",
-    "@fastkit/vue-page": "0.7.22",
-    "@fastkit/vue-scroller": "0.7.22",
-    "@fastkit/vue-stack": "0.7.22",
-    "@fastkit/vue-utils": "0.7.22"
+    "fastkit": "0.7.23",
+    "@fastkit/vue-app-layout": "0.7.23",
+    "@fastkit/vue-color-scheme": "0.7.23",
+    "@fastkit/vue-form-control": "0.7.23",
+    "@fastkit/vue-loading": "0.7.23",
+    "@fastkit/vue-media-match": "0.7.23",
+    "@fastkit/vue-page": "0.7.23",
+    "@fastkit/vue-scroller": "0.7.23",
+    "@fastkit/vue-stack": "0.7.23",
+    "@fastkit/vue-utils": "0.7.23"
   }
 }

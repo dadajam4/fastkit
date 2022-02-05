@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-kit",
-  "version": "0.7.22",
+  "version": "0.7.23",
   "description": "@fastkit/vite-kit",
   "main": "index.js",
   "module": "dist/vite-kit.mjs",
@@ -26,12 +26,12 @@
     "vite": "^2.7.10"
   },
   "dependencies": {
-    "@fastkit/color-scheme-gen": "0.7.22",
-    "@fastkit/hashed-sync": "0.7.22",
-    "@fastkit/icon-font-gen": "0.7.22",
-    "@fastkit/media-match-gen": "0.7.22",
-    "@fastkit/node-util": "0.7.22",
-    "@fastkit/sprite-images": "0.7.22",
-    "@fastkit/tiny-logger": "0.7.22"
+    "@fastkit/color-scheme-gen": "0.7.23",
+    "@fastkit/hashed-sync": "0.7.23",
+    "@fastkit/icon-font-gen": "0.7.23",
+    "@fastkit/media-match-gen": "0.7.23",
+    "@fastkit/node-util": "0.7.23",
+    "@fastkit/sprite-images": "0.7.23",
+    "@fastkit/tiny-logger": "0.7.23"
   }
 }
