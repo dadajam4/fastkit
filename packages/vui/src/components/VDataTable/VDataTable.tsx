@@ -38,6 +38,7 @@ const DATA_TABLE_DEFAULTS = {
   limits: [5, 10, 20, 50, 100],
   limitDefault: 20,
   contorolThreshold: 10,
+  searchQuery: [],
 };
 
 export type DataTableDefaults = typeof DATA_TABLE_DEFAULTS;
@@ -129,7 +130,10 @@ export const VDataTable = defineComponent({
     /**
      * 検索クエリ名
      */
-    searchQuery: [String, Array] as PropType<string | string[]>,
+    searchQuery: {
+      type: [String, Array] as PropType<string | string[]>,
+      default: () => DATA_TABLE_DEFAULTS.searchQuery,
+    },
 
     /**
      * リミット件数クエリ名

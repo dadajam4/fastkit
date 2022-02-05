@@ -14,7 +14,7 @@ import { RouterLink } from 'vue-router';
 import { LocationService, setDefaultRouterLink } from '@fastkit/vue-utils';
 import { VForm } from './components/VForm';
 import { VTextField, TextFieldInput } from './components/VTextField';
-import { VueForm } from '@fastkit/vue-form-control';
+import { VueForm, FormControlHinttipDelay } from '@fastkit/vue-form-control';
 import { getDocumentScroller } from '@fastkit/vue-scroller';
 
 export interface VuiPromptOptions extends Partial<VDialogProps> {
@@ -50,6 +50,7 @@ export interface VuiServiceUISettings {
     color?: ScopeName;
     variant?: ColorVariant;
   };
+  hinttipDelay?: FormControlHinttipDelay;
   noDataMessage?: VNodeChild | (() => VNodeChild);
   noResultsMessage?: VNodeChild | (() => VNodeChild);
 }

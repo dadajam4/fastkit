@@ -20,15 +20,18 @@ const EMPTY_MESSAGE = '\xa0'; // for keep height
 
 export type RequiredChipSource = (() => VNodeChild) | string | boolean;
 
+export type FormControlHinttip = boolean | string | (() => VNodeChild);
+
+export type FormControlHinttipDelay = 'click' | number;
+
 export function createFormControlProps() {
   return {
     ...createPropsOptions({
       nodeControl: {} as PropType<FormNodeControl>,
       label: {} as PropType<VNodeChildOrSlot>,
       hint: {} as PropType<VNodeChildOrSlot>,
-      hinttip: [Boolean, String, Function] as PropType<
-        boolean | string | (() => VNodeChild)
-      >,
+      hinttip: [Boolean, String, Function] as PropType<FormControlHinttip>,
+      hinttipDelay: [String, Number] as PropType<FormControlHinttipDelay>,
       infoAppends: {} as PropType<VNodeChildOrSlot>,
       validating: Boolean,
       pending: Boolean,
@@ -89,6 +92,7 @@ export class FormControl {
   protected _labelSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
   protected _hintSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
   protected _hinttip: ComputedRef<VNodeChild>;
+  protected _hinttipDelay: ComputedRef<FormControlHinttipDelay | undefined>;
   protected _hinttipPrepend?: () => VNodeChild;
   protected _infoAppendsSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
   protected _validating: ComputedRef<boolean>;
@@ -181,6 +185,10 @@ export class FormControl {
     return this._infoAppendsSlot.value;
   }
 
+  get hinttipDelay() {
+    return this._hinttipDelay.value;
+  }
+
   constructor(
     props: FormControlProps,
     ctx: FormControlContext,
@@ -215,6 +223,11 @@ export class FormControl {
         children.push(hinttip);
       }
       return children;
+    });
+
+    this._hinttipDelay = computed(() => {
+      const { hinttipDelay } = props;
+      return hinttipDelay == null ? 500 : hinttipDelay;
     });
 
     this._infoAppendsSlot = computed(() =>
@@ -341,6 +354,7 @@ export class FormControl {
       labelSlot: this._labelSlot,
       hintSlot: this._hintSlot,
       hinttip: this._hinttip,
+      hinttipDelay: this._hinttipDelay,
       infoAppendsSlot: this._infoAppendsSlot,
     };
   }

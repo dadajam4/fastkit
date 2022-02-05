@@ -64,6 +64,17 @@ export const VFormControl = defineComponent({
       ),
     });
 
+    const hinttipDelay = computed(() => {
+      let { hinttipDelay } = control;
+      if (hinttipDelay == null) {
+        hinttipDelay = vui.setting('hinttipDelay');
+      }
+      if (hinttipDelay == null) {
+        hinttipDelay = 500;
+      }
+      return hinttipDelay;
+    });
+
     ctx.expose(control.expose());
 
     const colorProvider = useVuiColorProvider();
@@ -98,6 +109,7 @@ export const VFormControl = defineComponent({
       const message = control.renderMessage();
       const appends = control.renderInfoAppends();
       const hinttip = control.renderHinttip();
+      const _hinttipDelay = hinttipDelay.value;
 
       return (
         <div class={['v-form-control', classes.value]}>
@@ -112,7 +124,12 @@ export const VFormControl = defineComponent({
               {hinttip && (
                 <VTooltip
                   top
-                  openOnHover={false}
+                  openOnHover={_hinttipDelay !== 'click'}
+                  openDelay={
+                    typeof _hinttipDelay === 'number'
+                      ? _hinttipDelay
+                      : undefined
+                  }
                   v-slots={{
                     activator: (ctx) => (
                       <a
