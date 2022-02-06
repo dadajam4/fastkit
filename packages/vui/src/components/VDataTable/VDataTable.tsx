@@ -38,7 +38,7 @@ const DATA_TABLE_DEFAULTS = {
   limits: [5, 10, 20, 50, 100],
   limitDefault: 20,
   contorolThreshold: 10,
-  searchQuery: [],
+  searchQuery: [] as string | string[],
 };
 
 export type DataTableDefaults = typeof DATA_TABLE_DEFAULTS;

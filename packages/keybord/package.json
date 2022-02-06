@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/keybord",
-  "version": "0.7.24",
+  "version": "0.7.25",
   "description": "@fastkit/keybord",
   "main": "index.js",
   "module": "dist/keybord.mjs",
