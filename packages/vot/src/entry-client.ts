@@ -4,7 +4,7 @@ import { deserializeState } from './utils/deserialize-state';
 import { useClientRedirect } from './utils/response';
 import { getFullPath, withoutSuffix } from './utils/route';
 import type { ClientHandler, VotContext } from './schemes';
-
+import { createScrollBehavior } from '@fastkit/vue-page';
 import { provideContext } from './injections';
 
 export const createEntry: ClientHandler = async function createClientEntry(
@@ -17,6 +17,7 @@ export const createEntry: ClientHandler = async function createClientEntry(
   const url = new URL(window.location.href);
   const routeBase = base && withoutSuffix(base({ url }), '/');
   const router = createRouter({
+    scrollBehavior: createScrollBehavior(),
     ...routerOptions,
     history: createWebHistory(routeBase),
     routes: routes as RouteRecordRaw[],

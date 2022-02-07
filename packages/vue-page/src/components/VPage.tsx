@@ -13,6 +13,7 @@ import {
   // useRoute,
 } from 'vue-router';
 import { generateWatchQueryKey } from '../schemes';
+import { ScrollBehaviorMessenger } from '../composables';
 // import { useVuePageControl } from '../injections';
 
 const DEFAULT_TRANSITION = 'page';
@@ -57,7 +58,15 @@ export const VPage = defineComponent({
               const key = generateWatchQueryKey(route, Component);
 
               return [
-                <Transition name={transition.value} mode="out-in">
+                <Transition
+                  name={transition.value}
+                  mode="out-in"
+                  onEnter={(ev) => {
+                    ScrollBehaviorMessenger.trigger();
+                  }}
+                  onEnterCancelled={() => {
+                    ScrollBehaviorMessenger.release();
+                  }}>
                   {Component ? h(Component, { key }) : undefined}
                   {/* <Suspense
                     onPending={() => onSuspensePending(Component)}

@@ -3,13 +3,39 @@ import { ComponentCustomOptions } from '@vue/runtime-core';
 import type { RouterScrollBehavior, RouteLocationNormalized } from 'vue-router';
 import { getRouteMatchedComponents } from '@fastkit/vue-utils';
 import { getSuspenseRouteBucket } from './suspense-route-bucket';
-import { nextTick } from 'vue';
+// import { nextTick } from 'vue';
 
 export type RawRouterScrollBehavior = 'top' | RouterScrollBehavior;
+
+type RouterScrollBehaviorPosition = ReturnType<RouterScrollBehavior>;
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomOptions {
     scrollBehavior?: RawRouterScrollBehavior;
+  }
+}
+
+export type ScrollBehaviorMessengerFn = (canceled: boolean) => any;
+
+export class ScrollBehaviorMessenger {
+  private static fns: ScrollBehaviorMessengerFn[] = [];
+
+  static trigger() {
+    this.fns.forEach((fn) => fn(false));
+    this.fns = [];
+  }
+
+  static reserveNextPosition(position: RouterScrollBehaviorPosition) {
+    return new Promise<RouterScrollBehaviorPosition>((resolve) => {
+      this.fns.push((canceled) => {
+        resolve(canceled ? undefined : position);
+      });
+    });
+  }
+
+  static release() {
+    this.fns.forEach((fn) => fn(true));
+    this.fns = [];
   }
 }
 
@@ -41,15 +67,14 @@ function findLastMatchedBehavior(
   route: RouteLocationNormalized,
 ): RouterScrollBehavior | undefined {
   const behaviors = extractMatchedBehaviors(route);
+  // console.log('■', behaviors);
   return behaviors[behaviors.length - 1];
 }
-
-// export interface CreateScrollBehaviorOptions {}
 
 export function createScrollBehavior(): RouterScrollBehavior {
   const scrollBehavior: RouterScrollBehavior = (to, from, savedPosition) => {
     // If the returned position is falsy or an empty object, will retain current scroll position
-    let position: ReturnType<RouterScrollBehavior> = false;
+    let position: RouterScrollBehaviorPosition = false;
     const isRouteChanged = to !== from;
 
     // savedPosition is only available for popstate navigations (back button)
@@ -100,8 +125,7 @@ export function createScrollBehavior(): RouterScrollBehavior {
           }
         }
 
-        await new Promise<void>((resolve) => nextTick(resolve));
-        return position;
+        return ScrollBehaviorMessenger.reserveNextPosition(position);
       });
   };
   return scrollBehavior;
