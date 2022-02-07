@@ -1,13 +1,9 @@
-// import { nextTick } from 'vue';
 import { ComponentCustomOptions } from '@vue/runtime-core';
 import type { RouterScrollBehavior, RouteLocationNormalized } from 'vue-router';
 import { getRouteMatchedComponents } from '@fastkit/vue-utils';
 import { getSuspenseRouteBucket } from './suspense-route-bucket';
-// import { nextTick } from 'vue';
 
 export type RawRouterScrollBehavior = 'top' | RouterScrollBehavior;
-
-type RouterScrollBehaviorPosition = ReturnType<RouterScrollBehavior>;
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomOptions {
@@ -25,8 +21,8 @@ export class ScrollBehaviorMessenger {
     this.fns = [];
   }
 
-  static reserveNextPosition(position: RouterScrollBehaviorPosition) {
-    return new Promise<RouterScrollBehaviorPosition>((resolve) => {
+  static reserveNextPosition(position: any) {
+    return new Promise<any>((resolve) => {
       this.fns.push((canceled) => {
         resolve(canceled ? undefined : position);
       });
@@ -67,14 +63,13 @@ function findLastMatchedBehavior(
   route: RouteLocationNormalized,
 ): RouterScrollBehavior | undefined {
   const behaviors = extractMatchedBehaviors(route);
-  // console.log('■', behaviors);
   return behaviors[behaviors.length - 1];
 }
 
 export function createScrollBehavior(): RouterScrollBehavior {
   const scrollBehavior: RouterScrollBehavior = (to, from, savedPosition) => {
     // If the returned position is falsy or an empty object, will retain current scroll position
-    let position: RouterScrollBehaviorPosition = false;
+    let position: any = false;
     const isRouteChanged = to !== from;
 
     // savedPosition is only available for popstate navigations (back button)
