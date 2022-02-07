@@ -5,10 +5,38 @@ export type DeepPartial<T> = T extends object
     }
   : T;
 
-export function isObject<T extends Record<string, any> = Record<string, any>>(
-  value: unknown,
-): value is T {
+export function isNonNullObject<
+  T extends Record<string, unknown> = Record<string, unknown>,
+>(value: unknown): value is T {
+  return !!value && typeof value === 'object';
+}
+
+export function isObject<
+  T extends Record<string, unknown> = Record<string, unknown>,
+>(value: unknown): value is T {
   return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+export function isPlainObject<
+  T extends Record<string, unknown> = Record<string, unknown>,
+>(value: unknown): value is T {
+  if (!isObject(value)) return false;
+
+  // If has modified constructor
+  const ctor = value.constructor;
+  if (value.constructor === undefined) return true;
+
+  // If has modified prototype
+  const prot = ctor.prototype;
+  if (isObject(prot) === false) return false;
+
+  // If constructor does not have an Object-specific method
+  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+    return false;
+  }
+
+  // Most likely a plain Object
+  return true;
 }
 
 // cloned from https://github.com/epoberezkin/fast-deep-equal with small changes

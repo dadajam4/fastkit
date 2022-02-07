@@ -1,4 +1,5 @@
 import type { nativeErrorResolver } from './resolvers/native';
+import type { UnionToIntersection } from '@fastkit/helpers';
 
 type BultinErrorResolvers = [typeof nativeErrorResolver];
 
@@ -18,12 +19,6 @@ type ExcludeNullableReturnType<T> = T extends (...args: any[]) => any
       args: Parameters<T>[0],
     ) => Partial<Exclude<ReturnType<T>, void | undefined | null>>
   : (...args: any[]) => {};
-
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
-  k: infer I,
-) => void
-  ? I
-  : never;
 
 export type ResolverContext = {
   resolve: () => void;

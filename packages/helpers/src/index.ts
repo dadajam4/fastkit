@@ -1,3 +1,4 @@
+export * from './types';
 export * from './converter';
 export * from './promise';
 export * from './string';
@@ -15,3 +16,5 @@ export * from './dom';
 export * from './debounce';
 export * from './console';
 export * from './general';
+export * from './merge';
+export * from './defaults';

@@ -33,7 +33,7 @@ export function parseWatchQueryOption(
 export function extractWatchQueryOption(
   source: any,
 ): WatchQueryOption | undefined {
-  if (!isObject(source)) return;
+  if (!isObject<any>(source)) return;
   if (source.watchQuery) return source.watchQuery;
   if (isObject(source.type) && source.type.watchQuery) {
     return source.type.watchQuery;
