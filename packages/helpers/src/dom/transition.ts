@@ -1,68 +1,3 @@
-export const IN_WINDOW = typeof window !== 'undefined';
-
-export const IN_DOCUMENT = typeof document !== 'undefined';
-
-export function isFocusable(element: HTMLElement): boolean {
-  if (
-    element.tabIndex > 0 ||
-    (element.tabIndex === 0 && element.getAttribute('tabIndex') !== null)
-  ) {
-    return true;
-  }
-
-  if ((element as any).disabled) {
-    return false;
-  }
-
-  switch (element.nodeName) {
-    case 'A':
-      return !!(element as any).href && (element as any).rel != 'ignore';
-    case 'INPUT':
-      return (
-        (element as any).type != 'hidden' && (element as any).type != 'file'
-      );
-    case 'BUTTON':
-    case 'SELECT':
-    case 'TEXTAREA':
-      return true;
-    default:
-      return false;
-  }
-}
-
-export function attemptFocus(element: HTMLElement): boolean {
-  if (!isFocusable(element)) {
-    return false;
-  }
-
-  // aria.Utils.IgnoreUtilFocusChanges = true;
-  try {
-    element.focus();
-  } catch (e) {}
-  // aria.Utils.IgnoreUtilFocusChanges = false;
-  return document.activeElement === element;
-}
-
-export function focusFirstDescendant(element: HTMLElement): boolean {
-  for (let i = 0; i < element.childNodes.length; i++) {
-    const child = element.childNodes[i];
-    if (
-      attemptFocus(child as HTMLElement) ||
-      focusFirstDescendant(child as HTMLElement)
-    ) {
-      return true;
-    }
-  }
-  return false;
-}
-
-export function pushDynamicStyle(styleContent: string) {
-  if (!IN_WINDOW) return;
-  const style = document.createElement('style');
-  style.innerHTML = styleContent;
-  document.head.appendChild(style);
-}
-
 export type TransitionEventType =
   | 'transitioncancel'
   | 'transitionend'
@@ -152,13 +87,4 @@ export function addTransitionendEvent(
   }
   delete options.includeCancel;
   return addTransitionEvent(types, el, handler, options);
-}
-
-export function ownerDocument(node: Node | null | undefined): Document {
-  return (node && node.ownerDocument) || document;
-}
-
-export function ownerWindow(node: Node | undefined): Window {
-  const doc = ownerDocument(node);
-  return doc.defaultView || window;
 }
