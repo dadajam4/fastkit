@@ -17,6 +17,7 @@ import {
 } from '@fastkit/vue-utils';
 import { useVui } from '../../injections';
 import { useRoute } from 'vue-router';
+import { ScopeName } from '@fastkit/color-scheme';
 
 export function createNavigationItemProps() {
   return {
@@ -27,6 +28,7 @@ export function createNavigationItemProps() {
       default: 0,
     },
     nested: Boolean,
+    color: String as PropType<ScopeName>,
     // key: {
     //   type: [String, Number],
     //   required: true,
@@ -243,12 +245,18 @@ export const VNavigationItem = defineComponent({
             <VExpandTransition>
               <div class="v-navigation-item__expand" v-show={opened.value}>
                 {_children.map((child) =>
-                  renderNavigationItemInput(child, {
-                    startIconEmptySpace: _props.value.startIconEmptySpace,
-                    depth: props.nested ? props.depth + 1 : props.depth,
-                    // onClick,
-                    // onChangeActive,
-                  }),
+                  renderNavigationItemInput(
+                    {
+                      color: props.color,
+                      ...child,
+                    },
+                    {
+                      startIconEmptySpace: _props.value.startIconEmptySpace,
+                      depth: props.nested ? props.depth + 1 : props.depth,
+                      // onClick,
+                      // onChangeActive,
+                    },
+                  ),
                 )}
               </div>
             </VExpandTransition>
