@@ -6,21 +6,35 @@ import {
   ref,
   computed,
   h,
+  KeepAlive,
 } from 'vue';
 import {
   RouterView,
   RouteLocationNormalizedLoaded,
+  RouteLocationMatched,
   // useRoute,
 } from 'vue-router';
-import { generateWatchQueryKey } from '../schemes';
+import {
+  generateRouteKeyWithWatchQuery,
+  RouterViewSlotProps,
+} from '../schemes';
 import { ScrollBehaviorMessenger } from '../composables';
+import { IN_WINDOW } from '@fastkit/helpers';
 // import { useVuePageControl } from '../injections';
 
 const DEFAULT_TRANSITION = 'page';
 
 export const VPage = defineComponent({
   name: 'VPage',
-  setup() {
+  props: {
+    pageKey: {
+      type: [Function, String] as unknown as () =>
+        | string
+        | ((route: RouteLocationNormalizedLoaded) => string),
+      default: null,
+    },
+  },
+  setup(props) {
     // const pageControl = useVuePageControl();
     const currentComponent = ref<VNode | null>(null);
 
@@ -48,14 +62,12 @@ export const VPage = defineComponent({
       return (
         <RouterView
           v-slots={{
-            default: ({
-              Component,
-              route,
-            }: {
-              Component: VNode;
-              route: RouteLocationNormalizedLoaded;
-            }) => {
-              const key = generateWatchQueryKey(route, Component);
+            default: (routeProps: RouterViewSlotProps) => {
+              const { Component } = routeProps;
+              const key = generateRouteKeyWithWatchQuery(
+                props.pageKey,
+                routeProps,
+              );
 
               return [
                 <Transition
@@ -68,6 +80,13 @@ export const VPage = defineComponent({
                     ScrollBehaviorMessenger.release();
                   }}>
                   {Component ? h(Component, { key }) : undefined}
+                  {/* {wrapInKeepAlive(
+                    true,
+                    Component ? h(Component, { key }) : undefined,
+                  )} */}
+                  {/* <KeepAlive>
+                    {Component ? h(Component, { key }) : undefined}
+                  </KeepAlive> */}
                   {/* <Suspense
                     onPending={() => onSuspensePending(Component)}
                     onResolve={() => onSuspenseResolved(Component)}

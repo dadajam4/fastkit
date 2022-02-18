@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue';
+import { defineComponent, onBeforeUnmount } from 'vue';
 // import { VButton, VSelect } from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
 import { VPage } from '@fastkit/vue-page';
@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router';
 
 export default defineComponent({
   prefetch(ctx) {
+    console.log('prefetch');
     ctx.provide('page3-parent', async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       return 5;
@@ -21,6 +22,14 @@ export default defineComponent({
   //     2,
   //   );
   // },
+  setup() {
+    // console.log(Date.now(), typeof window);
+    console.log('>>> setup');
+
+    onBeforeUnmount(() => {
+      console.log('!!! onBeforeUnmount');
+    });
+  },
   render() {
     return (
       <div>

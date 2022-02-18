@@ -4,9 +4,9 @@ export default defineComponent({
   prefetch(ctx) {
     ctx.provide('page3-child', async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      if (true) {
-        throw new Error('hoge');
-      }
+      // if (true) {
+      //   throw new Error('hoge');
+      // }
       return 5;
     });
   },
