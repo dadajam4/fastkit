@@ -6,20 +6,17 @@ import {
   ref,
   computed,
   h,
-  KeepAlive,
+  // KeepAlive,
+  PropType,
 } from 'vue';
-import {
-  RouterView,
-  RouteLocationNormalizedLoaded,
-  RouteLocationMatched,
-  // useRoute,
-} from 'vue-router';
+import { RouterView } from 'vue-router';
+import { RouterViewSlotProps, VuePageKeyOverride } from '../schemes';
 import {
   generateRouteKeyWithWatchQuery,
-  RouterViewSlotProps,
-} from '../schemes';
+  consumeForcePrefetchStates,
+} from '../utils';
 import { ScrollBehaviorMessenger } from '../composables';
-import { IN_WINDOW } from '@fastkit/helpers';
+// import { IN_WINDOW } from '@fastkit/helpers';
 // import { useVuePageControl } from '../injections';
 
 const DEFAULT_TRANSITION = 'page';
@@ -28,9 +25,7 @@ export const VPage = defineComponent({
   name: 'VPage',
   props: {
     pageKey: {
-      type: [Function, String] as unknown as () =>
-        | string
-        | ((route: RouteLocationNormalizedLoaded) => string),
+      type: [Function, String] as PropType<VuePageKeyOverride>,
       default: null,
     },
   },
@@ -64,10 +59,14 @@ export const VPage = defineComponent({
           v-slots={{
             default: (routeProps: RouterViewSlotProps) => {
               const { Component } = routeProps;
-              const key = generateRouteKeyWithWatchQuery(
-                props.pageKey,
+              let key = generateRouteKeyWithWatchQuery(
                 routeProps,
+                props.pageKey,
               );
+
+              if (consumeForcePrefetchStates(key)) {
+                key = `${key}:${Date.now()}`;
+              }
 
               return [
                 <Transition

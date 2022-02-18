@@ -12,6 +12,11 @@ export default defineComponent({
       return 5;
     });
   },
+  // prefetchHandler(ctx) {
+  //   console.log(ctx.control);
+  //   console.log('■', Math.random() > 0.5);
+  //   return Math.random() > 0.5;
+  // },
   // prefetch(ctx) {
   //   ctx.provide(
   //     'xxx',

@@ -28,6 +28,10 @@ import {
   RouteQueryType,
 } from '@fastkit/vue-utils';
 import { ResolvedRouteLocation, WatchQueryOption } from '../schemes';
+import {
+  routeKeyWithWatchQueryByRouteItem,
+  setForcePrefetchStates,
+} from '../utils';
 import { isPromise } from '@fastkit/helpers';
 import { EV } from '@fastkit/ev';
 import { useVuePageControl } from '../injections';
@@ -61,9 +65,23 @@ export type WriteResponseFn = (params: WrittenResponse) => void;
 
 export type RedirectFn = (location: string, status?: number) => void;
 
+export interface PrefetchHandlerContext {
+  control: VuePageControl;
+  to: RouteLocationNormalized;
+  from: RouteLocationNormalized;
+  matched: {
+    from?: RouteMatchedItem;
+    to: RouteMatchedItem;
+  };
+  pageKey: string;
+}
+
+export type PrefetchHandler = (ctx: PrefetchHandlerContext) => boolean | void;
+
 declare module '@vue/runtime-core' {
   export interface ComponentCustomOptions {
     prefetch?: RawPrefetchContext;
+    prefetchHandler?: PrefetchHandler;
     watchQuery?: WatchQueryOption;
   }
 }
@@ -77,14 +95,21 @@ function isComponentCustomOptions(
   );
 }
 
-function extractPrefetch(Component: unknown) {
+function extractPrefetch(Component: unknown): {
+  prefetch: VuePagePrefetchFn;
+  prefetchHandler?: PrefetchHandler;
+} | void {
   if (!isComponentCustomOptions(Component)) return;
   let { prefetch } = Component;
+  const { prefetchHandler } = Component;
   if (prefetch && typeof prefetch === 'object') {
     prefetch = prefetch.prefetch;
   }
   if (typeof prefetch === 'function') {
-    return prefetch;
+    return {
+      prefetch,
+      prefetchHandler,
+    };
   }
 }
 
@@ -106,18 +131,59 @@ interface RouteMatchedItemWithPrefetch extends RouteMatchedItem {
 }
 
 export function extractRouteMatchedItemsWithPrefetch(
-  route: RouteLocationNormalized,
+  control: VuePageControl,
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
 ) {
   const extracted: RouteMatchedItemWithPrefetch[] = [];
-  const matched = extractRouteMatchedItems(route);
+
+  const fromMatched = extractRouteMatchedItems(from);
+  const fromItems: { [key: string]: RouteMatchedItem } = {};
+
+  fromMatched.forEach((_item) => {
+    const fromKey = routeKeyWithWatchQueryByRouteItem(from, _item);
+    fromItems[fromKey] = _item;
+  });
+
+  const matched = extractRouteMatchedItems(to);
+
   matched.forEach((_item) => {
-    const prefetch = extractPrefetch(_item.Component);
-    if (prefetch) {
-      function updateQueries(queries: string[]) {
-        updateWatchQueryOption(_item.Component, queries);
-      }
-      extracted.push({ ..._item, prefetch, updateQueries });
+    const prefetchSettings = extractPrefetch(_item.Component);
+    if (!prefetchSettings) return;
+
+    const { prefetch, prefetchHandler } = prefetchSettings;
+
+    const pageKey = routeKeyWithWatchQueryByRouteItem(to, _item);
+    const fromItem = fromItems[pageKey];
+
+    let forcePrefetch: boolean | undefined | void;
+
+    if (prefetchHandler) {
+      const ctx: PrefetchHandlerContext = {
+        control,
+        to,
+        from,
+        matched: {
+          from: fromItem,
+          to: _item,
+        },
+        pageKey,
+      };
+
+      forcePrefetch = prefetchHandler(ctx);
     }
+
+    setForcePrefetchStates(pageKey, forcePrefetch || false);
+
+    if (!forcePrefetch && fromItem) {
+      // 遷移前にすでに実行されているprefetchの場合（ネストされたルートにおけるルートビュー等）はpreftechをキャンセルする
+      return;
+    }
+
+    function updateQueries(queries: string[]) {
+      updateWatchQueryOption(_item.Component, queries);
+    }
+    extracted.push({ ..._item, prefetch, updateQueries });
   });
   return {
     extracted,
@@ -604,7 +670,11 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     }
 
     try {
-      const { extracted, matched } = extractRouteMatchedItemsWithPrefetch(to);
+      const { extracted, matched } = extractRouteMatchedItemsWithPrefetch(
+        this,
+        to,
+        from,
+      );
       if (!matched.length) {
         throw new VuePageControlError({
           statusCode: 404,

@@ -10,7 +10,9 @@ import type {
 } from 'vue-router';
 import { isObjectEqual } from '@fastkit/helpers';
 
-type RawRouteComponent = RouteComponent | (() => Promise<RouteComponent>);
+export type RawRouteComponent =
+  | RouteComponent
+  | (() => Promise<RouteComponent>);
 
 export function getRouteMatchedComponents<
   P extends 'components' = 'components',
