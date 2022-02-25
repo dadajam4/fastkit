@@ -153,6 +153,10 @@ class Parent {
   get fuga() {
     return this.name;
   }
+  messages: {
+    a: string[];
+    b: string[];
+  };
 }
 
 const scheme: DefaultsScheme<Parent> = {
@@ -168,6 +172,9 @@ const scheme: DefaultsScheme<Parent> = {
     //   return undefined;
     // },
   ],
+  messages: {
+    a: [() => []],
+  },
 };
 
 const source: Parent = {
