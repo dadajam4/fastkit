@@ -1,12 +1,13 @@
 export { VuiInjectionKey } from './injections';
 
-import { VNodeChild } from 'vue';
+import { VNodeChild, reactive, UnwrapNestedRefs } from 'vue';
 import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import type { IconName, RawIconProp } from './components/VIcon';
 import {
   type VueColorSchemePluginSettings,
   type VueStackService,
   type VDialogProps,
+  type VStackControl,
   resolveVStackDynamicInput,
 } from '@fastkit/vue-kit';
 import type { Router } from 'vue-router';
@@ -16,6 +17,14 @@ import { VForm } from './components/VForm';
 import { VTextField, TextFieldInput } from './components/VTextField';
 import { VueForm, FormControlHinttipDelay } from '@fastkit/vue-form-control';
 import { getDocumentScroller } from '@fastkit/vue-scroller';
+import { ControlSize } from './schemes';
+
+export interface VuiFormPromptSettings<
+  T extends { [key: string]: any } = { [key: string]: any },
+> extends Partial<VDialogProps> {
+  state: T;
+  size?: ControlSize;
+}
 
 export interface VuiPromptOptions extends Partial<VDialogProps> {
   input?: Omit<TextFieldInput, 'modelValue'> & { initialValue?: string };
@@ -245,30 +254,23 @@ export class VuiService {
     return this.stack.snackbar(...args);
   }
 
-  prompt(rawOptions: RawVuiPromptOptions = {}) {
-    const options: VuiPromptOptions =
-      typeof rawOptions === 'string'
-        ? {
-            input: {
-              label: rawOptions,
-            },
-          }
-        : {
-            ...rawOptions,
-          };
+  formPrompt<T extends { [key: string]: any } = { [key: string]: any }>(
+    settings: VuiFormPromptSettings<T>,
+    slot: (
+      state: UnwrapNestedRefs<T>,
+      ctx: { form: VueForm; stack: VStackControl },
+    ) => VNodeChild,
+  ): Promise<T | false | undefined> {
+    let form: VueForm | undefined;
 
-    options.input = {
-      ...options.input,
+    const options = {
+      dense: true,
+      ...settings,
     };
 
-    options.dense = true;
+    const { size, state } = options;
 
-    let { initialValue: value = '' } = options.input;
-    const { size } = options.input;
-
-    delete options.input.initialValue;
-
-    let form: VueForm | undefined;
+    const _state = reactive(state);
 
     options.actions = options.actions || [
       this.stack.action('cancel', undefined, { size }),
@@ -297,21 +299,53 @@ export class VuiService {
               form = undefined;
             }}
             onSubmit={(ev) => {
-              stack.resolve(value);
-            }}>
-            <VTextField
-              {...options.input}
-              modelValue={value}
-              onChange={(ev) => {
-                stack.value = ev;
-                value = ev;
-              }}
-            />
-          </VForm>
+              stack.resolve(_state);
+            }}
+            v-slots={{
+              default: (form) => slot(_state, { form, stack }),
+            }}
+          />
         );
       },
     });
 
     return this.dialog(resolved);
+  }
+
+  prompt(rawOptions: RawVuiPromptOptions = {}) {
+    const options: VuiPromptOptions =
+      typeof rawOptions === 'string'
+        ? {
+            input: {
+              label: rawOptions,
+            },
+          }
+        : {
+            ...rawOptions,
+          };
+
+    options.input = {
+      ...options.input,
+    };
+
+    options.dense = true;
+
+    const { initialValue: value = '' } = options.input;
+    const { size } = options.input;
+
+    delete options.input.initialValue;
+
+    return this.formPrompt(
+      {
+        size,
+        ...options,
+        state: {
+          input: value,
+        },
+      },
+      (state) => <VTextField {...options.input} v-model={state.input} />,
+    ).then((result) => {
+      return result ? result.input : result;
+    });
   }
 }
