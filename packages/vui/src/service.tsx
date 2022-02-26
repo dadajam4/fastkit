@@ -302,7 +302,10 @@ export class VuiService {
               stack.resolve(_state);
             }}
             v-slots={{
-              default: (form) => slot(_state, { form, stack }),
+              default: (_form) => {
+                form = _form;
+                return slot(_state, { form, stack });
+              },
             }}
           />
         );
