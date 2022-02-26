@@ -292,9 +292,9 @@ export class VuiService {
           <VForm
             disableAutoScroll
             size={size}
-            onVnodeMounted={(vnode) => {
-              form = (vnode.component as any).ctx.form as VueForm;
-            }}
+            // onVnodeMounted={(vnode) => {
+            //   form = (vnode.component as any).ctx.form as VueForm;
+            // }}
             onVnodeBeforeUnmount={() => {
               form = undefined;
             }}
