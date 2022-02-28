@@ -97,7 +97,7 @@ function isComponentCustomOptions(
 }
 
 function extractPrefetch(Component: unknown): {
-  prefetch: VuePagePrefetchFn;
+  prefetch?: VuePagePrefetchFn;
   middleware: VuePageControlMiddlewareFn[];
   prefetchHandler?: PrefetchHandler;
 } | void {
@@ -131,9 +131,14 @@ function updateWatchQueryOption(Component: unknown, queries: string[]) {
 }
 
 interface RouteMatchedItemWithPrefetch extends RouteMatchedItem {
-  prefetch: RawPrefetchContext;
+  prefetch?: RawPrefetchContext;
   middleware: VuePageControlMiddlewareFn[];
   updateQueries(queries: string[]): void;
+}
+
+interface RequiredRouteMatchedItemWithPrefetch
+  extends RouteMatchedItemWithPrefetch {
+  prefetch: RawPrefetchContext;
 }
 
 export function extractRouteMatchedItemsWithPrefetch(
@@ -707,14 +712,19 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
         return this._triggerRedirect();
       }
 
-      if (!extracted.length) {
+      const requiredItems: RequiredRouteMatchedItemWithPrefetch[] =
+        extracted.filter(
+          (e) => !!e.prefetch,
+        ) as RequiredRouteMatchedItemWithPrefetch[];
+
+      if (!requiredItems.length) {
         this._initialStateConsumed = true;
         this._deletePageError();
         return;
       }
 
       const queueSetups: Promise<any>[] = [];
-      let queues = extracted.map((item) => {
+      let queues = requiredItems.map((item) => {
         const queue = new VuePagePrefetchQueue(this, item, to);
         if (queue._setupPromise) {
           queueSetups.push(queue._setupPromise);
@@ -828,7 +838,7 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
 
   constructor(
     control: VuePageControl,
-    item: RouteMatchedItemWithPrefetch,
+    item: RequiredRouteMatchedItemWithPrefetch,
     to: RouteLocationNormalized,
   ) {
     super();
