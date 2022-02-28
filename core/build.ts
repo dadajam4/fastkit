@@ -314,8 +314,23 @@ async function build(target: string) {
     }
   }
 
-  function processTypes(dts: string) {
+  async function processTypes(dts: string) {
     let processed = false;
+
+    const srcDir = path.resolve(pkgDir, 'src');
+    for (const vec of ['appends', 'prepends'] as const) {
+      const _typesPath = path.join(srcDir, `_types-${vec}.txt`);
+      if (await pathExists(_typesPath, 'file')) {
+        const _types = await fs.readFile(_typesPath, 'utf-8');
+        processed = true;
+        if (vec === 'appends') {
+          dts += _types;
+        } else {
+          dts = `${_types}${dts}`;
+        }
+      }
+    }
+
     const settings: { targets: string[]; pkg: string }[] = [
       {
         targets: ['ThemeName', 'PaletteName', 'ScopeName', 'ColorVariant'],
@@ -358,7 +373,7 @@ async function build(target: string) {
     }
     if (await pathExists(dtsPath, 'file')) {
       const dts = await fs.readFile(dtsPath, 'utf-8');
-      const typeProcessed = processTypes(dts);
+      const typeProcessed = await processTypes(dts);
       if (typeProcessed) {
         await fs.writeFile(dtsPath, typeProcessed);
       }

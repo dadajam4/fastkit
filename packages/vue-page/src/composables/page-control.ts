@@ -79,10 +79,11 @@ export interface PrefetchHandlerContext {
 export type PrefetchHandler = (ctx: PrefetchHandlerContext) => boolean | void;
 
 declare module '@vue/runtime-core' {
-  export interface ComponentCustomOptions {
+  interface ComponentCustomOptions {
     prefetch?: RawPrefetchContext;
     prefetchHandler?: PrefetchHandler;
     watchQuery?: WatchQueryOption;
+    middleware?: VuePageControlMiddlewareFn | VuePageControlMiddlewareFn[];
   }
 }
 
@@ -97,10 +98,13 @@ function isComponentCustomOptions(
 
 function extractPrefetch(Component: unknown): {
   prefetch: VuePagePrefetchFn;
+  middleware: VuePageControlMiddlewareFn[];
   prefetchHandler?: PrefetchHandler;
 } | void {
   if (!isComponentCustomOptions(Component)) return;
   let { prefetch } = Component;
+  const { middleware = [] } = Component;
+
   const { prefetchHandler } = Component;
   if (prefetch && typeof prefetch === 'object') {
     prefetch = prefetch.prefetch;
@@ -109,6 +113,7 @@ function extractPrefetch(Component: unknown): {
     return {
       prefetch,
       prefetchHandler,
+      middleware: Array.isArray(middleware) ? middleware : [middleware],
     };
   }
 }
@@ -127,6 +132,7 @@ function updateWatchQueryOption(Component: unknown, queries: string[]) {
 
 interface RouteMatchedItemWithPrefetch extends RouteMatchedItem {
   prefetch: RawPrefetchContext;
+  middleware: VuePageControlMiddlewareFn[];
   updateQueries(queries: string[]): void;
 }
 
@@ -151,7 +157,7 @@ export function extractRouteMatchedItemsWithPrefetch(
     const prefetchSettings = extractPrefetch(_item.Component);
     if (!prefetchSettings) return;
 
-    const { prefetch, prefetchHandler } = prefetchSettings;
+    const { prefetch, prefetchHandler, middleware } = prefetchSettings;
 
     const pageKey = routeKeyWithWatchQueryByRouteItem(to, _item);
     const fromItem = fromItems[pageKey];
@@ -183,7 +189,7 @@ export function extractRouteMatchedItemsWithPrefetch(
     function updateQueries(queries: string[]) {
       updateWatchQueryOption(_item.Component, queries);
     }
-    extracted.push({ ..._item, prefetch, updateQueries });
+    extracted.push({ ..._item, prefetch, updateQueries, middleware });
   });
   return {
     extracted,
@@ -684,7 +690,13 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
       this._transitioning.value = true;
 
-      for (const middlewareFn of this.middleware) {
+      const allMiddleware = [...this.middleware];
+
+      extracted.forEach(({ middleware }) => {
+        allMiddleware.push(...middleware);
+      });
+
+      for (const middlewareFn of allMiddleware) {
         await middlewareFn(this);
         if (this._redirectSpec) {
           break;
