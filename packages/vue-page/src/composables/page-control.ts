@@ -150,7 +150,6 @@ export function extractRouteMatchedItemsWithPrefetch(
   from: RouteLocationNormalized,
 ) {
   const extracted: RouteMatchedItemWithPrefetch[] = [];
-
   const fromMatched = extractRouteMatchedItems(from);
   const fromItems: { [key: string]: RouteMatchedItem } = {};
 
@@ -165,7 +164,8 @@ export function extractRouteMatchedItemsWithPrefetch(
     const prefetchSettings = extractPrefetch(_item.Component);
     if (!prefetchSettings) return;
 
-    const { prefetch, prefetchHandler, middleware } = prefetchSettings;
+    const { prefetchHandler, middleware } = prefetchSettings;
+    let { prefetch } = prefetchSettings;
 
     const pageKey = routeKeyWithWatchQueryByRouteItem(to, _item);
     const fromItem = fromItems[pageKey];
@@ -191,7 +191,7 @@ export function extractRouteMatchedItemsWithPrefetch(
 
     if (!forcePrefetch && fromItem) {
       // 遷移前にすでに実行されているprefetchの場合（ネストされたルートにおけるルートビュー等）はpreftechをキャンセルする
-      return;
+      prefetch = undefined;
     }
 
     function updateQueries(queries: string[]) {

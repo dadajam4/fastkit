@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/catcher",
-  "version": "0.7.39",
+  "version": "0.7.40",
   "description": "@fastkit/catcher",
   "buildOptions": {
     "name": "Catcher"
