@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/visibility",
-  "version": "0.7.36",
+  "version": "0.7.37",
   "description": "@fastkit/visibility",
   "buildOptions": {
     "name": "visibilityManager"
