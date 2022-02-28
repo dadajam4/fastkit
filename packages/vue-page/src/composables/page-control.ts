@@ -102,18 +102,21 @@ function extractPrefetch(Component: unknown): {
   prefetchHandler?: PrefetchHandler;
 } | void {
   if (!isComponentCustomOptions(Component)) return;
-  let { prefetch } = Component;
-  const { middleware = [] } = Component;
+  let { prefetch, middleware = [] } = Component;
+
+  if (!Array.isArray(middleware)) {
+    middleware = [middleware];
+  }
 
   const { prefetchHandler } = Component;
   if (prefetch && typeof prefetch === 'object') {
     prefetch = prefetch.prefetch;
   }
-  if (typeof prefetch === 'function') {
+  if (typeof prefetch === 'function' || middleware.length) {
     return {
       prefetch,
       prefetchHandler,
-      middleware: Array.isArray(middleware) ? middleware : [middleware],
+      middleware,
     };
   }
 }
