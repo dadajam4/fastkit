@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/stylelint-config",
-  "version": "0.7.40",
+  "version": "0.7.41",
   "description": "@fastkit/stylelint-config",
   "buildOptions": {
     "ignore": true
@@ -24,11 +24,11 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/stylelint-config#readme",
   "peerDependencies": {
-    "stylelint": "^14.5.3"
+    "stylelint": "^14.2.0"
   },
   "dependencies": {
     "postcss-html": "^1.2.0",
-    "postcss-scss": "^4.0.3",
+    "postcss-scss": "^4.0.2",
     "stylelint-config-css-modules": "^2.3.0",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-recess-order": "^2.5.0",

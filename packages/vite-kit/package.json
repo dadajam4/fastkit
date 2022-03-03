@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-kit",
-  "version": "0.7.40",
+  "version": "0.7.41",
   "description": "@fastkit/vite-kit",
   "main": "index.js",
   "module": "dist/vite-kit.mjs",
@@ -23,15 +23,15 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vite-kit#readme",
   "peerDependencies": {
-    "vite": "^2.8.6"
+    "vite": "^2.7.10"
   },
   "dependencies": {
-    "@fastkit/color-scheme-gen": "0.7.40",
-    "@fastkit/hashed-sync": "0.7.40",
-    "@fastkit/icon-font-gen": "0.7.40",
-    "@fastkit/media-match-gen": "0.7.40",
-    "@fastkit/node-util": "0.7.40",
-    "@fastkit/sprite-images": "0.7.40",
-    "@fastkit/tiny-logger": "0.7.40"
+    "@fastkit/color-scheme-gen": "0.7.41",
+    "@fastkit/hashed-sync": "0.7.41",
+    "@fastkit/icon-font-gen": "0.7.41",
+    "@fastkit/media-match-gen": "0.7.41",
+    "@fastkit/node-util": "0.7.41",
+    "@fastkit/sprite-images": "0.7.41",
+    "@fastkit/tiny-logger": "0.7.41"
   }
 }

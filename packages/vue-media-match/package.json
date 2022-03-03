@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-media-match",
-  "version": "0.7.40",
+  "version": "0.7.41",
   "description": "@fastkit/vue-media-match",
   "buildOptions": {
     "name": "VueMediaMatch"
@@ -26,10 +26,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-media-match#readme",
   "peerDependencies": {
-    "vue": "^3.2.31"
+    "vue": "^3.2.26"
   },
   "dependencies": {
-    "@fastkit/helpers": "0.7.40",
-    "@fastkit/media-match": "0.7.40"
+    "@fastkit/helpers": "0.7.41",
+    "@fastkit/media-match": "0.7.41"
   }
 }
