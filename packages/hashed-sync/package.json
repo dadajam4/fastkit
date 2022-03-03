@@ -30,7 +30,7 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/hashed-sync#readme",
   "dependencies": {
     "@fastkit/tiny-logger": "0.7.40",
-    "folder-hash": "^4.0.1",
+    "folder-hash": "^4.0.2",
     "fs-extra": "^9.1.0",
     "imagemin": "^8.0.1",
     "imagemin-mozjpeg": "^9.0.0",

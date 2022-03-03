@@ -23,6 +23,7 @@ export const VTooltip = defineComponent({
       return (
         <VMenu
           {...attrs}
+          scrollLock={false}
           class="v-tooltip"
           v-slots={{
             ...ctx.slots,

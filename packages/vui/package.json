@@ -28,8 +28,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vui#readme",
   "peerDependencies": {
-    "vite": "^2.7.10",
-    "vue": "^3.2.26"
+    "vite": "^2.8.6",
+    "vue": "^3.2.31"
   },
   "dependencies": {
     "@fastkit/color-scheme": "0.7.40",

@@ -502,7 +502,10 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     const bucket = this.initialState[STATE_BUCKET_SYMBOL] as any;
     let data = bucket[key as any] as T | undefined;
     if (data === undefined) {
-      data = typeof defaultValue === 'function' ? defaultValue() : defaultValue;
+      data =
+        typeof defaultValue === 'function'
+          ? (defaultValue as any)() // @TODO TS2349: This expression is not callable.
+          : defaultValue;
     }
     return data;
   }

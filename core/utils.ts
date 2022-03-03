@@ -76,30 +76,49 @@ export async function pathExists(filepath: string, type?: 'file' | 'dir') {
   }
 }
 
-export const targets = (exports.targets = fs
-  .readdirSync(PACKAGES_DIR.path)
-  .filter((f) => {
-    if (!fs.statSync(PACKAGES_DIR.join(f)).isDirectory()) {
+// export const targets = (exports.targets = fs
+//   .readdirSync(PACKAGES_DIR.path)
+//   .filter((f) => {
+//     if (!fs.statSync(PACKAGES_DIR.join(f)).isDirectory()) {
+//       return false;
+//     }
+
+//     try {
+//       const pkg = require(PACKAGES_DIR.join(
+//         f,
+//         'package.json',
+//       )) as FastkitPackage;
+//       const { buildOptions } = pkg;
+//       if (
+//         (pkg.private && !buildOptions) ||
+//         (!!buildOptions && buildOptions.ignore)
+//       ) {
+//         return false;
+//       }
+//     } catch (err) {
+//       throw err;
+//     }
+//     return true;
+//   }));
+export const targets = fs.readdirSync(PACKAGES_DIR.path).filter((f) => {
+  if (!fs.statSync(PACKAGES_DIR.join(f)).isDirectory()) {
+    return false;
+  }
+
+  try {
+    const pkg = require(PACKAGES_DIR.join(f, 'package.json')) as FastkitPackage;
+    const { buildOptions } = pkg;
+    if (
+      (pkg.private && !buildOptions) ||
+      (!!buildOptions && buildOptions.ignore)
+    ) {
       return false;
     }
-
-    try {
-      const pkg = require(PACKAGES_DIR.join(
-        f,
-        'package.json',
-      )) as FastkitPackage;
-      const { buildOptions } = pkg;
-      if (
-        (pkg.private && !buildOptions) ||
-        (!!buildOptions && buildOptions.ignore)
-      ) {
-        return false;
-      }
-    } catch (err) {
-      throw err;
-    }
-    return true;
-  }));
+  } catch (err) {
+    throw err;
+  }
+  return true;
+});
 
 export function getCommit() {
   try {
