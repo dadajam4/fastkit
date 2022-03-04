@@ -404,6 +404,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this.isClient = typeof window !== 'undefined';
     this.middleware = middleware;
     this._serverRedirect = serverRedirect;
+
     this._writeResponse = writeResponse;
 
     this._ErrorComponent = ErrorComponent || VErrorPage;
@@ -744,6 +745,10 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
       await Promise.all(queueSetups);
 
+      if (this._redirectSpec) {
+        return this._triggerRedirect();
+      }
+
       queues.forEach((queue) => {
         const { item, provideKey } = queue;
         if (provideKey) {
@@ -762,6 +767,10 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       this._prefetchQueues.value = queues.map((q) => () => q);
 
       await Promise.all(providePromises);
+
+      if (this._redirectSpec) {
+        return this._triggerRedirect();
+      }
 
       this._initialStateConsumed = true;
       this._deletePageError();
@@ -943,6 +952,7 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
       }
       return v;
     });
+    return this._providePromise;
   }
 
   injectOtherQueue<T, D extends T | undefined>(
@@ -982,7 +992,7 @@ export function createPrefetch<T>(
   data: RawProvided<T>,
 ): PrefetchContext<T> {
   const prefetch: VuePagePrefetchFn = function prefetch(queue) {
-    queue.provide(key, data);
+    return queue.provide(key, data);
   };
 
   function inject<D extends T | undefined, N extends Boolean>(
