@@ -19,7 +19,40 @@ export type DefaultsScheme<T> = {
   [K in WritableKeysOf<T>]?: DefaultsSchemeSource<T[K]>;
 };
 
+export const MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL = Symbol();
+
+function getIndexSignatureScheme(
+  scheme: unknown,
+): DefaultsSchemeSource<any> | undefined {
+  if (!scheme || Array.isArray(scheme) || typeof scheme !== 'object') {
+    return;
+  }
+
+  const symbols = Object.getOwnPropertySymbols(scheme);
+  if (symbols.some((s) => s === MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL)) {
+    return (scheme as any)[MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL];
+  }
+}
+
+export function createIndexSignatureDefaultsScheme<T>(
+  scheme: DefaultsSchemeSource<T>,
+) {
+  return {
+    [MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL]: scheme,
+  };
+}
+
 export function mergeDefaults<T>(base: T, scheme: DefaultsScheme<T>): T {
+  const indexSignatureScheme = getIndexSignatureScheme(scheme);
+  if (indexSignatureScheme) {
+    const baseKeys = Object.keys(base);
+    const _scheme: any = {};
+    baseKeys.forEach((key) => {
+      _scheme[key] = indexSignatureScheme;
+    });
+    return mergeDefaults(base, _scheme as any);
+  }
+
   const keys = Object.keys(scheme) as (keyof T)[];
   for (const key of keys) {
     const source = (scheme as any)[key];

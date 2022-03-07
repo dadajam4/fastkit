@@ -125,7 +125,12 @@
 
 // // import './plugins/playground-aliases';
 
-import { mergeDefaults, DefaultsScheme } from './packages/helpers/src';
+import {
+  mergeDefaults,
+  DefaultsScheme,
+  MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL,
+  createIndexSignatureDefaultsScheme,
+} from './packages/helpers/src';
 
 interface ChildObj {
   name: string;
@@ -157,6 +162,12 @@ class Parent {
     a: string[];
     b: string[];
   };
+  w1: {
+    [key: string]: ChildObj;
+  };
+  wild: {
+    [key: string]: ChildObj[];
+  };
 }
 
 const scheme: DefaultsScheme<Parent> = {
@@ -175,11 +186,38 @@ const scheme: DefaultsScheme<Parent> = {
   messages: {
     a: [() => []],
   },
+  w1: createIndexSignatureDefaultsScheme({
+    name: () => 'hoge',
+  }),
+  // w1: {
+  //   [MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL]: {
+  //     name: () => 'hoge',
+  //   },
+  // },
+  wild: createIndexSignatureDefaultsScheme([
+    {
+      name: () => 'hoge',
+    },
+  ]),
+  // wild: {
+  //   [MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL]: [
+  //     {
+  //       name: () => 'hoge',
+  //     },
+  //   ],
+  // },
 };
 
 const source: Parent = {
   // name: '',
   children: [{}, '', {}],
+  w1: {
+    hoge: {},
+  },
+  wild: {
+    a: [{ b: true }],
+    b: [],
+  },
 } as any;
 const merged = mergeDefaults(source, scheme);
 
