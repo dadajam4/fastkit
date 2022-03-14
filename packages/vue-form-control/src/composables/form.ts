@@ -41,6 +41,7 @@ export function createFormProps(options: FormOptions = {}) {
         default: true,
       },
       submiting: Boolean,
+      disableAutoScroll: Boolean,
     }),
   };
 }
@@ -69,17 +70,20 @@ export type FormContext = SetupContext<FormEmitOptions>;
 export type VueFormHook = (form: VueForm) => any;
 export interface FormOptions extends FormNodeControlBaseOptions {
   onAutoValidateError?: VueFormHook;
+  scrollToElement?: (element: HTMLElement) => any;
 }
 
 export class VueForm extends FormNodeControl {
   protected _formContext: FormContext;
   protected _autoValidate: ComputedRef<boolean>;
   protected _nativeAction: ComputedRef<string | undefined>;
+  protected _disableAutoScroll: ComputedRef<boolean>;
   protected _fnAction: ComputedRef<FormFunctionableAction | undefined>;
   protected _formRef = ref<HTMLFormElement | null>(null);
   protected _actionPromise = ref<Promise<any> | null>(null);
   protected _submiting: ComputedRef<boolean>;
   protected _onAutoValidateError?: VueFormHook;
+  protected _scrollToElement?: (element: HTMLElement) => any;
 
   get submiting() {
     return this._submiting.value;
@@ -89,12 +93,17 @@ export class VueForm extends FormNodeControl {
     return this._autoValidate.value;
   }
 
+  get disableAutoScroll() {
+    return this._disableAutoScroll.value;
+  }
+
   constructor(props: FormProps, ctx: FormContext, options: FormOptions = {}) {
     super(props, ctx as unknown as FormNodeContext<{}>, {
       ...options,
     });
     this._formContext = ctx;
     this._autoValidate = computed(() => props.autoValidate);
+    this._disableAutoScroll = computed(() => props.disableAutoScroll);
     this._nativeAction = computed(() => {
       if (typeof props.action === 'string') return props.action;
       return undefined;
@@ -105,10 +114,12 @@ export class VueForm extends FormNodeControl {
     });
     this._submiting = computed(() => this._actionPromise.value !== null);
     this._onAutoValidateError = options.onAutoValidateError;
+    this._scrollToElement = options.scrollToElement;
 
     onBeforeUnmount(() => {
       this._actionPromise.value = null;
       delete this._onAutoValidateError;
+      delete this._scrollToElement;
       delete (this as any)._formContext;
     });
 
@@ -153,11 +164,25 @@ export class VueForm extends FormNodeControl {
     });
   }
 
+  scrollToFirstInvalidElement() {
+    const { firstInvalidEl, _scrollToElement } = this;
+    if (!_scrollToElement || !firstInvalidEl) return;
+    return _scrollToElement(firstInvalidEl);
+  }
+
+  async validateAndScroll(): Promise<boolean> {
+    const valid = await this.validate();
+    if (!valid) {
+      !this.disableAutoScroll && this.scrollToFirstInvalidElement();
+    }
+    return valid;
+  }
+
   async handleSubmit(ev: Event) {
     ev.preventDefault();
     if (this.submiting || this.isDisabled || this.isReadonly) return;
     if (this.autoValidate) {
-      const valid = await this.validate();
+      const valid = await this.validateAndScroll();
       if (!valid) {
         this._onAutoValidateError && this._onAutoValidateError(this);
         return;
@@ -174,6 +199,7 @@ export class VueForm extends FormNodeControl {
       form: this as VueForm,
       formRef: () => this._formRef,
       nativeAction: this._nativeAction,
+      disableAutoScroll: this._disableAutoScroll,
     };
   }
 }

@@ -19,6 +19,7 @@ import { VTab, VTabRef } from './VTab';
 import { VScroller, useVScrollerRef } from '@fastkit/vue-kit';
 import { ScrollResult } from '@fastkit/scroller';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
+import { isPromise } from '@fastkit/helpers';
 
 export interface VTabsItemLabelSlotCtx {
   value: string;
@@ -29,6 +30,11 @@ export interface VTabsItemLabelSlotCtx {
 export type VTabsItemLabelSlot = (ctx: VTabsItemLabelSlotCtx) => VNodeChild;
 
 export type VTabsRouterHandler = (value: string) => RouteLocationRaw;
+
+export type VTabsGuard = (
+  nextValue: string,
+  oldValue: string,
+) => boolean | void | undefined | Promise<boolean | void | undefined>;
 
 export interface VTabsItem {
   value: string;
@@ -72,6 +78,7 @@ export const VTabs = defineComponent({
     }>(),
 
     color: String as PropType<ScopeName>,
+    onBeforeChange: Function as PropType<VTabsGuard>,
   },
   emits: {
     'update:modelValue': (newValue: string) => true,
@@ -167,7 +174,22 @@ export const VTabs = defineComponent({
       }
     }
 
-    function to(value: string) {
+    async function to(value: string) {
+      const { value: currentValue } = currentRef;
+      if (currentValue === value) {
+        return;
+      }
+      const { onBeforeChange } = props;
+      if (onBeforeChange) {
+        let result = onBeforeChange(value, currentRef.value);
+        if (isPromise(result)) {
+          result = await result;
+        }
+        console.log(result);
+        if (result === false) {
+          return;
+        }
+      }
       currentRef.value = value;
     }
 

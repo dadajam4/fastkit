@@ -85,6 +85,12 @@ export default defineComponent({
             v-slots={{
               default: (form) => (
                 <>
+                  <VButton
+                    onClick={() => {
+                      form.validateAndScroll();
+                    }}>
+                    あいうえお
+                  </VButton>
                   <VRadioGroup
                     label="公開状態"
                     items={[

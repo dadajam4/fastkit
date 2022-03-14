@@ -24,21 +24,18 @@ export const VForm = defineComponent({
     ...props,
     ...createControlProps(),
     ...defineSlotsProps<VFormSlots>(),
-    disableAutoScroll: Boolean,
+    // disableAutoScroll: Boolean,
   },
   emits,
   setup(props, ctx) {
     const vui = useVui();
     const nodeControl = useForm(props, ctx as any, {
       nodeType: VUI_FORM_SYMBOL,
-      onAutoValidateError: () => {
-        if (props.disableAutoScroll) return;
+      scrollToElement: (el) => {
         const scroller = getDocumentScroller();
-        const { firstInvalidEl } = nodeControl;
-        firstInvalidEl &&
-          scroller.toElement(firstInvalidEl, {
-            offset: vui.getAutoScrollToElementOffsetTop(),
-          });
+        return scroller.toElement(el, {
+          offset: vui.getAutoScrollToElementOffsetTop(),
+        });
       },
     });
     const classes = computed(() => {
