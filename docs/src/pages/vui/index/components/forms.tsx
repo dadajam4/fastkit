@@ -40,6 +40,7 @@ export default defineComponent({
       label: `アイテム${i}`,
     }));
     const stack = useVueStack();
+    const checks1 = ref(['1', '2']);
 
     async function submit1() {
       if (form1Sending.value) return;
@@ -69,6 +70,7 @@ export default defineComponent({
       form2Sending,
       dynamicKey,
       dynamicInput,
+      checks1,
     };
   },
   render() {
@@ -170,6 +172,7 @@ export default defineComponent({
                     hint="これは入力ヒントテキストです。"
                     stacked={false}
                     items={items}
+                    v-model={this.checks1}
                   />
 
                   <VSwitchGroup

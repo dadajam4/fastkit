@@ -7,6 +7,7 @@ import {
   createFormSelectorSettings,
   FormControlSlots,
   useFormSelectorControl,
+  FormSelectorControl,
   ResolvedFormSelectorItemData,
   FormNodeControl,
   renderSlotOrEmpty,
@@ -20,7 +21,12 @@ export interface DefineFormSelectorComponentOptions {
   nodeType: string;
   className: string;
   itemRenderer: (ctx: {
-    attrs: ResolvedFormSelectorItemData & { key: string | number };
+    control: FormSelectorControl;
+    selected: boolean;
+    attrs: ResolvedFormSelectorItemData & {
+      modelValue: boolean;
+      key: string | number;
+    };
     slots: {
       default: TypedSlot<FormNodeControl>;
     };
@@ -60,6 +66,7 @@ export function defineFormSelectorComponent(
       };
     },
     render() {
+      const { selectorControl } = this;
       return (
         <VFormControl
           nodeControl={this.nodeControl}
@@ -81,17 +88,21 @@ export function defineFormSelectorComponent(
             ...this.$slots,
             default: () => (
               <div class="v-form-selector__body">
-                {this.propItems.map((attrs) =>
-                  itemRenderer({
+                {this.propItems.map((attrs) => {
+                  const selected = selectorControl.isSelected(attrs.value);
+                  return itemRenderer({
+                    selected,
+                    control: selectorControl,
                     attrs: {
                       ...attrs,
+                      modelValue: selected,
                       key: attrs.value,
                     },
                     slots: {
                       default: () => attrs.label(this.selectorControl),
                     },
-                  }),
-                )}
+                  });
+                })}
                 {renderSlotOrEmpty(this.$slots, 'default')}
               </div>
             ),

@@ -443,6 +443,10 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     }
   }
 
+  isSelected(value: string | number) {
+    return this.selectedValues.includes(value);
+  }
+
   expose() {
     const publicInterface = super.expose();
     return {
