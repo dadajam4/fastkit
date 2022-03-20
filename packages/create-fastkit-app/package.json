@@ -1,6 +1,6 @@
 {
   "name": "create-fastkit-app",
-  "version": "0.7.46",
+  "version": "0.7.47",
   "description": "create-fastkit-app",
   "main": "index.js",
   "bin": {
