@@ -1,0 +1,78 @@
+@use '../../styles/core.scss';
+
+.v-chip {
+  @include core.button-reset();
+
+  $chip-sizes: xs, sm, md, lg, xl;
+
+  --chip-radius: calc(var(--chip-height) / 2);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--chip-height);
+  padding: 0 var(--chip-padding);
+  overflow: hidden;
+  font-size: var(--chip-font-size);
+  font-weight: var(--chip-font-weight);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: bottom;
+  cursor: default;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: var(--chip-radius);
+
+  --shadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
+  --focusShadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
+
+  &--clickable {
+    cursor: pointer;
+  }
+
+  @each $size in $chip-sizes {
+    &--#{$size} {
+      --chip-height: var(--chip-height-#{$size});
+      --chip-font-size: var(--chip-font-size-#{$size});
+    }
+  }
+
+  &--label {
+    --chip-radius: 4px;
+  }
+
+  // &[disabled] {
+  //   pointer-events: none;
+
+  //   &::before {
+  //     content: none;
+  //   }
+  // }
+  // // noop
+
+  // img,
+  // &__image {
+  //   display: inline-flex;
+  //   width: inherit !important;
+  //   height: inherit !important;
+  //   border-radius: inherit;
+  //   object-fit: cover;
+  // }
+
+  &__icon {
+    &--start {
+      margin-right: calc(var(--chip-padding) * 0.5);
+      margin-left: calc(var(--chip-padding) * -0.5);
+    }
+
+    &--end {
+      margin-right: calc(var(--chip-padding) * -0.5);
+      margin-left: calc(var(--chip-padding) * 0.5);
+    }
+  }
+
+  .v-avatar {
+    --avatar-size: 14px;
+  }
+}

@@ -79,6 +79,7 @@ export interface NavigationableContext {
 export interface UseNavigationableOptions {
   clickableClassName?: string | (() => string | undefined);
   RouterLink?: typeof RouterLink;
+  linkFallbackTag?: string | (() => string | undefined);
 }
 
 export function useNavigationable(
@@ -117,7 +118,7 @@ export function useNavigationable(
 
     const { onClick } = props;
 
-    const { linkFallbackTag } = props;
+    const linkFallbackTag = opts.linkFallbackTag || props.linkFallbackTag;
     const fallbackTag =
       typeof linkFallbackTag === 'function'
         ? linkFallbackTag()

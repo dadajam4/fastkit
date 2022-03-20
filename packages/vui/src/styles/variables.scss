@@ -30,6 +30,9 @@
   --typo-base-height: 1.5;
   --typo-base-spacing: 0em;
 
+  // medium
+  --typo-medium-weight: 500;
+
   // h1
   --typo-h1-size: 2.5rem;
   --typo-h1-weight: 500;
@@ -122,6 +125,22 @@
   // --typo-overline-weight: 400;
   // --typo-overline-height: 2.66;
   // --typo-overline-spacing: 0.08333em;
+
+  // =============================================
+  // chips
+  // =============================================
+  --chip-padding: 0.875em;
+  --chip-font-weight: var(--typo-base-weight);
+  --chip-height-xs: 16px;
+  --chip-font-size-xs: 10px;
+  --chip-height-sm: 24px;
+  --chip-font-size-sm: 12px;
+  --chip-height-md: 32px;
+  --chip-font-size-md: 14px;
+  --chip-height-lg: 54px;
+  --chip-font-size-lg: 16px;
+  --chip-height-xl: 66px;
+  --chip-font-size-xl: 18px;
 
   // =============================================
   // controls

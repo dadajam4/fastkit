@@ -150,6 +150,16 @@ export default defineComponent({
                           to: '/vui/components/loadings',
                         },
                         {
+                          key: 'avatars',
+                          label: 'Avatars',
+                          to: '/vui/components/avatars',
+                        },
+                        {
+                          key: 'chips',
+                          label: 'Chips',
+                          to: '/vui/components/chips',
+                        },
+                        {
                           key: 'cards',
                           label: 'Cards',
                           to: '/vui/components/cards',

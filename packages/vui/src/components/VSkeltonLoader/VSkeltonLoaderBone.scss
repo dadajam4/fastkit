@@ -1,0 +1,31 @@
+.v-skelton-loader-bone {
+  position: relative;
+  overflow: hidden;
+  cursor: progress;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: inherit;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: 100%;
+    content: '';
+    background: linear-gradient(
+      90deg,
+      hsla(0deg, 0%, 100%, 0),
+      hsla(0deg, 0%, 100%, 0.3),
+      hsla(0deg, 0%, 100%, 0)
+    );
+    transform: translateX(-100%);
+    animation: v-skelton-loader-bone-loading 1.5s infinite;
+  }
+}
+
+@keyframes v-skelton-loader-bone-loading {
+  100% {
+    transform: translateX(100%);
+  }
+}

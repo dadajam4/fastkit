@@ -1,0 +1,76 @@
+@use '../../styles/core.scss';
+
+.v-avatar {
+  @include core.button-reset();
+
+  --avatar-radius: 50%;
+  --avatar-font-weight: var(--typo-medium-weight);
+  --avatar-base-font-size: var(--typo-base-size);
+  --avatar-font-size: var(--avatar-base-font-size);
+
+  display: inline-flex;
+  flex-basis: var(--avatar-size);
+  align-items: center;
+  justify-content: center;
+  width: var(--avatar-size);
+  min-width: var(--avatar-size);
+  height: var(--avatar-size);
+  overflow: hidden;
+  font-size: var(--avatar-font-size);
+  font-weight: var(--avatar-font-weight);
+  line-height: 1;
+  text-align: center;
+  vertical-align: bottom;
+  cursor: default;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: var(--avatar-radius);
+  // border-radius: var(--control-field-radius);
+
+  --shadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
+  --focusShadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
+
+  &--clickable {
+    cursor: pointer;
+  }
+
+  &--sm {
+    --avatar-size: 36px;
+    --avatar-font-size: calc(var(--avatar-base-font-size) * 0.75);
+  }
+
+  &--md {
+    --avatar-size: 48px;
+  }
+
+  &--lg {
+    --avatar-size: 62px;
+    --avatar-font-size: calc(var(--avatar-base-font-size) * 1.25);
+  }
+
+  &--rounded {
+    --avatar-radius: 4px;
+  }
+
+  &--tile {
+    --avatar-radius: 0;
+  }
+
+  // &[disabled] {
+  //   pointer-events: none;
+
+  //   &::before {
+  //     content: none;
+  //   }
+  // }
+  // // noop
+
+  img,
+  &__image {
+    display: inline-flex;
+    width: inherit !important;
+    height: inherit !important;
+    border-radius: inherit;
+    object-fit: cover;
+  }
+}
