@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/scroller",
-  "version": "0.7.47",
+  "version": "0.7.48",
   "description": "@fastkit/scroller",
   "buildOptions": {
     "name": "Scroller"
@@ -26,9 +26,9 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/scroller#readme",
   "dependencies": {
-    "@fastkit/ev": "0.7.47",
-    "@fastkit/visibility": "0.7.47",
-    "@fastkit/tiny-logger": "0.7.47",
+    "@fastkit/ev": "0.7.48",
+    "@fastkit/visibility": "0.7.48",
+    "@fastkit/tiny-logger": "0.7.48",
     "bezier-easing": "^2.1.0"
   }
 }
