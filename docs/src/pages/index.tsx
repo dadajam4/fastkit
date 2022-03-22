@@ -7,6 +7,7 @@ import {
   VProgressLinear,
   VCheckbox,
   useVueStack,
+  VMenu,
 } from '@fastkit/vui';
 import { RouterLink } from 'vue-router';
 import { range } from '@fastkit/helpers';
@@ -35,11 +36,27 @@ export default defineComponent({
     return (
       <div>
         <VAppContainer>
+          <div>-----</div>
           <p>
             {`1${JSON.stringify(this.auth.me)} ${JSON.stringify(
               this.isLoggedIn(),
             )}`}
           </p>
+
+          <div class="flex">
+            <div>あいうえお</div>
+            <VMenu
+              distance={0}
+              x="right-inner"
+              // y="bottom"
+              width="fit"
+              maxWidth="fit"
+              v-slots={{
+                activator: ({ attrs }) => <VButton {...attrs}>menu</VButton>,
+              }}>
+              <div>あいうえお</div>
+            </VMenu>
+          </div>
           <VProgressCircular indeterminate />
           <VProgressCircular indeterminate color="accent" />
           <VProgressLinear

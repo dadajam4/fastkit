@@ -39,10 +39,8 @@ const { props, emits } = createStackableDefine({
 export const stackMenuProps = {
   ...props,
   ...createStackActionProps(),
-  top: Boolean,
-  bottom: Boolean,
-  left: Boolean,
-  right: Boolean,
+  x: String as PropType<VMenuXPosition>,
+  y: String as PropType<VMenuYPosition>,
   allowOverflow: Boolean,
   width: [Number, String] as PropType<number | 'fit'>,
   height: [Number, String] as PropType<number | 'fit'>,
@@ -65,6 +63,20 @@ export const stackMenuProps = {
 };
 
 export const stackMenuEmits = emits;
+
+export type VMenuXPosition =
+  | 'left'
+  | 'left-inner'
+  | 'center'
+  | 'right'
+  | 'right-inner';
+
+export type VMenuYPosition =
+  | 'top'
+  | 'top-inner'
+  | 'center'
+  | 'bottom'
+  | 'bottom-inner';
 
 export type VMenuProps = ExtractPropInput<typeof stackMenuProps>;
 
@@ -111,19 +123,23 @@ export const VMenu = defineComponent({
     const _height = computed(() => props.height);
     const _maxWidth = computed(() => props.maxWidth);
     const _maxHeight = computed(() => props.maxHeight);
+
     const _positionFlags = computed(() => {
-      const { left, right, top } = props;
-      let { bottom } = props;
-      if (!top && !bottom && !left && !right) bottom = true;
-      if (top && bottom)
-        logger.warn('top and bottom can not be specified at the same time.');
-      if (left && right)
-        logger.warn('left and right can not be specified at the same time.');
+      const { x = 'center', y = 'bottom' } = props;
+      // let { y } = props;
+      // if (!x && !y) {
+      //   y = 'bottom';
+      // }
+
       return {
-        left,
-        right,
-        top,
-        bottom,
+        x,
+        y,
+        xInner: x === 'left-inner' || x === 'right-inner',
+        yInner: y === 'top-inner' || y === 'bottom-inner',
+        left: x === 'left' || x === 'left-inner',
+        right: x === 'right' || x === 'right-inner',
+        top: y === 'top' || y === 'top-inner',
+        bottom: y === 'bottom' || y === 'bottom-inner',
       };
     });
 
@@ -134,11 +150,16 @@ export const VMenu = defineComponent({
       const { transition } = props;
       if (typeof transition === 'string' && transition !== DEFAULT_TRANSITION)
         return transition;
-      const { right, top, bottom } = _positionFlags.value;
-      if (bottom) return 'v-stack-slide-y';
-      if (top) return 'v-stack-slide-y-reverse';
-      if (right) return 'v-stack-slide-x';
-      return 'v-stack-slide-x-reverse';
+      const { x, y } = _positionFlags.value;
+      if (y === 'top') return 'v-stack-slide-y-reverse';
+      if (y === 'bottom') return 'v-stack-slide-y';
+      if (x === 'left') return 'v-stack-slide-x-reverse';
+      if (x === 'right') return 'v-stack-slide-x';
+      if (y === 'top-inner') return 'v-stack-slide-y';
+      if (y === 'bottom-inner') return 'v-stack-slide-y-reverse';
+      if (x === 'left-inner') return 'v-stack-slide-x';
+      if (x === 'right-inner') return 'v-stack-slide-x-reverse';
+      return 'v-stack-scale';
     });
 
     const _rect = computed<VMenuRect | null>(() => {
@@ -185,6 +206,8 @@ export const VMenu = defineComponent({
         bottom: isBottom,
         left: isLeft,
         right: isRight,
+        xInner,
+        yInner,
       } = _positionFlags.value;
 
       width = typeof computedWidth === 'number' ? computedWidth : myWidth;
@@ -198,11 +221,19 @@ export const VMenu = defineComponent({
       }
 
       if (isTop) {
-        top = activatorTop - height;
-        if (overlap) top += activatorHeight;
+        if (yInner) {
+          top = activatorTop;
+        } else {
+          top = activatorTop - height;
+          if (overlap) top += activatorHeight;
+        }
       } else if (isBottom) {
-        top = activatorBottom;
-        if (overlap) top -= activatorHeight;
+        if (yInner) {
+          top = activatorBottom - height;
+        } else {
+          top = activatorBottom;
+          if (overlap) top -= activatorHeight;
+        }
       } else {
         top = activatorTop - (height - activatorHeight) / 2;
       }
@@ -210,11 +241,19 @@ export const VMenu = defineComponent({
       top += pageYOffset;
 
       if (isLeft) {
-        left = activatorLeft - width;
-        if (overlap) left += activatorWidth;
+        if (xInner) {
+          left = activatorLeft;
+        } else {
+          left = activatorLeft - width;
+          if (overlap) left += activatorWidth;
+        }
       } else if (isRight) {
-        left = activatorRight;
-        if (overlap) left -= activatorWidth;
+        if (xInner) {
+          left = activatorRight - width;
+        } else {
+          left = activatorRight;
+          if (overlap) left -= activatorWidth;
+        }
       } else {
         left = activatorLeft - (width - activatorWidth) / 2;
       }

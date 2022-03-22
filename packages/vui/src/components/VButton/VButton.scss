@@ -110,10 +110,11 @@
     align-items: center;
     justify-content: center;
     justify-self: stretch;
+    pointer-events: none;
   }
 
   &--loading &__content {
-    pointer-events: none;
+    // pointer-events: none;
     opacity: 0;
   }
 

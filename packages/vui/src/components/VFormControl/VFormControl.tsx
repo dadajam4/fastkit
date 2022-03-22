@@ -123,7 +123,7 @@ export const VFormControl = defineComponent({
               {getRequiredChip()}
               {hinttip && (
                 <VTooltip
-                  top
+                  y="top"
                   openOnHover={_hinttipDelay !== 'click'}
                   openDelay={
                     typeof _hinttipDelay === 'number'
