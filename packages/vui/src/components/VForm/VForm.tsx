@@ -18,14 +18,18 @@ export interface VFormSlots {
   default: VueForm;
 }
 
-export const VForm = defineComponent({
-  name: 'VForm',
-  props: {
+export function createVFormProps() {
+  return {
     ...props,
     ...createControlProps(),
     ...defineSlotsProps<VFormSlots>(),
     // disableAutoScroll: Boolean,
-  },
+  };
+}
+
+export const VForm = defineComponent({
+  name: 'VForm',
+  props: createVFormProps(),
   emits,
   setup(props, ctx) {
     const vui = useVui();
