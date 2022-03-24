@@ -99,10 +99,10 @@ export const VWysiwygEditor = defineComponent({
     watch(
       () => props.modelValue,
       (modelValue) => {
-        editor.value &&
-          editor.value.commands.setContent(
-            modelValue == null ? '' : modelValue,
-          );
+        const $editor = editor.value;
+        if (!$editor) return;
+        $editor.commands.setContent(modelValue == null ? '' : modelValue);
+        textRef.value = $editor.getText();
       },
     );
 
@@ -120,6 +120,7 @@ export const VWysiwygEditor = defineComponent({
       onUpdate: (ev) => {
         inputControl.value = ev.editor.getHTML();
         textRef.value = ev.editor.getText();
+        console.log(textRef.value);
       },
       autofocus: props.autofocus,
       content: props.modelValue,

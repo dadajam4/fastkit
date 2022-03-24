@@ -81,6 +81,7 @@ export default defineComponent({
         <DocsSection title="Basic">
           <VForm
             disabled={this.form1Sending}
+            submiting
             onSubmit={(form) => {
               this.submit1();
             }}

@@ -38,6 +38,13 @@ export default defineComponent({
       <div class="pg-docs-components-icons">
         <VHero>Text fields</VHero>
         <DocsSection title="Basic">
+          <button
+            type="button"
+            onClick={(ev) => {
+              this.text1 = 'あああ';
+            }}>
+            xxxxx
+          </button>
           <VTextField
             label="氏名"
             v-model={this.text1}

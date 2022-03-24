@@ -87,6 +87,13 @@ export default defineComponent({
       <div class="pg-docs-components-wysiwygs">
         <VHero>Wysiwygs</VHero>
         <DocsSection title="Basic">
+          <button
+            type="button"
+            onClick={(ev) => {
+              this.text1 = 'あああ';
+            }}>
+            xxxxx
+          </button>
           <VWysiwygEditor
             label="日本語"
             tools={tools}

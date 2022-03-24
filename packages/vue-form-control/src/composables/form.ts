@@ -112,7 +112,9 @@ export class VueForm extends FormNodeControl {
       if (typeof props.action === 'function') return props.action;
       return undefined;
     });
-    this._submiting = computed(() => this._actionPromise.value !== null);
+    this._submiting = computed(
+      () => props.submiting || this._actionPromise.value !== null,
+    );
     this._onAutoValidateError = options.onAutoValidateError;
     this._scrollToElement = options.scrollToElement;
 
