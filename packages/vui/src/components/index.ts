@@ -26,6 +26,7 @@ export * from './VOption';
 export * from './VOptionGroup';
 export * from './VSelect';
 export * from './VTextField';
+export * from './VNumberField';
 export * from './VTextarea';
 export * from './VWysiwygEditor';
 export * from './VForm';

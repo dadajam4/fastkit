@@ -11,6 +11,7 @@ import {
   TEXT_INPUT_TYPES,
   TextInputType,
   VIcon,
+  VNumberField,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
 
@@ -23,6 +24,7 @@ export default defineComponent({
     const disabled = ref(false);
     const readonly = ref(false);
     const typedInputs = ref<{ [K in TextInputType]?: string }>({});
+    const num = ref<number | null>(100);
 
     return {
       text1,
@@ -31,6 +33,7 @@ export default defineComponent({
       disabled,
       readonly,
       typedInputs,
+      num,
     };
   },
   render() {
@@ -38,6 +41,7 @@ export default defineComponent({
       <div class="pg-docs-components-icons">
         <VHero>Text fields</VHero>
         <DocsSection title="Basic">
+          <div>{`${typeof this.num} ${this.num}`}</div>
           <button
             type="button"
             onClick={(ev) => {
@@ -45,6 +49,8 @@ export default defineComponent({
             }}>
             xxxxx
           </button>
+          <VNumberField label="数字入力" v-model={this.num} />
+
           <VTextField
             label="氏名"
             v-model={this.text1}

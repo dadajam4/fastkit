@@ -120,7 +120,6 @@ export const VWysiwygEditor = defineComponent({
       onUpdate: (ev) => {
         inputControl.value = ev.editor.getHTML();
         textRef.value = ev.editor.getText();
-        console.log(textRef.value);
       },
       autofocus: props.autofocus,
       content: props.modelValue,

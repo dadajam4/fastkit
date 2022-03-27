@@ -36,6 +36,10 @@ function createTextFieldProps() {
   };
 }
 
+export type TextFieldPropsOptions = ReturnType<typeof createTextFieldProps>;
+
+export type TextFieldEmits = typeof emits;
+
 export type TextFieldInput = ExtractPropInput<
   ReturnType<typeof createTextFieldProps>
 >;
