@@ -6,6 +6,7 @@ import {
   createFormControlProps,
   FormControlSlots,
   defineSlotsProps,
+  TextInputEmits,
 } from '@fastkit/vue-kit';
 import { VFormControl } from '../VFormControl';
 import {
@@ -38,7 +39,7 @@ function createTextFieldProps() {
 
 export type TextFieldPropsOptions = ReturnType<typeof createTextFieldProps>;
 
-export type TextFieldEmits = typeof emits;
+export type TextFieldEmits = TextInputEmits;
 
 export type TextFieldInput = ExtractPropInput<
   ReturnType<typeof createTextFieldProps>

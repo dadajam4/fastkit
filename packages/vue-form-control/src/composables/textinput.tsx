@@ -56,6 +56,8 @@ export function createTextInputEmits() {
   };
 }
 
+export type TextInputEmits = ReturnType<typeof createTextInputEmits>;
+
 export function createTextInputSettings() {
   const props = createTextInputProps();
   const emits = createTextInputEmits();
