@@ -28,7 +28,7 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-utils#readme",
   "peerDependencies": {
     "vue": "^3.2.26",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.14"
   },
   "dependencies": {
     "@fastkit/body-scroll-lock": "0.7.52",

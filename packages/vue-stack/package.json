@@ -28,7 +28,7 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-stack#readme",
   "peerDependencies": {
     "vue": "^3.2.26",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.14"
   },
   "dependencies": {
     "@fastkit/color-scheme": "0.7.52",
