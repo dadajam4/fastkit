@@ -4,9 +4,11 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { VotPluginOptions } from '../vot';
 import { createSSRDevHandler } from './dev/server';
+import { extractPages } from './utils';
 
 export * from './proxy';
 export * from './build';
+export * from './generate';
 export * from './dev';
 export * from './cli';
 export * from '../vot';
@@ -43,12 +45,10 @@ export function votPlugin(options: VotPluginOptions = {}) {
       return options;
     },
     config(config, env) {
-      // const isSSR = !!config.build?.ssr;
-      // console.log('■ isSSR', isSSR);
-
       return {
         define: {
           __CONTAINER_ID__: JSON.stringify(options.containerId || 'app'),
+          __VOT_BASE__: JSON.stringify(config.base || '/'),
           // Vite 2.6.0 bug: use this
           // instead of import.meta.env.DEV
           [`__${'DEV'}__`]: env.mode !== 'production',
@@ -68,57 +68,7 @@ export function votPlugin(options: VotPluginOptions = {}) {
           exclude: ['virtual:generated-pages', '@fastkit/vot'],
         },
       };
-
-      // config.optimizeDeps = config.optimizeDeps || {};
-      // config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
-      // config.optimizeDeps.exclude.push('virtual:generated-pages');
-      // return config;
     },
-    configResolved: (config) => {
-      // const isSSR = !!config.build.ssr;
-      // console.log('■ isSSR', isSSR);
-      // (config as any).define = {
-      //   ...config.define,
-      //   __VOT_SSR__: JSON.stringify(isSSR),
-      // };
-      // const libPath = `/${lib}`;
-      // config.resolve.alias.push({
-      //   find: /^vite-ssr(\/core|\/vue)?$/,
-      //   replacement:
-      //     pluginName +
-      //     libPath +
-      //     (config.build.ssr ? entryServer : entryClient),
-      //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //   // @ts-ignore
-      //   _viteSSR: true,
-      // });
-      // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // // @ts-ignore
-      // config.optimizeDeps = config.optimizeDeps || {};
-      // config.optimizeDeps.include = config.optimizeDeps.include || [];
-      // config.optimizeDeps.include.push(
-      //   pluginName + libPath + entryClient,
-      //   pluginName + libPath + entryServer,
-      // );
-    },
-    // resolveId(source, importer, { ssr }) {
-    //   console.log('---', source);
-    //   return undefined;
-    //   // const resolved = this.resolve(
-    //   //   `@fastkit/vot/entry-${ssr ? 'server' : 'client'}`,
-    //   // );
-    //   // return resolved;
-    //   // if (
-    //   //   ssr &&
-    //   //   options.excludeSsrComponents?.some((re) => re.test(source))
-    //   // ) {
-    //   //   return this.resolve(
-    //   //     `${pluginName}/${lib}/ssr-component-mock`,
-    //   //     importer,
-    //   //     { skipSelf: true },
-    //   //   );
-    //   // }
-    // },
     async configureServer(server) {
       if (configureServer) {
         const { middlewares } = server;
@@ -131,6 +81,9 @@ export function votPlugin(options: VotPluginOptions = {}) {
       }
     },
   };
+
+  (plugin as any).__options__ = options;
+  (plugin as any)._extractPages = () => extractPages(options);
 
   // if (configureServer) {
   //   plugin.configureServer = function (server) {

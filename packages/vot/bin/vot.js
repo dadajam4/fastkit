@@ -16,7 +16,7 @@ if (command === undefined || command.startsWith('-')) {
   command = 'dev';
 }
 
-const avairableCommands = ['dev', 'build', 'serve'];
+const avairableCommands = ['dev', 'build', 'generate', 'serve'];
 
 if (!avairableCommands.includes(command)) {
   throw new Error(`Command "${command}" not supported`);
@@ -25,6 +25,10 @@ if (!avairableCommands.includes(command)) {
 async function main() {
   if (['build', 'preview'].includes(command)) {
     require('./build');
+  }
+
+  if (command === 'generate') {
+    require('./generate');
   }
 
   if (['serve', 'preview'].includes(command)) {

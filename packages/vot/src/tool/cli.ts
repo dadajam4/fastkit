@@ -42,6 +42,10 @@ export async function cli() {
         process.exit();
       }
     })();
+  } else if (command === 'generate') {
+    const { generate } = await import('./generate');
+    await generate();
+    process.exit();
   } else if (
     command === 'dev' ||
     command === undefined ||

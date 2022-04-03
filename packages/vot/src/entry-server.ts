@@ -29,7 +29,7 @@ export const createEntry: SsrHandler = function createSsrEntry(
   App,
   {
     routes,
-    base,
+    // base,
     routerOptions = {},
     transformState = serializeState,
     ...options
@@ -56,7 +56,9 @@ export const createEntry: SsrHandler = function createSsrEntry(
     url = createUrl(url);
 
     const app = createApp(App);
-    const routeBase = base && withoutSuffix(base({ url }), '/');
+    // const routeBase = base && withoutSuffix(base({ url }), '/');
+    const base = __VOT_BASE__;
+    const routeBase = base && withoutSuffix(base, '/');
     const router = createRouter({
       ...routerOptions,
       history: createMemoryHistory(routeBase),

@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "cd docs && node ../packages/vot/bin/vot",
     "build:docs": "cd docs && node ../packages/vot/bin/vot build",
+    "generate": "cd docs && node ../packages/vot/bin/vot generate",
     "serve": "cd docs && node ../packages/vot/bin/vot serve",
     "preview": "yarn build:docs && yarn serve",
     "gen": "node -r esbuild-register core/bootstrap.ts --target ",

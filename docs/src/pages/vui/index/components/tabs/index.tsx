@@ -11,6 +11,7 @@ import {
 import { DocsSection } from '../../../../-components';
 import { range, objectFromArray } from '@fastkit/helpers';
 import { VPage } from '@fastkit/vue-page';
+import { MOCK_ITEMS_1 } from './-tabs';
 
 export default defineComponent({
   setup() {
@@ -22,28 +23,7 @@ export default defineComponent({
 
     const colors = vui.options.colorScheme.scopeNames;
 
-    const mockItems1 = [
-      {
-        value: 'home',
-        label: 'Home',
-      },
-      {
-        value: 'about',
-        label: 'About',
-      },
-      {
-        value: 'task',
-        label: 'Task',
-      },
-      {
-        value: 'settings',
-        label: 'Settings',
-      },
-      ...range(5, 1).map((i) => ({
-        value: `item${i}`,
-        label: `item${i}`,
-      })),
-    ];
+    const mockItems1 = MOCK_ITEMS_1.slice();
 
     const createSlots = (items: VTabsItem[]) => {
       return objectFromArray(items, (row, index) => {

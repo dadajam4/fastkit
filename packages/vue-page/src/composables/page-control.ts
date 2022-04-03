@@ -798,6 +798,9 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     if (IN_WINDOW || !this.response) return;
     if (this.response.headersSent) return;
     this.response.statusCode = status;
+    this.writeResponse({
+      status,
+    });
   }
 }
 

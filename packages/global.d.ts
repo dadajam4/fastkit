@@ -9,6 +9,7 @@ declare let __NODE_JS__: boolean;
 declare let __COMMIT__: string;
 declare let __VERSION__: string;
 declare let __CONTAINER_ID__: string;
+declare let __VOT_BASE__: string | undefined;
 
 declare module '*.css!raw' {
   const rawStyle: string;
@@ -21,7 +22,7 @@ declare module '*.scss!raw' {
 }
 
 declare module 'cssnano' {
-  import { PluginCreator } from 'postcss';
-  const cssnano: PluginCreator<any>;
+  import { PluginInitializer } from 'postcss';
+  const cssnano: PluginInitializer<any>;
   export default cssnano;
 }

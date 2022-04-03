@@ -1,9 +1,10 @@
-import { defineConfig } from 'vite';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
 
 import { viteVuiPlugin } from '@fastkit/vui/dist/tool';
 import { aliasesPlugin } from '../core/playground-aliases';
 import { globalsPlugin } from '../core/playground-globals';
 import { votPlugin } from '../packages/vot/dist/tool';
+import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
 
 const viteVui = viteVuiPlugin({
   __dev: true,
@@ -14,6 +15,7 @@ const viteVui = viteVuiPlugin({
 
 export default defineConfig({
   root: __dirname,
+  // base: '/docs/',
   server: {
     host: '0.0.0.0',
     proxy: {
@@ -21,16 +23,27 @@ export default defineConfig({
     },
   },
   plugins: [
+    splitVendorChunkPlugin(),
     globalsPlugin(),
     aliasesPlugin(),
     votPlugin({
       pages: {
-        exclude: ['**/-components/*'],
+        exclude: ['**/-components/*', '**/-*.ts'],
       },
       configureServer({ use }) {
         use('/healthcheck', (req, res) => {
           res.writeHead(200).end();
         });
+      },
+      generate: {
+        handler: (page) => {
+          if (!page.dynamicParams) return true;
+          if (page.fullPath === '/vui/components/tabs/:childId') {
+            return MOCK_ITEMS_1.map(({ value }) => ({
+              params: { childId: value },
+            }));
+          }
+        },
       },
     }),
     ...viteVui.plugins,

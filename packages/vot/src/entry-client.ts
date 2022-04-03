@@ -9,13 +9,15 @@ import { provideContext } from './injections';
 
 export const createEntry: ClientHandler = async function createClientEntry(
   App,
-  { routes, base, routerOptions = {}, debug = {}, ...options },
+  { routes, routerOptions = {}, debug = {}, ...options },
   hook,
 ) {
   const app = createSSRApp(App);
 
   const url = new URL(window.location.href);
-  const routeBase = base && withoutSuffix(base({ url }), '/');
+  const base = __VOT_BASE__;
+  const routeBase = base && withoutSuffix(base, '/');
+  // const routeBase = base && withoutSuffix(base({ url }), '/');
   const router = createRouter({
     scrollBehavior: createScrollBehavior(),
     ...routerOptions,

@@ -10,6 +10,7 @@ import type { Options as VuePluginOptions } from '@vitejs/plugin-vue';
 import type { Server, IncomingMessage } from 'connect';
 import type { ServerResponse } from 'http';
 import type { WrittenResponse } from './renderer';
+import type { RawVotGenerateOptions } from './generate';
 
 type VueJsxOptions = Parameters<typeof vueJsx>[0];
 
@@ -71,6 +72,11 @@ export interface VotPluginOptions extends SsrOptions {
   jsx?: VueJsxOptions;
   pages?: PagesUserOptions;
   configureServer?: VotConfigureServerFn;
+
+  /**
+   * Options for Static Site Generation
+   */
+  generate?: RawVotGenerateOptions;
 }
 
 // export function getPluginOptions(viteConfig: ResolvedConfig) {
@@ -85,9 +91,9 @@ export interface Meta {
   [key: string]: any;
 }
 
-export interface Base {
-  (params: { url: Location | URL }): string;
-}
+// export interface Base {
+//   (params: { url: Location | URL }): string;
+// }
 
 export type ExtendedRouteRaw = RouteLocationRaw & {
   props?: any;
@@ -95,7 +101,7 @@ export type ExtendedRouteRaw = RouteLocationRaw & {
 };
 
 export interface CreateEntryOptions {
-  base?: Base;
+  // base?: Base;
   debug?: { mount?: boolean };
   transformState?: (
     state: any,

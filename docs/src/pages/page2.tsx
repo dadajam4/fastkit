@@ -8,9 +8,13 @@ const prefetch = createPrefetch('xxx', async (queue) => {
   // console.log('---');
   await new Promise((resolve) => setTimeout(resolve, 10));
   if (true) {
-    queue.control.redirect({ path: '/page3' });
-    // console.log('??????');
+    throw new Error('hoge');
   }
+
+  // if (true) {
+  //   queue.control.redirect({ path: '/page3' });
+  //   // console.log('??????');
+  // }
   return { hoge: true };
 });
 

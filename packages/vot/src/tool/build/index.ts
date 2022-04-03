@@ -5,7 +5,8 @@ import {
   mergeConfig,
 } from 'vite';
 import replace from '@rollup/plugin-replace';
-import { promises as fs } from 'fs';
+import { promises } from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 import {
   getEntryPoint,
@@ -20,6 +21,7 @@ import type {
   OutputAsset,
   OutputOptions,
 } from 'rollup';
+import { generate } from '../generate';
 
 export async function build(inlineBuildOptions: BuildOptions = {}) {
   return new Promise(async (resolve) => {
@@ -27,6 +29,8 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
 
     const distDir =
       viteConfig.build?.outDir ?? path.resolve(process.cwd(), 'dist');
+
+    await fs.emptyDir(distDir);
 
     const { input: inputFilePath = '', build: pluginBuildOptions = {} } =
       getPluginOptions(viteConfig);
@@ -118,7 +122,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
 
           // Re-read the index.html in case it changed.
           // This content is not included in the virtual bundle.
-          indexHtmlTemplate = await fs.readFile(
+          indexHtmlTemplate = await promises.readFile(
             (clientBuildOptions.build?.outDir as string) + `/${INDEX_HTML}`,
             'utf-8',
           );
@@ -158,7 +162,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
       // served by mistake.
       // Let's remove it unless the user overrides this behavior.
       if (!pluginBuildOptions.keepIndexHtml) {
-        await fs
+        await promises
           .unlink(
             path.join(clientBuildOptions.build?.outDir as string, 'index.html'),
           )
@@ -170,6 +174,8 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
         clientBuildOptions,
         serverBuildOptions,
       );
+
+      await generate(viteConfig);
 
       resolve(null);
     }
@@ -202,13 +208,13 @@ async function generatePackageJson(
     ssr: {
       // This can be used later to serve static assets
       assets: (
-        await fs.readdir(clientBuildOptions.build?.outDir as string)
+        await promises.readdir(clientBuildOptions.build?.outDir as string)
       ).filter((file) => !/(index\.html|manifest\.json)$/i.test(file)),
     },
     ...(serverBuildOptions.packageJson || {}),
   };
 
-  await fs.writeFile(
+  await promises.writeFile(
     path.join(serverBuildOptions.build?.outDir as string, 'package.json'),
     JSON.stringify(packageJson, null, 2),
     'utf-8',

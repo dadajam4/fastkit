@@ -9,7 +9,7 @@ export function withoutPrefix(string: string, prefix: string) {
 }
 
 export function withSuffix(string: string, suffix: string) {
-  return string.endsWith(suffix) ? string : string + suffix;
+  return string.endsWith(suffix) ? string.slice(0, -1 * suffix.length) : string;
 }
 export function withoutSuffix(string: string, suffix: string) {
   return string.endsWith(suffix) ? string.slice(0, -1 * suffix.length) : string;
