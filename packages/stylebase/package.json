@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/stylebase",
-  "version": "0.7.52",
+  "version": "0.7.54",
   "description": "@fastkit/stylebase",
   "buildOptions": {
     "ignore": true

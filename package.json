@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "fastkit",
-  "version": "0.7.52",
+  "version": "0.7.54",
   "workspaces": [
     "packages/*"
   ],
@@ -137,7 +137,7 @@
     "stylelint": "^14.2.0",
     "stylelint-config-css-modules": "^2.3.0",
     "stylelint-config-prettier": "^9.0.3",
-    "stylelint-config-recess-order": "^2.5.0",
+    "stylelint-config-recess-order": "^3.0.0",
     "stylelint-config-standard": "^23.0.0",
     "stylelint-prettier": "^1.2.0",
     "stylelint-scss": "^4.1.0",

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-loading",
-  "version": "0.7.52",
+  "version": "0.7.54",
   "description": "@fastkit/vue-loading",
   "buildOptions": {
     "name": "VueLoading"
@@ -26,10 +26,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-loading#readme",
   "dependencies": {
-    "@fastkit/color-scheme": "0.7.52",
-    "@fastkit/vue-color-scheme": "0.7.52",
-    "@fastkit/helpers": "0.7.52",
-    "@fastkit/tiny-logger": "0.7.52",
-    "@fastkit/vue-utils": "0.7.52"
+    "@fastkit/color-scheme": "0.7.54",
+    "@fastkit/vue-color-scheme": "0.7.54",
+    "@fastkit/helpers": "0.7.54",
+    "@fastkit/tiny-logger": "0.7.54",
+    "@fastkit/vue-utils": "0.7.54"
   }
 }
