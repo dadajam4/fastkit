@@ -15,7 +15,7 @@ const viteVui = viteVuiPlugin({
 
 export default defineConfig({
   root: __dirname,
-  // base: '/docs/',
+  base: '/docs/',
   server: {
     host: '0.0.0.0',
     proxy: {

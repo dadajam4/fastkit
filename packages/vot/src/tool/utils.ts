@@ -43,7 +43,12 @@ export async function getEntryPoint(
     .substr(indexHtml.lastIndexOf('script type="module"'))
     .match(/src="(.*)">/i);
 
-  const entryFile = matches?.[1] || 'src/main';
+  let entryFile = matches?.[1] || 'src/main';
+
+  if (config.base) {
+    // Supports base path for entry...
+    entryFile = entryFile.replace(new RegExp(`^${config.base}`), '');
+  }
 
   return path.join(config.root, entryFile);
 }
