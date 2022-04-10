@@ -1,5 +1,5 @@
 import './VControlField.scss';
-import { computed, PropType, ref, defineComponent } from 'vue';
+import { computed, PropType, ref, defineComponent, VNodeChild } from 'vue';
 import {
   useParentFormNode,
   VNodeChildOrSlot,
@@ -16,6 +16,8 @@ import {
   useControlField,
 } from '../../composables';
 import { useVuiColorProvider } from '../../injections';
+import { VProgressCircular } from '../loading';
+import { CONTROL_LOADING_SPINNER_SIZES } from '../../schemes';
 
 const ADORNMENT_POSITIONS = ['start', 'end'] as const;
 
@@ -56,6 +58,7 @@ export const VControlField = defineComponent({
     focused: Boolean,
     autoHeight: Boolean,
     ...defineSlotsProps<InputBoxSlots>(),
+    error: Boolean,
   },
   // _slots: inputBoxSlots,
   emits: {
@@ -83,14 +86,18 @@ export const VControlField = defineComponent({
         `v-control-field--${inputBox.variant.value}`,
         {
           'v-control-field--disabled': disabled.value,
-          'v-control-field--invalid': invalid.value,
+          'v-control-field--invalid': invalid.value || props.error,
           'v-control-field--readonly': readonly.value,
           'v-control-field--focused': props.focused,
           'v-control-field--auto-height': autoHeight.value,
         },
         control.classes.value,
         colorProvider.className(
-          invalid.value && !readonly.value ? 'error' : 'primary',
+          props.error
+            ? 'error'
+            : invalid.value && !readonly.value
+            ? 'error'
+            : 'primary',
         ),
       ];
       return classes;
@@ -106,15 +113,25 @@ export const VControlField = defineComponent({
     });
 
     const renderAdornment = (position: AdornmentPosition) => {
-      const result = renderSlotOrEmpty(resolvedSlots.value, position);
-      if (!result) return;
+      let child: VNodeChild | undefined;
+      if (position === 'end' && props.loading) {
+        child = (
+          <VProgressCircular
+            indeterminate
+            size={CONTROL_LOADING_SPINNER_SIZES[props.size || 'md']}
+          />
+        );
+      } else {
+        child = renderSlotOrEmpty(resolvedSlots.value, position);
+      }
+      if (!child) return;
       return (
         <div
           class={[
             'v-control-field__adornment',
             `v-control-field__adornment--${position}`,
           ]}>
-          {result}
+          {child}
         </div>
       );
     };

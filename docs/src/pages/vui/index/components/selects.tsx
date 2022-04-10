@@ -25,11 +25,20 @@ export default defineComponent({
       value: String(i),
       label: `アイテム${i}`,
     }));
+    const asyncItems = (): Promise<FormSelectorItemData[]> => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([...items]);
+          // reject(new Error('jjj'));
+        }, 3000);
+      });
+    };
 
     return {
       select1,
       select2,
       items,
+      asyncItems,
       size,
       variant,
       disabled,
@@ -37,7 +46,7 @@ export default defineComponent({
     };
   },
   render() {
-    const { items } = this;
+    const { items, asyncItems } = this;
     return (
       <div class="pg-docs-components-icons">
         <VHero>Selects</VHero>
@@ -65,7 +74,7 @@ export default defineComponent({
           <VSelect
             label="コメント"
             v-model={this.select2}
-            items={items}
+            items={asyncItems}
             multiple
             required
             clearable

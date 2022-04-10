@@ -50,7 +50,6 @@ export const vueButtonProps = createPropsOptions({
   ...colorSchemeProps(),
   ...navigationableInheritProps,
   spacer: [Boolean, String] as PropType<RawVButtonSpacer>,
-  loading: Boolean,
   rounded: Boolean,
   icon: [String, Function] as PropType<RawVButtonIcon>,
   startIcon: [String, Function] as PropType<RawVButtonIcon>,

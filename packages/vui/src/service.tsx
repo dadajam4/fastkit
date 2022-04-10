@@ -8,6 +8,7 @@ import {
   type VueStackService,
   type VDialogProps,
   type VStackControl,
+  type VNodeChildOrSlot,
   resolveVStackDynamicInput,
 } from '@fastkit/vue-kit';
 import type { Router } from 'vue-router';
@@ -60,8 +61,10 @@ export interface VuiServiceUISettings {
     variant?: ColorVariant;
   };
   hinttipDelay?: FormControlHinttipDelay;
-  noDataMessage?: VNodeChild | (() => VNodeChild);
-  noResultsMessage?: VNodeChild | (() => VNodeChild);
+  noDataMessage?: VNodeChildOrSlot;
+  noResultsMessage?: VNodeChildOrSlot;
+  loadingMessage?: VNodeChildOrSlot;
+  failedToLoadDataMessage?: VNodeChildOrSlot;
 }
 
 export type RawVuiServiceUISettings = Partial<VuiServiceUISettings>;
@@ -102,6 +105,7 @@ export interface VuiServiceIconSettings {
   editorRedo: IconName;
   hinttip: IconName;
   clear: IconName;
+  reload: IconName;
 }
 
 export type RawVuiServiceIconSettings = Partial<VuiServiceIconSettings>;

@@ -9,6 +9,7 @@ import {
   ComputedRef,
   onBeforeUnmount,
   ref,
+  Ref,
 } from 'vue';
 import {
   createPropsOptions,
@@ -26,6 +27,7 @@ import {
 } from './node';
 import type { FormSelectorItemControl } from './selector-item';
 import { FormSelectorInjectionKey } from '../injections';
+import { IN_WINDOW } from '@fastkit/helpers';
 
 export interface FormSelectorItemData {
   value: string | number;
@@ -47,6 +49,12 @@ export type FormSelectorValue =
 
 const modelValue = [String, Number, Array] as PropType<FormSelectorValue>;
 
+export type FormSelectorItems = FormSelectorItemData[];
+
+export type RawFormSelectorItems =
+  | FormSelectorItems
+  | ((selectorControl: FormSelectorControl) => Promise<FormSelectorItems>);
+
 export function createFormSelectorProps(
   options: FormSelectorControlOptions = {},
 ) {
@@ -61,7 +69,7 @@ export function createFormSelectorProps(
         default: defaultMultiple,
       },
       items: {
-        type: Array as PropType<FormSelectorItemData[]>,
+        type: [Array, Function] as PropType<RawFormSelectorItems>,
         default: () => [],
       },
     }),
@@ -98,6 +106,8 @@ export interface FormSelectorControlOptions extends FormNodeControlBaseOptions {
   onSelectItem?: (item: FormSelectorItemControl, ev: MouseEvent) => any;
 }
 
+export type FormSelectorLoadState = 'ready' | 'loading' | 'error';
+
 export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   readonly parentNodeType?: FormNodeType;
   protected _itemGetters = ref<FormSelectorItemControl['_get'][]>([]);
@@ -105,7 +115,9 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   protected _notSelected: ComputedRef<boolean>;
   protected _allSelected: ComputedRef<boolean>;
   protected _indeterminate: ComputedRef<boolean>;
-  protected _propItems: ComputedRef<ResolvedFormSelectorItemData[]>;
+  protected _itemsLoadState = ref<FormSelectorLoadState>('ready');
+  protected __propItems: ComputedRef<RawFormSelectorItems>;
+  protected _propItems: Ref<ResolvedFormSelectorItemData[]> = ref([]);
   protected _selectedValues: ComputedRef<(string | number)[]>;
   protected _selectedItems: ComputedRef<FormSelectorItemControl[]>;
   protected onSelectItem?: (
@@ -141,6 +153,26 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     return this._selectedItems.value;
   }
 
+  get itemsLoadState() {
+    return this._itemsLoadState.value;
+  }
+
+  get itemsLoading() {
+    return this.itemsLoadState === 'loading';
+  }
+
+  get itemsReady() {
+    return this.itemsLoadState === 'ready';
+  }
+
+  get itemsLoadFailed() {
+    return this.itemsLoadState === 'error';
+  }
+
+  get isDisabled() {
+    return super.isDisabled || this.itemsLoading;
+  }
+
   constructor(
     props: FormSelectorProps,
     ctx: FormSelectorContext,
@@ -169,13 +201,6 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     this._indeterminate = computed(() => {
       return !this.notSelected && !this.allSelected;
     });
-
-    this._propItems = computed(() =>
-      props.items.map((item) => ({
-        ...item,
-        label: resolveVNodeChildOrSlot(item.label),
-      })),
-    );
 
     this._selectedValues = computed(() => {
       return this._safeMultipleValues();
@@ -209,6 +234,47 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       this[fn] = (this[fn] as any).bind(this);
     });
 
+    // const setPropItems = (items: FormSelectorItems) => {
+    //   this._propItems.value = items.map((item) => ({
+    //     ...item,
+    //     label: resolveVNodeChildOrSlot(item.label),
+    //   }));
+    //   this._itemsLoadState.value = 'ready';
+    // };
+
+    // const loadItems = () => {
+    //   const { items } = props;
+
+    //   if (typeof items !== 'function') {
+    //     setPropItems(items);
+    //     return;
+    //   }
+
+    //   setPropItems([]);
+    //   this._itemsLoadState.value = 'loading';
+
+    //   if (!IN_WINDOW) return;
+
+    //   items(this)
+    //     .then((result) => {
+    //       if (props.items !== items) return;
+    //       setPropItems(result);
+    //     })
+    //     .catch((_err) => {
+    //       if (props.items !== items) return;
+    //       this._itemsLoadState.value = 'error';
+    //     });
+    // };
+    this.__propItems = computed(() => props.items);
+
+    watch(
+      () => props.items,
+      () => {
+        this.loadItems();
+      },
+      { immediate: true },
+    );
+
     watch(
       () => this._value.value,
       (value) => {
@@ -219,6 +285,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     onBeforeUnmount(() => {
       delete this.onSelectItem;
+      this._propItems.value = [];
     });
 
     provide(FormSelectorInjectionKey, this);
@@ -226,6 +293,38 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
   emptyValue() {
     return this.multiple ? [] : undefined;
+  }
+
+  private _setPropItems(items: FormSelectorItems) {
+    this._propItems.value = items.map((item) => ({
+      ...item,
+      label: resolveVNodeChildOrSlot(item.label),
+    }));
+    this._itemsLoadState.value = 'ready';
+  }
+
+  loadItems() {
+    const items = this.__propItems.value;
+
+    if (typeof items !== 'function') {
+      this._setPropItems(items);
+      return;
+    }
+
+    this._setPropItems([]);
+    this._itemsLoadState.value = 'loading';
+
+    if (!IN_WINDOW) return;
+
+    items(this)
+      .then((result) => {
+        if (this.__propItems.value !== items) return;
+        this._setPropItems(result);
+      })
+      .catch((_err) => {
+        if (this.__propItems.value !== items) return;
+        this._itemsLoadState.value = 'error';
+      });
   }
 
   protected _recalcValues(changedSelectorItem?: FormSelectorItemControl) {

@@ -16,7 +16,7 @@ import { DocsSection } from '../../../-components';
 export default defineComponent({
   setup() {
     const check1 = ref(false);
-    const check2 = ref<string[]>([]);
+    const check2 = ref<string[]>(['3', '5']);
 
     const size = ref<ControlSize>('md');
     const variant = ref<ControlFieldVariant>('flat');
@@ -27,11 +27,20 @@ export default defineComponent({
       value: String(i),
       label: `アイテム${i}`,
     }));
+    const asyncItems = (): Promise<FormSelectorItemData[]> => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([...items]);
+          // reject(new Error('jjj'));
+        }, 3000);
+      });
+    };
 
     return {
       check1,
       check2,
       items,
+      asyncItems,
       size,
       variant,
       disabled,
@@ -40,7 +49,7 @@ export default defineComponent({
     };
   },
   render() {
-    const { items } = this;
+    const { items, asyncItems } = this;
     return (
       <div class="pg-docs-components-icons">
         <VHero>Checkboxes</VHero>
@@ -58,7 +67,7 @@ export default defineComponent({
             required
             hint="これは入力ヒントテキストです。"
             stacked={false}
-            items={items}
+            items={asyncItems}
             v-model={this.check2}
           />
           <div>

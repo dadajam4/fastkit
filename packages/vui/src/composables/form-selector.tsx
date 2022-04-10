@@ -1,5 +1,5 @@
 import './form-selector.scss';
-import { VNodeChild, defineComponent } from 'vue';
+import { VNodeChild, defineComponent, PropType, computed } from 'vue';
 import {
   defineSlotsProps,
   TypedSlot,
@@ -11,9 +11,14 @@ import {
   ResolvedFormSelectorItemData,
   FormNodeControl,
   renderSlotOrEmpty,
+  VNodeChildOrSlot,
+  resolveVNodeChildOrSlots,
 } from '@fastkit/vue-kit';
 import { createControlProps, useControl } from './control';
 import { VFormControl } from '../components/VFormControl';
+import { useVui } from '../injections';
+import { VProgressCircular } from '../components/loading';
+import { CONTROL_LOADING_SPINNER_SIZES } from '../schemes';
 
 export interface DefineFormSelectorComponentOptions {
   name: string;
@@ -51,6 +56,10 @@ export function defineFormSelectorComponent(
         type: Boolean,
         default: true,
       },
+      // eslint-disable-next-line vue/require-prop-types
+      loadingMessage: {} as PropType<VNodeChildOrSlot>,
+      // eslint-disable-next-line vue/require-prop-types
+      failedToLoadItemsMessage: {} as PropType<VNodeChildOrSlot>,
       ...defineSlotsProps<FormControlSlots>(),
     },
     emits,
@@ -60,9 +69,28 @@ export function defineFormSelectorComponent(
         defaultMultiple,
       });
       const control = useControl(props);
+      const vui = useVui();
+      const loadingMessageRef = computed(() => {
+        const slot = resolveVNodeChildOrSlots(
+          props.loadingMessage,
+          vui.setting('loadingMessage'),
+          'Loading...',
+        );
+        return slot && slot(vui);
+      });
+      const failedToLoadItemsMessageRef = computed(() => {
+        const slot = resolveVNodeChildOrSlots(
+          props.failedToLoadItemsMessage,
+          vui.setting('failedToLoadDataMessage'),
+          'Failed to load data.',
+        );
+        return slot && slot(vui);
+      });
       return {
         ...selectorControl.expose(),
         ...control,
+        loadingMessageRef,
+        failedToLoadItemsMessageRef,
       };
     },
     render() {
@@ -84,10 +112,29 @@ export function defineFormSelectorComponent(
           hint={this.hint}
           hinttip={this.hinttip}
           requiredChip={this.requiredChip}
+          error={selectorControl.itemsLoadFailed}
           v-slots={{
             ...this.$slots,
             default: () => (
               <div class="v-form-selector__body">
+                {selectorControl.itemsLoadFailed && (
+                  <div
+                    key="failed"
+                    class="v-form-selector__placeholder v-form-selector__placeholder--error">
+                    {this.failedToLoadItemsMessageRef}
+                  </div>
+                )}
+                {selectorControl.itemsLoading && (
+                  <div key="loading" class="v-form-selector__placeholder">
+                    <VProgressCircular
+                      indeterminate
+                      class="mr-1"
+                      size={CONTROL_LOADING_SPINNER_SIZES[this.size || 'md']}
+                    />
+
+                    {this.loadingMessageRef}
+                  </div>
+                )}
                 {this.propItems.map((attrs) => {
                   const selected = selectorControl.isSelected(attrs.value);
                   return itemRenderer({

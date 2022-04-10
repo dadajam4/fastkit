@@ -3,6 +3,19 @@
     display: block;
   }
 
+  &__placeholder {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    font-style: italic;
+    opacity: 0.5;
+
+    &--error {
+      color: var(--main-color);
+      opacity: 1;
+    }
+  }
+
   &--stacked &__body {
     display: flex;
     flex-direction: column;

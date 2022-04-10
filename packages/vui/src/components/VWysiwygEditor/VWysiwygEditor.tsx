@@ -255,6 +255,7 @@ export const VWysiwygEditor = defineComponent({
                     autoHeight
                     startAdornment={this.startAdornment}
                     endAdornment={this.endAdornment}
+                    size={this.size}
                     // onClickHost={(ev) => {
                     //   this.focus();
                     // }}

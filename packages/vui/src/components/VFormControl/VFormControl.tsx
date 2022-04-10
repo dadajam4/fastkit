@@ -51,6 +51,7 @@ export const VFormControl = defineComponent({
         default: FormControl;
       }
     >(),
+    error: Boolean,
   },
   emits,
   setup(props, ctx) {
@@ -94,7 +95,11 @@ export const VFormControl = defineComponent({
         'v-form-control--valid': control.valid,
       },
       colorProvider.className(
-        control.invalid && !control.readonly ? 'error' : 'primary',
+        props.error
+          ? 'error'
+          : control.invalid && !control.readonly
+          ? 'error'
+          : 'primary',
       ),
     ]);
 

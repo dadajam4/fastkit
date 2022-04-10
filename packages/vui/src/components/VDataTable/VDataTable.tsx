@@ -20,7 +20,7 @@ import { VPagination } from '../VPagination';
 import { VCheckbox } from '../VCheckbox';
 import { VIcon, resolveRawIconProp } from '../VIcon';
 import { VProgressCircular } from '../loading';
-import { resizeDirectiveArgument } from '@fastkit/vue-utils';
+import { resizeDirectiveArgument, VNodeChildOrSlot } from '@fastkit/vue-utils';
 import { VAppLayoutControl } from '@fastkit/vue-app-layout';
 import { VPaper } from '../VPaper';
 
@@ -182,9 +182,9 @@ export const VDataTable = defineComponent({
     fixedHeader: Boolean,
     maxHeight: [Number, String],
     // eslint-disable-next-line vue/require-prop-types
-    noDataMessage: {} as PropType<VNodeChild | (() => VNodeChild)>,
+    noDataMessage: {} as PropType<VNodeChildOrSlot>,
     // eslint-disable-next-line vue/require-prop-types
-    noResultsMessage: {} as PropType<VNodeChild | (() => VNodeChild)>,
+    noResultsMessage: {} as PropType<VNodeChildOrSlot>,
   },
   emits: {
     input: (selecteds: string[]) => true,
@@ -233,7 +233,7 @@ export const VDataTable = defineComponent({
     });
 
     const emptyMessage = computed(() => {
-      let message: VNodeChild | (() => VNodeChild);
+      let message: VNodeChildOrSlot;
       if (searchQueryValues.value.length) {
         message =
           props.noResultsMessage ||
@@ -245,7 +245,7 @@ export const VDataTable = defineComponent({
           vui.setting('noDataMessage') ||
           'No data was available.'; // データはありませんでした。
       }
-      return typeof message === 'function' ? message() : message;
+      return typeof message === 'function' ? message(vui) : message;
     });
 
     const classesRef = computed(() => [

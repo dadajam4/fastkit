@@ -1,5 +1,5 @@
 import './VSelect.scss';
-import { ref, VNodeChild, defineComponent } from 'vue';
+import { ref, VNodeChild, defineComponent, PropType, computed } from 'vue';
 import {
   createFormSelectorSettings,
   useFormSelectorControl,
@@ -8,6 +8,8 @@ import {
   FormControlSlots,
   FormSelectorItemControl,
   createPropsOptions,
+  VNodeChildOrSlot,
+  resolveVNodeChildOrSlots,
 } from '@fastkit/vue-kit';
 import { VFormControl } from '../VFormControl';
 import {
@@ -40,6 +42,8 @@ export const VSelect = defineComponent({
     ...defineSlotsProps<FormControlSlots & InputBoxSlots>(),
     ...createPropsOptions({
       placeholder: String,
+      loadingMessage: {} as PropType<VNodeChildOrSlot>,
+      failedToLoadItemsMessage: {} as PropType<VNodeChildOrSlot>,
     }),
   },
   emits,
@@ -62,6 +66,22 @@ export const VSelect = defineComponent({
     const vui = useVui();
     const iconName = vui.icon('menuDown');
     const fieldRef = ref<HTMLElement | null>(null);
+    const loadingMessageRef = computed(() => {
+      const slot = resolveVNodeChildOrSlots(
+        props.loadingMessage,
+        vui.setting('loadingMessage'),
+        'Loading...',
+      );
+      return slot && slot(vui);
+    });
+    const failedToLoadItemsMessageRef = computed(() => {
+      const slot = resolveVNodeChildOrSlots(
+        props.failedToLoadItemsMessage,
+        vui.setting('failedToLoadDataMessage'),
+        'Failed to load data.',
+      );
+      return slot && slot(vui);
+    });
 
     const focus = (opts?: FocusOptions): void => {
       fieldRef.value && fieldRef.value.focus(opts);
@@ -69,7 +89,17 @@ export const VSelect = defineComponent({
 
     const renderSelections = (selectedItems: FormSelectorItemControl[]) => {
       const children: VNodeChild[] = [];
-      if (selectedItems.length) {
+      if (inputControl.itemsLoadFailed) {
+        children.push(
+          <span class="v-select__placeholder">
+            {failedToLoadItemsMessageRef.value}
+          </span>,
+        );
+      } else if (inputControl.itemsLoading) {
+        children.push(
+          <span class="v-select__placeholder">{loadingMessageRef.value}</span>,
+        );
+      } else if (selectedItems.length) {
         selectedItems.forEach((item, index) => {
           if (index > 0) {
             children.push(vui.selectionSeparator());
@@ -136,9 +166,12 @@ export const VSelect = defineComponent({
                   <VControlField
                     class="v-select__input"
                     ref={this.fieldRef()}
+                    loading={selectorControl.itemsLoading}
+                    error={selectorControl.itemsLoadFailed}
                     startAdornment={this.startAdornment}
                     endAdornment={this.endAdornment}
                     // tabindex={this.computedTabindex}
+                    size={this.size}
                     focused={this.menuOpened}
                     onClick={(ev) => {
                       if (this.canOperation && !control.isActive) {
@@ -185,24 +218,43 @@ export const VSelect = defineComponent({
                           </div>
                         </div>,
                       ],
-                      endAdornment: () =>
-                        (this.clearable && this.nodeControl.value != null && (
-                          <VButton
-                            key="clear"
-                            icon={this.$vui.icon('clear')}
-                            rounded
-                            onClick={(ev) => {
-                              ev.stopPropagation();
-                              this.nodeControl.clear();
-                            }}
-                          />
-                        )) || (
+                      endAdornment: () => {
+                        if (selectorControl.itemsLoadFailed) {
+                          return (
+                            <VButton
+                              key="reload"
+                              icon={this.$vui.icon('reload')}
+                              rounded
+                              onClick={(ev) => {
+                                ev.stopPropagation();
+                                selectorControl.loadItems();
+                              }}
+                            />
+                          );
+                        }
+
+                        if (this.clearable && this.nodeControl.value != null) {
+                          return (
+                            <VButton
+                              key="clear"
+                              icon={this.$vui.icon('clear')}
+                              rounded
+                              onClick={(ev) => {
+                                ev.stopPropagation();
+                                this.nodeControl.clear();
+                              }}
+                            />
+                          );
+                        }
+
+                        return (
                           <VIcon
                             key="icon"
                             name={this.iconName}
                             rotate={this.menuOpened ? 180 : 0}
                           />
-                        ),
+                        );
+                      },
                     }}
                   />,
                 ],

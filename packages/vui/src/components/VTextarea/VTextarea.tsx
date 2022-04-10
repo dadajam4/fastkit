@@ -68,6 +68,7 @@ export const VTextarea = defineComponent({
           default: () => (
             <VControlField
               class="v-textarea__input"
+              size={this.size}
               autoHeight
               startAdornment={this.startAdornment}
               endAdornment={this.endAdornment}

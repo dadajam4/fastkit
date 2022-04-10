@@ -27,6 +27,7 @@ export function createControlProps() {
         return CONTROL_SIZES.includes(value);
       },
     },
+    loading: Boolean,
   });
 }
 
