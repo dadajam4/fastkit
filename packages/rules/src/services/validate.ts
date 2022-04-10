@@ -12,9 +12,13 @@ export interface ValidateOptions {
   eachPrefix?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ValidatableRule
+  extends Pick<Rule, 'validate' | 'message' | '$name'> {}
+
 export async function validate(
   value: any,
-  rules: RecursiveArray<Rule>,
+  rules: RecursiveArray<ValidatableRule>,
   options: ValidateOptions = {},
 ): Promise<ValidationError[] | undefined> {
   const errors: ValidationError[] = [];

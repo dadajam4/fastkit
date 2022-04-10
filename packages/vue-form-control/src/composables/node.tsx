@@ -20,7 +20,7 @@ import {
 } from 'vue';
 
 import {
-  Rule,
+  ValidatableRule,
   ValidationError,
   validate,
   required as requiredFactory,
@@ -108,7 +108,7 @@ export function createFormNodeProps<T, D = T>(
         default: defaultValidateTiming || 'touch',
       },
       rules: {
-        type: Array as PropType<RecursiveArray<Rule>>,
+        type: Array as PropType<RecursiveArray<ValidatableRule>>,
         default: () => [],
       },
       error: Boolean,
@@ -192,9 +192,9 @@ export class FormNodeControl<T = any, D = T> {
   protected _validateTimingIsChange: ComputedRef<boolean>;
   protected _validateTimingIsManual: ComputedRef<boolean>;
   protected _spellcheck: ComputedRef<boolean>;
-  protected _propRules: ComputedRef<RecursiveArray<Rule>>;
+  protected _propRules: ComputedRef<RecursiveArray<ValidatableRule>>;
   protected _required: ComputedRef<boolean>;
-  protected _rules: ComputedRef<Rule[]>;
+  protected _rules: ComputedRef<ValidatableRule[]>;
   protected _hasRequired: ComputedRef<boolean>;
   protected _hasInvalidChild: ComputedRef<boolean>;
   protected _tabindex: ComputedRef<number>;
@@ -660,7 +660,7 @@ export class FormNodeControl<T = any, D = T> {
     this._value.value = cheepClone(this.safeModelValue(value)) as any;
   }
 
-  protected _resolveRules(): Rule[] {
+  protected _resolveRules(): ValidatableRule[] {
     const { propRules, isRequired } = this;
     const rules = flattenRecursiveArray(propRules);
 
