@@ -100,8 +100,12 @@ export const VWysiwygEditor = defineComponent({
       () => props.modelValue,
       (modelValue) => {
         const $editor = editor.value;
-        if (!$editor) return;
-        $editor.commands.setContent(modelValue == null ? '' : modelValue);
+        if (!$editor || $editor.getHTML() === modelValue) return;
+
+        $editor.commands.setContent(
+          modelValue == null ? '' : modelValue,
+          false,
+        );
         textRef.value = $editor.getText();
       },
     );
