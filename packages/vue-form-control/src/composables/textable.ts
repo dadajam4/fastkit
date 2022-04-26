@@ -74,7 +74,11 @@ export function createTextableProps() {
       pattern: [String, RegExp],
       placeholder: String,
       autocapitalize: String as PropType<FormAutoCapitalize>,
-      finishings: [String, Array] as PropType<RawTextableFinishingProp>,
+      finishings: [
+        String,
+        Array,
+        Function,
+      ] as PropType<RawTextableFinishingProp>,
       counter: [Boolean, String, Number] as PropType<boolean | string | number>,
       counterValue: Function as PropType<(value: string) => number>,
       limit: Boolean,
