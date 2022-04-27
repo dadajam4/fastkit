@@ -17,7 +17,9 @@ export const TEXT_INPUT_TYPES = [
 
 export type TextInputType = typeof TEXT_INPUT_TYPES[number];
 
-export type TextFinishingFn = (value?: string | null) => string;
+export type TextFinishingFn = (
+  value?: string | null,
+) => string | Promise<string>;
 
 function defineFinishings<T extends string>(
   finishings: Record<T, TextFinishingFn>,

@@ -101,6 +101,12 @@ export default defineComponent({
             counter={100}
             // maxlength="100"
             variant="filled"
+            finishings={async (value) => {
+              if (!(await this.$vui.confirm('Ary you realy ?'))) {
+                return value || '';
+              }
+              return 'Hello !! ' + value;
+            }}
           />
 
           <div

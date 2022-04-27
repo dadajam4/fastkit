@@ -47,14 +47,14 @@ function resolveRawTextableFinishingProp(
   );
 }
 
-function finishingValue(
+async function finishingValue(
   value: string | null | undefined,
   finishings: TextFinishingFn[],
 ) {
   let result: string = nilToEmptyString(value);
-  finishings.forEach((finishing) => {
-    result = finishing(value);
-  });
+  for (const finishing of finishings) {
+    result = await finishing(value);
+  }
   return result;
 }
 
@@ -255,10 +255,10 @@ export class TextableControl extends FormNodeControl<string> {
     super.blurHandler(ev);
   }
 
-  finishing() {
+  protected async _finishing() {
     const { finishings } = this;
     if (!finishings) return;
-    this.value = finishingValue(this.value, finishings);
+    this.value = await finishingValue(this.value, finishings);
   }
 
   protected _resolveRules() {

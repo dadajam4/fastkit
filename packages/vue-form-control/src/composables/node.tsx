@@ -7,6 +7,7 @@ import {
   ComputedRef,
   computed,
   ref,
+  Ref,
   watch,
   provide,
   inject,
@@ -167,6 +168,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _initialValue = ref<T | D>(null as unknown as T | D);
   protected _children: FormNodeControl[] = [];
   protected _invalidChildren = ref<(() => FormNodeControl)[]>([]);
+  protected _finshingPromise: Ref<(() => Promise<void>) | null> = ref(null);
   protected _validationErrors = ref<ValidationError[]>([]);
   protected _validateResolvers: ValidateResolver[] = [];
   protected _lastValidateValueChanged = true;
@@ -217,6 +219,10 @@ export class FormNodeControl<T = any, D = T> {
 
   get booted() {
     return this._booted.value;
+  }
+
+  get isFinishing() {
+    return !!this._finshingPromise.value;
   }
 
   get validating() {
@@ -633,6 +639,7 @@ export class FormNodeControl<T = any, D = T> {
     onBeforeUnmount(() => {
       this.clearValidateResolvers();
       parentNode && parentNode._leaveFromNode(this);
+      this._finshingPromise.value = null;
       this.resetSelfValidates();
       this._parentNode = null;
       this._parentForm = null;
@@ -644,6 +651,20 @@ export class FormNodeControl<T = any, D = T> {
     (['focusHandler', 'blurHandler'] as const).forEach((fn) => {
       this[fn] = this[fn].bind(this);
     });
+  }
+
+  protected _finishing(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  finishing(): Promise<void> {
+    const getter = this._finshingPromise.value;
+    if (getter) return getter();
+    const promise = this._finishing().finally(() => {
+      this._finshingPromise.value = null;
+    });
+    this._finshingPromise.value = () => promise;
+    return promise;
   }
 
   setValue(value: T | D) {
@@ -812,6 +833,10 @@ export class FormNodeControl<T = any, D = T> {
       this._validating.value = true;
 
       const { rules } = this;
+
+      if (!this.focused) {
+        await this.finishing();
+      }
 
       const result = (await validate(this.validationValue, rules)) || [];
 
