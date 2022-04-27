@@ -1,5 +1,5 @@
 import './VWysiwygEditor.scss';
-import { defineComponent, Fragment, PropType, computed, ref, watch } from 'vue';
+import { defineComponent, PropType, computed, ref, watch } from 'vue';
 import {
   createFormControlProps,
   FormControlSlots,
@@ -259,9 +259,9 @@ export const VWysiwygEditor = defineComponent({
                   startAdornment={this.startAdornment}
                   endAdornment={this.endAdornment}
                   size={this.size}
-                  onClickHost={(ev) => {
-                    this.focus();
-                  }}
+                  // onClickHost={(ev) => {
+                  //   this.focus();
+                  // }}
                   v-slots={{
                     ...this.$slots,
                     default: () => {
