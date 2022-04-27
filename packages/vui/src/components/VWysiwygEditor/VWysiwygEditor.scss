@@ -29,6 +29,7 @@
 
   &__body {
     position: relative;
+    width: 100%;
     max-height: var(--max-height);
     // max-height: 200px;
     overflow: auto;
@@ -45,6 +46,7 @@
     }
 
     &__prose {
+      width: 100%;
       min-height: var(--min-height);
       outline: none;
     }

@@ -253,40 +253,38 @@ export const VWysiwygEditor = defineComponent({
             return (
               <div class="v-wysiwyg-editor__wrapper">
                 {!this.isReadonly && this.createTools()}
-                <div class="v-wysiwyg-editor__body">
-                  <VControlField
-                    class="v-wysiwyg-editor__input"
-                    autoHeight
-                    startAdornment={this.startAdornment}
-                    endAdornment={this.endAdornment}
-                    size={this.size}
-                    // onClickHost={(ev) => {
-                    //   this.focus();
-                    // }}
-                    v-slots={{
-                      ...this.$slots,
-                      default: () => {
-                        return (
-                          <Fragment>
-                            <EditorContent
-                              class="v-wysiwyg-editor__input__element wysiwyg"
-                              editor={editor}
-                            />
-                            {!this.floatingToolbar &&
-                              !!editor &&
-                              !this.isReadonly && (
-                                <BubbleMenu
-                                  class="v-wysiwyg-editor__bubble-menu"
-                                  editor={editor}>
-                                  {this.createTools(true)}
-                                </BubbleMenu>
-                              )}
-                          </Fragment>
-                        );
-                      },
-                    }}
-                  />
-                </div>
+                <VControlField
+                  class="v-wysiwyg-editor__input"
+                  autoHeight
+                  startAdornment={this.startAdornment}
+                  endAdornment={this.endAdornment}
+                  size={this.size}
+                  onClickHost={(ev) => {
+                    this.focus();
+                  }}
+                  v-slots={{
+                    ...this.$slots,
+                    default: () => {
+                      return (
+                        <div class="v-wysiwyg-editor__body">
+                          <EditorContent
+                            class="v-wysiwyg-editor__input__element wysiwyg"
+                            editor={editor}
+                          />
+                          {!this.floatingToolbar &&
+                            !!editor &&
+                            !this.isReadonly && (
+                              <BubbleMenu
+                                class="v-wysiwyg-editor__bubble-menu"
+                                editor={editor}>
+                                {this.createTools(true)}
+                              </BubbleMenu>
+                            )}
+                        </div>
+                      );
+                    },
+                  }}
+                />
               </div>
             );
           },
