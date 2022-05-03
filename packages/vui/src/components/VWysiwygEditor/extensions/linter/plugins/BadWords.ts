@@ -1,6 +1,6 @@
 import { LinterPlugin } from '../LinterPlugin';
 
-export function BadWords(words: string[]) {
+export function BadWords(words: string[]): typeof LinterPlugin {
   const regex = new RegExp(`\\b(${words.join('|')})\\b`);
 
   return class BadWords extends LinterPlugin {

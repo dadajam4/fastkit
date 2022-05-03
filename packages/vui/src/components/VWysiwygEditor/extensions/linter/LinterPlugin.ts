@@ -19,7 +19,7 @@ export interface RawLinterResult extends Omit<LinterResult, 'level'> {
 }
 
 export class LinterPlugin {
-  protected doc;
+  protected doc: ProsemirrorNode;
 
   private results: Array<LinterResult> = [];
 
