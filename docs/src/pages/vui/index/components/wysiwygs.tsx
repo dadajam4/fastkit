@@ -37,7 +37,7 @@ export default defineComponent({
       Hi there,
     </h2>
     <p>
-      this is a basic <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
+      this is a evidently basic <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
     </p>
     <ul>
       <li>
@@ -101,12 +101,12 @@ export default defineComponent({
             counter={100}
             // maxlength="100"
             variant="filled"
-            finishings={async (value) => {
-              if (!(await this.$vui.confirm('Ary you realy ?'))) {
-                return value || '';
-              }
-              return 'Hello !! ' + value;
-            }}
+            // finishings={async (value) => {
+            //   if (!(await this.$vui.confirm('Ary you realy ?'))) {
+            //     return value || '';
+            //   }
+            //   return 'Hello !! ' + value;
+            // }}
           />
 
           <div

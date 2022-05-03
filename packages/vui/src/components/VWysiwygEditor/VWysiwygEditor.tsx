@@ -1,5 +1,12 @@
 import './VWysiwygEditor.scss';
-import { defineComponent, PropType, computed, ref, watch } from 'vue';
+import {
+  defineComponent,
+  PropType,
+  computed,
+  ref,
+  watch,
+  onBeforeUnmount,
+} from 'vue';
 import {
   createFormControlProps,
   FormControlSlots,
@@ -34,10 +41,15 @@ import {
 import StarterKit from '@tiptap/starter-kit';
 import { VButton, VButtonGroup } from '../VButton';
 import {
+  RawWysiwygExtension,
+  resolveRawWysiwygExtensions,
   RawWysiwygEditorTool,
   resolveRawWysiwygEditorTools,
   WysiwygEditorContext,
+  // EditorEventsOptions,
+  WysiwygEditorInitializeContext,
 } from './schemes';
+// import { Linter, BadWords, Punctuation, HeadingLevel } from './extensions';
 
 export const VWysiwygEditor = defineComponent({
   name: 'VWysiwygEditor',
@@ -49,6 +61,10 @@ export const VWysiwygEditor = defineComponent({
     ...createControlFieldProviderProps(),
     ...createControlProps(),
     ...defineSlotsProps<FormControlSlots & InputBoxSlots>(),
+    extensions: {
+      type: Array as PropType<RawWysiwygExtension[]>,
+      default: () => [],
+    },
     tools: {
       type: Array as PropType<RawWysiwygEditorTool[]>,
       default: () => [],
@@ -78,6 +94,23 @@ export const VWysiwygEditor = defineComponent({
       validationValue: () => textRef.value,
     });
 
+    const initializeCtx = new WysiwygEditorInitializeContext({
+      onCreate: ({ editor }) => {
+        textRef.value = editor.getText();
+        updateEditable();
+      },
+      onFocus: ({ event }) => {
+        inputControl.focusHandler(event);
+      },
+      onBlur: ({ event }) => {
+        inputControl.blurHandler(event);
+      },
+      onUpdate: ({ editor }) => {
+        inputControl.value = editor.getHTML();
+        textRef.value = editor.getText();
+      },
+    });
+
     const extensions = [
       StarterKit.configure({
         bold: false,
@@ -86,6 +119,10 @@ export const VWysiwygEditor = defineComponent({
         history: false,
         italic: false,
       }),
+      // Linter.configure({
+      //   plugins: [BadWords(['abc', 'evidently']), Punctuation, HeadingLevel],
+      // }),
+      ...resolveRawWysiwygExtensions(props.extensions, initializeCtx),
       ...wysiwygSettings.value.extensions,
     ];
 
@@ -110,21 +147,13 @@ export const VWysiwygEditor = defineComponent({
       },
     );
 
+    initializeCtx.on('create', ({ editor }) => {
+      textRef.value = editor.getText();
+      updateEditable();
+    });
+
     const editor = useEditor({
-      onCreate: ({ editor }) => {
-        textRef.value = editor.getText();
-        updateEditable();
-      },
-      onFocus: (ctx) => {
-        inputControl.focusHandler(ctx.event);
-      },
-      onBlur: (ctx) => {
-        inputControl.blurHandler(ctx.event);
-      },
-      onUpdate: (ev) => {
-        inputControl.value = ev.editor.getHTML();
-        textRef.value = ev.editor.getText();
-      },
+      ...initializeCtx.editorOptions(),
       autofocus: props.autofocus,
       content: props.modelValue,
       extensions,
@@ -213,6 +242,10 @@ export const VWysiwygEditor = defineComponent({
         </VButtonGroup>
       );
     };
+
+    onBeforeUnmount(() => {
+      editor.value && editor.value.destroy();
+    });
 
     return {
       editor,
