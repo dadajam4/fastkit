@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font",
-  "version": "0.7.62",
+  "version": "0.7.63",
   "description": "@fastkit/icon-font",
   "main": "index.js",
   "module": "dist/icon-font.mjs",
