@@ -113,6 +113,17 @@ export default defineComponent({
             }}>
             xxxxx
           </button>
+
+          <button
+            type="button"
+            onClick={(ev) => {
+              console.log(ev.pageY);
+              this.$vui.menu({
+                content: 'xxx',
+              });
+            }}>
+            menu
+          </button>
           <VWysiwygEditor
             label="日本語"
             extensions={extensions}

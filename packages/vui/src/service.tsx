@@ -259,6 +259,10 @@ export class VuiService {
     return this.stack.snackbar(...args);
   }
 
+  menu(...args: Parameters<VueStackService['menu']>) {
+    return this.stack.menu(...args);
+  }
+
   formPrompt<T extends { [key: string]: any } = { [key: string]: any }>(
     settings: VuiFormPromptSettings<T>,
     slot: (

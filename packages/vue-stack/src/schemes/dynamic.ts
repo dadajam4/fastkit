@@ -3,6 +3,7 @@ import { h, VNode, VNodeChild } from 'vue';
 import { VStackControl } from './control';
 import type { VDialogStatic, VDialogProps } from '../components/VDialog';
 import type { VSnackbarStatic, VSnackbarProps } from '../components/VSnackbar';
+import type { VMenuStatic, VMenuProps } from '../components/VMenu';
 
 // export type VStackDynamicCtor = VDialogStatic;
 
@@ -46,9 +47,15 @@ export interface VStackDynamicSnackbarSetting extends VStackDynamicBaseSetting {
   props: Partial<VSnackbarProps>;
 }
 
+export interface VStackDynamicMenuSetting extends VStackDynamicBaseSetting {
+  Ctor: VMenuStatic;
+  props: Partial<VMenuProps>;
+}
+
 export type VStackDynamicSetting =
   | VStackDynamicDialogSetting
-  | VStackDynamicSnackbarSetting;
+  | VStackDynamicSnackbarSetting
+  | VStackDynamicMenuSetting;
 
 export type VStackDynamicResolver = (value: any) => void;
 
@@ -101,3 +108,5 @@ export type VStackDynamicDialogInput = VStackDynamicInput<
 export type VStackDynamicSnackbarInput = VStackDynamicInput<
   Partial<VSnackbarProps>
 >;
+
+export type VStackDynamicMenuInput = VStackDynamicInput<Partial<VMenuProps>>;

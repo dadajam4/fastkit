@@ -200,9 +200,13 @@ export function useStackControl(
               return;
             }
             const { activator } = state;
+            const el =
+              activator instanceof Event ? activator.target : activator;
+
             if (
-              activator &&
-              (relatedTarget === activator || activator.contains(relatedTarget))
+              el &&
+              el instanceof HTMLElement &&
+              (relatedTarget === el || el.contains(relatedTarget))
             ) {
               return;
             }
@@ -520,15 +524,15 @@ export function useStackControl(
     show(activator) {
       let _activator: HTMLElement | null;
       const propActivator = computedActivator.value;
+
       if (propActivator === false) {
         _activator = null;
-      } else if (propActivator) {
-        _activator = propActivator as HTMLElement;
       } else {
-        if (activator instanceof Event) {
-          _activator = activator.target as HTMLElement;
-        } else if (activator instanceof Element) {
-          _activator = activator as HTMLElement;
+        const __activator = activator || propActivator;
+        if (__activator instanceof Event) {
+          _activator = __activator.target as HTMLElement | null;
+        } else if (__activator instanceof Element) {
+          _activator = __activator as HTMLElement;
         } else {
           _activator = document.activeElement as HTMLElement | null;
         }
@@ -735,7 +739,11 @@ export function useStackControl(
       } else {
         if (state.activator) {
           if (focusRestorable.value) {
-            attemptFocus(state.activator);
+            const el =
+              state.activator instanceof Event
+                ? state.activator.target
+                : state.activator;
+            el && attemptFocus(el as HTMLElement);
           }
           state.activator = null;
         }

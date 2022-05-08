@@ -77,16 +77,14 @@ export interface WysiwygLinterStorage {
 }
 
 export const WysiwygLinter = createWysiwygExtension((ctx) => {
-  function showMenu(view: EditorView<any>, issue: Issue) {
+  function showMenu(view: EditorView<any>, issue: Issue, event: Event) {
     const message = resolveWysiwygLinterFixMessage(issue.message);
     const variant = ctx.vui.setting('containedVariant');
     const scope = ctx.vui.setting(`${issue.level}Scope`);
 
-    return ctx.vui.dialog({
-      props: {
-        class: 'v-linter__issue-menu',
-      },
-      children: (stack) => (
+    return ctx.vui.menu({
+      activator: event,
+      content: (stack) => (
         <div class="v-linter__issue-menu__body">
           <div
             class={[
@@ -201,7 +199,7 @@ export const WysiwygLinter = createWysiwygExtension((ctx) => {
 
               focus();
 
-              showMenu(view, issue);
+              showMenu(view, issue, event);
               return true;
             },
           },

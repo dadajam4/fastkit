@@ -13,39 +13,6 @@ export interface WysiwygColorItem {
   color: string | null;
 }
 
-function createColorItems(
-  items: WysiwygColorItem[],
-  opts: {
-    withLabel?: boolean;
-    onSelect: (item: WysiwygColorItem) => any;
-  },
-) {
-  const { withLabel, onSelect } = opts;
-  return (
-    <div
-      class={[
-        'v-wysiwyg-color-tool__items',
-        { 'v-wysiwyg-color-tool__items--with-label': withLabel },
-      ]}>
-      {items.map((item, index) => (
-        <button
-          key={item.key == null ? index : item.key}
-          class="v-wysiwyg-color-tool__item"
-          type="button"
-          onClick={() => onSelect(item)}>
-          <span
-            class="v-wysiwyg-color-tool__item__color"
-            style={item.color ? { color: item.color } : {}}
-          />
-          {withLabel && (
-            <span class="v-wysiwyg-color-tool__item__name">{item.name}</span>
-          )}
-        </button>
-      ))}
-    </div>
-  );
-}
-
 export interface CreateWysiwygColorToolOptions {
   items: WysiwygColorItem[];
   withLabel?: boolean;
@@ -65,25 +32,45 @@ export function createWysiwygColorTool(opts: CreateWysiwygColorToolOptions) {
             <span class="v-wysiwyg-color-tool__button__bar" />
           </span>
         ),
-      onClick: (ctx) => {
-        const body = createColorItems(opts.items, {
-          withLabel: opts.withLabel,
-          onSelect: (item) => {
-            const { color } = item;
-            let command = ctx.editor.chain().focus();
-            if (color) {
-              command = command.setColor(color);
-            } else {
-              command = command.unsetColor();
-            }
-            command.run();
-          },
-        });
-        ctx.vui.dialog({
-          props: {
-            class: 'v-wysiwyg-color-tool__menu',
-          },
-          children: [body],
+      onClick: (ctx, ev) => {
+        ctx.vui.menu({
+          class: 'v-wysiwyg-color-tool__menu',
+          activator: ev,
+          content: (stack) => (
+            <div
+              class={[
+                'v-wysiwyg-color-tool__items',
+                { 'v-wysiwyg-color-tool__items--with-label': opts.withLabel },
+              ]}>
+              {opts.items.map((item, index) => (
+                <button
+                  key={item.key == null ? index : item.key}
+                  class="v-wysiwyg-color-tool__item"
+                  type="button"
+                  onClick={() => {
+                    const { color } = item;
+                    let command = ctx.editor.chain().focus();
+                    if (color) {
+                      command = command.setColor(color);
+                    } else {
+                      command = command.unsetColor();
+                    }
+                    command.run();
+                    stack.close();
+                  }}>
+                  <span
+                    class="v-wysiwyg-color-tool__item__color"
+                    style={item.color ? { color: item.color } : {}}
+                  />
+                  {opts.withLabel && (
+                    <span class="v-wysiwyg-color-tool__item__name">
+                      {item.name}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          ),
         });
       },
       floating: true,

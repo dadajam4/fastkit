@@ -37,7 +37,7 @@ export interface VStackActivatorAttributes {
 
 export interface VStackControlState {
   isActive: boolean;
-  activator: HTMLElement | null;
+  activator: HTMLElement | Event | null;
   closeReason: StackableCloseReason;
   initialValue: any;
   inputValue: any;
@@ -88,7 +88,7 @@ export interface VStackControl {
   readonly closeDelay: number;
   readonly isDestroyed: boolean;
   readonly contentRef: Ref<HTMLElement | null>;
-  readonly activator: HTMLElement | null;
+  readonly activator: HTMLElement | Event | null;
   readonly backdropRef: Ref<HTMLElement | null>;
 
   /** @private */
@@ -271,7 +271,7 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
       default: true,
     },
     activator: {
-      type: [Object, Boolean] as PropType<Element | boolean | null>,
+      type: [Object, Boolean] as PropType<Element | Event | boolean | null>,
       default: null,
     },
     'v-slots': undefined as unknown as PropType<VStackSlots>,

@@ -394,11 +394,12 @@ export const VMenu = defineComponent({
 
     function updateActivatorRect() {
       const $activator = stackControl.activator;
-      if (!$activator) {
+      const el = $activator instanceof Event ? $activator.target : $activator;
+      if (!el) {
         state.activatorRect = null;
         return;
       }
-      const rect = $activator.getBoundingClientRect();
+      const rect = (el as HTMLElement).getBoundingClientRect();
 
       state.activatorRect = {
         left: rect.left,

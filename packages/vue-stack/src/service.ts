@@ -6,6 +6,7 @@ import {
   VStackDynamicInternalSetting,
   VStackDynamicDialogInput,
   VStackDynamicSnackbarInput,
+  VStackDynamicMenuInput,
   resolveVStackDynamicInput,
   ResolvedVStackDynamicInput,
   VStackDynamicChildren,
@@ -180,6 +181,16 @@ export class VueStackService {
     const { props, children } = resolveVStackDynamicInput(input);
     return this.dynamic({
       Ctor: markRaw(VSnackbar),
+      props: markRaw(props),
+      children,
+    });
+  }
+
+  async menu(input: VStackDynamicMenuInput) {
+    const { VMenu } = await import('./components/VMenu');
+    const { props, children } = resolveVStackDynamicInput(input);
+    return this.dynamic({
+      Ctor: markRaw(VMenu),
       props: markRaw(props),
       children,
     });
