@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-page",
-  "version": "0.7.63",
+  "version": "0.7.64",
   "description": "@fastkit/vue-page",
   "main": "index.js",
   "module": "dist/vue-page.mjs",
@@ -27,9 +27,9 @@
     "vue-router": "^4.0.14"
   },
   "dependencies": {
-    "@fastkit/ev": "0.7.63",
-    "@fastkit/helpers": "0.7.63",
-    "@fastkit/tiny-logger": "0.7.63",
-    "@fastkit/vue-utils": "0.7.63"
+    "@fastkit/ev": "0.7.64",
+    "@fastkit/helpers": "0.7.64",
+    "@fastkit/tiny-logger": "0.7.64",
+    "@fastkit/vue-utils": "0.7.64"
   }
 }
