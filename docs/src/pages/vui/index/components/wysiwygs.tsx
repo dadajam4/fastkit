@@ -30,6 +30,7 @@ const extensions = [
 
 const tools = [
   createWysiwygColorTool({
+    withLabel: true,
     items: [
       {
         name: 'リセット',

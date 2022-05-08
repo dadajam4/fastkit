@@ -53,6 +53,7 @@
   &__item {
     --focus-offset: calc(var(--item-size) * 0.05);
 
+    position: relative;
     display: flex;
     flex-basis: var(--item-size);
     align-items: center;
@@ -89,6 +90,7 @@
     }
 
     &__name {
+      position: relative;
       padding: 0 8px;
       font-size: 12px;
       white-space: nowrap;
@@ -109,6 +111,27 @@
   &__items--with-label &__item {
     flex-basis: auto;
     width: auto;
+    width: 100%;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: block;
+      content: '';
+      background: currentColor;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    &:hover,
+    &:focus {
+      &::before {
+        opacity: 0.1;
+      }
+    }
 
     & + .v-wysiwyg-color-tool__item {
       margin-top: 2px;

@@ -22,16 +22,23 @@ export function createWysiwygColorTool(opts: CreateWysiwygColorToolOptions) {
   const WysiwygColorTool: WysiwygEditorToolFactory = (vui) => {
     const tool: WysiwygEditorTool = {
       key: 'textColor',
-      icon: () => () =>
-        (
-          <span class="v-wysiwyg-color-tool__button">
-            <VIcon
-              class="v-wysiwyg-color-tool__button__icon"
-              name={vui.icon('editorTextColor')}
-            />
-            <span class="v-wysiwyg-color-tool__button__bar" />
-          </span>
-        ),
+      // active: ({ editor }) => editor.isActive('textStyle'),
+      icon:
+        ({ editor }) =>
+        () => {
+          const color: string | undefined =
+            editor.getAttributes('textStyle').color;
+          const style = { color };
+          return (
+            <span class="v-wysiwyg-color-tool__button">
+              <VIcon
+                class="v-wysiwyg-color-tool__button__icon"
+                name={vui.icon('editorTextColor')}
+              />
+              <span class="v-wysiwyg-color-tool__button__bar" style={style} />
+            </span>
+          );
+        },
       onClick: (ctx, ev) => {
         ctx.vui.menu({
           class: 'v-wysiwyg-color-tool__menu',
