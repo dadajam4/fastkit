@@ -9,7 +9,7 @@ import {
   CONTROL_FIELD_VARIANTS,
   ControlFieldVariant,
   VSelect,
-  WysiwygTextColorTool,
+  createWysiwygColorTool,
   WysiwygFormatBoldTool,
   WysiwygFormatItalicTool,
   WysiwygFormatUnderlineTool,
@@ -17,11 +17,30 @@ import {
   WysiwygOrderedListTool,
   WysiwygLinkTool,
   WysiwygHistoryTool,
+  WysiwygLinter,
+  WysiwygLinterBadWords,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
 
+const extensions = [
+  WysiwygLinter.configure({
+    plugins: [WysiwygLinterBadWords(['abc', 'evidently'])],
+  }),
+];
+
 const tools = [
-  WysiwygTextColorTool,
+  createWysiwygColorTool({
+    items: [
+      {
+        name: 'リセット',
+        color: null,
+      },
+      {
+        name: '強調色',
+        color: 'var(--palette-error)',
+      },
+    ],
+  }),
   WysiwygFormatBoldTool,
   WysiwygFormatItalicTool,
   WysiwygFormatUnderlineTool,
@@ -96,6 +115,7 @@ export default defineComponent({
           </button>
           <VWysiwygEditor
             label="日本語"
+            extensions={extensions}
             tools={tools}
             v-model={this.text1}
             counter={100}
@@ -119,6 +139,7 @@ export default defineComponent({
         <DocsSection title="Floating toolbar">
           <VWysiwygEditor
             label="日本語"
+            extensions={extensions}
             tools={tools}
             v-model={this.text1}
             counter={100}
@@ -134,6 +155,7 @@ export default defineComponent({
               {CONTROL_FIELD_VARIANTS.map((variant) => (
                 <VWysiwygEditor
                   label={variant}
+                  extensions={extensions}
                   tools={tools}
                   required
                   placeholder="プレースホルダー"

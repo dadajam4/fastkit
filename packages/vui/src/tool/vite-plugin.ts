@@ -143,6 +143,7 @@ export function viteVuiPlugin(
       primaryScope: 'primary' as any,
       plainVariant: 'plain' as any,
       containedVariant: 'contained' as any,
+      warningScope: 'warning' as any,
       errorScope: 'error' as any,
       buttonDefault: {
         color: 'base' as any,

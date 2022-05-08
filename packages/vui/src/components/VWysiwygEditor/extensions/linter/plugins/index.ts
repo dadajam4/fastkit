@@ -1,3 +1,3 @@
-export { BadWords } from './BadWords';
-export { HeadingLevel } from './HeadingLevel';
-export { Punctuation } from './Punctuation';
+export * from './BadWords';
+export * from './HeadingLevel';
+export * from './Punctuation';

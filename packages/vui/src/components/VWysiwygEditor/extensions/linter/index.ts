@@ -1,5 +1,5 @@
-export { Linter } from './Linter';
-export { LinterPlugin } from './LinterPlugin';
-export type { LinterOptions } from './Linter';
+export { WysiwygLinter } from './Linter';
+export { WysiwygLinterPlugin } from './LinterPlugin';
+export type { WysiwygLinterOptions } from './Linter';
 
 export * from './plugins';

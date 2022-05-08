@@ -2,10 +2,14 @@ import { type VuiService } from '../../service';
 import {
   type Editor,
   type Extensions,
+  type Node,
+  type Extension,
+  type Mark,
   type AnyExtension,
   type EditorOptions,
 } from '@tiptap/vue-3';
 import { type IconName } from '../VIcon';
+import { VNodeChild } from 'vue';
 
 const EDITOR_EVENTS = [
   'beforeCreate',
@@ -42,8 +46,18 @@ export type WysiwygEditorEventsBucket = {
 
 export class WysiwygEditorInitializeContext {
   readonly listeners: WysiwygEditorEventsBucket = {} as any;
+  private readonly _vui: () => VuiService;
 
-  constructor(opts: WysiwygEditorEventsOptions = {}) {
+  get vui() {
+    return this._vui();
+  }
+
+  constructor(
+    vuiGetter: () => VuiService,
+    opts: WysiwygEditorEventsOptions = {},
+  ) {
+    this._vui = vuiGetter;
+
     EDITOR_EVENTS.forEach((event) => {
       this.listeners[event] = [];
       const prefixed = prefixedEventName(event);
@@ -91,16 +105,82 @@ export interface WysiwygEditorContext {
   vui: VuiService;
 }
 
-export type WysiwygExtensionFactory = (
+export type WysiwygExtensionFactory<Options = any, Storage = any> = (
   ctx: WysiwygEditorInitializeContext,
-) => AnyExtension;
+) =>
+  | Extension<Options, Storage>
+  | Node<Options, Storage>
+  | Mark<Options, Storage>;
 
-export type RawWysiwygExtension = AnyExtension | WysiwygExtensionFactory;
+export interface CreatedWysiwygExtension<Options = any, Storage = any> {
+  __isCreatedWysiwygExtension: true;
+  _configs: Partial<Options>[];
+  configure(
+    options?: Partial<Options>,
+  ): CreatedWysiwygExtension<Options, Storage>;
+  raw: WysiwygExtensionSource<Options, Storage>;
+}
+
+export type WysiwygExtensionSource<Options = any, Storage = any> =
+  | Extension<Options, Storage>
+  | Node<Options, Storage>
+  | Mark<Options, Storage>
+  | WysiwygExtensionFactory<Options, Storage>;
+
+export type RawWysiwygExtension<Options = any, Storage = any> =
+  | WysiwygExtensionSource<Options, Storage>
+  | CreatedWysiwygExtension<Options, Storage>;
+
+// export function createWysiwygExtension<Options = any, Storage = any>(
+//   extension: Extension<Options, Storage>,
+// ): Extension<Options, Storage>;
+// export function createWysiwygExtension<Options = any, Storage = any>(
+//   node: Node<Options, Storage>,
+// ): Node<Options, Storage>;
+// export function createWysiwygExtension<Options = any, Storage = any>(
+//   mark: Mark<Options, Storage>,
+// ): Mark<Options, Storage>;
+// export function createWysiwygExtension<Options = any, Storage = any>(
+//   factory: WysiwygExtensionFactory<Options, Storage>,
+// ): WysiwygExtensionFactory<Options, Storage>;
+
+function isCreatedWysiwygExtension<Options = any, Storage = any>(
+  source: unknown,
+): source is CreatedWysiwygExtension<Options, Storage> {
+  return (
+    !!source &&
+    typeof source === 'object' &&
+    (source as CreatedWysiwygExtension).__isCreatedWysiwygExtension === true
+  );
+}
+
+export function createWysiwygExtension<Options = any, Storage = any>(
+  extension: WysiwygExtensionSource<Options, Storage>,
+) {
+  const ext: CreatedWysiwygExtension<Options, Storage> = {
+    __isCreatedWysiwygExtension: true,
+    _configs: [],
+    configure: (opts) => {
+      opts && ext._configs.push(opts);
+      return ext;
+    },
+    raw: extension,
+  };
+  return ext;
+}
 
 function resolveRawWysiwygExtension(
   raw: RawWysiwygExtension,
   ctx: WysiwygEditorInitializeContext,
 ): AnyExtension {
+  if (isCreatedWysiwygExtension(raw)) {
+    const { raw: _raw, _configs } = raw;
+    let ext = typeof _raw === 'function' ? _raw(ctx) : _raw;
+    _configs.forEach((config) => {
+      ext = ext.configure(config);
+    });
+    return ext;
+  }
   return typeof raw === 'function' ? raw(ctx) : raw;
 }
 
@@ -113,7 +193,9 @@ export function resolveRawWysiwygExtensions(
 
 export interface WysiwygEditorTool {
   key: string;
-  icon: IconName | ((ctx: WysiwygEditorContext) => IconName);
+  icon:
+    | IconName
+    | ((ctx: WysiwygEditorContext) => IconName | (() => VNodeChild));
   active?: boolean | ((ctx: WysiwygEditorContext) => boolean);
   disabled?: boolean | ((ctx: WysiwygEditorContext) => boolean);
   onClick: (ctx: WysiwygEditorContext, ev: MouseEvent) => any;

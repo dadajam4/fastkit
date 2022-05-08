@@ -6,6 +6,7 @@ import {
   ref,
   watch,
   onBeforeUnmount,
+  VNodeChild,
 } from 'vue';
 import {
   createFormControlProps,
@@ -49,7 +50,6 @@ import {
   // EditorEventsOptions,
   WysiwygEditorInitializeContext,
 } from './schemes';
-// import { Linter, BadWords, Punctuation, HeadingLevel } from './extensions';
 
 export const VWysiwygEditor = defineComponent({
   name: 'VWysiwygEditor',
@@ -94,7 +94,7 @@ export const VWysiwygEditor = defineComponent({
       validationValue: () => textRef.value,
     });
 
-    const initializeCtx = new WysiwygEditorInitializeContext({
+    const initializeCtx = new WysiwygEditorInitializeContext(() => vui, {
       onCreate: ({ editor }) => {
         textRef.value = editor.getText();
         updateEditable();
@@ -206,9 +206,12 @@ export const VWysiwygEditor = defineComponent({
 
       return (
         <VButtonGroup
-          class={{
-            'v-wysiwyg-editor__floating-toolbar': props.floatingToolbar,
-          }}
+          class={[
+            'v-wysiwyg-editor__toolbar',
+            {
+              'v-wysiwyg-editor__floating-toolbar': props.floatingToolbar,
+            },
+          ]}
           variant={variant}>
           {tools.map(({ key, icon, onClick, disabled, active }) => {
             const isActive =
@@ -217,16 +220,22 @@ export const VWysiwygEditor = defineComponent({
               !inputControl.canOperation ||
               (!!_editor && resolveContextableValue(context, disabled));
             let iconName: IconName | undefined;
+            let child: VNodeChild;
 
             if (typeof icon === 'function') {
               if (_editor) {
-                iconName = icon(context);
+                const _child = icon(context);
+                if (typeof _child === 'function') {
+                  child = _child();
+                } else {
+                  iconName = child as any;
+                }
               }
             } else {
               iconName = icon;
             }
 
-            if (!iconName) return;
+            if (!iconName && child == null) return;
 
             return (
               <VButton
@@ -235,8 +244,9 @@ export const VWysiwygEditor = defineComponent({
                 icon={iconName}
                 onClick={(ev) => onClick(context, ev)}
                 color={isActive ? toolButtonActiveColor : undefined}
-                disabled={isDisabled}
-              />
+                disabled={isDisabled}>
+                {child}
+              </VButton>
             );
           })}
         </VButtonGroup>

@@ -40,6 +40,7 @@ export interface VuiServiceUISettings {
   primaryScope: ScopeName;
   plainVariant: ColorVariant;
   containedVariant: ColorVariant;
+  warningScope: ScopeName;
   errorScope: ScopeName;
   buttonDefault: {
     color: ScopeName;

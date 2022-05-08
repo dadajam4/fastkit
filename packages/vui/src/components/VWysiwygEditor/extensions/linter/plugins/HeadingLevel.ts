@@ -1,7 +1,10 @@
 import { EditorView } from 'prosemirror-view';
-import { LinterPlugin, LinterResult as Issue } from '../LinterPlugin';
+import {
+  WysiwygLinterPlugin,
+  WysiwygLinterResult as Issue,
+} from '../LinterPlugin';
 
-export class HeadingLevel extends LinterPlugin {
+export class WysiwygLinterHeadingLevel extends WysiwygLinterPlugin {
   fixHeader(level: number) {
     return function ({ state, dispatch }: EditorView, issue: Issue) {
       dispatch(state.tr.setNodeMarkup(issue.from - 1, undefined, { level }));
@@ -21,7 +24,10 @@ export class HeadingLevel extends LinterPlugin {
             message: `Heading too small (${level} under ${lastHeadLevel})`,
             from: position + 1,
             to: position + 1 + node.content.size,
-            fix: this.fixHeader(lastHeadLevel + 1),
+            fix: {
+              message: '修正する',
+              handler: this.fixHeader(lastHeadLevel + 1),
+            },
           });
         }
         lastHeadLevel = level;

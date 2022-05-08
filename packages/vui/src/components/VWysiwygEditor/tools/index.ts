@@ -5,4 +5,4 @@ export * from './format-underline';
 export * from './history';
 export * from './link';
 export * from './ordered-list';
-export * from './text-color';
+export * from './color';

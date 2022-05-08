@@ -25,6 +25,7 @@ export const VButtonGroup = defineComponent({
   },
   setup(props, ctx) {
     return () => {
+      let hasIcon = false;
       let buttonLength = 0;
 
       let tmp = renderSlotOrEmpty(ctx.slots) || [];
@@ -42,6 +43,10 @@ export const VButtonGroup = defineComponent({
         }
 
         buttonLength++;
+
+        if (!hasIcon && node.props && !!node.props.icon) {
+          hasIcon = true;
+        }
 
         return {
           isButton: true,
@@ -67,6 +72,7 @@ export const VButtonGroup = defineComponent({
             class: [
               'v-button-group__item',
               {
+                'v-button--icon': hasIcon,
                 'v-button-group__item--has-left': hasLeft,
                 'v-button-group__item--has-right': hasRight,
               },
@@ -75,7 +81,12 @@ export const VButtonGroup = defineComponent({
         }
         return child.node;
       });
-      return <div class="v-button-group">{$children}</div>;
+      return (
+        <div
+          class={['v-button-group', { 'v-button-group--has-icon': hasIcon }]}>
+          {$children}
+        </div>
+      );
     };
   },
 });

@@ -192,6 +192,7 @@ function createConfig(
     '@tiptap/extension-italic',
     '@tiptap/extension-history',
     '@tiptap/extension-ordered-list',
+    '@tiptap/extension-link',
     'esbuild',
     'vite',
     'postcss',

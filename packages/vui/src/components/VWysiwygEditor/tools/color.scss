@@ -1,0 +1,117 @@
+:root {
+  --v-wysiwyg-color-tool: 30px;
+}
+
+.v-wysiwyg-color-tool {
+  &__button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: bottom;
+
+    &__bar {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: block;
+      height: 2px;
+      background: currentColor;
+    }
+  }
+
+  &__menu {
+    .v-dialog__content {
+      min-width: 0;
+    }
+
+    .v-dialog__body {
+      padding: 2px;
+    }
+  }
+
+  &__items {
+    --item-size: var(--v-wysiwyg-color-tool);
+
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    max-width: calc(var(--item-size) * 5);
+    vertical-align: bottom;
+
+    &--with-label {
+      display: flex;
+      flex-direction: column;
+      // flex-wrap: nowrap;
+      align-items: flex-start;
+      max-width: none;
+      padding: 2px;
+    }
+  }
+
+  &__item {
+    --focus-offset: calc(var(--item-size) * 0.05);
+
+    display: flex;
+    flex-basis: var(--item-size);
+    align-items: center;
+    width: var(--item-size);
+    height: var(--item-size);
+    padding: 0;
+    margin: 0;
+    // margin: 2px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    outline: 0;
+    appearance: none;
+
+    &__color {
+      position: relative;
+      flex: 0 0 var(--item-size);
+      width: var(--item-size);
+      height: var(--item-size);
+
+      &::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: block;
+        content: '';
+        background: currentColor;
+        border: solid 1px transparent;
+        transition: all 0.15s;
+      }
+    }
+
+    &__name {
+      padding: 0 8px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    &:hover &__color,
+    &:focus &__color {
+      &::before {
+        top: var(--focus-offset);
+        right: var(--focus-offset);
+        bottom: var(--focus-offset);
+        left: var(--focus-offset);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  &__items--with-label &__item {
+    flex-basis: auto;
+    width: auto;
+
+    & + .v-wysiwyg-color-tool__item {
+      margin-top: 2px;
+    }
+  }
+}

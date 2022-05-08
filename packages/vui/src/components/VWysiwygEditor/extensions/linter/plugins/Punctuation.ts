@@ -1,7 +1,10 @@
 import { EditorView } from 'prosemirror-view';
-import { LinterPlugin, LinterResult as Issue } from '../LinterPlugin';
+import {
+  WysiwygLinterPlugin,
+  WysiwygLinterResult as Issue,
+} from '../LinterPlugin';
 
-export class Punctuation extends LinterPlugin {
+export class WysiwygLinterPunctuation extends WysiwygLinterPlugin {
   public regex = / ([,.!?:]) ?/g;
 
   fix(replacement: any) {
@@ -33,7 +36,10 @@ export class Punctuation extends LinterPlugin {
           message: 'Suspicious spacing around punctuation',
           from: position + matches.index,
           to: position + matches.index + matches[0].length,
-          fix: this.fix(`${matches[1]} `),
+          fix: {
+            message: 'Fix it!!!',
+            handler: this.fix(`${matches[1]} `),
+          },
         });
       }
     });
