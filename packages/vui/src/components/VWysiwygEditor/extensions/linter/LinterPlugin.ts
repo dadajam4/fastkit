@@ -20,6 +20,7 @@ export type WysiwygLinterResultLevel = 'warning' | 'error';
 // fixers
 export interface WysiwygLinterResult {
   id: string;
+  icon: boolean;
   level: WysiwygLinterResultLevel;
   message: WysiwygLinterFixMessage;
   from: number;
@@ -28,8 +29,9 @@ export interface WysiwygLinterResult {
 }
 
 export interface RawLinterResult
-  extends Omit<WysiwygLinterResult, 'level' | 'fix' | 'id'> {
+  extends Omit<WysiwygLinterResult, 'level' | 'fix' | 'id' | 'icon'> {
   level?: WysiwygLinterResultLevel;
+  icon?: boolean;
   fix?: WysiwygLinterFixer | WysiwygLinterFixer[];
 }
 
@@ -43,12 +45,13 @@ export class WysiwygLinterPlugin {
   }
 
   record(result: RawLinterResult) {
-    const { fix = [] } = result;
+    const { fix = [], icon = false } = result;
     this.results.push({
       level: 'error',
       id: cheepUUID(),
       ...result,
       fix: Array.isArray(fix) ? fix : [fix],
+      icon,
     });
   }
 

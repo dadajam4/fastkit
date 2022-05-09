@@ -48,7 +48,7 @@ function runAllLinterPlugins(
     .flat();
 
   issues.forEach((issue) => {
-    const { level = 'warning' } = issue;
+    const { level = 'warning', icon } = issue;
     const message = resolveWysiwygLinterFixMessage(issue.message);
     decorations.push(
       Decoration.inline(issue.from, issue.to, {
@@ -56,8 +56,12 @@ function runAllLinterPlugins(
         'data-issue-id': issue.id,
         title: typeof message === 'string' ? message : undefined,
       }),
-      Decoration.widget(issue.from, (view) => renderIcon(view, issue)),
     );
+    if (icon) {
+      decorations.push(
+        Decoration.widget(issue.from, (view) => renderIcon(view, issue)),
+      );
+    }
   });
 
   const decorationSet = DecorationSet.create(doc, decorations);
