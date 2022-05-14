@@ -5,18 +5,63 @@ export type DeepPartial<T> = T extends object
     }
   : T;
 
+/**
+ * Checks if the specified variable is a NonNull object.
+ *
+ * @param value - Variables to be examined
+ *
+ * @returns
+ *  - `null` -> `false`
+ *  - `1` -> `false`
+ *  - `"1"` -> `false`
+ *  - `{}` -> `true`
+ *  - `[]` -> `true`
+ *  - `new Date()` -> `true`
+ *  - `new RegExp()` -> `true`
+ *  - `new SomeClass()` -> `true`
+ */
 export function isNonNullObject<
   T extends Record<string, unknown> = Record<string, unknown>,
 >(value: unknown): value is T {
   return !!value && typeof value === 'object';
 }
 
+/**
+ * Checks if the specified variable is a derived instance of the `Object` class.
+ *
+ * @param value - Variables to be examined
+ * @returns
+ *  - `null` -> `false`
+ *  - `1` -> `false`
+ *  - `"1"` -> `false`
+ *  - `{}` -> `true`
+ *  - `[]` -> `false`
+ *  - `new Date()` -> `false`
+ *  - `new RegExp()` -> `false`
+ *  - `new SomeClass()` -> `true`
+ *  - `new (class SomeClass extends ParentClass {})()` -> `true`
+ *  - `new (class SomeClass extends Array {})()` -> `false`
+ */
 export function isObject<
   T extends Record<string, unknown> = Record<string, unknown>,
 >(value: unknown): value is T {
   return Object.prototype.toString.call(value) === '[object Object]';
 }
 
+/**
+ * Checks if the specified variable is a direct instance of the `Object` class.
+ *
+ * @param value - Variables to be examined
+ * @returns
+ *  - `null` -> `false`
+ *  - `1` -> `false`
+ *  - `"1"` -> `false`
+ *  - `{}` -> `true`
+ *  - `[]` -> `false`
+ *  - `new Date()` -> `false`
+ *  - `new RegExp()` -> `false`
+ *  - `new SomeClass()` -> `false`
+ */
 export function isPlainObject<
   T extends Record<string, unknown> = Record<string, unknown>,
 >(value: unknown): value is T {
