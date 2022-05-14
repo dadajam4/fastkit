@@ -54,7 +54,17 @@ export default defineComponent({
               v-slots={{
                 activator: ({ attrs }) => <VButton {...attrs}>menu</VButton>,
               }}>
-              <div>あいうえお</div>
+              <div>
+                <div>あいうえお</div>
+                <div>
+                  <VButton
+                    onClick={() => {
+                      this.$vui.snackbar('a');
+                    }}>
+                    Snack!!!
+                  </VButton>
+                </div>
+              </div>
             </VMenu>
           </div>
           <VProgressCircular indeterminate />

@@ -49,6 +49,9 @@ export interface UseStackControlOptions {
   transitionResolver?: () => string;
 }
 
+const outsideClickControlFilter = (control: VStackControl) =>
+  control.closeOnOutsideClick;
+
 export function useStackControl(
   props: VStackProps,
   ctx: VStackSetupContext,
@@ -416,7 +419,7 @@ export function useStackControl(
       if (
         !closeOnOutsideClick.value ||
         state.showing ||
-        !control.isFront() ||
+        !control.isFront(outsideClickControlFilter) ||
         $vstack.someTransitioning()
       ) {
         return false;
@@ -454,6 +457,9 @@ export function useStackControl(
     },
     get closeOnNavigation() {
       return closeOnNavigation.value;
+    },
+    get closeOnOutsideClick() {
+      return closeOnOutsideClick.value;
     },
     get zIndex() {
       return zIndex.value;
@@ -581,8 +587,8 @@ export function useStackControl(
       const maxActivateOrder = front ? front.activateOrder : 0;
       state.activateOrder = maxActivateOrder + 1;
     },
-    isFront() {
-      return $vstack.isFront(control);
+    isFront(filter?: (control: VStackControl) => boolean) {
+      return $vstack.isFront(control, filter);
     },
     guardEffect() {
       if (!guardEffect.value) return;

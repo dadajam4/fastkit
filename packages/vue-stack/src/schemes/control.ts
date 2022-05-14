@@ -84,6 +84,7 @@ export interface VStackControl {
   readonly focusRestorable: boolean;
   readonly closeOnEsc: boolean;
   readonly closeOnNavigation: boolean;
+  readonly closeOnOutsideClick: boolean;
   readonly openDelay: number;
   readonly closeDelay: number;
   readonly isDestroyed: boolean;
@@ -141,7 +142,7 @@ export interface VStackControl {
   ): VNode;
   toFront(): void;
   resetValue(): void;
-  isFront(): boolean;
+  isFront(filter?: (control: VStackControl) => boolean): boolean;
   guardEffect(): void;
 }
 

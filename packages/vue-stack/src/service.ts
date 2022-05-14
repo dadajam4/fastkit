@@ -74,12 +74,13 @@ export class VueStackService {
     return this.controls.some((control) => control.transitioning);
   }
 
-  getFront() {
+  getFront(filter?: (control: VStackControl) => boolean) {
     const controls = this.controls.filter((control) => control.isActive);
     if (controls.length === 0) return;
     let maxControl: VStackControl | undefined;
     let maxActivateOrder = 0;
     controls.forEach((control) => {
+      if (filter && !filter(control)) return;
       const { activateOrder } = control;
       if (activateOrder > maxActivateOrder) {
         maxActivateOrder = activateOrder;
@@ -89,8 +90,11 @@ export class VueStackService {
     return maxControl;
   }
 
-  isFront(control: VStackControl) {
-    return this.getFront() === control;
+  isFront(
+    control: VStackControl,
+    filter?: (control: VStackControl) => boolean,
+  ) {
+    return this.getFront(filter) === control;
   }
 
   private removeDynamicSetting(setting: VStackDynamicInternalSetting) {
