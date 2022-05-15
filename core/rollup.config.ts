@@ -181,6 +181,7 @@ function createConfig(
       ];
   external.push(
     'module',
+    'crypto',
     '@vueuse/head',
     'chokidar',
     '@tiptap/extension-link',

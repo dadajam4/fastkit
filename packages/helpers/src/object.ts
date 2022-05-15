@@ -1,3 +1,6 @@
+import { sha256 } from './crypto';
+import { safeJSONStringify } from './json';
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type DeepPartial<T> = T extends object
   ? {
@@ -11,14 +14,14 @@ export type DeepPartial<T> = T extends object
  * @param value - Variables to be examined
  *
  * @returns
- *  - `null` -> `false`
- *  - `1` -> `false`
- *  - `"1"` -> `false`
- *  - `{}` -> `true`
- *  - `[]` -> `true`
- *  - `new Date()` -> `true`
- *  - `new RegExp()` -> `true`
- *  - `new SomeClass()` -> `true`
+ *  - `null` -&gt; `false`
+ *  - `1` -&gt; `false`
+ *  - `"1"` -&gt; `false`
+ *  - `{}` -&gt; `true`
+ *  - `[]` -&gt; `true`
+ *  - `new Date()` -&gt; `true`
+ *  - `new RegExp()` -&gt; `true`
+ *  - `new SomeClass()` -&gt; `true`
  */
 export function isNonNullObject<
   T extends Record<string, unknown> = Record<string, unknown>,
@@ -31,16 +34,16 @@ export function isNonNullObject<
  *
  * @param value - Variables to be examined
  * @returns
- *  - `null` -> `false`
- *  - `1` -> `false`
- *  - `"1"` -> `false`
- *  - `{}` -> `true`
- *  - `[]` -> `false`
- *  - `new Date()` -> `false`
- *  - `new RegExp()` -> `false`
- *  - `new SomeClass()` -> `true`
- *  - `new (class SomeClass extends ParentClass {})()` -> `true`
- *  - `new (class SomeClass extends Array {})()` -> `false`
+ *  - `null` -&gt; `false`
+ *  - `1` -&gt; `false`
+ *  - `"1"` -&gt; `false`
+ *  - `{}` -&gt; `true`
+ *  - `[]` -&gt; `false`
+ *  - `new Date()` -&gt; `false`
+ *  - `new RegExp()` -&gt; `false`
+ *  - `new SomeClass()` -&gt; `true`
+ *  - `new (class SomeClass extends ParentClass {})()` -&gt; `true`
+ *  - `new (class SomeClass extends Array {})()` -&gt; `false`
  */
 export function isObject<
   T extends Record<string, unknown> = Record<string, unknown>,
@@ -53,14 +56,14 @@ export function isObject<
  *
  * @param value - Variables to be examined
  * @returns
- *  - `null` -> `false`
- *  - `1` -> `false`
- *  - `"1"` -> `false`
- *  - `{}` -> `true`
- *  - `[]` -> `false`
- *  - `new Date()` -> `false`
- *  - `new RegExp()` -> `false`
- *  - `new SomeClass()` -> `false`
+ *  - `null` -&gt; `false`
+ *  - `1` -&gt; `false`
+ *  - `"1"` -&gt; `false`
+ *  - `{}` -&gt; `true`
+ *  - `[]` -&gt; `false`
+ *  - `new Date()` -&gt; `false`
+ *  - `new RegExp()` -&gt; `false`
+ *  - `new SomeClass()` -&gt; `false`
  */
 export function isPlainObject<
   T extends Record<string, unknown> = Record<string, unknown>,
@@ -196,4 +199,13 @@ export function removeUndef<T extends Record<string, unknown>>(
     }
     return result;
   }, {}) as T;
+}
+
+export async function objectHash(obj: any) {
+  const data = safeJSONStringify(obj);
+  const hash = await sha256(data);
+  return {
+    hash,
+    data,
+  };
 }
