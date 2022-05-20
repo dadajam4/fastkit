@@ -26,8 +26,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-color-scheme#readme",
   "peerDependencies": {
-    "vue": "^3.2.26",
-    "@vueuse/head": "^0.7.2"
+    "vue": "^3.2.34",
+    "@vueuse/head": "^0.7.6"
   },
   "dependencies": {
     "@fastkit/color-scheme": "0.7.67",

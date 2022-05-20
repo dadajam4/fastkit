@@ -143,11 +143,11 @@
     "stylelint-prettier": "^1.2.0",
     "stylelint-scss": "^4.1.0",
     "typescript": "^4.4.4",
-    "vite": "^2.9.1",
+    "vite": "^2.9.9",
     "vite-plugin-pages": "^0.22.0",
     "vue": "^3.2.26",
     "vue-eslint-parser": "^8.0.1",
-    "vue-router": "^4.0.14",
+    "vue-router": "^4.0.15",
     "webfont": "^11.2.26",
     "yorkie": "^2.0.0"
   }

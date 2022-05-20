@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-scroller#readme",
   "peerDependencies": {
-    "vue": "^3.2.26"
+    "vue": "^3.2.34"
   },
   "dependencies": {
     "@fastkit/vue-utils": "0.7.67",
