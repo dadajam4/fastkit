@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "fastkit",
-  "version": "0.7.69",
+  "version": "0.8.0",
   "workspaces": [
     "packages/*"
   ],

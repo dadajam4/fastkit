@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-scroller",
-  "version": "0.7.69",
+  "version": "0.8.0",
   "description": "@fastkit/vue-scroller",
   "buildOptions": {
     "name": "VueScroller"
@@ -30,8 +30,8 @@
     "vue": "^3.2.26"
   },
   "dependencies": {
-    "@fastkit/vue-utils": "0.7.69",
-    "@fastkit/scroller": "0.7.69",
-    "@fastkit/tiny-logger": "0.7.69"
+    "@fastkit/vue-utils": "0.8.0",
+    "@fastkit/scroller": "0.8.0",
+    "@fastkit/tiny-logger": "0.8.0"
   }
 }
