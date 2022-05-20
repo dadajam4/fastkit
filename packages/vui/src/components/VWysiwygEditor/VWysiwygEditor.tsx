@@ -311,14 +311,18 @@ export const VWysiwygEditor = defineComponent({
                       return (
                         <div class="v-wysiwyg-editor__body">
                           <EditorContent
-                            class="v-wysiwyg-editor__input__element wysiwyg"
+                            {...({
+                              class: 'v-wysiwyg-editor__input__element wysiwyg',
+                            } as any)}
                             editor={editor}
                           />
                           {!this.floatingToolbar &&
                             !!editor &&
                             !this.isReadonly && (
                               <BubbleMenu
-                                class="v-wysiwyg-editor__bubble-menu"
+                                {...({
+                                  class: 'v-wysiwyg-editor__bubble-menu',
+                                } as any)}
                                 editor={editor}>
                                 {this.createTools(true)}
                               </BubbleMenu>

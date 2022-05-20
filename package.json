@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "fastkit",
-  "version": "0.7.67",
+  "version": "0.7.69",
   "workspaces": [
     "packages/*"
   ],
@@ -68,7 +68,7 @@
     "@babel/preset-env": "^7.15.8",
     "@datadog/browser-logs": "^3.11.0",
     "@mdi/svg": "^6.5.95",
-    "@microsoft/api-extractor": "^7.18.17",
+    "@microsoft/api-extractor": "^7.20.0",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-json": "^4.1.0",
     "@tiptap/extension-link": "^2.0.0-beta.36",

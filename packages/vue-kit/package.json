@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-kit",
-  "version": "0.7.67",
+  "version": "0.7.69",
   "description": "vue-kit",
   "main": "index.js",
   "module": "dist/vue-kit.mjs",
@@ -34,18 +34,18 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-kit#readme",
   "peerDependencies": {
-    "vue": "^3.2.34"
+    "vue": "^3.2.26"
   },
   "dependencies": {
-    "fastkit": "0.7.67",
-    "@fastkit/vue-app-layout": "0.7.67",
-    "@fastkit/vue-color-scheme": "0.7.67",
-    "@fastkit/vue-form-control": "0.7.67",
-    "@fastkit/vue-loading": "0.7.67",
-    "@fastkit/vue-media-match": "0.7.67",
-    "@fastkit/vue-page": "0.7.67",
-    "@fastkit/vue-scroller": "0.7.67",
-    "@fastkit/vue-stack": "0.7.67",
-    "@fastkit/vue-utils": "0.7.67"
+    "fastkit": "0.7.69",
+    "@fastkit/vue-app-layout": "0.7.69",
+    "@fastkit/vue-color-scheme": "0.7.69",
+    "@fastkit/vue-form-control": "0.7.69",
+    "@fastkit/vue-loading": "0.7.69",
+    "@fastkit/vue-media-match": "0.7.69",
+    "@fastkit/vue-page": "0.7.69",
+    "@fastkit/vue-scroller": "0.7.69",
+    "@fastkit/vue-stack": "0.7.69",
+    "@fastkit/vue-utils": "0.7.69"
   }
 }

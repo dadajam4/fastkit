@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-stack",
-  "version": "0.7.67",
+  "version": "0.7.69",
   "description": "@fastkit/vue-stack",
   "buildOptions": {
     "name": "VueStack"
@@ -27,14 +27,14 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-stack#readme",
   "peerDependencies": {
-    "vue": "^3.2.34",
+    "vue": "^3.2.26",
     "vue-router": "^4.0.15"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "0.7.67",
-    "@fastkit/vue-color-scheme": "0.7.67",
-    "@fastkit/helpers": "0.7.67",
-    "@fastkit/tiny-logger": "0.7.67",
-    "@fastkit/vue-utils": "0.7.67"
+    "@fastkit/color-scheme": "0.7.69",
+    "@fastkit/vue-color-scheme": "0.7.69",
+    "@fastkit/helpers": "0.7.69",
+    "@fastkit/tiny-logger": "0.7.69",
+    "@fastkit/vue-utils": "0.7.69"
   }
 }
