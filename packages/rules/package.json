@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/rules",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "@fastkit/rules",
   "main": "index.js",
   "module": "dist/rules.mjs",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/rules#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.8.0",
-    "@fastkit/tiny-logger": "0.8.0"
+    "@fastkit/helpers": "0.8.1",
+    "@fastkit/tiny-logger": "0.8.1"
   }
 }
