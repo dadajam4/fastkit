@@ -343,7 +343,7 @@ async function publishPackage(
       ],
       {
         cwd: pkgRoot,
-        stdio: 'inherit',
+        stdio: 'pipe',
       },
     );
   } catch (e: any) {
