@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/async-control",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "@fastkit/async-control",
   "buildOptions": {
     "name": "AsyncControl"
