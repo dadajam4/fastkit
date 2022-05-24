@@ -344,7 +344,7 @@ async function publishPackage(
       ],
       {
         cwd: pkgRoot,
-        stdio: 'pipe',
+        stdio: 'inherit',
       },
     );
     delete require.cache[path.join(pkgRoot, 'package.json')];
