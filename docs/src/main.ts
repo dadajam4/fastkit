@@ -4,8 +4,10 @@ import { App } from './App';
 import { installVui } from '../.vui/installer';
 import { createVotEntry } from '@fastkit/vot';
 import { authPlugin } from './plugins';
+import { VErrorPage } from './components/VErrorPage/VErrorPage';
 
 export default createVotEntry(App, {
+  ErrorComponent: VErrorPage,
   plugins: [
     (ctx) => {
       installVui(ctx, {

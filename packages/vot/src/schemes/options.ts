@@ -1,3 +1,4 @@
+import type { Component } from 'vue';
 import type { VuePageControlMiddlewareFn } from '@fastkit/vue-page';
 import type { HeadClient } from '@vueuse/head';
 import type { RouteLocationRaw, RouterOptions } from 'vue-router';
@@ -111,6 +112,7 @@ export interface CreateEntryOptions {
   routerOptions?: Omit<RouterOptions, 'routes' | 'history'>;
   plugins?: RawVotPlugin[];
   middleware?: VuePageControlMiddlewareFn[];
+  ErrorComponent?: Component;
 }
 
 export interface Hook {

@@ -4,7 +4,7 @@ import { App, h, Component } from 'vue';
 import { Router } from 'vue-router';
 import { createEntry } from './entry';
 import { createHead } from '@vueuse/head';
-import { isPromise, IN_WINDOW } from '@fastkit/helpers';
+import { isPromise, IN_WINDOW, removeUndef } from '@fastkit/helpers';
 import { installVuePageControl, VPageRoot } from '@fastkit/vue-page';
 import { resolveRawVotPlugin, CreateEntryOptions } from './schemes';
 export * from '@fastkit/vue-page';
@@ -40,17 +40,20 @@ export async function createVotHook(
 
       const { plugins, middleware } = options;
 
-      const pageControl = installVuePageControl({
-        app,
-        router,
-        initialState,
-        initialRoute,
-        request,
-        response,
-        middleware,
-        writeResponse,
-        serverRedirect: redirect,
-      });
+      const pageControl = installVuePageControl(
+        removeUndef({
+          app,
+          router,
+          initialState,
+          initialRoute,
+          request,
+          response,
+          middleware,
+          writeResponse,
+          serverRedirect: redirect,
+          ErrorComponent: options.ErrorComponent,
+        }),
+      );
 
       // Set page control reference for global window
       if (IN_WINDOW) {

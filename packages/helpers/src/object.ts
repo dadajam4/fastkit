@@ -1,5 +1,6 @@
 import { sha256 } from './crypto';
 import { safeJSONStringify } from './json';
+import { cyrb53 } from './string';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type DeepPartial<T> = T extends object
@@ -204,6 +205,15 @@ export function removeUndef<T extends Record<string, unknown>>(
 export async function objectHash(obj: any) {
   const data = safeJSONStringify(obj);
   const hash = await sha256(data);
+  return {
+    hash,
+    data,
+  };
+}
+
+export function tinyObjectHash(obj: any) {
+  const data = safeJSONStringify(obj);
+  const hash = String(cyrb53(data));
   return {
     hash,
     data,
