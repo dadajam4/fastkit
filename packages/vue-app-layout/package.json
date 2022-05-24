@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-app-layout",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "@fastkit/vue-app-layout",
   "main": "index.js",
   "module": "dist/vue-app-layout.mjs",
@@ -27,7 +27,7 @@
     "vue-router": "^4.0.15"
   },
   "dependencies": {
-    "@fastkit/vue-utils": "0.8.4",
-    "@fastkit/vue-scroller": "0.8.4"
+    "@fastkit/vue-utils": "0.8.5",
+    "@fastkit/vue-scroller": "0.8.5"
   }
 }

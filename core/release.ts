@@ -188,6 +188,7 @@ async function updatePackage(pkgRoot: string, version: string) {
   await updateDeps(pkg, 'dependencies', version);
   await updateDeps(pkg, 'peerDependencies', version);
   await fs.writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+  console.log('---', pkg.name, pkg.version);
 }
 
 const externalModuleVersionDetectedCache: {
@@ -346,7 +347,9 @@ async function publishPackage(
         stdio: 'pipe',
       },
     );
-    console.log(chalk.green(`Successfully published ${pkgName}@${version}`));
+    delete require.cache[path.join(pkgRoot, 'package.json')];
+    const pkg = require(path.join(pkgRoot, 'package.json'));
+    console.log('>>>', pkgName, pkg.version);
   } catch (e: any) {
     if (e.stderr.match(/previously published/)) {
       console.log(chalk.red(`Skipping already published: ${pkgName}`));
