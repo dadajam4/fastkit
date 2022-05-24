@@ -325,7 +325,11 @@ async function publishPackage(
   }
   releaseTag = releaseTag || null;
 
-  step(`Publishing ${pkgName}...`);
+  step(
+    `Publishing ${pkgName}... yarn publish --new-version${version} ${
+      releaseTag ? ' --tag ' + releaseTag : ''
+    } --access public`,
+  );
   try {
     await runIfNotDry(
       'yarn',
