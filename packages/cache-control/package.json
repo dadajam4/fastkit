@@ -1,17 +1,17 @@
 {
-  "name": "@fastkit/async-control",
+  "name": "@fastkit/cache-control",
   "version": "0.8.8",
-  "description": "@fastkit/async-control",
+  "description": "@fastkit/cache-control",
   "buildOptions": {
-    "name": "AsyncControl"
+    "name": "CacheControl"
   },
   "main": "index.js",
-  "module": "dist/async-control.mjs",
+  "module": "dist/cache-control.mjs",
   "files": [
     "index.js",
     "dist"
   ],
-  "types": "dist/async-control.d.ts",
+  "types": "dist/cache-control.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"
@@ -24,9 +24,8 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/async-control#readme",
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/cache-control#readme",
   "dependencies": {
-    "@fastkit/cache-control": "0.8.8",
     "@fastkit/helpers": "0.8.8"
   }
 }

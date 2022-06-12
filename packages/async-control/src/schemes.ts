@@ -1,14 +1,23 @@
+import {
+  CacheControllerBehavior,
+  CacheController,
+  CacheDetailsWithRemainingTimes,
+} from '@fastkit/cache-control';
+import { AwaitedReturnType, Duration } from '@fastkit/helpers';
+
 /**
  * Some asynchronous function.
  */
-export type AsyncFn<Result = any> = (...args: any[]) => Promise<Result>;
+export type AsyncFn<Args extends any[] = any[], Result = any> = (
+  ...args: Args
+) => Promise<Result>;
 
 /**
  * Resolver for asynchronous processing (resolved & rejected).
  *
  * @internal
  */
-export interface AsyncRequestResolver {
+export interface AsyncHandlerRequestResolver {
   resolve: (payload: any) => any;
   reject: (payload: any) => any;
 }
@@ -20,123 +29,219 @@ export interface AsyncRequestResolver {
  * - `"running"` in process.
  * - `"resolved"` resolved.
  * - `"rejected"` rejected.
+ * - `"destroyed"` destroyed.
  */
-export type AsyncRequestState = 'pending' | 'running' | 'resolved' | 'rejected';
+export type AsyncHandlerRequestState =
+  | 'pending'
+  | 'running'
+  | 'resolved'
+  | 'rejected'
+  | 'destroyed';
 
 /**
- * Cache Data Details
+ * A method to customize the argument list just before generating the hash.
  */
-export interface CacheDetails<T = any> {
-  /**
-   * Hash string of runtime argument list.
-   */
-  hash: string;
+export type AsyncHandlerHashArgs<Fn extends AsyncFn> = (
+  args: Parameters<Fn>,
+) => any;
 
-  /**
-   * Runtime argument list.
-   */
-  args: any[];
+/**
+ * Error handler for cache operations.
+ */
+export type AsyncHandlerCacheErrorHandler = (error: unknown) => any;
 
+/**
+ * Map error handlers by cache operation method.
+ */
+export interface AsyncHandlerCacheErrorHandlerMap {
   /**
-   * cached data.
-   */
-  data: T;
-
-  /**
-   * Cache creation date.
+   * Error handler for cache acquisition.
    *
-   * * Date.prototype.toISOString()
-   *
-   * @example `"2022-10-05T14:48:00.000Z"`
+   * @default AsyncHandlerOptions.errorLogger
    */
-  createdAt: string;
+  get: AsyncHandlerCacheErrorHandler;
 
   /**
-   * Cash Expiration Date.
+   * Error handler when saving cache.
    *
-   * * Date.prototype.toISOString()
-   *
-   * @example `"2022-10-05T14:48:00.000Z"`
+   * @default AsyncHandlerOptions.errorLogger
    */
-  expiredAt: string;
-
-  /**
-   * Indicates `true` if the expiration date has passed.
-   */
-  expired?: boolean;
+  set: AsyncHandlerCacheErrorHandler;
 }
 
 /**
- * Cache acquisition request.
+ * Handler that determines whether or not the cache needs to be refreshed.
  */
-export interface GetCacheRequest {
-  /**
-   * Hash string of runtime argument list.
-   */
-  hash: string;
+export type AsyncHandlerCacheRevalidateChecker<T = any> = (
+  details: CacheDetailsWithRemainingTimes<T>,
+) => boolean;
 
-  /**
-   * Set to `true` if expired data is acceptable.
-   */
-  allowExpired?: boolean;
+/**
+ * Cache Refresh Conditions.
+ *
+ * * `"always"` - Always trigger an update after cache acquisition.
+ * * `number` - Number of valid seconds remaining in cache.
+ * * `Duration` - Valid duration remaining in cache.
+ * * `Function` - Handler that determines whether or not the cache needs to be refreshed.
+ */
+export type AsyncHandlerCacheRevalidateCondition<T = any> =
+  | 'always'
+  | number
+  | Duration
+  | AsyncHandlerCacheRevalidateChecker<T>;
+
+export function normalizeAsyncHandlerCacheRevalidateCondition<T = any>(
+  source: AsyncHandlerCacheRevalidateCondition<T>,
+): AsyncHandlerCacheRevalidateChecker<T> {
+  if (typeof source === 'function') return source;
+  if (source === 'always') return () => true;
+
+  const duration =
+    typeof source === 'number' ? Duration.seconds(source) : source;
+  return (details) =>
+    details.remainingTimes.milliseconds < duration.milliseconds;
 }
 
 /**
- * Cache acquisition request or hash string.
+ * Cache controller behavior settings.
  */
-export type RawGetCacheRequest = string | GetCacheRequest;
-
-export function resolveRawGetCacheRequest(
-  raw: RawGetCacheRequest,
-): GetCacheRequest {
-  return typeof raw === 'string' ? { hash: raw } : raw;
-}
-
-/**
- * Cache deletion request.
- */
-export interface DeleteCacheRequest {
+export interface AsyncHandlerCacheBehavior<T = any>
+  extends CacheControllerBehavior<T> {
   /**
-   * Hash string of runtime argument list.
-   */
-  hash: string;
-}
-
-/**
- * Cache deletion request or hash string.
- */
-export type RawDeleteCacheRequest = string | DeleteCacheRequest;
-
-export function resolveRawDeleteCacheRequest(
-  raw: RawDeleteCacheRequest,
-): DeleteCacheRequest {
-  return typeof raw === 'string' ? { hash: raw } : raw;
-}
-
-/**
- * Storage for cache operation.
- */
-export interface CacheStorage<T = any> {
-  /**
-   * Retrieve cache.
+   * Cache Refresh Conditions.
+   * This setting will trigger a cache update in the background after the cache is acquired.
    *
-   * @param req - Cache acquisition request.
+   * * `"always"` - Always trigger an update after cache acquisition.
+   * * `number` - Number of valid seconds remaining in cache.
+   * * `Duration` - Valid duration remaining in cache.
+   * * `Function` - Handler that determines whether or not the cache needs to be refreshed.
    */
-  get(
-    req: GetCacheRequest,
-  ): CacheDetails<T> | null | Promise<CacheDetails<T> | null>;
+  revalidate?: AsyncHandlerCacheRevalidateCondition;
 
   /**
-   * Save the cache.
-   *
-   * @param details - Cache Data Details
+   * Map error handlers by cache operation method.
    */
-  put(details: CacheDetails<T>): any;
+  errorHandlers?: Partial<AsyncHandlerCacheErrorHandlerMap>;
+}
+
+/**
+ * Cache controllers and their operational settings.
+ */
+export interface AsyncHandlerCacheSettings<T = any> {
+  /**
+   * Class that takes arbitrary storage and controls cache.
+   */
+  controller: CacheController<T>;
 
   /**
-   * Delete the cache.
-   *
-   * @param req - Cache deletion request.
+   * Cache controller behavior settings.
    */
-  delete(req: DeleteCacheRequest): any;
+  behavior: AsyncHandlerCacheBehavior<T>;
+
+  /**
+   * Handler that determines whether or not the cache needs to be refreshed.
+   */
+  revalidate?: AsyncHandlerCacheRevalidateChecker<T>;
+
+  /**
+   * Map error handlers by cache operation method.
+   */
+  errorHandlers: AsyncHandlerCacheErrorHandlerMap;
+}
+
+/**
+ * Cache controller instance or its behavior settings.
+ */
+export type RawAsyncHandlerCacheBehavior<T = any> =
+  | AsyncHandlerCacheBehavior<T>
+  | CacheController<T>;
+
+/**
+ * Error logger for AsyncHandler.
+ */
+export type AsyncHandlerErrorLogger = (error: unknown) => any;
+
+export function resolveRawAsyncHandlerCacheBehavior<T = any>(
+  raw: RawAsyncHandlerCacheBehavior<T>,
+  settings: { errorLogger: AsyncHandlerErrorLogger },
+): AsyncHandlerCacheSettings<T> {
+  const { errorLogger } = settings;
+
+  let controller: CacheController<T>;
+  let behavior: AsyncHandlerCacheBehavior<T>;
+  let errorHandlers: AsyncHandlerCacheErrorHandlerMap;
+  let revalidate: AsyncHandlerCacheRevalidateChecker<T> | undefined;
+
+  const isController = raw instanceof CacheController;
+  if (isController) {
+    controller = raw;
+    behavior = { ...controller.behavior };
+    errorHandlers = {
+      get: errorLogger,
+      set: errorLogger,
+    };
+  } else {
+    controller = new CacheController(raw);
+    behavior = { ...raw };
+    if (raw.revalidate != null) {
+      revalidate = normalizeAsyncHandlerCacheRevalidateCondition(
+        raw.revalidate,
+      );
+    }
+    errorHandlers = {
+      get: errorLogger,
+      set: errorLogger,
+      ...raw.errorHandlers,
+    };
+  }
+
+  return {
+    controller,
+    behavior,
+    revalidate,
+    errorHandlers,
+  };
+}
+
+/**
+ * Configure behavior when incorporating this asynchronous support into a function.
+ */
+export interface AsyncHandlerOptions<Fn extends AsyncFn> {
+  /**
+   * Error logger for AsyncHandler.
+   *
+   * @default console.error
+   */
+  errorLogger?: AsyncHandlerErrorLogger;
+
+  /**
+   * You may want to bind the `this` to a function controlled by this asynchronous support.
+   */
+  thisObj?: any;
+
+  /**
+   * Set the time in milliseconds to allow for a delay before starting the asynchronous process.
+   *
+   * @default 0 Immediately Execute.
+   */
+  delay?: number;
+
+  /**
+   * A method to customize the argument list just before generating the hash.
+   */
+  hashArgs?: AsyncHandlerHashArgs<Fn>;
+
+  /**
+   * Cache controller instance or its behavior settings.
+   *
+   * Set this option if you want to use cache control together.
+   */
+  cache?: RawAsyncHandlerCacheBehavior<AwaitedReturnType<Fn>>;
+
+  /**
+   * Enable/disable asynchronous control. Asynchronous control works only if it resolves as `true`.
+   *
+   * @default true
+   */
+  enabled?: boolean | ((...args: Parameters<Fn>) => boolean);
 }

@@ -1,4 +1,5 @@
 export * from './types';
+export * from './func';
 export * from './converter';
 export * from './promise';
 export * from './string';
@@ -19,3 +20,4 @@ export * from './console';
 export * from './general';
 export * from './merge';
 export * from './defaults';
+export * from './duration';
