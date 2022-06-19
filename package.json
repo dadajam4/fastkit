@@ -24,7 +24,7 @@
     "format": "run-s eslint:fix stylelint:fix",
     "typecheck": "tsc --noEmit --skipLibCheck",
     "play": "node -r esbuild-register ./play.ts",
-    "test": "node -r esbuild-register core/build.ts fastkit -f global -d && jest --runInBand",
+    "test": "jest --runInBand",
     "release": "node -r esbuild-register core/release.ts",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "preinstall": "node ./core/checkYarn.js"

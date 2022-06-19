@@ -40,8 +40,10 @@ export interface CacheDetails<T = any> {
   expiredAt: string | null;
 }
 
-export interface CacheDetailsWithRemainingTimes<T = any>
-  extends CacheDetails<T> {
+/**
+ * Remaining cache validity time information.
+ */
+export interface CacheRemainingTimes {
   /**
    * Elapsed time since the cache was created.
    */
@@ -60,39 +62,12 @@ export interface CacheDetailsWithRemainingTimes<T = any>
   expired: boolean;
 }
 
-export function toCacheDetailsWithRemainingTimes<T = any>(
-  source: CacheDetails<T>,
-  now = Date.now(),
-): CacheDetailsWithRemainingTimes<T> {
-  const { createdAt, expiredAt } = source;
-  const elapsedTimes = new Duration([createdAt, now]);
-  const remainingTimesSource =
-    expiredAt == null
-      ? Infinity
-      : Math.max(new Date(expiredAt).getTime() - now, 0);
-  const remainingTimes = new Duration(remainingTimesSource);
-  const expired = remainingTimes.milliseconds > 0;
-
-  return {
-    ...source,
-    elapsedTimes,
-    remainingTimes,
-    expired,
-  };
-}
-
-// /**
-//  * キャッシュ
-//  */
-// export type CacheIncrementalHandler<T = any> = (
-//   req: GetCacheRequest,
-// ) => T | Promise<T>;
-
-// export interface CacheIncrementalBehavior<T = any> {
-//   handler: CacheIncrementalHandler<T>;
-//   // revavalidateXXX?: number;
-//   // unstable_revalidate
-// }
+/**
+ * Cache details and remaining expiration date information.
+ */
+export interface CacheDetailsWithRemainingTimes<T = any>
+  extends CacheDetails<T>,
+    CacheRemainingTimes {}
 
 /**
  * Cache acquisition request.
@@ -188,7 +163,7 @@ export interface CreateCacheDetailsSettings<T = any> {
    *
    * `number`(Seconds) or Duration instance.
    *
-   * If you want the expiration date to be indefinite, set `-1`.
+   * If you want the expiration date to be indefinite, set `Infinity` or a number less than 0.
    */
   ttl: number | Duration;
 }

@@ -96,8 +96,6 @@ describe('immediate', () => {
       immediateCheckValue++;
     });
     const listener2 = ev.on('test', (a) => {
-      const b: number = a;
-      console.log(b);
       immediateCheckValue++;
     });
     expect(immediateCheckValue).toStrictEqual(1);
@@ -114,14 +112,10 @@ describe('immediate', () => {
       immediateCheckValue++;
     });
     const listener2 = ev.on('test', (a) => {
-      const b: number = a;
       immediateCheckValue++;
-      console.log(b);
     });
     const listener3 = ev.once('test', (a) => {
-      const b: number = a;
       immediateCheckValue++;
-      console.log(b);
     });
     expect(immediateCheckValue).toStrictEqual(1);
     expect(listeners.length).toStrictEqual(3);

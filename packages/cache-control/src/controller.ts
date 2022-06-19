@@ -2,14 +2,16 @@ import {
   RawDeleteCacheRequest,
   RawGetCacheRequest,
   CreateCacheDetailsSettings,
-  CacheDetails,
   GetCacheRequest,
   DeleteCacheRequest,
   CacheControllerBehavior,
   CacheDetailsWithRemainingTimes,
-  toCacheDetailsWithRemainingTimes,
 } from './schemes';
-import { Duration, clone } from '@fastkit/helpers';
+import { clone, Duration } from '@fastkit/helpers';
+import {
+  createCacheDetails,
+  toCacheDetailsWithRemainingTimes,
+} from './helpers';
 
 function resolveRawGetCacheRequest(raw: RawGetCacheRequest): GetCacheRequest {
   return typeof raw === 'string' ? { key: raw } : raw;
@@ -19,36 +21,6 @@ function resolveRawDeleteCacheRequest(
   raw: RawDeleteCacheRequest,
 ): DeleteCacheRequest {
   return typeof raw === 'string' ? { key: raw } : raw;
-}
-
-/**
- * Generate cache details.
- *
- * @param settings - Settings for cache creation.
- */
-export function createCacheDetails<T = any>(
-  settings: CreateCacheDetailsSettings<T>,
-): CacheDetails<T> {
-  const { key, args, data, ttl } = settings;
-  const createdAtDt = new Date();
-
-  let expiredAt: string | null;
-
-  if (ttl !== -1) {
-    const duration = typeof ttl === 'number' ? Duration.seconds(ttl) : ttl;
-    const expiredAtDt = new Date(createdAtDt.getTime() + duration.milliseconds);
-    expiredAt = expiredAtDt.toISOString();
-  } else {
-    expiredAt = null;
-  }
-
-  return {
-    key,
-    args: clone(args),
-    data: clone(data),
-    createdAt: createdAtDt.toISOString(),
-    expiredAt,
-  };
 }
 
 /**
@@ -117,11 +89,11 @@ export class CacheController<T = any> {
        *
        * `number`(Seconds) or Duration instance.
        *
-       * If you want the expiration date to be indefinite, set `-1`.
+       * If you want the expiration date to be indefinite, set `Infinity` or a number less than 0.
        *
        * @default CacheController['ttl']
        */
-      ttl?: number;
+      ttl?: number | Duration;
     },
   ) {
     const ttl = settings.ttl == null ? this.ttl : settings.ttl;

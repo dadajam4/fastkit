@@ -2,21 +2,12 @@ import {
   AsyncFn,
   AsyncHandlerOptions,
   AsyncHandlerHashArgs,
-  resolveRawAsyncHandlerCacheBehavior,
   AsyncHandlerCacheSettings,
   AsyncHandlerErrorLogger,
 } from './schemes';
+import { resolveRawAsyncHandlerCacheBehavior } from './helpers';
 import { AsyncHandlerRequest } from './request';
 import { tinyObjectHash, AwaitedReturnType } from '@fastkit/helpers';
-
-export const ASYNC_HANDLER_SYMBOL = Symbol();
-
-/**
- * A function that wraps the original function.
- */
-export type AsyncHandlerFn<Fn extends AsyncFn> = Fn & {
-  [ASYNC_HANDLER_SYMBOL]: AsyncHandler<Fn>;
-};
 
 /**
  * Asynchronous processing controller.
@@ -30,7 +21,7 @@ export class AsyncHandler<Fn extends AsyncFn> {
   /**
    * Original function.
    */
-  readonly originalFunc: Fn;
+  originalFunc: Fn;
 
   /**
    * The `this` object to bind to the original function.
@@ -47,7 +38,7 @@ export class AsyncHandler<Fn extends AsyncFn> {
   /**
    * A function that wraps the original function.
    */
-  readonly handler: AsyncHandlerFn<Fn>;
+  readonly handler: Fn;
 
   /**
    * A map array of requests generated for each hash of the argument.
@@ -117,9 +108,7 @@ export class AsyncHandler<Fn extends AsyncFn> {
         const req = this.getRequestByArgs(args);
         req.push({ resolve, reject });
       });
-    }) as AsyncHandlerFn<Fn>;
-
-    this.handler[ASYNC_HANDLER_SYMBOL] = this;
+    }) as Fn;
   }
 
   /**
@@ -138,7 +127,11 @@ export class AsyncHandler<Fn extends AsyncFn> {
    * @param args - Argument list for executing the original method.
    */
   call(...args: Parameters<Fn>): Promise<Awaited<ReturnType<Fn>>> {
-    return this.originalFunc.call(this.thisObj || this, ...args);
+    const { originalFunc } = this;
+    if (!originalFunc) {
+      throw new Error('missing function.');
+    }
+    return originalFunc.apply(this.thisObj || this, args);
   }
 
   /**
@@ -169,18 +162,4 @@ export class AsyncHandler<Fn extends AsyncFn> {
   private removeRequestByHash(hash: string) {
     delete this._requestMap[hash];
   }
-}
-
-/**
- * Retrieves Asynchronous processing handler from the specified asynchronous function.
- * If the controller is not found, an exception is thrown.
- *
- * @param func - function.
- */
-export function getAsyncHandler<Fn extends AsyncFn>(func: Fn) {
-  const controller = (func as AsyncHandlerFn<Fn>)[ASYNC_HANDLER_SYMBOL];
-  if (!controller) {
-    throw new Error('missing async controller.');
-  }
-  return controller;
 }

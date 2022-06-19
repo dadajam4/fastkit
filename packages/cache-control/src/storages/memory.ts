@@ -63,7 +63,10 @@ export class MemoryCacheStorage implements CacheStorage {
   private _roundByMaxKeys() {
     const keys = Array.from(this._bucket.keys());
     const overflowLength = keys.length - this.maxKeys;
+
     if (overflowLength < 1) return;
+
+    keys.length = overflowLength;
 
     for (const key of keys) {
       this.delete({ key });
@@ -97,5 +100,13 @@ export class MemoryCacheStorage implements CacheStorage {
 
   clear() {
     this._bucket.clear();
+  }
+
+  get size() {
+    return this._bucket.size;
+  }
+
+  keys() {
+    return this._bucket.keys();
   }
 }

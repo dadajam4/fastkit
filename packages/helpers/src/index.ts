@@ -1,6 +1,7 @@
 export * from './types';
 export * from './func';
 export * from './converter';
+export * from './delay';
 export * from './promise';
 export * from './string';
 export * from './set';

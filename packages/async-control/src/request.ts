@@ -127,10 +127,6 @@ export class AsyncHandlerRequest<Fn extends AsyncFn> {
     this.args = clone(args);
     this.hash = hash;
     this._finisher = finisher;
-
-    // this.runDelay = this.runDelay.bind(this);
-    // this.callFunc = this.callFunc.bind(this);
-    // this.applyCache = this.applyCache.bind(this);
   }
 
   getResolvedValue() {
@@ -214,6 +210,12 @@ export class AsyncHandlerRequest<Fn extends AsyncFn> {
         | null
         | undefined;
 
+      /**
+       * Promise to indicate completion of asynchronous finishing process.
+       *
+       * * When a cache is used, for example, the cache storage promise is substituted.
+       * * This empty promise is always used, even when caching is not used. This is because we want to divert the executed result when asynchronous processing is called synchronously in succession.
+       */
       let finishPromise: Promise<any> = Promise.resolve();
 
       // 1. Wait for the time of the delay value that may have been set.

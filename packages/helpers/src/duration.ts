@@ -126,6 +126,13 @@ export class Duration {
    *
    * @param source - Sources that generate durations.
    */
+  constructor(source: DurationSource);
+
+  /**
+   * Creates a Duration instance for a given sources.
+   *
+   * @param source - Sources that generate durations.
+   */
   constructor(source: DurationSource) {
     let milliseconds: number;
 
