@@ -141,7 +141,7 @@ export class AsyncHandler<Fn extends AsyncFn> {
    */
   getRequestByArgs(args: Parameters<Fn>) {
     const { hashArgs } = this;
-    const hashSource = hashArgs ? hashArgs(args) : args;
+    const hashSource = hashArgs ? hashArgs(...args) : args;
     const { hash } = tinyObjectHash(hashSource);
 
     let request = this._requestMap[hash];

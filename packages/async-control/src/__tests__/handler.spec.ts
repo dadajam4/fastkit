@@ -123,6 +123,89 @@ describe(AsyncHandler.name, () => {
 
       expect(handler.originalFunc.called).toBe(4);
     });
+
+    it('Can intervene in hash functions.', async () => {
+      const fn = createFn();
+      const handler = new AsyncHandler(fn, {
+        hashArgs: (a) => {
+          return { a };
+        },
+      });
+
+      const result1 = await handler.handler(1, '2', false);
+      const result2 = await handler.handler(1, '3', true);
+
+      expect(result1).toStrictEqual({
+        args: [1, '2', false],
+        called: 1,
+      });
+
+      expect(result2).toStrictEqual({
+        args: [1, '2', false],
+        called: 1,
+      });
+      expect(handler.originalFunc.called).toBe(1);
+    });
+
+    it('You can wait for as long as the `delay` value.', async () => {
+      const fn = createFn();
+      const handler = new AsyncHandler(fn, {
+        delay: 500,
+      });
+
+      const [result1, result2] = await Promise.all([
+        handler.handler(1, '2', false),
+        delay(300).then(() => handler.handler(1, '2', false)),
+      ]);
+
+      expect(result1).toStrictEqual({
+        args: [1, '2', false],
+        called: 1,
+      });
+
+      expect(result2).toStrictEqual({
+        args: [1, '2', false],
+        called: 1,
+      });
+      expect(handler.originalFunc.called).toBe(1);
+    });
+
+    it('If the `enabled` option resolves as `false`, no control is performed.', async () => {
+      const fn = createFn();
+      const handler = new AsyncHandler(fn, {
+        delay: 500,
+        enabled: () => false,
+      });
+
+      const [result1, result2] = await Promise.all([
+        handler.handler(1, '2', false),
+        delay(300).then(() => handler.handler(1, '2', false)),
+      ]);
+
+      expect(result1).toStrictEqual({
+        args: [1, '2', false],
+        called: 1,
+      });
+
+      expect(result2).toStrictEqual({
+        args: [1, '2', false],
+        called: 2,
+      });
+      expect(handler.originalFunc.called).toBe(2);
+    });
+
+    it('The execution result is recurrently cloned and dereferenced.', async () => {
+      const fn = createFn();
+      const handler = new AsyncHandler(fn);
+
+      const [result1, result2] = await Promise.all([
+        handler.handler(1, '2', false),
+        handler.handler(1, '2', false),
+      ]);
+
+      expect(result1).toStrictEqual(result2);
+      expect(result1).not.toBe(result2);
+    });
   });
 
   describe('Use cache', () => {

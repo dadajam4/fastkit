@@ -42,7 +42,7 @@ export type AsyncHandlerRequestState =
  * A method to customize the argument list just before generating the hash.
  */
 export type AsyncHandlerHashArgs<Fn extends AsyncFn> = (
-  args: Parameters<Fn>,
+  ...args: Parameters<Fn>
 ) => any;
 
 /**
