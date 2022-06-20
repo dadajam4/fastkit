@@ -34,7 +34,6 @@ export const DEFAULT_FORM_SELECTOR_GROUP_ID = '__default__';
 export interface FormSelectorItem {
   value: string | number;
   label: VNodeChildOrSlot<FormSelectorControl>;
-  // group?: string | number;
   disabled?: boolean;
 }
 
