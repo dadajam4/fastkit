@@ -16,7 +16,7 @@ export function createFormSelectorItemGroupProps() {
   return {
     ...createPropsOptions({
       disabled: Boolean,
-      group: {
+      groupId: {
         type: [String, Number],
         required: true,
       },
@@ -38,8 +38,7 @@ export interface FormSelectorItemGroupControlOptions
 export class FormSelectorItemGroupControl {
   readonly parentNodeType?: FormNodeType;
   protected _parentSelector: FormSelectorControl | null = null;
-  readonly group?: string | number;
-
+  readonly groupId!: string | number;
   protected _disabled: ComputedRef<boolean>;
   protected _notSelected: ComputedRef<boolean>;
   protected _allSelected: ComputedRef<boolean>;
@@ -71,7 +70,7 @@ export class FormSelectorItemGroupControl {
     options: FormSelectorItemGroupControlOptions = {},
   ) {
     this.parentNodeType = options.parentNodeType;
-    this.group = props.group;
+    this.groupId = props.groupId;
 
     const parentSelector = useParentFormSelector();
     if (
@@ -88,15 +87,15 @@ export class FormSelectorItemGroupControl {
     });
 
     this._notSelected = computed(() => {
-      return parentSelector.isNotSelected(this.group);
+      return parentSelector.isNotSelected(this.groupId);
     });
 
     this._allSelected = computed(() => {
-      return parentSelector.isAllSelected(this.group);
+      return parentSelector.isAllSelected(this.groupId);
     });
 
     this._indeterminate = computed(() => {
-      return parentSelector.isIndeterminate(this.group);
+      return parentSelector.isIndeterminate(this.groupId);
     });
 
     onBeforeUnmount(() => {
@@ -117,10 +116,12 @@ export class FormSelectorItemGroupControl {
   }
 }
 
-export function useParentFormSelectorItemGroup(group?: string | number) {
+export function useParentFormSelectorItemGroup(
+  parentSelector: FormSelectorControl,
+) {
   const groupControl = inject(FormSelectorItemGroupInjectionKey, null);
-  if (!groupControl) return null;
-  if (group && groupControl.group !== group) return null;
+  if (!groupControl || groupControl.parentSelector !== parentSelector)
+    return null;
   return groupControl;
 }
 

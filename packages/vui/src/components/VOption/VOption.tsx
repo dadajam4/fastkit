@@ -45,7 +45,10 @@ export const VOption = defineComponent({
       <label
         class={classes}
         onClick={selectorItemControl.handleClickElement}
-        tabindex={selectorItemControl.tabindex}>
+        tabindex={selectorItemControl.tabindex}
+        {...({
+          'aria-disabled': selectorItemControl.isDisabled,
+        } as any)}>
         <span class="v-option__label">
           {renderSlotOrEmpty(this.$slots, 'default')}
         </span>

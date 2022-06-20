@@ -449,6 +449,7 @@ export const VMenu = defineComponent({
 
       const els = (Array.from(itemElements(bodyEl)) as HTMLElement[]).filter(
         (el) => {
+          if (el.tabIndex === -1) return false;
           const disabled = el.getAttribute('disabled');
           return disabled == null || disabled === '';
         },
@@ -492,7 +493,10 @@ export const VMenu = defineComponent({
 
       const nextEl = els[nextIndex];
 
-      nextEl && nextEl.focus();
+      if (nextEl) {
+        nextEl.focus();
+        // ev.preventDefault();
+      }
     };
 
     const choiceKeyHandler = (ev: KeyboardEvent) => {
@@ -513,6 +517,7 @@ export const VMenu = defineComponent({
 
       if (currentEl) {
         ctx.emit('choiceItemElement', currentEl);
+        ev.preventDefault();
       }
     };
 

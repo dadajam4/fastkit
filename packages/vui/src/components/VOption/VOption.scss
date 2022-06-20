@@ -6,7 +6,8 @@
   position: relative;
   display: flex;
   width: 100%;
-  padding: 0.375em 1em;
+  padding: 0.75em 1em;
+  // font-size: 0.875em;
 
   input {
     @include core.hidden-input-element;
@@ -57,5 +58,16 @@
 
   &--has-not-value &__label {
     font-style: italic;
+  }
+
+  &[disabled],
+  &[tabindex='-1'] {
+    color: var(--palette-muted);
+    pointer-events: none;
+    opacity: 0.4;
+
+    &::before {
+      opacity: 0 !important;
+    }
   }
 }

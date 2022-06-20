@@ -7,7 +7,8 @@ import {
   CONTROL_FIELD_VARIANTS,
   ControlFieldVariant,
   VSelect,
-  FormSelectorItemData,
+  FormSelectorItem,
+  RawFormSelectorItems,
 } from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
 import { DocsSection } from '../../../-components';
@@ -21,14 +22,35 @@ export default defineComponent({
     const variant = ref<ControlFieldVariant>('flat');
     const disabled = ref(false);
     const readonly = ref(false);
-    const items: FormSelectorItemData[] = range(10, 1).map((i) => ({
+    const items: FormSelectorItem[] = range(10, 1).map((i) => ({
       value: String(i),
       label: `アイテム${i}`,
     }));
-    const asyncItems = (): Promise<FormSelectorItemData[]> => {
+    const asyncItems: RawFormSelectorItems = () => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          resolve([...items]);
+          resolve([
+            ...items,
+            {
+              id: 'group-1',
+              label: 'Group1',
+              items: range(5, 11).map((i) => ({
+                value: String(i),
+                label: `アイテム${i}`,
+                disabled: i % 2 === 0,
+              })),
+            },
+            {
+              id: 'group-2',
+              label: 'Group2',
+              items: range(5, 16).map((i) => ({
+                value: String(i),
+                label: `アイテム${i}`,
+                disabled: i % 2 === 0,
+              })),
+              disabled: true,
+            },
+          ]);
           // reject(new Error('jjj'));
         }, 3000);
       });

@@ -8,7 +8,7 @@ import {
   FormControlSlots,
   useFormSelectorControl,
   FormSelectorControl,
-  ResolvedFormSelectorItemData,
+  ResolvedFormSelectorItem,
   FormNodeControl,
   renderSlotOrEmpty,
   VNodeChildOrSlot,
@@ -28,7 +28,7 @@ export interface DefineFormSelectorComponentOptions {
   itemRenderer: (ctx: {
     control: FormSelectorControl;
     selected: boolean;
-    attrs: ResolvedFormSelectorItemData & {
+    attrs: ResolvedFormSelectorItem & {
       modelValue: boolean;
       key: string | number;
     };
@@ -70,7 +70,7 @@ export function defineFormSelectorComponent(
       });
       const control = useControl(props);
       const vui = useVui();
-      const loadingMessageRef = computed(() => {
+      const loadingMessageRef = computed<VNodeChild | undefined>(() => {
         const slot = resolveVNodeChildOrSlots(
           props.loadingMessage,
           vui.setting('loadingMessage'),
@@ -135,20 +135,29 @@ export function defineFormSelectorComponent(
                     {this.loadingMessageRef}
                   </div>
                 )}
-                {this.propItems.map((attrs) => {
-                  const selected = selectorControl.isSelected(attrs.value);
-                  return itemRenderer({
-                    selected,
-                    control: selectorControl,
-                    attrs: {
-                      ...attrs,
-                      modelValue: selected,
-                      key: attrs.value,
-                    },
-                    slots: {
-                      default: () => attrs.label(this.selectorControl),
-                    },
-                  });
+                {this.propGroups.map((group) => {
+                  const { items } = group;
+                  return (
+                    <>
+                      {items.map((attrs) => {
+                        const selected = selectorControl.isSelected(
+                          attrs.value,
+                        );
+                        return itemRenderer({
+                          selected,
+                          control: selectorControl,
+                          attrs: {
+                            ...attrs,
+                            modelValue: selected,
+                            key: attrs.value,
+                          },
+                          slots: {
+                            default: () => attrs.label(this.selectorControl),
+                          },
+                        });
+                      })}
+                    </>
+                  );
                 })}
                 {renderSlotOrEmpty(this.$slots, 'default')}
               </div>

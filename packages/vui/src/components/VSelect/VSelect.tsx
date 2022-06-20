@@ -26,6 +26,7 @@ import {
 import { VUI_SELECT_SYMBOL, useVui } from '../../injections';
 import { VIcon } from '../VIcon';
 import { VMenu } from '../kits';
+import { VOptionGroup } from '../VOptionGroup';
 import { VOption } from '../VOption';
 import { VButton } from '..';
 
@@ -129,13 +130,24 @@ export const VSelect = defineComponent({
   render() {
     const { nodeControl, selectorControl, selectorItems, selectedItems } = this;
     const children = (this.$slots.default && this.$slots.default()) || [];
-    const propOptions = this.propItems.map((item) => {
+    const propGroups = this.propGroups.map((group) => {
       return (
-        <VOption disabled={item.disabled} value={item.value} key={item.value}>
-          {{
-            default: () => item.label(selectorControl),
-          }}
-        </VOption>
+        <VOptionGroup
+          key={group.id}
+          groupId={group.id}
+          label={group.label(selectorControl)}
+          disabled={group.disabled}>
+          {group.items.map((item) => (
+            <VOption
+              disabled={item.disabled}
+              value={item.value}
+              key={item.value}>
+              {{
+                default: () => item.label(selectorControl),
+              }}
+            </VOption>
+          ))}
+        </VOptionGroup>
       );
     });
 
@@ -277,7 +289,7 @@ export const VSelect = defineComponent({
               }}>
               <div class={['v-select__body', this.classes]}>
                 {children}
-                {propOptions}
+                {propGroups}
               </div>
             </VMenu>
           ),

@@ -6,7 +6,7 @@ import {
   VSwitch,
   ControlFieldVariant,
   VRadioGroup,
-  FormSelectorItemData,
+  FormSelectorItem,
   VSelect,
 } from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
@@ -21,7 +21,7 @@ export default defineComponent({
     const disabled = ref(false);
     const readonly = ref(false);
     const stacked = ref(false);
-    const items: FormSelectorItemData[] = range(5, 1).map((i) => ({
+    const items: FormSelectorItem[] = range(5, 1).map((i) => ({
       value: String(i),
       label: `アイテム${i}`,
     }));

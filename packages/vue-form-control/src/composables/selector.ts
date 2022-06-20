@@ -29,16 +29,31 @@ import type { FormSelectorItemControl } from './selector-item';
 import { FormSelectorInjectionKey } from '../injections';
 import { IN_WINDOW } from '@fastkit/helpers';
 
-export interface FormSelectorItemData {
+export const DEFAULT_FORM_SELECTOR_GROUP_ID = '__default__';
+
+export interface FormSelectorItem {
   value: string | number;
   label: VNodeChildOrSlot<FormSelectorControl>;
-  group?: string | number;
+  // group?: string | number;
   disabled?: boolean;
 }
 
-export interface ResolvedFormSelectorItemData
-  extends Omit<FormSelectorItemData, 'label'> {
+export interface FormSelectorGroup {
+  id: string | number;
+  label: VNodeChildOrSlot<FormSelectorControl>;
+  disabled?: boolean;
+  items: FormSelectorItem[];
+}
+
+export interface ResolvedFormSelectorItem
+  extends Omit<FormSelectorItem, 'label'> {
   label: TypedSlot<FormSelectorControl>;
+}
+
+export interface ResolvedFormSelectorGroup
+  extends Omit<FormSelectorGroup, 'label'> {
+  label: TypedSlot<FormSelectorControl>;
+  items: ResolvedFormSelectorItem[];
 }
 
 export type FormSelectorValue =
@@ -49,11 +64,14 @@ export type FormSelectorValue =
 
 const modelValue = [String, Number, Array] as PropType<FormSelectorValue>;
 
-export type FormSelectorItems = FormSelectorItemData[];
+// export type FormSelectorItems = FormSelectorItem[];
+export type FormSelectorItemOrGroups = (FormSelectorItem | FormSelectorGroup)[];
 
 export type RawFormSelectorItems =
-  | FormSelectorItems
-  | ((selectorControl: FormSelectorControl) => Promise<FormSelectorItems>);
+  | FormSelectorItemOrGroups
+  | ((
+      selectorControl: FormSelectorControl,
+    ) => Promise<FormSelectorItemOrGroups>);
 
 export function createFormSelectorProps(
   options: FormSelectorControlOptions = {},
@@ -116,8 +134,9 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   protected _allSelected: ComputedRef<boolean>;
   protected _indeterminate: ComputedRef<boolean>;
   protected _itemsLoadState = ref<FormSelectorLoadState>('ready');
+  protected _propGroups: Ref<ResolvedFormSelectorGroup[]> = ref([]);
   protected __propItems: ComputedRef<RawFormSelectorItems>;
-  protected _propItems: Ref<ResolvedFormSelectorItemData[]> = ref([]);
+  // protected _propItems: Ref<ResolvedFormSelectorItem[]> = ref([]);
   protected _selectedValues: ComputedRef<(string | number)[]>;
   protected _selectedItems: ComputedRef<FormSelectorItemControl[]>;
   protected onSelectItem?: (
@@ -141,9 +160,13 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     return this._indeterminate.value;
   }
 
-  get propItems() {
-    return this._propItems.value;
+  get propGroups() {
+    return this._propGroups.value;
   }
+
+  // get propItems() {
+  //   return this._propItems.value;
+  // }
 
   get selectedValues() {
     return this._selectedValues.value;
@@ -285,7 +308,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     onBeforeUnmount(() => {
       delete this.onSelectItem;
-      this._propItems.value = [];
+      this._propGroups.value = [];
     });
 
     provide(FormSelectorInjectionKey, this);
@@ -295,11 +318,38 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     return this.multiple ? [] : undefined;
   }
 
-  private _setPropItems(items: FormSelectorItems) {
-    this._propItems.value = items.map((item) => ({
-      ...item,
-      label: resolveVNodeChildOrSlot(item.label),
-    }));
+  private _setPropItems(itemOrGroups: FormSelectorItemOrGroups) {
+    const groups: ResolvedFormSelectorGroup[] = [];
+    let defaultGroup: ResolvedFormSelectorGroup | undefined;
+
+    itemOrGroups.forEach((itemOrGroup) => {
+      if ('items' in itemOrGroup) {
+        groups.push({
+          ...itemOrGroup,
+          label: resolveVNodeChildOrSlot(itemOrGroup.label),
+          items: itemOrGroup.items.map((item) => ({
+            ...item,
+            label: resolveVNodeChildOrSlot(item.label),
+          })),
+        });
+        return;
+      }
+
+      if (!defaultGroup) {
+        defaultGroup = {
+          id: DEFAULT_FORM_SELECTOR_GROUP_ID,
+          label: () => undefined,
+          items: [],
+        };
+        groups.push(defaultGroup);
+      }
+
+      defaultGroup.items.push({
+        ...itemOrGroup,
+        label: resolveVNodeChildOrSlot(itemOrGroup.label),
+      });
+    });
+    this._propGroups.value = groups.filter((group) => !!group.items.length);
     this._itemsLoadState.value = 'ready';
   }
 
@@ -414,12 +464,13 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     }
   }
 
-  getItems(group?: string | number | (string | number)[]) {
+  getItems(groupId?: string | number | (string | number)[]) {
     let { items } = this;
-    if (group) {
-      const filter = Array.isArray(group) ? group : [group];
+    if (groupId) {
+      const filter = Array.isArray(groupId) ? groupId : [groupId];
       items = items.filter(
-        ({ group }) => group != null && filter.includes(group),
+        ({ groupId: _groupId }) =>
+          _groupId != null && filter.includes(_groupId),
       );
     }
     return items;
@@ -566,7 +617,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       selectorItems: this._items,
       selectedValues: this._selectedValues,
       selectedItems: this._selectedItems,
-      propItems: this._propItems,
+      propGroups: this._propGroups,
     };
   }
 

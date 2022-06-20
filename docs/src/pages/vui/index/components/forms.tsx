@@ -9,7 +9,7 @@ import {
   ControlFieldVariant,
   VSelect,
   VForm,
-  FormSelectorItemData,
+  FormSelectorItem,
   VCheckbox,
   VCheckboxGroup,
   VTextField,
@@ -35,7 +35,7 @@ export default defineComponent({
       k1: '',
       k2: '',
     });
-    const items: FormSelectorItemData[] = range(5, 1).map((i) => ({
+    const items: FormSelectorItem[] = range(5, 1).map((i) => ({
       value: String(i),
       label: `アイテム${i}`,
     }));

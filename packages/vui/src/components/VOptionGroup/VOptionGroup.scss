@@ -1,3 +1,16 @@
 .v-option-group {
   display: block;
+
+  &__label {
+    padding: 1em;
+    // padding: 0.875em 1em;
+    font-size: 0.875em;
+    color: var(--palette-caption);
+    opacity: 0.6;
+  }
+
+  &--disabled &__label {
+    color: var(--palette-muted);
+    opacity: 0.4;
+  }
 }

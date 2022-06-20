@@ -31,7 +31,6 @@ export function createFormSelectorItemProps() {
         type: [String, Number],
         // default: '',
       },
-      group: [String, Number],
     }),
   };
 }
@@ -70,7 +69,7 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
   protected _parentSelector: FormSelectorControl | null = null;
   protected _groupControl: FormSelectorItemGroupControl | null = null;
   readonly propValue?: string | number;
-  readonly group?: string | number;
+  // readonly group?: string | number;
   protected _multiple: ComputedRef<boolean>;
   protected _hasValue: ComputedRef<boolean>;
   protected _defaultSlot: ComputedRef<Slot>;
@@ -83,6 +82,12 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
 
   get groupControl() {
     return this._groupControl;
+  }
+
+  get groupId() {
+    const { groupControl } = this;
+    if (!groupControl) return null;
+    return groupControl.groupId;
   }
 
   get selected() {
@@ -144,7 +149,7 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
 
     this.parentNodeType = options.parentNodeType;
     this.propValue = props.value;
-    this.group = props.group;
+    // this.group = props.group;
     this._name = computed(() => {
       if (props.name) return props.name;
       if (this.parentSelector) return this.parentSelector.name;
@@ -187,13 +192,14 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
       immediate: true,
     });
 
-    this._groupControl = useParentFormSelectorItemGroup(this.group);
-
     if (this.parentNodeType) {
       const parentSelector = useParentFormSelector();
+
       if (parentSelector && parentSelector.nodeType === this.parentNodeType) {
         this._parentSelector = parentSelector;
         parentSelector._joinFromSelectorItem(this);
+
+        this._groupControl = useParentFormSelectorItemGroup(parentSelector);
 
         onBeforeUnmount(() => {
           parentSelector._leaveFromSelectorItem(this);
