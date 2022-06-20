@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/async-control",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "@fastkit/async-control",
   "buildOptions": {
     "name": "AsyncControl"
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/async-control#readme",
   "dependencies": {
-    "@fastkit/cache-control": "0.8.8",
-    "@fastkit/helpers": "0.8.8"
+    "@fastkit/cache-control": "0.8.9",
+    "@fastkit/helpers": "0.8.9"
   }
 }
