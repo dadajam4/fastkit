@@ -20,7 +20,7 @@ export type RawKBSettings = RawKBSetting | RawKBSetting[];
 
 export interface RawKBSetting {
   target?: GlobalEventHandlers;
-  key?: KeyType | KeyType[];
+  key?: KeyType | KeyType[] | Readonly<KeyType[]>;
 
   /**
    * @default "keydown"

@@ -35,4 +35,7 @@ export interface VMenuControl {
   updateMenuRect(menuBodyRect?: ResizeDirectivePayload): void;
   updateActivatorRect(): void;
   updateRects(menuBodyRect?: ResizeDirectivePayload): void;
+  arrowKeyHandler(ev: KeyboardEvent): void;
+  choiceKeyHandler(ev: KeyboardEvent): void;
+  keybordEventHandler(ev: KeyboardEvent): void;
 }

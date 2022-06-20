@@ -1,12 +1,12 @@
 @use '../../styles/core.scss';
 
 .v-option {
+  @include core.button-reset();
+
   position: relative;
   display: flex;
   width: 100%;
   padding: 0.375em 1em;
-  cursor: pointer;
-  user-select: none;
 
   input {
     @include core.hidden-input-element;

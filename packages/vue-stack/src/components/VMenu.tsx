@@ -22,6 +22,7 @@ import {
   useWindow,
   resizeDirectiveArgument,
   ResizeDirectivePayload,
+  useKeybord,
 } from '@fastkit/vue-utils';
 import { logger } from '../logger';
 import { IN_WINDOW } from '@fastkit/helpers';
@@ -35,6 +36,18 @@ const { props, emits } = createStackableDefine({
   defaultTransition: DEFAULT_TRANSITION,
   defaultScrollLock: true,
 });
+
+export const MENU_STACK_ARROW_KEY_TYPES = useKeybord.Key([
+  'ArrowUp',
+  'ArrowDown',
+]);
+
+export const MENU_STACK_CHOICE_KEY_TYPES = useKeybord.Key(['Enter', ' ']);
+
+export const MENU_STACK_KEYBORD_EVENT_TYPES = useKeybord.Key([
+  ...MENU_STACK_ARROW_KEY_TYPES,
+  ...MENU_STACK_CHOICE_KEY_TYPES,
+]);
 
 export const stackMenuProps = {
   ...props,
@@ -59,10 +72,16 @@ export const stackMenuProps = {
     default: DEFAULT_RESIZE_WATCH_DEBOUNCE,
   },
   overlap: Boolean,
+  itemElements: Function as PropType<
+    (body: HTMLElement) => NodeListOf<Element> | Element[]
+  >,
   // ...createSnackbarPositionProps(),
 };
 
-export const stackMenuEmits = emits;
+export const stackMenuEmits = {
+  ...emits,
+  choiceItemElement: (el: HTMLElement) => true,
+};
 
 export type VMenuXPosition =
   | 'left'
@@ -88,7 +107,7 @@ export const VMenu = defineComponent({
   props: stackMenuProps,
   emits: stackMenuEmits,
   setup(props, ctx) {
-    const stackControl = useStackControl(props, ctx, {
+    const stackControl = useStackControl(props, ctx as any, {
       onContentMounted: () => {
         updateRects();
         // startHandleResize();
@@ -418,6 +437,102 @@ export const VMenu = defineComponent({
       updateActivatorRect();
     }
 
+    // const ARROW_KEYS = ['ArrowUp', 'ArrowDown'] as const;
+
+    // const enterKeyHandler =
+    const getItemElements = () => {
+      const { itemElements } = props;
+      if (!itemElements) return;
+
+      const bodyEl = stackMenuControl.bodyRef.value;
+      if (!bodyEl) return;
+
+      const els = (Array.from(itemElements(bodyEl)) as HTMLElement[]).filter(
+        (el) => {
+          const disabled = el.getAttribute('disabled');
+          return disabled == null || disabled === '';
+        },
+      );
+
+      if (!els.length) return;
+
+      return els;
+    };
+
+    const arrowKeyHandler = (ev: KeyboardEvent) => {
+      const { key } = ev;
+      if (
+        !stackControl.isActive ||
+        !MENU_STACK_ARROW_KEY_TYPES.includes(key as any)
+      )
+        return;
+
+      const els = getItemElements();
+
+      if (!els) return;
+
+      const { activeElement } = document;
+
+      const currentEl = activeElement && els.find((el) => el === activeElement);
+      const currentIndex = currentEl && els.indexOf(currentEl);
+      let nextIndex: number;
+      const { length } = els;
+      const isUp = key === 'ArrowUp';
+      if (currentIndex == null) {
+        nextIndex = isUp ? length - 1 : 0;
+      } else {
+        const shiftAmount = key === 'ArrowUp' ? -1 : 1;
+        nextIndex = currentIndex + shiftAmount;
+        if (nextIndex < 0) {
+          nextIndex = length - 1;
+        } else if (nextIndex >= length) {
+          nextIndex = 0;
+        }
+      }
+
+      const nextEl = els[nextIndex];
+
+      nextEl && nextEl.focus();
+    };
+
+    const choiceKeyHandler = (ev: KeyboardEvent) => {
+      const { key } = ev;
+      if (
+        !stackControl.isActive ||
+        !MENU_STACK_CHOICE_KEY_TYPES.includes(key as any)
+      )
+        return;
+
+      const els = getItemElements();
+
+      if (!els) return;
+
+      const { activeElement } = document;
+
+      const currentEl = activeElement && els.find((el) => el === activeElement);
+
+      if (currentEl) {
+        ctx.emit('choiceItemElement', currentEl);
+      }
+    };
+
+    const keybordEventHandler = (ev: KeyboardEvent) => {
+      if (MENU_STACK_ARROW_KEY_TYPES.includes(ev.key as any))
+        return arrowKeyHandler(ev);
+      if (MENU_STACK_CHOICE_KEY_TYPES.includes(ev.key as any))
+        return choiceKeyHandler(ev);
+    };
+
+    useKeybord(
+      [
+        {
+          key: MENU_STACK_KEYBORD_EVENT_TYPES,
+          handler: keybordEventHandler,
+        },
+      ],
+      { autorun: true },
+    );
+
     const stackMenuControl: VMenuControl = {
       get pageXOffset() {
         return state.pageXOffset;
@@ -457,6 +572,9 @@ export const VMenu = defineComponent({
       updateMenuRect,
       updateActivatorRect,
       updateRects,
+      keybordEventHandler,
+      arrowKeyHandler,
+      choiceKeyHandler,
     };
 
     return {

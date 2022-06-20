@@ -58,6 +58,20 @@
       white-space: nowrap;
       vertical-align: middle;
     }
+
+    .v-select--multiple & {
+      display: block;
+    }
+
+    .v-select--multiple &__inner {
+      display: block;
+      overflow: auto;
+      white-space: unset;
+    }
+  }
+
+  &--multiple .v-control-field__body {
+    padding: 0.2em 0;
   }
 
   &__placeholder {

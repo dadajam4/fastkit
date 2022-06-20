@@ -143,7 +143,13 @@ export const VSelect = defineComponent({
       <VFormControl
         nodeControl={nodeControl}
         // focused={this.nodeControl.focused}
-        class={['v-select', this.classes]}
+        class={[
+          'v-select',
+          this.classes,
+          {
+            'v-select--multiple': this.multiple,
+          },
+        ]}
         label={this.label}
         hint={this.hint}
         hinttip={this.hinttip}
@@ -161,6 +167,15 @@ export const VSelect = defineComponent({
               distance={0}
               alwaysRender
               v-model={this.menuOpened}
+              itemElements={(body) => body.querySelectorAll('.v-option')}
+              onChoiceItemElement={(item) => {
+                const ev = new MouseEvent('click', {
+                  view: window,
+                  bubbles: true,
+                  cancelable: true,
+                });
+                item.dispatchEvent(ev);
+              }}
               v-slots={{
                 activator: ({ attrs, control }) => [
                   <VControlField
@@ -173,6 +188,7 @@ export const VSelect = defineComponent({
                     // tabindex={this.computedTabindex}
                     size={this.size}
                     focused={this.menuOpened}
+                    autoHeight={this.multiple}
                     onClick={(ev) => {
                       if (this.canOperation && !control.isActive) {
                         let t = ev.target as HTMLElement;

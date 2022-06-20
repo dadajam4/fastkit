@@ -42,7 +42,10 @@ export const VOption = defineComponent({
   render() {
     const { selectorItemControl, classes } = this;
     return (
-      <label class={classes} onClick={selectorItemControl.handleClickElement}>
+      <label
+        class={classes}
+        onClick={selectorItemControl.handleClickElement}
+        tabindex={selectorItemControl.tabindex}>
         <span class="v-option__label">
           {renderSlotOrEmpty(this.$slots, 'default')}
         </span>
