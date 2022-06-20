@@ -1,5 +1,13 @@
 import './VSelect.scss';
-import { ref, VNodeChild, defineComponent, PropType, computed } from 'vue';
+import {
+  ref,
+  Ref,
+  VNodeChild,
+  defineComponent,
+  PropType,
+  computed,
+  nextTick,
+} from 'vue';
 import {
   createFormSelectorSettings,
   useFormSelectorControl,
@@ -10,6 +18,7 @@ import {
   createPropsOptions,
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
+  useKeybord,
 } from '@fastkit/vue-kit';
 import { VFormControl } from '../VFormControl';
 import {
@@ -29,6 +38,16 @@ import { VMenu } from '../kits';
 import { VOptionGroup } from '../VOptionGroup';
 import { VOption } from '../VOption';
 import { VButton } from '..';
+import { VMenuControl } from '@fastkit/vue-stack';
+
+export const ARROW_KEY_TYPES = useKeybord.Key(['ArrowUp', 'ArrowDown']);
+
+export const CHOICE_KEY_TYPES = useKeybord.Key(['Enter', ' ']);
+
+export const KEYBORD_EVENT_TYPES = useKeybord.Key([
+  ...ARROW_KEY_TYPES,
+  ...CHOICE_KEY_TYPES,
+]);
 
 const { props, emits } = createFormSelectorSettings();
 
@@ -49,6 +68,7 @@ export const VSelect = defineComponent({
   },
   emits,
   setup(props, ctx) {
+    const menuRef: Ref<{ stackMenuControl: VMenuControl } | null> = ref(null);
     const menuOpened = ref(false);
     const showMenu = () => {
       menuOpened.value = true;
@@ -112,8 +132,127 @@ export const VSelect = defineComponent({
           <span class="v-select__placeholder">{props.placeholder}</span>,
         );
       }
+
       return children;
     };
+
+    const clearKeyFocused = () => {
+      const menu = menuRef.value;
+      if (!menu) return;
+      const bodyEl = menu.stackMenuControl.bodyRef.value;
+      if (!bodyEl) return;
+
+      const els = Array.from(
+        bodyEl.querySelectorAll('.v-option'),
+      ) as HTMLElement[];
+
+      els.forEach((el) => el.classList.remove('v-option--key-focused'));
+    };
+
+    const getItemElements = (): HTMLElement[] | void => {
+      const menu = menuRef.value;
+      if (!menu) return;
+
+      const bodyEl = menu.stackMenuControl.bodyRef.value;
+
+      if (!bodyEl) return;
+
+      const els = (
+        Array.from(bodyEl.querySelectorAll('.v-option')) as HTMLElement[]
+      ).filter((el) => {
+        if (el.tabIndex === -1) return false;
+        const disabled = el.getAttribute('disabled');
+        const ariaDisabled = el.getAttribute('aria-disabled');
+        if (ariaDisabled === 'true') return false;
+        return disabled == null || disabled === '';
+      });
+
+      if (!els.length) return;
+
+      return els;
+    };
+
+    const arrowKeyHandler = (ev: KeyboardEvent) => {
+      const { key } = ev;
+      if (!menuOpened.value || !ARROW_KEY_TYPES.includes(key as any)) return;
+
+      const els = getItemElements();
+
+      if (!els) return;
+
+      const currentEl = els.find((el) =>
+        el.classList.contains('v-option--key-focused'),
+      );
+      const currentIndex = currentEl && els.indexOf(currentEl);
+      let nextIndex: number;
+      const { length } = els;
+      const isUp = key === 'ArrowUp';
+      if (currentIndex == null) {
+        nextIndex = isUp ? length - 1 : 0;
+      } else {
+        const shiftAmount = key === 'ArrowUp' ? -1 : 1;
+        nextIndex = currentIndex + shiftAmount;
+        if (nextIndex < 0) {
+          nextIndex = length - 1;
+        } else if (nextIndex >= length) {
+          nextIndex = 0;
+        }
+      }
+
+      const nextEl = els[nextIndex];
+
+      if (nextEl) {
+        clearKeyFocused();
+        nextEl.classList.add('v-option--key-focused');
+        nextEl.scrollIntoView({
+          block: 'nearest',
+          inline: 'nearest',
+          behavior: 'smooth',
+        });
+        ev.preventDefault();
+      }
+    };
+
+    const choiceKeyHandler = (ev: KeyboardEvent) => {
+      const { key } = ev;
+      if (!menuOpened.value || !CHOICE_KEY_TYPES.includes(key as any)) return;
+
+      const els = getItemElements();
+
+      if (!els) return;
+
+      const currentEl = els.find((el) =>
+        el.classList.contains('v-option--key-focused'),
+      );
+
+      if (currentEl) {
+        const ev = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        currentEl.dispatchEvent(ev);
+        ev.preventDefault();
+        nextTick(() => {
+          currentEl.classList.add('v-option--key-focused');
+        });
+      }
+    };
+
+    const keybordEventHandler = (ev: KeyboardEvent) => {
+      if (ARROW_KEY_TYPES.includes(ev.key as any)) return arrowKeyHandler(ev);
+      if (CHOICE_KEY_TYPES.includes(ev.key as any)) return choiceKeyHandler(ev);
+    };
+
+    useKeybord(
+      [
+        {
+          key: KEYBORD_EVENT_TYPES,
+          handler: keybordEventHandler,
+        },
+      ],
+      { autorun: true },
+    );
 
     return {
       ...inputControl.expose(),
@@ -125,6 +264,8 @@ export const VSelect = defineComponent({
       showMenu,
       closeMenu,
       renderSelections,
+      menuRef: () => menuRef,
+      clearKeyFocused,
     };
   },
   render() {
@@ -179,15 +320,8 @@ export const VSelect = defineComponent({
               distance={0}
               alwaysRender
               v-model={this.menuOpened}
-              itemElements={(body) => body.querySelectorAll('.v-option')}
-              onChoiceItemElement={(item) => {
-                const ev = new MouseEvent('click', {
-                  view: window,
-                  bubbles: true,
-                  cancelable: true,
-                });
-                item.dispatchEvent(ev);
-              }}
+              ref={this.menuRef()}
+              onClose={this.clearKeyFocused}
               v-slots={{
                 activator: ({ attrs, control }) => [
                   <VControlField

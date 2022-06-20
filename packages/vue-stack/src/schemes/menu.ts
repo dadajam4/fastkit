@@ -30,12 +30,10 @@ export interface VMenuControl {
   readonly maxRight: number;
   readonly maxBottom: number;
   readonly styles: CSSProperties;
+  readonly scrollerRef: Ref<HTMLElement | null>;
   readonly bodyRef: Ref<HTMLElement | null>;
   updatePageOffset(): void;
   updateMenuRect(menuBodyRect?: ResizeDirectivePayload): void;
   updateActivatorRect(): void;
   updateRects(menuBodyRect?: ResizeDirectivePayload): void;
-  arrowKeyHandler(ev: KeyboardEvent): void;
-  choiceKeyHandler(ev: KeyboardEvent): void;
-  keybordEventHandler(ev: KeyboardEvent): void;
 }

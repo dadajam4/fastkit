@@ -22,7 +22,6 @@ import {
   useWindow,
   resizeDirectiveArgument,
   ResizeDirectivePayload,
-  useKeybord,
 } from '@fastkit/vue-utils';
 import { logger } from '../logger';
 import { IN_WINDOW } from '@fastkit/helpers';
@@ -37,18 +36,6 @@ const { props, emits } = createStackableDefine({
   defaultScrollLock: true,
 });
 
-export const MENU_STACK_ARROW_KEY_TYPES = useKeybord.Key([
-  'ArrowUp',
-  'ArrowDown',
-]);
-
-export const MENU_STACK_CHOICE_KEY_TYPES = useKeybord.Key(['Enter', ' ']);
-
-export const MENU_STACK_KEYBORD_EVENT_TYPES = useKeybord.Key([
-  ...MENU_STACK_ARROW_KEY_TYPES,
-  ...MENU_STACK_CHOICE_KEY_TYPES,
-]);
-
 export const stackMenuProps = {
   ...props,
   ...createStackActionProps(),
@@ -57,8 +44,8 @@ export const stackMenuProps = {
   allowOverflow: Boolean,
   width: [Number, String] as PropType<number | 'fit'>,
   height: [Number, String] as PropType<number | 'fit'>,
-  maxWidth: [Number, String] as PropType<number | 'fit'>,
-  maxHeight: [Number, String] as PropType<number | 'fit'>,
+  maxWidth: [Number, String] as PropType<number | 'fit' | 'free'>,
+  maxHeight: [Number, String] as PropType<number | 'fit' | 'free'>,
   distance: {
     type: Number,
     default: DEFAULT_DISTANCE,
@@ -72,15 +59,10 @@ export const stackMenuProps = {
     default: DEFAULT_RESIZE_WATCH_DEBOUNCE,
   },
   overlap: Boolean,
-  itemElements: Function as PropType<
-    (body: HTMLElement) => NodeListOf<Element> | Element[]
-  >,
-  // ...createSnackbarPositionProps(),
 };
 
 export const stackMenuEmits = {
   ...emits,
-  choiceItemElement: (el: HTMLElement) => true,
 };
 
 export type VMenuXPosition =
@@ -123,6 +105,7 @@ export const VMenu = defineComponent({
       activatorRect: null,
     });
 
+    const _scrollerRef = ref<HTMLElement | null>(null);
     const _bodyRef = ref<HTMLElement | null>(null);
     const _distance = computed(() => props.distance);
     const _resizeWatchDebounce = computed(() => props.resizeWatchDebounce);
@@ -220,17 +203,74 @@ export const VMenu = defineComponent({
       if (computedMaxWidth === 'fit') computedMaxWidth = activatorWidth;
       if (computedMaxHeight === 'fit') computedMaxHeight = activatorHeight;
 
-      const {
+      let {
         top: isTop,
         bottom: isBottom,
         left: isLeft,
         right: isRight,
-        xInner,
-        yInner,
       } = _positionFlags.value;
+
+      const { xInner, yInner } = _positionFlags.value;
 
       width = typeof computedWidth === 'number' ? computedWidth : myWidth;
       height = typeof computedHeight === 'number' ? computedHeight : myHeight;
+
+      const overlapHeight = overlap ? activatorHeight : 0;
+      const overlapWidth = overlap ? activatorWidth : 0;
+      const topFree = activatorTop - _edgeMargin.value + overlapHeight;
+      const bottomFree =
+        $window.height - _edgeMargin.value - activatorBottom + overlapHeight;
+      const leftFree = activatorLeft - _edgeMargin.value + overlapWidth;
+      const rightFree =
+        $window.width - _edgeMargin.value - activatorRight + overlapWidth;
+
+      if (!yInner && computedMaxHeight == null) {
+        if (isBottom) {
+          if (height > bottomFree) {
+            if (bottomFree < topFree) {
+              isBottom = false;
+              isTop = true;
+              computedMaxHeight = topFree;
+            } else {
+              computedMaxHeight = bottomFree;
+            }
+          }
+        } else if (isTop) {
+          if (height > topFree) {
+            if (topFree < bottomFree) {
+              isTop = false;
+              isBottom = true;
+              computedMaxHeight = bottomFree;
+            } else {
+              computedMaxHeight = topFree;
+            }
+          }
+        }
+      }
+
+      if (!xInner && computedMaxWidth == null) {
+        if (isRight) {
+          if (width > rightFree) {
+            if (rightFree < leftFree) {
+              isRight = false;
+              isLeft = true;
+              computedMaxWidth = leftFree;
+            } else {
+              computedMaxWidth = rightFree;
+            }
+          }
+        } else if (isLeft) {
+          if (width > leftFree) {
+            if (leftFree < rightFree) {
+              isLeft = false;
+              isRight = true;
+              computedMaxWidth = rightFree;
+            } else {
+              computedMaxWidth = leftFree;
+            }
+          }
+        }
+      }
 
       if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
         width = computedMaxWidth;
@@ -437,107 +477,6 @@ export const VMenu = defineComponent({
       updateActivatorRect();
     }
 
-    // const ARROW_KEYS = ['ArrowUp', 'ArrowDown'] as const;
-
-    // const enterKeyHandler =
-    const getItemElements = () => {
-      const { itemElements } = props;
-      if (!itemElements) return;
-
-      const bodyEl = stackMenuControl.bodyRef.value;
-      if (!bodyEl) return;
-
-      const els = (Array.from(itemElements(bodyEl)) as HTMLElement[]).filter(
-        (el) => {
-          if (el.tabIndex === -1) return false;
-          const disabled = el.getAttribute('disabled');
-          return disabled == null || disabled === '';
-        },
-      );
-
-      if (!els.length) return;
-
-      return els;
-    };
-
-    const arrowKeyHandler = (ev: KeyboardEvent) => {
-      const { key } = ev;
-      if (
-        !stackControl.isActive ||
-        !MENU_STACK_ARROW_KEY_TYPES.includes(key as any)
-      )
-        return;
-
-      const els = getItemElements();
-
-      if (!els) return;
-
-      const { activeElement } = document;
-
-      const currentEl = activeElement && els.find((el) => el === activeElement);
-      const currentIndex = currentEl && els.indexOf(currentEl);
-      let nextIndex: number;
-      const { length } = els;
-      const isUp = key === 'ArrowUp';
-      if (currentIndex == null) {
-        nextIndex = isUp ? length - 1 : 0;
-      } else {
-        const shiftAmount = key === 'ArrowUp' ? -1 : 1;
-        nextIndex = currentIndex + shiftAmount;
-        if (nextIndex < 0) {
-          nextIndex = length - 1;
-        } else if (nextIndex >= length) {
-          nextIndex = 0;
-        }
-      }
-
-      const nextEl = els[nextIndex];
-
-      if (nextEl) {
-        nextEl.focus();
-        // ev.preventDefault();
-      }
-    };
-
-    const choiceKeyHandler = (ev: KeyboardEvent) => {
-      const { key } = ev;
-      if (
-        !stackControl.isActive ||
-        !MENU_STACK_CHOICE_KEY_TYPES.includes(key as any)
-      )
-        return;
-
-      const els = getItemElements();
-
-      if (!els) return;
-
-      const { activeElement } = document;
-
-      const currentEl = activeElement && els.find((el) => el === activeElement);
-
-      if (currentEl) {
-        ctx.emit('choiceItemElement', currentEl);
-        ev.preventDefault();
-      }
-    };
-
-    const keybordEventHandler = (ev: KeyboardEvent) => {
-      if (MENU_STACK_ARROW_KEY_TYPES.includes(ev.key as any))
-        return arrowKeyHandler(ev);
-      if (MENU_STACK_CHOICE_KEY_TYPES.includes(ev.key as any))
-        return choiceKeyHandler(ev);
-    };
-
-    useKeybord(
-      [
-        {
-          key: MENU_STACK_KEYBORD_EVENT_TYPES,
-          handler: keybordEventHandler,
-        },
-      ],
-      { autorun: true },
-    );
-
     const stackMenuControl: VMenuControl = {
       get pageXOffset() {
         return state.pageXOffset;
@@ -573,13 +512,11 @@ export const VMenu = defineComponent({
         return _styles.value;
       },
       bodyRef: _bodyRef,
+      scrollerRef: _scrollerRef,
       updatePageOffset,
       updateMenuRect,
       updateActivatorRect,
       updateRects,
-      keybordEventHandler,
-      arrowKeyHandler,
-      choiceKeyHandler,
     };
 
     return {
@@ -594,7 +531,10 @@ export const VMenu = defineComponent({
 
     return render((children) => {
       return withDirectives(
-        <div class={['v-menu', color.colorClasses.value]} style={styles}>
+        <div
+          class={['v-menu', color.colorClasses.value]}
+          style={styles}
+          ref={stackMenuControl.scrollerRef}>
           {withDirectives(
             <div class="v-menu__body" ref={stackMenuControl.bodyRef}>
               {children}

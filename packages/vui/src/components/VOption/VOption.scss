@@ -36,7 +36,8 @@
   }
 
   &:hover,
-  &:focus-within {
+  &:focus-within,
+  &--key-focused {
     &::before {
       opacity: 0.12;
     }

@@ -46,6 +46,7 @@ export const VOption = defineComponent({
         class={classes}
         onClick={selectorItemControl.handleClickElement}
         tabindex={selectorItemControl.tabindex}
+        data-value={selectorItemControl.propValue}
         {...({
           'aria-disabled': selectorItemControl.isDisabled,
         } as any)}>
