@@ -1,3 +1,12 @@
+## [0.8.11](https://github.com/dadajam4/fastkit/compare/v0.8.10...v0.8.11) (2022-06-27)
+
+
+### Bug Fixes
+
+* Fixed memory leaks in SSR for various plug-ins ([c6e259c](https://github.com/dadajam4/fastkit/commit/c6e259cccf9282d59518753cf77f0ba4228aba7c))
+
+
+
 ## [0.8.10](https://github.com/dadajam4/fastkit/compare/v0.8.9...v0.8.10) (2022-06-20)
 
 
