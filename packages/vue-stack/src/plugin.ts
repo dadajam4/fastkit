@@ -4,6 +4,7 @@ import {
   VueStackServiceOptions,
   VueStackInjectionKey,
 } from './service';
+import { onAppUnmount } from '@fastkit/vue-utils';
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
@@ -12,23 +13,14 @@ declare module '@vue/runtime-core' {
 }
 
 export class VueStackPlugin {
-  static readonly installedApps = new Set<App>();
-
   static install(app: App, opts: VueStackServiceOptions) {
-    const { installedApps } = this;
-    if (installedApps.has(app)) return;
-    const unmountApp = app.unmount;
-    installedApps.add(app);
-
     const $vstack = new VueStackService(opts);
     app.provide(VueStackInjectionKey, $vstack);
     app.config.globalProperties.$vstack = $vstack;
 
-    app.unmount = function () {
-      installedApps.delete(app);
+    onAppUnmount(app, () => {
       delete app.config.globalProperties.$vstack;
-      unmountApp();
-    };
+    });
   }
 }
 

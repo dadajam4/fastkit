@@ -6,11 +6,13 @@ import { globalsPlugin } from '../core/playground-globals';
 import { votPlugin } from '../packages/vot/dist/tool';
 import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
 
+const USE_GENERATE = true;
+
 const viteVui = viteVuiPlugin({
   __dev: true,
-  onBooted: () => {
-    console.log('★ onBooted');
-  },
+  // onBooted: () => {
+  //   console.log('★ onBooted');
+  // },
 });
 
 export default defineConfig({
@@ -35,16 +37,18 @@ export default defineConfig({
           res.writeHead(200).end();
         });
       },
-      generate: {
-        handler: (page) => {
-          if (!page.dynamicParams) return true;
-          if (page.fullPath === '/vui/components/tabs/:childId') {
-            return MOCK_ITEMS_1.map(({ value }) => ({
-              params: { childId: value },
-            }));
+      generate: USE_GENERATE
+        ? {
+            handler: (page) => {
+              if (!page.dynamicParams) return true;
+              if (page.fullPath === '/vui/components/tabs/:childId') {
+                return MOCK_ITEMS_1.map(({ value }) => ({
+                  params: { childId: value },
+                }));
+              }
+            },
           }
-        },
-      },
+        : undefined,
     }),
     ...viteVui.plugins,
   ],

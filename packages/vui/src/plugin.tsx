@@ -10,6 +10,7 @@ import {
   installVueStackPlugin,
   VueStackServiceOptions,
   VueColorSchemePlugin,
+  onAppUnmount,
 } from '@fastkit/vue-kit';
 import { VButton } from './components/VButton';
 
@@ -46,14 +47,7 @@ declare module '@vue/runtime-core' {
 }
 
 export class VuiPlugin {
-  static readonly installedApps = new Set<App>();
-
   static install(app: App, opts: VuiPluginOptions) {
-    const { installedApps } = this;
-    if (installedApps.has(app)) return;
-    const unmountApp = app.unmount;
-    installedApps.add(app);
-
     const { colorScheme, stack, uiSettings } = opts;
 
     // ColorScheme
@@ -88,11 +82,9 @@ export class VuiPlugin {
     app.provide(VuiInjectionKey, $vui);
     app.config.globalProperties.$vui = $vui;
 
-    app.unmount = function () {
-      installedApps.delete(app);
+    onAppUnmount(app, () => {
       delete app.config.globalProperties.$vui;
-      unmountApp();
-    };
+    });
   }
 }
 

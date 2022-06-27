@@ -4,7 +4,7 @@ import {
   StateInjectionKey,
 } from '@fastkit/vot';
 import { InjectionKey, inject } from 'vue';
-import { objectHash } from '@fastkit/helpers';
+// import { objectHash } from '@fastkit/helpers';
 
 declare module '@fastkit/vot' {
   interface VuePageControl {
@@ -59,9 +59,9 @@ export const authPlugin = createVotPlugin({
       };
     });
 
-    console.log('kick!!!', ctx.isClient, state);
-    const hoge = await objectHash(state);
-    console.log(hoge, typeof window);
+    // console.log('kick!!!', ctx.isClient, state);
+    // const hoge = await objectHash(state);
+    // console.log(hoge, typeof window);
 
     const auth = new AuthSearvice(ctx, state);
     ctx.auth = auth;

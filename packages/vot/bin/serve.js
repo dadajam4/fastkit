@@ -1,3 +1,6 @@
 const serve = require('./serve-fn');
+const [, , ...args] = process.argv;
 
-serve();
+serve({
+  memwatch: args.includes('--memwatch'),
+});

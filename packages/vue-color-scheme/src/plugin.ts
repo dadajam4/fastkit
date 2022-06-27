@@ -8,7 +8,6 @@ export interface VueColorSchemePluginSettings
 }
 
 export class VueColorSchemePlugin {
-  readonly installedApps = new Set<App>();
   readonly settings: VueColorSchemeServiceSettings;
 
   constructor(settings: VueColorSchemePluginSettings) {
@@ -23,17 +22,7 @@ export class VueColorSchemePlugin {
   }
 
   install(app: App) {
-    const { installedApps } = this;
-    if (installedApps.has(app)) return;
-    const unmountApp = app.unmount;
-    installedApps.add(app);
-
     const $color = new VueColorSchemeService(this.settings);
     $color.provide(app);
-
-    app.unmount = function () {
-      installedApps.delete(app);
-      unmountApp();
-    };
   }
 }

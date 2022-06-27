@@ -3,7 +3,26 @@ const express = require('express');
 const vite = require('vite');
 const { proxyMiddleware } = require('../dist/tool');
 
-module.exports = async function serve() {
+module.exports = async function serve(opts = {}) {
+  let memwatch;
+
+  if (opts.memwatch) {
+    memwatch = require('./memwatch')();
+
+    memwatch.memwatcher.start({
+      graph: true,
+      graphSetup(setup) {
+        setup.metrics.malloc = {
+          aggregator: 'avg',
+          color: 'cyan',
+        };
+      },
+      graphAddMetric(turtleGraph, stats) {
+        turtleGraph.metric('malloc', 'malloc').push(stats.malloced_memory);
+      },
+    });
+  }
+
   const { path: configPath, config } = await vite.loadConfigFromFile({
     command: 'serve',
   });
@@ -29,6 +48,14 @@ module.exports = async function serve() {
   const { default: renderPage } = require(path.join(dist, 'server'));
 
   const server = express();
+
+  if (memwatch) {
+    server.get('/__memwatch__/diff', async (request, response) => {
+      memwatch.gc();
+      const diff = memwatch.diff();
+      response.json(diff);
+    });
+  }
 
   let router = server;
   if (config.base) {
