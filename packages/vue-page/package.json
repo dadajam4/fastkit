@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-page#readme",
   "peerDependencies": {
-    "vue": "^3.2.26",
-    "vue-router": "^4.0.15"
+    "vue": "^3.2.37",
+    "vue-router": "^4.0.16"
   },
   "dependencies": {
     "@fastkit/ev": "0.8.12",

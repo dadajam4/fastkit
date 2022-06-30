@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/stylelint-config#readme",
   "peerDependencies": {
-    "stylelint": "^14.2.0"
+    "stylelint": "^14.9.1"
   },
   "dependencies": {
     "postcss-html": "^1.2.0",

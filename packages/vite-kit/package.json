@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vite-kit#readme",
   "peerDependencies": {
-    "vite": "^2.9.9"
+    "vite": "^2.9.13"
   },
   "dependencies": {
     "@fastkit/color-scheme-gen": "0.8.12",

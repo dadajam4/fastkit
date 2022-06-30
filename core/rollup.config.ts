@@ -7,7 +7,6 @@ import json from '@rollup/plugin-json';
 import { ROOT_DIR, PACKAGES_DIR, getPackage } from './utils';
 import { BuildOptions, BuildType } from './schemes';
 import { Options as TerserOptions } from 'rollup-plugin-terser';
-import { babel } from '@rollup/plugin-babel';
 import { rawStylesPlugin } from '../core/raw-styles';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import postcss from 'rollup-plugin-postcss';
@@ -206,7 +205,6 @@ function createConfig(
     // 'nuxt3',
     'http-proxy',
     'virtual:generated-pages',
-    'node-fetch',
     'fs',
     'fs-extra',
     'http',

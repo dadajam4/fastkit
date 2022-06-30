@@ -20,7 +20,7 @@ function resolveWysiwygLinterFixMessage(message: WysiwygLinterFixMessage) {
   return typeof message === 'function' ? message() : message;
 }
 
-function renderIcon(view: EditorView<any>, issue: Issue) {
+function renderIcon(view: EditorView, issue: Issue) {
   const { level = 'warning' } = issue;
   const icon = document.createElement('div');
   const message = resolveWysiwygLinterFixMessage(issue.message);
@@ -81,7 +81,7 @@ export interface WysiwygLinterStorage {
 }
 
 export const WysiwygLinter = createWysiwygExtension((ctx) => {
-  function showMenu(view: EditorView<any>, issue: Issue, event: Event) {
+  function showMenu(view: EditorView, issue: Issue, event: Event) {
     const message = resolveWysiwygLinterFixMessage(issue.message);
     const variant = ctx.vui.setting('containedVariant');
     const scope = ctx.vui.setting(`${issue.level}Scope`);
@@ -166,49 +166,45 @@ export const WysiwygLinter = createWysiwygExtension((ctx) => {
         };
       };
 
-      return [
-        new Plugin({
-          key: new PluginKey('linter'),
-          state: {
-            init(_, { doc }) {
-              return runAll(doc);
-            },
-            apply(transaction, oldState) {
-              return transaction.docChanged
-                ? runAll(transaction.doc)
-                : oldState;
-            },
+      const linterPlugin: Plugin<any> = new Plugin({
+        key: new PluginKey('linter'),
+        state: {
+          init(_, { doc }) {
+            return runAll(doc);
           },
-          props: {
-            decorations(state) {
-              return this.getState(state);
-            },
-            handleClick(view, _, event) {
-              const info = getIssueElementByEvent(event.target);
-              if (!info) {
-                return false;
-              }
-
-              const { issue } = info;
-              const { from, to } = issue;
-
-              const focus = () =>
-                view.dispatch(
-                  view.state.tr
-                    .setSelection(
-                      TextSelection.create(view.state.doc, from, to),
-                    )
-                    .scrollIntoView(),
-                );
-
-              focus();
-
-              showMenu(view, issue, event);
-              return true;
-            },
+          apply(transaction, oldState) {
+            return transaction.docChanged ? runAll(transaction.doc) : oldState;
           },
-        }),
-      ];
+        },
+        props: {
+          decorations(state) {
+            return linterPlugin.getState(state);
+          },
+          handleClick(view, _, event) {
+            const info = getIssueElementByEvent(event.target);
+            if (!info) {
+              return false;
+            }
+
+            const { issue } = info;
+            const { from, to } = issue;
+
+            const focus = () =>
+              view.dispatch(
+                view.state.tr
+                  .setSelection(TextSelection.create(view.state.doc, from, to))
+                  .scrollIntoView(),
+              );
+
+            focus();
+
+            showMenu(view, issue, event);
+            return true;
+          },
+        },
+      });
+
+      return [linterPlugin];
     },
   });
 });

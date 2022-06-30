@@ -31,6 +31,6 @@
   "dependencies": {
     "@fastkit/tiny-logger": "0.8.12",
     "esbuild": "^0.13.0",
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.18"
   }
 }

@@ -170,13 +170,6 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
     server: options.server || { ...options },
   });
 
-  // if (options.polyfills !== false) {
-  //   if (!globalThis.fetch) {
-  //     const fetch = await import('node-fetch');
-  //     (globalThis as any).fetch = fetch.default || fetch;
-  //   }
-  // }
-
   const isMiddlewareMode = !!(
     (options as any).middlewareMode || options.server?.middlewareMode
   );
