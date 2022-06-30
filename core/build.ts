@@ -31,6 +31,7 @@ import {
   getCommit,
   pathExists,
   getPackage,
+  getBuildQueues,
 } from './utils';
 
 export interface BuildArgs {
@@ -86,23 +87,26 @@ async function runParallel(
   source: string[],
   iteratorFn: (target: string, source: string[]) => Promise<any>,
 ) {
-  const ret: Promise<any>[] = [];
-  const executing: Promise<any>[] = [];
-  for (const item of source) {
-    const p = Promise.resolve().then(() => iteratorFn(item, source));
-    ret.push(p);
+  const queues = getBuildQueues(source);
+  for (const queue of queues) {
+    const ret: Promise<any>[] = [];
+    const executing: Promise<any>[] = [];
+    for (const node of queue) {
+      const p = Promise.resolve().then(() => iteratorFn(node.name, source));
+      ret.push(p);
 
-    if (maxConcurrency <= source.length) {
-      const e: Promise<any> = p.then(() =>
-        executing.splice(executing.indexOf(e), 1),
-      );
-      executing.push(e);
-      if (executing.length >= maxConcurrency) {
-        await Promise.race(executing);
+      if (maxConcurrency <= queue.length) {
+        const e: Promise<any> = p.then(() =>
+          executing.splice(executing.indexOf(e), 1),
+        );
+        executing.push(e);
+        if (executing.length >= maxConcurrency) {
+          await Promise.race(executing);
+        }
       }
     }
+    await Promise.all(ret);
   }
-  return Promise.all(ret);
 }
 
 async function build(target: string) {

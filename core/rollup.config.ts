@@ -184,6 +184,9 @@ function createConfig(
     'crypto',
     '@vueuse/head',
     'chokidar',
+    'prosemirror-view',
+    'prosemirror-state',
+    '@tiptap/core',
     '@tiptap/extension-link',
     '@tiptap/starter-kit',
     '@tiptap/extension-underline',
@@ -204,6 +207,11 @@ function createConfig(
     'http-proxy',
     'virtual:generated-pages',
     'node-fetch',
+    'fs',
+    'fs-extra',
+    'http',
+    'perf_hooks',
+    'imask',
   );
 
   // the browser builds requires postcss to be available
