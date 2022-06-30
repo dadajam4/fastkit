@@ -236,34 +236,6 @@ function createConfig(
   // if (packageOptions.styles) {
   //   _plugins.push(styles(packageOptions.styles));
   // }
-  if (packageOptions.legacy && isGlobalBuild) {
-    _plugins.push(
-      babel({
-        babelrc: false,
-        presets: [
-          [
-            '@babel/preset-env',
-            {
-              useBuiltIns: 'usage',
-              corejs: 3,
-              ignoreBrowserslistConfig: true,
-              targets: {
-                browsers: ['IE 11'],
-              },
-            },
-          ],
-        ],
-        extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', 'ts', 'tsx'],
-        babelHelpers: 'bundled',
-        exclude: ['node_modules/@babel/**', 'node_modules/core-js/**'],
-        plugins: [
-          require('@babel/plugin-transform-arrow-functions'),
-          require('@babel/plugin-proposal-class-properties'),
-          require('@babel/plugin-transform-template-literals'),
-        ],
-      }),
-    );
-  }
 
   if (packageOptions.rawStyles) {
     _plugins.push(rawStylesPlugin(packageOptions.rawStyles));

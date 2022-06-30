@@ -16,7 +16,6 @@ export interface BuildOptions {
   rawStyles?: {
     autoprefixer?: AutoprefixerOptions;
   };
-  legacy?: boolean;
   tool?: boolean;
 }
 
