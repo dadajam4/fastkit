@@ -20,9 +20,3 @@ declare module '*.scss!raw' {
   const rawStyle: string;
   export default rawStyle;
 }
-
-declare module 'cssnano' {
-  import { PluginInitializer } from 'postcss';
-  const cssnano: PluginInitializer<any>;
-  export default cssnano;
-}
