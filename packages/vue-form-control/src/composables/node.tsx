@@ -112,6 +112,9 @@ export function createFormNodeProps<T, D = T>(
         type: Array as PropType<RecursiveArray<ValidatableRule>>,
         default: () => [],
       },
+      validationDeps: Function as PropType<
+        (nodeControl: FormNodeControl) => any
+      >,
       error: Boolean,
       errorMessages: [String, Array] as PropType<string | string[]>,
     }),
@@ -585,22 +588,31 @@ export class FormNodeControl<T = any, D = T> {
       { immediate: true },
     );
 
+    const onValidateValueChange = () => {
+      this._lastValidateValueChanged = true;
+
+      if (
+        this.shouldValidate ||
+        this.validateTimingIsChange ||
+        this.validateTimingIsAlways
+      ) {
+        this.validateSelf();
+      }
+    };
+
     watch(
       () => this.value,
       (value) => {
-        this._lastValidateValueChanged = true;
-
-        if (
-          this.shouldValidate ||
-          this.validateTimingIsChange ||
-          this.validateTimingIsAlways
-        ) {
-          this.validateSelf();
-        }
-
+        onValidateValueChange();
         this._ctx.emit('change', value as any);
       },
       { immediate: true },
+    );
+
+    watch(
+      () => props.validationDeps && props.validationDeps(this),
+      onValidateValueChange,
+      // { deep: true },
     );
 
     watch(
