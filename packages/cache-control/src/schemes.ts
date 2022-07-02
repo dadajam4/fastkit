@@ -1,4 +1,4 @@
-import { Duration } from '@fastkit/helpers';
+import { Duration } from '@fastkit/duration';
 
 /**
  * Cache Details.

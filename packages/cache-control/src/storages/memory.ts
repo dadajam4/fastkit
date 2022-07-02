@@ -4,7 +4,7 @@ import {
   DeleteCacheRequest,
   GetCacheRequest,
 } from '../schemes';
-import { Duration } from '@fastkit/helpers';
+import { Duration } from '@fastkit/duration';
 
 const DEFAULT_MAX_KEYS = 32767;
 

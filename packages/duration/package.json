@@ -1,17 +1,17 @@
 {
-  "name": "@fastkit/cache-control",
+  "name": "@fastkit/duration",
   "version": "0.8.12",
-  "description": "@fastkit/cache-control",
+  "description": "@fastkit/duration",
   "buildOptions": {
-    "name": "CacheControl"
+    "name": "Duration"
   },
   "main": "index.js",
-  "module": "dist/cache-control.mjs",
+  "module": "dist/duration.mjs",
   "files": [
     "index.js",
     "dist"
   ],
-  "types": "dist/cache-control.d.ts",
+  "types": "dist/duration.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"
@@ -24,9 +24,5 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/cache-control#readme",
-  "dependencies": {
-    "@fastkit/duration": "0.8.12",
-    "@fastkit/helpers": "0.8.12"
-  }
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/duration#readme"
 }

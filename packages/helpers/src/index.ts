@@ -21,4 +21,3 @@ export * from './console';
 export * from './general';
 export * from './merge';
 export * from './defaults';
-export * from './duration';

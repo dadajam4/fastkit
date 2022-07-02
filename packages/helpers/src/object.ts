@@ -147,7 +147,7 @@ export function isIterableObject<T = any>(source?: any): source is Iterable<T> {
 }
 
 /**
- * @see: https://github.com/vuejs/vue-router/blob/c69ff7bd60228fb79acd764c3fdae91015a49103/src/util/route.js#L96
+ * @see https://github.com/vuejs/vue-router/blob/c69ff7bd60228fb79acd764c3fdae91015a49103/src/util/route.js#L96
  */
 export function isObjectEqual<T extends any>(
   a: T = {} as T,

@@ -92,7 +92,7 @@ export function flattenComparatorCondition(
 
 /**
  * Generate a condition object for executing comparisons execution. At this point, constructors such as `Symbol` and `Function` are removed.
- * @param args Any free parameter
+ * @param args - Any free parameter
  */
 export function createComparatorCondition(
   ...args: any[]

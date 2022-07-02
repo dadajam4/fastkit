@@ -1,4 +1,5 @@
-import { Duration, clone } from '@fastkit/helpers';
+import { clone } from '@fastkit/helpers';
+import { Duration } from '@fastkit/duration';
 
 import {
   CreateCacheDetailsSettings,

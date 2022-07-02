@@ -4,7 +4,7 @@ import {
   DeleteCacheRequest,
   GetCacheRequest,
 } from '../schemes';
-import { Duration } from '@fastkit/helpers';
+import { Duration } from '@fastkit/duration';
 import fs from 'fs';
 import path from 'path';
 

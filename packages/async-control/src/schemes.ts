@@ -3,7 +3,8 @@ import {
   CacheController,
   CacheDetailsWithRemainingTimes,
 } from '@fastkit/cache-control';
-import { AwaitedReturnType, Duration } from '@fastkit/helpers';
+import { AwaitedReturnType } from '@fastkit/helpers';
+import { Duration } from '@fastkit/duration';
 
 /**
  * Some asynchronous function.

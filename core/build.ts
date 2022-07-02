@@ -88,11 +88,25 @@ async function runParallel(
   iteratorFn: (target: string, source: string[]) => Promise<any>,
 ) {
   const queues = getBuildQueues(source);
+  const total = queues.flat().length;
+  let suceeded = 0;
+
   for (const queue of queues) {
     const ret: Promise<any>[] = [];
     const executing: Promise<any>[] = [];
     for (const node of queue) {
-      const p = Promise.resolve().then(() => iteratorFn(node.name, source));
+      const p = Promise.resolve().then(() =>
+        iteratorFn(node.name, source).then(() => {
+          suceeded++;
+          console.log(
+            chalk.bold(
+              chalk.green(
+                `(${suceeded}/${total}) ${node.name} completed successfully.`,
+              ),
+            ),
+          );
+        }),
+      );
       ret.push(p);
 
       if (maxConcurrency <= queue.length) {
@@ -382,7 +396,6 @@ async function build(target: string) {
         await fs.writeFile(dtsPath, typeProcessed);
       }
     }
-    console.log(dtsPath);
     console.log(
       chalk.bold(chalk.green(`API Extractor completed successfully.`)),
     );

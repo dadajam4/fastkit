@@ -1,4 +1,4 @@
-import { Duration } from '@fastkit/helpers';
+import { Duration } from '@fastkit/duration';
 import { CacheController } from '@fastkit/cache-control';
 import {
   AsyncHandlerCacheRevalidateCondition,

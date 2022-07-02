@@ -3,7 +3,8 @@ import 'jest';
 import { CacheController } from '../controller';
 import { MemoryCacheStorage } from '../storages';
 import { CacheStorage } from '../schemes';
-import { Duration, delay } from '@fastkit/helpers';
+import { delay } from '@fastkit/helpers';
+import { Duration } from '@fastkit/duration';
 
 function runControllerTests(createStorage: () => CacheStorage<any>) {
   describe(CacheController.name, () => {
