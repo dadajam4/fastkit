@@ -1,3 +1,12 @@
+## [0.8.13](https://github.com/dadajam4/fastkit/compare/v0.8.12...v0.8.13) (2022-07-02)
+
+
+### Features
+
+* Consider Reactive dependencies for form validation ([7226378](https://github.com/dadajam4/fastkit/commit/722637805bb9112e8f4f13d0f147e560a54ed7c5))
+
+
+
 ## [0.8.12](https://github.com/dadajam4/fastkit/compare/v0.8.11...v0.8.12) (2022-06-30)
 
 
