@@ -154,6 +154,7 @@ function createConfig(
         'core',
         'plugins',
         'vite.config.ts',
+        'site',
         'docs',
       ],
     },

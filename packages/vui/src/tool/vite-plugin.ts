@@ -75,27 +75,14 @@ async function renderTemplate({
 }
 
 function defaultDynamicDest() {
-  // const pkgDir = findPackageDirSync();
-  // if (!pkgDir) {
-  //   throw new Error(`missing package directory`);
-  // }
-  // return path.join(pkgDir, '.vui');
   return path.resolve('.vui');
 }
 
 function getBuiltinsDir() {
-  // const cwd = process.cwd();
   const pkgDir = findPackageDirSync(undefined, true);
   if (!pkgDir) {
     throw new Error(`missing package directory`);
   }
-
-  // For development...
-  // console.log('■■■', cwd);
-  // if (cwd.endsWith('/docs')) {
-  //   const result = path.resolve(cwd, '../packages/vui/src/assets/builtins');
-  //   return result;
-  // }
 
   return path.join(pkgDir, 'node_modules/@fastkit/vui/dist/assets/builtins');
 }
@@ -112,7 +99,6 @@ export interface ViteVuiPluginOptions
   __dev?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ViteVuiPluginResultSettings
   extends Pick<VuiServiceOptions, 'uiSettings' | 'icons'> {
   colorScheme: string;
@@ -191,11 +177,6 @@ export function viteVuiPlugin(
   const { dynamicDest: _dynamicDest } = options;
 
   if (!_dynamicDest) {
-    // if (options.__dev) {
-    //   dynamicDest = path.resolve(__dirname, '../../../../docs/.vui');
-    // } else {
-    //   dynamicDest = defaultDynamicDest();
-    // }
     dynamicDest = defaultDynamicDest();
   } else {
     dynamicDest = _dynamicDest;
@@ -261,7 +242,6 @@ export {};
       const ssr = (config as any).ssr || {};
       ssr.noExternal = ssr.noExternal || [];
       ssr.noExternal.push(/\/vui\/dist\/assets\//);
-      // ssr.noExternal.push(/\/fastkit\//);
 
       (config as any).ssr = ssr;
       return config;

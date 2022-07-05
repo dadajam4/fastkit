@@ -25,28 +25,28 @@
       "@fastkit/*": ["packages/*/src"],
       "fastkit/*": ["packages/fastkit/src"],
       "~~": [
-        "./docs"
+        "./site"
       ],
       "~~/*": [
-        "./docs/*"
+        "./site/*"
       ],
       "@@": [
-        "./docs"
+        "./site"
       ],
       "@@/*": [
-        "./docs/*"
+        "./site/*"
       ],
       "~": [
-        "./docs/src"
+        "./site/src"
       ],
       "~/*": [
-        "./docs/src/*"
+        "./site/src/*"
       ],
       "@": [
-        "./docs/src"
+        "./site/src"
       ],
       "@/*": [
-        "./docs/src/*"
+        "./site/src/*"
       ],
     }
   },
@@ -54,6 +54,6 @@
     "packages/global.d.ts",
     "packages/*/src",
     "core",
-    "docs"
+    "site"
   ]
 }

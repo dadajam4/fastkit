@@ -19,7 +19,7 @@ module.exports = {
   //   "stylelint --fix"
   // ],
   "*.{css,scss,vue,html}":  async (files) => {
-    const filesToLint = files.filter((file) => !/\/\.docs\//.test(file));
+    const filesToLint = files.filter((file) => !/\/docs\//.test(file)).join(' ');
     return filesToLint.length ? `stylelint --fix ${filesToLint}` : 'echo';
   },
   '*.{ts,tsx,js,vue,html,yaml}': async (files) => {

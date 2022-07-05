@@ -17,11 +17,13 @@ module.exports = {
   ignorePatterns: [
     '/node_modules/',
     '**/node_modules/',
+    '/coverage/',
     '/dist/',
+    '/play.ts',
     '**/dist/',
     '**/.vui/',
     '**/vui.d.ts',
     '**/vui.d.ts',
-    '.docs/',
+    'docs/',
   ],
 };

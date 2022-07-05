@@ -47,7 +47,7 @@ export default defineConfig({
                 }));
               }
             },
-            outputSync: '../.docs',
+            outputSync: '../docs',
           }
         : undefined,
     }),
