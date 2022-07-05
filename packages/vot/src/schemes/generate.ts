@@ -23,6 +23,7 @@ export type VotGenerateHandler = (
 export interface VotGenerateOptions {
   mode: VotGenerateMode;
   handler: VotGenerateHandler;
+  outputSync?: string;
 }
 
 export type RawVotGenerateOptions =
@@ -47,10 +48,15 @@ export function resolveRawVotGenerateOptions(
     source = {};
   }
 
-  const { mode = 'static', handler = DEFAULT_GENERATE_HANDLER } = source;
+  const {
+    mode = 'static',
+    handler = DEFAULT_GENERATE_HANDLER,
+    outputSync,
+  } = source;
   return {
     mode,
     handler,
+    outputSync,
   };
 }
 

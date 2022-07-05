@@ -9,6 +9,7 @@ module.exports = {
     '/coverage/',
     '/dist/',
     '**/dist/',
-    '**/*.ts'
+    '**/*.ts',
+    '.docs/',
   ],
 };

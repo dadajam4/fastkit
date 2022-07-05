@@ -21,5 +21,7 @@ module.exports = {
     '**/dist/',
     '**/.vui/',
     '**/vui.d.ts',
+    '**/vui.d.ts',
+    '.docs/',
   ],
 };

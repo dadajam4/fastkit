@@ -135,6 +135,14 @@ export async function generate(_config?: ResolvedConfig) {
     server.close();
   }
 
+  const outputSync =
+    generateOptions.outputSync && path.resolve(generateOptions.outputSync);
+
+  if (outputSync) {
+    await fs.emptyDir(outputSync);
+    await fs.copySync(clientOutDir, outputSync);
+  }
+
   function findPlugin(
     pluginName: string,
     buckets = viteConfig.plugins,

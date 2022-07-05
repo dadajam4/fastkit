@@ -17,7 +17,7 @@ const viteVui = viteVuiPlugin({
 
 export default defineConfig({
   root: __dirname,
-  base: '/docs/',
+  base: '/fastkit/',
   server: {
     host: '0.0.0.0',
     proxy: {
@@ -47,6 +47,7 @@ export default defineConfig({
                 }));
               }
             },
+            outputSync: '../.docs',
           }
         : undefined,
     }),

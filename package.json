@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "cd docs && node ../packages/vot/bin/vot",
     "build:docs": "cd docs && node ../packages/vot/bin/vot build",
-    "generate": "cd docs && node ../packages/vot/bin/vot generate",
     "serve": "cd docs && node ../packages/vot/bin/vot serve",
     "preview": "yarn build:docs && yarn serve",
     "memwatch": "cd docs && node ../packages/vot/bin/vot serve --memwatch",
@@ -35,16 +34,8 @@
     "directory": "test-dts"
   },
   "gitHooks": {
-    "pre-commit": "lint-staged",
+    "pre-commit": "lint-staged --config .lintstagedrc.js",
     "commit-msg": "node core/verifyCommit.js"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,vue,html,yaml}": [
-      "eslint --fix"
-    ],
-    "*.{css,scss,vue,html}": [
-      "stylelint --fix"
-    ]
   },
   "engines": {
     "node": ">=12.0.0"
