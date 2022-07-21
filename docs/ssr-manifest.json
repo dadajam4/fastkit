@@ -464,6 +464,12 @@
   "../packages/vue-stack/src/components/VTooltip.tsx": [
     "/fastkit/assets/mdi.337d8f30.woff2"
   ],
+  "../packages/vue-stack/src/components/VSheetStack.scss": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vue-stack/src/components/VSheetStack.tsx": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
   "../packages/vui/src/styles/index.scss": [
     "/fastkit/assets/mdi.337d8f30.woff2"
   ],
@@ -1296,22 +1302,22 @@
     "/fastkit/assets/vendor.9cbaf9a0.js"
   ],
   "src/pages/index.scss": [
-    "/fastkit/assets/generated-pages.29146fba.js",
+    "/fastkit/assets/generated-pages.9b84364f.js",
     "/fastkit/assets/generated-pages.65c5cf89.css"
   ],
   "src/pages/index.tsx": [
-    "/fastkit/assets/generated-pages.29146fba.js",
+    "/fastkit/assets/generated-pages.9b84364f.js",
     "/fastkit/assets/generated-pages.65c5cf89.css"
   ],
   "../../../../../../@vite-plugin-pages/generated-pages": [
-    "/fastkit/assets/generated-pages.29146fba.js",
+    "/fastkit/assets/generated-pages.9b84364f.js",
     "/fastkit/assets/generated-pages.65c5cf89.css"
   ],
   "src/pages/page2.tsx": [
-    "/fastkit/assets/page2.24388159.js"
+    "/fastkit/assets/page2.1830ad0e.js"
   ],
   "src/pages/page3.tsx": [
-    "/fastkit/assets/page3.6255bc01.js"
+    "/fastkit/assets/page3.c1df320c.js"
   ],
   "src/pages/page3/child.tsx": [
     "/fastkit/assets/child.a25c1987.js"
@@ -1326,43 +1332,43 @@
     "/fastkit/assets/forms.0576f8de.js"
   ],
   "src/pages/components/index.tsx": [
-    "/fastkit/assets/index.11cacb8a.js"
+    "/fastkit/assets/index.04fbec6a.js"
   ],
   "src/pages/getting-started/index.tsx": [
-    "/fastkit/assets/index.4ec631b0.js"
+    "/fastkit/assets/index.5f48b837.js"
   ],
   "src/components/VDocsLayout/VDocsLayout.scss": [
-    "/fastkit/assets/VDocsSection.09027fd5.js",
+    "/fastkit/assets/VDocsSection.54dc8d95.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsLayout/VDocsLayout.tsx": [
-    "/fastkit/assets/VDocsSection.09027fd5.js",
+    "/fastkit/assets/VDocsSection.54dc8d95.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsSection/VDocsSection.scss": [
-    "/fastkit/assets/VDocsSection.09027fd5.js",
+    "/fastkit/assets/VDocsSection.54dc8d95.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsSection/injections.ts": [
-    "/fastkit/assets/VDocsSection.09027fd5.js",
+    "/fastkit/assets/VDocsSection.54dc8d95.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsSection/context.ts": [
-    "/fastkit/assets/VDocsSection.09027fd5.js",
+    "/fastkit/assets/VDocsSection.54dc8d95.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsSection/VDocsSection.tsx": [
-    "/fastkit/assets/VDocsSection.09027fd5.js",
+    "/fastkit/assets/VDocsSection.54dc8d95.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "../packages/vue-media-match/src/service.ts": [
-    "/fastkit/assets/composables.35cdd074.js"
+    "/fastkit/assets/composables.7e6ad8eb.js"
   ],
   "../packages/vue-media-match/src/composables.ts": [
-    "/fastkit/assets/composables.35cdd074.js"
+    "/fastkit/assets/composables.7e6ad8eb.js"
   ],
   "src/pages/getting-started/index/index.tsx": [
-    "/fastkit/assets/index.720e7479.js"
+    "/fastkit/assets/index.158f5c30.js"
   ],
   "src/pages/getting-started/installation.tsx": [
     "/fastkit/assets/installation.ee1b38dc.js"
@@ -1377,146 +1383,146 @@
     "/fastkit/assets/custom.2eb4df5d.js"
   ],
   "src/pages/vui/index.scss": [
-    "/fastkit/assets/index.7e09e535.js",
+    "/fastkit/assets/index.000ac7a8.js",
     "/fastkit/assets/index.94f15d8b.css"
   ],
   "src/pages/vui/index.tsx": [
-    "/fastkit/assets/index.7e09e535.js",
+    "/fastkit/assets/index.000ac7a8.js",
     "/fastkit/assets/index.94f15d8b.css"
   ],
   "src/pages/vui/index/index.tsx": [
     "/fastkit/assets/index.508c8dd5.js"
   ],
   "src/pages/vui/index/components/avatars.tsx": [
-    "/fastkit/assets/avatars.08553e58.js"
+    "/fastkit/assets/avatars.c62c443e.js"
   ],
   "src/pages/-components/DocsSection.scss": [
-    "/fastkit/assets/DocsSection.b22037b9.js",
+    "/fastkit/assets/DocsSection.72c55ae1.js",
     "/fastkit/assets/DocsSection.fc73d35f.css"
   ],
   "src/pages/-components/DocsSection.tsx": [
-    "/fastkit/assets/DocsSection.b22037b9.js",
+    "/fastkit/assets/DocsSection.72c55ae1.js",
     "/fastkit/assets/DocsSection.fc73d35f.css"
   ],
   "src/pages/vui/index/components/breadcrumbs.tsx": [
-    "/fastkit/assets/breadcrumbs.697bd830.js"
+    "/fastkit/assets/breadcrumbs.eb9070df.js"
   ],
   "src/pages/vui/index/components/buttons.tsx": [
-    "/fastkit/assets/buttons.d0b88dac.js"
+    "/fastkit/assets/buttons.fa8cbce0.js"
   ],
   "src/pages/vui/index/components/cards.tsx": [
-    "/fastkit/assets/cards.f4c7b2c4.js"
+    "/fastkit/assets/cards.af1792e9.js"
   ],
   "src/pages/vui/index/components/checkboxes.tsx": [
-    "/fastkit/assets/checkboxes.915967fc.js"
+    "/fastkit/assets/checkboxes.4a982f43.js"
   ],
   "src/pages/vui/index/components/chips.tsx": [
-    "/fastkit/assets/chips.234cbe15.js"
+    "/fastkit/assets/chips.e0c7e5ce.js"
   ],
   "src/pages/vui/index/components/data-tables.tsx": [
-    "/fastkit/assets/data-tables.42f2f7f7.js"
+    "/fastkit/assets/data-tables.dceacc8b.js"
   ],
   "src/pages/vui/index/components/forms.tsx": [
-    "/fastkit/assets/forms.15bdd426.js"
+    "/fastkit/assets/forms.26ee2d78.js"
   ],
   "src/pages/vui/index/components/icons.tsx": [
-    "/fastkit/assets/icons.b92a4464.js"
+    "/fastkit/assets/icons.517a4c1b.js"
   ],
   "src/pages/vui/index/components/index.tsx": [
-    "/fastkit/assets/index.57d5f220.js"
+    "/fastkit/assets/index.7ad6d802.js"
   ],
   "src/pages/vui/index/components/loadings.tsx": [
-    "/fastkit/assets/loadings.6fcac443.js"
+    "/fastkit/assets/loadings.81999a8d.js"
   ],
   "src/pages/vui/index/components/pagination.tsx": [
-    "/fastkit/assets/pagination.39e7dab8.js"
+    "/fastkit/assets/pagination.7feb7a59.js"
   ],
   "src/pages/vui/index/components/radio-buttons.tsx": [
-    "/fastkit/assets/radio-buttons.0a81aafa.js"
+    "/fastkit/assets/radio-buttons.2565101d.js"
   ],
   "src/pages/vui/index/components/selects.tsx": [
-    "/fastkit/assets/selects.4643a863.js"
+    "/fastkit/assets/selects.b083be6d.js"
   ],
   "src/pages/vui/index/components/switches.tsx": [
-    "/fastkit/assets/switches.2ef6beff.js"
+    "/fastkit/assets/switches.66e2b57e.js"
   ],
   "src/pages/vui/index/components/text-fields.tsx": [
-    "/fastkit/assets/text-fields.0fcffab4.js"
+    "/fastkit/assets/text-fields.5c9d3bc9.js"
   ],
   "src/pages/vui/index/components/textareas.tsx": [
-    "/fastkit/assets/textareas.f2a40dcf.js"
+    "/fastkit/assets/textareas.e04fddd0.js"
   ],
   "../packages/vui/src/components/VWysiwygEditor/extensions/linter/Linter.tsx": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/extensions/linter/LinterPlugin.ts": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/extensions/linter/plugins/BadWords.tsx": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/bullet-list.ts": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/format-bold.ts": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/format-italic.ts": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/format-underline.ts": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/history.ts": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/link.ts": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/ordered-list.ts": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/color.tsx": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "src/pages/vui/index/components/wysiwygs.scss": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "src/pages/vui/index/components/wysiwygs.tsx": [
-    "/fastkit/assets/wysiwygs.6d1c4802.js",
+    "/fastkit/assets/wysiwygs.08bd849d.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "src/pages/vui/index/test/child1.tsx": [
-    "/fastkit/assets/child1.16290b34.js"
+    "/fastkit/assets/child1.b1388f65.js"
   ],
   "src/pages/vui/index/test/index.tsx": [
-    "/fastkit/assets/index.88792def.js"
+    "/fastkit/assets/index.e97b7c23.js"
   ],
   "src/pages/vui/index/components/tabs/-tabs.ts": [
-    "/fastkit/assets/index.f955d56d.js"
+    "/fastkit/assets/index.21632b3d.js"
   ],
   "src/pages/vui/index/components/tabs/index.tsx": [
-    "/fastkit/assets/index.f955d56d.js"
+    "/fastkit/assets/index.21632b3d.js"
   ],
   "src/pages/vui/index/components/tabs/index/[childId].tsx": [
-    "/fastkit/assets/_childId_.bbedd65d.js"
+    "/fastkit/assets/_childId_.72203393.js"
   ],
   "src/pages/vui/index/test/child2/child1.tsx": [
-    "/fastkit/assets/child1.24ca6a2c.js"
+    "/fastkit/assets/child1.64991fa8.js"
   ],
   "src/pages/vui/index/test/child2/index.tsx": [
-    "/fastkit/assets/index.909be65c.js"
+    "/fastkit/assets/index.25a72743.js"
   ]
 }

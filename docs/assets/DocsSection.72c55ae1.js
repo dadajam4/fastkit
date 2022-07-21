@@ -1,0 +1,1 @@
+import{f as e,g as t}from"./vendor.9cbaf9a0.js";import{j as n,G as c,i}from"./index.c649fe59.js";const d=e({name:"DocsSection",props:{title:String},setup(o,s){return()=>t(i,{class:"docs-section",tag:"section"},{default:()=>[t(n,null,{default:()=>[t("h2",{class:"docs-section__title"},[o.title]),t("div",{class:"docs-section__body"},[c(s.slots,"default")])]})]})}});export{d as D};
