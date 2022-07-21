@@ -167,7 +167,7 @@ export function useStackControl(
     {
       key: 'Escape',
       handler: (ev) => {
-        if (!closeOnEsc.value) return;
+        if (!closeOnEsc.value || !control.isFront()) return;
         if (persistent.value) {
           control.guardEffect();
           return;
