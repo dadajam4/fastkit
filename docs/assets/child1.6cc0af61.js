@@ -1,1 +1,0 @@
-import{f as r,g as e,G as t}from"./vendor.9cbaf9a0.js";import{H as a}from"./index.9239fa07.js";var l=r({render(){return e("div",null,[e(a,null,{default:()=>[t("Test / Child1")]})])}});export{l as default};

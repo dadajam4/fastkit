@@ -1,3 +1,12 @@
+## [0.8.14](https://github.com/dadajam4/fastkit/compare/v0.8.13...v0.8.14) (2022-07-21)
+
+
+### Bug Fixes
+
+* **vue-stack:** Make the ESC key hide handler work only on the frontmost stack ([0b19562](https://github.com/dadajam4/fastkit/commit/0b19562d650db5f0b3f4bc48a9f08b3ee9b0f148))
+
+
+
 ## [0.8.13](https://github.com/dadajam4/fastkit/compare/v0.8.12...v0.8.13) (2022-07-02)
 
 

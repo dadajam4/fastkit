@@ -1,0 +1,1 @@
+import{f as t,g as e}from"./vendor.9cbaf9a0.js";import{f as r}from"./index.00feedab.js";import{V as o}from"./VDocsSection.09027fd5.js";import"./composables.35cdd074.js";var i=t({render(){return e(o,{home:"/getting-started",title:"HOME"},{default:()=>[e(r,null,null)]})}});export{i as default};

@@ -1,0 +1,1 @@
+import{f as a,g as e,G as t}from"./vendor.9cbaf9a0.js";import{z as r,a7 as d}from"./index.00feedab.js";var i=a({render(){return e("div",null,[e(r,null,{default:()=>[t("Test / Index")]}),e(d,{to:"/vui/test/child1"},{default:()=>[t("child1")]})])}});export{i as default};

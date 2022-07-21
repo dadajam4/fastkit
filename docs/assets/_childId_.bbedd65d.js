@@ -1,0 +1,1 @@
+import{f as t,g as e,G as o}from"./vendor.9cbaf9a0.js";import{u as a}from"./index.00feedab.js";var n=t({setup(){const r=a();return()=>e("div",null,[e("h1",null,[o("Here is "),r.location.currentRoute.params.childId])])}});export{n as default};
