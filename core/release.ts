@@ -135,6 +135,12 @@ async function main() {
   // generate changelog
   await run(`yarn`, ['changelog']);
 
+  // build docs
+  step('\nBuilding documents...');
+  await runIfNotDry('yarn', ['build:docs'], {
+    stdio: 'pipe',
+  });
+
   const { stdout } = await run('git', ['diff'], { stdio: 'pipe' });
   if (stdout) {
     step('\nCommitting changes...');
@@ -149,6 +155,8 @@ async function main() {
   for (const pkg of packages) {
     await publishPackage(pkg, targetVersion, runIfNotDry);
   }
+
+  await runIfNotDry('git', ['tag', `v${targetVersion}`]);
 
   // push to GitHub
   step('\nPushing to GitHub...');
