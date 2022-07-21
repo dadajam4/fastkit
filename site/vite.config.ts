@@ -5,11 +5,13 @@ import { aliasesPlugin } from '../core/playground-aliases';
 import { globalsPlugin } from '../core/playground-globals';
 import { votPlugin } from '../packages/vot/dist/tool';
 import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
+import path from 'path';
 
 const USE_GENERATE = true;
 
 const viteVui = viteVuiPlugin({
   __dev: true,
+  colorScheme: './config/color-scheme.ts',
   // onBooted: () => {
   //   console.log('★ onBooted');
   // },
@@ -22,6 +24,14 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/google': 'https://google.com',
+    },
+  },
+  resolve: {
+    alias: {
+      '@@': path.resolve(__dirname, '.'),
+      '~~': path.resolve(__dirname, '.'),
+      '@': path.resolve(__dirname, 'src'),
+      '~': path.join(__dirname, 'src'),
     },
   },
   plugins: [

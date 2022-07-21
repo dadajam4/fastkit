@@ -34,6 +34,7 @@
   --typo-medium-weight: 500;
 
   // h1
+  --typo-h1-family: inherit;
   --typo-h1-size: 2.5rem;
   --typo-h1-weight: 500;
   --typo-h1-height: 1.2222222222222223;
@@ -42,6 +43,7 @@
   --typo-h1-color: var(--palette-heading);
 
   // h2
+  --typo-h2-family: inherit;
   --typo-h2-size: 1.875rem;
   --typo-h2-weight: 500;
   --typo-h2-height: 1.5;
@@ -50,6 +52,7 @@
   --typo-h2-color: var(--palette-heading);
 
   // h3
+  --typo-h3-family: inherit;
   --typo-h3-size: 1.25rem;
   --typo-h3-weight: 500;
   --typo-h3-height: 1.5;
@@ -58,6 +61,7 @@
   --typo-h3-color: var(--palette-heading);
 
   // h4
+  --typo-h4-family: inherit;
   --typo-h4-size: 1.25rem;
   --typo-h4-weight: 400;
   --typo-h4-height: 1.5;
@@ -66,6 +70,7 @@
   --typo-h4-color: var(--palette-heading);
 
   // h5
+  --typo-h5-family: inherit;
   --typo-h5-size: 0.875rem;
   --typo-h5-weight: 400;
   --typo-h5-height: 1.57;
@@ -74,6 +79,7 @@
   --typo-h5-color: var(--palette-heading);
 
   // h6
+  --typo-h6-family: inherit;
   --typo-h6-size: 0.67rem;
   --typo-h6-weight: 400;
   --typo-h6-height: 1.5;
@@ -82,12 +88,14 @@
   --typo-h6-color: var(--palette-heading);
 
   // subtitle1
+  --typo-subtitle1-family: inherit;
   --typo-subtitle1-size: 1rem;
   --typo-subtitle1-weight: 400;
   --typo-subtitle1-height: 1.75;
   --typo-subtitle1-spacing: 0.00938em;
 
   // subtitle2
+  --typo-subtitle2-family: inherit;
   --typo-subtitle2-size: 0.875rem;
   --typo-subtitle2-weight: 500;
   --typo-subtitle2-height: 1.57;

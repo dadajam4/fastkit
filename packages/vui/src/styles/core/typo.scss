@@ -1,3 +1,7 @@
+@function get-typo-family($level) {
+  @return var(--typo-#{$level}-family);
+}
+
 @function get-typo-size($level) {
   @return var(--typo-#{$level}-size);
 }
@@ -20,6 +24,10 @@
 
 @function get-typo-color($level) {
   @return var(--typo-#{$level}-color);
+}
+
+@mixin typo-family($level) {
+  font-family: get-typo-family($level);
 }
 
 @mixin typo-size($level) {
@@ -47,6 +55,7 @@
 }
 
 @mixin typo($level) {
+  @include typo-family($level);
   @include typo-size($level);
   @include typo-weight($level);
   @include typo-height($level);

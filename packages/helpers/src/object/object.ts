@@ -1,6 +1,13 @@
-import { sha256 } from './crypto';
-import { safeJSONStringify } from './json';
-import { cyrb53 } from './string';
+import { sha256 } from '../crypto';
+import { safeJSONStringify } from '../json';
+import { cyrb53 } from '../string';
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+type Builtin = Function | Date | Error | RegExp;
+
+export type DeepReadonly<T> = T extends Builtin
+  ? T
+  : { readonly [key in keyof T]: DeepReadonly<T[key]> };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type DeepPartial<T> = T extends object

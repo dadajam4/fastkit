@@ -1,192 +1,67 @@
-import { defineComponent, ref } from 'vue';
+import './index.scss';
+
+import { defineComponent } from 'vue';
 import {
   VButton,
-  VSelect,
   VAppContainer,
-  VProgressCircular,
-  VProgressLinear,
-  VCheckbox,
-  useVueStack,
-  VMenu,
+  VGridContainer,
+  VGridItem,
+  VBusyImage,
 } from '@fastkit/vui';
-import { RouterLink } from 'vue-router';
-import { range } from '@fastkit/helpers';
-import { AuthSearvice } from '../plugins';
-// import { useState } from '@fastkit/vot';
-import { AppError } from '../error';
-import { getLogger } from '../logger';
 
 export default defineComponent({
   setup(props, ctx) {
-    const auth = AuthSearvice.use();
-    // const hoge = useState(AuthSearvice.StateInjectionKey);
-    const logger = getLogger('top');
-    const loading = ref(false);
-    const stack = useVueStack();
+    return () => {
+      return (
+        <div class="pg-home">
+          <VAppContainer>
+            <div class="text-center">
+              <VBusyImage
+                class="pg-home__logo"
+                src="/logo.svg"
+                alt=""
+                width={120}
+                height={120}
+              />
+              <h1 class="pg-home__title docs-theme-font">fastkit</h1>
+              <p class="pg-home__lead">
+                {/* <>
+                  すぐにアプリケーションをつくるための、いつものツールキット。
+                </> */}
+                <>A toolkit for quickly creating applications.</>
+              </p>
+              {/** A toolkit for quickly creating applications. */}
 
-    return {
-      logger,
-      auth: auth.state,
-      isLoggedIn: () => auth.isLoggedIn,
-      loading,
-      stack,
-    };
-  },
-  render() {
-    return (
-      <div>
-        <VAppContainer>
-          <div>-----</div>
-          <p>
-            {`1${JSON.stringify(this.auth.me)} ${JSON.stringify(
-              this.isLoggedIn(),
-            )}`}
-          </p>
-
-          <div class="flex">
-            <div>あいうえお</div>
-            <VMenu
-              distance={0}
-              x="right-inner"
-              // y="bottom"
-              width="fit"
-              maxWidth="fit"
-              v-slots={{
-                activator: ({ attrs }) => <VButton {...attrs}>menu</VButton>,
-              }}>
-              <div>
-                <div>あいうえお</div>
-                <div>
+              <VGridContainer
+                spacing={2}
+                alignContent={'center'}
+                justifyContent={'center'}>
+                <VGridItem>
                   <VButton
-                    onClick={() => {
-                      this.$vui.snackbar('a');
-                    }}>
-                    Snack!!!
+                    class="pg-home__action"
+                    to="/getting-started"
+                    color="primary"
+                    size="lg"
+                    startIcon={'mdi-compass'}>
+                    Get Started
                   </VButton>
-                </div>
-              </div>
-            </VMenu>
-          </div>
-          <VProgressCircular indeterminate />
-          <VProgressCircular indeterminate color="accent" />
-          <VProgressLinear
-            indeterminate
-            active
-            color="primary"></VProgressLinear>
-          <VProgressLinear indeterminate active></VProgressLinear>
-          <button
-            onClick={(ev) => {
-              const error = AppError.from('zzzz');
-              this.logger.error(error);
-              this.logger.info('あいうえお', { message: 'あいうえお' });
-            }}>
-            error
-          </button>
-          <VCheckbox v-model={this.loading}>loading</VCheckbox>
-          <VButton
-            color="primary"
-            href="https://google.com"
-            loading={this.loading}>
-            https://google.com
-          </VButton>
-          <VAppContainer pulled>
-            <p>2(pulled)</p>
-            <VAppContainer>
-              <p>3</p>
-              <VAppContainer pulled>
-                <p>4(pulled)</p>
-              </VAppContainer>
-            </VAppContainer>
+                </VGridItem>
+                <VGridItem>
+                  <VButton
+                    class="pg-home__action"
+                    color="secondary"
+                    size="lg"
+                    startIcon={'mdi-github'}
+                    href="https://github.com/dadajam4/fastkit"
+                    target="_blank">
+                    GitHub
+                  </VButton>
+                </VGridItem>
+              </VGridContainer>
+            </div>
           </VAppContainer>
-        </VAppContainer>
-        <ul>
-          <li>
-            <RouterLink to="/">Home</RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/vui">Vui</RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/page2">page2</RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/page3">page3</RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/page3/child">page3/child</RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/components">components</RouterLink>
-          </li>
-        </ul>
-
-        <VButton
-          color="accent"
-          onClick={() => {
-            this.stack.snackbar({
-              content: 'hello',
-              // actions: [
-              //   {
-              //     key: 'hello',
-              //     content: (ctx) => 'あああ',
-              //   },
-              // ],
-            });
-          }}>
-          Snackbar
-        </VButton>
-
-        <VButton
-          color="primary"
-          onClick={() => {
-            this.stack.alert('This is alert.');
-          }}>
-          Alert
-        </VButton>
-
-        <VButton
-          color="primary"
-          onClick={async () => {
-            const result = await this.stack.confirm('This is confirm.');
-            if (result) {
-              this.stack.snackbar({
-                content: () => 'OK!',
-                top: true,
-              });
-            } else {
-              this.stack.snackbar({
-                content: () => 'cancelled.',
-                // top: true,
-              });
-            }
-          }}>
-          Alert
-        </VButton>
-
-        <div>
-          <VButton size="sm" loading={this.loading}>
-            small
-          </VButton>
-          <VButton size="md" loading={this.loading}>
-            midium
-          </VButton>
-          <VButton size="lg" loading={this.loading}>
-            large
-          </VButton>
         </div>
-
-        <VSelect
-          items={[
-            {
-              value: '1',
-              label: 'あいう',
-            },
-          ]}
-          placeholder="Placeholder"></VSelect>
-        {range(100, 1).map((i) => (
-          <p key={i}>{`This is Text.${i}`}</p>
-        ))}
-      </div>
-    );
+      );
+    };
   },
 });

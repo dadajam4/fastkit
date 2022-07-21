@@ -1,11 +1,13 @@
 import { defineComponent } from 'vue';
+import { VPage } from '@fastkit/vui';
+import { VDocsLayout } from '~/components';
 
 export default defineComponent({
   render() {
     return (
-      <div>
-        <h1>Getting Started</h1>
-      </div>
+      <VDocsLayout home="/getting-started" title="HOME">
+        <VPage />
+      </VDocsLayout>
     );
   },
 });

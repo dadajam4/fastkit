@@ -1,5 +1,18 @@
 @import '../.vui/setup.scss';
 
+// :root:root {
+//   --typo-h1-family: 'Zen Dots', cursive;
+//   --typo-h2-family: 'Zen Dots', cursive;
+// }
+:root {
+  --docs-theme-font: 'Zen Dots', sans-serif;
+}
+
+.docs-theme-font {
+  font-family: var(--docs-theme-font);
+  text-transform: none;
+}
+
 .page {
   &-enter-active,
   &-leave-active {
