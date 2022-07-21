@@ -91,6 +91,7 @@ export interface VStackControl {
   readonly contentRef: Ref<HTMLElement | null>;
   readonly activator: HTMLElement | Event | null;
   readonly backdropRef: Ref<HTMLElement | null>;
+  readonly stackType?: string | symbol;
 
   /** @private */
   readonly _: {

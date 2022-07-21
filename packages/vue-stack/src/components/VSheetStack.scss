@@ -1,0 +1,35 @@
+.v-sheet-stack {
+  --v-sheet-stack-width: 90vw;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  width: var(--v-sheet-stack-width);
+  padding: 0;
+  overflow: auto;
+  outline: 0;
+  box-shadow: var(--dialog-shadow);
+  transition: transform var(--stack-transition-slowly);
+
+  &__scroller {
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  &--has-active-child {
+    transform: translateX(-10vw);
+  }
+
+  &-enter-active,
+  &-leave-active {
+    transition: transform var(--stack-transition-slowly);
+  }
+
+  &-enter-from,
+  &-leave-to {
+    transform: translateX(var(--v-sheet-stack-width));
+  }
+}

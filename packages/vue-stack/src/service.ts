@@ -1,4 +1,4 @@
-import { Ref, ref, markRaw } from 'vue';
+import { Ref, ref, markRaw, ComputedRef, computed } from 'vue';
 import { VStackControl } from './schemes/control';
 export type { VStackControl } from './schemes/control';
 import {
@@ -10,6 +10,7 @@ import {
   resolveVStackDynamicInput,
   ResolvedVStackDynamicInput,
   VStackDynamicChildren,
+  VStackDynamicSheetInput,
 } from './schemes/dynamic';
 export {
   type VStackDynamicDialogInput,
@@ -25,6 +26,7 @@ import {
 export { VueStackInjectionKey } from './injections';
 // import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import { VDialogProps } from './components/VDialog';
+// import { VSheetStackProps } from './components/VSheetStack';
 
 export interface VueStackServiceOptions {
   zIndex?: number;
@@ -33,7 +35,9 @@ export interface VueStackServiceOptions {
 }
 
 export class VueStackService {
-  readonly controls: VStackControl[] = [];
+  private readonly _controls: Ref<(() => VStackControl)[]> = ref([]);
+  private readonly __controls: ComputedRef<VStackControl[]>;
+  // readonly controls: VStackControl[] = [];
   readonly zIndex: number;
   readonly snackbarDefaultPosition: 'top' | 'bottom';
   readonly builtinActions: VStackBuiltinActions;
@@ -41,6 +45,10 @@ export class VueStackService {
   private readonly _dynamicSettings: Ref<VStackDynamicInternalSetting[]> = ref(
     [],
   );
+
+  get controls() {
+    return this.__controls.value;
+  }
 
   get dynamicSettings() {
     return this._dynamicSettings.value;
@@ -51,6 +59,8 @@ export class VueStackService {
     this.zIndex = zIndex;
     this.builtinActions = actions;
     this.snackbarDefaultPosition = snackbarDefaultPosition;
+
+    this.__controls = computed(() => this._controls.value.map((c) => c()));
   }
 
   genId() {
@@ -59,19 +69,23 @@ export class VueStackService {
 
   add(control: VStackControl): number {
     let index = -1;
-    if (!this.controls.includes(control)) {
-      index = this.controls.push(control);
+    if (!this.__controls.value.includes(control)) {
+      index = this._controls.value.push(() => control);
     }
     return index;
   }
 
   remove(control: VStackControl): VStackControl[] {
-    const index = this.controls.indexOf(control);
-    return this.controls.splice(index, 1);
+    const index = this.__controls.value.indexOf(control);
+    return this._controls.value.splice(index, 1).map((c) => c());
   }
 
   someTransitioning() {
     return this.controls.some((control) => control.transitioning);
+  }
+
+  getActiveStacks() {
+    return this.controls.filter((control) => control.isActive);
   }
 
   getFront(filter?: (control: VStackControl) => boolean) {
@@ -145,18 +159,6 @@ export class VueStackService {
       children,
     });
   }
-  // async dialog(input: VStackDynamicDialogInput) {
-  //   const { VDialog } = await import('./components/VDialog');
-  //   const { props, children } = resolveVStackDynamicInput(input);
-  //   if (!props.actions) {
-  //     props.actions = [this.action('close')];
-  //   }
-  //   return this.dynamic({
-  //     Ctor: markRaw(VDialog),
-  //     props: markRaw(props),
-  //     children,
-  //   });
-  // }
 
   async alert(input: VStackDynamicDialogInput) {
     const resolvedInput = resolveVStackDynamicInput(input);
@@ -195,6 +197,17 @@ export class VueStackService {
     const { props, children } = resolveVStackDynamicInput(input);
     return this.dynamic({
       Ctor: markRaw(VMenu),
+      props: markRaw(props),
+      children,
+    });
+  }
+
+  async sheet(input: VStackDynamicSheetInput) {
+    const resolvedInput = resolveVStackDynamicInput(input);
+    const { VSheetStack } = await import('./components/VSheetStack');
+    const { props, children } = resolvedInput;
+    return this.dynamic({
+      Ctor: markRaw(VSheetStack),
       props: markRaw(props),
       children,
     });

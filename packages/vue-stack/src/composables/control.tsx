@@ -47,6 +47,7 @@ export interface UseStackControlOptions {
   onContentMounted?: (content: HTMLElement) => any;
   onContentDetached?: () => any;
   transitionResolver?: () => string;
+  stackType?: string | symbol;
 }
 
 const outsideClickControlFilter = (control: VStackControl) =>
@@ -445,6 +446,9 @@ export function useStackControl(
     _: privateApi,
     get $service() {
       return $vstack;
+    },
+    get stackType() {
+      return opts.stackType;
     },
     get transitioning() {
       return transitioning.value;
