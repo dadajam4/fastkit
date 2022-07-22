@@ -16,6 +16,8 @@
   transition: transform var(--stack-transition-slowly);
 
   &__header {
+    position: relative;
+    z-index: 1;
     flex: 0 0;
     background-color: var(--v-sheet-background);
   }
