@@ -40,7 +40,7 @@
     "@tiptap/extension-link": "^2.0.0-beta.43",
     "@tiptap/extension-underline": "^2.0.0-beta.25",
     "@tiptap/extension-text-style": "^2.0.0-beta.26",
-    "@tiptap/starter-kit": "^2.0.0-beta.190",
+    "@tiptap/starter-kit": "^2.0.0-beta.191",
     "@tiptap/vue-3": "^2.0.0-beta.96",
     "eta": "^1.12.3",
     "fs-extra": "^9.1.0"
