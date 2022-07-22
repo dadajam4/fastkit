@@ -5,9 +5,9 @@ import type { VDialogStatic, VDialogProps } from '../components/VDialog';
 import type { VSnackbarStatic, VSnackbarProps } from '../components/VSnackbar';
 import type { VMenuStatic, VMenuProps } from '../components/VMenu';
 import type {
-  VSheetStackStatic,
-  VSheetStackProps,
-} from '../components/VSheetStack';
+  VSheetModalStatic,
+  VSheetModalProps,
+} from '../components/VSheetModal';
 
 // export type VStackDynamicCtor = VDialogStatic;
 
@@ -57,11 +57,11 @@ export interface VStackDynamicMenuSetting extends VStackDynamicBaseSetting {
 }
 
 export interface VStackDynamicSheetSetting extends VStackDynamicBaseSetting {
-  Ctor: VSheetStackStatic;
-  props: Partial<VSheetStackProps>;
+  Ctor: VSheetModalStatic;
+  props: Partial<VSheetModalProps>;
 }
 
-// import type { VSheetStackStatic, VSheetStackProps } from '../components/VSheetStack';
+// import type { VSheetModalStatic, VSheetModalProps } from '../components/VSheetModal';
 
 export type VStackDynamicSetting =
   | VStackDynamicDialogSetting
@@ -124,5 +124,5 @@ export type VStackDynamicSnackbarInput = VStackDynamicInput<
 export type VStackDynamicMenuInput = VStackDynamicInput<Partial<VMenuProps>>;
 
 export type VStackDynamicSheetInput = VStackDynamicInput<
-  Partial<VSheetStackProps>
+  Partial<VSheetModalProps>
 >;

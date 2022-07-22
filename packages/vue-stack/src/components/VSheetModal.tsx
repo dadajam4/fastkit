@@ -1,4 +1,4 @@
-import './VSheetStack.scss';
+import './VSheetModal.scss';
 import {
   defineComponent,
   ExtractPropTypes,
@@ -11,31 +11,31 @@ import { useStackControl } from '../composables';
 import { ExtractPropInput } from '@fastkit/vue-utils';
 
 const { props, emits } = createStackableDefine({
-  defaultTransition: 'v-sheet-stack',
+  defaultTransition: 'v-sheet-modal',
   defaultFocusTrap: true,
   defaultFocusRestorable: true,
   defaultScrollLock: true,
 });
 
-export interface VSheetStackSlots extends VStackSlots {
+export interface VSheetModalSlots extends VStackSlots {
   header?: (control: VStackControl) => VNodeChild;
 }
 
-export const sheetStackProps = {
+export const sheetModalProps = {
   ...props,
-  'v-slots': undefined as unknown as PropType<VSheetStackSlots>,
+  'v-slots': undefined as unknown as PropType<VSheetModalSlots>,
 };
 
-export type VSheetStackProps = ExtractPropInput<typeof sheetStackProps>;
+export type VSheetModalProps = ExtractPropInput<typeof sheetModalProps>;
 
-export type VSheetStackResolvedProps = ExtractPropTypes<typeof sheetStackProps>;
+export type VSheetModalResolvedProps = ExtractPropTypes<typeof sheetModalProps>;
 
 const SHEET_STACK_TYPE = Symbol();
 
-export const VSheetStack = defineComponent({
-  name: 'VSheetStack',
+export const VSheetModal = defineComponent({
+  name: 'VSheetModal',
   inheritAttrs: false,
-  props: sheetStackProps,
+  props: sheetModalProps,
   emits,
   setup(props, ctx) {
     const stackControl = useStackControl(props, ctx, {
@@ -60,23 +60,23 @@ export const VSheetStack = defineComponent({
       return (
         <div
           class={[
-            'v-sheet-stack',
+            'v-sheet-modal',
             {
-              'v-sheet-stack--has-active-child': this.hasActiveChild,
+              'v-sheet-modal--has-active-child': this.hasActiveChild,
             },
             color.colorClasses.value,
           ]}
           tabindex="0">
           {headerSlot && (
-            <div class="v-sheet-stack__header">
+            <div class="v-sheet-modal__header">
               {headerSlot(this.stackControl)}
             </div>
           )}
-          <div class="v-sheet-stack__scroller">{children}</div>
+          <div class="v-sheet-modal__scroller">{children}</div>
         </div>
       );
     });
   },
 });
 
-export type VSheetStackStatic = typeof VSheetStack;
+export type VSheetModalStatic = typeof VSheetModal;

@@ -1,5 +1,11 @@
 import { defineComponent } from 'vue';
-import { VPage, VSheetStack } from '@fastkit/vui';
+import {
+  VPage,
+  VSheetModal,
+  VToolbar,
+  VToolbarEdge,
+  VButton,
+} from '@fastkit/vui';
 import { VDocsLayout } from '~/components';
 import { range } from '@fastkit/helpers';
 
@@ -11,9 +17,27 @@ export default defineComponent({
         <button type="button" onClick={(ev) => this.$vui.stack.sheet('xxxx')}>
           click!!
         </button>
-        <VSheetStack
+        <VSheetModal
           backdrop
           v-slots={{
+            header: (stack) => (
+              <VToolbar elevation={1}>
+                <VToolbarEdge edge="start">
+                  <VButton
+                    icon="mdi-close"
+                    size="lg"
+                    rounded
+                    onClick={() => {
+                      stack.close();
+                    }}
+                  />
+                </VToolbarEdge>
+                <VToolbarEdge edge="end">
+                  <VButton>CLOSE</VButton>
+                  <VButton>CLOSE</VButton>
+                </VToolbarEdge>
+              </VToolbar>
+            ),
             activator: ({ attrs }) => (
               <button {...attrs} type="button">
                 xxxx
@@ -21,9 +45,10 @@ export default defineComponent({
             ),
           }}>
           <div>
-            <VSheetStack
+            <VSheetModal
               backdrop
               v-slots={{
+                header: () => <VToolbar></VToolbar>,
                 activator: ({ attrs }) => (
                   <button {...attrs} type="button">
                     xxxx
@@ -35,13 +60,13 @@ export default defineComponent({
                   <div key={i} class="p-4">{`テキスト${i}が入ります。`}</div>
                 ))}
               </div>
-            </VSheetStack>
+            </VSheetModal>
 
             {range(100, 1).map((i) => (
               <div key={i} class="p-4">{`テキスト${i}が入ります。`}</div>
             ))}
           </div>
-        </VSheetStack>
+        </VSheetModal>
       </VDocsLayout>
     );
   },

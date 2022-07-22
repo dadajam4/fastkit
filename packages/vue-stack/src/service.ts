@@ -26,7 +26,7 @@ import {
 export { VueStackInjectionKey } from './injections';
 // import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import { VDialogProps } from './components/VDialog';
-// import { VSheetStackProps } from './components/VSheetStack';
+// import { VSheetModalProps } from './components/VSheetModal';
 
 export interface VueStackServiceOptions {
   zIndex?: number;
@@ -204,10 +204,10 @@ export class VueStackService {
 
   async sheet(input: VStackDynamicSheetInput) {
     const resolvedInput = resolveVStackDynamicInput(input);
-    const { VSheetStack } = await import('./components/VSheetStack');
+    const { VSheetModal } = await import('./components/VSheetModal');
     const { props, children } = resolvedInput;
     return this.dynamic({
-      Ctor: markRaw(VSheetStack),
+      Ctor: markRaw(VSheetModal),
       props: markRaw(props),
       children,
     });
