@@ -156,8 +156,6 @@ async function main() {
     await publishPackage(pkg, targetVersion, runIfNotDry);
   }
 
-  await runIfNotDry('git', ['tag', `v${targetVersion}`]);
-
   // push to GitHub
   step('\nPushing to GitHub...');
   await runIfNotDry('git', ['tag', `v${targetVersion}`]);
