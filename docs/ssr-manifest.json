@@ -1302,22 +1302,22 @@
     "/fastkit/assets/vendor.9cbaf9a0.js"
   ],
   "src/pages/index.scss": [
-    "/fastkit/assets/generated-pages.5e12ea09.js",
+    "/fastkit/assets/generated-pages.fa14f387.js",
     "/fastkit/assets/generated-pages.65c5cf89.css"
   ],
   "src/pages/index.tsx": [
-    "/fastkit/assets/generated-pages.5e12ea09.js",
+    "/fastkit/assets/generated-pages.fa14f387.js",
     "/fastkit/assets/generated-pages.65c5cf89.css"
   ],
   "../../../../../../@vite-plugin-pages/generated-pages": [
-    "/fastkit/assets/generated-pages.5e12ea09.js",
+    "/fastkit/assets/generated-pages.fa14f387.js",
     "/fastkit/assets/generated-pages.65c5cf89.css"
   ],
   "src/pages/page2.tsx": [
-    "/fastkit/assets/page2.b4c4a19e.js"
+    "/fastkit/assets/page2.d0a9d393.js"
   ],
   "src/pages/page3.tsx": [
-    "/fastkit/assets/page3.da8f717e.js"
+    "/fastkit/assets/page3.83f20795.js"
   ],
   "src/pages/page3/child.tsx": [
     "/fastkit/assets/child.a25c1987.js"
@@ -1332,43 +1332,43 @@
     "/fastkit/assets/forms.0576f8de.js"
   ],
   "src/pages/components/index.tsx": [
-    "/fastkit/assets/index.049829f5.js"
+    "/fastkit/assets/index.e1d39431.js"
   ],
   "src/pages/getting-started/index.tsx": [
-    "/fastkit/assets/index.53452200.js"
+    "/fastkit/assets/index.ac274ebb.js"
   ],
   "src/components/VDocsLayout/VDocsLayout.scss": [
-    "/fastkit/assets/VDocsSection.db4898b4.js",
+    "/fastkit/assets/VDocsSection.96ab0dec.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsLayout/VDocsLayout.tsx": [
-    "/fastkit/assets/VDocsSection.db4898b4.js",
+    "/fastkit/assets/VDocsSection.96ab0dec.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsSection/VDocsSection.scss": [
-    "/fastkit/assets/VDocsSection.db4898b4.js",
+    "/fastkit/assets/VDocsSection.96ab0dec.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsSection/injections.ts": [
-    "/fastkit/assets/VDocsSection.db4898b4.js",
+    "/fastkit/assets/VDocsSection.96ab0dec.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsSection/context.ts": [
-    "/fastkit/assets/VDocsSection.db4898b4.js",
+    "/fastkit/assets/VDocsSection.96ab0dec.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "src/components/VDocsSection/VDocsSection.tsx": [
-    "/fastkit/assets/VDocsSection.db4898b4.js",
+    "/fastkit/assets/VDocsSection.96ab0dec.js",
     "/fastkit/assets/VDocsSection.89cdfea5.css"
   ],
   "../packages/vue-media-match/src/service.ts": [
-    "/fastkit/assets/composables.1deddee0.js"
+    "/fastkit/assets/composables.73973f2c.js"
   ],
   "../packages/vue-media-match/src/composables.ts": [
-    "/fastkit/assets/composables.1deddee0.js"
+    "/fastkit/assets/composables.73973f2c.js"
   ],
   "src/pages/getting-started/index/index.tsx": [
-    "/fastkit/assets/index.728743d9.js"
+    "/fastkit/assets/index.21f2aa73.js"
   ],
   "src/pages/getting-started/installation.tsx": [
     "/fastkit/assets/installation.ee1b38dc.js"
@@ -1383,146 +1383,146 @@
     "/fastkit/assets/custom.2eb4df5d.js"
   ],
   "src/pages/vui/index.scss": [
-    "/fastkit/assets/index.4a42011b.js",
+    "/fastkit/assets/index.395e34e9.js",
     "/fastkit/assets/index.94f15d8b.css"
   ],
   "src/pages/vui/index.tsx": [
-    "/fastkit/assets/index.4a42011b.js",
+    "/fastkit/assets/index.395e34e9.js",
     "/fastkit/assets/index.94f15d8b.css"
   ],
   "src/pages/vui/index/index.tsx": [
     "/fastkit/assets/index.508c8dd5.js"
   ],
   "src/pages/vui/index/components/avatars.tsx": [
-    "/fastkit/assets/avatars.c760b94f.js"
+    "/fastkit/assets/avatars.7e6866c1.js"
   ],
   "src/pages/-components/DocsSection.scss": [
-    "/fastkit/assets/DocsSection.d726b725.js",
+    "/fastkit/assets/DocsSection.6302c8b4.js",
     "/fastkit/assets/DocsSection.fc73d35f.css"
   ],
   "src/pages/-components/DocsSection.tsx": [
-    "/fastkit/assets/DocsSection.d726b725.js",
+    "/fastkit/assets/DocsSection.6302c8b4.js",
     "/fastkit/assets/DocsSection.fc73d35f.css"
   ],
   "src/pages/vui/index/components/breadcrumbs.tsx": [
-    "/fastkit/assets/breadcrumbs.4536258b.js"
+    "/fastkit/assets/breadcrumbs.5ade1458.js"
   ],
   "src/pages/vui/index/components/buttons.tsx": [
-    "/fastkit/assets/buttons.0a40b1f1.js"
+    "/fastkit/assets/buttons.d4f68f4b.js"
   ],
   "src/pages/vui/index/components/cards.tsx": [
-    "/fastkit/assets/cards.479ccf51.js"
+    "/fastkit/assets/cards.c1c34231.js"
   ],
   "src/pages/vui/index/components/checkboxes.tsx": [
-    "/fastkit/assets/checkboxes.23ea5ac5.js"
+    "/fastkit/assets/checkboxes.6ed63ee3.js"
   ],
   "src/pages/vui/index/components/chips.tsx": [
-    "/fastkit/assets/chips.f50012d7.js"
+    "/fastkit/assets/chips.bf525258.js"
   ],
   "src/pages/vui/index/components/data-tables.tsx": [
-    "/fastkit/assets/data-tables.e23a63f8.js"
+    "/fastkit/assets/data-tables.2bd30c77.js"
   ],
   "src/pages/vui/index/components/forms.tsx": [
-    "/fastkit/assets/forms.5d3bd867.js"
+    "/fastkit/assets/forms.527d6c32.js"
   ],
   "src/pages/vui/index/components/icons.tsx": [
-    "/fastkit/assets/icons.b869784f.js"
+    "/fastkit/assets/icons.45d5643a.js"
   ],
   "src/pages/vui/index/components/index.tsx": [
-    "/fastkit/assets/index.a28e0402.js"
+    "/fastkit/assets/index.3d187126.js"
   ],
   "src/pages/vui/index/components/loadings.tsx": [
-    "/fastkit/assets/loadings.bd75d84a.js"
+    "/fastkit/assets/loadings.b73673e9.js"
   ],
   "src/pages/vui/index/components/pagination.tsx": [
-    "/fastkit/assets/pagination.2e7f00de.js"
+    "/fastkit/assets/pagination.fc85ff43.js"
   ],
   "src/pages/vui/index/components/radio-buttons.tsx": [
-    "/fastkit/assets/radio-buttons.b15f82b4.js"
+    "/fastkit/assets/radio-buttons.72856bf1.js"
   ],
   "src/pages/vui/index/components/selects.tsx": [
-    "/fastkit/assets/selects.19a6f2f2.js"
+    "/fastkit/assets/selects.0527bc2b.js"
   ],
   "src/pages/vui/index/components/switches.tsx": [
-    "/fastkit/assets/switches.910499d3.js"
+    "/fastkit/assets/switches.a3546338.js"
   ],
   "src/pages/vui/index/components/text-fields.tsx": [
-    "/fastkit/assets/text-fields.869f98fd.js"
+    "/fastkit/assets/text-fields.11c47cdf.js"
   ],
   "src/pages/vui/index/components/textareas.tsx": [
-    "/fastkit/assets/textareas.52c91342.js"
+    "/fastkit/assets/textareas.3895051e.js"
   ],
   "../packages/vui/src/components/VWysiwygEditor/extensions/linter/Linter.tsx": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/extensions/linter/LinterPlugin.ts": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/extensions/linter/plugins/BadWords.tsx": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/bullet-list.ts": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/format-bold.ts": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/format-italic.ts": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/format-underline.ts": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/history.ts": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/link.ts": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/ordered-list.ts": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/color.tsx": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "src/pages/vui/index/components/wysiwygs.scss": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "src/pages/vui/index/components/wysiwygs.tsx": [
-    "/fastkit/assets/wysiwygs.63cedc15.js",
+    "/fastkit/assets/wysiwygs.c86e06cb.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "src/pages/vui/index/test/child1.tsx": [
-    "/fastkit/assets/child1.159522ce.js"
+    "/fastkit/assets/child1.c6dcf46c.js"
   ],
   "src/pages/vui/index/test/index.tsx": [
-    "/fastkit/assets/index.6774f4b2.js"
+    "/fastkit/assets/index.bf22b987.js"
   ],
   "src/pages/vui/index/components/tabs/-tabs.ts": [
-    "/fastkit/assets/index.6886c75b.js"
+    "/fastkit/assets/index.78d348b5.js"
   ],
   "src/pages/vui/index/components/tabs/index.tsx": [
-    "/fastkit/assets/index.6886c75b.js"
+    "/fastkit/assets/index.78d348b5.js"
   ],
   "src/pages/vui/index/components/tabs/index/[childId].tsx": [
-    "/fastkit/assets/_childId_.837b4eb4.js"
+    "/fastkit/assets/_childId_.b8e3b273.js"
   ],
   "src/pages/vui/index/test/child2/child1.tsx": [
-    "/fastkit/assets/child1.7c556cf1.js"
+    "/fastkit/assets/child1.2e98b2dd.js"
   ],
   "src/pages/vui/index/test/child2/index.tsx": [
-    "/fastkit/assets/index.19156980.js"
+    "/fastkit/assets/index.a855de72.js"
   ]
 }

@@ -1,3 +1,12 @@
+## [0.8.17](https://github.com/dadajam4/fastkit/compare/v0.8.16...v0.8.17) (2022-07-22)
+
+
+### Bug Fixes
+
+* **vue-stack:** VSheetModal header is hidden by the scroll body ([2648c92](https://github.com/dadajam4/fastkit/commit/2648c92eb32311555f213eaf6119d9c98f6d13a4))
+
+
+
 ## [0.8.16](https://github.com/dadajam4/fastkit/compare/v0.8.15...v0.8.16) (2022-07-22)
 
 
