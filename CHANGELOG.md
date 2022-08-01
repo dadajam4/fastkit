@@ -1,3 +1,12 @@
+## [0.8.18](https://github.com/dadajam4/fastkit/compare/v0.8.17...v0.8.18) (2022-08-01)
+
+
+### Bug Fixes
+
+* Duplicate tagging on release ([cc2569f](https://github.com/dadajam4/fastkit/commit/cc2569f3806bc6e33453b3ed85d27a25169a02f7))
+
+
+
 ## [0.8.17](https://github.com/dadajam4/fastkit/compare/v0.8.16...v0.8.17) (2022-07-22)
 
 

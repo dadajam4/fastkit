@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-form-control",
-  "version": "0.8.17",
+  "version": "0.8.18",
   "description": "@fastkit/vue-form-control",
   "main": "index.js",
   "module": "dist/vue-form-control.mjs",
@@ -26,10 +26,10 @@
     "vue": "^3.2.37"
   },
   "dependencies": {
-    "@fastkit/helpers": "0.8.17",
-    "@fastkit/rules": "0.8.17",
-    "@fastkit/tiny-logger": "0.8.17",
-    "@fastkit/vue-utils": "0.8.17",
+    "@fastkit/helpers": "0.8.18",
+    "@fastkit/rules": "0.8.18",
+    "@fastkit/tiny-logger": "0.8.18",
+    "@fastkit/vue-utils": "0.8.18",
     "imask": "^6.2.2"
   }
 }
