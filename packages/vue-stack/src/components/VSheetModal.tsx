@@ -23,6 +23,7 @@ export interface VSheetModalSlots extends VStackSlots {
 
 export const sheetModalProps = {
   ...props,
+  header: Function as PropType<(control: VStackControl) => VNodeChild>,
   'v-slots': undefined as unknown as PropType<VSheetModalSlots>,
 };
 
@@ -55,7 +56,7 @@ export const VSheetModal = defineComponent({
   },
   render() {
     const { render, color } = this.stackControl;
-    const headerSlot = this.$slots.header;
+    const headerSlot = this.$slots.header || this.header;
     return render((children) => {
       return (
         <div

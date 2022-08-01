@@ -14,7 +14,16 @@ export default defineComponent({
     return (
       <VDocsLayout home="/getting-started" title="HOME">
         <VPage />
-        <button type="button" onClick={(ev) => this.$vui.stack.sheet('xxxx')}>
+        <button
+          type="button"
+          onClick={(ev) =>
+            this.$vui.stack.sheet({
+              header: () => {
+                return <div>あああ</div>;
+              },
+              content: 'xxxx',
+            })
+          }>
           click!!
         </button>
         <VSheetModal

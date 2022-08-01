@@ -9,8 +9,15 @@ export type DeepReadonly<T> = T extends Builtin
   ? T
   : { readonly [key in keyof T]: DeepReadonly<T[key]> };
 
+// // eslint-disable-next-line @typescript-eslint/ban-types
+// export type DeepPartial<T> = T extends object
+//   ? {
+//       [P in keyof T]?: DeepPartial<T[P]>;
+//     }
+//   : T;
+
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type DeepPartial<T> = T extends object
+export type DeepPartial<T> = T extends Record<keyof any, unknown>
   ? {
       [P in keyof T]?: DeepPartial<T[P]>;
     }
@@ -225,4 +232,14 @@ export function tinyObjectHash(obj: any) {
     hash,
     data,
   };
+}
+
+export function mapFromObjectArray<
+  T extends Record<keyof any, any>,
+  K extends keyof T,
+>(array: T[], key: K): Record<T[K], T> {
+  return array.reduce((prev, current) => {
+    prev[current[key]] = current;
+    return prev;
+  }, {} as Record<T[K], T>);
 }

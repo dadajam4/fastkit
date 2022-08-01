@@ -6,6 +6,10 @@ export function safeGetTimeByDateSource(source: number | string | Date) {
   return source.getTime();
 }
 
+export function toDate(source: number | string | Date): Date {
+  return source instanceof Date ? source : new Date(source);
+}
+
 export const DATE_INPUT_PRECISIONS = [
   'month',
   'date',
