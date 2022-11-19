@@ -142,7 +142,7 @@ export class LocationService {
     this.router = router;
     this.state = reactive<LocationServiceState>({
       transitioningTo: null,
-    });
+    }) as LocationServiceState;
 
     router.beforeEach((to) => {
       this.state.transitioningTo = to;

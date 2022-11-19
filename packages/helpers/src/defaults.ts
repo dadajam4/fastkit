@@ -45,7 +45,7 @@ export function createIndexSignatureDefaultsScheme<T>(
 export function mergeDefaults<T>(base: T, scheme: DefaultsScheme<T>): T {
   const indexSignatureScheme = getIndexSignatureScheme(scheme);
   if (indexSignatureScheme) {
-    const baseKeys = Object.keys(base);
+    const baseKeys = Object.keys(base as any); // @FIXME
     const _scheme: any = {};
     baseKeys.forEach((key) => {
       _scheme[key] = indexSignatureScheme;

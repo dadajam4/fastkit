@@ -224,9 +224,10 @@ export class Color implements ColorImplements {
         model: 'rgb',
       };
     } else if (maybeHSL(mixSource)) {
+      const { h, s, l, a } = parseColorSource(mixSource);
       mixSource = {
         ...this.hslaJSON(),
-        ...mixSource,
+        ...{ h, s, l, a },
       };
       options = {
         ...resolveMixOptions(options),

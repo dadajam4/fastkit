@@ -5,6 +5,15 @@ import { cyrb53 } from '../string';
 // eslint-disable-next-line @typescript-eslint/ban-types
 type Builtin = Function | Date | Error | RegExp;
 
+export type Primitive =
+  | bigint
+  | boolean
+  | null
+  | number
+  | string
+  | symbol
+  | undefined;
+
 export type DeepReadonly<T> = T extends Builtin
   ? T
   : { readonly [key in keyof T]: DeepReadonly<T[key]> };
@@ -17,7 +26,10 @@ export type DeepReadonly<T> = T extends Builtin
 //   : T;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type DeepPartial<T> = T extends Record<keyof any, unknown>
+export type DeepPartial<T> = T extends Function
+  ? T
+  : // eslint-disable-next-line @typescript-eslint/ban-types
+  T extends object
   ? {
       [P in keyof T]?: DeepPartial<T[P]>;
     }

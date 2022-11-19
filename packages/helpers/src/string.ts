@@ -33,3 +33,27 @@ export function cyrb53(str: string, seed = 0) {
     Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 }
+
+/**
+ * Obtains a string with the first letter of the specified string capitalized
+ *
+ * - `"helloWorld"` -> `"HelloWorld"`
+ *
+ * @param str - String of conversion source
+ * @returns String with first letter converted to uppercase
+ */
+export function capitalize<T extends string>(str: T): Capitalize<T> {
+  return (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>;
+}
+
+/**
+ * Obtains a string with the first letter of the specified string in lowercase.
+ *
+ * - `"HelloWorld"` -> `"helloWorld"`
+ *
+ * @param str - String of conversion source
+ * @returns String with first letter converted to lowercase
+ */
+export function uncapitalize<T extends string>(str: T): Uncapitalize<T> {
+  return (str.charAt(0).toLowerCase() + str.slice(1)) as Uncapitalize<T>;
+}

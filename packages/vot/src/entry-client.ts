@@ -61,11 +61,11 @@ export const createEntry: ClientHandler = async function createClientEntry(
     }
   });
 
+  app.use(router);
+
   if (hook) {
     await hook(context);
   }
-
-  app.use(router);
 
   if (debug.mount !== false) {
     // this will hydrate the app

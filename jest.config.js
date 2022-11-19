@@ -1,6 +1,11 @@
 module.exports = {
   transform: {
-    '^.+\\.tsx?$': 'esbuild-jest',
+    '^.+\\.tsx?$': [
+      'esbuild-jest',
+      {
+        sourcemap: true,
+      },
+    ],
   },
   setupFilesAfterEnv: ['./core/setupJestEnv.ts'],
   globals: {

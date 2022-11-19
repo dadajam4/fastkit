@@ -147,7 +147,7 @@ export interface SameRouteCheckOptions {
 }
 
 /**
- * @see: https://github.com/vuejs/vue-router/blob/c69ff7bd60228fb79acd764c3fdae91015a49103/src/util/route.js#L73
+ * @see https://github.com/vuejs/vue-router/blob/c69ff7bd60228fb79acd764c3fdae91015a49103/src/util/route.js#L73
  */
 export function isSameRoute(
   a: _RouteLocationBase,

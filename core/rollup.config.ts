@@ -180,6 +180,7 @@ function createConfig(
         ...['path', 'url', 'stream'],
       ];
   external.push(
+    'bezier-easing',
     'module',
     'crypto',
     '@vueuse/head',

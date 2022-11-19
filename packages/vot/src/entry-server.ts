@@ -104,9 +104,9 @@ export const createEntry: SsrHandler = function createSsrEntry(
 
     provideContext(app, context);
 
-    const { head } = (hook && (await hook(context))) || {};
-
     app.use(router);
+
+    const { head } = (hook && (await hook(context))) || {};
 
     const tick = async () => {
       router.push(fullPath);

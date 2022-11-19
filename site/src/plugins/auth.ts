@@ -6,11 +6,11 @@ import {
 import { InjectionKey, inject } from 'vue';
 // import { objectHash } from '@fastkit/helpers';
 
-declare module '@fastkit/vot' {
-  interface VuePageControl {
-    auth: AuthSearvice;
-  }
-}
+// declare module '@fastkit/vue-page' {
+//   interface VuePageControl {
+//     auth: AuthSearvice;
+//   }
+// }
 
 const AuthStateInjectionKey: StateInjectionKey<AuthState> = '__auth-state__';
 const AuthSearviceInjectionKey: InjectionKey<AuthSearvice> = Symbol();

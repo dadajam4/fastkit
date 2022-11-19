@@ -170,7 +170,8 @@ export function deepmerge<T1, T2>(
   } else if (sourceIsArray) {
     return _options.arrayMerge(target as unknown as any[], source, _options);
   } else {
-    return mergeObject(target, source, _options);
+    // @FIXME
+    return mergeObject(target as any, source as any, _options);
   }
 }
 

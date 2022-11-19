@@ -10,5 +10,6 @@
 			"scss",
 			// "html", // for vue sfc
 		],
+		"typescript.tsdk": "node_modules/typescript/lib",
 	}
 }

@@ -3,6 +3,7 @@ import { App } from './App';
 import { installVui } from '../.vui/installer';
 import { createVotEntry } from '@fastkit/vot';
 import { authPlugin } from './plugins';
+import { i18nPlugin } from '~/i18n';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
 
 export default createVotEntry(App, {
@@ -16,6 +17,7 @@ export default createVotEntry(App, {
         },
       });
     },
+    i18nPlugin,
     authPlugin,
   ],
   middleware: [

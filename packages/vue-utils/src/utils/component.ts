@@ -1,4 +1,9 @@
-import { DefineComponent, VNodeChild, PropType } from 'vue';
+import {
+  DefineComponent,
+  VNodeChild,
+  PropType,
+  ComponentCustomOptions,
+} from 'vue';
 
 // export type RawSlotValidators = Record<string, (...args: any[]) => boolean>;
 
@@ -25,4 +30,13 @@ export function defineSlotsProps<R extends RawSlotsSettings>() {
   return undefined as unknown as {
     'v-slots': PropType<ResolveRawSlots<R>>;
   };
+}
+
+export function isComponentCustomOptions(
+  Component: unknown,
+): Component is ComponentCustomOptions {
+  return (
+    (!!Component && typeof Component === 'object') ||
+    typeof Component === 'function'
+  );
 }

@@ -1,0 +1,1 @@
+# @fastkit/vue-i18n

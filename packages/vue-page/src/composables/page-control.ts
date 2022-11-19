@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import {
   App,
-  ComponentCustomOptions,
   ref,
   Ref,
   ComputedRef,
@@ -26,6 +25,7 @@ import {
   RouteMatchedItem,
   getRouteQuery,
   RouteQueryType,
+  isComponentCustomOptions,
 } from '@fastkit/vue-utils';
 import { ResolvedRouteLocation, WatchQueryOption } from '../schemes';
 import {
@@ -85,15 +85,6 @@ declare module '@vue/runtime-core' {
     watchQuery?: WatchQueryOption;
     middleware?: VuePageControlMiddlewareFn | VuePageControlMiddlewareFn[];
   }
-}
-
-function isComponentCustomOptions(
-  Component: unknown,
-): Component is ComponentCustomOptions {
-  return (
-    (!!Component && typeof Component === 'object') ||
-    typeof Component === 'function'
-  );
 }
 
 function extractPrefetch(Component: unknown): {
@@ -417,7 +408,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     );
     this._initialState = initialState;
 
-    this._route = ref(initialRoute);
+    this._route = ref(initialRoute) as Ref<ResolvedRouteLocation>;
     this._runningQueues = computed(() =>
       this.prefetchQueues.filter((q) => q.running),
     );

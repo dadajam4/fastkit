@@ -17,7 +17,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "i18n"
   ],
   "author": "dadajam4",
   "license": "MIT",

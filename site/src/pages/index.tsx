@@ -8,9 +8,15 @@ import {
   VGridItem,
   VBusyImage,
 } from '@fastkit/vui';
+import { Top } from './i18n';
+import { i18n } from '~/i18n';
+
+const I18nSubSpace = i18n.defineSubSpace({ Top });
 
 export default defineComponent({
+  i18n: I18nSubSpace,
   setup(props, ctx) {
+    const subSpace = I18nSubSpace.use();
     return () => {
       return (
         <div class="pg-home">
@@ -18,19 +24,15 @@ export default defineComponent({
             <div class="text-center">
               <VBusyImage
                 class="pg-home__logo"
-                src="/logo.svg"
+                src={`${import.meta.env.BASE_URL}logo.svg`}
                 alt=""
                 width={120}
                 height={120}
               />
               <h1 class="pg-home__title docs-theme-font">fastkit</h1>
               <p class="pg-home__lead">
-                {/* <>
-                  すぐにアプリケーションをつくるための、いつものツールキット。
-                </> */}
-                <>A toolkit for quickly creating applications.</>
+                <>{subSpace.at.Top.trans.lead}</>
               </p>
-              {/** A toolkit for quickly creating applications. */}
 
               <VGridContainer
                 spacing={2}
