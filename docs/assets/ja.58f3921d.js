@@ -1,0 +1,1 @@
+import{s as u}from"./generated-pages.f55cb3d9.js";import"./index.900ff698.js";import"./vendor.b2c83758.js";const o=u.defineLocale.strict({translations:{lead:"\u3059\u3050\u306B\u30A2\u30D7\u30EA\u30B1\u30FC\u30B7\u30E7\u30F3\u3092\u3064\u304F\u308B\u305F\u3081\u306E\u3001\u3044\u3064\u3082\u306E\u30C4\u30FC\u30EB\u30AD\u30C3\u30C8\u3002"}});export{o as default,o as ja};

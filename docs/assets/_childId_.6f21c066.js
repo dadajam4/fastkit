@@ -1,0 +1,1 @@
+import{f as t,g as e,K as o}from"./vendor.b2c83758.js";import{u as a}from"./index.900ff698.js";var n=t({setup(){const r=a();return()=>e("div",null,[e("h1",null,[o("Here is "),r.location.currentRoute.params.childId])])}});export{n as default};
