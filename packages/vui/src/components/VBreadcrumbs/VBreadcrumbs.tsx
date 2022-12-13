@@ -45,7 +45,7 @@ export const VBreadcrumbs = defineComponent({
       return items.map((item) => {
         const { to, text } = item;
         const {
-          disabled = vui.location.match(to) || !vui.location.isAvairable(to),
+          disabled = vui.location.match(to) || !vui.location.isAvailable(to),
         } = item;
         return {
           ...item,

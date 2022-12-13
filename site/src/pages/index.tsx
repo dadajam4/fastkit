@@ -8,8 +8,9 @@ import {
   VGridItem,
   VBusyImage,
 } from '@fastkit/vui';
-import { Top } from './i18n';
+import { Top } from './-i18n';
 import { i18n } from '~/i18n';
+import { useHead } from '@vueuse/head';
 
 const I18nSubSpace = i18n.defineSubSpace({ Top });
 
@@ -17,6 +18,10 @@ export default defineComponent({
   i18n: I18nSubSpace,
   setup(props, ctx) {
     const subSpace = I18nSubSpace.use();
+    useHead({
+      title: `fastkit - ${subSpace.at.Top.trans.lead}`,
+    });
+
     return () => {
       return (
         <div class="pg-home">
@@ -34,6 +39,18 @@ export default defineComponent({
                 <>{subSpace.at.Top.trans.lead}</>
               </p>
 
+              {/* <div>
+                {subSpace.locales.map((locale) => (
+                  <VButton
+                    key={locale.name}
+                    onClick={() => subSpace.space.setLocale(locale.name)}
+                    loading={locale.name === subSpace.space.nextLocaleName}
+                    disabled={locale.name === subSpace.space.currentLocaleName}>
+                    {locale.meta.displayName}
+                  </VButton>
+                ))}
+              </div> */}
+
               <VGridContainer
                 spacing={2}
                 alignContent={'center'}
@@ -45,7 +62,7 @@ export default defineComponent({
                     color="primary"
                     size="lg"
                     startIcon={'mdi-compass'}>
-                    Get Started
+                    {subSpace.at.common.t.getStarted}
                   </VButton>
                 </VGridItem>
                 <VGridItem>

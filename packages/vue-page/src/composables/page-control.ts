@@ -39,6 +39,7 @@ import { VuePageControlError } from './page-error';
 import { VErrorPage } from '../components/VErrorPage';
 import type { ServerResponse, IncomingMessage } from 'http';
 import { StateInjectionKey } from './state';
+import { Cookies, CookiesContext } from '@fastkit/cookies';
 // import { JSONMapValue, JSONData } from '@fastkit/helpers';
 
 // type JSONData = Record<string, unknown>;
@@ -287,6 +288,7 @@ const ERROR_STATE_NAME = '__vpe__';
 export class VuePageControl extends EV<VuePageControlEventMap> {
   readonly app: App;
   readonly router: Router;
+  readonly cookies: Cookies;
   private _from: Ref<RouteLocationNormalized | null> = ref(null);
   private _to: Ref<RouteLocationNormalized | null> = ref(null);
   private _initialState: InitialState;
@@ -393,6 +395,12 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this.request = request;
     this.response = response;
     this.isClient = typeof window !== 'undefined';
+
+    const cookiesContext: CookiesContext = this.isClient
+      ? document
+      : { req: request, res: response };
+    this.cookies = new Cookies(cookiesContext, { bucket: reactive({}) });
+
     this.middleware = middleware;
     this._serverRedirect = serverRedirect;
 
@@ -425,9 +433,6 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       };
     });
 
-    this._handleBeforeResolve = this._handleBeforeResolve.bind(this);
-    this._handleAfterEach = this._handleAfterEach.bind(this);
-
     (
       [
         '_handleBeforeResolve',
@@ -435,6 +440,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
         'setInitialState',
         'injectData',
         'onSuspensePending',
+        'redirect',
       ] as const
     ).forEach((fn) => {
       const _fn = this[fn];
@@ -644,7 +650,14 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
         : `?${queryStr}`
       : '';
 
-    const fullPath = `${path}${queryAppends}`;
+    let fullPath = `${path}${queryAppends}`;
+
+    // apply base url
+    if (/^\//.test(fullPath)) {
+      const { base } = this.router.options.history;
+      fullPath = `${base}/${fullPath.replace(/^\//, '')}`;
+    }
+
     if (this.isClient) {
       const isInSite = /(^[.]{1,2}\/)|(^\/(?!\/))/.test(fullPath);
       if (isInSite) {

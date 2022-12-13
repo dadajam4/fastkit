@@ -15,7 +15,6 @@ export type VotGenerateConditionResult =
   | boolean
   | (VotGenerateParams | string)[];
 
-// VotExtractedPage
 export type VotGenerateHandler = (
   page: VotExtractedPage,
 ) => VotGenerateConditionResult;
@@ -67,8 +66,8 @@ export function generateVotGeneratePagePaths(
   const { handler } = opts;
   const results: string[] = [];
   pages.forEach((page) => {
-    const { path, fullPath } = page;
-    if (!path) return;
+    const { path: fullPath } = page;
+    if (!fullPath) return;
     const result = handler(page);
     if (!result) return;
     if (result === true) {
@@ -99,3 +98,5 @@ export function generateVotGeneratePagePaths(
   });
   return results;
 }
+
+export const VOT_GENERATE_PAGES_PATH = '__VOT_GENERATE_PAGES__';

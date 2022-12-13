@@ -2,13 +2,13 @@ import { reactive } from 'vue';
 import { IN_WINDOW } from '@fastkit/helpers';
 
 export interface WindowState {
-  avairable: boolean;
+  available: boolean;
   width: number;
   height: number;
 }
 
 export const state = reactive<WindowState>({
-  avairable: IN_WINDOW,
+  available: IN_WINDOW,
   width: IN_WINDOW ? window.innerWidth : 0,
   height: IN_WINDOW ? window.innerHeight : 0,
 });
@@ -28,15 +28,15 @@ if (typeof window !== 'undefined') {
 }
 
 export interface UseWindowRef {
-  readonly avairable: boolean;
+  readonly available: boolean;
   readonly width: number;
   readonly height: number;
 }
 
 export function useWindow(): UseWindowRef {
   return {
-    get avairable() {
-      return state.avairable;
+    get available() {
+      return state.available;
     },
     get width() {
       return state.width;

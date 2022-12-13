@@ -1,0 +1,1 @@
+# @fastkit/accept-language

@@ -133,7 +133,7 @@ export type VuiVNodeResolver = () => VNodeChild;
 
 export interface VuiServiceOptions {
   router: Router;
-  RouterLink?: typeof RouterLink;
+  RouterLink?: any;
   colorScheme: VueColorSchemePluginSettings;
   uiSettings: VuiServiceUISettings;
   icons: VuiServiceIconSettings;

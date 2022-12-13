@@ -348,12 +348,32 @@ export class I18nSpaceStorage<
   /** Checks if one of the list of specified locale names is currently loading */
   isLoading(...localeNames: LocaleName[]): boolean;
 
+  /** Checks if one of the list of specified locale names is currently loading */
+  isLoading(...localeNames: LocaleName[]): boolean;
+
   isLoading(...localeNames: LocaleName[]) {
     const { loadingLocales } = this;
     if (!localeNames.length) return loadingLocales.length > 0;
     return localeNames.some((localeName) =>
       loadingLocales.includes(localeName),
     );
+  }
+
+  someComponentIsLoading(
+    Ctors: I18nComponentStatic<LocaleName, BaseLocale, LocaleMeta>[],
+    localeNames?: LocaleName[],
+  ) {
+    for (const Ctor of Ctors) {
+      const req = this.findLoadRequest(Ctor);
+      if (
+        req &&
+        (!localeNames ||
+          localeNames.some((localeName) => req[0].includes(localeName)))
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

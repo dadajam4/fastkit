@@ -1,0 +1,1 @@
+# @fastkit/vot-i18n

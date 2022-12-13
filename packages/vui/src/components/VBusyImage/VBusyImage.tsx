@@ -96,7 +96,7 @@ export const VBusyImage = defineComponent({
   },
   setup(props, ctx) {
     const loadStateRef = ref<BusyImageLoadState>(
-      props.cover && isAvairableSrc(ctx.attrs.src as any)
+      props.cover && isAvailableSrc(ctx.attrs.src as any)
         ? 'loading'
         : 'pending',
     );
@@ -173,7 +173,7 @@ export const VBusyImage = defineComponent({
       () => ctx.attrs.src as string | null | undefined,
       (value) => {
         coverImageRef.value = undefined;
-        if (isAvairableSrc(value)) {
+        if (isAvailableSrc(value)) {
           loadStateRef.value = 'loading';
           if (props.cover) {
             loadImage(value)
@@ -273,6 +273,6 @@ function imageIsReady(image: HTMLImageElement): 'load' | 'error' | false {
   return image.naturalWidth + image.naturalHeight > 0 ? 'load' : 'error';
 }
 
-function isAvairableSrc(src: string | null | undefined): src is string {
+function isAvailableSrc(src: string | null | undefined): src is string {
   return typeof src === 'string' && src !== '';
 }

@@ -189,7 +189,7 @@ export class LocationService {
     return route.matched.flatMap((record) => Object.values(record.components));
   }
 
-  isAvairable(raw?: RouteLocationRaw) {
+  isAvailable(raw?: RouteLocationRaw) {
     if (!raw) return false;
     return this.getMatchedComponents(raw).length > 0;
   }

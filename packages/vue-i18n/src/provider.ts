@@ -10,15 +10,16 @@ import { extractVueI18nComponentOptions } from './helpers';
 import type { Router } from 'vue-router';
 import { arrayRemove } from '@fastkit/helpers';
 import { VueI18nError } from './logger';
+// import { VueI18nSubSpace } from './schemes';
 
 /**
  * @internal
  */
-export type AnyProvider = VueI18nSubSpaceProvider<any, any, any, any, any>;
+export type AnyProvider = VueI18nSubSpaceProvider<any, any, any, any, any, any>;
 
 interface ProviderCache {
   provider: AnyProvider;
-  subSpace: I18nSubSpace<any, any, any, any, any>;
+  subSpace: I18nSubSpace<any, any, any, any, any, any>;
   dispose: () => void;
 }
 
@@ -41,6 +42,7 @@ export class VueI18nSubSpaceProvider<
     BaseLocale,
     LocaleMeta
   > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  StrategyCustomInterface extends { [key in keyof any]: any } = {},
 > {
   /**
    * Symbol key to inject subspace when `setup()` Vue components
@@ -51,7 +53,8 @@ export class VueI18nSubSpaceProvider<
       BaseLocale,
       LocaleMeta,
       SpaceComponents,
-      SubComponents
+      SubComponents,
+      StrategyCustomInterface
     >
   > = Symbol();
 
@@ -82,7 +85,8 @@ export class VueI18nSubSpaceProvider<
     BaseLocale,
     LocaleMeta,
     SpaceComponents,
-    SubComponents
+    SubComponents,
+    StrategyCustomInterface
   > {
     const subSpace = inject(this.injectionKey);
     if (!subSpace) {

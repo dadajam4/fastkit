@@ -1,12 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import { resolveConfig, ResolvedConfig } from 'vite';
+import { resolveConfig, ResolvedConfig, Plugin } from 'vite';
 import { VotPluginOptions } from '../vot';
+import type { RouteRecord } from 'vue-router';
+import type { VotExtractedPage } from '../schemes/page';
 import {
-  PageContext,
-  UserOptions as PagesUserOptions,
-} from 'vite-plugin-pages';
-import type { ExtractedPage, VotExtractedPage } from '../schemes/page';
+  resolveRawVotGenerateOptions,
+  VotGenerateOptions,
+} from '../schemes/generate';
 
 export const INDEX_HTML = 'index.html';
 
@@ -53,15 +54,6 @@ export async function getEntryPoint(
   return path.join(config.root, entryFile);
 }
 
-function resolvePagesOptions(options: VotPluginOptions = {}): PagesUserOptions {
-  const { pages } = options;
-  return {
-    pagesDir: 'src/pages',
-    extensions: ['vue', 'ts', 'tsx'],
-    ...pages,
-  };
-}
-
 function extractDynamicParams(path: string): string[] | undefined {
   const dynamicParams: string[] = [];
   const chunks = path.split('/');
@@ -74,71 +66,66 @@ function extractDynamicParams(path: string): string[] | undefined {
 }
 
 function resolveExtractedPage(
-  page: ExtractedPage,
-  parents: ExtractedPage[] = [],
-): VotExtractedPage {
-  const { name, path, props, children } = page;
-  const fullPathPrefix = parents.length
-    ? `${parents.map(({ path }) => path).join('/')}/`
-    : '';
-  const fullPath = `${fullPathPrefix}${path}`;
+  route: RouteRecord,
+): VotExtractedPage | undefined {
+  if (route.redirect) return;
+  const { path, name } = route;
   const resolved: VotExtractedPage = {
     name,
     path,
-    fullPath,
-    props,
   };
-  const dynamicParams = extractDynamicParams(fullPath);
+  const dynamicParams = extractDynamicParams(path);
   if (dynamicParams) {
     resolved.dynamicParams = dynamicParams;
-  }
-  if (children) {
-    resolved.children = resolveExtractedPages(children, [...parents, page]);
   }
   return resolved;
 }
 
-function resolveExtractedPages(
-  pages: ExtractedPage[],
-  parents?: ExtractedPage[],
+export function resolveExtractedPages(
+  routes: RouteRecord[],
 ): VotExtractedPage[] {
-  return pages.map((page) => resolveExtractedPage(page, parents));
+  const pages: VotExtractedPage[] = [];
+  routes.map(resolveExtractedPage).forEach((page) => {
+    page && pages.push(page);
+  });
+  return pages;
 }
 
-export async function extractPages(options: VotPluginOptions = {}): Promise<{
-  pages: VotExtractedPage[];
-  flat: () => VotExtractedPage[];
-}> {
-  const pageCtx = new PageContext(resolvePagesOptions(options));
-  await pageCtx.searchGlob();
-  let code = await pageCtx.resolveRoutes();
-  if (!code) {
-    throw new Error('missing pages.');
+export function findPlugin(
+  pluginName: string,
+  buckets: readonly Plugin[] | Plugin[],
+): Plugin | undefined {
+  for (const row of buckets) {
+    if (Array.isArray(row)) {
+      const hit = findPlugin(pluginName, row);
+      if (hit) return hit;
+    }
+    if (row.name === pluginName) {
+      return row;
+    }
+  }
+}
+
+export function findVotPlugin(buckets: readonly Plugin[] | Plugin[]):
+  | {
+      plugin: Plugin;
+      options: VotPluginOptions;
+      generateOptions: VotGenerateOptions;
+    }
+  | undefined {
+  const plugin = findPlugin('vite:vot', buckets);
+  if (!plugin) return;
+
+  const options: VotPluginOptions = (plugin as any).__options__;
+
+  if (!options) {
+    throw new Error('missing vot plugin options.');
   }
 
-  code = code.replace(/,"component":(.*?),/g, ',');
-  code = code.replace(/import ([\s\S]*?)const routes = ?/, '');
-  code = code.replace(/export default routes;?/, '');
-  code = code.trim().replace(/];/, ']');
-
-  const pages = eval(code) as ExtractedPage[];
-  const resolved: VotExtractedPage[] = resolveExtractedPages(pages);
-
-  const _flat = (pages: VotExtractedPage[]) => {
-    const flattened: VotExtractedPage[] = [];
-    pages.forEach((page) => {
-      flattened.push(page);
-      if (page.children) {
-        flattened.push(..._flat(page.children));
-      }
-    });
-    return flattened;
-  };
-
-  const flat = () => _flat(resolved);
-
+  const generateOptions = resolveRawVotGenerateOptions(options.generate);
   return {
-    pages: resolved,
-    flat,
+    plugin,
+    options,
+    generateOptions,
   };
 }

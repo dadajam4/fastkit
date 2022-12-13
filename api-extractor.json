@@ -51,6 +51,9 @@
   "compiler": {
     "overrideTsconfig": {
       "$schema": "http://json.schemastore.org/tsconfig",
+      "compilerOptions": {
+        "esModuleInterop": true,
+      },
       "include": [
         "packages/global.d.ts",
         "packages/*/src/**/*.d.ts",

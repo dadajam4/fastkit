@@ -29,6 +29,6 @@
     "vue-router": "^4.0.16"
   },
   "dependencies": {
-    "@fastkit/i18n": "0.8.13"
+    "@fastkit/i18n": "0.8.18"
   }
 }

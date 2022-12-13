@@ -1,3 +1,5 @@
+import type { RouteRecordName } from 'vue-router';
+
 export interface ExtractedPage {
   name: string;
   path: string;
@@ -7,8 +9,8 @@ export interface ExtractedPage {
   // rawRoute: string;
 }
 
-export interface VotExtractedPage extends ExtractedPage {
-  fullPath: string;
+export interface VotExtractedPage {
+  name?: RouteRecordName;
+  path: string;
   dynamicParams?: string[];
-  children?: VotExtractedPage[];
 }

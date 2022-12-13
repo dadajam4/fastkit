@@ -11,8 +11,13 @@ import {
   findDependencies,
   renderPreloadLinks,
 } from './utils/html';
-
-import type { SsrHandler, VotContext } from './schemes';
+import { createMockPathRoute } from '@fastkit/vue-utils';
+import { setupVotPluginsAndHooks } from './schemes';
+import type {
+  SsrHandler,
+  VotContext,
+  VotBeforeRouterSetupParams,
+} from './schemes';
 
 import { provideContext } from './injections';
 
@@ -32,10 +37,12 @@ export const createEntry: SsrHandler = function createSsrEntry(
     // base,
     routerOptions = {},
     transformState = serializeState,
+    plugins: _plugins,
     ...options
   },
   hook,
 ) {
+  const { plugins, hooks } = setupVotPluginsAndHooks(_plugins);
   return async function ssrEntry(
     url,
     {
@@ -59,18 +66,25 @@ export const createEntry: SsrHandler = function createSsrEntry(
     // const routeBase = base && withoutSuffix(base({ url }), '/');
     const base = __VOT_BASE__;
     const routeBase = base && withoutSuffix(base, '/');
-    const router = createRouter({
+
+    const beforeRouterSetupParams: VotBeforeRouterSetupParams = {
       ...routerOptions,
       history: createMemoryHistory(routeBase),
       routes: routes as RouteRecordRaw[],
-    });
+    };
+
+    await hooks.emit('beforeRouterSetup', beforeRouterSetupParams);
+
+    const router = createRouter(beforeRouterSetupParams);
+
+    await hooks.emit('afterRouterSetup', router);
 
     router.beforeEach((to) => {
       to.meta.state = initialState || null;
     });
 
     const fullPath = getFullPath(url, routeBase);
-    const initialRoute = router.resolve(fullPath);
+    const initialRoute = createMockPathRoute(router, fullPath);
 
     // Server redirect utilities
     const {
@@ -100,6 +114,8 @@ export const createEntry: SsrHandler = function createSsrEntry(
       initialState: {},
       writeResponse,
       redirect,
+      plugins,
+      hooks,
     };
 
     provideContext(app, context);

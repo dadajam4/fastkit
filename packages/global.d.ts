@@ -10,6 +10,7 @@ declare let __COMMIT__: string;
 declare let __VERSION__: string;
 declare let __CONTAINER_ID__: string;
 declare let __VOT_BASE__: string | undefined;
+declare let __VOT_GENERATE__: boolean;
 
 declare module '*.css!raw' {
   const rawStyle: string;

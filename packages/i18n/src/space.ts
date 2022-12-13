@@ -120,6 +120,20 @@ export interface I18nSpaceStaticImpl<
   resolveLocale(localeLikeString: LocaleName | string): LocaleName;
 
   /**
+   * Converts the specified locale name (or similar string) to a locale name valid for this instance
+   *
+   * * This method splits the given string with a hyphen string (`"-"`) to get the most likely locale name
+   * * If the locale names do not match, the base locale name is selected unless the second argument is true
+   *
+   * @param localeLikeString - Locale name (or similar name)
+   * @param withoutDefault - Return undefined when no matching locale is found?
+   */
+  resolveLocale<D extends boolean | undefined>(
+    localeLikeString: LocaleName | string,
+    withoutDefault?: D,
+  ): D extends true ? LocaleName | undefined : LocaleName;
+
+  /**
    * Obtains the locale object corresponding to a given locale name
    *
    * @param localeName - locale name
@@ -205,7 +219,7 @@ export interface I18nSpaceOptions<
  * * For server-side use, it is best to instantiate this space for one client (one request) or one service function
  * * For client-side use, you can invoke an instance of this space at the root of the application, and then invoke a separate subspace for each root component with `createSubSpace()` to share state and match the design with encapsulated logic. It is possible to match the design with encapsulated logic
  */
-export interface I18nSpace<
+export type I18nSpace<
   LocaleName extends string,
   BaseLocale extends LocaleName,
   LocaleMeta extends I18nLocaleMeta,
@@ -214,7 +228,8 @@ export interface I18nSpace<
     BaseLocale,
     LocaleMeta
   > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
-> extends I18nSpaceStaticImpl<LocaleName, BaseLocale, LocaleMeta> {
+  SpaceCustomInterface extends { [key in keyof any]: any } = {},
+> = I18nSpaceStaticImpl<LocaleName, BaseLocale, LocaleMeta> & {
   /** space definition */
   readonly Ctor: I18nSpaceStatic<LocaleName, BaseLocale, LocaleMeta>;
 
@@ -284,7 +299,15 @@ export interface I18nSpace<
    * * This simply loads the currently selected locale
    * * Note that immediately after instantiating the space, loading of the locale under selection is not triggered, so this call must be made
    */
-  init(): Promise<this>;
+  init(): Promise<
+    I18nSpace<
+      LocaleName,
+      BaseLocale,
+      LocaleMeta,
+      Components,
+      SpaceCustomInterface
+    >
+  >;
 
   /**
    * Checks if the specified locale name is currently selected
@@ -326,7 +349,7 @@ export interface I18nSpace<
     Components,
     SubComponents
   >;
-}
+} & SpaceCustomInterface;
 
 /**
  * Internationalization Space Definition
@@ -424,6 +447,21 @@ function createStaticImpl<
     localeDependenciesMap[locale.name] = locale.dependencies;
   });
 
+  const resolveLocale = (<D extends boolean | undefined>(
+    localeLikeString: LocaleName | string,
+    withoutDefault?: D,
+  ): D extends true ? LocaleName | undefined : LocaleName => {
+    return _resolveLocale<LocaleName, D extends true ? undefined : LocaleName>(
+      localeLikeString,
+      availableLocales,
+      withoutDefault ? undefined : (defaultLocale as any),
+    );
+  }) as I18nSpaceStaticImpl<
+    LocaleName,
+    BaseLocale,
+    LocaleMeta
+  >['resolveLocale'];
+
   const impl: I18nSpaceStaticImpl<LocaleName, BaseLocale, LocaleMeta> = {
     locales,
     availableLocales,
@@ -436,13 +474,25 @@ function createStaticImpl<
     isAvailableLocale(localeLikeString): localeLikeString is LocaleName {
       return availableLocales.includes(localeLikeString as any);
     },
-    resolveLocale(localeLikeString) {
-      return _resolveLocale<LocaleName>(
-        localeLikeString,
-        availableLocales,
-        defaultLocale,
-      );
-    },
+    // resolveLocale<D extends boolean>(
+    //   localeLikeString: LocaleName | string,
+    //   withoutDefault?: D,
+    // ): D extends false ? LocaleName | undefined : LocaleName;
+    resolveLocale,
+
+    // resolveLocale<D extends boolean | undefined>(
+    //   localeLikeString: LocaleName | string,
+    //   withoutDefault?: D,
+    // ): D extends true ? LocaleName | undefined : LocaleName {
+    //   return _resolveLocale<
+    //     LocaleName,
+    //     D extends true ? undefined : LocaleName
+    //   >(
+    //     localeLikeString,
+    //     availableLocales,
+    //     withoutDefault ? undefined : (defaultLocale as any),
+    //   );
+    // },
     getLocale(localeName) {
       return locales.get(localeName);
     },
@@ -485,12 +535,19 @@ export class I18nSubSpace<
     BaseLocale,
     LocaleMeta
   > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  SpaceCustomInterface extends { [key in keyof any]: any } = {},
   // Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   // SubComponents extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
 > implements I18nSpaceStaticImpl<LocaleName, BaseLocale, LocaleMeta>
 {
   /** Internationalization Space */
-  readonly space: I18nSpace<LocaleName, BaseLocale, LocaleMeta, Components>;
+  readonly space: I18nSpace<
+    LocaleName,
+    BaseLocale,
+    LocaleMeta,
+    Components,
+    SpaceCustomInterface
+  >;
 
   /** Instantiated component map */
   readonly at: I18nInstantiatedDependencies<Components & SubComponents>;
@@ -527,7 +584,13 @@ export class I18nSubSpace<
    * @param bucket - Object that holds a component instance of the subspace
    */
   constructor(
-    space: I18nSpace<LocaleName, BaseLocale, LocaleMeta, Components>,
+    space: I18nSpace<
+      LocaleName,
+      BaseLocale,
+      LocaleMeta,
+      Components,
+      SpaceCustomInterface
+    >,
     storage: I18nSpaceStorage<LocaleName, BaseLocale, LocaleMeta>,
     Components: SubComponents,
     bucket: any = {},
@@ -654,6 +717,25 @@ export function defineI18nSpace<
         );
       };
 
+      const initResolvers: {
+        resolve: (
+          space: I18nSpace<LocaleName, BaseLocale, LocaleMeta, Components>,
+        ) => any;
+        reject: () => any;
+      }[] = [];
+
+      const resolveInitResolvers = <T extends 'resolve' | 'reject'>(
+        type: T,
+        payload: T extends 'resolve'
+          ? I18nSpace<LocaleName, BaseLocale, LocaleMeta, Components>
+          : any,
+      ) => {
+        for (const resolver of initResolvers) {
+          resolver[type](payload);
+        }
+        initResolvers.length = 0;
+      };
+
       const loadComponents = (
         Components: I18nComponentStatic<
           LocaleName,
@@ -678,8 +760,17 @@ export function defineI18nSpace<
 
           const onComponentResolve = () => {
             if (rejected) return;
-            if (!internalStorage.isLoading(...localeNames)) {
+            if (
+              !internalStorage.someComponentIsLoading(
+                Components,
+                localeDependencies,
+              )
+            ) {
               resolve();
+
+              if (!space.isLoading) {
+                resolveInitResolvers('resolve', space);
+              }
             }
           };
 
@@ -699,6 +790,7 @@ export function defineI18nSpace<
               .catch((err) => {
                 rejected = true;
                 releaseRequest();
+                resolveInitResolvers('reject', err);
                 reject(err);
               })
               .finally(releaseRequest);
@@ -767,7 +859,14 @@ export function defineI18nSpace<
           return loadComponents(getComponentDependencies(), localeNames);
         },
         init() {
-          return space.load(space.currentLocaleName).then(() => space);
+          if (!space.isLoading)
+            return space.load(space.currentLocaleName).then(() => space);
+          return new Promise((resolve, reject) => {
+            initResolvers.push({
+              resolve,
+              reject,
+            });
+          });
         },
       };
 

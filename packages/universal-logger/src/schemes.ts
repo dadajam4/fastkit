@@ -10,7 +10,7 @@ export function levelToIndex(level: LogLevel): number {
   return LOG_LEVELS.indexOf(level);
 }
 
-export function isAvairableLogLevel(
+export function isAvailableLogLevel(
   level: LogLevel | number,
   threshold?: LogLevelThreshold | number,
 ) {

@@ -205,6 +205,7 @@ function createConfig(
     '@datadog/browser-logs',
     // '@nuxt',
     // 'nuxt3',
+    'nodemon',
     'http-proxy',
     'virtual:generated-pages',
     'fs',
@@ -212,6 +213,8 @@ function createConfig(
     'http',
     'perf_hooks',
     'imask',
+    'cookie',
+    'set-cookie-parser',
   );
 
   // the browser builds requires postcss to be available

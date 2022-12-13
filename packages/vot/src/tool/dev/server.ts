@@ -134,6 +134,10 @@ export const createSSRDevHandler = (
         ...context,
       });
 
+      if (response.headersSent) {
+        return response.end();
+      }
+
       writeHead(response, result);
       if (isRedirect(result)) {
         return response.end();
@@ -167,6 +171,11 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
 
   const viteServer = await createViteServer({
     ...options,
+    ...{
+      define: {
+        __VOT_GENERATE__: false,
+      },
+    },
     server: options.server || { ...options },
   });
 

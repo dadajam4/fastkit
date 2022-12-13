@@ -3,27 +3,42 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { deserializeState } from './utils/deserialize-state';
 import { useClientRedirect } from './utils/response';
 import { getFullPath, withoutSuffix } from './utils/route';
-import type { ClientHandler, VotContext } from './schemes';
+import { setupVotPluginsAndHooks } from './schemes';
+import type {
+  ClientHandler,
+  VotContext,
+  VotBeforeRouterSetupParams,
+} from './schemes';
 import { createScrollBehavior } from '@fastkit/vue-page';
 import { provideContext } from './injections';
+import { createMockPathRoute } from '@fastkit/vue-utils';
 
 export const createEntry: ClientHandler = async function createClientEntry(
   App,
-  { routes, routerOptions = {}, debug = {}, ...options },
+  { routes, routerOptions = {}, debug = {}, plugins: _plugins, ...options },
   hook,
 ) {
+  const { plugins, hooks } = setupVotPluginsAndHooks(_plugins);
   const app = createSSRApp(App);
 
   const url = new URL(window.location.href);
   const base = __VOT_BASE__;
   const routeBase = base && withoutSuffix(base, '/');
   // const routeBase = base && withoutSuffix(base({ url }), '/');
-  const router = createRouter({
+
+  const beforeRouterSetupParams: VotBeforeRouterSetupParams = {
     scrollBehavior: createScrollBehavior(),
     ...routerOptions,
     history: createWebHistory(routeBase),
     routes: routes as RouteRecordRaw[],
-  });
+  };
+
+  await hooks.emit('beforeRouterSetup', beforeRouterSetupParams);
+
+  const router = createRouter(beforeRouterSetupParams);
+
+  await hooks.emit('afterRouterSetup', router);
+
   const { transformState = deserializeState } = options;
 
   // Deserialize the state included in the DOM
@@ -37,6 +52,9 @@ export const createEntry: ClientHandler = async function createClientEntry(
     router.push(location),
   );
 
+  const fullPath = getFullPath(url, routeBase);
+  const initialRoute = createMockPathRoute(router, fullPath);
+
   const context: VotContext = {
     url,
     isClient: true,
@@ -45,19 +63,22 @@ export const createEntry: ClientHandler = async function createClientEntry(
     writeResponse,
     app,
     router,
-    initialRoute: router.resolve(getFullPath(url, routeBase)),
+    initialRoute,
+    plugins,
+    hooks,
   };
 
   provideContext(app, context);
 
   let entryRoutePath: string | undefined;
   let isFirstRoute = true;
-  router.beforeEach((to) => {
+  const done = router.beforeEach((to) => {
     if (isFirstRoute || (entryRoutePath && entryRoutePath === to.path)) {
       // The first route is rendered in the server and its state is provided globally.
       isFirstRoute = false;
       entryRoutePath = to.path;
       to.meta.state = context.initialState;
+      done();
     }
   });
 

@@ -13,6 +13,7 @@ import {
   getPluginOptions,
   INDEX_HTML,
   resolveViteConfig,
+  findVotPlugin,
 } from '../utils';
 import { BuildOptions } from '../../vot';
 import type {
@@ -26,6 +27,19 @@ import { generate } from '../generate';
 export async function build(inlineBuildOptions: BuildOptions = {}) {
   return new Promise(async (resolve) => {
     const viteConfig = await resolveViteConfig();
+    const findVotPluginResult = findVotPlugin(viteConfig.plugins);
+
+    if (!findVotPluginResult) {
+      throw new Error('missing vot plugin.');
+    }
+
+    const isGenerate = findVotPluginResult.generateOptions.mode !== 'off';
+    const definePlugin = replace({
+      preventAssignment: true,
+      values: {
+        __VOT_GENERATE__: () => JSON.stringify(isGenerate),
+      },
+    });
 
     const distDir =
       viteConfig.build?.outDir ?? path.resolve(process.cwd(), 'dist');
@@ -53,6 +67,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
               ? {
                   input: inputFilePath,
                   plugins: [
+                    definePlugin,
                     inputFileName !== INDEX_HTML && {
                       generateBundle(options, bundle) {
                         // Rename custom name to index.html
@@ -64,7 +79,9 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
                     },
                   ],
                 }
-              : {},
+              : {
+                  plugins: [definePlugin],
+                },
         },
       } as InlineConfig,
       mergeConfig(
@@ -90,6 +107,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
                   __VOT_HTML__: () => indexHtmlTemplate,
                 },
               }),
+              definePlugin,
             ],
           },
         },

@@ -305,7 +305,8 @@ async function build(target: string) {
         });
       const appends: string[] = [];
       targets.forEach((target) => {
-        if (!mods.includes(target)) {
+        const re = new RegExp(`(^|\n)import { ${target} } from '${pkg}'`);
+        if (!re.test(dts) && !mods.includes(target)) {
           appends.push(target);
         }
       });

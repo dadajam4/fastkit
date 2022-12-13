@@ -11,7 +11,7 @@ import {
   LoggerPayload,
   LogLevelThreshold,
   levelToIndex,
-  isAvairableLogLevel,
+  isAvailableLogLevel,
   DEFAULT_LOGGER_NAME,
 } from './schemes';
 
@@ -44,7 +44,7 @@ export class Logger {
     const results = this.transports.map(
       ({ level, transformers, transport }) => {
         if (level == null) level = this.level;
-        if (!isAvairableLogLevel(logLevelIndex, level))
+        if (!isAvailableLogLevel(logLevelIndex, level))
           return Promise.resolve();
 
         try {

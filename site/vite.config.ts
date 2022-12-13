@@ -40,7 +40,7 @@ export default defineConfig({
     aliasesPlugin(),
     votPlugin({
       pages: {
-        exclude: ['**/-components/*', '**/-*.ts'],
+        exclude: ['**/-*/**/*', '**/-*.*'],
       },
       configureServer({ use }) {
         use('/healthcheck', (req, res) => {
@@ -51,7 +51,7 @@ export default defineConfig({
         ? {
             handler: (page) => {
               if (!page.dynamicParams) return true;
-              if (page.fullPath === '/vui/components/tabs/:childId') {
+              if (page.path.endsWith('/vui/components/tabs/:childId')) {
                 return MOCK_ITEMS_1.map(({ value }) => ({
                   params: { childId: value },
                 }));

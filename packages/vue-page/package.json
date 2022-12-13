@@ -27,6 +27,7 @@
     "vue-router": "^4.0.16"
   },
   "dependencies": {
+    "@fastkit/cookies": "0.8.18",
     "@fastkit/ev": "0.8.18",
     "@fastkit/helpers": "0.8.18",
     "@fastkit/tiny-logger": "0.8.18",

@@ -29,11 +29,14 @@ export function normalizeLocale(locale: string) {
  * @param defaultLocale - default locale name
  * @returns Valid locale name
  */
-export function resolveLocale<LocaleName extends string>(
+export function resolveLocale<
+  LocaleName extends string,
+  Default extends LocaleName | undefined = undefined,
+>(
   localeLikeString: LocaleName | string,
   availableLocales: LocaleName[],
-  defaultLocale: LocaleName,
-): LocaleName {
+  defaultLocale?: Default,
+): LocaleName | Default {
   if (availableLocales.includes(localeLikeString as LocaleName)) {
     return localeLikeString as LocaleName;
   }
@@ -69,7 +72,7 @@ export function resolveLocale<LocaleName extends string>(
       }
     }
   }
-  return resolved || defaultLocale;
+  return resolved || (defaultLocale as Default);
 }
 
 /**

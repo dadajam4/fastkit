@@ -6,7 +6,8 @@ import { createEntry } from './entry';
 import { createHead } from '@vueuse/head';
 import { isPromise, IN_WINDOW, removeUndef } from '@fastkit/helpers';
 import { installVuePageControl, VPageRoot } from '@fastkit/vue-page';
-import { resolveRawVotPlugin, CreateEntryOptions } from './schemes';
+import { CreateEntryOptions } from './schemes';
+import { VOT_GENERATE_PAGES_PATH } from './schemes/generate';
 export * from '@fastkit/vue-page';
 
 export async function createVotHook(
@@ -26,6 +27,24 @@ export async function createVotHook(
     async (_ctx) => {
       const app = _ctx.app as App;
       const router = _ctx.router as Router;
+
+      if (__VOT_GENERATE__) {
+        router.addRoute({
+          path: `/${VOT_GENERATE_PAGES_PATH}`,
+          component: {
+            name: VOT_GENERATE_PAGES_PATH,
+            template: '',
+            middleware: (ctx) => {
+              if (ctx.response) {
+                ctx.response.setHeader('Content-Type', 'application/json');
+                ctx.response.writeHead(200);
+                ctx.response.end(JSON.stringify(router.getRoutes()));
+              }
+            },
+          },
+        });
+      }
+
       const {
         initialState,
         initialRoute,
@@ -33,12 +52,13 @@ export async function createVotHook(
         response,
         writeResponse,
         redirect,
+        plugins,
       } = _ctx;
 
       const head = createHead();
       app.use(head);
 
-      const { plugins, middleware } = options;
+      const { middleware } = options;
 
       const pageControl = installVuePageControl(
         removeUndef({
@@ -62,8 +82,7 @@ export async function createVotHook(
 
       // Install plugins
       if (plugins) {
-        for (const _plugin of plugins) {
-          const plugin = resolveRawVotPlugin(_plugin);
+        for (const plugin of plugins) {
           const result = plugin.setup(pageControl);
           if (isPromise(result)) {
             await result;

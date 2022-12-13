@@ -1,12 +1,14 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { resolveViteConfig } from '../utils';
-import { Plugin, ResolvedConfig } from 'vite';
-import { VotExtractedPage } from '../../schemes/page';
-import { VotPluginOptions } from '../../schemes/options';
 import {
-  resolveRawVotGenerateOptions,
+  resolveViteConfig,
+  findVotPlugin,
+  resolveExtractedPages,
+} from '../utils';
+import { ResolvedConfig } from 'vite';
+import {
   generateVotGeneratePagePaths,
+  VOT_GENERATE_PAGES_PATH,
 } from '../../schemes/generate';
 import http, { Server } from 'http';
 import chalk from 'chalk';
@@ -46,31 +48,15 @@ export async function generate(_config?: ResolvedConfig) {
     viteConfig.build?.outDir ?? path.resolve(process.cwd(), 'dist');
   const clientOutDir = path.resolve(distDir, 'client');
 
-  const votPlugin = findPlugin('vite:vot');
+  const findVotPluginResult = findVotPlugin(viteConfig.plugins);
 
-  if (!votPlugin) {
+  if (!findVotPluginResult) {
     throw new Error('missing vot plugin.');
   }
 
-  const options: VotPluginOptions = (votPlugin as any).__options__;
-
-  if (!options) {
-    throw new Error('missing vot plugin options.');
-  }
-
-  const generateOptions = resolveRawVotGenerateOptions(options.generate);
+  const { generateOptions } = findVotPluginResult;
 
   if (generateOptions.mode === 'off') {
-    return;
-  }
-
-  const pages: VotExtractedPage[] = (
-    await (votPlugin as any)._extractPages()
-  ).flat();
-
-  const filteredPages = generateVotGeneratePagePaths(generateOptions, pages);
-  if (!filteredPages.length) {
-    console.log(chalk.gray('No pages found for generate.'));
     return;
   }
 
@@ -91,15 +77,51 @@ export async function generate(_config?: ResolvedConfig) {
   const server: Server = launched.server;
   const host = launched.host;
   const port = launched.port;
+  const normalizePath = (path: string) => {
+    if (!path.endsWith('/')) {
+      path += '/';
+    }
+    path = path.replace(/^\/\//, '/');
+    return path;
+  };
+
+  const PAGES_PATH = normalizePath(
+    `${basePrefix.replace(/\/$/, '')}/${VOT_GENERATE_PAGES_PATH}/`,
+  );
+
+  const routes = JSON.parse(
+    (
+      await httpRequest({
+        protocol: 'http:',
+        host: host === '0.0.0.0' ? 'localhost' : host,
+        port,
+        path: PAGES_PATH,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+    ).toString(),
+  );
+
+  const pages = resolveExtractedPages(routes).filter(
+    (page) => !page.path.includes('__VOT_GENERATE_PAGES__'),
+  );
+
+  const filteredPages = generateVotGeneratePagePaths(generateOptions, pages);
+  if (!filteredPages.length) {
+    console.log(chalk.gray('No pages found for generate.'));
+    server.close();
+    return;
+  }
+
+  const { length } = filteredPages;
+  let completed = 0;
 
   try {
     await Promise.all(
       filteredPages.map(async (pagePath) => {
-        let requestPath = `${basePrefix}${pagePath}`;
-        if (!requestPath.endsWith('/')) {
-          requestPath += '/';
-        }
-        requestPath = requestPath.replace(/^\/\//, '/');
+        const requestPath = normalizePath(`${basePrefix}${pagePath}`);
         const outDir = path.join(clientOutDir, pagePath);
         const outPath = path.join(outDir, 'index.html');
         await fs.remove(outPath);
@@ -117,12 +139,20 @@ export async function generate(_config?: ResolvedConfig) {
           });
           await fs.ensureDir(outDir);
           await fs.writeFile(outPath, html);
-          console.log(`${chalk.gray('generated >>> ')}${chalk.cyan(pagePath)}`);
+          completed++;
+          console.log(
+            `(${completed}/${length}) ${chalk.gray(
+              'generated >>> ',
+            )}${chalk.cyan(pagePath)}`,
+          );
         } catch (_err) {
+          completed++;
           if (isIncomingMessage(_err)) {
             console.log(
               `${chalk.yellow(
-                `skip generate status[${_err.statusCode || 'NA'}] >>> `,
+                `(${completed}/${length}) skip generate status[${
+                  _err.statusCode || 'NA'
+                }] >>> `,
               )}${chalk.red(pagePath)}`,
             );
           } else {
@@ -141,20 +171,5 @@ export async function generate(_config?: ResolvedConfig) {
   if (outputSync) {
     await fs.emptyDir(outputSync);
     await fs.copySync(clientOutDir, outputSync);
-  }
-
-  function findPlugin(
-    pluginName: string,
-    buckets = viteConfig.plugins,
-  ): Plugin | undefined {
-    for (const row of buckets) {
-      if (Array.isArray(row)) {
-        const hit = findPlugin(pluginName, row);
-        if (hit) return hit;
-      }
-      if (row.name === pluginName) {
-        return row;
-      }
-    }
   }
 }

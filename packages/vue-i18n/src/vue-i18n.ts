@@ -1,51 +1,77 @@
-import { App, inject } from 'vue';
+import { App } from 'vue';
 import { onAppUnmount } from '@fastkit/vue-utils';
+import type { Router, RouterOptions } from 'vue-router';
 import {
+  I18nSpace,
   I18nSpaceStatic,
   I18nLocaleMeta,
   I18nDependencies,
   I18nSpaceOptions,
-  I18nSpace,
 } from '@fastkit/i18n';
-import { createVueI18nObjectStorage } from './helpers';
-import { VUE_I18N_INJECTION_KEY } from './injections';
-import type { Router } from 'vue-router';
 import { VueI18nSubSpaceProvider } from './provider';
-import { VueI18nError } from './logger';
-
-/**
- * Obtaining Provided Internationalization Space
- * @returns
- */
-const use = () => {
-  const space = inject(VUE_I18N_INJECTION_KEY);
-  if (!space) {
-    throw new VueI18nError('missing provided i18n space');
-  }
-  return space;
-};
+import { createVueI18nObjectStorage } from './helpers';
+import { VUE_I18N_INJECTION_KEY, useI18nSpace } from './injections';
+import { VueI18nContext } from './context';
+import { RawVueI18nStrategyFactory, defineStrategy } from './strategies';
+import { VueI18nClient, VueI18nClientSettings } from './client';
+import { AnySpaceStatic } from './schemes';
 
 /**
  * Service interface to provide internationalization capabilities throughout Vue applications
  */
 export interface VueI18n<
-  LocaleName extends string,
-  BaseLocale extends LocaleName,
-  LocaleMeta extends I18nLocaleMeta,
-  Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  LocaleName extends string = string,
+  BaseLocale extends LocaleName = LocaleName,
+  LocaleMeta extends I18nLocaleMeta = I18nLocaleMeta,
+  Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> = any,
+  StrategyCustomInterface extends { [key in keyof any]: any } = {},
 > {
+  /**
+   * Internationalization Space Definition
+   *
+   * @see {@link I18nSpaceStatic}
+   */
+  readonly Space: I18nSpaceStatic<LocaleName, BaseLocale, LocaleMeta>;
+
   /**
    * Generate instantiated internationalization spaces and methods to plug them into Vue app instances
    */
-  setup: () => {
-    space: I18nSpace<LocaleName, BaseLocale, LocaleMeta, Components>;
+  readonly setup: () => {
+    /**
+     * Internationalization Service Space
+     *
+     * @see {@link I18nSpace}
+     */
+    space: I18nSpace<
+      LocaleName,
+      BaseLocale,
+      LocaleMeta,
+      Components,
+      StrategyCustomInterface
+    >;
     install: (app: App) => any;
   };
 
   /**
+   * @TODO
+   */
+  setupRouter: (router: Router) => void;
+
+  /**
+   * @TODO
+   */
+  extendRouterOptions: (routerOptions: RouterOptions) => void;
+
+  /**
    * Obtaining Provided Internationalization Space
    */
-  use: () => I18nSpace<LocaleName, BaseLocale, LocaleMeta, Components>;
+  use: () => I18nSpace<
+    LocaleName,
+    BaseLocale,
+    LocaleMeta,
+    Components,
+    StrategyCustomInterface
+  >;
 
   /**
    * Generate providers of internationalization subspaces that can be configured and used for Vue components.
@@ -84,8 +110,27 @@ export interface VueI18n<
     BaseLocale,
     LocaleMeta,
     Components,
-    SubComponents
+    SubComponents,
+    StrategyCustomInterface
   >;
+}
+
+/**
+ * Internationalization space initialization options
+ */
+export interface VueI18nSpaceOptions<
+  LocaleName extends string = string,
+  BaseLocale extends LocaleName = LocaleName,
+  LocaleMeta extends I18nLocaleMeta = I18nLocaleMeta,
+  Components extends I18nDependencies<
+    LocaleName,
+    BaseLocale,
+    LocaleMeta
+  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  StrategyCustomInterface extends { [key in keyof any]: any } = {},
+> extends I18nSpaceOptions<LocaleName, BaseLocale, LocaleMeta, Components> {
+  strategy?: RawVueI18nStrategyFactory<StrategyCustomInterface>;
+  client?: VueI18nClientSettings | (() => VueI18nClientSettings | void);
 }
 
 /**
@@ -113,10 +158,29 @@ export function createVueI18n<
   BaseLocale extends LocaleName,
   LocaleMeta extends I18nLocaleMeta,
   Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  StrategyCustomInterface extends { [key in keyof any]: any } = {},
 >(
   Space: I18nSpaceStatic<LocaleName, BaseLocale, LocaleMeta>,
-  options?: I18nSpaceOptions<LocaleName, BaseLocale, LocaleMeta, Components>,
-): VueI18n<LocaleName, BaseLocale, LocaleMeta, Components> {
+  options: VueI18nSpaceOptions<
+    LocaleName,
+    BaseLocale,
+    LocaleMeta,
+    Components,
+    StrategyCustomInterface
+  > = {},
+): VueI18n<
+  LocaleName,
+  BaseLocale,
+  LocaleMeta,
+  Components,
+  StrategyCustomInterface
+> {
+  const strategyFactory = options.strategy && defineStrategy(options.strategy);
+  const ctx = new VueI18nContext(Space as unknown as AnySpaceStatic);
+  const strategy = strategyFactory && strategyFactory(ctx);
+  const setupRouter = strategy && strategy.setupRouter;
+  const extendRouterOptions = strategy && strategy.extendRouterOptions;
+
   /**
    * Generate instantiated internationalization spaces and methods to plug them into Vue app instances
    * @see {@link VueI18n.setup}
@@ -134,16 +198,26 @@ export function createVueI18n<
 
     // Initialize space
     const space = Space.create(_options);
+    const { client: rawClientSettings } = options;
 
     const install = (app: App) => {
       app.provide(VUE_I18N_INJECTION_KEY, space);
       app.config.globalProperties.$i18n = space;
 
-      const router: Router | undefined = app.config.globalProperties.$router;
+      const clientSettings =
+        typeof rawClientSettings === 'function'
+          ? rawClientSettings()
+          : rawClientSettings;
 
-      // Register guard if Vue Router is already installed
-      if (router) {
-        VueI18nSubSpaceProvider.registerRouterGuard(router, space, app);
+      const client = new VueI18nClient(
+        ctx,
+        app,
+        space as any,
+        clientSettings || {},
+      );
+
+      if (strategy) {
+        client.initStrategy(strategy);
       }
 
       onAppUnmount(app, () => {
@@ -167,13 +241,18 @@ export function createVueI18n<
       BaseLocale,
       LocaleMeta,
       Components,
-      SubComponents
+      SubComponents,
+      StrategyCustomInterface
     >(Space, SubComponents);
   };
 
   return {
-    setup,
-    use,
+    Space,
+    setup: setup as any,
+    use: useI18nSpace as any,
     defineSubSpace,
+    setupRouter: (router) => setupRouter && setupRouter(router),
+    extendRouterOptions: (routerOptions) =>
+      extendRouterOptions && extendRouterOptions(routerOptions),
   };
 }

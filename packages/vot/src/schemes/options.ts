@@ -1,7 +1,11 @@
 import type { Component } from 'vue';
 import type { VuePageControlMiddlewareFn } from '@fastkit/vue-page';
 import type { HeadClient } from '@vueuse/head';
-import type { RouteLocationRaw, RouterOptions } from 'vue-router';
+import type {
+  RouteLocationRaw,
+  RouterOptions,
+  RouteRecordRaw,
+} from 'vue-router';
 import type { VotContext } from './context';
 import type { RawVotPlugin } from './plugin';
 import type { InlineConfig } from 'vite';
@@ -51,6 +55,14 @@ export interface SsrOptions {
   }) => Promise<WrittenResponse>;
 }
 
+export type VotRoutesGenerated = (
+  routes: RouteRecordRaw[],
+) => RouteRecordRaw[] | void;
+
+export interface VotPluginPagesOptions extends PagesUserOptions {
+  onRoutesGenerated?: VotRoutesGenerated;
+}
+
 export interface VotPluginOptions extends SsrOptions {
   /**
    * Path to entry index.html
@@ -71,7 +83,7 @@ export interface VotPluginOptions extends SsrOptions {
   excludeSsrComponents?: Array<RegExp>;
   vue?: VuePluginOptions;
   jsx?: VueJsxOptions;
-  pages?: PagesUserOptions;
+  pages?: VotPluginPagesOptions;
   configureServer?: VotConfigureServerFn;
 
   /**
@@ -101,6 +113,8 @@ export type ExtendedRouteRaw = RouteLocationRaw & {
   meta?: Meta;
 };
 
+export type VotRouterOptions = Omit<RouterOptions, 'routes' | 'history'>;
+
 export interface CreateEntryOptions {
   // base?: Base;
   debug?: { mount?: boolean };
@@ -109,7 +123,7 @@ export interface CreateEntryOptions {
     defaultTransformer: (state: any) => any,
   ) => any | Promise<any>;
   routes?: ExtendedRouteRaw[];
-  routerOptions?: Omit<RouterOptions, 'routes' | 'history'>;
+  routerOptions?: VotRouterOptions;
   plugins?: RawVotPlugin[];
   middleware?: VuePageControlMiddlewareFn[];
   ErrorComponent?: Component;

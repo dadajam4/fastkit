@@ -16,9 +16,9 @@ if (command === undefined || command.startsWith('-')) {
   command = 'dev';
 }
 
-const avairableCommands = ['dev', 'build', 'generate', 'serve'];
+const availableCommands = ['dev', 'build', 'generate', 'serve'];
 
-if (!avairableCommands.includes(command)) {
+if (!availableCommands.includes(command)) {
   throw new Error(`Command "${command}" not supported`);
 }
 

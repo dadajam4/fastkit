@@ -4,7 +4,6 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { VotPluginOptions } from '../vot';
 import { createSSRDevHandler } from './dev/server';
-import { extractPages } from './utils';
 
 export * from './proxy';
 export * from './build';
@@ -83,7 +82,6 @@ export function votPlugin(options: VotPluginOptions = {}) {
   };
 
   (plugin as any).__options__ = options;
-  (plugin as any)._extractPages = () => extractPages(options);
 
   // if (configureServer) {
   //   plugin.configureServer = function (server) {

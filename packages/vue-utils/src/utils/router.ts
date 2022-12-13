@@ -7,6 +7,8 @@ import type {
   RouteLocationNormalizedLoaded,
   _RouteLocationBase,
   LocationQuery,
+  Router,
+  RouteLocation,
 } from 'vue-router';
 import { isObjectEqual } from '@fastkit/helpers';
 
@@ -176,4 +178,27 @@ export function isSameRoute(
   } else {
     return false;
   }
+}
+
+const MOCK_REDIRECT_FN = () => ({ name: '' });
+
+export function createMockPathRoute(
+  router: Router,
+  path: string,
+): RouteLocation & { href: string } {
+  const { base } = router.options.history;
+  if (path.startsWith(base)) {
+    path = path.replace(base, '');
+  }
+
+  const release = router.addRoute({
+    name: '__mockRoute__',
+    path,
+    redirect: MOCK_REDIRECT_FN,
+  });
+
+  const route = router.resolve(path);
+  release();
+
+  return route;
 }

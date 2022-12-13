@@ -34,9 +34,6 @@ module.exports = async function serve(opts = {}) {
 
   const votPlugin = findPlugin('vite:vot');
 
-  // const pages = await votPlugin._extractPages();
-  // console.log(pages.flat());
-
   const configureServer = votPlugin && votPlugin.configureServer;
 
   const dist = path.resolve(root, 'dist');
@@ -90,6 +87,10 @@ module.exports = async function serve(opts = {}) {
       response,
       // initialState: { ... } // <- This would also be available
     });
+
+    if (response.headersSent) {
+      return;
+    }
 
     response.writeHead(status || 200, statusText || headers, headers);
     await new Promise((resolve) => setTimeout(resolve, 100));

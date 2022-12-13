@@ -15,7 +15,7 @@ export type AsyncHandlerDecoratedFn<Fn extends AsyncFn> = Fn & {
  *
  * @param options - TConfigure behavior when incorporating this asynchronous support into a function.
  *
- * @see {AsyncHandler}
+ * @see {@link AsyncHandler}
  */
 export function AsyncHandle<Fn extends AsyncFn>(
   options: AsyncHandlerOptions<Fn> = {},
