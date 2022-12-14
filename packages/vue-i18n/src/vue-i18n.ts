@@ -53,12 +53,18 @@ export interface VueI18n<
   };
 
   /**
-   * @TODO
+   * Methods to initialize the vue-router instance if necessary
+   *
+   * * Calling this method is only necessary if the configured strategy requires route initialization
+   * * This initialization process should be performed only once during the initialization of the vue application
    */
   setupRouter: (router: Router) => void;
 
   /**
-   * @TODO
+   * If vue-router options need to be set up, the process
+   *
+   * * Calling this method is only necessary if the configured strategy requires route initialization
+   * * This initialization process should be performed only once during the initialization of the vue application
    */
   extendRouterOptions: (routerOptions: RouterOptions) => void;
 
@@ -129,7 +135,16 @@ export interface VueI18nSpaceOptions<
   > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   StrategyCustomInterface extends { [key in keyof any]: any } = {},
 > extends I18nSpaceOptions<LocaleName, BaseLocale, LocaleMeta, Components> {
+  /**
+   * Strategy object or its factory
+   */
   strategy?: RawVueI18nStrategyFactory<StrategyCustomInterface>;
+
+  /**
+   * Client configuration for vue-i18n
+   *
+   * @see {@link VueI18nClientSettings}
+   */
   client?: VueI18nClientSettings | (() => VueI18nClientSettings | void);
 }
 
