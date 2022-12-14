@@ -10,6 +10,9 @@ import {
 } from '@fastkit/vue-i18n';
 import { pick } from '@fastkit/accept-language';
 
+/**
+ * vot plugin for vue-i18n
+ */
 export interface VotI18n<
   LocaleName extends string,
   BaseLocale extends LocaleName,
@@ -28,6 +31,12 @@ export interface VotI18n<
       'defineSubSpace' | 'use'
     > {}
 
+/**
+ * Create a vot plugin for vue-i18n
+ * @param Space - Internationalization Space Definition
+ * @param options - Internationalization space initialization options
+ * @returns vot plugin for vue-i18n
+ */
 export function createVotI18n<
   LocaleName extends string,
   BaseLocale extends LocaleName,
