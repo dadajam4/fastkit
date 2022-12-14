@@ -4,7 +4,7 @@ import { useI18nSpace } from '../../../../injections';
 import type { PathPrefixStrategyCustomInterface } from '../path-prefix-strategy';
 
 /**
- * RouterLink with automatic application of the locale selected in the space
+ * {@link RouterLink} with automatic application of the locale selected in the space
  *
  * @see {@link RouteStrategyCustomInterface.location}
  * @see {@link RouterLink}

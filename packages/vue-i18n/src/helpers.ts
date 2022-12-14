@@ -15,6 +15,11 @@ export function createVueI18nObjectStorage() {
   return createI18nObjectStorage(reactive({}));
 }
 
+/**
+ * Get the provider of the subspace set in the vue component
+ * @param route - Normalized route object
+ * @returns Provider of the subspace
+ */
 export function extractVueI18nComponentOptions(
   route: RouteLocationNormalized,
 ): AnyProvider[] {

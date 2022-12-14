@@ -10,16 +10,29 @@ import { extractVueI18nComponentOptions } from './helpers';
 import type { Router } from 'vue-router';
 import { arrayRemove } from '@fastkit/helpers';
 import { VueI18nError } from './logger';
-// import { VueI18nSubSpace } from './schemes';
 
 /**
+ * Subspace Providers
  * @internal
  */
 export type AnyProvider = VueI18nSubSpaceProvider<any, any, any, any, any, any>;
 
+/**
+ * Subspace provider cache interface
+ */
 interface ProviderCache {
+  /** Subspace Providers */
   provider: AnyProvider;
+
+  /**
+   * Subspace for Internationalization Services
+   * @see {@link I18nSubSpace}
+   */
   subSpace: I18nSubSpace<any, any, any, any, any, any>;
+
+  /**
+   * Freeing the cache
+   */
   dispose: () => void;
 }
 

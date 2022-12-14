@@ -1,15 +1,16 @@
-import type { I18nSpace, I18nSpaceStatic } from '@fastkit/i18n';
 import type { VueI18nContext } from '../context';
 import type { VueI18nClient } from '../client';
 import type { Router, RouterOptions } from 'vue-router';
 
-/** Internationalization Space Definition */
-export type AnySpaceStatic = I18nSpaceStatic<string, string, any>;
-
-/** i18n space instance */
-export type AnySpace = I18nSpace<string, string, any, any>;
-
+/**
+ * Strategy initialization results
+ */
 export interface VueI18nStrategyInitResult {
+  /**
+   * locale name
+   *
+   * * If this locale name is set, it will be set as the client's initial locale
+   */
   locale?: string;
 
   /**
@@ -32,7 +33,6 @@ export interface VueI18nStrategy<StrategyCustomInterface = void> {
    * @remarks We expect this method to do the following
    *
    * - Perform individual strategy setups. (Routing extensions, etc.)
-   * - もし必要な場合、ルーターのセットアップ処理
    */
   initClient(client: VueI18nClient): VueI18nStrategyInitResult;
 
@@ -44,19 +44,42 @@ export interface VueI18nStrategy<StrategyCustomInterface = void> {
    */
   spaceExtends?: (client: VueI18nClient) => StrategyCustomInterface;
 
+  /**
+   * Methods to initialize the vue-router instance if necessary
+   *
+   * * This initialization process is executed only once during the initialization of the vue application
+   * * In particular, if you need to initialize every client request on the server side, do so in `initClient`.
+   */
   setupRouter?: (router: Router) => any;
 
+  /**
+   * If vue-router options need to be set up, the process
+   */
   extendRouterOptions?: (routerOptions: RouterOptions) => any;
 }
 
+/**
+ * Factories that generate strategies
+ *
+ * @param ctx - Context object to control & support strategy behavior
+ */
 export type VueI18nStrategyFactory<StrategyCustomInterface = void> = (
   ctx: VueI18nContext,
 ) => VueI18nStrategy<StrategyCustomInterface>;
 
+/**
+ * Strategy object or its factory
+ */
 export type RawVueI18nStrategyFactory<StrategyCustomInterface = void> =
   | VueI18nStrategy<StrategyCustomInterface>
   | VueI18nStrategyFactory<StrategyCustomInterface>;
 
+/**
+ * Define Strategies
+ *
+ * @param strategyOrFactory - Strategy object or its factory
+ * @returns Factories that generate strategies
+ */
 export function defineStrategy<StrategyCustomInterface = void>(
   strategyOrFactory: RawVueI18nStrategyFactory<StrategyCustomInterface>,
 ): VueI18nStrategyFactory<StrategyCustomInterface> {

@@ -9,7 +9,7 @@ import {
 import { LocaleLink } from './components/LocaleLink';
 
 /**
- * Custom interface for root strategies
+ * Custom interface for Prefix-based strategies for locale names
  */
 export interface PathPrefixStrategyCustomInterface {
   /**
@@ -38,7 +38,7 @@ export interface PathPrefixStrategySettings extends PathPrefixContextSettings {
 }
 
 /**
- * Create a strategy launcher to extend vue-router routes
+ * Create a Prefix-based strategy for locale names
  *
  * * This strategy detects valid languages in the i18n space and extends the vue-router route
  * * Use this if you want to determine the locale on a URL path basis
@@ -46,7 +46,7 @@ export interface PathPrefixStrategySettings extends PathPrefixContextSettings {
  * * The operation changes in detail depending on the setting @see {@link PathPrefixStrategySettings}
  *
  * @param settings - Configure PathPrefixStrategy behavior
- * @returns Route Extension Strategy Launcher
+ * @returns Prefix-based strategy
  */
 export function createPathPrefixStrategy(
   settings: PathPrefixStrategySettings = {},
@@ -93,61 +93,61 @@ export function createPathPrefixStrategy(
          * This method detects whether a redirect is necessary and, if so, returns the locale for the redirect as well
          * @remarks Detect redirect destinations under the following conditions
          *
-         * ### リダイレクトを行わない条件
-         * * パスから検出したロケールとクライアントロケールとが一致している場合はリダイレクトしない
-         * * 次回リダイレクト先が前回リダイレクト先と一致している場合、無限リダイレクトを避けるためにリダイレクトをキャンセルする
+         * ### Conditions under which redirects are not performed
+         * * Do not redirect if the locale detected from the path matches the client locale
+         * * If the next redirect destination matches the previous redirect destination, cancel the redirect to avoid infinite redirects
          *
-         * ### リダイレクト先検出条件
+         * ### Redirect Destination Detection Condition
          *
-         * 1. クライアントロケール矯正設定がされていて、クライアントロケールが検出されている時はクライアントロケールへリダイレクトする
-         * 2. 基礎ロケールを除外していなくて、パスにマッチするロケールがない時は、クライアントロケールかベースロケールへリダイレクトする
-         * 3. 基礎ロケールを除外していて、パスにマッチするロケールがなくて、まだリダイレクトしていない時は、クライアントロケールかベースロケールへリダイレクトする
+         * 1. Redirect to the client locale when client locale enforcement is set and the client locale is detected.
+         * 2. If the base locale is not excluded and there is no matching locale in the path, redirect to the client locale or base locale
+         * 3. Redirect to the client locale or base locale when the base locale is excluded and there is no matching locale in the path and it has not yet been redirected
          */
         const detectInitialLocale = (): {
-          /** 初期ロケール名 */
+          /** initial locale name */
           locale: string;
 
-          /** リダイレクトを行うべき場合、そのロケール名 */
+          /** The locale name, if a redirect should be performed */
           redirectTo?: string;
         } => {
-          /** 現在のパスに含まれているロケール */
+          /** Locale included in the current path */
           const initialPath =
             client.getInitialPath() || router.currentRoute.value.path;
           const matchedLocale = ctx.getLocaleInPath(initialPath);
 
-          /** 現在のパスに対応するロケール */
+          /** Locale corresponding to the current path */
           const resolvedMatchedLocale = matchedLocale || ctx.baseLocale;
 
-          /** クライアントが認識できるロケール */
+          /** Client-recognizable locales */
           const clientLocale = client.extractClientLocale();
 
-          /** 前回リダイレクトしたロケール */
+          /** Last redirected locale */
           const redirectedLocale = getRedirectedLocale();
 
-          /** リダイレクトしたいロケール名 */
+          /** The locale name, if a redirect should be performed */
           let redirectTo: string | undefined = (() => {
-            // パスから検出したロケールとクライアントロケールとが一致している場合はリダイレクトしない
+            // Do not redirect if the locale detected from the path matches the client locale
             if (clientLocale === resolvedMatchedLocale) return;
 
-            // クライアントロケール矯正設定がされていて、クライアントロケールが検出されている時はクライアントロケールへリダイレクトする
+            // Redirect to the client locale when client locale correction is configured and the client locale is detected.
             if (ctx.forceClientLocale && clientLocale) {
               return clientLocale;
             }
 
             const clientOrBaseLocale = clientLocale || ctx.baseLocale;
 
-            // 基礎ロケールを除外していなくて、パスにマッチするロケールがない時は、クライアントロケールかベースロケールへリダイレクトする
+            // If the base locale is not excluded and there is no matching locale in the path, redirect to the client locale or base locale
             if (!ctx.ignoreBaseLocale && !matchedLocale) {
               return clientOrBaseLocale;
             }
 
-            // 基礎ロケールを除外していて、パスにマッチするロケールがなくて、まだリダイレクトしていない時は、クライアントロケールかベースロケールへリダイレクトする
+            // Redirect to the client locale or base locale when the base locale is excluded and there is no matching locale in the path and it has not yet been redirected
             if (ctx.ignoreBaseLocale && !matchedLocale && !redirectedLocale) {
               return clientOrBaseLocale;
             }
           })();
 
-          // 次回リダイレクト先が前回リダイレクト先と一致している場合、無限リダイレクトを避けるためにリダイレクトをキャンセルする
+          // If the next redirect destination matches the previous redirect destination, cancel the redirect to avoid infinite redirects
           if (
             redirectTo === redirectedLocale ||
             resolvedMatchedLocale === redirectTo

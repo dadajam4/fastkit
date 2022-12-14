@@ -24,12 +24,17 @@ export type GetClientLanguageResult =
  */
 export type ServerRedirectFn = (redirectTo: string) => any;
 
+/**
+ * Method for getting the client's language
+ *
+ * @param availableLocales - List of locale names supported by the i18n space
+ */
 export type GetClientLanguage = (
   availableLocales: string[] | readonly string[],
 ) => GetClientLanguageResult;
 
 /**
- * Storage interface used by strategy helpers
+ * Storage interface for storing the results of the strategy's processing
  *
  * * Please set up any storage on the side of the strategy user
  * * For example, map to cookies if server-side, local storage if on the browser, etc.
@@ -47,11 +52,13 @@ export interface StrategyStorage {
 }
 
 /**
- * Strategy helper initialization settings
+ * Client configuration for vue-i18n
+ *
+ * @see {@link VueI18nClient}
  */
 export interface VueI18nClientSettings {
   /**
-   * Storage interface used by strategy
+   * Storage interface for storing the results of the strategy's processing
    *
    * @see {@link StrategyStorage}
    */
@@ -69,18 +76,29 @@ export interface VueI18nClientSettings {
 
   /**
    * Method for redirects on the server
+   *
+   * * Called when redirecting on the SSR side
    */
   serverRedirect?: ServerRedirectFn;
 
   /**
-   * クライアントの初期パス
+   * Initial Client Path
    *
-   * * vue-routerの初期化前ではまだルートが設定されていないので、その時用
+   * * At the time of initialization of vue-router, the route may not yet be established, so please configure as needed
    */
   initialPath?: string | (() => string | undefined);
 }
 
+/**
+ * vue-i18n client
+ *
+ * * Class that controls one client request for a vue application with vue-i18n set up
+ */
 export class VueI18nClient {
+  /**
+   * Context object to control & support strategy behavior
+   * @see {@link VueI18nContext}
+   */
   readonly ctx: VueI18nContext;
 
   /** vue application instance */
@@ -97,6 +115,10 @@ export class VueI18nClient {
    */
   readonly router?: Router;
 
+  /**
+   * Client configuration for vue-i18n
+   * @see {@link VueI18nClientSettings}
+   */
   readonly settings: VueI18nClientSettings;
 
   // readonly storage?: StrategyStorage;
@@ -131,6 +153,13 @@ export class VueI18nClient {
     }
   }
 
+  /**
+   * Obtain a (vue-router)Router instance
+   *
+   * @see {@link Router}
+   * @returns Router instance
+   * @throws Will throw an error if no Router instance is installed.
+   */
   enforceRouter(): Router {
     const { router } = this;
     if (!router) {
@@ -150,17 +179,18 @@ export class VueI18nClient {
    */
   readonly setSpaceLocale: (localeName: string) => Promise<void>;
 
-  // /**
-  //  * Set locale for i18n space
-  //  *
-  //  * @remarks
-  //  * * vue-i18n overrides the `setLocale` method of an i18n space instance
-  //  * * Use this override if you want to call the space method directly, ignoring the processing of this override
-  //  */
-  // setSpaceLocale(localeName: string) {
-  //   return this.space.setLocale(localeName);
-  // }
-
+  /**
+   * Initialize the strategy
+   *
+   * @remarks This method performs the following initialization
+   *
+   * - If the strategy has i18n space extension settings, extend the space instance
+   * - Override i18n space locale setting methods with strategy locale setting methods
+   * - If the strategy initialization process returns a locale name, set it to space as the initial locale
+   *
+   * @param strategy - Strategies for working with i18n spaces in vue applications
+   * @see {@link VueI18nStrategy}
+   */
   initStrategy(strategy: VueI18nStrategy<any>) {
     const { space } = this;
 
@@ -186,9 +216,10 @@ export class VueI18nClient {
       return setLocale(resolvedLocaleName);
     };
 
+    // Override methods for locale sets
     space.setLocale = setLocaleAdapter;
 
-    // locale && setLocaleAdapter(locale);
+    // If locale name is returned, set to space
     locale && this.setSpaceLocale(locale);
   }
 
@@ -198,7 +229,6 @@ export class VueI18nClient {
    * * If the runtime environment is a browser, ignore behavior settings and return `Navigator.languages`
    *
    * @returns client-recognizable languages
-   *available
    * @see {@link VueI18nClientSettings.getClientLanguage}
    */
   getClientLanguage(
@@ -254,15 +284,11 @@ export class VueI18nClient {
     strategyStorage && strategyStorage.set(key, value);
   }
 
-  private rawLocationToFullPath(
-    rawLocation: RouteLocationRaw,
-  ): string | undefined {
-    if (this.router) return this.router.resolve(rawLocation).fullPath;
-    if (typeof rawLocation === 'string') return rawLocation;
-  }
-
   /**
    * Method to redirect
+   *
+   * * When the execution environment is a server, if a redirect method for SSR is set, that method will be called.
+   *
    * @param redirectTo - Redirect Location
    */
   redirect(redirectTo: RouteLocationRaw): any {
@@ -300,12 +326,24 @@ export class VueI18nClient {
   }
 
   /**
-   * クライアントの初期パス
+   * Obtain the initial path of the client
    *
-   * * vue-routerの初期化前ではまだルートが設定されていないので、その時用
+   * @see {@link VueI18nClientSettings.initialPath}
    */
   getInitialPath(): string | undefined {
     const { initialPath } = this.settings;
     return typeof initialPath === 'function' ? initialPath() : initialPath;
+  }
+
+  /**
+   * Convert locations that can be specified in vue-router to full paths
+   * @param rawLocation - User-level route location
+   * @returns Full path of location
+   */
+  private rawLocationToFullPath(
+    rawLocation: RouteLocationRaw,
+  ): string | undefined {
+    if (this.router) return this.router.resolve(rawLocation).fullPath;
+    if (typeof rawLocation === 'string') return rawLocation;
   }
 }

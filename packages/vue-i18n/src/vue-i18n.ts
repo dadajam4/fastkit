@@ -201,7 +201,10 @@ export function createVueI18n<
     const { client: rawClientSettings } = options;
 
     const install = (app: App) => {
+      // Provide space to the entire vue application
       app.provide(VUE_I18N_INJECTION_KEY, space);
+
+      // Set space as a built-in property of a vue component
       app.config.globalProperties.$i18n = space;
 
       const clientSettings =
@@ -216,6 +219,7 @@ export function createVueI18n<
         clientSettings || {},
       );
 
+      // If a strategy is set, initialize it
       if (strategy) {
         client.initStrategy(strategy);
       }

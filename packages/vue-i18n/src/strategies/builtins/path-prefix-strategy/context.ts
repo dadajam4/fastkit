@@ -62,12 +62,21 @@ const DEFAULT_SET_LOCALE_BEHAVIOR: SetLocaleBehavior = 'push';
 
 const ROUTER_EXTENDED_SYMBOL = Symbol('v18n-extended');
 
+/**
+ * Checks whether the route has already been extended in the specified object
+ * @param routerOrOptionsOrRoutes - Objects to be checked
+ * @returns true if extended
+ */
 const isExtended = (
   routerOrOptionsOrRoutes: Router | RouterOptions | RouterOptions['routes'],
 ): boolean => {
   return (routerOrOptionsOrRoutes as any)[ROUTER_EXTENDED_SYMBOL] === true;
 };
 
+/**
+ * Set the extended flag for the route
+ * @param routerOrOptionsOrRoutes - Objects to be set
+ */
 const setExtended = (
   routerOrOptionsOrRoutes: Router | RouterOptions | RouterOptions['routes'],
 ) => {
@@ -104,7 +113,7 @@ export interface PathPrefixContextSettings {
   setLocaleBehavire?: SetLocaleBehavior;
 
   /**
-   * xxx
+   * Storage key corresponding to the locale value of the last redirection result
    * @default "vi18n_redirected"
    * @see {@link DEFAULT_REDIRECTED_STORAGE_KEY}
    */
@@ -118,33 +127,65 @@ export interface PathPrefixContextSettings {
   forceClientLocale?: boolean;
 }
 
+/**
+ * Service class to extend routes according to the locale of the i18n space
+ */
 export class PathPrefixContext {
+  /**
+   * Context object to control & support strategy behavior
+   * @see {@link VueI18nContext}
+   */
   readonly ctx: VueI18nContext;
+
+  /** Regular expression instances matching the locale prefix for this space */
   readonly pathMatchRe: RegExp;
+
+  /**
+   * How to manipulate the route when calling `setLocale()`.
+   * @see {@link SetLocaleBehavior}
+   */
   readonly setLocaleBehavire: SetLocaleBehavior;
+
+  /**
+   * Do you want to exclude route generation for veil locales defined in space
+   * @see {@link PathPrefixContextSettings.ignoreBaseLocale}
+   */
   readonly ignoreBaseLocale: boolean;
+
+  /**
+   * Storage key corresponding to the locale value of the last redirection result
+   * @see {@link PathPrefixContextSettings.redirectedStorageKey}
+   */
   readonly redirectedStorageKey: string;
+
+  /**
+   * Enforce redirection to the client locale
+   * @see {@link PathPrefixContextSettings.forceClientLocale}
+   */
   readonly forceClientLocale: boolean;
 
   /**
    * List of routes you want to exclude from route generation
-   *
    * @see {@link GenerateRouteExcludeFn}
    */
   readonly excludes: GenerateRouteExcludeFn[];
 
+  /** Internationalization Space Definition */
   get Space() {
     return this.ctx.Space;
   }
 
+  /** List of valid locale names in this space */
   get availableLocales() {
     return this.Space.availableLocales;
   }
 
+  /** base locale name */
   get baseLocale() {
     return this.Space.baseLocale;
   }
 
+  /** Checks if the specified locale name (or similar string) is a valid locale name for this instance */
   get isAvailableLocale() {
     return this.Space.isAvailableLocale;
   }
@@ -167,6 +208,8 @@ export class PathPrefixContext {
     this.excludes = excludes.map((exclude) =>
       normalizeGenerateRouteExclude(exclude),
     );
+
+    // bind this for methods...
     (
       [
         'extendRouterOptionsRoutes',
@@ -191,10 +234,21 @@ export class PathPrefixContext {
       : undefined;
   }
 
+  /**
+   * Checks whether a given route should be overtaken by a route extension
+   * @param route - Routes to check
+   * @returns True if the extension should be unintroduced.
+   */
   isExcludeRoute(route: RouteRecordRaw): boolean {
     return this.excludes.some((exclude) => exclude(route));
   }
 
+  /**
+   * Duplicate a given route with a given locale name prefix
+   * @param route - Route object from which to duplicate
+   * @param localeName - locale name
+   * @returns Duplicated route object
+   */
   duplicateRoute(route: RouteRecordRaw, localeName: string): RouteRecordRaw {
     const routeName =
       typeof route.name === 'symbol'
@@ -216,6 +270,12 @@ export class PathPrefixContext {
     return duplicated;
   }
 
+  /**
+   * Duplicate a given route object list with a given locale name prefix
+   * @param routes - Route object list from which to duplicate
+   * @param localeName - locale name
+   * @returns Duplicated route list object
+   */
   duplicateRoutes(
     routes: RouteRecordRaw[],
     localeName: string,
@@ -228,6 +288,16 @@ export class PathPrefixContext {
     return duplicatedRoutes;
   }
 
+  /**
+   * Sorts a list of specified route objects
+   *
+   * @remarks Sort in the following order
+   *
+   * 1. Route without locale name prefix
+   * 2. Order of valid language list
+   *
+   * @param routes - route objects
+   */
   sortRoutes(routes: RouteRecordRaw[]) {
     const { pathMatchRe, availableLocales } = this;
     const getLocaleIndex = (path: string) => {
@@ -245,6 +315,14 @@ export class PathPrefixContext {
     });
   }
 
+  /**
+   * Generates a list of duplicated routes corresponding to the specified list of route objects
+   *
+   * * The result of executing this method does not include the root from which it was replicated
+   *
+   * @param routes - route objects
+   * @returns Duplicated route list object
+   */
   generateExtendRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
     const generatedRoutes: RouteRecordRaw[] = [];
     for (const localeName of this.availableLocales) {
@@ -256,6 +334,10 @@ export class PathPrefixContext {
     return generatedRoutes;
   }
 
+  /**
+   * Extend the optional route of the specified vue-router with a list of locales in this space
+   * @param routes - route objects
+   */
   extendRouterOptionsRoutes(routes: RouteRecordRaw[]) {
     if (isExtended(routes)) return;
     routes.push(...this.generateExtendRoutes(routes));
@@ -263,6 +345,10 @@ export class PathPrefixContext {
     setExtended(routes);
   }
 
+  /**
+   * Extend the optional route of the specified vue-router with a list of locales in this space
+   * @param routerOptions - Options to initialize a {@link RouterOptions | Router} instance.
+   */
   extendRouterOptions(routerOptions: RouterOptions) {
     if (isExtended(routerOptions)) return;
     routerOptions.routes = [
@@ -273,6 +359,10 @@ export class PathPrefixContext {
     setExtended(routerOptions);
   }
 
+  /**
+   * Extend the router instance with a list of locales in this space
+   * @param router - {@link Router} instance.
+   */
   extendRouter(router: Router) {
     if (isExtended(router)) return;
     const generatedRoutes = this.generateExtendRoutes(router.options.routes);

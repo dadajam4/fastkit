@@ -2,9 +2,9 @@ import { VueI18nStrategyFactory, defineStrategy } from '../../schemes';
 import { StorageStrategySettings, DEFAULT_LOCALE_STORAGE_KEY } from './schemes';
 
 /**
- * Create a strategy launcher to save client locale in storage
+ * Create a strategy to save client locale in storage
  * @param settings - Setting up storage-based strategies
- * @returns Storage-based strategy launcher
+ * @returns Storage-based strategy
  */
 export function createStorageStrategy(
   settings: StorageStrategySettings = {},

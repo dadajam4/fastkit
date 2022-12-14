@@ -12,7 +12,7 @@ export const VUE_I18N_INJECTION_KEY: InjectionKey<
 
 /**
  * Obtaining Provided Internationalization Space
- * @returns
+ * @returns Provided Internationalization Space
  */
 export function useI18nSpace<
   StrategyCustomInterface extends { [key in keyof any]: any } = {},
