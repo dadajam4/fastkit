@@ -6,6 +6,17 @@
 // }
 :root {
   --docs-theme-font: 'Zen Dots', sans-serif;
+
+  // @FIXME vuiに書きたいけど mqミックスインが使えない
+  --v-app-container-padding: 16px;
+
+  @include mq(sm) {
+    --v-app-container-padding: 32px;
+  }
+
+  @include mq(lg) {
+    --v-app-container-padding: 40px;
+  }
 }
 
 .docs-theme-font {

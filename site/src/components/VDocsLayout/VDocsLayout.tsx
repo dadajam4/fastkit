@@ -78,7 +78,7 @@ export const VDocsLayout = defineComponent({
                     <VToolbarMenu to="/" class="v-docs-layout__home">
                       <VBusyImage
                         class="v-docs-layout__home__icon"
-                        src="/logo.svg"
+                        src={`${import.meta.env.BASE_URL}logo.svg`}
                         alt=""
                         width={24}
                         height={24}
@@ -147,7 +147,7 @@ export const VDocsLayout = defineComponent({
                       <VPageLink class="v-docs-layout__drawer__header" to="/">
                         <VBusyImage
                           class="v-docs-layout__drawer__header__icon"
-                          src="/logo.svg"
+                          src={`${import.meta.env.BASE_URL}logo.svg`}
                           alt=""
                           width={24}
                           height={24}

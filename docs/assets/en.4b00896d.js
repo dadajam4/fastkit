@@ -1,0 +1,1 @@
+import{t}from"./index.634a4a2b.js";import"./vendor.a37b5c2e.js";const s=t.defineLocale.strict({translations:a=>({appName:"fastkit",guide:"Guide",whatIsFastkit:"What is fastkit?",tryItOut:"Try it out",installation:"Installation",translations:"Translations",copied:"Copied",packages:"Packages",previousPage:"Previous page",nextPage:"Next page"})});export{s as default,s as en};

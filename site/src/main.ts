@@ -1,4 +1,3 @@
-import './main.scss';
 import { App } from './App';
 import { installVui } from '../.vui/installer';
 import { createVotEntry } from '@fastkit/vot';
@@ -6,6 +5,7 @@ import { authPlugin } from './plugins';
 import { i18n } from '~/i18n';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
 import { LocaleLink, useLink } from '@fastkit/vue-i18n';
+import './main.scss';
 
 export default createVotEntry(App, {
   ErrorComponent: VErrorPage,

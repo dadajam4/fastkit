@@ -1,1 +1,0 @@
-import{s as t}from"./-home.27084d12.js";import"./vendor.a37b5c2e.js";import"./index.b0592674.js";import"./generated-pages.4925ecbd.js";const p=t.defineLocale.strict({translations:{lead:"Toolkit to support rapid scratch development of applications."}});export{p as default,p as en};
