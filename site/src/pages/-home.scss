@@ -1,0 +1,24 @@
+.pg-home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+  &__title {
+    font-size: 48px;
+  }
+
+  &__lead {
+    margin-bottom: 32px;
+  }
+
+  &__languages {
+    margin-bottom: 32px;
+  }
+
+  &__action {
+    min-width: 280px;
+    font-size: 18px;
+  }
+}

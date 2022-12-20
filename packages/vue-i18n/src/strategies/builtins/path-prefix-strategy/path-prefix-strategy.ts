@@ -19,6 +19,18 @@ export interface PathPrefixStrategyCustomInterface {
   location(location: RouteLocationRaw): ResolvedLocation;
 
   /**
+   * Get the path corresponding to the specified locale
+   * @param localeName - locale name
+   * @param currentRoutePath - current route path
+   *
+   * * returns `undefined` if the current locale and the switched locale are the same
+   * @returns path after switching
+   *
+   * @see {@link PathPrefixContext.getSwitchLocalePath}
+   */
+  getSwitchLocation(localeName: string): string | undefined;
+
+  /**
    * RouterLink with automatic application of the locale selected in the space
    * @see {@link LocaleLink}
    */
@@ -239,6 +251,11 @@ export function createPathPrefixStrategy(
         };
         return {
           location: createSpaceLocation,
+          getSwitchLocation: (localeName) =>
+            ctx.getSwitchLocalePath(
+              localeName,
+              router.currentRoute.value.fullPath,
+            ),
           LocaleLink,
         };
       },

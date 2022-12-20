@@ -398,7 +398,7 @@ export class PathPrefixContext {
     localeName: string,
     currentRoutePath: string,
   ): string | undefined {
-    const path = currentRoutePath.replace(this.pathMatchRe, '');
+    const path = currentRoutePath.replace(this.pathMatchRe, '') || '/';
     const nextPath =
       this.ignoreBaseLocale && localeName === this.baseLocale
         ? path

@@ -1,0 +1,42 @@
+.v-docs-paging {
+  --gap: 16px;
+
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  margin-top: 64px;
+
+  &__item {
+    --width: calc(50% - var(--gap) * 0.5);
+
+    display: flex;
+    flex: 0 0 var(--width);
+    flex-direction: column;
+    width: var(--width);
+    padding: 4px 16px 8px;
+    margin: 0;
+
+    &--prev {
+      margin-right: auto;
+    }
+
+    &--next {
+      margin-left: auto;
+      text-align: right;
+    }
+
+    &__type {
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      color: var(--palette-muted);
+      vertical-align: bottom;
+    }
+
+    &__title {
+      margin-top: 4px;
+      font-size: 14px;
+      color: var(--palette-link);
+    }
+  }
+}

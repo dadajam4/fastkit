@@ -9,6 +9,26 @@
     }
   }
 
+  &__languages {
+    padding: 8px;
+
+    &__title {
+      padding: 4px;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    &__nav {
+      margin-top: 4px;
+    }
+  }
+
+  &__main {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
   &__drawer {
     &__header {
       display: flex;

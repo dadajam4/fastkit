@@ -1,6 +1,6 @@
 import './VDocsLayout.scss';
 
-import { defineComponent, PropType, computed } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import {
   VAppLayout,
   useMediaMatch,
@@ -15,18 +15,14 @@ import {
   VBusyImage,
   VTextField,
   VIcon,
+  NavigationInput,
+  VMenu,
 } from '@fastkit/vui';
+import { DocsLayoutPackageInfo } from './schemes';
+import { DocsPackage } from './docs-package';
+import { VLanguageSwitcher } from '../VLanguageSwitcher';
 
-export interface VDocsLayoutPackageInfo {
-  name: string;
-  displayName?: string;
-  // github?: string;
-}
-
-export interface ResolvedVDocsLayoutPackageInfo extends VDocsLayoutPackageInfo {
-  displayName: string;
-  github: string;
-}
+export type DocsLayoutNavigation = NavigationInput & { key?: string | number };
 
 export const VDocsLayout = defineComponent({
   name: 'VDocsLayout',
@@ -39,32 +35,20 @@ export const VDocsLayout = defineComponent({
       type: String,
       required: true,
     },
-    package: [String, Object] as PropType<string | VDocsLayoutPackageInfo>,
+    package: [String, Object] as PropType<string | DocsLayoutPackageInfo>,
     github: String,
+    navigations: {
+      type: Array as PropType<DocsLayoutNavigation[]>,
+      default: () => [],
+    },
   },
   setup(props, ctx) {
     const mediaMatch = useMediaMatch();
     const drawerStatic = () => mediaMatch('lg');
-    const pkg = computed(() => {
-      let { package: _pkg = 'fastkit' } = props;
-      if (typeof _pkg === 'string') {
-        _pkg = {
-          name: _pkg,
-        };
-      }
-      const { name } = _pkg;
-      const { displayName = name } = _pkg;
-      const githubBase = 'https://github.com/dadajam4/fastkit';
-      const github = `${githubBase}${
-        name === 'fastkit' ? '' : `/tree/main/packages/${name}#readme`
-      }`;
-
-      return {
-        name,
-        displayName,
-        github,
-      };
-    });
+    const pkg = new DocsPackage(props.package, { home: props.home });
+    // const packageRef = computed(() =>
+    //   resolveDocsLayoutPackageInfo(props.package, { home: props.home }),
+    // );
 
     return () => {
       return (
@@ -108,16 +92,38 @@ export const VDocsLayout = defineComponent({
                     style={{ marginLeft: 'auto' }}
                     hiddenInfo
                     // placeholder={`${pkg.value.displayName}を検索`}
-                    placeholder={`Search ${pkg.value.displayName}`}
+                    placeholder={`Search ${pkg.displayName}`}
                     startAdornment={() => <VIcon name={'mdi-magnify'} />}
                   />
                   {/* <VToolbarMenu to={props.home}>{props.title}</VToolbarMenu> */}
                   {/* <VToolbarTitle>Vui</VToolbarTitle> */}
                   <VToolbarEdge edge="end" style={{ marginLeft: '0' }}>
+                    <VMenu
+                      // distance={0}
+                      // openOnHover
+                      v-slots={{
+                        activator: ({ attrs }) => (
+                          <VButton
+                            rounded
+                            icon={'mdi-translate'}
+                            size="lg"
+                            {...attrs}
+                          />
+                        ),
+                        default: () => (
+                          <div class="v-docs-layout__languages">
+                            <h4 class="v-docs-layout__languages__title">
+                              {pkg.i18n.at.common.t.translations}
+                            </h4>
+                            <VLanguageSwitcher class="v-docs-layout__languages__nav" />
+                          </div>
+                        ),
+                      }}
+                    />
                     <VButton
-                      href={pkg.value.github}
+                      href={pkg.github}
                       target="_blank"
-                      title={pkg.value.name}
+                      title={pkg.name}
                       rounded
                       icon={'mdi-github'}
                       size="lg"
@@ -127,7 +133,7 @@ export const VDocsLayout = defineComponent({
               );
             },
             default: () => (
-              <VAppContainer>
+              <VAppContainer class="pb-8">
                 {ctx.slots.default && ctx.slots.default()}
               </VAppContainer>
             ),
@@ -150,7 +156,7 @@ export const VDocsLayout = defineComponent({
                       </VPageLink>
                     ),
                   }}>
-                  <VNavigation
+                  {/* <VNavigation
                     caption="本体に戻る"
                     items={[
                       {
@@ -160,9 +166,16 @@ export const VDocsLayout = defineComponent({
                         to: '/',
                       },
                     ]}
-                  />
+                  /> */}
 
-                  <VNavigation
+                  {props.navigations.map((navigation, navigationIndex) => (
+                    <VNavigation
+                      {...navigation}
+                      key={`nav-${navigation.key || navigationIndex}`}
+                    />
+                  ))}
+
+                  {/* <VNavigation
                     caption="ドキュメント"
                     items={[
                       {
@@ -309,7 +322,7 @@ export const VDocsLayout = defineComponent({
                         ],
                       },
                     ]}
-                  />
+                  /> */}
                 </VDrawerLayout>
               );
             },

@@ -2,7 +2,7 @@ import { scheme } from './scheme';
 
 export const en = scheme.defineLocale.strict({
   translations: {
-    lead: 'A toolkit for quickly creating applications.',
+    lead: 'Toolkit to support rapid scratch development of applications.',
   },
 });
 

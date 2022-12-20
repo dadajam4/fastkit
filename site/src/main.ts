@@ -5,14 +5,19 @@ import { createVotEntry } from '@fastkit/vot';
 import { authPlugin } from './plugins';
 import { i18n } from '~/i18n';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
-import { LocaleLink } from '@fastkit/vue-i18n';
+import { LocaleLink, useLink } from '@fastkit/vue-i18n';
 
 export default createVotEntry(App, {
   ErrorComponent: VErrorPage,
+  routerOptions: {
+    RouterLink: LocaleLink,
+    useLink,
+  },
   plugins: [
     (ctx) => {
       installVui(ctx, {
-        RouterLink: LocaleLink,
+        RouterLink: ctx.RouterLink,
+        useLink: ctx.useLink,
         uiSettings: {
           noDataMessage: 'データはありませんでした。',
           noResultsMessage: '検索結果が見つかりませんでした。',

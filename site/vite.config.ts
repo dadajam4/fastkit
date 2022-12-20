@@ -28,6 +28,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@@@': path.resolve(__dirname, '..'),
+      '~~~': path.resolve(__dirname, '..'),
       '@@': path.resolve(__dirname, '.'),
       '~~': path.resolve(__dirname, '.'),
       '@': path.resolve(__dirname, 'src'),
@@ -41,6 +43,14 @@ export default defineConfig({
     votPlugin({
       pages: {
         exclude: ['**/-*/**/*', '**/-*.*'],
+        onRoutesGenerated(routes) {
+          routes.unshift({
+            name: 'home',
+            path: '/',
+            component: '/src/pages/-home.tsx' as any,
+            props: true,
+          });
+        },
       },
       configureServer({ use }) {
         use('/healthcheck', (req, res) => {

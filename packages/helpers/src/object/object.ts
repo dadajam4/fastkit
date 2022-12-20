@@ -212,7 +212,7 @@ export function objectFromArray<R, K extends string | number | symbol, T>(
   return Object.fromEntries(entries);
 }
 
-export function removeUndef<T extends Record<string, unknown>>(
+export function removeUndef<T extends Record<string, any>>(
   obj: T,
   deep?: boolean,
 ): T {

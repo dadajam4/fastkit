@@ -1,1 +1,0 @@
-import{s as t}from"./generated-pages.f55cb3d9.js";import"./index.900ff698.js";import"./vendor.b2c83758.js";const e=t.defineLocale.strict({translations:{lead:"A toolkit for quickly creating applications."}});export{e as default,e as en};

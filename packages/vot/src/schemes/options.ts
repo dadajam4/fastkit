@@ -5,6 +5,7 @@ import type {
   RouteLocationRaw,
   RouterOptions,
   RouteRecordRaw,
+  useLink,
 } from 'vue-router';
 import type { VotContext } from './context';
 import type { RawVotPlugin } from './plugin';
@@ -113,7 +114,11 @@ export type ExtendedRouteRaw = RouteLocationRaw & {
   meta?: Meta;
 };
 
-export type VotRouterOptions = Omit<RouterOptions, 'routes' | 'history'>;
+export interface VotRouterOptions
+  extends Omit<RouterOptions, 'routes' | 'history'> {
+  RouterLink?: any;
+  useLink?: typeof useLink;
+}
 
 export interface CreateEntryOptions {
   // base?: Base;

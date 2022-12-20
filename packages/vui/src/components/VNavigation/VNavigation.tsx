@@ -12,10 +12,10 @@ import {
   renderNavigationItemInput,
 } from './VNavigationItem';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
+import { createPropsOptions, ExtractPropInput } from '@fastkit/vue-utils';
 
-export const VNavigation = defineComponent({
-  name: 'VNavigation',
-  props: {
+export function createNavigationProps() {
+  return createPropsOptions({
     items: {
       type: Array as PropType<NavigationItemInput[]>,
       required: true,
@@ -26,7 +26,16 @@ export const VNavigation = defineComponent({
       default: true,
     },
     caption: [String, Function] as PropType<VNodeChild | (() => VNodeChild)>,
-  },
+  });
+}
+
+export type NavigationInput = ExtractPropInput<
+  ReturnType<typeof createNavigationProps>
+>;
+
+export const VNavigation = defineComponent({
+  name: 'VNavigation',
+  props: createNavigationProps(),
   setup(props, ctx) {
     const items = computed(() => props.items);
     const color = useScopeColorClass(props);

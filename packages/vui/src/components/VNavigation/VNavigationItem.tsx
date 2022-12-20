@@ -72,6 +72,12 @@ export function renderNavigationItemInput(
   );
 }
 
+const TRIM_END_SLASH_RE = /\/$/;
+
+function trimEndSlash<T extends string | undefined>(sorce: T) {
+  return sorce ? sorce.replace(TRIM_END_SLASH_RE, '') : sorce;
+}
+
 export const VNavigationItem = defineComponent({
   name: 'VNavigationItem',
   inheritAttrs: false,
@@ -96,10 +102,10 @@ export const VNavigationItem = defineComponent({
     const match = computed(() => {
       const { match } = props;
       const { to } = ctx.attrs;
-      if (match) return match;
+      if (match) return trimEndSlash(match);
       if (!to) return;
-      if (typeof to === 'string') return to;
-      return (to as any).path as string | undefined;
+      if (typeof to === 'string') return trimEndSlash(to);
+      return trimEndSlash((to as any).path as string | undefined);
     });
 
     const classes = computed(() => [
@@ -128,7 +134,7 @@ export const VNavigationItem = defineComponent({
           return;
         }
 
-        if (newPath.match(m)) {
+        if (trimEndSlash(newPath).match(m)) {
           open();
           // matched.value = true;
         } else {

@@ -18,7 +18,7 @@ import type {
   LocationQueryRaw,
   LocationAsRelativeRaw,
 } from 'vue-router';
-import { stringifyQuery } from 'vue-router';
+import { stringifyQuery, useLink, RouterLink } from 'vue-router';
 import { IN_WINDOW } from '@fastkit/helpers';
 import {
   extractRouteMatchedItems,
@@ -258,6 +258,8 @@ function resolveRawVuePageControlRedirectSpec(
 export interface VuePageControlSettings {
   app: App;
   router: Router;
+  RouterLink?: any;
+  useLink?: typeof useLink;
   initialState?: InitialState;
   initialRoute: ResolvedRouteLocation;
   ErrorComponent?: Component;
@@ -289,6 +291,8 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   readonly app: App;
   readonly router: Router;
   readonly cookies: Cookies;
+  readonly RouterLink: typeof RouterLink;
+  readonly useLink: typeof useLink;
   private _from: Ref<RouteLocationNormalized | null> = ref(null);
   private _to: Ref<RouteLocationNormalized | null> = ref(null);
   private _initialState: InitialState;
@@ -395,6 +399,8 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     this.request = request;
     this.response = response;
     this.isClient = typeof window !== 'undefined';
+    this.RouterLink = settings.RouterLink || RouterLink;
+    this.useLink = settings.useLink || useLink;
 
     const cookiesContext: CookiesContext = this.isClient
       ? document

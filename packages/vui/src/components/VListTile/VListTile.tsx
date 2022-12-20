@@ -14,8 +14,9 @@ import {
   createPropsOptions,
 } from '@fastkit/vue-utils';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
-import { useLink } from 'vue-router';
+// import { useLink } from 'vue-router';
 import { VLink } from '@fastkit/vue-utils';
+import { useVui } from '../../injections';
 
 export function createListTileProps() {
   const icon = rawIconProp();
@@ -47,6 +48,7 @@ export const VListTile = defineComponent({
     ...listTileEmits,
   },
   setup(props, ctx) {
+    const vui = useVui();
     const startIcon: ComputedRef<VNodeChild> = computed(() => {
       let icon = resolveRawIconProp(false, props.startIcon);
       if (!icon && props.startIconEmptySpace) {
@@ -60,7 +62,7 @@ export const VListTile = defineComponent({
 
     const hasTo = computed(() => !!ctx.attrs.to);
 
-    const link = useLink({ to: (ctx.attrs.to as any) || '' });
+    const link = vui.useLink({ to: (ctx.attrs.to as any) || '' });
 
     const isActive = computed(() => {
       if (!hasTo.value) return false;

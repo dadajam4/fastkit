@@ -38,6 +38,14 @@
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), color 1ms;
   appearance: none;
 
+  &--align-left {
+    justify-content: flex-start;
+  }
+
+  &--align-right {
+    justify-content: flex-end;
+  }
+
   &--plain {
     color: inherit !important;
     // color: inherit !important;

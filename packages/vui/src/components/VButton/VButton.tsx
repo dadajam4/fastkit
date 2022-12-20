@@ -30,6 +30,10 @@ export type VButtonIcon = () => VNodeChild;
 
 export type RawVButtonIcon = IconName | VButtonIcon;
 
+export const BUTTON_ALIGNS = ['left', 'center', 'right'] as const;
+
+export type VButtonAlign = typeof BUTTON_ALIGNS[number];
+
 function resolveRawVButtonIcon(
   raw?: RawVButtonIcon,
   type: 'main' | 'start' | 'end' = 'main',
@@ -54,6 +58,10 @@ export const vueButtonProps = createPropsOptions({
   icon: [String, Function] as PropType<RawVButtonIcon>,
   startIcon: [String, Function] as PropType<RawVButtonIcon>,
   endIcon: [String, Function] as PropType<RawVButtonIcon>,
+  align: {
+    type: String as PropType<VButtonAlign>,
+    default: 'center',
+  },
   ...createControlProps(),
 });
 
@@ -115,6 +123,7 @@ export const VButton = defineComponent({
       // navigationable.value.classes,
       spacer.value ? `v-button--spacer-${spacer.value}` : undefined,
       `v-button--${control.size.value}`,
+      `v-button--align-${props.align}`,
       {
         'v-button--loading': isLoading.value,
         'v-button--icon': !!icon.value,

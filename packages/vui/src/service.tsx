@@ -12,13 +12,15 @@ import {
   resolveVStackDynamicInput,
 } from '@fastkit/vue-kit';
 import type { Router } from 'vue-router';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useLink, UseLinkOptions } from 'vue-router';
 import { LocationService, setDefaultRouterLink } from '@fastkit/vue-utils';
 import { VForm } from './components/VForm';
 import { VTextField, TextFieldInput } from './components/VTextField';
 import { VueForm, FormControlHinttipDelay } from '@fastkit/vue-form-control';
 import { getDocumentScroller } from '@fastkit/vue-scroller';
 import { ControlSize } from './schemes';
+
+export type UseLinkResult = ReturnType<typeof useLink>;
 
 export interface VuiFormPromptSettings<
   T extends { [key: string]: any } = { [key: string]: any },
@@ -134,6 +136,7 @@ export type VuiVNodeResolver = () => VNodeChild;
 export interface VuiServiceOptions {
   router: Router;
   RouterLink?: any;
+  useLink?: (props: UseLinkOptions) => UseLinkResult;
   colorScheme: VueColorSchemePluginSettings;
   uiSettings: VuiServiceUISettings;
   icons: VuiServiceIconSettings;
@@ -183,6 +186,7 @@ export class VuiService {
   readonly router: Router;
   readonly location: LocationService;
   readonly stack: VueStackService;
+  readonly useLink: typeof useLink;
 
   get scroller() {
     return getDocumentScroller();
@@ -207,6 +211,7 @@ export class VuiService {
       router: this.router,
     });
     this.stack = stackService;
+    this.useLink = options.useLink || useLink;
   }
 
   configure(options?: Partial<VuiServiceOptions>) {

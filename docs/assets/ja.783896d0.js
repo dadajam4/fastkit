@@ -1,1 +1,0 @@
-import{e as t}from"./index.900ff698.js";import"./vendor.b2c83758.js";const o=t.defineLocale.strict({translations:{appName:"fastkit",getStarted:"\u306F\u3058\u3081\u3088\u3046"}});export{o as default,o as ja};

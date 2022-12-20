@@ -78,7 +78,7 @@ export interface NavigationableContext {
 
 export interface UseNavigationableOptions {
   clickableClassName?: string | (() => string | undefined);
-  RouterLink?: typeof RouterLink;
+  RouterLink?: any;
   linkFallbackTag?: string | (() => string | undefined);
 }
 

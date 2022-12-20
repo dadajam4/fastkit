@@ -5,7 +5,11 @@ import { Router } from 'vue-router';
 import { createEntry } from './entry';
 import { createHead } from '@vueuse/head';
 import { isPromise, IN_WINDOW, removeUndef } from '@fastkit/helpers';
-import { installVuePageControl, VPageRoot } from '@fastkit/vue-page';
+import {
+  installVuePageControl,
+  VuePageControlSettings,
+  VPageRoot,
+} from '@fastkit/vue-page';
 import { CreateEntryOptions } from './schemes';
 import { VOT_GENERATE_PAGES_PATH } from './schemes/generate';
 export * from '@fastkit/vue-page';
@@ -58,12 +62,14 @@ export async function createVotHook(
       const head = createHead();
       app.use(head);
 
-      const { middleware } = options;
+      const { middleware, routerOptions } = options;
 
       const pageControl = installVuePageControl(
-        removeUndef({
+        removeUndef<VuePageControlSettings>({
           app,
           router,
+          RouterLink: routerOptions?.RouterLink,
+          useLink: routerOptions?.useLink,
           initialState,
           initialRoute,
           request,

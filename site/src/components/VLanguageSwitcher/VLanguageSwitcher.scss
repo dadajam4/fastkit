@@ -1,0 +1,12 @@
+.v-language-switcher {
+  // noop
+  &--stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &--stack &__link {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}

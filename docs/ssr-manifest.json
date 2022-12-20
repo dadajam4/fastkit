@@ -401,6 +401,9 @@
   "../packages/vue-page/src/components/VPageProgress/VPageProgress.tsx": [
     "/fastkit/assets/mdi.337d8f30.woff2"
   ],
+  "../packages/vue-page/src/components/VPageLink.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
   "../packages/vue-page/src/components/VPageRoot/VPageRoot.tsx": [
     "/fastkit/assets/mdi.337d8f30.woff2"
   ],
@@ -803,63 +806,6 @@
   "../packages/vui/src/plugin.tsx": [
     "/fastkit/assets/mdi.337d8f30.woff2"
   ],
-  "src/App.tsx": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  ".vui/setup.scss": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  ".vui/color-scheme/color-scheme.info.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  ".vui/media-match/media-match.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  ".vui/icon-font/index.css": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  ".vui/icon-font/mdi/mdi.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vui/src/styles/after-effects.scss": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  ".vui/installer.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/schemes/hooks.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/schemes/plugin.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/utils/deserialize-state.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/utils/response.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/utils/route.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/injections.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/entry-client.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/entry.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/schemes/generate.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "../packages/vot/src/plugin.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
-  "src/plugins/auth.ts": [
-    "/fastkit/assets/mdi.337d8f30.woff2"
-  ],
   "../packages/i18n/src/storage.ts": [
     "/fastkit/assets/mdi.337d8f30.woff2"
   ],
@@ -947,6 +893,63 @@
   "src/i18n/index.ts": [
     "/fastkit/assets/mdi.337d8f30.woff2"
   ],
+  "src/App.tsx": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  ".vui/setup.scss": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  ".vui/color-scheme/color-scheme.info.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  ".vui/media-match/media-match.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  ".vui/icon-font/index.css": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  ".vui/icon-font/mdi/mdi.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vui/src/styles/after-effects.scss": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  ".vui/installer.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/schemes/hooks.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/schemes/plugin.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/utils/deserialize-state.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/utils/response.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/utils/route.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/injections.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/entry-client.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/entry.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/schemes/generate.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "../packages/vot/src/plugin.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
+  "src/plugins/auth.ts": [
+    "/fastkit/assets/mdi.337d8f30.woff2"
+  ],
   "src/components/VErrorPage/VErrorPage.tsx": [
     "/fastkit/assets/mdi.337d8f30.woff2"
   ],
@@ -957,706 +960,781 @@
     "/fastkit/assets/mdi.337d8f30.woff2"
   ],
   "../node_modules/@vue/shared/dist/shared.esm-bundler.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/vue/dist/vue.runtime.esm-bundler.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "\u0000commonjsHelpers.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/bezier-easing/src/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/env.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/const.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/time.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/proxy.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/api/api.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/api/app.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/api/component.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/api/context.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/api/hooks.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/api/util.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/api/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/plugin.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/devtools-api/lib/esm/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/vue-router/dist/vue-router.esm-bundler.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vueuse/head/dist/index.mjs": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/_rollupPluginBabelHelpers-b054ecd2.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/core/change-details.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/core/utils.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/core/action-details.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/core/continuous-tail-details.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/core/holder.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/base.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/factory.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/pattern/input-definition.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/pattern/fixed-definition.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/pattern/chunk-tail-details.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/pattern/cursor.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/regexp.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/pattern.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/range.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/date.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/controls/mask-element.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/controls/html-mask-element.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/controls/html-contenteditable-mask-element.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/controls/input.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/enum.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/number.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/function.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/dynamic.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/masked/pipe.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/imask/esm/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "\u0000/Users/dadajam4/projects/npm/fastkit/node_modules/cookie/index.js?commonjs-exports": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/cookie/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "\u0000/Users/dadajam4/projects/npm/fastkit/node_modules/set-cookie-parser/lib/set-cookie.js?commonjs-module": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/set-cookie-parser/lib/set-cookie.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/orderedmap/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-model/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-transform/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-state/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-view/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/w3c-keyname/index.es.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-keymap/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-commands/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-schema-list/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/core/dist/tiptap-core.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/enums.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getNodeName.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getWindow.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/instanceOf.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/applyStyles.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/getBasePlacement.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/math.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getLayoutRect.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/contains.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getComputedStyle.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/isTableElement.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getDocumentElement.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getParentNode.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getOffsetParent.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/getMainAxisFromPlacement.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/within.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/getFreshSideObject.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/mergePaddingObject.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/expandToHashMap.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/arrow.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/getVariation.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/computeStyles.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/eventListeners.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/getOppositePlacement.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/getOppositeVariationPlacement.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getWindowScrollBarX.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getViewportRect.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getDocumentRect.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/isScrollParent.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getScrollParent.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/listScrollParents.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/rectToClientRect.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getClippingRect.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/computeOffsets.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/detectOverflow.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/computeAutoPlacement.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/flip.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/hide.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/offset.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/popperOffsets.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/getAltAxis.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/preventOverflow.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/modifiers/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getHTMLElementScroll.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getNodeScroll.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/dom-utils/getCompositeRect.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/orderModifiers.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/debounce.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/format.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/validateModifiers.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/uniqueBy.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/utils/mergeByName.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/createPopper.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/popper-lite.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/popper.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@popperjs/core/lib/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/tippy.js/dist/tippy.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-bubble-menu/dist/tiptap-extension-bubble-menu.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-floating-menu/dist/tiptap-extension-floating-menu.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/vue-3/dist/tiptap-vue-3.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-blockquote/dist/tiptap-extension-blockquote.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-bold/dist/tiptap-extension-bold.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-bullet-list/dist/tiptap-extension-bullet-list.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-code/dist/tiptap-extension-code.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-code-block/dist/tiptap-extension-code-block.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-document/dist/tiptap-extension-document.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-dropcursor/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-dropcursor/dist/tiptap-extension-dropcursor.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-gapcursor/node_modules/prosemirror-view/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-gapcursor/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-gapcursor/dist/tiptap-extension-gapcursor.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-hard-break/dist/tiptap-extension-hard-break.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-heading/dist/tiptap-extension-heading.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/rope-sequence/dist/index.es.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/prosemirror-history/dist/index.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-history/dist/tiptap-extension-history.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-horizontal-rule/dist/tiptap-extension-horizontal-rule.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-italic/dist/tiptap-extension-italic.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-list-item/dist/tiptap-extension-list-item.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-ordered-list/dist/tiptap-extension-ordered-list.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-paragraph/dist/tiptap-extension-paragraph.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-strike/dist/tiptap-extension-strike.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-text/dist/tiptap-extension-text.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/starter-kit/dist/tiptap-starter-kit.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-text-style/dist/tiptap-extension-text-style.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-underline/dist/tiptap-extension-underline.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/linkifyjs/dist/linkify.module.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@tiptap/extension-link/dist/tiptap-extension-link.esm.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../node_modules/@vue/server-renderer/dist/server-renderer.esm-bundler.js": [
-    "/fastkit/assets/vendor.b2c83758.js"
-  ],
-  "src/pages/index.scss": [
-    "/fastkit/assets/generated-pages.f55cb3d9.js",
-    "/fastkit/assets/generated-pages.65c5cf89.css"
-  ],
-  "src/pages/-i18n/scheme.ts": [
-    "/fastkit/assets/generated-pages.f55cb3d9.js",
-    "/fastkit/assets/generated-pages.65c5cf89.css"
-  ],
-  "src/pages/-i18n/index.ts": [
-    "/fastkit/assets/generated-pages.f55cb3d9.js",
-    "/fastkit/assets/generated-pages.65c5cf89.css"
-  ],
-  "src/pages/index.tsx": [
-    "/fastkit/assets/generated-pages.f55cb3d9.js",
-    "/fastkit/assets/generated-pages.65c5cf89.css"
-  ],
-  "../../../../../../@vite-plugin-pages/generated-pages": [
-    "/fastkit/assets/generated-pages.f55cb3d9.js",
-    "/fastkit/assets/generated-pages.65c5cf89.css"
-  ],
-  "src/i18n/components/common/ja.ts": [
-    "/fastkit/assets/ja.783896d0.js"
-  ],
-  "src/i18n/components/common/en.ts": [
-    "/fastkit/assets/en.2ab97d0d.js"
-  ],
-  "src/pages/page2.tsx": [
-    "/fastkit/assets/page2.60245125.js"
-  ],
-  "src/pages/page3.tsx": [
-    "/fastkit/assets/page3.2e1f759d.js"
-  ],
-  "src/pages/page3/child.tsx": [
-    "/fastkit/assets/child.133be6ae.js"
-  ],
-  "src/pages/page3/index.tsx": [
-    "/fastkit/assets/index.aec6281a.js"
-  ],
-  "src/pages/components/buttons.tsx": [
-    "/fastkit/assets/buttons.997cdaca.js"
-  ],
-  "src/pages/components/forms.tsx": [
-    "/fastkit/assets/forms.d3c82938.js"
-  ],
-  "src/pages/components/index.tsx": [
-    "/fastkit/assets/index.07be52a4.js"
-  ],
-  "src/pages/getting-started/index.tsx": [
-    "/fastkit/assets/index.629f6712.js"
-  ],
-  "src/components/VDocsLayout/VDocsLayout.scss": [
-    "/fastkit/assets/VDocsSection.28f452b8.js",
-    "/fastkit/assets/VDocsSection.89cdfea5.css"
-  ],
-  "src/components/VDocsLayout/VDocsLayout.tsx": [
-    "/fastkit/assets/VDocsSection.28f452b8.js",
-    "/fastkit/assets/VDocsSection.89cdfea5.css"
-  ],
-  "src/components/VDocsSection/VDocsSection.scss": [
-    "/fastkit/assets/VDocsSection.28f452b8.js",
-    "/fastkit/assets/VDocsSection.89cdfea5.css"
-  ],
-  "src/components/VDocsSection/injections.ts": [
-    "/fastkit/assets/VDocsSection.28f452b8.js",
-    "/fastkit/assets/VDocsSection.89cdfea5.css"
-  ],
-  "src/components/VDocsSection/context.ts": [
-    "/fastkit/assets/VDocsSection.28f452b8.js",
-    "/fastkit/assets/VDocsSection.89cdfea5.css"
-  ],
-  "src/components/VDocsSection/VDocsSection.tsx": [
-    "/fastkit/assets/VDocsSection.28f452b8.js",
-    "/fastkit/assets/VDocsSection.89cdfea5.css"
+    "/fastkit/assets/vendor.a37b5c2e.js"
   ],
   "../packages/vue-media-match/src/service.ts": [
-    "/fastkit/assets/composables.a36eaecf.js"
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
   ],
   "../packages/vue-media-match/src/composables.ts": [
-    "/fastkit/assets/composables.a36eaecf.js"
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
   ],
-  "src/pages/getting-started/index/index.tsx": [
-    "/fastkit/assets/index.bce323d2.js"
+  "\u0000/Users/dadajam4/projects/npm/fastkit/node_modules/prismjs/prism.js?commonjs-module": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
   ],
-  "src/pages/getting-started/installation.tsx": [
-    "/fastkit/assets/installation.e97b018c.js"
+  "../node_modules/prismjs/prism.js": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
   ],
-  "src/pages/getting-started/usage.tsx": [
-    "/fastkit/assets/usage.62fbd997.js"
+  "../node_modules/prismjs/themes/prism-okaidia.css": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
   ],
-  "src/pages/settings/basic.tsx": [
-    "/fastkit/assets/basic.3f7160d7.js"
+  "../node_modules/prismjs/components/prism-bash.js": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
   ],
-  "src/pages/settings/custom.tsx": [
-    "/fastkit/assets/custom.0bf61514.js"
+  "../node_modules/prismjs/components/prism-css.js": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "../node_modules/prismjs/components/prism-javascript.js": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "../node_modules/prismjs/components/prism-json.js": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "../node_modules/prismjs/components/prism-scss.js": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "../node_modules/prismjs/components/prism-typescript.js": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "../node_modules/prismjs/components/prism-jsx.js": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "../node_modules/prismjs/components/prism-tsx.js": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VPrism/VPrism.scss": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VPrism/VPrism.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VCode/VCode.scss": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VCode/VCode.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VLanguageSwitcher/VLanguageSwitcher.scss": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VLanguageSwitcher/VLanguageSwitcher.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "../core/constants.ts": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsLayout/schemes.ts": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsLayout/injections.ts": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsLayout/docs-package.ts": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsLayout/VDocsLayout.scss": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsLayout/VDocsLayout.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsSection/VDocsSection.scss": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsSection/injections.ts": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsSection/context.ts": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsSection/VDocsSection.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsPaging/VDocsPaging.scss": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/components/VDocsPaging/VDocsPaging.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/pages/index/index.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "../packages/fastkit/package.json": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/pages/index/index/guide/index.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/pages/index/index/guide/packages.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/pages/index/index/guide/what.tsx": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "../../../../../../@vite-plugin-pages/generated-pages": [
+    "/fastkit/assets/generated-pages.4925ecbd.js",
+    "/fastkit/assets/generated-pages.47e5f749.css"
+  ],
+  "src/i18n/components/common/ja.ts": [
+    "/fastkit/assets/ja.1a250a67.js"
+  ],
+  "src/i18n/components/common/en.ts": [
+    "/fastkit/assets/en.9e32bd8c.js"
+  ],
+  "src/pages/-home.scss": [
+    "/fastkit/assets/-home.27084d12.js",
+    "/fastkit/assets/-home.9cefba0c.css"
+  ],
+  "src/pages/-i18n/scheme.ts": [
+    "/fastkit/assets/-home.27084d12.js",
+    "/fastkit/assets/-home.9cefba0c.css"
+  ],
+  "src/pages/-i18n/index.ts": [
+    "/fastkit/assets/-home.27084d12.js",
+    "/fastkit/assets/-home.9cefba0c.css"
+  ],
+  "src/pages/-home.tsx": [
+    "/fastkit/assets/-home.27084d12.js",
+    "/fastkit/assets/-home.9cefba0c.css"
   ],
   "src/pages/vui/index.scss": [
-    "/fastkit/assets/index.6544f870.js",
+    "/fastkit/assets/index.a78ce38a.js",
     "/fastkit/assets/index.94f15d8b.css"
   ],
   "src/pages/vui/index.tsx": [
-    "/fastkit/assets/index.6544f870.js",
+    "/fastkit/assets/index.a78ce38a.js",
     "/fastkit/assets/index.94f15d8b.css"
   ],
   "src/pages/vui/index/index.tsx": [
-    "/fastkit/assets/index.9e63a28d.js"
+    "/fastkit/assets/index.999491d5.js"
   ],
   "src/pages/vui/index/components/avatars.tsx": [
-    "/fastkit/assets/avatars.bd739d0a.js"
+    "/fastkit/assets/avatars.2f7f5dc2.js"
   ],
   "src/pages/-components/DocsSection.scss": [
-    "/fastkit/assets/DocsSection.b754179a.js",
+    "/fastkit/assets/DocsSection.01ad6050.js",
     "/fastkit/assets/DocsSection.fc73d35f.css"
   ],
   "src/pages/-components/DocsSection.tsx": [
-    "/fastkit/assets/DocsSection.b754179a.js",
+    "/fastkit/assets/DocsSection.01ad6050.js",
     "/fastkit/assets/DocsSection.fc73d35f.css"
   ],
   "src/pages/vui/index/components/breadcrumbs.tsx": [
-    "/fastkit/assets/breadcrumbs.157ad921.js"
+    "/fastkit/assets/breadcrumbs.a1fcfdc8.js"
   ],
   "src/pages/vui/index/components/buttons.tsx": [
-    "/fastkit/assets/buttons.d17ec709.js"
+    "/fastkit/assets/buttons.9833af36.js"
   ],
   "src/pages/vui/index/components/cards.tsx": [
-    "/fastkit/assets/cards.c5738595.js"
+    "/fastkit/assets/cards.afef2c80.js"
   ],
   "src/pages/vui/index/components/checkboxes.tsx": [
-    "/fastkit/assets/checkboxes.55937ea5.js"
+    "/fastkit/assets/checkboxes.c18418aa.js"
   ],
   "src/pages/vui/index/components/chips.tsx": [
-    "/fastkit/assets/chips.7b130117.js"
+    "/fastkit/assets/chips.1365f016.js"
   ],
   "src/pages/vui/index/components/data-tables.tsx": [
-    "/fastkit/assets/data-tables.a57fc3ca.js"
+    "/fastkit/assets/data-tables.65f03476.js"
   ],
   "src/pages/vui/index/components/forms.tsx": [
-    "/fastkit/assets/forms.0ca3b149.js"
+    "/fastkit/assets/forms.ed001750.js"
   ],
   "src/pages/vui/index/components/icons.tsx": [
-    "/fastkit/assets/icons.94da7e31.js"
+    "/fastkit/assets/icons.1f8950a0.js"
   ],
   "src/pages/vui/index/components/index.tsx": [
-    "/fastkit/assets/index.b9c3f533.js"
+    "/fastkit/assets/index.ecbd48ee.js"
   ],
   "src/pages/vui/index/components/loadings.tsx": [
-    "/fastkit/assets/loadings.341d3519.js"
+    "/fastkit/assets/loadings.53b69f47.js"
   ],
   "src/pages/vui/index/components/pagination.tsx": [
-    "/fastkit/assets/pagination.72429f97.js"
+    "/fastkit/assets/pagination.daecdf1b.js"
   ],
   "src/pages/vui/index/components/radio-buttons.tsx": [
-    "/fastkit/assets/radio-buttons.4dc745da.js"
+    "/fastkit/assets/radio-buttons.442acf95.js"
   ],
   "src/pages/vui/index/components/selects.tsx": [
-    "/fastkit/assets/selects.06a39bc5.js"
+    "/fastkit/assets/selects.8e97a66d.js"
   ],
   "src/pages/vui/index/components/switches.tsx": [
-    "/fastkit/assets/switches.8a95b34a.js"
+    "/fastkit/assets/switches.29d8bcba.js"
   ],
   "src/pages/vui/index/components/text-fields.tsx": [
-    "/fastkit/assets/text-fields.65509f68.js"
+    "/fastkit/assets/text-fields.b7dfc82c.js"
   ],
   "src/pages/vui/index/components/textareas.tsx": [
-    "/fastkit/assets/textareas.4f9de8be.js"
+    "/fastkit/assets/textareas.e79518ed.js"
   ],
   "../packages/vui/src/components/VWysiwygEditor/extensions/linter/Linter.tsx": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/extensions/linter/LinterPlugin.ts": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/extensions/linter/plugins/BadWords.tsx": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/bullet-list.ts": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/format-bold.ts": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/format-italic.ts": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/format-underline.ts": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/history.ts": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/link.ts": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/ordered-list.ts": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "../packages/vui/src/components/VWysiwygEditor/tools/color.tsx": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "src/pages/vui/index/components/wysiwygs.scss": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "src/pages/vui/index/components/wysiwygs.tsx": [
-    "/fastkit/assets/wysiwygs.d6f120ab.js",
+    "/fastkit/assets/wysiwygs.9137c2ed.js",
     "/fastkit/assets/wysiwygs.b5ffd641.css"
   ],
   "src/pages/vui/index/test/child1.tsx": [
-    "/fastkit/assets/child1.27743a9a.js"
+    "/fastkit/assets/child1.bcf02777.js"
   ],
   "src/pages/vui/index/test/index.tsx": [
-    "/fastkit/assets/index.929b5c3a.js"
+    "/fastkit/assets/index.bdeeeb46.js"
   ],
   "src/pages/vui/index/components/tabs/-tabs.ts": [
-    "/fastkit/assets/index.d9f02a2b.js"
+    "/fastkit/assets/index.8cb96afa.js"
   ],
   "src/pages/vui/index/components/tabs/index.tsx": [
-    "/fastkit/assets/index.d9f02a2b.js"
+    "/fastkit/assets/index.8cb96afa.js"
   ],
   "src/pages/vui/index/components/tabs/index/[childId].tsx": [
-    "/fastkit/assets/_childId_.6f21c066.js"
+    "/fastkit/assets/_childId_.2e42a4ba.js"
   ],
   "src/pages/vui/index/test/child2/child1.tsx": [
-    "/fastkit/assets/child1.66fd227d.js"
+    "/fastkit/assets/child1.5688711d.js"
   ],
   "src/pages/vui/index/test/child2/index.tsx": [
-    "/fastkit/assets/index.33460bb3.js"
+    "/fastkit/assets/index.b6db590a.js"
   ],
   "src/pages/-i18n/ja.ts": [
-    "/fastkit/assets/ja.58f3921d.js"
+    "/fastkit/assets/ja.fe4d4a9b.js"
   ],
   "src/pages/-i18n/en.ts": [
-    "/fastkit/assets/en.c709ea96.js"
+    "/fastkit/assets/en.c1a24d58.js"
   ]
 }

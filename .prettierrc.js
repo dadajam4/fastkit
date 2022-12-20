@@ -16,5 +16,11 @@ module.exports = {
         "parser":"html"
       }
     },
+    {
+      "files": "*.md",
+      "options": {
+        tabWidth: 4,
+      }
+    },
   ],
 };
