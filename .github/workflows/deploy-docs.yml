@@ -43,6 +43,8 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Build vot
+        run: yarn build vot
+      - name: Build docs
         run: yarn build:docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
