@@ -43,7 +43,7 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Build vot
-        run: yarn build helpers vui vot vite-kit
+        run: yarn build helpers vui vot vite-kit color-scheme-gen hashed-sync icon-font-gen media-match-gen node-util
       - name: Build docs
         run: yarn build:docs
       - name: Upload artifact
