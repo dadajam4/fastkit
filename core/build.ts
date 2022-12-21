@@ -267,16 +267,17 @@ async function build(target: string) {
       process.exitCode = 1;
     }
     await fs.remove(`${pkgDir}/dist/packages`);
-    const assetsDir = path.join(pkgDir, 'src/assets');
+  }
+
+  const assetsDir = path.join(pkgDir, 'src/assets');
+  if (await pathExists(assetsDir, 'dir')) {
+    await fs.copy(assetsDir, path.join(pkgDir, 'dist/assets'));
+  }
+  if (tool) {
+    await fs.remove(`${pkgDir}/dist/tool/packages`);
+    const assetsDir = path.join(pkgDir, 'src/tool/assets');
     if (await pathExists(assetsDir, 'dir')) {
-      await fs.copy(assetsDir, path.join(pkgDir, 'dist/assets'));
-    }
-    if (tool) {
-      await fs.remove(`${pkgDir}/dist/tool/packages`);
-      const assetsDir = path.join(pkgDir, 'src/tool/assets');
-      if (await pathExists(assetsDir, 'dir')) {
-        await fs.copy(assetsDir, path.join(pkgDir, 'dist/tool/assets'));
-      }
+      await fs.copy(assetsDir, path.join(pkgDir, 'dist/tool/assets'));
     }
   }
 
