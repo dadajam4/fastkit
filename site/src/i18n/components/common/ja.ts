@@ -12,6 +12,7 @@ export const ja = commonScheme.defineLocale.strict({
     packages: 'パッケージ一覧',
     previousPage: 'Previous page',
     nextPage: 'Next page',
+    all: '全て',
   },
 });
 

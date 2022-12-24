@@ -1,12 +1,20 @@
 {
   "name": "@fastkit/color-scheme-gen",
   "version": "0.8.18",
-  "description": "@fastkit/color-scheme-gen",
+  "description": "Generator for generating \"color\" schemas.",
   "buildOptions": {
     "name": "ColorSchemeGen",
     "formats": [
       "cjs"
     ]
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "color",
+    "description": {
+      "en": "Generator for generating \"color\" schemas.",
+      "ja": "「色」のスキーマを生成するためのジェネレータ。"
+    }
   },
   "main": "index.js",
   "module": "dist/color-scheme-gen.mjs",
@@ -20,7 +28,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "color"
   ],
   "author": "dadajam4",
   "license": "MIT",

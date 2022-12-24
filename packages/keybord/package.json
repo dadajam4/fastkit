@@ -1,8 +1,16 @@
 {
   "name": "@fastkit/keybord",
   "version": "0.8.18",
-  "description": "@fastkit/keybord",
+  "description": "Observer implementation to handle keyboard input to Type safe.",
   "main": "index.js",
+  "_docs": {
+    "scope": "",
+    "feature": "ui",
+    "description": {
+      "en": "Observer implementation to handle keyboard input to Type safe.",
+      "ja": "キーボード入力をTypeセーフにハンドルするオブザーバ実装。"
+    }
+  },
   "module": "dist/keybord.mjs",
   "files": [
     "index.js",
@@ -14,7 +22,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "keyboard"
   ],
   "author": "dadajam4",
   "license": "MIT",

@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/cache-control",
   "version": "0.8.18",
-  "description": "@fastkit/cache-control",
+  "description": "Helper implementation for plugging cache controls into a JavaScript implementation.",
   "buildOptions": {
     "name": "CacheControl"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "Helper implementation for plugging cache controls into a JavaScript implementation.",
+      "ja": "JavaScript実装にキャッシュの制御をプラグインするためのヘルパ実装。"
+    }
   },
   "main": "index.js",
   "module": "dist/cache-control.mjs",
@@ -17,7 +25,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "cache",
+    "async"
   ],
   "author": "dadajam4",
   "license": "MIT",

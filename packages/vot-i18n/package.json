@@ -1,7 +1,15 @@
 {
   "name": "@fastkit/vot-i18n",
   "version": "0.8.18",
-  "description": "@fastkit/vot-i18n",
+  "description": "Library for multilingual localization of vot applications.",
+  "_docs": {
+    "scope": "vot",
+    "feature": "i18n",
+    "description": {
+      "en": "Library for multilingual localization of vot applications.",
+      "ja": "votアプリケーションを多言語ローカライズするためのライブラリ。"
+    }
+  },
   "main": "index.js",
   "module": "dist/vot-i18n.mjs",
   "files": [
@@ -15,9 +23,13 @@
   },
   "keywords": [
     "fastkit",
-    "vue",
-    "vot",
-    "i18n"
+    "i18n",
+    "translation",
+    "localisation",
+    "localization",
+    "locale",
+    "intl",
+    "vot"
   ],
   "author": "dadajam4",
   "license": "MIT",

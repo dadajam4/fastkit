@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/tiny-logger",
   "version": "0.8.18",
-  "description": "@fastkit/tiny-logger",
+  "description": "A small logger to display the application logs just a little bit nicer.",
   "buildOptions": {
     "name": "TinyLogger"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "log",
+    "description": {
+      "en": "A small logger to display the application logs just a little bit nicer.",
+      "ja": "アプリケーションログをほんの少し綺麗に表示するための小さなロガー。"
+    }
   },
   "main": "index.js",
   "module": "dist/tiny-logger.mjs",
@@ -17,7 +25,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "logger",
+    "log"
   ],
   "author": "dadajam4",
   "license": "MIT",

@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/vue-scroller",
   "version": "0.8.18",
-  "description": "@fastkit/vue-scroller",
+  "description": "A library for controlling the scrolling state of elements and components in Vue applications.",
   "buildOptions": {
     "name": "VueScroller"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "ui",
+    "description": {
+      "en": "A library for controlling the scrolling state of elements and components in Vue applications.",
+      "ja": "Vueアプリケーションで要素やコンポーネントのスクロール状態をコントロールするためのライブラリ。"
+    }
   },
   "main": "index.js",
   "module": "dist/vue-scroller.mjs",
@@ -18,7 +26,8 @@
   },
   "keywords": [
     "fastkit",
-    "vue"
+    "vue",
+    "scroll"
   ],
   "author": "dadajam4",
   "license": "MIT",

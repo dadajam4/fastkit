@@ -12,6 +12,7 @@ export const en = commonScheme.defineLocale.strict({
     packages: 'Packages',
     previousPage: 'Previous page',
     nextPage: 'Next page',
+    all: 'All',
   }),
 });
 

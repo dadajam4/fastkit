@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/vue-loading",
   "version": "0.8.18",
-  "description": "@fastkit/vue-loading",
+  "description": "Loading component for Vue applications.",
   "buildOptions": {
     "name": "VueLoading"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "ui",
+    "description": {
+      "en": "Loading component for Vue applications.",
+      "ja": "Vueアプリケーションのためのローディングコンポーネント。"
+    }
   },
   "main": "index.js",
   "module": "dist/vue-loading.mjs",
@@ -17,7 +25,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "vue",
+    "loading"
   ],
   "author": "dadajam4",
   "license": "MIT",

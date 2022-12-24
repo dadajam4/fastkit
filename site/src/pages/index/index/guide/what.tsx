@@ -1,11 +1,12 @@
 import { defineComponent } from 'vue';
 import { VHero } from '@fastkit/vui';
-import { VDocsSection, DocsPackage, VDocsPaging } from '~/components';
+import { VDocsSection, VDocsPaging } from '~/components';
 import { i18n } from '~/i18n';
+import { PackageProvide } from '~/composables';
 
 export default defineComponent({
   setup() {
-    const pkg = DocsPackage.use();
+    const pkg = PackageProvide.use();
     const { trans } = i18n.use().at.common;
 
     pkg.useHead({

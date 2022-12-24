@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/vue-color-scheme",
   "version": "0.8.18",
-  "description": "@fastkit/vue-color-scheme",
+  "description": "A library for using Type-safe \"color\" schemas in Vue applications.",
   "buildOptions": {
     "name": "VueColorScheme"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "color",
+    "description": {
+      "en": "A library for using Type-safe \"color\" schemas in Vue applications.",
+      "ja": "VueアプリケーションでTypeセーフな「色」のスキーマを利用するためのライブラリ。"
+    }
   },
   "main": "index.js",
   "module": "dist/vue-color-scheme.mjs",
@@ -17,7 +25,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "vue",
+    "color"
   ],
   "author": "dadajam4",
   "license": "MIT",

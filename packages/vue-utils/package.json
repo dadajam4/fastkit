@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/vue-utils",
   "version": "0.8.18",
-  "description": "@fastkit/vue-utils",
+  "description": "Utilities for efficient development of Vue applications.",
   "buildOptions": {
     "name": "VueUtils"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "",
+    "description": {
+      "en": "Utilities for efficient development of Vue applications.",
+      "ja": "Vueアプリケーションを効率的に開発するためのユーティリティー。"
+    }
   },
   "main": "index.js",
   "module": "dist/vue-utils.mjs",

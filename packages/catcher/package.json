@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/catcher",
   "version": "0.8.18",
-  "description": "@fastkit/catcher",
+  "description": "Custom classes for Type-safe handling of exceptions in your application.",
   "buildOptions": {
     "name": "Catcher"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "Custom classes for Type-safe handling of exceptions in your application.",
+      "ja": "あなたのアプリケーションで例外をTypeセーフに取り扱うためのカスタムクラス。"
+    }
   },
   "main": "index.js",
   "module": "dist/catcher.mjs",
@@ -17,7 +25,10 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "error",
+    "exception",
+    "throw"
   ],
   "author": "dadajam4",
   "license": "MIT",

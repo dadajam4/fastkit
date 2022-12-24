@@ -1,7 +1,15 @@
 {
   "name": "@fastkit/rules",
   "version": "0.8.18",
-  "description": "@fastkit/rules",
+  "description": "Universal validation library that works in server/browser.",
+  "_docs": {
+    "scope": "",
+    "feature": "validation",
+    "description": {
+      "en": "Universal validation library that works in server/browser.",
+      "ja": "サーバ／ブラウザで動作するユニバーサルなバリデーションライブラリ。"
+    }
+  },
   "main": "index.js",
   "module": "dist/rules.mjs",
   "files": [
@@ -14,7 +22,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "rule",
+    "validation"
   ],
   "author": "dadajam4",
   "license": "MIT",

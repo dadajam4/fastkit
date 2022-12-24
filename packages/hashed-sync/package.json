@@ -1,12 +1,20 @@
 {
   "name": "@fastkit/hashed-sync",
   "version": "0.8.18",
-  "description": "@fastkit/hashed-sync",
+  "description": "Compare and synchronize the status of entire files and directories by hash value.",
   "buildOptions": {
     "name": "HashedSync",
     "formats": [
       "cjs"
     ]
+  },
+  "_docs": {
+    "scope": "node",
+    "feature": "file",
+    "description": {
+      "en": "Compare and synchronize the status of entire files and directories by hash value.",
+      "ja": "ファイルやディレクトリ全体の状態をハッシュ値で比較して同期する。"
+    }
   },
   "main": "index.js",
   "module": "dist/hashed-sync.mjs",
@@ -20,7 +28,11 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "sync",
+    "file",
+    "directory",
+    "hash"
   ],
   "author": "dadajam4",
   "license": "MIT",

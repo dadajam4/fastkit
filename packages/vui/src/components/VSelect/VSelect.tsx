@@ -59,12 +59,18 @@ export const VSelect = defineComponent({
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),
-    ...defineSlotsProps<FormControlSlots & InputBoxSlots>(),
+    ...defineSlotsProps<
+      FormControlSlots &
+        InputBoxSlots & {
+          selection: { item: FormSelectorItemControl; index: number };
+        }
+    >(),
     ...createPropsOptions({
       placeholder: String,
       loadingMessage: {} as PropType<VNodeChildOrSlot>,
       failedToLoadItemsMessage: {} as PropType<VNodeChildOrSlot>,
     }),
+    closeOnNavigation: Boolean,
   },
   emits,
   setup(props, ctx) {
@@ -109,6 +115,7 @@ export const VSelect = defineComponent({
     };
 
     const renderSelections = (selectedItems: FormSelectorItemControl[]) => {
+      const selectionSlot = ctx.slots.selection;
       const children: VNodeChild[] = [];
       if (inputControl.itemsLoadFailed) {
         children.push(
@@ -125,7 +132,10 @@ export const VSelect = defineComponent({
           if (index > 0) {
             children.push(vui.selectionSeparator());
           }
-          children.push(item.renderDefaultSlot());
+          const child = selectionSlot
+            ? selectionSlot({ item, index })
+            : item.renderDefaultSlot();
+          children.push(child);
         });
       } else if (props.placeholder != null) {
         children.push(
@@ -317,6 +327,7 @@ export const VSelect = defineComponent({
             <VMenu
               width="fit"
               maxWidth="fit"
+              closeOnNavigation={this.closeOnNavigation}
               distance={0}
               alwaysRender
               v-model={this.menuOpened}

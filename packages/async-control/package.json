@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/async-control",
   "version": "0.8.18",
-  "description": "@fastkit/async-control",
+  "description": "A helper implementation that efficiently controls asynchronous processing.",
   "buildOptions": {
     "name": "AsyncControl"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "A helper implementation that efficiently controls asynchronous processing.",
+      "ja": "非同期処理を効率的にコントロールするためのへルパ実装。"
+    }
   },
   "main": "index.js",
   "module": "dist/async-control.mjs",
@@ -17,7 +25,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "async"
   ],
   "author": "dadajam4",
   "license": "MIT",

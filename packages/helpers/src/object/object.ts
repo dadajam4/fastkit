@@ -36,6 +36,27 @@ export type DeepPartial<T> = T extends Function
   : T;
 
 /**
+ * Checks if the specified variable is a not Nullable.
+ *
+ * @param value - Variables to be examined
+ *
+ * @returns
+ *  - `null` -&gt; `false`
+ *  - `undefined` -&gt; `false`
+ *  - `0` -&gt; `true`
+ *  - `1` -&gt; `true`
+ *  - `""` -&gt; `true`
+ *  - `"0"` -&gt; `true`
+ *  - `{}` -&gt; `true`
+ *  - `[]` -&gt; `true`
+ */
+export function inNonNullable<T>(
+  value: T,
+): value is Exclude<T, null | undefined> {
+  return value != null;
+}
+
+/**
  * Checks if the specified variable is a NonNull object.
  *
  * @param value - Variables to be examined

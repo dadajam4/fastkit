@@ -18,25 +18,24 @@ import {
   NavigationInput,
   VMenu,
 } from '@fastkit/vui';
-import { DocsLayoutPackageInfo } from './schemes';
-import { DocsPackage } from './docs-package';
 import { VLanguageSwitcher } from '../VLanguageSwitcher';
+import { PackageProvide } from '~/composables';
 
 export type DocsLayoutNavigation = NavigationInput & { key?: string | number };
 
 export const VDocsLayout = defineComponent({
   name: 'VDocsLayout',
   props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    home: {
-      type: String,
-      required: true,
-    },
-    package: [String, Object] as PropType<string | DocsLayoutPackageInfo>,
-    github: String,
+    // title: {
+    //   type: String,
+    //   required: true,
+    // },
+    // home: {
+    //   type: String,
+    //   required: true,
+    // },
+    // package: [String, Object] as PropType<string | DocsLayoutPackageInfo>,
+    // github: String,
     navigations: {
       type: Array as PropType<DocsLayoutNavigation[]>,
       default: () => [],
@@ -45,10 +44,7 @@ export const VDocsLayout = defineComponent({
   setup(props, ctx) {
     const mediaMatch = useMediaMatch();
     const drawerStatic = () => mediaMatch('lg');
-    const pkg = new DocsPackage(props.package, { home: props.home });
-    // const packageRef = computed(() =>
-    //   resolveDocsLayoutPackageInfo(props.package, { home: props.home }),
-    // );
+    const pkg = PackageProvide.use();
 
     return () => {
       return (

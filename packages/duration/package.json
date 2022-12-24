@@ -3,7 +3,15 @@
   "version": "0.8.18",
   "description": "@fastkit/duration",
   "buildOptions": {
-    "name": "Duration"
+    "name": "Value object implementation expressing \"duration\"."
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "Value object implementation expressing \"duration\".",
+      "ja": "「期間」を表現する値オブジェクト実装。"
+    }
   },
   "main": "index.js",
   "module": "dist/duration.mjs",
@@ -17,7 +25,10 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "duration",
+    "time",
+    "date"
   ],
   "author": "dadajam4",
   "license": "MIT",

@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/scroller",
   "version": "0.8.18",
-  "description": "@fastkit/scroller",
+  "description": "Library for controlling the scrolling state of DOM elements.",
   "buildOptions": {
     "name": "Scroller"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "ui",
+    "description": {
+      "en": "Library for controlling the scrolling state of DOM elements.",
+      "ja": "DOM要素のスクロール状態をコントロールするためのライブラリ。"
+    }
   },
   "main": "index.js",
   "module": "dist/scroller.mjs",
@@ -17,7 +25,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "scroll"
   ],
   "author": "dadajam4",
   "license": "MIT",

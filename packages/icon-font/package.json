@@ -1,8 +1,16 @@
 {
   "name": "@fastkit/icon-font",
   "version": "0.8.18",
-  "description": "@fastkit/icon-font",
+  "description": "Helper to handle icon definitions for Type safe.",
   "main": "index.js",
+  "_docs": {
+    "scope": "",
+    "feature": "icon",
+    "description": {
+      "en": "Helper to handle icon definitions for Type safe.",
+      "ja": "Typeセーフにアイコンの定義を扱うためのヘルパー。"
+    }
+  },
   "module": "dist/icon-font.mjs",
   "files": [
     "index.js",
@@ -14,7 +22,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "icon"
   ],
   "author": "dadajam4",
   "license": "MIT",

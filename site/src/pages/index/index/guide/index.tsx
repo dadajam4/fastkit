@@ -1,14 +1,12 @@
 import { defineComponent } from 'vue';
 import { VHero } from '@fastkit/vui';
-import { VDocsSection, DocsPackage, VCode, VDocsPaging } from '~/components';
+import { VDocsSection, VCode, VDocsPaging } from '~/components';
 import { i18n } from '~/i18n';
-import pkg from '~~~/packages/fastkit/package.json';
-
-const dependencies = Object.entries(pkg.dependencies);
+import { PackageProvide } from '~/composables';
 
 export default defineComponent({
   setup() {
-    const pkg = DocsPackage.use();
+    const pkg = PackageProvide.use();
     const { trans } = i18n.use().at.common;
 
     pkg.useHead({
@@ -39,12 +37,12 @@ export default defineComponent({
               このインストールによって以下のパッケージが依存関係としてインストールされます。
               <br />
               これらのツールはあなたのアプリケーションが適切なバンドラ（vite等）を利用している限り、利用していないパッケージはtree
-              shakingによってバンドルから除外されますが、不用なインストールを避けて最適化をしたい場合、個別インストールを行なってください。
+              shakingによってバンドルから除外されるでしょう。node_modulesへの不用なインストールを避けたい場合、個別インストールを検討してください。
             </p>
 
             <ul>
-              {dependencies.map(([pkg]) => (
-                <li key={pkg}>{pkg.replace('@fastkit/', '')}</li>
+              {pkg.dependencies.map(({ name }) => (
+                <li key={name}>{name.replace('@fastkit/', '')}</li>
               ))}
             </ul>
           </VDocsSection>

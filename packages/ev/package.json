@@ -5,6 +5,14 @@
   "buildOptions": {
     "name": "EV"
   },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "A helper that plugs a simple, type-safe event emitter & observer into your favorite implementation.",
+      "ja": "シンプルでtypeセーフなEvent emitter & observerをあなたのお気に入りの実装にプラグインするヘルパ。"
+    }
+  },
   "main": "index.js",
   "module": "dist/ev.mjs",
   "files": [
@@ -17,7 +25,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "event"
   ],
   "author": "dadajam4",
   "license": "MIT",

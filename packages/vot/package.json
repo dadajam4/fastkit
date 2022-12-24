@@ -1,10 +1,18 @@
 {
   "name": "@fastkit/vot",
   "version": "0.8.18",
-  "description": "@fastkit/vot",
+  "description": "Orchestration tools for building Vue applications.",
   "buildOptions": {
     "name": "Vot",
     "tool": true
+  },
+  "_docs": {
+    "scope": "vot",
+    "feature": "framework",
+    "description": {
+      "en": "Orchestration tools for building Vue applications.",
+      "ja": "Vueアプリケーションを構築するためのオーケストレーションツール。"
+    }
   },
   "main": "index.js",
   "module": "dist/vot.mjs",
@@ -22,7 +30,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "vot"
   ],
   "author": "dadajam4",
   "license": "MIT",

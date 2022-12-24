@@ -5,6 +5,14 @@
   "buildOptions": {
     "ignore": true
   },
+  "_docs": {
+    "scope": "",
+    "feature": "lint",
+    "description": {
+      "en": "fastkit recommended eslint settings.",
+      "ja": "fastkitが推奨するeslintの設定。"
+    }
+  },
   "main": "index.js",
   "files": [
     "index.js"
@@ -14,7 +22,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "eslint",
+    "lint"
   ],
   "author": "dadajam4",
   "license": "MIT",

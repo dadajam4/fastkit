@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/color",
   "version": "0.8.18",
-  "description": "@fastkit/color",
+  "description": "Value object implementation for controlling \"color\".",
   "buildOptions": {
     "name": "Color"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "color",
+    "description": {
+      "en": "Value object implementation for controlling \"color\".",
+      "ja": "「色」をコントロールするための値オブジェクト実装。"
+    }
   },
   "main": "index.js",
   "module": "dist/color.mjs",

@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/i18n",
   "version": "0.8.18",
-  "description": "@fastkit/i18n",
+  "description": "A library for localizing applications into multiple languages, regardless of the server/browser execution environment.",
   "buildOptions": {
     "name": "I18n"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "i18n",
+    "description": {
+      "en": "A library for localizing applications into multiple languages, regardless of the server/browser execution environment.",
+      "ja": "サーバー／ブラウザーの実行環境に依存せず、アプリケーションを多言語にローカライズするためのライブラリ。"
+    }
   },
   "main": "index.js",
   "module": "dist/i18n.mjs",
@@ -18,7 +26,12 @@
   },
   "keywords": [
     "fastkit",
-    "i18n"
+    "i18n",
+    "translation",
+    "localisation",
+    "localization",
+    "locale",
+    "intl"
   ],
   "author": "dadajam4",
   "license": "MIT",

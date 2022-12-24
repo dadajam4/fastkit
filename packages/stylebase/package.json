@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/stylebase",
   "version": "0.8.18",
-  "description": "@fastkit/stylebase",
+  "description": "Variations of the base CSS implementation recommended by fastkit.",
   "buildOptions": {
     "ignore": true
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "css",
+    "description": {
+      "en": "Variations of the base CSS implementation recommended by fastkit.",
+      "ja": "fastkitが推奨するベースCSS実装のバリエーション。"
+    }
   },
   "files": [
     "destyle.css",
@@ -15,7 +23,10 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "css",
+    "style",
+    "reset"
   ],
   "author": "dadajam4",
   "license": "MIT",

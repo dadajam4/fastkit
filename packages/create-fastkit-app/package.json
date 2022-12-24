@@ -1,7 +1,13 @@
 {
   "name": "create-fastkit-app",
   "version": "0.8.18",
-  "description": "create-fastkit-app",
+  "description": "CLI to generate scaffolding for applications proposed by fastkit.",
+  "buildOptions": {
+    "description": {
+      "en": "CLI to generate scaffolding for applications proposed by fastkit.",
+      "ja": "fastkitが提案するアプリケーションの足場を生成するCLI。"
+    }
+  },
   "main": "index.js",
   "bin": {
     "create-fastkit-app": "lib/cli.js"

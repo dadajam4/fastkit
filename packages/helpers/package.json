@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/helpers",
   "version": "0.8.18",
-  "description": "@fastkit/helpers",
+  "description": "A small collection of helper implementations for processing primitive values and objects.",
   "buildOptions": {
     "name": "Helpers"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "A small collection of helper implementations for processing primitive values and objects.",
+      "ja": "プリミティブな値やオブジェクトを処理するための小さなヘルパー実装のコレクションです。"
+    }
   },
   "main": "index.js",
   "module": "dist/helpers.mjs",
@@ -17,7 +25,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "helper"
   ],
   "author": "dadajam4",
   "license": "MIT",

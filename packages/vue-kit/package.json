@@ -1,8 +1,16 @@
 {
   "name": "@fastkit/vue-kit",
   "version": "0.8.18",
-  "description": "vue-kit",
+  "description": "Utilities for Vue applications.",
   "main": "index.js",
+  "_docs": {
+    "scope": "vue",
+    "feature": "",
+    "description": {
+      "en": "Utilities for Vue applications.",
+      "ja": "Vueアプリケーション向けのユーティリティー。"
+    }
+  },
   "module": "dist/vue-kit.mjs",
   "files": [
     "index.js",

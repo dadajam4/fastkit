@@ -1,12 +1,20 @@
 {
   "name": "@fastkit/sprite-images",
   "version": "0.8.18",
-  "description": "@fastkit/sprite-images",
+  "description": "Tools for generating sprite images.",
   "buildOptions": {
     "name": "SpriteImages",
     "formats": [
       "cjs"
     ]
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "image",
+    "description": {
+      "en": "Tools for generating sprite images.",
+      "ja": "スプライト画像を生成するためのツール。"
+    }
   },
   "main": "index.js",
   "module": "dist/sprite-images.mjs",
@@ -20,7 +28,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "sprite",
+    "image"
   ],
   "author": "dadajam4",
   "license": "MIT",

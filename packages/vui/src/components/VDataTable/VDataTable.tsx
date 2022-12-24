@@ -401,7 +401,11 @@ export const VDataTable = defineComponent({
 
       vui.location.pushQuery({
         ...queries,
-        [props.pageQuery]: 1,
+        ...(usePaigingRef.value
+          ? {
+              [props.pageQuery]: 1,
+            }
+          : undefined),
       });
     }
 
@@ -530,7 +534,7 @@ export const VDataTable = defineComponent({
       const isIndeterminate = isIndeterminateRef.value;
       const isAllSelected = isAllSelectedRef.value;
       const { defaultOrder, ascQueryValue } = props;
-      const usePaiging = usePaigingRef.value;
+      // const usePaiging = usePaigingRef.value;
 
       const children = headersRef.value.map((header) => {
         const { label, sortQuery, align, key } = header;
@@ -567,7 +571,7 @@ export const VDataTable = defineComponent({
 
         const sortActive = sortBy === sortQuery;
 
-        if (sortQuery && usePaiging) {
+        if (sortQuery) {
           const isASC = sortActive
             ? isASCRef.value
             : defaultOrder === ascQueryValue;
@@ -615,9 +619,9 @@ export const VDataTable = defineComponent({
           <th
             class={classes}
             key={header.key}
-            tabindex={sortQuery && usePaiging ? 0 : undefined}
+            tabindex={sortQuery ? 0 : undefined}
             onClick={(ev) => {
-              if (!sortQuery || !usePaiging) return;
+              if (!sortQuery) return;
               handleClickSortHeader(header, ev);
             }}>
             <div class="v-data-table__table__cell__tile">{headerChildren}</div>

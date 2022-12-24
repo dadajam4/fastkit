@@ -6,6 +6,7 @@ import { globalsPlugin } from '../core/playground-globals';
 import { votPlugin } from '../packages/vot/dist/tool';
 import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
 import path from 'path';
+import { PackageLoader } from './plugins';
 
 const USE_GENERATE = true;
 
@@ -40,6 +41,7 @@ export default defineConfig({
     splitVendorChunkPlugin(),
     globalsPlugin(),
     aliasesPlugin(),
+    PackageLoader(),
     votPlugin({
       pages: {
         exclude: ['**/-*/**/*', '**/-*.*'],

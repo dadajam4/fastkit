@@ -5,6 +5,14 @@
   "buildOptions": {
     "ignore": true
   },
+  "_docs": {
+    "scope": "",
+    "feature": "lint",
+    "description": {
+      "en": "fastkit recommended eslint configuration for vue applications.",
+      "ja": "fastkitが推奨するvueアプリケーション用のeslintの設定。"
+    }
+  },
   "main": "index.js",
   "files": [
     "index.js"
@@ -14,7 +22,10 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "eslint",
+    "lint",
+    "vue"
   ],
   "author": "dadajam4",
   "license": "MIT",

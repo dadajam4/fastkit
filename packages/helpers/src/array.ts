@@ -22,3 +22,7 @@ export function arrayRemove<T>(array: T[], entry: T) {
 export function range(length: number, offset = 0): number[] {
   return Array.from(Array(length), (v, k) => k + offset);
 }
+
+export function arrayUnique<T>(array: T[]): T[] {
+  return Array.from(new Set(array));
+}

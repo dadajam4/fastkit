@@ -1,12 +1,20 @@
 {
   "name": "@fastkit/nodepack",
   "version": "0.8.18",
-  "description": "@fastkit/nodepack",
+  "description": "A small bundled tool for developing Node.js server and tool implementations.",
   "buildOptions": {
     "name": "Nodepack",
     "formats": [
       "cjs"
     ]
+  },
+  "_docs": {
+    "scope": "node",
+    "feature": "",
+    "description": {
+      "en": "A small bundled tool for developing Node.js server and tool implementations.",
+      "ja": "Node.jsのサーバやツール実装を開発するための小さなバンドルツール。"
+    }
   },
   "main": "index.js",
   "module": "dist/nodepack.mjs",
@@ -20,7 +28,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "bundle",
+    "node"
   ],
   "author": "dadajam4",
   "license": "MIT",

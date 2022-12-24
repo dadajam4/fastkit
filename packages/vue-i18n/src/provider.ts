@@ -6,10 +6,17 @@ import {
   I18nDependencies,
 } from '@fastkit/i18n';
 import { inject, InjectionKey, App } from 'vue';
-import { extractVueI18nComponentOptions } from './helpers';
-import type { Router } from 'vue-router';
-import { arrayRemove } from '@fastkit/helpers';
+import type { Router, RouteLocationNormalized } from 'vue-router';
+import {
+  arrayRemove,
+  flattenRecursiveArray,
+  arrayUnique,
+} from '@fastkit/helpers';
 import { VueI18nError } from './logger';
+import {
+  extractRouteMatchedItems,
+  isComponentCustomOptions,
+} from '@fastkit/vue-utils';
 
 /**
  * Subspace Providers
@@ -172,6 +179,15 @@ export class VueI18nSubSpaceProvider<
   }
 }
 
+export interface VueI18nInjectedComponent {
+  i18n?: VueI18nComponentOption;
+}
+
+export type VueI18nComponentOption =
+  | AnyProvider
+  | VueI18nInjectedComponent
+  | VueI18nComponentOption[];
+
 declare module '@vue/runtime-core' {
   export interface ComponentCustomOptions {
     /**
@@ -199,6 +215,39 @@ declare module '@vue/runtime-core' {
      * });
      * ```
      */
-    i18n?: AnyProvider;
+    i18n?: VueI18nComponentOption;
   }
+}
+
+function flattenVueI18nComponentOption(
+  option: VueI18nComponentOption,
+): AnyProvider[] {
+  const results: AnyProvider[] = [];
+  flattenRecursiveArray(option).forEach((value) => {
+    if (value instanceof VueI18nSubSpaceProvider) return results.push(value);
+    const { i18n } = value;
+    if (i18n) results.push(...flattenVueI18nComponentOption(i18n));
+  });
+  return arrayUnique(results);
+}
+
+/**
+ * Get the provider of the subspace set in the vue component
+ * @param route - Normalized route object
+ * @returns Provider of the subspace
+ */
+export function extractVueI18nComponentOptions(
+  route: RouteLocationNormalized,
+): AnyProvider[] {
+  const results: AnyProvider[] = [];
+  const items = extractRouteMatchedItems(route);
+  items.forEach((item) => {
+    const { Component } = item;
+    if (!isComponentCustomOptions(Component)) return;
+    const { i18n } = Component;
+    if (i18n) {
+      results.push(...flattenVueI18nComponentOption(i18n));
+    }
+  });
+  return arrayUnique(results);
 }

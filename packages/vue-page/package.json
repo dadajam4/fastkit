@@ -1,7 +1,15 @@
 {
   "name": "@fastkit/vue-page",
   "version": "0.8.18",
-  "description": "@fastkit/vue-page",
+  "description": "Middleware for more convenient control of routing in Vue applications.",
+  "_docs": {
+    "scope": "vue",
+    "feature": "",
+    "description": {
+      "en": "Middleware for more convenient control of routing in Vue applications.",
+      "ja": "Vueアプリケーションのルーティングをより便利にコントロールするためのミドルウェア。"
+    }
+  },
   "main": "index.js",
   "module": "dist/vue-page.mjs",
   "files": [
@@ -14,7 +22,10 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "vue",
+    "router",
+    "page"
   ],
   "author": "dadajam4",
   "license": "MIT",

@@ -1,12 +1,20 @@
 {
   "name": "@fastkit/media-match-gen",
   "version": "0.8.18",
-  "description": "@fastkit/media-match-gen",
+  "description": "A tool to generate Type-safe media query breakpoint schemas.",
   "buildOptions": {
     "name": "MediaMatchGen",
     "formats": [
       "cjs"
     ]
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "ui",
+    "description": {
+      "en": "A tool to generate Type-safe media query breakpoint schemas.",
+      "ja": "Typeセーフなメディアクエリブレイクポイントスキーマを生成するツール。"
+    }
   },
   "main": "index.js",
   "module": "dist/media-match-gen.mjs",
@@ -20,7 +28,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "mediaquery",
+    "mediamatch"
   ],
   "author": "dadajam4",
   "license": "MIT",

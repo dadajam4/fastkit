@@ -1,12 +1,20 @@
 {
   "name": "@fastkit/icon-font-gen",
   "version": "0.8.18",
-  "description": "@fastkit/icon-font-gen",
+  "description": "A tool to generate icon web fonts and their definitions Type-safe for your application.",
   "buildOptions": {
     "name": "IconFont",
     "formats": [
       "cjs"
     ]
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "icon",
+    "description": {
+      "en": "A tool to generate icon web fonts and their definitions Type-safe for your application.",
+      "ja": "アプリケーションのためにアイコンWebフォントとその定義をTypeセーフに生成するツール。"
+    }
   },
   "main": "index.js",
   "bin": {
@@ -24,7 +32,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "icon"
   ],
   "author": "dadajam4",
   "license": "MIT",

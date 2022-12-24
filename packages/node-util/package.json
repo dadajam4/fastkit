@@ -1,12 +1,20 @@
 {
   "name": "@fastkit/node-util",
   "version": "0.8.18",
-  "description": "@fastkit/node-util",
+  "description": "Utilities for Node.js server and tool implementation.",
   "buildOptions": {
     "name": "NodeUtil",
     "formats": [
       "cjs"
     ]
+  },
+  "_docs": {
+    "scope": "node",
+    "feature": "",
+    "description": {
+      "en": "Utilities for Node.js server and tool implementation.",
+      "ja": "Node.jsのサーバやツール実装のためのユーティリティー。"
+    }
   },
   "main": "index.js",
   "module": "dist/node-util.mjs",
@@ -20,7 +28,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "node"
   ],
   "author": "dadajam4",
   "license": "MIT",

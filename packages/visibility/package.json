@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/visibility",
   "version": "0.8.18",
-  "description": "@fastkit/visibility",
+  "description": "A library to watch the visible state of the browser window.",
   "buildOptions": {
     "name": "visibilityManager"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "ui",
+    "description": {
+      "en": "A library to watch the visible state of the browser window.",
+      "ja": "ブラウザウィンドウの可視状態をウォッチするライブラリ。"
+    }
   },
   "main": "index.js",
   "module": "dist/visibility.mjs",
@@ -17,7 +25,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "visibility"
   ],
   "author": "dadajam4",
   "license": "MIT",

@@ -1,7 +1,15 @@
 {
   "name": "@fastkit/vite-kit",
   "version": "0.8.18",
-  "description": "@fastkit/vite-kit",
+  "description": "A collection of toolkits for vite application setup.",
+  "_docs": {
+    "scope": "vite",
+    "feature": "",
+    "description": {
+      "en": "A collection of toolkits for vite application setup.",
+      "ja": "viteアプリケーションセットアップ用のツールキット集。"
+    }
+  },
   "main": "index.js",
   "module": "dist/vite-kit.mjs",
   "files": [
@@ -14,7 +22,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "vite"
   ],
   "author": "dadajam4",
   "license": "MIT",

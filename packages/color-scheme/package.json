@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/color-scheme",
   "version": "0.8.18",
-  "description": "@fastkit/color-scheme",
+  "description": "An implementation to control the schema associated with \"color\".",
   "buildOptions": {
     "name": "ColorScheme"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "color",
+    "description": {
+      "en": "An implementation to control the schema associated with \"color\".",
+      "ja": "「色」に関連するスキーマを制御するための実装。"
+    }
   },
   "main": "index.js",
   "module": "dist/color-scheme.mjs",
@@ -17,7 +25,8 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "color"
   ],
   "author": "dadajam4",
   "license": "MIT",

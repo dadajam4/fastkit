@@ -1,7 +1,15 @@
 {
   "name": "@fastkit/universal-logger",
   "version": "0.8.18",
-  "description": "@fastkit/universal-logger",
+  "description": "Pluggable and universal log output library for any server/browser execution environment.",
+  "_docs": {
+    "scope": "",
+    "feature": "log",
+    "description": {
+      "en": "Pluggable and universal log output library for any server/browser execution environment.",
+      "ja": "サーバ／ブラウザの実行環境を問わないプラグイン可能でユニバーサルなログ出力用ライブラリ。"
+    }
+  },
   "main": "index.js",
   "module": "dist/universal-logger.mjs",
   "files": [
@@ -14,7 +22,9 @@
     "url": "git+https://github.com/dadajam4/fastkit.git"
   },
   "keywords": [
-    "fastkit"
+    "fastkit",
+    "logger",
+    "log"
   ],
   "author": "dadajam4",
   "license": "MIT",

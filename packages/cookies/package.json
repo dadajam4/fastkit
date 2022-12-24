@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/cookies",
   "version": "0.8.18",
-  "description": "@fastkit/cookies",
+  "description": "Helper implementation for universal server/browser control of cookie headers.",
   "buildOptions": {
     "name": "Cookies"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "Helper implementation for universal server/browser control of cookie headers.",
+      "ja": "サーバ/ブラウザでユニバーサルにクッキーヘッダを制御するためのヘルパ実装。"
+    }
   },
   "main": "index.js",
   "module": "dist/cookies.mjs",

@@ -1,9 +1,17 @@
 {
   "name": "@fastkit/vue-stack",
   "version": "0.8.18",
-  "description": "@fastkit/vue-stack",
+  "description": "Library for displaying dialogs, tooltips and menus in Vue applications.",
   "buildOptions": {
     "name": "VueStack"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "ui",
+    "description": {
+      "en": "Library for displaying dialogs, tooltips and menus in Vue applications.",
+      "ja": "Vueアプリケーションにダイアログやツールチップやメニューを表示するためのライブラリ。"
+    }
   },
   "main": "index.js",
   "module": "dist/vue-stack.mjs",
@@ -18,7 +26,12 @@
   },
   "keywords": [
     "fastkit",
-    "vue"
+    "vue",
+    "dialog",
+    "modal",
+    "popup",
+    "menu",
+    "tooltip"
   ],
   "author": "dadajam4",
   "license": "MIT",

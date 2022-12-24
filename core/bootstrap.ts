@@ -62,6 +62,14 @@ files.forEach((shortName) => {
         url: `${rootPkg.homepage}/issues`,
       },
       homepage: `${rootPkg.homepage}/tree/dev/packages/${shortName}#readme`,
+      _docs: {
+        scope: '',
+        feature: '',
+        description: {
+          ja: '',
+          en: '',
+        },
+      },
     };
     fs.writeFileSync(pkgPath, JSON.stringify(json, null, 2));
   }

@@ -9,6 +9,7 @@ import {
 } from '@fastkit/vui';
 import { VDocsLayout, DocsLayoutNavigation } from '~/components';
 import { i18n } from '~/i18n';
+import { VPackageProvider } from 'virtual:package-provider:fastkit';
 
 export default defineComponent({
   setup() {
@@ -49,12 +50,13 @@ export default defineComponent({
 
     return () => {
       return (
-        <VDocsLayout
-          home="/getting-started"
-          title="HOME"
-          navigations={navigationsRef.value}>
-          <VPage />
-          {/* <button
+        <VPackageProvider>
+          <VDocsLayout
+            // home="/getting-started"
+            // title="HOME"
+            navigations={navigationsRef.value}>
+            <VPage />
+            {/* <button
             type="button"
             onClick={(ev) =>
               vui.stack.sheet({
@@ -66,7 +68,7 @@ export default defineComponent({
             }>
             click!!
           </button> */}
-          {/* <VSheetModal
+            {/* <VSheetModal
             backdrop
             v-slots={{
               header: (stack) => (
@@ -116,7 +118,8 @@ export default defineComponent({
               ))}
             </div>
           </VSheetModal> */}
-        </VDocsLayout>
+          </VDocsLayout>
+        </VPackageProvider>
       );
     };
   },
