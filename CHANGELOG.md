@@ -1,3 +1,19 @@
+# [0.9.0](https://github.com/dadajam4/fastkit/compare/v0.8.18...v0.9.0) (2022-12-30)
+
+
+### Bug Fixes
+
+* Changed misnamed keybord package ([4cdfab0](https://github.com/dadajam4/fastkit/commit/4cdfab02309a6d23dd445cbe9a8d1cfb0b7a9af1))
+
+
+### Features
+
+* **i18n:** Create i18n package ([23f419b](https://github.com/dadajam4/fastkit/commit/23f419b4bda2c071bd584b4c58b66b19219c1a04))
+* **i18n:** Revamped i18n package ([31bdf82](https://github.com/dadajam4/fastkit/commit/31bdf8208811c638f175288cb42d31a5d57278f1))
+* vot-i18n ([047a411](https://github.com/dadajam4/fastkit/commit/047a4111fc959b64562b70ca1621cd3ae819eee3))
+
+
+
 ## [0.8.18](https://github.com/dadajam4/fastkit/compare/v0.8.17...v0.8.18) (2022-08-01)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-loading",
-  "version": "0.8.18",
+  "version": "0.9.0",
   "description": "Loading component for Vue applications.",
   "buildOptions": {
     "name": "VueLoading"
@@ -36,10 +36,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-loading#readme",
   "dependencies": {
-    "@fastkit/color-scheme": "0.8.18",
-    "@fastkit/vue-color-scheme": "0.8.18",
-    "@fastkit/helpers": "0.8.18",
-    "@fastkit/tiny-logger": "0.8.18",
-    "@fastkit/vue-utils": "0.8.18"
+    "@fastkit/color-scheme": "0.9.0",
+    "@fastkit/vue-color-scheme": "0.9.0",
+    "@fastkit/helpers": "0.9.0",
+    "@fastkit/tiny-logger": "0.9.0",
+    "@fastkit/vue-utils": "0.9.0"
   }
 }
