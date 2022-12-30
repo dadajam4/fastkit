@@ -26,7 +26,11 @@ export const VDocsSection = defineComponent({
       return (
         <section
           id={id()}
-          class={['v-docs-section', `v-docs-section--${level()}`]}>
+          class={[
+            'v-docs-section',
+            `v-docs-section--${level()}`,
+            'docs-container',
+          ]}>
           <Heading
             class={[
               'v-docs-section__heading',

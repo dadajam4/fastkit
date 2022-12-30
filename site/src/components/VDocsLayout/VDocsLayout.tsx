@@ -1,6 +1,6 @@
 import './VDocsLayout.scss';
 
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, computed } from 'vue';
 import {
   VAppLayout,
   useMediaMatch,
@@ -20,22 +20,19 @@ import {
 } from '@fastkit/vui';
 import { VLanguageSwitcher } from '../VLanguageSwitcher';
 import { PackageProvide } from '~/composables';
+import { i18n } from '~/i18n';
+import { FASTKIT_AUTHOR } from '~~~/core/constants';
 
 export type DocsLayoutNavigation = NavigationInput & { key?: string | number };
+
+interface PackageScope {
+  displayName: string;
+  github: string;
+}
 
 export const VDocsLayout = defineComponent({
   name: 'VDocsLayout',
   props: {
-    // title: {
-    //   type: String,
-    //   required: true,
-    // },
-    // home: {
-    //   type: String,
-    //   required: true,
-    // },
-    // package: [String, Object] as PropType<string | DocsLayoutPackageInfo>,
-    // github: String,
     navigations: {
       type: Array as PropType<DocsLayoutNavigation[]>,
       default: () => [],
@@ -44,9 +41,25 @@ export const VDocsLayout = defineComponent({
   setup(props, ctx) {
     const mediaMatch = useMediaMatch();
     const drawerStatic = () => mediaMatch('lg');
-    const pkg = PackageProvide.use();
+    const pkg = PackageProvide.use(true);
+    const { trans } = i18n.use().at.common;
+    const packageScopeRef = computed<PackageScope>(() => {
+      if (!pkg) {
+        return {
+          displayName: 'fastkit',
+          github: `https://github.com/${FASTKIT_AUTHOR}/fastkit`,
+        };
+      }
+
+      return {
+        displayName: pkg.displayName,
+        github: pkg.github,
+      };
+    });
 
     return () => {
+      const packageScope = packageScopeRef.value;
+
       return (
         <VAppLayout
           class="v-docs-layout"
@@ -88,7 +101,7 @@ export const VDocsLayout = defineComponent({
                     style={{ marginLeft: 'auto' }}
                     hiddenInfo
                     // placeholder={`${pkg.value.displayName}を検索`}
-                    placeholder={`Search ${pkg.displayName}`}
+                    placeholder={`Search ${packageScope.displayName}`}
                     startAdornment={() => <VIcon name={'mdi-magnify'} />}
                   />
                   {/* <VToolbarMenu to={props.home}>{props.title}</VToolbarMenu> */}
@@ -109,7 +122,7 @@ export const VDocsLayout = defineComponent({
                         default: () => (
                           <div class="v-docs-layout__languages">
                             <h4 class="v-docs-layout__languages__title">
-                              {pkg.i18n.at.common.t.translations}
+                              {trans.translations}
                             </h4>
                             <VLanguageSwitcher class="v-docs-layout__languages__nav" />
                           </div>
@@ -117,9 +130,9 @@ export const VDocsLayout = defineComponent({
                       }}
                     />
                     <VButton
-                      href={pkg.github}
+                      href={packageScope.github}
                       target="_blank"
-                      title={pkg.name}
+                      title="GitHub"
                       rounded
                       icon={'mdi-github'}
                       size="lg"
@@ -152,173 +165,12 @@ export const VDocsLayout = defineComponent({
                       </VPageLink>
                     ),
                   }}>
-                  {/* <VNavigation
-                    caption="本体に戻る"
-                    items={[
-                      {
-                        key: 'fastkit',
-                        label: 'HOME',
-                        startIcon: 'mdi-home',
-                        to: '/',
-                      },
-                    ]}
-                  /> */}
-
                   {props.navigations.map((navigation, navigationIndex) => (
                     <VNavigation
                       {...navigation}
                       key={`nav-${navigation.key || navigationIndex}`}
                     />
                   ))}
-
-                  {/* <VNavigation
-                    caption="ドキュメント"
-                    items={[
-                      {
-                        key: 'home',
-                        label: 'HOME',
-                        to: '/vui',
-                        exactMatch: true,
-                      },
-                      {
-                        key: 'test',
-                        label: 'Test',
-                        to: '/vui/test',
-                        startIcon: 'mdi-toggle-switch-off-outline',
-                        children: [
-                          {
-                            key: 'child1',
-                            label: 'child1',
-                            to: '/vui/test/child1',
-                          },
-                          {
-                            key: 'child2',
-                            label: 'child2',
-                            to: '/vui/test/child2',
-                            nested: true,
-                            startIcon: 'mdi-toggle-switch-off-outline',
-                            children: [
-                              {
-                                key: 'index',
-                                label: 'index',
-                                to: '/vui/test/child2',
-                                startIcon: 'mdi-toggle-switch-off-outline',
-                              },
-                              {
-                                key: 'child1',
-                                label: 'child1',
-                                to: '/vui/test/child2/child1',
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                      {
-                        key: 'components',
-                        label: 'Components',
-                        to: '/vui/components',
-                        // match: '/vui/components',
-                        startIcon: 'mdi-toggle-switch-off-outline',
-                        children: [
-                          {
-                            key: 'usage',
-                            label: 'Usage',
-                            to: '/vui/components',
-                          },
-                          {
-                            key: 'buttons',
-                            label: 'Buttons',
-                            to: '/vui/components/buttons',
-                          },
-                          {
-                            key: 'icons',
-                            label: 'Icons',
-                            to: '/vui/components/icons',
-                          },
-                          {
-                            key: 'loadings',
-                            label: 'Loadings',
-                            to: '/vui/components/loadings',
-                          },
-                          {
-                            key: 'avatars',
-                            label: 'Avatars',
-                            to: '/vui/components/avatars',
-                          },
-                          {
-                            key: 'chips',
-                            label: 'Chips',
-                            to: '/vui/components/chips',
-                          },
-                          {
-                            key: 'cards',
-                            label: 'Cards',
-                            to: '/vui/components/cards',
-                          },
-                          {
-                            key: 'text-fields',
-                            label: 'Text fields',
-                            to: '/vui/components/text-fields',
-                          },
-                          {
-                            key: 'textareas',
-                            label: 'Textareas',
-                            to: '/vui/components/textareas',
-                          },
-                          {
-                            key: 'wysiwygs',
-                            label: 'Wysiwygs',
-                            to: '/vui/components/wysiwygs',
-                          },
-                          {
-                            key: 'selects',
-                            label: 'Selects',
-                            to: '/vui/components/selects',
-                          },
-                          {
-                            key: 'checkboxes',
-                            label: 'Checkboxes',
-                            to: '/vui/components/checkboxes',
-                          },
-                          {
-                            key: 'radio-buttons',
-                            label: 'Radio buttons',
-                            to: '/vui/components/radio-buttons',
-                          },
-                          {
-                            key: 'switches',
-                            label: 'Switches',
-                            to: '/vui/components/switches',
-                          },
-                          {
-                            key: 'forms',
-                            label: 'Forms',
-                            to: '/vui/components/forms',
-                          },
-                          {
-                            key: 'pagination',
-                            label: 'Pagination',
-                            to: '/vui/components/pagination',
-                          },
-                          {
-                            key: 'data-tables',
-                            label: 'Data tables',
-                            to: '/vui/components/data-tables',
-                          },
-                          {
-                            key: 'tabs',
-                            label: 'Tabs',
-                            to: '/vui/components/tabs',
-                          },
-                          {
-                            key: 'breadcrumbs',
-                            label: 'Breadcrumbs',
-                            to: '/vui/components/breadcrumbs',
-                          },
-                        ],
-                      },
-                    ]}
-                  /> */}
                 </VDrawerLayout>
               );
             },

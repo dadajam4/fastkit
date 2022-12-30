@@ -6,6 +6,7 @@
 // }
 :root {
   --docs-theme-font: 'Zen Dots', sans-serif;
+  --docs-container-width: 960px;
 
   // @FIXME vuiに書きたいけど mqミックスインが使えない
   --v-app-container-padding: 16px;
@@ -22,6 +23,12 @@
 .docs-theme-font {
   font-family: var(--docs-theme-font);
   text-transform: none;
+}
+
+.docs-container {
+  max-width: 960px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .page {

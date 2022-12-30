@@ -13,6 +13,8 @@ export const ja = commonScheme.defineLocale.strict({
     previousPage: 'Previous page',
     nextPage: 'Next page',
     all: '全て',
+    usage: '使い方',
+    docIsInPreparation: 'ドキュメントは準備中です。',
   },
 });
 

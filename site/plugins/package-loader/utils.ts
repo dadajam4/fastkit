@@ -21,14 +21,19 @@ export async function loadPackage(packageName: string): Promise<LoadResult> {
   return toLoadResult(toPackageInfo(pkg));
 }
 
-export async function loadPackages(): Promise<LoadResult> {
+export async function getPackages(): Promise<PackageInfo[]> {
   const packages = await Promise.all(
     targets.map((target) => getPackage(PACKAGES_DIR.join(target))),
   );
   const filteredPkgs = packages
     .filter((pkg) => !!pkg._docs)
     .map((pkg) => toPackageInfo(pkg));
-  return toLoadResult(filteredPkgs);
+  return filteredPkgs;
+}
+
+export async function loadPackages(): Promise<LoadResult> {
+  const packages = await getPackages();
+  return toLoadResult(packages);
 }
 
 export function extractGetPackageProviderName(id: string) {
@@ -70,10 +75,11 @@ export function toPackageInfo(source: FastkitPackage): PackageInfo {
     _docs = { description: {} },
   } = source;
   const name = fullName.replace('@fastkit/', '');
-  const { scope, feature, description = {} } = _docs;
+  const { displayName = name, scope, feature, description = {} } = _docs;
 
   return {
     name,
+    displayName,
     fullName,
     scope,
     feature,

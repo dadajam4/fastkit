@@ -12,6 +12,8 @@ export type CommonTranslations = {
   previousPage: string;
   nextPage: string;
   all: string;
+  usage: string;
+  docIsInPreparation: string;
 };
 
 export const commonScheme = I18nSpaceDefine.defineScheme({

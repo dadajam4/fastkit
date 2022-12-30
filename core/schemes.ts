@@ -56,6 +56,11 @@ export interface BuildOptions {
  */
 export interface PackageDocsOptions {
   /**
+   * Name for package display
+   */
+  displayName?: string;
+
+  /**
    * If the package is heavily dependent on a particular execution environment or framework, the identifier
    *
    * @example "node" | "vue" ...

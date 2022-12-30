@@ -8,10 +8,9 @@ import _pkgs from 'virtual:packages';
 export default defineComponent({
   i18n: VPackageExplorer,
   setup() {
-    const pkg = PackageProvide.use();
     const { trans } = i18n.use().at.common;
 
-    pkg.useHead({
+    PackageProvide.useHead({
       title: trans.packages,
     });
 
@@ -27,7 +26,7 @@ export default defineComponent({
               エクスプローラーを利用して必要なツールを見つけてください。
             </p>
 
-            <VPackageExplorer value={_pkgs} />
+            <VPackageExplorer class="mt-6" value={_pkgs} />
           </VDocsSection>
 
           <VDocsPaging

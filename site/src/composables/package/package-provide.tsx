@@ -5,14 +5,51 @@ import { PACKAGE_PROVIDE_INJECTION_KEY } from './injections';
 import { useHead, HeadObject } from '@vueuse/head';
 import { useVuePageControl, VuePageControl } from '@fastkit/vot';
 import { i18n } from '~/i18n';
+import { arrayUnique } from '@fastkit/helpers';
+import { VDocsSection, VCode } from '~/components';
+import { VHero } from '@fastkit/vui';
+
+type UseHeadInput = Parameters<typeof useHead>[0];
+
+const extractTitleFromHeadObject = (
+  input?: UseHeadInput,
+): {
+  title?: string;
+  obj: HeadObject;
+} => {
+  if (!input) return { obj: {} };
+  const obj = isRef(input) ? input.value : input;
+  const { title: _title } = obj;
+  const title = _title && isRef(_title) ? _title.value : _title;
+  return {
+    title,
+    obj,
+  };
+};
 
 export class PackageProvide {
-  static use() {
-    const pkg = inject(PACKAGE_PROVIDE_INJECTION_KEY);
-    if (!pkg) {
+  static use<AllowMissing extends boolean = false>(
+    allowMissing?: AllowMissing,
+  ): AllowMissing extends true ? PackageProvide | undefined : PackageProvide {
+    const pkg = inject(PACKAGE_PROVIDE_INJECTION_KEY, undefined);
+    if (!pkg && !allowMissing) {
       throw new Error('missing provided package');
     }
-    return pkg;
+    return pkg as PackageProvide;
+  }
+
+  static useHead(input?: UseHeadInput, titleAppends?: string) {
+    const ref = computed<HeadObject>(() => {
+      const { title, obj } = extractTitleFromHeadObject(input);
+      const titleChunks: string[] = ['fastkit'];
+      titleAppends && titleChunks.unshift(titleAppends);
+      title && titleChunks.unshift(title);
+      return {
+        ...obj,
+        title: arrayUnique(titleChunks).join(' | '),
+      };
+    });
+    useHead(ref);
   }
 
   /**
@@ -86,6 +123,8 @@ export class PackageProvide {
     this.displayName = displayName;
     this.github = github;
     this.home = home;
+
+    this.useHead({});
   }
 
   provide() {
@@ -93,23 +132,29 @@ export class PackageProvide {
     return this;
   }
 
-  useHead(...params: Parameters<typeof useHead>) {
-    const obj = params[0];
-    const ref = computed<HeadObject>(() => {
-      const org = isRef(obj) ? obj.value : obj;
-      const chunks: string[] = ['fastkit'];
-      const { title } = org;
-      if (title) {
-        const titleChunk = isRef(title) ? title.value : title;
-        if (titleChunk) {
-          chunks.unshift(titleChunk);
-        }
-      }
-      return {
-        ...org,
-        title: chunks.join(' | '),
-      };
-    });
-    useHead(ref);
+  useHead(input?: UseHeadInput) {
+    return PackageProvide.useHead(input, this.displayName);
+  }
+
+  renderInstallation() {
+    return (
+      <VDocsSection title={this.i18n.at.common.t.installation}>
+        <h3>NPM</h3>
+        <VCode language="sh">{`npm install ${this.info.fullName} -D`}</VCode>
+        <h3>Yarn</h3>
+        <VCode language="sh">{`yarn add ${this.info.fullName} -D`}</VCode>
+      </VDocsSection>
+    );
+  }
+
+  renderHeader() {
+    return (
+      <div class="package-provide-header">
+        <VHero>{this.displayName}</VHero>
+        <p class="docs-container mt-4">{this.description}</p>
+
+        {this.renderInstallation()}
+      </div>
+    );
   }
 }

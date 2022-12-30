@@ -31,4 +31,14 @@
       }
     }
   }
+
+  &__count {
+    margin-bottom: 8px;
+    font-size: 10px;
+
+    &__num {
+      margin: 0 0.25em;
+      font-size: 140%;
+    }
+  }
 }

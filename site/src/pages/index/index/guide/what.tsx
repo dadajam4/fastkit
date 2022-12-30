@@ -6,10 +6,9 @@ import { PackageProvide } from '~/composables';
 
 export default defineComponent({
   setup() {
-    const pkg = PackageProvide.use();
     const { trans } = i18n.use().at.common;
 
-    pkg.useHead({
+    PackageProvide.useHead({
       title: trans.whatIsFastkit,
     });
 

@@ -6,10 +6,9 @@ import { PackageProvide } from '~/composables';
 
 export default defineComponent({
   setup() {
-    const pkg = PackageProvide.use();
     const { trans } = i18n.use().at.common;
 
-    pkg.useHead({
+    PackageProvide.useHead({
       title: trans.tryItOut,
     });
 
@@ -33,18 +32,20 @@ export default defineComponent({
             </p>
             <VCode language="sh">npm i fastkit -D</VCode>
 
-            <p>
-              このインストールによって以下のパッケージが依存関係としてインストールされます。
-              <br />
-              これらのツールはあなたのアプリケーションが適切なバンドラ（vite等）を利用している限り、利用していないパッケージはtree
-              shakingによってバンドルから除外されるでしょう。node_modulesへの不用なインストールを避けたい場合、個別インストールを検討してください。
-            </p>
+            {/* <>
+              <p>
+                このインストールによって以下のパッケージが依存関係としてインストールされます。
+                <br />
+                これらのツールはあなたのアプリケーションが適切なバンドラ（vite等）を利用している限り、利用していないパッケージはtree
+                shakingによってバンドルから除外されるでしょう。node_modulesへの不用なインストールを避けたい場合、個別インストールを検討してください。
+              </p>
 
-            <ul>
-              {pkg.dependencies.map(({ name }) => (
-                <li key={name}>{name.replace('@fastkit/', '')}</li>
-              ))}
-            </ul>
+              <ul>
+                {pkg.dependencies.map(({ name }) => (
+                  <li key={name}>{name.replace('@fastkit/', '')}</li>
+                ))}
+              </ul>
+            </> */}
           </VDocsSection>
 
           <VDocsPaging
@@ -53,7 +54,7 @@ export default defineComponent({
               title: trans.whatIsFastkit,
             }}
             next={{
-              to: '/guide/packages/',
+              to: '/packages/',
               title: trans.packages,
             }}
           />

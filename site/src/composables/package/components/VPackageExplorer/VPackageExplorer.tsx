@@ -261,15 +261,31 @@ export const VPackageExplorer = defineComponent({
     ];
 
     return () => {
+      const packages = sortedPackagesRef.value;
+
       return (
         <div class="v-package-explorer">
           <div class="v-package-explorer__filter">
             {createFilterItem('scope')}
             {createFilterItem('feature')}
           </div>
+
+          {packages.length > 0 && (
+            <div class="v-package-explorer__count">
+              <span class="v-package-explorer__count__num">
+                {props.value.length}
+              </span>
+              <span>個中</span>
+              <span class="v-package-explorer__count__num">
+                {packages.length}
+              </span>
+              <span>個のパッケージ</span>
+            </div>
+          )}
+
           <VDataTable
             headers={headers}
-            items={sortedPackagesRef.value}
+            items={packages}
             fixedHeader
             itemKey="name"
             limits={[]}

@@ -1,4 +1,4 @@
 # fastkit
 
 ## Documentation
-https://dadajam4.github.io/fastkit/
+https://dadajam4.github.io/fastkit/fastkit/

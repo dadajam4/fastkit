@@ -1,11 +1,17 @@
 declare const PackageInfo: Awaited<import('./schemes').PackageInfo>;
 
-declare const VueComponent: Awaited<import('vue').DefineComponent>;
+declare const PackageProvide: Awaited<
+  import('~/composables/package/package-provide').PackageProvide
+>;
+
+declare const _VPackageProvider: Awaited<
+  typeof import('~/composables/package/components/VPackageProvider/VPackageProvider').VPackageProvider
+>;
 
 declare module 'virtual:package-provider:*' {
   export const pkg: typeof PackageInfo;
-  export const VPackageProvider: typeof VueComponent;
-  export default VueComponent;
+  export const VPackageProvider: typeof _VPackageProvider;
+  export default VPackageProvider;
 }
 
 declare module 'virtual:package:*' {

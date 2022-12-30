@@ -56,9 +56,11 @@ export interface SsrOptions {
   }) => Promise<WrittenResponse>;
 }
 
+type Awaitable<T> = T | PromiseLike<T>;
+
 export type VotRoutesGenerated = (
   routes: RouteRecordRaw[],
-) => RouteRecordRaw[] | void;
+) => Awaitable<RouteRecordRaw[] | void>;
 
 export interface VotPluginPagesOptions extends PagesUserOptions {
   onRoutesGenerated?: VotRoutesGenerated;

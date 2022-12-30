@@ -15,6 +15,7 @@ const rootPkg = getPackage();
 const version = rootPkg.version;
 
 const packagesDir = path.resolve(__dirname, '../packages');
+const licenseTemplatePath = path.resolve(__dirname, 'LICENSE.tmpl');
 const { target, force } = args;
 
 if (target) {
@@ -74,9 +75,28 @@ files.forEach((shortName) => {
     fs.writeFileSync(pkgPath, JSON.stringify(json, null, 2));
   }
 
+  const licensePath = path.join(packagesDir, shortName, `LICENSE`);
+  if (force || !fs.existsSync(licensePath)) {
+    const licenseTemplate = fs.readFileSync(licenseTemplatePath, 'utf-8');
+    const license = licenseTemplate.replace(
+      '[year]',
+      String(new Date().getFullYear()).replace(
+        '[author]',
+        'Ayumu Fujii (dadajam4) and Fastkit contributors',
+      ),
+    );
+    fs.writeFileSync(licensePath, license);
+  }
+
   const readmePath = path.join(packagesDir, shortName, `README.md`);
   if (force || !fs.existsSync(readmePath)) {
-    fs.writeFileSync(readmePath, `# ${name}`);
+    const readmeContent = `
+# ${name}
+
+## Documentation
+https://dadajam4.github.io/fastkit/${shortName}/
+    `.trim();
+    fs.writeFileSync(readmePath, readmeContent);
   }
 
   const apiExtractorConfigPath = path.join(

@@ -13,6 +13,8 @@ export const en = commonScheme.defineLocale.strict({
     previousPage: 'Previous page',
     nextPage: 'Next page',
     all: 'All',
+    usage: 'Usage',
+    docIsInPreparation: 'Documentation is in preparation.',
   }),
 });
 

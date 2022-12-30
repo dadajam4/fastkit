@@ -22,7 +22,7 @@ import { ScopeName } from '@fastkit/color-scheme';
 export function createNavigationItemProps() {
   return {
     ...createListTileProps(),
-    match: String,
+    match: [String, Array] as PropType<string | string[]>,
     depth: {
       type: Number,
       default: 0,
@@ -99,13 +99,16 @@ export const VNavigationItem = defineComponent({
 
     const to = computed(() => ctx.attrs.to);
 
-    const match = computed(() => {
+    const match = computed<string[] | undefined>(() => {
       const { match } = props;
       const { to } = ctx.attrs;
-      if (match) return trimEndSlash(match);
+      if (match) {
+        return (Array.isArray(match) ? match : [match]).map(trimEndSlash);
+      }
       if (!to) return;
-      if (typeof to === 'string') return trimEndSlash(to);
-      return trimEndSlash((to as any).path as string | undefined);
+      const toPath = typeof to === 'string' ? to : (to as any).path;
+      if (!toPath) return;
+      return [trimEndSlash(toPath)];
     });
 
     const classes = computed(() => [
@@ -129,18 +132,27 @@ export const VNavigationItem = defineComponent({
         const c = children.value;
         const m = match.value;
 
-        if (!c || !m) {
+        if (!c || !m || !m.length) {
           // matched.value = false;
           return;
         }
 
-        if (trimEndSlash(newPath).match(m)) {
+        const trimedNewPath = trimEndSlash(newPath);
+        if (m.some((_) => trimedNewPath.match(_))) {
           open();
           // matched.value = true;
         } else {
           close();
           // matched.value = false;
         }
+
+        // if (trimEndSlash(newPath).match(m)) {
+        //   open();
+        //   // matched.value = true;
+        // } else {
+        //   close();
+        //   // matched.value = false;
+        // }
       },
       { immediate: true },
     );
