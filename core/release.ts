@@ -135,11 +135,11 @@ async function main() {
   // generate changelog
   await run(`yarn`, ['changelog']);
 
-  // build docs
-  step('\nBuilding documents...');
-  await runIfNotDry('yarn', ['build:docs'], {
-    stdio: 'pipe',
-  });
+  // // build docs
+  // step('\nBuilding documents...');
+  // await runIfNotDry('yarn', ['build:docs'], {
+  //   stdio: 'pipe',
+  // });
 
   const { stdout } = await run('git', ['diff'], { stdio: 'pipe' });
   if (stdout) {
