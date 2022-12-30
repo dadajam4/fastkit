@@ -81,7 +81,7 @@ function createSetting(rawKBSettings: RawKBSettings): ComputedKBSetting[] {
   return computedSettings;
 }
 
-export class KeybordService {
+export class KeyboardService {
   readonly settings: ComputedKBSetting[];
   private _running = false;
 

@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
 import { VDocsSection, VCode } from '~/components';
-import { VPackageProvider } from 'virtual:package-provider:keybord';
+import { VPackageProvider } from 'virtual:package-provider:keyboard';
 import { i18n } from '~/i18n';
 import { pkg } from './-i18n';
 

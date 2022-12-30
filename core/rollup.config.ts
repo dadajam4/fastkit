@@ -217,9 +217,26 @@ function createConfig(
     'set-cookie-parser',
   );
 
-  // the browser builds requires postcss to be available
-  // as a global (e.g. http://wzrd.in/standalone/postcss)
   output.globals = {
+    vue: 'Vue',
+    'bezier-easing': 'BezierEasing',
+    'vue-router': 'VueRouter',
+
+    // I am not confident that this setup is correct.
+    // @see https://github.com/vueuse/vueuse#cdn
+    '@vueuse/head': 'VueUse',
+    imask: 'IMask',
+
+    // @FIXME
+    // This setting needs to be resolved because it is not delivered to the CDN
+    cookie: 'Cookie',
+
+    // @FIXME
+    // This setting needs to be resolved because it is not delivered to the CDN
+    'set-cookie-parser': 'SetCookieParser',
+
+    // the browser builds requires postcss to be available
+    // as a global (e.g. http://wzrd.in/standalone/postcss)
     postcss: 'postcss',
   };
 

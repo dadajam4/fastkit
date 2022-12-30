@@ -14,7 +14,7 @@ import {
   // ColorSchemePropsStaticOptions,
   ColorClassesResult,
 } from '@fastkit/vue-color-scheme';
-import { UseKeybordRef, StyleValue } from '@fastkit/vue-utils';
+import { UseKeyboardRef, StyleValue } from '@fastkit/vue-utils';
 import { rawNumberProp, JavaScriptTransition } from '@fastkit/vue-utils';
 
 type DelayTimerProps = 'openDelay' | 'closeDelay';
@@ -102,7 +102,7 @@ export interface VStackControl {
       readonly props: any;
       // readonly name: string | undefined;
     };
-    readonly keybord: UseKeybordRef;
+    readonly keyboard: UseKeyboardRef;
     readonly transitionListeners: {
       onBeforeEnter: (el: HTMLElement) => void;
       onAfterEnter: (el: HTMLElement) => void;

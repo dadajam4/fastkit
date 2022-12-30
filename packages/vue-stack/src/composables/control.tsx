@@ -23,7 +23,7 @@ import {
   IN_WINDOW,
 } from '@fastkit/helpers';
 import {
-  useKeybord,
+  useKeyboard,
   clickOutsideDirectiveArgument,
   bodyScrollLockDirectiveArgument,
   StyleValue,
@@ -164,7 +164,7 @@ export function useStackControl(
   //   },
   // });
 
-  const keybord = useKeybord(
+  const keyboard = useKeyboard(
     {
       key: 'Escape',
       handler: (ev) => {
@@ -289,8 +289,8 @@ export function useStackControl(
     get Transition() {
       return TransitionDefine.value;
     },
-    get keybord() {
-      return keybord;
+    get keyboard() {
+      return keyboard;
     },
     transitionListeners: {
       onBeforeEnter: (el) => {

@@ -1,5 +1,5 @@
 {
-  "name": "@fastkit/keybord",
+  "name": "@fastkit/keyboard",
   "version": "0.8.18",
   "description": "Observer implementation to handle keyboard input to Type safe.",
   "main": "index.js",
@@ -11,12 +11,12 @@
       "ja": "キーボード入力をTypeセーフにハンドルするオブザーバ実装。"
     }
   },
-  "module": "dist/keybord.mjs",
+  "module": "dist/keyboard.mjs",
   "files": [
     "index.js",
     "dist"
   ],
-  "types": "dist/keybord.d.ts",
+  "types": "dist/keyboard.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"
@@ -30,5 +30,5 @@
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
-  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/keybord#readme"
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/keyboard#readme"
 }

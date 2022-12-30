@@ -18,7 +18,7 @@ import {
   createPropsOptions,
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
-  useKeybord,
+  useKeyboard,
 } from '@fastkit/vue-kit';
 import { VFormControl } from '../VFormControl';
 import {
@@ -40,11 +40,11 @@ import { VOption } from '../VOption';
 import { VButton } from '..';
 import { VMenuControl } from '@fastkit/vue-stack';
 
-export const ARROW_KEY_TYPES = useKeybord.Key(['ArrowUp', 'ArrowDown']);
+export const ARROW_KEY_TYPES = useKeyboard.Key(['ArrowUp', 'ArrowDown']);
 
-export const CHOICE_KEY_TYPES = useKeybord.Key(['Enter', ' ']);
+export const CHOICE_KEY_TYPES = useKeyboard.Key(['Enter', ' ']);
 
-export const KEYBORD_EVENT_TYPES = useKeybord.Key([
+export const KEYBORD_EVENT_TYPES = useKeyboard.Key([
   ...ARROW_KEY_TYPES,
   ...CHOICE_KEY_TYPES,
 ]);
@@ -249,16 +249,16 @@ export const VSelect = defineComponent({
       }
     };
 
-    const keybordEventHandler = (ev: KeyboardEvent) => {
+    const keyboardEventHandler = (ev: KeyboardEvent) => {
       if (ARROW_KEY_TYPES.includes(ev.key as any)) return arrowKeyHandler(ev);
       if (CHOICE_KEY_TYPES.includes(ev.key as any)) return choiceKeyHandler(ev);
     };
 
-    useKeybord(
+    useKeyboard(
       [
         {
           key: KEYBORD_EVENT_TYPES,
-          handler: keybordEventHandler,
+          handler: keyboardEventHandler,
         },
       ],
       { autorun: true },

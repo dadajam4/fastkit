@@ -58,7 +58,7 @@
     "@fastkit/i18n": "0.8.18",
     "@fastkit/icon-font": "0.8.18",
     "@fastkit/icon-font-gen": "0.8.18",
-    "@fastkit/keybord": "0.8.18",
+    "@fastkit/keyboard": "0.8.18",
     "@fastkit/media-match": "0.8.18",
     "@fastkit/media-match-gen": "0.8.18",
     "@fastkit/node-util": "0.8.18",
