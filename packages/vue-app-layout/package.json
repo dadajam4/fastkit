@@ -33,8 +33,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-app-layout#readme",
   "peerDependencies": {
-    "vue": "^3.2.37",
-    "vue-router": "^4.0.16"
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
   },
   "dependencies": {
     "@fastkit/vue-utils": "0.9.0",

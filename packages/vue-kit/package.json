@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-kit#readme",
   "peerDependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.2.45"
   },
   "dependencies": {
     "fastkit": "0.9.0",

@@ -137,9 +137,9 @@
     "stylelint-scss": "^4.1.0",
     "vite": "^2.9.13",
     "vite-plugin-pages": "^0.22.0",
-    "vue": "^3.2.37",
+    "vue": "^3.2.45",
     "vue-eslint-parser": "^8.0.1",
-    "vue-router": "^4.0.16",
+    "vue-router": "^4.1.6",
     "webfont": "^11.2.26",
     "yorkie": "^2.0.0"
   }

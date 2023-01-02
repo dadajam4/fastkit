@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-media-match#readme",
   "peerDependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.2.45"
   },
   "dependencies": {
     "@fastkit/helpers": "0.9.0",
