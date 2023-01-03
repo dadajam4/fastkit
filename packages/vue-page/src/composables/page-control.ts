@@ -422,7 +422,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     );
     this._initialState = initialState;
 
-    this._route = ref(initialRoute) as Ref<ResolvedRouteLocation>;
+    this._route = ref(initialRoute as any) as Ref<ResolvedRouteLocation>;
     this._runningQueues = computed(() =>
       this.prefetchQueues.filter((q) => q.running),
     );
