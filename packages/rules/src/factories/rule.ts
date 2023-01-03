@@ -33,11 +33,11 @@ export type RuleSettingsValidatePayload =
   | RuleSettingsValidateSource
   | Promise<RuleSettingsValidateSource>;
 
-export type RuleSettingsMessage<C extends any = any> =
+export type RuleSettingsMessage<C = any> =
   | string
   | ((value: any, ctx: RuleValidateContext<C>) => string);
 
-export type RuleSettings<C extends any = any> =
+export type RuleSettings<C = any> =
   | {
       name: string;
       validate: (value: any, constraints: C) => RuleSettingsValidatePayload;
@@ -51,7 +51,7 @@ export type RuleSettings<C extends any = any> =
       constraints?: any;
     };
 
-export interface RuleValidateContext<C extends any = any> {
+export interface RuleValidateContext<C = any> {
   name: string;
   value: any;
   constraints: C;
@@ -62,7 +62,7 @@ export interface RuleValidateContext<C extends any = any> {
   exception?: any;
 }
 
-export interface Rule<C extends any = any> {
+export interface Rule<C = any> {
   <EC extends C = C>(
     constraints: Partial<EC>,
     overRides?: string | Partial<RuleSettings<EC>>,
@@ -86,9 +86,7 @@ export interface Rule<C extends any = any> {
   };
 }
 
-export function createRule<C extends any = any>(
-  settings: RuleSettings<C>,
-): Rule<C> {
+export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
   const { name, validate, message, constraints } = settings;
 
   function rule<EC extends C = C>(

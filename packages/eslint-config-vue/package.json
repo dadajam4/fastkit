@@ -35,6 +35,6 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/eslint-config-vue#readme",
   "dependencies": {
     "@fastkit/eslint-config": "0.9.0",
-    "eslint-plugin-vue": "^7.20.0"
+    "eslint-plugin-vue": "^9.8.0"
   }
 }
