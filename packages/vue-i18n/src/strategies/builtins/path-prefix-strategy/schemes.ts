@@ -1,6 +1,7 @@
 import type {
   RouteLocation,
-  LocationAsPath,
+  // LocationAsPath,
+  MatcherLocationAsPath,
   LocationAsRelativeRaw,
   RouteQueryAndHash,
   RouteLocationOptions,
@@ -10,10 +11,10 @@ import type {
 /**
  * Path-based route location settings
  *
- * @see {@link LocationAsPath}
+ * @see {@link MatcherLocationAsPath}
  */
 export type PathBaseLocation = RouteQueryAndHash &
-  LocationAsPath &
+  MatcherLocationAsPath &
   RouteLocationOptions;
 
 /**

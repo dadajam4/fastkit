@@ -18,11 +18,12 @@ const extractTitleFromHeadObject = (
   obj: HeadObject;
 } => {
   if (!input) return { obj: {} };
-  const obj = isRef(input) ? input.value : input;
+  const value = isRef(input) ? input.value : input;
+  const obj = typeof value === 'function' ? value() : value;
   const { title: _title } = obj;
   const title = _title && isRef(_title) ? _title.value : _title;
   return {
-    title,
+    title: typeof title === 'string' ? title : undefined,
     obj,
   };
 };

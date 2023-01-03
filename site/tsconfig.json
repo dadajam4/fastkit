@@ -1,0 +1,53 @@
+{
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "paths": {
+      "@fastkit/*": ["../packages/*/src"],
+      "fastkit/*": ["../packages/fastkit/src"],
+      "~~~": [
+        ".."
+      ],
+      "~~~/*": [
+        "../*"
+      ],
+      "@@@": [
+        ".."
+      ],
+      "@@@/*": [
+        "../*"
+      ],
+      "~~": [
+        "."
+      ],
+      "~~/*": [
+        "./*"
+      ],
+      "@@": [
+        "."
+      ],
+      "@@/*": [
+        "./*"
+      ],
+      "~": [
+        "./src"
+      ],
+      "~/*": [
+        "./src/*"
+      ],
+      "@": [
+        "./src"
+      ],
+      "@/*": [
+        "./src/*"
+      ],
+    }
+  },
+  "include": [
+    "../packages/global.d.ts",
+    "../packages/*/src",
+    "../core",
+    "./",
+  ]
+}

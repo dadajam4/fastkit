@@ -11,7 +11,7 @@ export interface ResolvedRouteLocation extends RouteLocation {
 type InstanceOf<T> = T extends new (...args: any[]) => infer R ? R : never;
 
 export type RouterViewSlotProps = Parameters<
-  InstanceOf<typeof RouterView>['$slots']['default']
+  NonNullable<InstanceOf<typeof RouterView>['$slots']['default']>
 >[0];
 
 export type WatchQueryOption = boolean | string[];

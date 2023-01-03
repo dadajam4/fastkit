@@ -14,7 +14,7 @@ import type {
   Router,
   RouteLocationNormalized,
   RouteQueryAndHash,
-  LocationAsPath,
+  MatcherLocationAsPath,
   LocationQueryRaw,
   LocationAsRelativeRaw,
 } from 'vue-router';
@@ -220,12 +220,12 @@ type RedirectOptions = {
 
 export type RawVuePageControlRedirectSpec =
   | string
-  | (RouteQueryAndHash & LocationAsPath & RedirectOptions)
+  | (RouteQueryAndHash & MatcherLocationAsPath & RedirectOptions)
   | (RouteQueryAndHash & LocationAsRelativeRaw & RedirectOptions);
 
 export interface VuePageControlRedirectSpec
   extends RouteQueryAndHash,
-    LocationAsPath,
+    MatcherLocationAsPath,
     LocationAsRelativeRaw {
   statusCode: number;
   query?: LocationQueryRaw;
@@ -243,7 +243,7 @@ function resolveRawVuePageControlRedirectSpec(
     source = { path: source };
   }
   const { statusCode = DEFAULT_REDIRECT_STATUS, query, hash } = source;
-  const { path } = source as LocationAsPath;
+  const { path } = source as MatcherLocationAsPath;
   const { name, params } = source as LocationAsRelativeRaw;
   return {
     statusCode,

@@ -212,7 +212,7 @@ export class PathPrefixContext {
     // bind this for methods...
     (
       [
-        'extendRouterOptionsRoutes',
+        // 'extendRouterOptionsRoutes',
         'extendRouterOptions',
         'extendRouter',
       ] as const
@@ -277,7 +277,7 @@ export class PathPrefixContext {
    * @returns Duplicated route list object
    */
   duplicateRoutes(
-    routes: RouteRecordRaw[],
+    routes: readonly RouteRecordRaw[],
     localeName: string,
   ): RouteRecordRaw[] {
     const duplicatedRoutes: RouteRecordRaw[] = [];
@@ -298,7 +298,8 @@ export class PathPrefixContext {
    *
    * @param routes - route objects
    */
-  sortRoutes(routes: RouteRecordRaw[]) {
+  sortRoutes(routes: RouteRecordRaw[] | readonly RouteRecordRaw[]) {
+    const results = routes.slice();
     const { pathMatchRe, availableLocales } = this;
     const getLocaleIndex = (path: string) => {
       const localeMatch = path.match(pathMatchRe);
@@ -306,13 +307,14 @@ export class PathPrefixContext {
       if (!locale) return -1;
       return availableLocales.indexOf(locale);
     };
-    routes.sort((a, b) => {
+    results.sort((a, b) => {
       const ai = getLocaleIndex(a.path);
       const bi = getLocaleIndex(b.path);
       if (ai < bi) return -1;
       if (ai > bi) return 1;
       return 0;
     });
+    return results;
   }
 
   /**
@@ -323,27 +325,27 @@ export class PathPrefixContext {
    * @param routes - route objects
    * @returns Duplicated route list object
    */
-  generateExtendRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
+  generateExtendRoutes(routes: readonly RouteRecordRaw[]): RouteRecordRaw[] {
     const generatedRoutes: RouteRecordRaw[] = [];
     for (const localeName of this.availableLocales) {
       if (this.ignoreBaseLocale && localeName === this.baseLocale) continue;
       const duplicatedRoutes = this.duplicateRoutes(routes, localeName);
       generatedRoutes.push(...duplicatedRoutes);
     }
-    this.sortRoutes(generatedRoutes);
-    return generatedRoutes;
+    const sorted = this.sortRoutes(generatedRoutes);
+    return sorted;
   }
 
-  /**
-   * Extend the optional route of the specified vue-router with a list of locales in this space
-   * @param routes - route objects
-   */
-  extendRouterOptionsRoutes(routes: RouteRecordRaw[]) {
-    if (isExtended(routes)) return;
-    routes.push(...this.generateExtendRoutes(routes));
-    this.sortRoutes(routes);
-    setExtended(routes);
-  }
+  // /**
+  //  * Extend the optional route of the specified vue-router with a list of locales in this space
+  //  * @param routes - route objects
+  //  */
+  // extendRouterOptionsRoutes(routes: RouteRecordRaw[]) {
+  //   if (isExtended(routes)) return;
+  //   routes.push(...this.generateExtendRoutes(routes));
+  //   this.sortRoutes(routes);
+  //   setExtended(routes);
+  // }
 
   /**
    * Extend the optional route of the specified vue-router with a list of locales in this space
@@ -355,7 +357,7 @@ export class PathPrefixContext {
       ...routerOptions.routes,
       ...this.generateExtendRoutes(routerOptions.routes),
     ];
-    this.sortRoutes(routerOptions.routes);
+    routerOptions.routes = this.sortRoutes(routerOptions.routes);
     setExtended(routerOptions);
   }
 
