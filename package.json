@@ -149,7 +149,7 @@
     "vite": "^2.9.13",
     "vite-plugin-pages": "^0.28.0",
     "vue": "^3.2.45",
-    "vue-eslint-parser": "^8.0.1",
+    "vue-eslint-parser": "^9.1.0",
     "vue-router": "^4.1.6",
     "webfont": "^11.2.26",
     "yorkie": "^2.0.0"
