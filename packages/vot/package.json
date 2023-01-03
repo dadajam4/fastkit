@@ -54,7 +54,7 @@
     "express": "^4.17.1",
     "http-proxy": "^1.18.1",
     "vite": "^2.9.13",
-    "vite-plugin-pages": "^0.22.0",
+    "vite-plugin-pages": "^0.28.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   }
