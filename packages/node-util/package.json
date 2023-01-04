@@ -44,6 +44,6 @@
     "esbuild": "^0.16.3",
     "execa": "^5.1.0",
     "folder-hash": "^4.0.1",
-    "fs-extra": "^9.1.0"
+    "fs-extra": "^11.1.0"
   }
 }
