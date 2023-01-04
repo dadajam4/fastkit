@@ -1,3 +1,13 @@
+# [0.10.0](https://github.com/dadajam4/fastkit/compare/v0.9.0...v0.10.0) (2023-01-04)
+
+
+### Bug Fixes
+
+* **icon-font-gen:** wrong webfont package references ([3fb5642](https://github.com/dadajam4/fastkit/commit/3fb564279f9704d1cd186a30715f830d108b1599))
+* **vui:** elevation is not applied ([3f3b918](https://github.com/dadajam4/fastkit/commit/3f3b9180925c6ef327570515fc04e2f4ba3bef9e))
+
+
+
 # [0.9.0](https://github.com/dadajam4/fastkit/compare/v0.8.18...v0.9.0) (2022-12-30)
 
 

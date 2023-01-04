@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/tiny-logger",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "A small logger to display the application logs just a little bit nicer.",
   "buildOptions": {
     "name": "TinyLogger"
@@ -36,6 +36,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/tiny-logger#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.9.0"
+    "@fastkit/helpers": "0.10.0"
   }
 }

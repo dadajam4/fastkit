@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/sprite-images",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Tools for generating sprite images.",
   "buildOptions": {
     "name": "SpriteImages",
@@ -39,8 +39,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/sprite-images#readme",
   "dependencies": {
-    "@fastkit/ev": "0.9.0",
-    "@fastkit/tiny-logger": "0.9.0",
+    "@fastkit/ev": "0.10.0",
+    "@fastkit/tiny-logger": "0.10.0",
     "chokidar": "^3.5.0",
     "fs-extra": "^11.1.0",
     "spritesmith": "^3.4.0"
