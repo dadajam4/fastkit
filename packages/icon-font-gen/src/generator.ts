@@ -88,7 +88,7 @@ export async function generateEntry(
 
   await fs.ensureDir(options.dest);
 
-  const webfont = await (await import('webfont')).default;
+  const { webfont } = await import('webfont');
 
   // const { startUnicode = 0xea01 } = options;
   const { startUnicode = 0xba01 } = options;
