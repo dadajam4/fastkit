@@ -38,11 +38,13 @@ module.exports = async function serve(opts = {}) {
 
   const dist = path.resolve(root, 'dist');
 
-  const { ssr } = require(path.join(dist, 'server/package.json'));
+  const { ssr, exports } = require(path.join(dist, 'server/package.json'));
 
   const manifest = require(path.join(dist, 'client/ssr-manifest.json'));
 
-  const { default: renderPage } = require(path.join(dist, 'server'));
+  const { default: renderPage } = await import(
+    path.join(dist, 'server', exports)
+  );
 
   const server = express();
 

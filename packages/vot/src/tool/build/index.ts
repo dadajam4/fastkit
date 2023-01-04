@@ -216,13 +216,9 @@ async function generatePackageJson(
       ((viteConfig.build?.ssr || serverBuildOptions.build?.ssr) as string),
   );
 
-  const moduleFormat =
-    (viteConfig.build?.rollupOptions?.output as OutputOptions)?.format ||
-    (serverBuildOptions.build?.rollupOptions?.output as OutputOptions)?.format;
-
   const packageJson = {
-    main: outputFile ? ssrOutput.base : ssrOutput.name + '.js',
-    type: /^esm?$/i.test(moduleFormat || '') ? 'module' : 'commonjs',
+    exports: outputFile ? ssrOutput.base : ssrOutput.name + '.mjs', // Vite 3.0 default
+    type: 'module', // Vite 3.0 default
     ssr: {
       // This can be used later to serve static assets
       assets: (

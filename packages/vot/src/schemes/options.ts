@@ -47,7 +47,7 @@ export interface BuildOptions {
 
 export interface SsrOptions {
   plugin?: string;
-  ssr?: string;
+  ssrEntry?: string;
   getRenderContext?: (params: {
     url: string;
     request: IncomingMessage;

@@ -14,7 +14,11 @@ export * from '../vot';
 
 export function votPlugin(options: VotPluginOptions = {}) {
   const { pages, configureServer } = options;
-  const pagesPlugin = Pages({
+
+  // @FIXME Not default exported on the CJS side for some reason.
+  const _Pages: typeof Pages =
+    typeof Pages === 'function' ? Pages : (Pages as any).default;
+  const pagesPlugin = _Pages({
     pagesDir: 'src/pages',
     extensions: ['vue', 'ts', 'tsx'],
     ...pages,
@@ -94,7 +98,7 @@ export function votPlugin(options: VotPluginOptions = {}) {
   const plugins = [pagesPlugin, vuePlugin, vueJsxPlugin, plugin];
 
   if ((options.excludeSsrComponents || []).length > 0) {
-    plugins.push({
+    const plugin: Plugin = {
       name: 'vite:vot-exclude-components',
       enforce: 'pre',
       resolveId(source, importer, { ssr }) {
@@ -107,7 +111,8 @@ export function votPlugin(options: VotPluginOptions = {}) {
           });
         }
       },
-    });
+    };
+    plugins.push(plugin);
   }
 
   return plugins;

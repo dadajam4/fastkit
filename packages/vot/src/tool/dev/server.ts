@@ -96,7 +96,7 @@ export const createSSRDevHandler = (
 
     try {
       const entryPoint =
-        options.ssr || (await getEntryPoint(server.config, template));
+        options.ssrEntry || (await getEntryPoint(server.config, template));
 
       let resolvedEntryPoint = await server.ssrLoadModule(resolve(entryPoint));
       resolvedEntryPoint = resolvedEntryPoint.default || resolvedEntryPoint;
@@ -176,7 +176,10 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
         __VOT_GENERATE__: false,
       },
     },
-    server: options.server || { ...options },
+    server: {
+      port: 3000,
+      ...(options.server || { ...options }),
+    },
   });
 
   const isMiddlewareMode = !!(

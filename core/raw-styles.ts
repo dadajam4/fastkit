@@ -113,6 +113,8 @@ export function rawStylesPlugin(options?: BuildOptions['rawStyles']): Plugin {
         moduleGraph.updateModuleInfo(
           thisModule,
           new Set(deps),
+          new Map(),
+          new Set(),
           new Set(),
           false,
         );

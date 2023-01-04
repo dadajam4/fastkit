@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vui#readme",
   "peerDependencies": {
-    "vite": "^2.9.13",
+    "vite": "^4.0.4",
     "vue": "^3.2.45"
   },
   "dependencies": {

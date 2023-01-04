@@ -223,6 +223,14 @@ function createConfig(
     'imask',
     'cookie',
     'set-cookie-parser',
+    'execa',
+    'folder-hash',
+    'eta',
+    'imagemin-pngquant',
+    'imagemin-mozjpeg',
+    'imagemin',
+    'webfont',
+    'cac',
   );
 
   output.globals = {
