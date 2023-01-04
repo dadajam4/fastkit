@@ -23,7 +23,7 @@
 
 @mixin elevation($z, $important: false) {
   box-shadow: var(--shadow-key-umbra-#{$z}), var(--shadow-key-penumbra-#{$z}),
-    var(--shadow-key-ambient-#{$z}) if($important, '!important', null);
+    var(--shadow-key-ambient-#{$z}) if($important, unquote('!important'), null);
 }
 
 @mixin elevation-transition(
