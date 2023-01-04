@@ -23,6 +23,7 @@ export default defineConfig({
   base: '/fastkit/',
   server: {
     host: '0.0.0.0',
+    port: 3000,
     proxy: {
       '/google': 'https://google.com',
     },

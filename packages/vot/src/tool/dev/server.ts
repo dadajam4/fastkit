@@ -176,10 +176,7 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
         __VOT_GENERATE__: false,
       },
     },
-    server: {
-      port: 3000,
-      ...(options.server || { ...options }),
-    },
+    server: options.server || { ...options },
   });
 
   const isMiddlewareMode = !!(
