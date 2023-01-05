@@ -3,10 +3,13 @@ import path from 'path';
 import { FastkitAppConfig, FastkitAppPackageConfig } from './schemes';
 import { getFlatFiles, processTemplate } from './utils';
 import chalk from 'chalk';
+import { fileURLToPath } from 'node:url';
+
+const _dirname = path.dirname(fileURLToPath(new URL('.', import.meta.url)));
 
 export async function scaffold(config: FastkitAppConfig) {
   const PACKAGES_DIR = path.join(config.dest, 'packages');
-  const TEMPLATES_DIR = path.resolve(__dirname, '../templates');
+  const TEMPLATES_DIR = path.resolve(_dirname, '../templates');
   const SHARED_TEMPLATES_DIR = path.join(TEMPLATES_DIR, 'shared');
 
   await fs.emptyDir(config.dest);

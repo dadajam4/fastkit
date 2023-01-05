@@ -217,7 +217,7 @@ async function generatePackageJson(
   );
 
   const packageJson = {
-    exports: outputFile ? ssrOutput.base : ssrOutput.name + '.mjs', // Vite 3.0 default
+    exports: outputFile ? ssrOutput.base : ssrOutput.name + '.js', // Vite 3.0 default
     type: 'module', // Vite 3.0 default
     ssr: {
       // This can be used later to serve static assets

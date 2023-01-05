@@ -13,10 +13,11 @@
       "ja": "「色」をコントロールするための値オブジェクト実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/color.mjs",
+  "main": "./dist/color.mjs",
+  "exports": {
+    ".": "./dist/color.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/color.d.ts",

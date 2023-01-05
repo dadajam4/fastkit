@@ -13,10 +13,11 @@
       "ja": "VueアプリケーションでTypeセーフな「色」のスキーマを利用するためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-color-scheme.mjs",
+  "main": "./dist/vue-color-scheme.mjs",
+  "exports": {
+    ".": "./dist/vue-color-scheme.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-color-scheme.d.ts",

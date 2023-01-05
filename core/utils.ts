@@ -27,7 +27,7 @@ export function getPackage(
     packagePath = path.join(packagePath, 'package.json');
   }
   try {
-    return require(packagePath);
+    return fs.readJSONSync(packagePath);
   } catch (err) {
     throw err;
   }
@@ -45,7 +45,7 @@ export async function findPackage(
   while (true) {
     const target = path.join(from, 'package.json');
     try {
-      const pkg = require(target);
+      const pkg = fs.readJSONSync(target);
       if (pkg) {
         result = pkg;
         break;
@@ -106,7 +106,9 @@ export const targets = fs.readdirSync(PACKAGES_DIR.path).filter((f) => {
   }
 
   try {
-    const pkg = require(PACKAGES_DIR.join(f, 'package.json')) as FastkitPackage;
+    const pkg = fs.readJSONSync(
+      PACKAGES_DIR.join(f, 'package.json'),
+    ) as FastkitPackage;
     const { buildOptions } = pkg;
     if (
       (pkg.private && !buildOptions) ||
@@ -172,7 +174,7 @@ function getDeps(name: string) {
     targets.includes(dep.replace(/^@fastkit\//, '')),
   );
   const result = deps.slice();
-  deps.forEach((dep) => {
+  for (const dep of deps) {
     const childName = dep.replace(/^@fastkit\//, '');
     if (targets.includes(childName)) {
       const children = getDeps(childName);
@@ -180,7 +182,7 @@ function getDeps(name: string) {
         !result.includes(child) && result.push(child);
       });
     }
-  });
+  }
   return result;
 }
 

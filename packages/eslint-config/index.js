@@ -14,7 +14,7 @@ module.exports = {
       parser: 'eslint-html-parser',
     },
     {
-      files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
+      files: ['*.ts', '*.tsx', '*.js', '*.jsx', '*.mjs'],
       extends: [
         'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
       ],

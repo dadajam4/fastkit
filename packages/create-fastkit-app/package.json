@@ -8,13 +8,14 @@
       "ja": "fastkitが提案するアプリケーションの足場を生成するCLI。"
     }
   },
-  "main": "index.js",
   "bin": {
     "create-fastkit-app": "lib/cli.js"
   },
-  "module": "dist/create-fastkit-app.mjs",
+  "main": "./dist/create-fastkit-app.mjs",
+  "exports": {
+    ".": "./dist/create-fastkit-app.mjs"
+  },
   "files": [
-    "index.js",
     "templates",
     "dist",
     "lib"

@@ -3,10 +3,7 @@
   "version": "0.10.0",
   "description": "Generator for generating \"color\" schemas.",
   "buildOptions": {
-    "name": "ColorSchemeGen",
-    "formats": [
-      "cjs"
-    ]
+    "name": "ColorSchemeGen"
   },
   "_docs": {
     "scope": "",
@@ -16,10 +13,11 @@
       "ja": "「色」のスキーマを生成するためのジェネレータ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/color-scheme-gen.mjs",
+  "main": "./dist/color-scheme-gen.mjs",
+  "exports": {
+    ".": "./dist/color-scheme-gen.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/color-scheme-gen.d.ts",

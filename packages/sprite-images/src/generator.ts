@@ -4,6 +4,8 @@ import chokidar, { FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
 import { SpriteImagesOptions, SpriteImagesSettings } from './schemes';
 import { logger } from './logger';
+import module from 'node:module';
+const require = module.createRequire(import.meta.url);
 
 const Spritesmith = require('spritesmith');
 

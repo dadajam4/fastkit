@@ -13,10 +13,11 @@
       "ja": "Vueアプリケーションにダイアログやツールチップやメニューを表示するためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-stack.mjs",
+  "main": "./dist/vue-stack.mjs",
+  "exports": {
+    ".": "./dist/vue-stack.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-stack.d.ts",

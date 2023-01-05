@@ -1,9 +1,9 @@
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
 
 import { viteVuiPlugin } from '@fastkit/vui/dist/tool';
+import { votPlugin } from '@fastkit/vot/dist/tool';
 import { aliasesPlugin } from '../core/playground-aliases';
 import { globalsPlugin } from '../core/playground-globals';
-import { votPlugin } from '../packages/vot/dist/tool';
 import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
 import path from 'path';
 import { PackageLoader } from './plugins';

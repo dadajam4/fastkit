@@ -2,13 +2,13 @@ import { Plugin } from 'vite';
 import { dynamicSrcVitePlugin } from '@fastkit/vite-kit';
 import path from 'path';
 import fs from 'fs-extra';
-import { findPackageDirSync } from '@fastkit/node-util';
+import { findPackageDirSync, getDirname } from '@fastkit/node-util';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
 import { VuiServiceOptions } from '../service';
 import { render } from 'eta';
 import { VuiError } from '../logger';
 
-const VUI_PACKAGE_DIR = path.resolve(__dirname, '../..');
+const VUI_PACKAGE_DIR = path.resolve(getDirname(import.meta.url), '../..');
 const STYLE_AFTER_EFFECTS_PATH = path.join(
   VUI_PACKAGE_DIR,
   'src/styles/after-effects.scss',

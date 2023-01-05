@@ -13,10 +13,11 @@
       "ja": "Vueアプリケーションで要素やコンポーネントのスクロール状態をコントロールするためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-scroller.mjs",
+  "main": "./dist/vue-scroller.mjs",
+  "exports": {
+    ".": "./dist/vue-scroller.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-scroller.d.ts",

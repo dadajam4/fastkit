@@ -1,12 +1,38 @@
 import esbuild, { Plugin } from 'esbuild';
 import path from 'path';
 import fs from 'fs';
-// import Module from 'module';
 import { resolveEntryPoint, pathExists } from './path';
 import { findPackageDir } from './package';
 import { NodeUtilError } from './logger';
 import chokidar from 'chokidar';
 import { EV } from '@fastkit/ev';
+import module from 'node:module';
+import url from 'node:url';
+
+const require = module.createRequire(import.meta.url);
+
+const importMetaUrlPlugin: Plugin = {
+  name: 'import.meta.url',
+  setup({ onLoad }) {
+    onLoad({ filter: /\.(m?(j|t)sx?)$/, namespace: 'file' }, (args) => {
+      let code = fs.readFileSync(args.path, 'utf8');
+
+      code = code.replace(
+        /\bimport\.meta\.url\b/g,
+        JSON.stringify(url.pathToFileURL(args.path)),
+      );
+
+      const chunks = args.path.split('.');
+      const ext = chunks[chunks.length - 1];
+
+      const jsType = ext.includes('ts') ? 'ts' : 'js';
+      const jsxSuffix = ext.includes('sx') ? 'x' : '';
+      const loader = `${jsType}${jsxSuffix}` as const;
+
+      return { contents: code, loader: loader };
+    });
+  },
+};
 
 const nativeNodeModulesPlugin: Plugin = {
   name: 'native-node-modules',
@@ -84,6 +110,7 @@ export async function esbuildRequire<T = any>(
     cacheName,
   );
   const outfile = path.join(cacheDir, 'index.js');
+
   const buildResult = await esbuild.build({
     // outfile
     entryPoints: [entryPoint],
@@ -95,7 +122,7 @@ export async function esbuildRequire<T = any>(
     metafile: true,
     // logLevel: 'warning',
     // external: ['module'],
-    plugins: [nativeNodeModulesPlugin],
+    plugins: [importMetaUrlPlugin, nativeNodeModulesPlugin],
     outfile,
   });
 

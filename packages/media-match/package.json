@@ -13,10 +13,11 @@
       "ja": "メディアクエリブレイクポイントをTypeセーフに扱うためのスキーマ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/media-match.mjs",
+  "main": "./dist/media-match.mjs",
+  "exports": {
+    ".": "./dist/media-match.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/media-match.d.ts",

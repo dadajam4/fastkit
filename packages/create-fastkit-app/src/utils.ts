@@ -9,9 +9,13 @@ import {
   VUE_DEPENDENCIES,
   DEPENDENCIE_VERSION_MAP,
 } from './schemes';
+import { fileURLToPath } from 'node:url';
+
+const _dirname = path.dirname(fileURLToPath(new URL('.', import.meta.url)));
+
 const { version: fastkitVersion } = require('../package.json');
 
-export const TEMPLATES_DIR = path.resolve(__dirname, '../templates');
+export const TEMPLATES_DIR = path.resolve(_dirname, '../templates');
 
 export const PACKAGES_DIR = path.join(TEMPLATES_DIR, 'packages');
 

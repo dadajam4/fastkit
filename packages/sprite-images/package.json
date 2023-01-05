@@ -3,10 +3,7 @@
   "version": "0.10.0",
   "description": "Tools for generating sprite images.",
   "buildOptions": {
-    "name": "SpriteImages",
-    "formats": [
-      "cjs"
-    ]
+    "name": "SpriteImages"
   },
   "_docs": {
     "scope": "",
@@ -16,10 +13,11 @@
       "ja": "スプライト画像を生成するためのツール。"
     }
   },
-  "main": "index.js",
-  "module": "dist/sprite-images.mjs",
+  "main": "./dist/sprite-images.mjs",
+  "exports": {
+    ".": "./dist/sprite-images.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/sprite-images.d.ts",

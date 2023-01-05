@@ -13,7 +13,10 @@
       "ja": "fastkitが推奨するvueアプリケーション用のeslintの設定。"
     }
   },
-  "main": "index.js",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js"
+  },
   "files": [
     "index.js"
   ],

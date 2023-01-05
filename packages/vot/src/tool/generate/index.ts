@@ -60,7 +60,8 @@ export async function generate(_config?: ResolvedConfig) {
     return;
   }
 
-  const serve = require('../../bin/serve-fn');
+  const { serve } = await import('@fastkit/vot/bin/serve-fn' as any);
+
   let basePrefix = '';
   let viteBase = viteConfig.base;
 

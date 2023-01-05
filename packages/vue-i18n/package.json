@@ -10,10 +10,11 @@
       "ja": "Vueアプリケーションを多言語ローカライズするためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-i18n.mjs",
+  "main": "./dist/vue-i18n.mjs",
+  "exports": {
+    ".": "./dist/vue-i18n.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-i18n.d.ts",

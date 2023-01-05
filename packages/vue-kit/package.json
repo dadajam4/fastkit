@@ -2,7 +2,9 @@
   "name": "@fastkit/vue-kit",
   "version": "0.10.0",
   "description": "Utilities for Vue applications.",
-  "main": "index.js",
+  "buildOptions": {
+    "name": "VueKit"
+  },
   "_docs": {
     "scope": "vue",
     "feature": "",
@@ -11,22 +13,14 @@
       "ja": "Vueアプリケーション向けのユーティリティー。"
     }
   },
-  "module": "dist/vue-kit.mjs",
+  "main": "./dist/vue-kit.mjs",
+  "exports": {
+    ".": "./dist/vue-kit.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-kit.d.ts",
-  "unpkg": "dist/vue-kit.global.js",
-  "jsdelivr": "dist/vue-kit.global.js",
-  "buildOptions": {
-    "name": "VueKit",
-    "formats": [
-      "esm-bundler",
-      "cjs",
-      "global"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"

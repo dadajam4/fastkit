@@ -13,10 +13,11 @@
       "ja": "「期間」を表現する値オブジェクト実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/duration.mjs",
+  "main": "./dist/duration.mjs",
+  "exports": {
+    ".": "./dist/duration.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/duration.d.ts",

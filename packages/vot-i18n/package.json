@@ -10,10 +10,11 @@
       "ja": "votアプリケーションを多言語ローカライズするためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vot-i18n.mjs",
+  "main": "./dist/vot-i18n.mjs",
+  "exports": {
+    ".": "./dist/vot-i18n.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vot-i18n.d.ts",

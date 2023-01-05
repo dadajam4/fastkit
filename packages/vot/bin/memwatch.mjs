@@ -1,11 +1,12 @@
-function memwatch() {
-  const gc = require('./expose-gc');
+export async function createMemwatch() {
+  const { getGc } = await import('./expose-gc.mjs');
+  const gc = getGc();
 
   let memwatcher;
   let memwatch;
 
   try {
-    memwatcher = require('node-memwatcher');
+    memwatcher = await import('node-memwatcher');
   } catch (err) {
     if (err.code === 'MODULE_NOT_FOUND') {
       console.warn('For memory monitoring, "node-memwatcher" is required.');
@@ -16,7 +17,7 @@ function memwatch() {
   }
 
   try {
-    memwatch = require('@airbnb/node-memwatch');
+    memwatch = await import('@airbnb/node-memwatch');
   } catch (err) {
     if (err.code === 'MODULE_NOT_FOUND') {
       console.warn(
@@ -63,5 +64,3 @@ function memwatch() {
     },
   };
 }
-
-module.exports = memwatch;

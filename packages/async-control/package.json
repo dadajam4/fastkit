@@ -13,10 +13,11 @@
       "ja": "非同期処理を効率的にコントロールするためのへルパ実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/async-control.mjs",
+  "main": "./dist/async-control.mjs",
+  "exports": {
+    ".": "./dist/async-control.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/async-control.d.ts",

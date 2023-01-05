@@ -13,10 +13,11 @@
       "ja": "Vueアプリケーションを効率的に開発するためのユーティリティー。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-utils.mjs",
+  "main": "./dist/vue-utils.mjs",
+  "exports": {
+    ".": "./dist/vue-utils.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-utils.d.ts",

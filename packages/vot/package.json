@@ -14,15 +14,18 @@
       "ja": "Vueアプリケーションを構築するためのオーケストレーションツール。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vot.mjs",
+  "main": "./dist/vot.mjs",
+  "exports": {
+    "./tool": "./dist/tool/index.mjs",
+    "./bin/*": "./bin/*.mjs",
+    ".": "./dist/vot.mjs"
+  },
   "files": [
-    "index.js",
     "bin",
     "dist"
   ],
   "bin": {
-    "vot": "bin/vot.js"
+    "vot": "./bin/vot.mjs"
   },
   "types": "dist/vot.d.ts",
   "repository": {

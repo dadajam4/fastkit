@@ -2,7 +2,6 @@
   "name": "@fastkit/keyboard",
   "version": "0.10.0",
   "description": "Observer implementation to handle keyboard input to Type safe.",
-  "main": "index.js",
   "_docs": {
     "scope": "",
     "feature": "ui",
@@ -11,9 +10,11 @@
       "ja": "キーボード入力をTypeセーフにハンドルするオブザーバ実装。"
     }
   },
-  "module": "dist/keyboard.mjs",
+  "main": "./dist/keyboard.mjs",
+  "exports": {
+    ".": "./dist/keyboard.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/keyboard.d.ts",

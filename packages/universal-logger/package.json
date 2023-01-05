@@ -10,10 +10,11 @@
       "ja": "サーバ／ブラウザの実行環境を問わないプラグイン可能でユニバーサルなログ出力用ライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/universal-logger.mjs",
+  "main": "./dist/universal-logger.mjs",
+  "exports": {
+    ".": "./dist/universal-logger.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/universal-logger.d.ts",

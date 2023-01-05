@@ -2,22 +2,8 @@
   "name": "fastkit",
   "version": "0.10.0",
   "description": "Toolkit to support rapid scratch development of applications.",
-  "main": "index.js",
-  "module": "dist/fastkit.mjs",
-  "files": [
-    "index.js",
-    "dist"
-  ],
-  "types": "dist/fastkit.d.ts",
-  "unpkg": "dist/fastkit.global.js",
-  "jsdelivr": "dist/fastkit.global.js",
   "buildOptions": {
-    "name": "Fastkit",
-    "formats": [
-      "esm-bundler",
-      "cjs",
-      "global"
-    ]
+    "name": "Fastkit"
   },
   "_docs": {
     "scope": "",
@@ -27,6 +13,14 @@
       "ja": "アプリケーションの迅速なスクラッチ開発を支えるツールキット。"
     }
   },
+  "main": "./dist/fastkit.mjs",
+  "exports": {
+    ".": "./dist/fastkit.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "dist/fastkit.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"

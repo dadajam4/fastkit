@@ -3,10 +3,7 @@
   "version": "0.10.0",
   "description": "A tool to generate icon web fonts and their definitions Type-safe for your application.",
   "buildOptions": {
-    "name": "IconFont",
-    "formats": [
-      "cjs"
-    ]
+    "name": "IconFont"
   },
   "_docs": {
     "scope": "",
@@ -16,13 +13,14 @@
       "ja": "アプリケーションのためにアイコンWebフォントとその定義をTypeセーフに生成するツール。"
     }
   },
-  "main": "index.js",
   "bin": {
-    "icon-font": "lib/cli.js"
+    "icon-font": "lib/cli.mjs"
   },
-  "module": "dist/icon-font-gen.mjs",
+  "main": "./dist/icon-font-gen.mjs",
+  "exports": {
+    ".": "./dist/icon-font-gen.mjs"
+  },
   "files": [
-    "index.js",
     "lib",
     "dist"
   ],

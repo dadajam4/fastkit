@@ -13,7 +13,10 @@
       "ja": "fastkitが推奨するstylelintの設定。"
     }
   },
-  "main": "index.js",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js"
+  },
   "files": [
     "index.js"
   ],

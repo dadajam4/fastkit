@@ -13,10 +13,11 @@
       "ja": "Accept-Languageヘッダを解析し、品質順にソートする小さなパーサ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/accept-language.mjs",
+  "main": "./dist/accept-language.mjs",
+  "exports": {
+    ".": "./dist/accept-language.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/accept-language.d.ts",

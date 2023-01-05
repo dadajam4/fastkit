@@ -4,7 +4,7 @@ module.exports = {
   extends: [path.resolve(__dirname, 'packages/eslint-config')],
   overrides: [
     {
-      files: ['*.ts', '*.tsx', '*.js', '*.jsx', '*.vue'],
+      files: ['*.ts', '*.tsx', '*.js', '*.jsx', '*.mjs', '*.cjs', '*.vue'],
       extends: ['plugin:vue/vue3-recommended'],
       parser: 'vue-eslint-parser',
       rules: {

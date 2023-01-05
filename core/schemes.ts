@@ -7,7 +7,8 @@ import { Options as AutoprefixerOptions } from 'autoprefixer';
  * - `"cjs"` CommonJS
  * - `"global"` Global build For CDN Install
  */
-export type BuildType = 'esm-bundler' /* | 'esm-browser'*/ | 'cjs' | 'global';
+// export type BuildType = 'esm-bundler' /* | 'esm-browser'*/ | 'cjs'; // | 'global';
+export type BuildType = 'esm-bundler'; // /* | 'esm-browser'*/ | 'cjs'; // | 'global';
 // | 'esm-bundler-runtime'
 // | 'esm-browser-runtime'
 // | 'global-runtime'
@@ -38,9 +39,6 @@ export interface BuildOptions {
 
   /** Global object name of bundle for CDN installation */
   name?: string;
-
-  /** @FIXME これ何だったっけ、、？？？ */
-  enableNonBrowserBranches?: boolean;
 
   /** Build settings to be passed to the css raw loader process */
   rawStyles?: {

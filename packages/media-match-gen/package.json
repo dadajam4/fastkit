@@ -3,10 +3,7 @@
   "version": "0.10.0",
   "description": "A tool to generate Type-safe media query breakpoint schemas.",
   "buildOptions": {
-    "name": "MediaMatchGen",
-    "formats": [
-      "cjs"
-    ]
+    "name": "MediaMatchGen"
   },
   "_docs": {
     "scope": "",
@@ -16,10 +13,11 @@
       "ja": "Typeセーフなメディアクエリブレイクポイントスキーマを生成するツール。"
     }
   },
-  "main": "index.js",
-  "module": "dist/media-match-gen.mjs",
+  "main": "./dist/media-match-gen.mjs",
+  "exports": {
+    ".": "./dist/media-match-gen.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/media-match-gen.d.ts",

@@ -11,6 +11,9 @@ import {
 import chalk from 'chalk';
 import { getPluginOptions, getEntryPoint } from '../utils';
 import type { WrittenResponse, SsrOptions } from '../../vot';
+import module from 'node:module';
+
+const require = module.createRequire(import.meta.url);
 
 // This cannot be imported from utils due to ESM <> CJS issues
 const isRedirect = ({ status = 0 } = {}) => status >= 300 && status < 400;
@@ -190,7 +193,7 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
           const server = await target.listen(port);
 
           if (!isMiddlewareMode) {
-            printServerInfo(server);
+            await printServerInfo(server);
           }
 
           return server;
@@ -202,14 +205,15 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
   });
 }
 
-export function printServerInfo(server: ViteDevServer) {
+export async function printServerInfo(server: ViteDevServer) {
   const info = server.config.logger.info;
 
   let ssrReadyMessage = '\n -- SSR mode';
 
   if (Object.prototype.hasOwnProperty.call(server, 'printUrls')) {
+    const vitePkg = require('vite/package.json');
     info(
-      chalk.cyan(`\n  vite v${require('vite/package.json').version}`) +
+      chalk.cyan(`\n  vite v${vitePkg.version}`) +
         chalk.green(` dev server running at:\n`),
       { clear: !server.config.logger.hasWarned },
     );

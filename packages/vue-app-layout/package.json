@@ -10,10 +10,11 @@
       "ja": "Vueアプリケーションの全体レイアウトを制御するためのコンポーネント実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-app-layout.mjs",
+  "main": "./dist/vue-app-layout.mjs",
+  "exports": {
+    ".": "./dist/vue-app-layout.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-app-layout.d.ts",

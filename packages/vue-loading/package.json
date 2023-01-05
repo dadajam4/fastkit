@@ -13,10 +13,11 @@
       "ja": "Vueアプリケーションのためのローディングコンポーネント。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-loading.mjs",
+  "main": "./dist/vue-loading.mjs",
+  "exports": {
+    ".": "./dist/vue-loading.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-loading.d.ts",

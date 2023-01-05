@@ -13,10 +13,11 @@
       "ja": "プリミティブな値やオブジェクトを処理するための小さなヘルパー実装のコレクションです。"
     }
   },
-  "main": "index.js",
-  "module": "dist/helpers.mjs",
+  "main": "./dist/helpers.mjs",
+  "exports": {
+    ".": "./dist/helpers.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/helpers.d.ts",

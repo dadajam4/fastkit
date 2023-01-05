@@ -13,10 +13,11 @@
       "ja": "VueアプリケーションでTypeセーフなメディアクエリブレイクポイントスキーマを扱うためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-media-match.mjs",
+  "main": "./dist/vue-media-match.mjs",
+  "exports": {
+    ".": "./dist/vue-media-match.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-media-match.d.ts",

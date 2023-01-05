@@ -3,10 +3,7 @@
   "version": "0.10.0",
   "description": "A small bundled tool for developing Node.js server and tool implementations.",
   "buildOptions": {
-    "name": "Nodepack",
-    "formats": [
-      "cjs"
-    ]
+    "name": "Nodepack"
   },
   "_docs": {
     "scope": "node",
@@ -16,10 +13,11 @@
       "ja": "Node.jsのサーバやツール実装を開発するための小さなバンドルツール。"
     }
   },
-  "main": "index.js",
-  "module": "dist/nodepack.mjs",
+  "main": "./dist/nodepack.mjs",
+  "exports": {
+    ".": "./dist/nodepack.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/nodepack.d.ts",

@@ -13,10 +13,11 @@
       "ja": "サーバー／ブラウザーの実行環境に依存せず、アプリケーションを多言語にローカライズするためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/i18n.mjs",
+  "main": "./dist/i18n.mjs",
+  "exports": {
+    ".": "./dist/i18n.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/i18n.d.ts",

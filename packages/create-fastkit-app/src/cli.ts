@@ -2,8 +2,6 @@ import { cac } from 'cac';
 import { prompt } from './prompt';
 import { scaffold } from './scaffold';
 
-const { version } = require('../package.json');
-
 export function cli() {
   const cli = cac('create-fastkit-app');
 
@@ -18,7 +16,7 @@ export function cli() {
 
   cli.help();
 
-  cli.version(version);
+  cli.version(__VERSION__);
 
   cli.parse();
 }

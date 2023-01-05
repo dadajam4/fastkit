@@ -2,7 +2,8 @@
 
 export async function cli() {
   if (!(globalThis as any).__ssr_start_time) {
-    const { performance } = require('perf_hooks');
+    const { performance } = await import('perf_hooks');
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     globalThis.__ssr_start_time = performance.now();
@@ -24,10 +25,6 @@ export async function cli() {
   const [command] = args;
 
   if (command === 'build') {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    // const { build } = require('./build');
-
     const { build } = await import('./build');
 
     (async () => {

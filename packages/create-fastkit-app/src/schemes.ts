@@ -1,4 +1,7 @@
 import path from 'path';
+import { fileURLToPath } from 'node:url';
+
+const _dirname = path.dirname(fileURLToPath(new URL('.', import.meta.url)));
 
 export const PACKAGE_TYPES = ['frontend', 'backend', 'other'] as const;
 
@@ -64,7 +67,7 @@ export interface FastkitAppConfig {
 
 export const DEPENDENCIE_VERSION_MAP: {
   [pkg: string]: string;
-} = require(path.resolve(__dirname, '../templates/dependencies.json'));
+} = require(path.resolve(_dirname, '../templates/dependencies.json'));
 
 export const DEFAULT_DEPENDENCIES: string[] = [
   'yorkie',

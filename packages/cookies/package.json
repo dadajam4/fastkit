@@ -13,10 +13,11 @@
       "ja": "サーバ/ブラウザでユニバーサルにクッキーヘッダを制御するためのヘルパ実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/cookies.mjs",
+  "main": "./dist/cookies.mjs",
+  "exports": {
+    ".": "./dist/cookies.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/cookies.d.ts",

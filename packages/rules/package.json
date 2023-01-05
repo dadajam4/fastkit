@@ -10,10 +10,11 @@
       "ja": "サーバ／ブラウザで動作するユニバーサルなバリデーションライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/rules.mjs",
+  "main": "./dist/rules.mjs",
+  "exports": {
+    ".": "./dist/rules.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/rules.d.ts",

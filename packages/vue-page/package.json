@@ -10,10 +10,11 @@
       "ja": "Vueアプリケーションのルーティングをより便利にコントロールするためのミドルウェア。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-page.mjs",
+  "main": "./dist/vue-page.mjs",
+  "exports": {
+    ".": "./dist/vue-page.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-page.d.ts",

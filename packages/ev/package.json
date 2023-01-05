@@ -13,10 +13,11 @@
       "ja": "シンプルでtypeセーフなEvent emitter & observerをあなたのお気に入りの実装にプラグインするヘルパ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/ev.mjs",
+  "main": "./dist/ev.mjs",
+  "exports": {
+    ".": "./dist/ev.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/ev.d.ts",

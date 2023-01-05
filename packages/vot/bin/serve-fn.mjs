@@ -1,13 +1,16 @@
-const path = require('path');
-const express = require('express');
-const vite = require('vite');
-const { proxyMiddleware } = require('../dist/tool');
+import path from 'path';
+import express from 'express';
+import { loadConfigFromFile } from 'vite';
+import { proxyMiddleware } from '../dist/tool/index.mjs';
+import module from 'node:module';
+const require = module.createRequire(import.meta.url);
 
-module.exports = async function serve(opts = {}) {
+export async function serve(opts = {}) {
   let memwatch;
 
   if (opts.memwatch) {
-    memwatch = require('./memwatch')();
+    const { createMemwatch } = await import('./memwatch.mjs');
+    memwatch = await createMemwatch();
 
     memwatch.memwatcher.start({
       graph: true,
@@ -23,7 +26,7 @@ module.exports = async function serve(opts = {}) {
     });
   }
 
-  const { path: configPath, config } = await vite.loadConfigFromFile({
+  const { path: configPath, config } = await loadConfigFromFile({
     command: 'serve',
   });
 
@@ -127,4 +130,6 @@ module.exports = async function serve(opts = {}) {
       }
     }
   }
-};
+}
+
+export default serve;

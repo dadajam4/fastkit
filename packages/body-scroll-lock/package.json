@@ -2,10 +2,11 @@
   "name": "@fastkit/body-scroll-lock",
   "version": "0.10.0",
   "description": "@fastkit/body-scroll-lock",
-  "main": "index.js",
-  "module": "dist/body-scroll-lock.mjs",
+  "main": "./dist/body-scroll-lock.mjs",
+  "exports": {
+    ".": "./dist/body-scroll-lock.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/body-scroll-lock.d.ts",

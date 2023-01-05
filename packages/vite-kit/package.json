@@ -10,10 +10,11 @@
       "ja": "viteアプリケーションセットアップ用のツールキット集。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vite-kit.mjs",
+  "main": "./dist/vite-kit.mjs",
+  "exports": {
+    ".": "./dist/vite-kit.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vite-kit.d.ts",

@@ -13,10 +13,11 @@
       "ja": "DOM要素のスクロール状態をコントロールするためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/scroller.mjs",
+  "main": "./dist/scroller.mjs",
+  "exports": {
+    ".": "./dist/scroller.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/scroller.d.ts",

@@ -13,10 +13,11 @@
       "ja": "アプリケーションログをほんの少し綺麗に表示するための小さなロガー。"
     }
   },
-  "main": "index.js",
-  "module": "dist/tiny-logger.mjs",
+  "main": "./dist/tiny-logger.mjs",
+  "exports": {
+    ".": "./dist/tiny-logger.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/tiny-logger.d.ts",

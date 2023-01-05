@@ -13,10 +13,11 @@
       "ja": "「色」に関連するスキーマを制御するための実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/color-scheme.mjs",
+  "main": "./dist/color-scheme.mjs",
+  "exports": {
+    ".": "./dist/color-scheme.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/color-scheme.d.ts",

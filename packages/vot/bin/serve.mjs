@@ -1,4 +1,5 @@
-const serve = require('./serve-fn');
+import { serve } from './serve-fn.mjs';
+
 const [, , ...args] = process.argv;
 
 serve({

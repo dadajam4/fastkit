@@ -10,10 +10,11 @@
       "ja": "Vueアプリケーションのためのフォームの基礎実装ライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-form-control.mjs",
+  "main": "./dist/vue-form-control.mjs",
+  "exports": {
+    ".": "./dist/vue-form-control.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-form-control.d.ts",

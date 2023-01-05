@@ -14,10 +14,12 @@
       "ja": "Vueアプリケーション用のシンプルで拡張可能なUIキット。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vui.mjs",
+  "main": "./dist/vui.mjs",
+  "exports": {
+    "./tool": "./dist/tool/index.mjs",
+    ".": "./dist/vui.mjs"
+  },
   "files": [
-    "index.js",
     "dist",
     "src"
   ],

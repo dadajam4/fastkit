@@ -3,10 +3,7 @@
   "version": "0.10.0",
   "description": "Utilities for Node.js server and tool implementation.",
   "buildOptions": {
-    "name": "NodeUtil",
-    "formats": [
-      "cjs"
-    ]
+    "name": "NodeUtil"
   },
   "_docs": {
     "scope": "node",
@@ -16,10 +13,11 @@
       "ja": "Node.jsのサーバやツール実装のためのユーティリティー。"
     }
   },
-  "main": "index.js",
-  "module": "dist/node-util.mjs",
+  "main": "./dist/node-util.mjs",
+  "exports": {
+    ".": "./dist/node-util.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/node-util.d.ts",

@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
+import { fileURLToPath } from 'node:url';
 
 export async function resolveEntryPoint(
   rawEntryPoint: string,
@@ -48,4 +49,8 @@ export function pathExistsSync(filepath: string, type?: 'file' | 'dir') {
     if (err.code === 'ENOENT') return false;
     throw err;
   }
+}
+
+export function getDirname(fileOrDirectory: string) {
+  return path.dirname(fileURLToPath(fileOrDirectory));
 }

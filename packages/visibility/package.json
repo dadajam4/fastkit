@@ -13,10 +13,11 @@
       "ja": "ブラウザウィンドウの可視状態をウォッチするライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/visibility.mjs",
+  "main": "./dist/visibility.mjs",
+  "exports": {
+    ".": "./dist/visibility.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/visibility.d.ts",

@@ -13,10 +13,11 @@
       "ja": "あなたのアプリケーションで例外をTypeセーフに取り扱うためのカスタムクラス。"
     }
   },
-  "main": "index.js",
-  "module": "dist/catcher.mjs",
+  "main": "./dist/catcher.mjs",
+  "exports": {
+    ".": "./dist/catcher.mjs"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/catcher.d.ts",
