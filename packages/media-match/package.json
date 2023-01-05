@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Schema for Type-safe handling of media query breakpoints.",
   "buildOptions": {
     "name": "MediaMatch"

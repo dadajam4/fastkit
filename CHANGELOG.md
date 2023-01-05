@@ -1,3 +1,12 @@
+## [0.10.1](https://github.com/dadajam4/fastkit/compare/v0.10.0...v0.10.1) (2023-01-05)
+
+
+### Bug Fixes
+
+* **vot:** Consider the server startup port ([47f72a5](https://github.com/dadajam4/fastkit/commit/47f72a579c649f0fa3ba96148f51f4eeed8f61d0))
+
+
+
 # [0.10.0](https://github.com/dadajam4/fastkit/compare/v0.9.0...v0.10.0) (2023-01-04)
 
 
