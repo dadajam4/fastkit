@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "A simple, extensible UI kit for Vue applications.",
   "buildOptions": {
     "name": "Vui",
@@ -46,11 +46,11 @@
     "vue": "^3.2.45"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "0.10.2",
-    "@fastkit/icon-font": "0.10.2",
-    "@fastkit/tiny-logger": "0.10.2",
-    "@fastkit/vite-kit": "0.10.2",
-    "@fastkit/vue-kit": "0.10.2",
+    "@fastkit/color-scheme": "0.10.3",
+    "@fastkit/icon-font": "0.10.3",
+    "@fastkit/tiny-logger": "0.10.3",
+    "@fastkit/vite-kit": "0.10.3",
+    "@fastkit/vue-kit": "0.10.3",
     "@tiptap/extension-link": "^2.0.0-beta.209",
     "@tiptap/extension-text-style": "^2.0.0-beta.209",
     "@tiptap/extension-underline": "^2.0.0-beta.209",

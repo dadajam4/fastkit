@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-i18n",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "@fastkit/vue-i18n",
   "_docs": {
     "scope": "vue",
@@ -43,6 +43,6 @@
     "vue-router": "^4.1.6"
   },
   "dependencies": {
-    "@fastkit/i18n": "0.10.2"
+    "@fastkit/i18n": "0.10.3"
   }
 }

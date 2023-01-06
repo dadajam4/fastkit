@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/keyboard",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Observer implementation to handle keyboard input to Type safe.",
   "_docs": {
     "scope": "",
