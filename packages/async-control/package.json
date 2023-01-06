@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/async-control",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "A helper implementation that efficiently controls asynchronous processing.",
   "buildOptions": {
     "name": "AsyncControl"
@@ -36,8 +36,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/async-control#readme",
   "dependencies": {
-    "@fastkit/cache-control": "0.10.1",
-    "@fastkit/duration": "0.10.1",
-    "@fastkit/helpers": "0.10.1"
+    "@fastkit/cache-control": "0.10.2",
+    "@fastkit/duration": "0.10.2",
+    "@fastkit/helpers": "0.10.2"
   }
 }

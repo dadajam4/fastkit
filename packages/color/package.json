@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Value object implementation for controlling \"color\".",
   "buildOptions": {
     "name": "Color"
@@ -36,6 +36,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/color#readme",
   "dependencies": {
-    "@fastkit/tiny-logger": "0.10.1"
+    "@fastkit/tiny-logger": "0.10.2"
   }
 }

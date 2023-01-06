@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match-gen",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "A tool to generate Type-safe media query breakpoint schemas.",
   "buildOptions": {
     "name": "MediaMatchGen"
@@ -37,10 +37,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/media-match-gen#readme",
   "dependencies": {
-    "@fastkit/ev": "0.10.1",
-    "@fastkit/media-match": "0.10.1",
-    "@fastkit/node-util": "0.10.1",
-    "@fastkit/tiny-logger": "0.10.1",
+    "@fastkit/ev": "0.10.2",
+    "@fastkit/media-match": "0.10.2",
+    "@fastkit/node-util": "0.10.2",
+    "@fastkit/tiny-logger": "0.10.2",
     "fs-extra": "^11.1.0"
   }
 }
