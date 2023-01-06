@@ -16,7 +16,7 @@
   },
   "main": "./dist/vot.mjs",
   "exports": {
-    "./tool": "./dist/tool/index.mjs",
+    "./dist/tool": "./dist/tool/index.mjs",
     "./bin/*": "./bin/*.mjs",
     ".": "./dist/vot.mjs"
   },

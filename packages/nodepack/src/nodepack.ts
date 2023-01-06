@@ -5,6 +5,7 @@ import nodemon from 'nodemon';
 import { logger } from './logger';
 import { nodeExternalPlugin } from './esbuild-plugin';
 import { NodepackOptions } from './schemes';
+import { inferPackageFormat } from '@fastkit/node-util';
 
 function log(type: 'warn' | 'error', messages: Message[]) {
   messages.forEach(({ text, detail, location }) => {
@@ -39,8 +40,18 @@ export async function nodepack(opts: NodepackOptions) {
   if (!path.isAbsolute(dest)) {
     dest = path.resolve(dest);
   }
-  if (!dest.endsWith('.js')) {
-    dest = path.join(dest, `${entryName}.js`);
+
+  let destDir: string;
+  let format: 'esm' | 'cjs';
+
+  if (/\.(c|m)?js/.test(dest)) {
+    destDir = path.dirname(dest);
+    format = inferPackageFormat(destDir, dest);
+  } else {
+    destDir = dest;
+    format = inferPackageFormat(destDir);
+    const ext = format === 'esm' ? 'mjs' : 'cjs';
+    dest = path.join(destDir, `${entryName}.${ext}`);
   }
 
   let demon: typeof nodemon | undefined;
@@ -62,9 +73,13 @@ export async function nodepack(opts: NodepackOptions) {
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
       ...define,
     },
-    target,
-    platform: 'node',
-    format: 'cjs',
+    target: target || format === 'esm' ? 'esnext' : undefined,
+    ...(format === 'cjs'
+      ? {
+          platform: 'node',
+        }
+      : undefined),
+    format,
     entryPoints: [entry],
     outfile: dest,
     color: true,

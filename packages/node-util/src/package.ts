@@ -20,15 +20,32 @@ export function isAvailableModuleDirSync(dir: string) {
   return files.filter((file) => !file.startsWith('.')).length > 0;
 }
 
-export async function findPackageDir(
+/**
+ * Mock interface of package.json
+ */
+export interface PackageMetadata {
+  [key: string]: unknown;
+}
+
+export interface FindPackageResult {
+  data: PackageMetadata;
+  dir: string;
+}
+
+export async function findPackage(
   from: string = process.cwd(),
   requireModuleDirectory = false,
-): Promise<string | undefined> {
+): Promise<FindPackageResult | undefined> {
   if (DEV_RE.test(from)) {
-    return path.join(from, '../..');
+    from = path.join(from, '../..');
+    const pkg = require(path.join(from, 'package.json'));
+    return {
+      data: pkg,
+      dir: from,
+    };
   }
 
-  let result: string | undefined;
+  let result: FindPackageResult | undefined;
 
   if (await pathExists(from, 'file')) {
     from = path.dirname(from);
@@ -43,7 +60,68 @@ export async function findPackageDir(
           !requireModuleDirectory ||
           (await isAvailableModuleDir(path.join(from, 'node_modules')))
         ) {
-          result = from;
+          result = {
+            data: pkg,
+            dir: from,
+          };
+          break;
+        }
+      }
+    } catch (err: any) {
+      if (!err.message.startsWith('Cannot find module')) {
+        throw err;
+      }
+    }
+    const next = path.dirname(from);
+    if (next === from) {
+      break;
+    }
+    from = next;
+  }
+  return result;
+}
+
+export function findPackageDir(
+  from?: string,
+  requireModuleDirectory?: boolean,
+): Promise<string | undefined> {
+  return findPackage(from, requireModuleDirectory).then(
+    (result) => result?.dir,
+  );
+}
+
+export function findPackageSync(
+  from: string = process.cwd(),
+  requireModuleDirectory = false,
+): FindPackageResult | undefined {
+  if (DEV_RE.test(from)) {
+    from = path.join(from, '../..');
+    const pkg = require(path.join(from, 'package.json'));
+    return {
+      data: pkg,
+      dir: from,
+    };
+  }
+
+  let result: FindPackageResult | undefined;
+
+  if (pathExistsSync(from, 'file')) {
+    from = path.dirname(from);
+  }
+
+  while (true) {
+    const target = path.join(from, 'package.json');
+    try {
+      const pkg = require(target);
+      if (pkg) {
+        if (
+          !requireModuleDirectory ||
+          isAvailableModuleDirSync(path.join(from, 'node_modules'))
+        ) {
+          result = {
+            data: pkg,
+            dir: from,
+          };
           break;
         }
       }
@@ -62,44 +140,10 @@ export async function findPackageDir(
 }
 
 export function findPackageDirSync(
-  from: string = process.cwd(),
-  requireModuleDirectory = false,
+  from?: string,
+  requireModuleDirectory?: boolean,
 ): string | undefined {
-  if (DEV_RE.test(from)) {
-    return path.join(from, '../..');
-  }
-
-  let result: string | undefined;
-
-  if (pathExistsSync(from, 'file')) {
-    from = path.dirname(from);
-  }
-
-  while (true) {
-    const target = path.join(from, 'package.json');
-    try {
-      const pkg = require(target);
-      if (pkg) {
-        if (
-          !requireModuleDirectory ||
-          isAvailableModuleDirSync(path.join(from, 'node_modules'))
-        ) {
-          result = from;
-          break;
-        }
-      }
-    } catch (err: any) {
-      if (!err.message.startsWith('Cannot find module')) {
-        throw err;
-      }
-    }
-    const next = path.dirname(from);
-    if (next === from) {
-      break;
-    }
-    from = next;
-  }
-  return result;
+  return findPackageSync(from, requireModuleDirectory)?.dir;
 }
 
 export type PackageManagerName = 'npm' | 'yarn' | 'pnpm';
@@ -214,4 +258,20 @@ export async function installPackage(
     throw new NodeUtilError(res.stderr);
   }
   return installedDir;
+}
+
+export function inferPackageFormat(
+  cwd: string,
+  filename?: string,
+): 'esm' | 'cjs' {
+  if (filename) {
+    if (filename.endsWith('.mjs')) {
+      return 'esm';
+    }
+    if (filename.endsWith('.cjs')) {
+      return 'cjs';
+    }
+  }
+  const pkg = findPackageSync(cwd);
+  return pkg?.data.type === 'module' ? 'esm' : 'cjs';
 }

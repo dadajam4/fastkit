@@ -2,7 +2,7 @@ module.exports = {
   extends: ['@fastkit/eslint-config'],
   overrides: [
     {
-      files: ['*.ts', '*.tsx', '*.js', '*.jsx', '*.mjs', '*.vue'],
+      files: ['*.ts', '*.tsx', '*.js', '*.jsx', '*.vue'],
       extends: ['plugin:vue/vue3-recommended'],
       parser: 'vue-eslint-parser',
       rules: {
