@@ -20,11 +20,11 @@ const TEMPLATE = `
 /* eslint-disable */
 // @ts-nocheck
 <% if (!it.__dev) { %>
-import '@fastkit/vue-stack/dist/vue-stack.css';
-import '@fastkit/vue-app-layout/dist/vue-app-layout.css';
-import '@fastkit/vue-loading/dist/vue-loading.css';
-import '@fastkit/vue-scroller/dist/vue-scroller.css';
-import '@fastkit/vui/dist/vui.css';
+import '@fastkit/vue-stack/vue-stack.css';
+import '@fastkit/vue-app-layout/vue-app-layout.css';
+import '@fastkit/vue-loading/vue-loading.css';
+import '@fastkit/vue-scroller/vue-scroller.css';
+import '@fastkit/vui/vui.css';
 <% } %>
 import './setup.scss';
 import type { App } from 'vue';

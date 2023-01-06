@@ -15,6 +15,7 @@
   },
   "main": "./dist/vue-loading.mjs",
   "exports": {
+    "./vue-loading.css": "./dist/vue-loading.css",
     ".": "./dist/vue-loading.mjs"
   },
   "files": [

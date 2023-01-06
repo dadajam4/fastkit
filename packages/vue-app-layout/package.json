@@ -12,6 +12,7 @@
   },
   "main": "./dist/vue-app-layout.mjs",
   "exports": {
+    "./vue-app-layout.css": "./dist/vue-app-layout.css",
     ".": "./dist/vue-app-layout.mjs"
   },
   "files": [

@@ -16,6 +16,7 @@
   },
   "main": "./dist/vui.mjs",
   "exports": {
+    "./vui.css": "./dist/vui.css",
     "./tool": "./dist/tool/index.mjs",
     ".": "./dist/vui.mjs"
   },
