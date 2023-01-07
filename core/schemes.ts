@@ -13,6 +13,8 @@ export type BuildType = 'esm-bundler'; // /* | 'esm-browser'*/ | 'cjs'; // | 'gl
 // | 'esm-browser-runtime'
 // | 'global-runtime'
 
+export type BuildHook = 'after';
+
 /**
  * Package Build Configuration
  */
@@ -47,6 +49,8 @@ export interface BuildOptions {
 
   /** Set to `true` if the package provides tools (cli) */
   tool?: boolean;
+
+  hooks?: Partial<Record<BuildHook, string[]>>;
 }
 
 /**

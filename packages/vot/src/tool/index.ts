@@ -68,7 +68,8 @@ export function votPlugin(options: VotPluginOptions = {}) {
               }
             : undefined,
         optimizeDeps: {
-          exclude: ['virtual:generated-pages', '@fastkit/vot'],
+          // exclude: ['virtual:generated-pages', '@fastkit/vot'],
+          exclude: ['virtual:generated-pages'],
         },
       };
     },

@@ -33,6 +33,7 @@ import {
   getPackage,
   getBuildQueues,
 } from './utils';
+import { BuildHook } from './schemes';
 
 export interface BuildArgs {
   targets: string[];
@@ -141,7 +142,21 @@ async function build(target: string) {
   const buildOptions = pkg.buildOptions || {};
 
   const env = buildOptions.env || (devOnly ? 'development' : 'production');
-  const { tool } = buildOptions;
+  const { tool, hooks = {} } = buildOptions;
+
+  const applyHookScript = async (scriptPath: string) => {
+    const fullPath = path.resolve(pkgDir, scriptPath);
+    const result = require(fullPath);
+    if (result.default) await result.default;
+  };
+
+  const applyHook = async (hook: BuildHook) => {
+    const scriptPaths = hooks[hook];
+    if (!scriptPaths) return;
+    for (const scriptPath of scriptPaths) {
+      await applyHookScript(scriptPath);
+    }
+  };
 
   await execa(
     'rollup',
@@ -280,6 +295,8 @@ async function build(target: string) {
       await fs.copy(assetsDir, path.join(pkgDir, 'dist/tool/assets'));
     }
   }
+
+  await applyHook('after');
 
   function processTypesByTargets(dts: string, targets: string[], pkg: string) {
     const importRe = new RegExp(`import {([^\\{\\}]+)} from '${pkg}'`);
