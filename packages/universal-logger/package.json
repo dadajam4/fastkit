@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/universal-logger",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Pluggable and universal log output library for any server/browser execution environment.",
   "_docs": {
     "scope": "",
@@ -34,6 +34,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/universal-logger#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.10.3"
+    "@fastkit/helpers": "0.10.4"
   }
 }

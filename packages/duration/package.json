@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/duration",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "@fastkit/duration",
   "buildOptions": {
     "name": "Value object implementation expressing \"duration\"."
