@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color-scheme-gen",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "description": "Generator for generating \"color\" schemas.",
   "buildOptions": {
     "name": "ColorSchemeGen"
@@ -37,11 +37,11 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/color-scheme-gen#readme",
   "dependencies": {
-    "@fastkit/color": "0.10.5",
-    "@fastkit/color-scheme": "0.10.5",
-    "@fastkit/ev": "0.10.5",
-    "@fastkit/node-util": "0.10.5",
-    "@fastkit/tiny-logger": "0.10.5",
+    "@fastkit/color": "0.10.6",
+    "@fastkit/color-scheme": "0.10.6",
+    "@fastkit/ev": "0.10.6",
+    "@fastkit/node-util": "0.10.6",
+    "@fastkit/tiny-logger": "0.10.6",
     "eta": "^1.12.3"
   }
 }

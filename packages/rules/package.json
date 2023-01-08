@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/rules",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "description": "Universal validation library that works in server/browser.",
   "_docs": {
     "scope": "",
@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/rules#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.10.5",
-    "@fastkit/tiny-logger": "0.10.5"
+    "@fastkit/helpers": "0.10.6",
+    "@fastkit/tiny-logger": "0.10.6"
   }
 }
