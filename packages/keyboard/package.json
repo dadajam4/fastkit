@@ -12,7 +12,8 @@
   },
   "main": "./dist/keyboard.mjs",
   "exports": {
-    ".": "./dist/keyboard.mjs"
+    ".": "./dist/keyboard.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

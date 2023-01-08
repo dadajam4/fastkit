@@ -15,7 +15,8 @@
   },
   "main": "./dist/vue-kit.mjs",
   "exports": {
-    ".": "./dist/vue-kit.mjs"
+    ".": "./dist/vue-kit.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

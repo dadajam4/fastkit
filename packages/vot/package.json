@@ -21,9 +21,18 @@
   },
   "main": "./dist/vot.mjs",
   "exports": {
-    "./dist/tool": "./dist/tool/index.mjs",
+    "./tool": {
+      "import": "./dist/tool/index.mjs",
+      "types": "./dist/tool/index.d.ts"
+    },
     "./bin/*": "./bin/*.mjs",
     ".": "./dist/vot.mjs"
+  },
+  "typesVersions": {
+    "*": {
+      ".": ["./dist/vot.d.ts"],
+      "tool": ["./dist/tool/index.d.ts"]
+    }
   },
   "files": [
     "bin",

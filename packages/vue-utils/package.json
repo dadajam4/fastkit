@@ -15,7 +15,8 @@
   },
   "main": "./dist/vue-utils.mjs",
   "exports": {
-    ".": "./dist/vue-utils.mjs"
+    ".": "./dist/vue-utils.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

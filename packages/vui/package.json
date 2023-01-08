@@ -17,8 +17,17 @@
   "main": "./dist/vui.mjs",
   "exports": {
     "./vui.css": "./dist/vui.css",
-    "./dist/tool": "./dist/tool/index.mjs",
+    "./tool": {
+      "import": "./dist/tool/index.mjs",
+      "types": "./dist/tool/index.d.ts"
+    },
     ".": "./dist/vui.mjs"
+  },
+  "typesVersions": {
+    "*": {
+      ".": ["./dist/vui.d.ts"],
+      "tool": ["./dist/tool/index.d.ts"]
+    }
   },
   "files": [
     "dist",

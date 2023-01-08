@@ -15,7 +15,8 @@
   },
   "main": "./dist/visibility.mjs",
   "exports": {
-    ".": "./dist/visibility.mjs"
+    ".": "./dist/visibility.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

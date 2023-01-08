@@ -16,7 +16,8 @@
   "main": "./dist/vue-stack.mjs",
   "exports": {
     "./vue-stack.css": "./dist/vue-stack.css",
-    ".": "./dist/vue-stack.mjs"
+    ".": "./dist/vue-stack.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

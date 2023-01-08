@@ -15,7 +15,8 @@
   },
   "main": "./index.js",
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./package.json": "./package.json"
   },
   "files": [
     "index.js"
@@ -36,7 +37,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/stylelint-config#readme",
   "peerDependencies": {
-    "stylelint": "^14.9.1"
+    "stylelint": "^14.16.1"
   },
   "dependencies": {
     "postcss-html": "^1.2.0",

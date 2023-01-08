@@ -16,7 +16,8 @@
   "main": "./dist/vue-scroller.mjs",
   "exports": {
     "./vue-scroller.css": "./dist/vue-scroller.css",
-    ".": "./dist/vue-scroller.mjs"
+    ".": "./dist/vue-scroller.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

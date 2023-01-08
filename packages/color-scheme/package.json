@@ -15,7 +15,8 @@
   },
   "main": "./dist/color-scheme.mjs",
   "exports": {
-    ".": "./dist/color-scheme.mjs"
+    ".": "./dist/color-scheme.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

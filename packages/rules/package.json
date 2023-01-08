@@ -12,7 +12,8 @@
   },
   "main": "./dist/rules.mjs",
   "exports": {
-    ".": "./dist/rules.mjs"
+    ".": "./dist/rules.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

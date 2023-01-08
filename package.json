@@ -139,7 +139,7 @@
     "sass": "^1.53.0",
     "set-cookie-parser": "^2.5.1",
     "spritesmith": "^3.4.0",
-    "stylelint": "^14.9.1",
+    "stylelint": "^14.16.1",
     "stylelint-config-css-modules": "^4.1.0",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-recess-order": "^3.0.0",

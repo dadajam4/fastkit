@@ -13,7 +13,8 @@
   "main": "./dist/vue-app-layout.mjs",
   "exports": {
     "./vue-app-layout.css": "./dist/vue-app-layout.css",
-    ".": "./dist/vue-app-layout.mjs"
+    ".": "./dist/vue-app-layout.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

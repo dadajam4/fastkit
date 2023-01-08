@@ -12,7 +12,8 @@
   },
   "main": "./dist/vue-i18n.mjs",
   "exports": {
-    ".": "./dist/vue-i18n.mjs"
+    ".": "./dist/vue-i18n.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

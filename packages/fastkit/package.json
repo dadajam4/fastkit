@@ -15,7 +15,8 @@
   },
   "main": "./dist/fastkit.mjs",
   "exports": {
-    ".": "./dist/fastkit.mjs"
+    ".": "./dist/fastkit.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

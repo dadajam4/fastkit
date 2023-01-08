@@ -12,7 +12,8 @@
   },
   "main": "./dist/vue-form-control.mjs",
   "exports": {
-    ".": "./dist/vue-form-control.mjs"
+    ".": "./dist/vue-form-control.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

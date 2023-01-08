@@ -15,7 +15,8 @@
   },
   "main": "./dist/media-match-gen.mjs",
   "exports": {
-    ".": "./dist/media-match-gen.mjs"
+    ".": "./dist/media-match-gen.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

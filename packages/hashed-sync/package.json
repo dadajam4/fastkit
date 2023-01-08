@@ -15,7 +15,8 @@
   },
   "main": "./dist/hashed-sync.mjs",
   "exports": {
-    ".": "./dist/hashed-sync.mjs"
+    ".": "./dist/hashed-sync.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

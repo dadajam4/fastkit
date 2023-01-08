@@ -12,7 +12,8 @@
   },
   "main": "./dist/vot-i18n.mjs",
   "exports": {
-    ".": "./dist/vot-i18n.mjs"
+    ".": "./dist/vot-i18n.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

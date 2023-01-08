@@ -15,7 +15,8 @@
   },
   "main": "./dist/vue-color-scheme.mjs",
   "exports": {
-    ".": "./dist/vue-color-scheme.mjs"
+    ".": "./dist/vue-color-scheme.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

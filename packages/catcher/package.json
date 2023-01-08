@@ -15,7 +15,8 @@
   },
   "main": "./dist/catcher.mjs",
   "exports": {
-    ".": "./dist/catcher.mjs"
+    ".": "./dist/catcher.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

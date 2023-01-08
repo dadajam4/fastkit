@@ -122,8 +122,8 @@
   }
 
   &__viewport {
-    container-type: inline-size;
-    container-name: v-app-layout;
+    // container-type: inline-size;
+    // container-name: v-app-layout;
     display: flex;
     flex: 1 1 100%;
     flex-direction: column;

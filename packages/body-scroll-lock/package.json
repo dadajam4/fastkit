@@ -4,7 +4,8 @@
   "description": "@fastkit/body-scroll-lock",
   "main": "./dist/body-scroll-lock.mjs",
   "exports": {
-    ".": "./dist/body-scroll-lock.mjs"
+    ".": "./dist/body-scroll-lock.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

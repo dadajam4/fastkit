@@ -12,7 +12,8 @@
   },
   "main": "./dist/universal-logger.mjs",
   "exports": {
-    ".": "./dist/universal-logger.mjs"
+    ".": "./dist/universal-logger.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

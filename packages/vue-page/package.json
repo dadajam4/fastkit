@@ -12,7 +12,8 @@
   },
   "main": "./dist/vue-page.mjs",
   "exports": {
-    ".": "./dist/vue-page.mjs"
+    ".": "./dist/vue-page.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

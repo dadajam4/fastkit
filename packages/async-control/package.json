@@ -15,7 +15,8 @@
   },
   "main": "./dist/async-control.mjs",
   "exports": {
-    ".": "./dist/async-control.mjs"
+    ".": "./dist/async-control.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

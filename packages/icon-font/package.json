@@ -12,7 +12,8 @@
   },
   "main": "./dist/icon-font.mjs",
   "exports": {
-    ".": "./dist/icon-font.mjs"
+    ".": "./dist/icon-font.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

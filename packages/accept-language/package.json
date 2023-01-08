@@ -15,7 +15,8 @@
   },
   "main": "./dist/accept-language.mjs",
   "exports": {
-    ".": "./dist/accept-language.mjs"
+    ".": "./dist/accept-language.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

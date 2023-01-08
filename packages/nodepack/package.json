@@ -15,7 +15,8 @@
   },
   "main": "./dist/nodepack.mjs",
   "exports": {
-    ".": "./dist/nodepack.mjs"
+    ".": "./dist/nodepack.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

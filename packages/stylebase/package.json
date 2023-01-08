@@ -13,6 +13,10 @@
       "ja": "fastkitが推奨するベースCSS実装のバリエーション。"
     }
   },
+  "exports": {
+    "./*.css": "./*.css",
+    "./package.json": "./package.json"
+  },
   "files": [
     "destyle.css",
     "normalize.css",

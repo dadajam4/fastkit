@@ -4,20 +4,17 @@
   // @FIXME
   // I really want to use css variables in the query so that the user can control the breakpoints.
 
-  /* stylelint-disable-next-line scss/at-rule-no-unknown */
-  @container v-app-layout (min-width: 600px) {
-    --v-app-container-padding: 32px;
-  }
+  // @container v-app-layout (min-width: 600px) {
+  //   --v-app-container-padding: 32px;
+  // }
 
-  /* stylelint-disable-next-line scss/at-rule-no-unknown */
-  @container v-app-layout (min-width: 900px) {
-    --v-app-container-padding: 32px;
-  }
+  // @container v-app-layout (min-width: 900px) {
+  //   --v-app-container-padding: 32px;
+  // }
 
-  /* stylelint-disable-next-line scss/at-rule-no-unknown */
-  @container v-app-layout (min-width: 1025px) {
-    --v-app-container-padding: 40px;
-  }
+  // @container v-app-layout (min-width: 1025px) {
+  //   --v-app-container-padding: 40px;
+  // }
 
   &--padded {
     padding-right: var(--v-app-container-padding);

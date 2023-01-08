@@ -15,7 +15,8 @@
   },
   "main": "./dist/i18n.mjs",
   "exports": {
-    ".": "./dist/i18n.mjs"
+    ".": "./dist/i18n.mjs",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
