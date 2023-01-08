@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "description": "Orchestration tools for building Vue applications.",
   "buildOptions": {
     "name": "Vot",
@@ -30,8 +30,12 @@
   },
   "typesVersions": {
     "*": {
-      ".": ["./dist/vot.d.ts"],
-      "tool": ["./dist/tool/index.d.ts"]
+      ".": [
+        "./dist/vot.d.ts"
+      ],
+      "tool": [
+        "./dist/tool/index.d.ts"
+      ]
     }
   },
   "files": [
@@ -57,8 +61,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vot#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.10.4",
-    "@fastkit/vue-page": "0.10.4",
+    "@fastkit/helpers": "0.10.5",
+    "@fastkit/vue-page": "0.10.5",
     "@rollup/plugin-replace": "^5.0.0",
     "@types/http-proxy": "^1.17.7",
     "@types/node": "^18.11.18",
