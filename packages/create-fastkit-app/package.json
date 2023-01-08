@@ -37,7 +37,7 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/create-fastkit-app#readme",
   "dependencies": {
     "cac": "^6.7.11",
-    "chalk": "^4.1.0",
+    "chalk": "^5.2.0",
     "enquirer": "^2.3.6",
     "eta": "^1.12.3",
     "fs-extra": "^11.1.0"

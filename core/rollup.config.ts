@@ -1,6 +1,6 @@
 import { RollupOptions, OutputOptions, Plugin } from 'rollup';
 import { RollupReplaceOptions } from '@rollup/plugin-replace';
-import path from 'path';
+import path from 'node:path';
 import ts from 'rollup-plugin-typescript2';
 import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
@@ -9,6 +9,7 @@ import { BuildOptions, BuildType } from './schemes';
 import { rawStylesPlugin } from '../core/raw-styles';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import postcss from 'rollup-plugin-postcss';
+import chalk from 'chalk';
 
 const TARGET: string | undefined = process.env.TARGET;
 const COMMIT: string | undefined = process.env.COMMIT;
@@ -94,7 +95,7 @@ function createConfig(
 ): RollupOptions {
   const _plugins = [...plugins];
   if (!output) {
-    console.log(require('chalk').yellow(`invalid format: "${format}"`));
+    console.log(chalk.yellow(`invalid format: "${format}"`));
     process.exit(1);
   }
 
@@ -191,6 +192,7 @@ function createConfig(
     'imagemin',
     'webfont',
     'cac',
+    'chalk',
   );
 
   // const nodePlugins =

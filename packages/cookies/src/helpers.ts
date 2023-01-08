@@ -3,7 +3,7 @@ import type {
   IncomingMessage,
   IncomingHttpHeaders,
   ServerResponse,
-} from 'http';
+} from 'node:http';
 import type { Cookie } from 'set-cookie-parser';
 import { isObject } from '@fastkit/helpers';
 

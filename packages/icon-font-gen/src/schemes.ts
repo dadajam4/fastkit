@@ -1,5 +1,5 @@
 import type { OptionsBase } from 'webfont/dist/src/types/OptionsBase';
-import path from 'path';
+import path from 'node:path';
 import { installPackage } from '@fastkit/node-util';
 
 export type IconFontFormat = NonNullable<OptionsBase['formats']>[number];

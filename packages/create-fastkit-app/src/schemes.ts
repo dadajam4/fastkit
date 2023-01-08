@@ -1,11 +1,11 @@
-import path from 'path';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const _dirname = path.dirname(fileURLToPath(new URL('.', import.meta.url)));
 
 export const PACKAGE_TYPES = ['frontend', 'backend', 'other'] as const;
 
-export type PackageType = typeof PACKAGE_TYPES[number];
+export type PackageType = (typeof PACKAGE_TYPES)[number];
 
 export const BASE_STYLES = [
   {

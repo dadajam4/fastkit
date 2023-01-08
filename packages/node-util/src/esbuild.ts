@@ -1,6 +1,6 @@
 import esbuild, { Plugin } from 'esbuild';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
 import { resolveEntryPoint, pathExists } from './path';
 import { findPackageDir } from './package';
 import { NodeUtilError } from './logger';

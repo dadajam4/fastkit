@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild';
 import type { BuildOptions, Message } from 'esbuild';
-import path from 'path';
+import path from 'node:path';
 import nodemon from 'nodemon';
 import { logger } from './logger';
 import { nodeExternalPlugin } from './esbuild-plugin';

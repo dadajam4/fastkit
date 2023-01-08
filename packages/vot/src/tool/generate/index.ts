@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import fs from 'fs-extra';
 import {
   resolveViteConfig,
@@ -10,7 +10,7 @@ import {
   generateVotGeneratePagePaths,
   VOT_GENERATE_PAGES_PATH,
 } from '../../schemes/generate';
-import http, { Server } from 'http';
+import http, { Server } from 'node:http';
 import chalk from 'chalk';
 
 function isIncomingMessage(source: unknown): source is http.IncomingMessage {

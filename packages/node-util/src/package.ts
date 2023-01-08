@@ -1,7 +1,7 @@
-import path from 'path';
+import path from 'node:path';
 import fs from 'fs-extra';
 import { pathExists, pathExistsSync } from './path';
-import execa from 'execa';
+import { execa } from 'execa';
 import { NodeUtilError } from './logger';
 import module from 'node:module';
 const require = module.createRequire(import.meta.url);

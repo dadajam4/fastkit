@@ -28,7 +28,7 @@
     "test": "jest --runInBand",
     "release": "node -r esbuild-register core/release.ts",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "preinstall": "node ./core/checkYarn.js"
+    "preinstall": "node ./core/checkYarn.mjs"
   },
   "types": "test-dts/index.d.ts",
   "tsd": {
@@ -36,7 +36,7 @@
   },
   "gitHooks": {
     "pre-commit": "lint-staged --config .lintstagedrc.js",
-    "commit-msg": "node core/verifyCommit.js"
+    "commit-msg": "node core/verifyCommit.mjs"
   },
   "engines": {
     "node": ">=12.0.0"
@@ -56,7 +56,7 @@
   ],
   "devDependencies": {
     "@airbnb/node-memwatch": "^2.0.0",
-    "@datadog/browser-logs": "^4.28.1",
+    "@datadog/browser-logs": "^4.29.1",
     "@mdi/svg": "^7.1.96",
     "@microsoft/api-extractor": "^7.33.6",
     "@rollup/plugin-json": "^6.0.0",
@@ -90,6 +90,7 @@
     "bezier-easing": "^2.1.0",
     "brotli": "^1.3.3",
     "cac": "^6.7.11",
+    "chalk": "^5.2.0",
     "conventional-changelog-cli": "^2.1.1",
     "cookie": "^0.5.0",
     "enquirer": "^2.3.6",
@@ -107,7 +108,7 @@
     "folder-hash": "^4.0.1",
     "http-proxy": "^1.18.1",
     "imagemin": "^8.0.1",
-    "imagemin-mozjpeg": "^9.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
     "imagemin-pngquant": "^9.0.2",
     "imask": "^6.2.2",
     "jest": "^29.3.1",
@@ -118,7 +119,7 @@
     "npm-run-all": "^4.1.5",
     "postcss-html": "^1.2.0",
     "postcss-scss": "^4.0.2",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.2",
     "prismjs": "^1.29.0",
     "prosemirror-commands": "^1.5.0",
     "prosemirror-dropcursor": "^1.6.1",

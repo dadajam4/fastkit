@@ -6,7 +6,7 @@ import {
 } from '@fastkit/color-scheme';
 import { toScssValues } from './to-scss-values';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import { render } from 'eta';
 import {
   ESbuildRunner,
@@ -22,7 +22,7 @@ const TEMPLATES_DIR = path.resolve(_dirname, 'assets/templates');
 
 export const COLOR_SCHEME_LOADER_TYPES = ['info', 'json', 'scss'] as const;
 
-export type ColorSchemeLoaderType = typeof COLOR_SCHEME_LOADER_TYPES[number];
+export type ColorSchemeLoaderType = (typeof COLOR_SCHEME_LOADER_TYPES)[number];
 
 export type ColorSchemeLoaderResult = {
   entryPoint: string;

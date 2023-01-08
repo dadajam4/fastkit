@@ -2,7 +2,7 @@
 
 export async function cli() {
   if (!(globalThis as any).__ssr_start_time) {
-    const { performance } = await import('perf_hooks');
+    const { performance } = await import('node:perf_hooks');
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

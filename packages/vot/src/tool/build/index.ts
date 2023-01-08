@@ -5,9 +5,9 @@ import {
   mergeConfig,
 } from 'vite';
 import replace from '@rollup/plugin-replace';
-import { promises } from 'fs';
+import { promises } from 'node:fs';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import {
   getEntryPoint,
   getPluginOptions,

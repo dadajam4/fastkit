@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import chalk from 'chalk';
-import execa from 'execa';
+import { execaSync } from 'execa';
 import { FastkitPackage } from './schemes';
 
 class PathString extends String {
@@ -124,7 +124,7 @@ export const targets = fs.readdirSync(PACKAGES_DIR.path).filter((f) => {
 
 export function getCommit() {
   try {
-    return execa.sync('git', ['rev-parse', 'HEAD']).stdout.slice(0, 7);
+    return execaSync('git', ['rev-parse', 'HEAD']).stdout.slice(0, 7);
   } catch (err) {
     return '';
   }

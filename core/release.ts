@@ -1,14 +1,12 @@
 import minimist from 'minimist';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import chalk from 'chalk';
 import semver from 'semver';
 import { prompt } from 'enquirer';
-import execa from 'execa';
+import { execa, Options as ExecaOptions } from 'execa';
 import { ROOT_DIR, PACKAGES_DIR, getPackage } from './utils';
 import { FastkitPackage } from './schemes';
-
-type ExecaOptions<EncodingType = string> = execa.Options<EncodingType>;
 
 export interface ReleaseArgs {
   preid?: string;

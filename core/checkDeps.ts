@@ -1,9 +1,9 @@
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import minimist from 'minimist';
 import glob from 'glob';
 import { preProcessFile } from 'typescript';
-import { builtinModules } from 'module';
+import { builtinModules } from 'node:module';
 import {
   ROOT_DIR,
   PACKAGES_DIR,

@@ -1,6 +1,6 @@
 import { Plugin } from 'vite';
 import { dynamicSrcVitePlugin } from '@fastkit/vite-kit';
-import path from 'path';
+import path from 'node:path';
 import fs from 'fs-extra';
 import { findPackageDirSync, getDirname } from '@fastkit/node-util';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';

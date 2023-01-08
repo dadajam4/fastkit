@@ -2,7 +2,7 @@
 import 'jest';
 import { FileCacheStorage } from '../file';
 import { CacheDetails } from '../../schemes';
-import path from 'path';
+import path from 'node:path';
 import fs from 'fs-extra';
 
 function delay(ms: number) {

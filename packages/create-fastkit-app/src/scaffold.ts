@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import { FastkitAppConfig, FastkitAppPackageConfig } from './schemes';
 import { getFlatFiles, processTemplate } from './utils';
 import chalk from 'chalk';

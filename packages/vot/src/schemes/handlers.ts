@@ -1,6 +1,6 @@
 import type { Component } from 'vue';
 import type { CreateEntryOptions, Hook } from './options';
-// import type { ServerResponse } from 'http';
+// import type { ServerResponse } from 'node:http';
 // import type { IncomingMessage } from 'connect';
 import { Renderer } from './renderer';
 

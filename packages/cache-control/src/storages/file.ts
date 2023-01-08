@@ -5,8 +5,8 @@ import {
   GetCacheRequest,
 } from '../schemes';
 import { Duration } from '@fastkit/duration';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 /**
  * @see https://developer.mozilla.org/docs/Web/API/setTimeout#maximum_delay_value

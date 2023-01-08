@@ -1,5 +1,5 @@
 import { Plugin, TransformResult, ViteDevServer } from 'vite';
-import path from 'path';
+import path from 'node:path';
 import sass from 'sass';
 // import Fiber from 'fibers';
 import postcss from 'postcss';

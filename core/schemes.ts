@@ -103,6 +103,7 @@ export interface FastkitPackage {
   };
   keywords: string[];
   main?: string;
+  exports?: Record<string, any>;
   module?: string;
   files?: string[];
   devDependencies?: Record<string, string>;

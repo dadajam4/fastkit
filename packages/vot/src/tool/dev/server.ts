@@ -1,6 +1,6 @@
-import type { ServerResponse } from 'http';
-import { promises as fs } from 'fs';
-import path from 'path';
+import type { ServerResponse } from 'node:http';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import { performance } from 'perf_hooks';
 import { NextHandleFunction } from 'connect';
 import {

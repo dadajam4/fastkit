@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import chalk from 'chalk';
 import { prompt as _prompt } from 'enquirer';
 import { FastkitAppConfig, BASE_STYLES } from './schemes';
@@ -14,6 +14,7 @@ export interface PromptOptions {
 }
 
 export async function prompt(opts: PromptOptions = {}) {
+  const orangeColor = chalk.rgb(255, 165, 0);
   const cwd = process.cwd();
   let { dest: workspaceDir = '' } = opts;
   let workspaceName = '';
@@ -50,7 +51,7 @@ export async function prompt(opts: PromptOptions = {}) {
   const others = packageConfigs.filter((c) => c.type === 'other');
 
   function onCancel(): any {
-    console.log(chalk.keyword('orange')('canceled...'));
+    console.log(orangeColor('canceled...'));
     process.exit();
   }
 
@@ -269,9 +270,8 @@ export async function prompt(opts: PromptOptions = {}) {
     .join('\n');
 
   console.log(
-    chalk
-      .keyword('orange')(
-        `
+    orangeColor(
+      `
 ==================================================
 Workspace name: ${chalk.bold(appConfig.name)}
 Output: ${chalk.bold(appConfig.dest)}
@@ -280,8 +280,7 @@ Packages:
 ${packageDump}
 ==================================================
   `,
-      )
-      .trim(),
+    ).trim(),
   );
 
   await _prompt<any>({

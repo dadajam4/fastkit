@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import fs from 'fs-extra';
 import { compare, META_DIR_NAME, HISTORY_FILE_NAME } from './compare';
 import {

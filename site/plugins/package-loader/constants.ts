@@ -1,5 +1,5 @@
 import { ROOT_DIR } from '../../../core/utils';
-import path from 'path';
+import path from 'node:path';
 
 export const GET_PACKAGE_PREFIX = 'virtual:package:';
 

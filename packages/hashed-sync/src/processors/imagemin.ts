@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 // import _imagemin from 'imagemin';
 // import imageminWebp from 'imagemin-webp';
 // const imageminWebp = require('imagemin-webp');

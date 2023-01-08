@@ -1,6 +1,10 @@
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 
+/**
+ * @TODO
+ * Vite's loader for SSR references cjs
+ */
 async function main() {
   const dest = path.resolve(__dirname, '../dist/vot.mjs');
   const mjsCode = fs.readFileSync(dest, 'utf-8');

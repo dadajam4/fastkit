@@ -1,5 +1,5 @@
 import { cac } from 'cac';
-import path from 'path';
+import path from 'node:path';
 import {
   DEFAULT_DEST_DIRNAME,
   DEFAULT_CONFIG_FILENAME,

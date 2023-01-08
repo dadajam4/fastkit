@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import chokidar, { FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
 import {

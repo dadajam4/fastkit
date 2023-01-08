@@ -37,7 +37,7 @@ import { EV } from '@fastkit/ev';
 import { useVuePageControl } from '../injections';
 import { VuePageControlError } from './page-error';
 import { VErrorPage } from '../components/VErrorPage';
-import type { ServerResponse, IncomingMessage } from 'http';
+import type { ServerResponse, IncomingMessage } from 'node:http';
 import { StateInjectionKey } from './state';
 import { Cookies, CookiesContext } from '@fastkit/cookies';
 // import { JSONMapValue, JSONData } from '@fastkit/helpers';

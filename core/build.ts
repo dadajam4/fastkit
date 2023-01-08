@@ -15,13 +15,13 @@ yarn build helpers --formats cjs
 ```
 */
 
-import { cpus } from 'os';
+import { cpus } from 'node:os';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import chalk from 'chalk';
-import execa from 'execa';
+import { execa } from 'execa';
 import { compress } from 'brotli';
-import { gzipSync } from 'zlib';
+import { gzipSync } from 'node:zlib';
 import minimist from 'minimist';
 import {
   ROOT_DIR,

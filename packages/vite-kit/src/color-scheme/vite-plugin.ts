@@ -1,7 +1,7 @@
 import { Plugin } from 'vite';
 // import { LoadColorSchemeRunner } from './loader';
 import { LoadColorSchemeRunner } from '@fastkit/color-scheme-gen';
-import path from 'path';
+import path from 'node:path';
 import { findPackageDir } from '@fastkit/node-util';
 import { ViteColorSchemeError } from './logger';
 import { UnPromisify } from '@fastkit/helpers';
