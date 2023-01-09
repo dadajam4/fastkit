@@ -40,7 +40,7 @@
     "@fastkit/ev": "0.10.6",
     "@fastkit/tiny-logger": "0.10.6",
     "chokidar": "^3.5.0",
-    "esbuild": "^0.16.0",
+    "esbuild": "^0.16.16",
     "execa": "^6.1.0",
     "folder-hash": "^4.0.1",
     "fs-extra": "^11.1.0"

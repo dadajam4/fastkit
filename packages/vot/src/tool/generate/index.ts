@@ -138,6 +138,9 @@ export async function generate(_config?: ResolvedConfig) {
               'Content-Type': 'text/html',
             },
           });
+          if (typeof html !== 'string') {
+            throw { statusCode: html.status };
+          }
           await fs.ensureDir(outDir);
           await fs.writeFile(outPath, html);
           completed++;
