@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/eslint-config-vue",
-  "version": "0.10.6",
+  "version": "0.11.0",
   "description": "@fastkit/eslint-config-vue",
   "buildOptions": {
     "ignore": true
@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/eslint-config-vue#readme",
   "dependencies": {
-    "@fastkit/eslint-config": "0.10.6",
+    "@fastkit/eslint-config": "0.11.0",
     "eslint-plugin-vue": "^9.8.0"
   }
 }

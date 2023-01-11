@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/eslint-config",
-  "version": "0.10.6",
+  "version": "0.11.0",
   "description": "@fastkit/eslint-config",
   "buildOptions": {
     "ignore": true
@@ -42,8 +42,8 @@
     "prettier": "^2.8.2"
   },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.48.1",
-    "@typescript-eslint/parser": "^5.48.1",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-html-parser": "^6.8.1",
     "eslint-plugin-prettier": "^4.2.1"

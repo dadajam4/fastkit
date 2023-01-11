@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/scroller",
-  "version": "0.10.6",
+  "version": "0.11.0",
   "description": "Library for controlling the scrolling state of DOM elements.",
   "buildOptions": {
     "name": "Scroller"
@@ -38,9 +38,9 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/scroller#readme",
   "dependencies": {
-    "@fastkit/ev": "0.10.6",
-    "@fastkit/visibility": "0.10.6",
-    "@fastkit/tiny-logger": "0.10.6",
+    "@fastkit/ev": "0.11.0",
+    "@fastkit/visibility": "0.11.0",
+    "@fastkit/tiny-logger": "0.11.0",
     "bezier-easing": "^2.1.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-stack",
-  "version": "0.10.6",
+  "version": "0.11.0",
   "description": "Library for displaying dialogs, tooltips and menus in Vue applications.",
   "buildOptions": {
     "name": "VueStack"
@@ -48,10 +48,10 @@
     "vue-router": "^4.1.6"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "0.10.6",
-    "@fastkit/vue-color-scheme": "0.10.6",
-    "@fastkit/helpers": "0.10.6",
-    "@fastkit/tiny-logger": "0.10.6",
-    "@fastkit/vue-utils": "0.10.6"
+    "@fastkit/color-scheme": "0.11.0",
+    "@fastkit/vue-color-scheme": "0.11.0",
+    "@fastkit/helpers": "0.11.0",
+    "@fastkit/tiny-logger": "0.11.0",
+    "@fastkit/vue-utils": "0.11.0"
   }
 }
