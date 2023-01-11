@@ -14,7 +14,7 @@ import type vueJsx from '@vitejs/plugin-vue-jsx';
 import type { UserOptions as PagesUserOptions } from 'vite-plugin-pages';
 import type { Options as VuePluginOptions } from '@vitejs/plugin-vue';
 import type { Server, IncomingMessage } from 'connect';
-import type { ServerResponse } from 'http';
+import type { ServerResponse } from 'node:http';
 import type { WrittenResponse } from './renderer';
 import type { RawVotGenerateOptions } from './generate';
 
@@ -47,7 +47,7 @@ export interface BuildOptions {
 
 export interface SsrOptions {
   plugin?: string;
-  ssr?: string;
+  ssrEntry?: string;
   getRenderContext?: (params: {
     url: string;
     request: IncomingMessage;

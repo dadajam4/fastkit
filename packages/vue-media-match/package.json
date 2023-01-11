@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-media-match",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Library for handling Type-safe media query breakpoint schemas in Vue applications.",
   "buildOptions": {
     "name": "VueMediaMatch"
@@ -13,10 +13,13 @@
       "ja": "VueアプリケーションでTypeセーフなメディアクエリブレイクポイントスキーマを扱うためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-media-match.mjs",
+  "main": "./dist/vue-media-match.mjs",
+  "exports": {
+    ".": "./dist/vue-media-match.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-media-match.d.ts",
@@ -37,10 +40,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-media-match#readme",
   "peerDependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.2.45"
   },
   "dependencies": {
-    "@fastkit/helpers": "0.9.0",
-    "@fastkit/media-match": "0.9.0"
+    "@fastkit/helpers": "0.10.6",
+    "@fastkit/media-match": "0.10.6"
   }
 }

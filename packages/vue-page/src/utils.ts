@@ -72,7 +72,7 @@ export const generateRouteKey = (
   const matchedRoute = routeProps.route.matched.find(
     (m) =>
       routeProps.Component &&
-      m.components.default === routeProps.Component.type,
+      m.components?.default === routeProps.Component.type,
   );
   if (!matchedRoute) {
     return '';

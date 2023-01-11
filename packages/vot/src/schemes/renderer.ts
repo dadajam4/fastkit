@@ -1,5 +1,5 @@
 import type { WrittenResponse } from '@fastkit/vue-page';
-import type { ServerResponse } from 'http';
+import type { ServerResponse } from 'node:http';
 import type { IncomingMessage } from 'connect';
 
 export type {

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/rules",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Universal validation library that works in server/browser.",
   "_docs": {
     "scope": "",
@@ -10,10 +10,13 @@
       "ja": "サーバ／ブラウザで動作するユニバーサルなバリデーションライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/rules.mjs",
+  "main": "./dist/rules.mjs",
+  "exports": {
+    ".": "./dist/rules.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/rules.d.ts",
@@ -33,7 +36,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/rules#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.9.0",
-    "@fastkit/tiny-logger": "0.9.0"
+    "@fastkit/helpers": "0.10.6",
+    "@fastkit/tiny-logger": "0.10.6"
   }
 }

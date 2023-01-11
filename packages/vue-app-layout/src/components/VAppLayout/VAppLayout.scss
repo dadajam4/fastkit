@@ -56,6 +56,7 @@
     @each $drawer-position in $drawer-positions {
       --v-app-layout-#{$vertial-position}-#{$drawer-position}-offset: 0px;
 
+      /* stylelint-disable-next-line prettier/prettier */
       &--drawer-static#{&}--drawer-#{$drawer-position}:not(#{&}--drawer-stick-#{$vertial-position}) {
         --v-app-layout-#{$vertial-position}-#{$drawer-position}-offset: var(
           --v-app-layout-drawer-width
@@ -121,6 +122,8 @@
   }
 
   &__viewport {
+    // container-type: inline-size;
+    // container-name: v-app-layout;
     display: flex;
     flex: 1 1 100%;
     flex-direction: column;

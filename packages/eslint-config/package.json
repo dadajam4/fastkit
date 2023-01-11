@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/eslint-config",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "@fastkit/eslint-config",
   "buildOptions": {
     "ignore": true
@@ -13,7 +13,12 @@
       "ja": "fastkitが推奨するeslintの設定。"
     }
   },
-  "main": "index.js",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
     "index.js"
   ],
@@ -33,12 +38,12 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/eslint-config#readme",
   "peerDependencies": {
-    "eslint": "^7.23.0",
-    "prettier": "^2.7.1"
+    "eslint": "^8.31.0",
+    "prettier": "^2.8.2"
   },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-html-parser": "^6.8.1",
     "eslint-plugin-prettier": "^4.2.1"

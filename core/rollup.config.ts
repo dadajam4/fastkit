@@ -1,22 +1,20 @@
 import { RollupOptions, OutputOptions, Plugin } from 'rollup';
 import { RollupReplaceOptions } from '@rollup/plugin-replace';
-import path from 'path';
+import path from 'node:path';
 import ts from 'rollup-plugin-typescript2';
 import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import { ROOT_DIR, PACKAGES_DIR, getPackage } from './utils';
 import { BuildOptions, BuildType } from './schemes';
-import { Options as TerserOptions } from 'rollup-plugin-terser';
 import { rawStylesPlugin } from '../core/raw-styles';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import postcss from 'rollup-plugin-postcss';
-// import styles from 'rollup-plugin-styles';
+import chalk from 'chalk';
 
 const TARGET: string | undefined = process.env.TARGET;
 const COMMIT: string | undefined = process.env.COMMIT;
 const NODE_ENV: string | undefined = process.env.NODE_ENV;
 const FORMATS: string | undefined = process.env.FORMATS;
-// const TYPES: string | undefined = process.env.TYPES;
 const PROD_ONLY: string | undefined = process.env.PROD_ONLY;
 const SOURCE_MAP: string | undefined = process.env.SOURCE_MAP;
 const TOOL: string | undefined = process.env.TOOL;
@@ -46,34 +44,14 @@ const outputConfigs: Record<BuildType, NormalizedOutputOptions> = {
     file: resolve(`dist/${name}.mjs`),
     format: `es`,
   },
-  // 'esm-browser': {
-  //   file: resolve(`dist/${name}.esm-browser.js`),
-  //   format: `es`,
-  // },
-  cjs: {
-    file: resolve(`dist/${name}.cjs.js`),
-    format: `cjs`,
-  },
-  global: {
-    file: resolve(`dist/${name}.global.js`),
-    format: `iife`,
-  },
-  // // runtime-only builds, for main "fastkit" package only
-  // 'esm-bundler-runtime': {
-  //   file: resolve(`dist/${name}.runtime.esm-bundler.js`),
-  //   format: `es`,
-  // },
-  // 'esm-browser-runtime': {
-  //   file: resolve(`dist/${name}.runtime.esm-browser.js`),
-  //   format: 'es',
-  // },
-  // 'global-runtime': {
-  //   file: resolve(`dist/${name}.runtime.global.js`),
-  //   format: 'iife',
+  // cjs: {
+  //   file: resolve(`dist/${name}.cjs`),
+  //   format: `cjs`,
   // },
 };
 
-const defaultFormats: BuildType[] = ['esm-bundler', 'cjs'];
+// const defaultFormats: BuildType[] = ['esm-bundler', 'cjs'];
+const defaultFormats: BuildType[] = ['esm-bundler'];
 const inlineFormats = FORMATS && (FORMATS.split(',') as BuildType[]);
 const packageFormats =
   inlineFormats || packageOptions.formats || defaultFormats;
@@ -86,21 +64,20 @@ if (NODE_ENV === 'production') {
     if (packageOptions.prod === false) {
       return;
     }
-    if (format === 'cjs') {
-      packageConfigs.push(createProductionConfig(format));
-    }
-    if (/^(global)/.test(format)) {
-      packageConfigs.push(createMinifiedConfig(format));
-    }
+    // if (format === 'cjs') {
+    //   packageConfigs.push(createProductionConfig(format));
+    // }
   });
 }
 if (!!TOOL) {
   packageConfigs.push(
     createConfig(
-      'cjs',
+      'esm-bundler',
+      // 'cjs',
       {
-        file: resolve(`dist/tool/index.js`),
-        format: `cjs`,
+        file: resolve(`dist/tool/index.mjs`),
+        format: 'es',
+        // format: `cjs`,
       },
       [],
       `src/tool/index.ts`,
@@ -118,7 +95,7 @@ function createConfig(
 ): RollupOptions {
   const _plugins = [...plugins];
   if (!output) {
-    console.log(require('chalk').yellow(`invalid format: "${format}"`));
+    console.log(chalk.yellow(`invalid format: "${format}"`));
     process.exit(1);
   }
 
@@ -126,15 +103,9 @@ function createConfig(
   output.externalLiveBindings = false;
 
   const isProductionBuild =
-    __DEV__ === 'false' || /\.prod\.js$/.test(output.file || '');
+    __DEV__ === 'false' || /\.prod\./.test(output.file || '');
   const isBundlerESMBuild = /esm-bundler/.test(format);
-  // const isBrowserESMBuild = /esm-browser/.test(format);
-  const isNodeBuild = format === 'cjs';
-  const isGlobalBuild = /global/.test(format);
-
-  if (isGlobalBuild) {
-    output.name = packageOptions.name;
-  }
+  // const isNodeBuild = format === 'cjs';
 
   // const shouldEmitDeclarations = process.env.TYPES != null && !hasTSChecked;
   const shouldEmitDeclarations = true;
@@ -165,28 +136,28 @@ function createConfig(
   // during a single build.
   hasTSChecked = true;
 
-  // const entryFile = `src/index.ts`;
+  const external = [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
+    ...['path', 'url', 'stream'],
+  ];
 
-  const external = isGlobalBuild
-    ? packageOptions.enableNonBrowserBranches
-      ? []
-      : // normal browser builds - non-browser only imports are tree-shaken,
-        // they are only listed here to suppress warnings.
-        ['source-map', '@babel/parser', 'estree-walker']
-    : // Node / esm-bundler builds. Externalize everything.
-      [
-        ...Object.keys(pkg.dependencies || {}),
-        ...Object.keys(pkg.peerDependencies || {}),
-        ...['path', 'url', 'stream'],
-      ];
   external.push(
     'bezier-easing',
     'module',
     'crypto',
     '@vueuse/head',
     'chokidar',
-    'prosemirror-view',
+    'prosemirror-commands',
+    'prosemirror-keymap',
+    'prosemirror-model',
+    'prosemirror-schema-list',
     'prosemirror-state',
+    'prosemirror-transform',
+    'prosemirror-view',
+    'prosemirror-history',
+    'prosemirror-dropcursor',
+    'prosemirror-gapcursor',
     '@tiptap/core',
     '@tiptap/extension-link',
     '@tiptap/starter-kit',
@@ -203,8 +174,6 @@ function createConfig(
     'postcss',
     'nanoid',
     '@datadog/browser-logs',
-    // '@nuxt',
-    // 'nuxt3',
     'nodemon',
     'http-proxy',
     'virtual:generated-pages',
@@ -215,47 +184,18 @@ function createConfig(
     'imask',
     'cookie',
     'set-cookie-parser',
+    'execa',
+    'folder-hash',
+    'eta',
+    'imagemin-pngquant',
+    'imagemin-mozjpeg',
+    'imagemin',
+    'webfont',
+    'cac',
+    'chalk',
   );
 
-  output.globals = {
-    vue: 'Vue',
-    'bezier-easing': 'BezierEasing',
-    'vue-router': 'VueRouter',
-
-    // I am not confident that this setup is correct.
-    // @see https://github.com/vueuse/vueuse#cdn
-    '@vueuse/head': 'VueUse',
-    imask: 'IMask',
-
-    // @FIXME
-    // This setting needs to be resolved because it is not delivered to the CDN
-    cookie: 'Cookie',
-
-    // @FIXME
-    // This setting needs to be resolved because it is not delivered to the CDN
-    'set-cookie-parser': 'SetCookieParser',
-
-    // the browser builds requires postcss to be available
-    // as a global (e.g. http://wzrd.in/standalone/postcss)
-    postcss: 'postcss',
-  };
-
-  const nodePlugins =
-    packageOptions.enableNonBrowserBranches && format !== 'cjs'
-      ? [
-          require('@rollup/plugin-commonjs')({
-            sourceMap: false,
-          }),
-          require('rollup-plugin-polyfill-node')(),
-          require('@rollup/plugin-node-resolve').nodeResolve(),
-        ]
-      : [];
-
-  const externalRe = isGlobalBuild ? /^(vue)/ : /^(vue|@fastkit)/;
-
-  // if (packageOptions.styles) {
-  //   _plugins.push(styles(packageOptions.styles));
-  // }
+  const externalRe = /^(vue|@fastkit|node:)/;
 
   if (packageOptions.rawStyles) {
     _plugins.push(rawStylesPlugin(packageOptions.rawStyles));
@@ -269,8 +209,6 @@ function createConfig(
 
   return {
     input: resolve(entryFile),
-    // Global and Browser ESM builds inlines everything so that they can be
-    // used alone.
     external(id) {
       return external.includes(id) || externalRe.test(id);
     },
@@ -298,16 +236,7 @@ function createConfig(
       tsPlugin,
       vueJsx(),
       postcssPlugin,
-      createReplacePlugin(
-        isProductionBuild,
-        isBundlerESMBuild,
-        // isBrowserBuild?
-        (isGlobalBuild || isBundlerESMBuild) &&
-          !packageOptions.enableNonBrowserBranches,
-        isGlobalBuild,
-        isNodeBuild,
-      ),
-      ...nodePlugins,
+      createReplacePlugin(isProductionBuild, isBundlerESMBuild),
       ..._plugins,
     ],
     output,
@@ -325,9 +254,6 @@ function createConfig(
 function createReplacePlugin(
   isProduction: boolean,
   isBundlerESMBuild: boolean,
-  isBrowserBuild: boolean,
-  isGlobalBuild: boolean,
-  isNodeBuild: boolean,
 ) {
   const replacements: RollupReplaceOptions['values'] = {
     __COMMIT__: `"${COMMIT}"`,
@@ -340,15 +266,9 @@ function createReplacePlugin(
         String(!isProduction),
     // this is only used during Fastkit's internal tests
     __TEST__: String(false),
-    // If the build is expected to run directly in the browser (global / esm builds)
-    __BROWSER__: isBundlerESMBuild
-      ? `(typeof document !== 'undefined')`
-      : String(isBrowserBuild),
-    __GLOBAL__: String(isGlobalBuild),
     __ESM_BUNDLER__: String(isBundlerESMBuild),
-    // is targeting Node (SSR)?
-    __NODE_JS__: String(isNodeBuild),
   };
+
   // allow inline overrides like
   //__RUNTIME_COMPILE__=true yarn build runtime-core
   Object.keys(replacements).forEach((key) => {
@@ -359,38 +279,39 @@ function createReplacePlugin(
       }
     }
   });
+
   return replace({
     values: replacements,
     preventAssignment: true,
   });
 }
 
-function createProductionConfig(format: BuildType) {
-  return createConfig(format, {
-    file: resolve(`dist/${name}.${format}.prod.js`),
-    format: outputConfigs[format].format,
-  });
-}
+// function createProductionConfig(format: BuildType) {
+//   return createConfig(format, {
+//     file: resolve(`dist/${name}.prod.${format}`),
+//     format: outputConfigs[format].format,
+//   });
+// }
 
-function createMinifiedConfig(format: BuildType) {
-  const { terser } = require('rollup-plugin-terser') as {
-    terser: (options?: TerserOptions) => Plugin;
-  };
-  return createConfig(
-    format,
-    {
-      file: outputConfigs[format].file.replace(/\.js$/, '.prod.js'),
-      format: outputConfigs[format].format,
-    },
-    [
-      terser({
-        module: /^esm/.test(format),
-        compress: {
-          ecma: 2015,
-          pure_getters: true,
-        },
-        safari10: true,
-      }),
-    ],
-  );
-}
+// function createMinifiedConfig(format: BuildType) {
+//   const { terser } = require('rollup-plugin-terser') as {
+//     terser: (options?: TerserOptions) => Plugin;
+//   };
+//   return createConfig(
+//     format,
+//     {
+//       file: outputConfigs[format].file.replace(/\.js$/, '.prod.js'),
+//       format: outputConfigs[format].format,
+//     },
+//     [
+//       terser({
+//         module: /^esm/.test(format),
+//         compress: {
+//           ecma: 2015,
+//           pure_getters: true,
+//         },
+//         safari10: true,
+//       }),
+//     ],
+//   );
+// }

@@ -37,7 +37,7 @@ export function cyrb53(str: string, seed = 0) {
 /**
  * Obtains a string with the first letter of the specified string capitalized
  *
- * - `"helloWorld"` -> `"HelloWorld"`
+ * - `"helloWorld"` -&gt; `"HelloWorld"`
  *
  * @param str - String of conversion source
  * @returns String with first letter converted to uppercase
@@ -49,7 +49,7 @@ export function capitalize<T extends string>(str: T): Capitalize<T> {
 /**
  * Obtains a string with the first letter of the specified string in lowercase.
  *
- * - `"HelloWorld"` -> `"helloWorld"`
+ * - `"HelloWorld"` -&gt; `"helloWorld"`
  *
  * @param str - String of conversion source
  * @returns String with first letter converted to lowercase

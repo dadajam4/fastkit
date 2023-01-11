@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-form-control",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Basic form implementation library for Vue applications.",
   "_docs": {
     "scope": "vue",
@@ -10,10 +10,13 @@
       "ja": "Vueアプリケーションのためのフォームの基礎実装ライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-form-control.mjs",
+  "main": "./dist/vue-form-control.mjs",
+  "exports": {
+    ".": "./dist/vue-form-control.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-form-control.d.ts",
@@ -35,13 +38,13 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-form-control#readme",
   "peerDependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.2.45"
   },
   "dependencies": {
-    "@fastkit/helpers": "0.9.0",
-    "@fastkit/rules": "0.9.0",
-    "@fastkit/tiny-logger": "0.9.0",
-    "@fastkit/vue-utils": "0.9.0",
+    "@fastkit/helpers": "0.10.6",
+    "@fastkit/rules": "0.10.6",
+    "@fastkit/tiny-logger": "0.10.6",
+    "@fastkit/vue-utils": "0.10.6",
     "imask": "^6.2.2"
   }
 }

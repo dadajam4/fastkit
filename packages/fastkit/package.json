@@ -1,23 +1,9 @@
 {
   "name": "fastkit",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Toolkit to support rapid scratch development of applications.",
-  "main": "index.js",
-  "module": "dist/fastkit.mjs",
-  "files": [
-    "index.js",
-    "dist"
-  ],
-  "types": "dist/fastkit.d.ts",
-  "unpkg": "dist/fastkit.global.js",
-  "jsdelivr": "dist/fastkit.global.js",
   "buildOptions": {
-    "name": "Fastkit",
-    "formats": [
-      "esm-bundler",
-      "cjs",
-      "global"
-    ]
+    "name": "Fastkit"
   },
   "_docs": {
     "scope": "",
@@ -27,6 +13,16 @@
       "ja": "アプリケーションの迅速なスクラッチ開発を支えるツールキット。"
     }
   },
+  "main": "./dist/fastkit.mjs",
+  "exports": {
+    ".": "./dist/fastkit.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "dist/fastkit.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"
@@ -41,36 +37,36 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/fastkit#readme",
   "dependencies": {
-    "@fastkit/accept-language": "0.9.0",
-    "@fastkit/async-control": "0.9.0",
-    "@fastkit/body-scroll-lock": "0.9.0",
-    "@fastkit/cache-control": "0.9.0",
-    "@fastkit/catcher": "0.9.0",
-    "@fastkit/color": "0.9.0",
-    "@fastkit/color-scheme": "0.9.0",
-    "@fastkit/color-scheme-gen": "0.9.0",
-    "@fastkit/cookies": "0.9.0",
-    "@fastkit/duration": "0.9.0",
-    "@fastkit/eslint-config": "0.9.0",
-    "@fastkit/ev": "0.9.0",
-    "@fastkit/hashed-sync": "0.9.0",
-    "@fastkit/helpers": "0.9.0",
-    "@fastkit/i18n": "0.9.0",
-    "@fastkit/icon-font": "0.9.0",
-    "@fastkit/icon-font-gen": "0.9.0",
-    "@fastkit/keyboard": "0.9.0",
-    "@fastkit/media-match": "0.9.0",
-    "@fastkit/media-match-gen": "0.9.0",
-    "@fastkit/node-util": "0.9.0",
-    "@fastkit/nodepack": "0.9.0",
-    "@fastkit/rules": "0.9.0",
-    "@fastkit/scroller": "0.9.0",
-    "@fastkit/sprite-images": "0.9.0",
-    "@fastkit/stylebase": "0.9.0",
-    "@fastkit/stylelint-config": "0.9.0",
-    "@fastkit/tiny-logger": "0.9.0",
-    "@fastkit/universal-logger": "0.9.0",
-    "@fastkit/visibility": "0.9.0",
-    "@fastkit/vite-kit": "0.9.0"
+    "@fastkit/accept-language": "0.10.6",
+    "@fastkit/async-control": "0.10.6",
+    "@fastkit/body-scroll-lock": "0.10.6",
+    "@fastkit/cache-control": "0.10.6",
+    "@fastkit/catcher": "0.10.6",
+    "@fastkit/color": "0.10.6",
+    "@fastkit/color-scheme": "0.10.6",
+    "@fastkit/color-scheme-gen": "0.10.6",
+    "@fastkit/cookies": "0.10.6",
+    "@fastkit/duration": "0.10.6",
+    "@fastkit/eslint-config": "0.10.6",
+    "@fastkit/ev": "0.10.6",
+    "@fastkit/hashed-sync": "0.10.6",
+    "@fastkit/helpers": "0.10.6",
+    "@fastkit/i18n": "0.10.6",
+    "@fastkit/icon-font": "0.10.6",
+    "@fastkit/icon-font-gen": "0.10.6",
+    "@fastkit/keyboard": "0.10.6",
+    "@fastkit/media-match": "0.10.6",
+    "@fastkit/media-match-gen": "0.10.6",
+    "@fastkit/node-util": "0.10.6",
+    "@fastkit/nodepack": "0.10.6",
+    "@fastkit/rules": "0.10.6",
+    "@fastkit/scroller": "0.10.6",
+    "@fastkit/sprite-images": "0.10.6",
+    "@fastkit/stylebase": "0.10.6",
+    "@fastkit/stylelint-config": "0.10.6",
+    "@fastkit/tiny-logger": "0.10.6",
+    "@fastkit/universal-logger": "0.10.6",
+    "@fastkit/visibility": "0.10.6",
+    "@fastkit/vite-kit": "0.10.6"
   }
 }

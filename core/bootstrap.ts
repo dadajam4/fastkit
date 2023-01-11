@@ -1,7 +1,7 @@
 // create package.json, README, etc. for packages that don't have them yet
 import minimist from 'minimist';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import { getPackage } from './utils';
 import { FastkitPackage } from './schemes';
 
@@ -47,14 +47,20 @@ files.forEach((shortName) => {
   }
 
   if (force || !pkgExists) {
+    const mainModule = `dist/${shortName}.mjs`;
+    const mainModuleDTS = `dist/${shortName}.d.ts`;
     const json: FastkitPackage = {
       name,
       version,
       description: name,
-      main: 'index.js',
-      module: `dist/${shortName}.mjs`,
-      files: [`index.js`, `dist`],
-      types: `dist/${shortName}.d.ts`,
+      main: mainModule,
+      exports: {
+        '.': mainModule,
+        './package.json': './package.json',
+      },
+      module: mainModule,
+      files: [`dist`],
+      types: mainModuleDTS,
       repository: rootPkg.repository,
       keywords: rootPkg.keywords,
       author: rootPkg.author,

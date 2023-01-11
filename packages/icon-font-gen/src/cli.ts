@@ -1,5 +1,5 @@
 import { cac } from 'cac';
-import path from 'path';
+import path from 'node:path';
 import {
   DEFAULT_DEST_DIRNAME,
   DEFAULT_CONFIG_FILENAME,
@@ -9,9 +9,7 @@ import { generate } from './generator';
 import { findPackageDir, esbuildRequire } from '@fastkit/node-util';
 import { IconFontGenError } from './logger';
 
-const { version } = require('../package.json');
-
-export function cli() {
+export async function cli() {
   const cli = cac('icon-font');
 
   cli
@@ -57,7 +55,7 @@ Path of the configuration file. (default: [your package directory]${path.sep}${D
 
   cli.help();
 
-  cli.version(version);
+  cli.version(__VERSION__);
 
   cli.parse();
 }

@@ -1,12 +1,9 @@
 {
   "name": "@fastkit/hashed-sync",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Compare and synchronize the status of entire files and directories by hash value.",
   "buildOptions": {
-    "name": "HashedSync",
-    "formats": [
-      "cjs"
-    ]
+    "name": "HashedSync"
   },
   "_docs": {
     "scope": "node",
@@ -16,10 +13,13 @@
       "ja": "ファイルやディレクトリ全体の状態をハッシュ値で比較して同期する。"
     }
   },
-  "main": "index.js",
-  "module": "dist/hashed-sync.mjs",
+  "main": "./dist/hashed-sync.mjs",
+  "exports": {
+    ".": "./dist/hashed-sync.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/hashed-sync.d.ts",
@@ -41,11 +41,11 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/hashed-sync#readme",
   "dependencies": {
-    "@fastkit/tiny-logger": "0.9.0",
-    "folder-hash": "^4.0.1",
-    "fs-extra": "^9.1.0",
+    "@fastkit/tiny-logger": "0.10.6",
+    "folder-hash": "^4.0.3",
+    "fs-extra": "^11.1.0",
     "imagemin": "^8.0.1",
-    "imagemin-mozjpeg": "^9.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
     "imagemin-pngquant": "^9.0.2"
   }
 }

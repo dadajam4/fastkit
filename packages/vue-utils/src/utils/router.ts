@@ -24,7 +24,7 @@ export function getRouteMatchedComponents<
   prop: P = 'components' as P,
 ) {
   const values = route.matched.map((m, index) => {
-    return Object.values(m[prop]).map((v) => {
+    return Object.values(m[prop] || {}).map((v) => {
       matches && matches.push(index);
       return v;
     });
@@ -52,6 +52,7 @@ export function extractRouteMatchedItems(route: RouteLocationNormalized) {
 
   route.matched.forEach((route, index) => {
     const { components, instances } = route;
+    if (!components) return;
     Object.entries(components).forEach(([key, Component]) => {
       if (!Component) return;
       const instance = instances[key] || null;

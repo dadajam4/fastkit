@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/ev",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "@fastkit/ev",
   "buildOptions": {
     "name": "EV"
@@ -13,10 +13,13 @@
       "ja": "シンプルでtypeセーフなEvent emitter & observerをあなたのお気に入りの実装にプラグインするヘルパ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/ev.mjs",
+  "main": "./dist/ev.mjs",
+  "exports": {
+    ".": "./dist/ev.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/ev.d.ts",

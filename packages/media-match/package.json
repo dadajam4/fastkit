@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Schema for Type-safe handling of media query breakpoints.",
   "buildOptions": {
     "name": "MediaMatch"
@@ -13,10 +13,13 @@
       "ja": "メディアクエリブレイクポイントをTypeセーフに扱うためのスキーマ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/media-match.mjs",
+  "main": "./dist/media-match.mjs",
+  "exports": {
+    ".": "./dist/media-match.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/media-match.d.ts",

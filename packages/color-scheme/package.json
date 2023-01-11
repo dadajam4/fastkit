@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color-scheme",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "An implementation to control the schema associated with \"color\".",
   "buildOptions": {
     "name": "ColorScheme"
@@ -13,10 +13,13 @@
       "ja": "「色」に関連するスキーマを制御するための実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/color-scheme.mjs",
+  "main": "./dist/color-scheme.mjs",
+  "exports": {
+    ".": "./dist/color-scheme.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/color-scheme.d.ts",
@@ -35,7 +38,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/color-scheme#readme",
   "dependencies": {
-    "@fastkit/color": "0.9.0",
-    "@fastkit/tiny-logger": "0.9.0"
+    "@fastkit/color": "0.10.6",
+    "@fastkit/tiny-logger": "0.10.6"
   }
 }

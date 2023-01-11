@@ -12,7 +12,6 @@ import {
   GET_PACKAGE_PREFIX,
   // PROVIDER_TEMPLATE_DIR,
 } from './constants';
-// import path from 'path';
 
 export function PackageLoader(): Plugin {
   return {

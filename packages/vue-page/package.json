@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-page",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Middleware for more convenient control of routing in Vue applications.",
   "_docs": {
     "scope": "vue",
@@ -10,10 +10,13 @@
       "ja": "Vueアプリケーションのルーティングをより便利にコントロールするためのミドルウェア。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-page.mjs",
+  "main": "./dist/vue-page.mjs",
+  "exports": {
+    ".": "./dist/vue-page.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-page.d.ts",
@@ -34,14 +37,14 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-page#readme",
   "peerDependencies": {
-    "vue": "^3.2.37",
-    "vue-router": "^4.0.16"
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
   },
   "dependencies": {
-    "@fastkit/cookies": "0.9.0",
-    "@fastkit/ev": "0.9.0",
-    "@fastkit/helpers": "0.9.0",
-    "@fastkit/tiny-logger": "0.9.0",
-    "@fastkit/vue-utils": "0.9.0"
+    "@fastkit/cookies": "0.10.6",
+    "@fastkit/ev": "0.10.6",
+    "@fastkit/helpers": "0.10.6",
+    "@fastkit/tiny-logger": "0.10.6",
+    "@fastkit/vue-utils": "0.10.6"
   }
 }

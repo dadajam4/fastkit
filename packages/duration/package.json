@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/duration",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "@fastkit/duration",
   "buildOptions": {
     "name": "Value object implementation expressing \"duration\"."
@@ -13,10 +13,13 @@
       "ja": "「期間」を表現する値オブジェクト実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/duration.mjs",
+  "main": "./dist/duration.mjs",
+  "exports": {
+    ".": "./dist/duration.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/duration.d.ts",

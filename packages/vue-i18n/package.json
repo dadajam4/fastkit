@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-i18n",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "@fastkit/vue-i18n",
   "_docs": {
     "scope": "vue",
@@ -10,10 +10,13 @@
       "ja": "Vueアプリケーションを多言語ローカライズするためのライブラリ。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-i18n.mjs",
+  "main": "./dist/vue-i18n.mjs",
+  "exports": {
+    ".": "./dist/vue-i18n.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-i18n.d.ts",
@@ -38,10 +41,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-i18n#readme",
   "peerDependencies": {
-    "vue": "^3.2.37",
-    "vue-router": "^4.0.16"
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
   },
   "dependencies": {
-    "@fastkit/i18n": "0.9.0"
+    "@fastkit/i18n": "0.10.6"
   }
 }

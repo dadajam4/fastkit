@@ -24,19 +24,19 @@ if (!availableCommands.includes(command)) {
 
 async function main() {
   if (['build', 'preview'].includes(command)) {
-    require('./build');
+    await import('./build.mjs');
   }
 
   if (command === 'generate') {
-    require('./generate');
+    await import('./generate.mjs');
   }
 
   if (['serve', 'preview'].includes(command)) {
-    require('./serve');
+    await import('./serve.mjs');
   }
 
   if (command === 'dev') {
-    require('./dev');
+    await import('./dev.mjs');
   }
 }
 

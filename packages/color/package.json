@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Value object implementation for controlling \"color\".",
   "buildOptions": {
     "name": "Color"
@@ -13,10 +13,13 @@
       "ja": "「色」をコントロールするための値オブジェクト実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/color.mjs",
+  "main": "./dist/color.mjs",
+  "exports": {
+    ".": "./dist/color.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/color.d.ts",
@@ -35,6 +38,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/color#readme",
   "dependencies": {
-    "@fastkit/tiny-logger": "0.9.0"
+    "@fastkit/tiny-logger": "0.10.6"
   }
 }

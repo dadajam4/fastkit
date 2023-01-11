@@ -1,8 +1,7 @@
 {
   "name": "@fastkit/icon-font",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Helper to handle icon definitions for Type safe.",
-  "main": "index.js",
   "_docs": {
     "scope": "",
     "feature": "icon",
@@ -11,9 +10,13 @@
       "ja": "Typeセーフにアイコンの定義を扱うためのヘルパー。"
     }
   },
-  "module": "dist/icon-font.mjs",
+  "main": "./dist/icon-font.mjs",
+  "exports": {
+    ".": "./dist/icon-font.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/icon-font.d.ts",

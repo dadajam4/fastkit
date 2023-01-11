@@ -1,14 +1,14 @@
 import { Plugin } from 'vite';
 import { dynamicSrcVitePlugin } from '@fastkit/vite-kit';
-import path from 'path';
+import path from 'node:path';
 import fs from 'fs-extra';
-import { findPackageDirSync } from '@fastkit/node-util';
+import { findPackageDirSync, getDirname } from '@fastkit/node-util';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
 import { VuiServiceOptions } from '../service';
 import { render } from 'eta';
 import { VuiError } from '../logger';
 
-const VUI_PACKAGE_DIR = path.resolve(__dirname, '../..');
+const VUI_PACKAGE_DIR = path.resolve(getDirname(import.meta.url), '../..');
 const STYLE_AFTER_EFFECTS_PATH = path.join(
   VUI_PACKAGE_DIR,
   'src/styles/after-effects.scss',
@@ -20,11 +20,11 @@ const TEMPLATE = `
 /* eslint-disable */
 // @ts-nocheck
 <% if (!it.__dev) { %>
-import '@fastkit/vue-stack/dist/vue-stack.css';
-import '@fastkit/vue-app-layout/dist/vue-app-layout.css';
-import '@fastkit/vue-loading/dist/vue-loading.css';
-import '@fastkit/vue-scroller/dist/vue-scroller.css';
-import '@fastkit/vui/dist/vui.css';
+import '@fastkit/vue-stack/vue-stack.css';
+import '@fastkit/vue-app-layout/vue-app-layout.css';
+import '@fastkit/vue-loading/vue-loading.css';
+import '@fastkit/vue-scroller/vue-scroller.css';
+import '@fastkit/vui/vui.css';
 <% } %>
 import './setup.scss';
 import type { App } from 'vue';

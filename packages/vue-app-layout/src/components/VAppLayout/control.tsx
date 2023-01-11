@@ -209,6 +209,7 @@ export class VAppLayoutControl {
     provide(VAppLayoutControl.injectionKey, this);
 
     onMounted(() => {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
       _globalLayoutControl = this;
       const scroller = getDocumentScroller();
       scroller.setScrollToElementAddtionalOffset(this._scrollerOffset);

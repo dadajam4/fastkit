@@ -19,7 +19,7 @@ export class VueStackPlugin {
     app.config.globalProperties.$vstack = $vstack;
 
     onAppUnmount(app, () => {
-      delete app.config.globalProperties.$vstack;
+      delete (app.config.globalProperties as any).$vstack;
     });
   }
 }

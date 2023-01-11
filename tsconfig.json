@@ -66,6 +66,5 @@
     "packages/global.d.ts",
     "packages/*/src",
     "core",
-    "site"
   ]
 }

@@ -1,6 +1,6 @@
-import type { ServerResponse } from 'http';
-import { promises as fs } from 'fs';
-import path from 'path';
+import type { ServerResponse } from 'node:http';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import { performance } from 'perf_hooks';
 import { NextHandleFunction } from 'connect';
 import {
@@ -11,6 +11,9 @@ import {
 import chalk from 'chalk';
 import { getPluginOptions, getEntryPoint } from '../utils';
 import type { WrittenResponse, SsrOptions } from '../../vot';
+import module from 'node:module';
+
+const require = module.createRequire(import.meta.url);
 
 // This cannot be imported from utils due to ESM <> CJS issues
 const isRedirect = ({ status = 0 } = {}) => status >= 300 && status < 400;
@@ -96,7 +99,7 @@ export const createSSRDevHandler = (
 
     try {
       const entryPoint =
-        options.ssr || (await getEntryPoint(server.config, template));
+        options.ssrEntry || (await getEntryPoint(server.config, template));
 
       let resolvedEntryPoint = await server.ssrLoadModule(resolve(entryPoint));
       resolvedEntryPoint = resolvedEntryPoint.default || resolvedEntryPoint;
@@ -190,7 +193,7 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
           const server = await target.listen(port);
 
           if (!isMiddlewareMode) {
-            printServerInfo(server);
+            await printServerInfo(server);
           }
 
           return server;
@@ -202,14 +205,15 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
   });
 }
 
-export function printServerInfo(server: ViteDevServer) {
+export async function printServerInfo(server: ViteDevServer) {
   const info = server.config.logger.info;
 
   let ssrReadyMessage = '\n -- SSR mode';
 
   if (Object.prototype.hasOwnProperty.call(server, 'printUrls')) {
+    const vitePkg = require('vite/package.json');
     info(
-      chalk.cyan(`\n  vite v${require('vite/package.json').version}`) +
+      chalk.cyan(`\n  vite v${vitePkg.version}`) +
         chalk.green(` dev server running at:\n`),
       { clear: !server.config.logger.hasWarned },
     );

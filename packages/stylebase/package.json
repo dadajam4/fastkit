@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/stylebase",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Variations of the base CSS implementation recommended by fastkit.",
   "buildOptions": {
     "ignore": true
@@ -12,6 +12,11 @@
       "en": "Variations of the base CSS implementation recommended by fastkit.",
       "ja": "fastkitが推奨するベースCSS実装のバリエーション。"
     }
+  },
+  "exports": {
+    "./*.css": "./*.css",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   },
   "files": [
     "destyle.css",

@@ -1,4 +1,4 @@
-import { ComponentCustomOptions } from '@vue/runtime-core';
+import { ComponentCustomOptions } from 'vue';
 import type { RouterScrollBehavior, RouteLocationNormalized } from 'vue-router';
 import { getRouteMatchedComponents } from '@fastkit/vue-utils';
 import { getSuspenseRouteBucket } from './suspense-route-bucket';

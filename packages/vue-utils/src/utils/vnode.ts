@@ -1,4 +1,4 @@
-import type { VNode, VNodeTypes, VNodeChild, Slots } from '@vue/runtime-core';
+import type { VNode, VNodeTypes, VNodeChild, Slots } from 'vue';
 import { Comment, Text, Fragment, isVNode } from 'vue';
 
 export function findVNodeChild(
@@ -27,19 +27,17 @@ export function findVNodeChild(
   return hit;
 }
 
-export type TypedSlot<Prop extends any = any> = (prop: Prop) => VNodeChild;
+export type TypedSlot<Prop = any> = (prop: Prop) => VNodeChild;
 
-export type VNodeChildOrSlot<Prop extends any = any> =
-  | VNodeChild
-  | TypedSlot<Prop>;
+export type VNodeChildOrSlot<Prop = any> = VNodeChild | TypedSlot<Prop>;
 
-export function resolveVNodeChildOrSlot<Prop extends any = any>(
+export function resolveVNodeChildOrSlot<Prop = any>(
   raw: VNodeChildOrSlot<Prop>,
 ): TypedSlot<Prop> {
   return typeof raw === 'function' ? raw : () => raw;
 }
 
-export function resolveVNodeChildOrSlots<Prop extends any = any>(
+export function resolveVNodeChildOrSlots<Prop = any>(
   ...raws: VNodeChildOrSlot<Prop>[]
 ): TypedSlot<Prop> | undefined {
   for (const raw of raws) {

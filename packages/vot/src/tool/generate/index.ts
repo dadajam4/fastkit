@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import fs from 'fs-extra';
 import {
   resolveViteConfig,
@@ -10,7 +10,7 @@ import {
   generateVotGeneratePagePaths,
   VOT_GENERATE_PAGES_PATH,
 } from '../../schemes/generate';
-import http, { Server } from 'http';
+import http, { Server } from 'node:http';
 import chalk from 'chalk';
 
 function isIncomingMessage(source: unknown): source is http.IncomingMessage {
@@ -60,7 +60,8 @@ export async function generate(_config?: ResolvedConfig) {
     return;
   }
 
-  const serve = require('../../bin/serve-fn');
+  const { serve } = await import('@fastkit/vot/bin/serve-fn' as any);
+
   let basePrefix = '';
   let viteBase = viteConfig.base;
 
@@ -137,6 +138,9 @@ export async function generate(_config?: ResolvedConfig) {
               'Content-Type': 'text/html',
             },
           });
+          if (typeof html !== 'string') {
+            throw { statusCode: html.status };
+          }
           await fs.ensureDir(outDir);
           await fs.writeFile(outPath, html);
           completed++;

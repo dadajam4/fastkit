@@ -39,7 +39,7 @@ import {
   BubbleMenu,
   FocusPosition,
 } from '@tiptap/vue-3';
-import StarterKit from '@tiptap/starter-kit';
+import { StarterKit } from '@tiptap/starter-kit';
 import { VButton, VButtonGroup } from '../VButton';
 import {
   RawWysiwygExtension,

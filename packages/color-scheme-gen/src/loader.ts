@@ -6,17 +6,23 @@ import {
 } from '@fastkit/color-scheme';
 import { toScssValues } from './to-scss-values';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import { render } from 'eta';
-import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
+import {
+  ESbuildRunner,
+  ESbuildRequireResult,
+  getDirname,
+} from '@fastkit/node-util';
 import { EV } from '@fastkit/ev';
 import { logger, ColorSchemeGenError } from './logger';
 
-const TEMPLATES_DIR = path.resolve(__dirname, 'assets/templates');
+const _dirname = getDirname(import.meta.url);
+
+const TEMPLATES_DIR = path.resolve(_dirname, 'assets/templates');
 
 export const COLOR_SCHEME_LOADER_TYPES = ['info', 'json', 'scss'] as const;
 
-export type ColorSchemeLoaderType = typeof COLOR_SCHEME_LOADER_TYPES[number];
+export type ColorSchemeLoaderType = (typeof COLOR_SCHEME_LOADER_TYPES)[number];
 
 export type ColorSchemeLoaderResult = {
   entryPoint: string;

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/helpers",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "A small collection of helper implementations for processing primitive values and objects.",
   "buildOptions": {
     "name": "Helpers"
@@ -13,10 +13,13 @@
       "ja": "プリミティブな値やオブジェクトを処理するための小さなヘルパー実装のコレクションです。"
     }
   },
-  "main": "index.js",
-  "module": "dist/helpers.mjs",
+  "main": "./dist/helpers.mjs",
+  "exports": {
+    ".": "./dist/helpers.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/helpers.d.ts",

@@ -22,6 +22,10 @@ module.exports = {
     'selector-class-pattern': null,
     'custom-property-pattern': null,
     'number-max-precision': 16,
+    'import-notation': null,
+
+    // Allow use of implicit scss global methods
+    'function-no-unknown': null,
     // 'function-calc-no-unspaced-operator': false,
     // 'function-linear-gradient-no-nonstandard-direction': false,
     // 'function-calc-no-invalid': null,

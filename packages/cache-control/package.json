@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cache-control",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Helper implementation for plugging cache controls into a JavaScript implementation.",
   "buildOptions": {
     "name": "CacheControl"
@@ -13,10 +13,13 @@
       "ja": "JavaScript実装にキャッシュの制御をプラグインするためのヘルパ実装。"
     }
   },
-  "main": "index.js",
-  "module": "dist/cache-control.mjs",
+  "main": "./dist/cache-control.mjs",
+  "exports": {
+    ".": "./dist/cache-control.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/cache-control.d.ts",
@@ -36,7 +39,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/cache-control#readme",
   "dependencies": {
-    "@fastkit/duration": "0.9.0",
-    "@fastkit/helpers": "0.9.0"
+    "@fastkit/duration": "0.10.6",
+    "@fastkit/helpers": "0.10.6"
   }
 }

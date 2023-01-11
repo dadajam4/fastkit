@@ -6,7 +6,7 @@ export async function getCrypto(): Promise<Crypto> {
       __crypto = crypto;
       return crypto;
     } else {
-      const { webcrypto } = await import('crypto');
+      const { webcrypto } = await import('node:crypto');
       __crypto = webcrypto as any;
     }
   }

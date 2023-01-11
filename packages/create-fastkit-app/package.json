@@ -1,6 +1,6 @@
 {
   "name": "create-fastkit-app",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "CLI to generate scaffolding for applications proposed by fastkit.",
   "buildOptions": {
     "description": {
@@ -8,13 +8,16 @@
       "ja": "fastkitが提案するアプリケーションの足場を生成するCLI。"
     }
   },
-  "main": "index.js",
   "bin": {
     "create-fastkit-app": "lib/cli.js"
   },
-  "module": "dist/create-fastkit-app.mjs",
+  "main": "./dist/create-fastkit-app.mjs",
+  "exports": {
+    ".": "./dist/create-fastkit-app.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "templates",
     "dist",
     "lib"
@@ -35,9 +38,9 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/create-fastkit-app#readme",
   "dependencies": {
     "cac": "^6.7.11",
-    "chalk": "^4.1.0",
+    "chalk": "^5.2.0",
     "enquirer": "^2.3.6",
     "eta": "^1.12.3",
-    "fs-extra": "^9.1.0"
+    "fs-extra": "^11.1.0"
   }
 }

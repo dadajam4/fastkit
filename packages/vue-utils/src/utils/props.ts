@@ -1,4 +1,4 @@
-import { PropType, Prop, ComponentPropsOptions } from '@vue/runtime-core';
+import { PropType, Prop, ComponentPropsOptions } from 'vue';
 
 import { HTMLAttributes } from 'vue';
 

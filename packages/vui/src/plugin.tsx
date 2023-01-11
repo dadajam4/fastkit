@@ -83,7 +83,7 @@ export class VuiPlugin {
     app.config.globalProperties.$vui = $vui;
 
     onAppUnmount(app, () => {
-      delete app.config.globalProperties.$vui;
+      delete (app.config.globalProperties as any).$vui;
     });
   }
 }

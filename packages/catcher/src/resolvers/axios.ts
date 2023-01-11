@@ -65,9 +65,10 @@ export function toAxiosErrorInfo(source: AxiosError): AxiosErrorInfo {
     response: _response,
   } = source;
   const config: SerializableAxiosRequestConfig = {};
-  ConfigPicks.forEach((prop) => {
-    config[prop] = _config[prop];
-  });
+  _config &&
+    ConfigPicks.forEach((prop) => {
+      config[prop] = _config[prop];
+    });
   let response: SerializableAxiosResponse | undefined;
   if (_response) {
     response = {

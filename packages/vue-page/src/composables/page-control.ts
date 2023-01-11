@@ -14,7 +14,7 @@ import type {
   Router,
   RouteLocationNormalized,
   RouteQueryAndHash,
-  LocationAsPath,
+  MatcherLocationAsPath,
   LocationQueryRaw,
   LocationAsRelativeRaw,
 } from 'vue-router';
@@ -37,7 +37,7 @@ import { EV } from '@fastkit/ev';
 import { useVuePageControl } from '../injections';
 import { VuePageControlError } from './page-error';
 import { VErrorPage } from '../components/VErrorPage';
-import type { ServerResponse, IncomingMessage } from 'http';
+import type { ServerResponse, IncomingMessage } from 'node:http';
 import { StateInjectionKey } from './state';
 import { Cookies, CookiesContext } from '@fastkit/cookies';
 // import { JSONMapValue, JSONData } from '@fastkit/helpers';
@@ -220,12 +220,12 @@ type RedirectOptions = {
 
 export type RawVuePageControlRedirectSpec =
   | string
-  | (RouteQueryAndHash & LocationAsPath & RedirectOptions)
+  | (RouteQueryAndHash & MatcherLocationAsPath & RedirectOptions)
   | (RouteQueryAndHash & LocationAsRelativeRaw & RedirectOptions);
 
 export interface VuePageControlRedirectSpec
   extends RouteQueryAndHash,
-    LocationAsPath,
+    MatcherLocationAsPath,
     LocationAsRelativeRaw {
   statusCode: number;
   query?: LocationQueryRaw;
@@ -243,7 +243,7 @@ function resolveRawVuePageControlRedirectSpec(
     source = { path: source };
   }
   const { statusCode = DEFAULT_REDIRECT_STATUS, query, hash } = source;
-  const { path } = source as LocationAsPath;
+  const { path } = source as MatcherLocationAsPath;
   const { name, params } = source as LocationAsRelativeRaw;
   return {
     statusCode,
@@ -422,7 +422,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     );
     this._initialState = initialState;
 
-    this._route = ref(initialRoute) as Ref<ResolvedRouteLocation>;
+    this._route = ref(initialRoute as any) as Ref<ResolvedRouteLocation>;
     this._runningQueues = computed(() =>
       this.prefetchQueues.filter((q) => q.running),
     );

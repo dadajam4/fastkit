@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/tiny-logger",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "A small logger to display the application logs just a little bit nicer.",
   "buildOptions": {
     "name": "TinyLogger"
@@ -13,10 +13,13 @@
       "ja": "アプリケーションログをほんの少し綺麗に表示するための小さなロガー。"
     }
   },
-  "main": "index.js",
-  "module": "dist/tiny-logger.mjs",
+  "main": "./dist/tiny-logger.mjs",
+  "exports": {
+    ".": "./dist/tiny-logger.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/tiny-logger.d.ts",
@@ -36,6 +39,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/tiny-logger#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.9.0"
+    "@fastkit/helpers": "0.10.6"
   }
 }

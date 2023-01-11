@@ -1,3 +1,42 @@
+## [0.10.6](https://github.com/dadajam4/fastkit/compare/v0.10.5...v0.10.6) (2023-01-08)
+
+
+
+## [0.10.5](https://github.com/dadajam4/fastkit/compare/v0.10.4...v0.10.5) (2023-01-08)
+
+
+
+## [0.10.4](https://github.com/dadajam4/fastkit/compare/v0.10.3...v0.10.4) (2023-01-07)
+
+
+
+## [0.10.3](https://github.com/dadajam4/fastkit/compare/v0.10.2...v0.10.3) (2023-01-06)
+
+
+
+## [0.10.2](https://github.com/dadajam4/fastkit/compare/v0.10.1...v0.10.2) (2023-01-06)
+
+
+
+## [0.10.1](https://github.com/dadajam4/fastkit/compare/v0.10.0...v0.10.1) (2023-01-05)
+
+
+### Bug Fixes
+
+* **vot:** Consider the server startup port ([47f72a5](https://github.com/dadajam4/fastkit/commit/47f72a579c649f0fa3ba96148f51f4eeed8f61d0))
+
+
+
+# [0.10.0](https://github.com/dadajam4/fastkit/compare/v0.9.0...v0.10.0) (2023-01-04)
+
+
+### Bug Fixes
+
+* **icon-font-gen:** wrong webfont package references ([3fb5642](https://github.com/dadajam4/fastkit/commit/3fb564279f9704d1cd186a30715f830d108b1599))
+* **vui:** elevation is not applied ([3f3b918](https://github.com/dadajam4/fastkit/commit/3f3b9180925c6ef327570515fc04e2f4ba3bef9e))
+
+
+
 # [0.9.0](https://github.com/dadajam4/fastkit/compare/v0.8.18...v0.9.0) (2022-12-30)
 
 

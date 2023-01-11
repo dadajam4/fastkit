@@ -186,7 +186,9 @@ export class LocationService {
     const route = raw
       ? this.router.resolve(raw)
       : this.router.currentRoute.value;
-    return route.matched.flatMap((record) => Object.values(record.components));
+    return route.matched.flatMap((record) =>
+      Object.values(record.components || {}),
+    );
   }
 
   isAvailable(raw?: RouteLocationRaw) {

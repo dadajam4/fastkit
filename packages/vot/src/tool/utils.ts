@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { resolveConfig, ResolvedConfig, Plugin } from 'vite';
 import { VotPluginOptions } from '../vot';
 import type { RouteRecord } from 'vue-router';

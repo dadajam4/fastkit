@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Utilities for efficient development of Vue applications.",
   "buildOptions": {
     "name": "VueUtils"
@@ -13,10 +13,13 @@
       "ja": "Vueアプリケーションを効率的に開発するためのユーティリティー。"
     }
   },
-  "main": "index.js",
-  "module": "dist/vue-utils.mjs",
+  "main": "./dist/vue-utils.mjs",
+  "exports": {
+    ".": "./dist/vue-utils.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/vue-utils.d.ts",
@@ -35,13 +38,13 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-utils#readme",
   "peerDependencies": {
-    "vue": "^3.2.37",
-    "vue-router": "^4.0.16"
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
   },
   "dependencies": {
-    "@fastkit/body-scroll-lock": "0.9.0",
-    "@fastkit/visibility": "0.9.0",
-    "@fastkit/keyboard": "0.9.0",
-    "@fastkit/helpers": "0.9.0"
+    "@fastkit/body-scroll-lock": "0.10.6",
+    "@fastkit/visibility": "0.10.6",
+    "@fastkit/keyboard": "0.10.6",
+    "@fastkit/helpers": "0.10.6"
   }
 }

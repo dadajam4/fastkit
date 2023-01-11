@@ -196,10 +196,7 @@ export function isIterableObject<T = any>(source?: any): source is Iterable<T> {
 /**
  * @see https://github.com/vuejs/vue-router/blob/c69ff7bd60228fb79acd764c3fdae91015a49103/src/util/route.js#L96
  */
-export function isObjectEqual<T extends any>(
-  a: T = {} as T,
-  b: unknown,
-): b is T {
+export function isObjectEqual<T>(a: T = {} as T, b: unknown): b is T {
   // handle null value #1566
   if (!a || !b) return a === b;
   if (!isObject(b)) return false;

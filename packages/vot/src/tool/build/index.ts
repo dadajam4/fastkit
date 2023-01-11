@@ -5,9 +5,9 @@ import {
   mergeConfig,
 } from 'vite';
 import replace from '@rollup/plugin-replace';
-import { promises } from 'fs';
+import { promises } from 'node:fs';
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import {
   getEntryPoint,
   getPluginOptions,
@@ -216,13 +216,9 @@ async function generatePackageJson(
       ((viteConfig.build?.ssr || serverBuildOptions.build?.ssr) as string),
   );
 
-  const moduleFormat =
-    (viteConfig.build?.rollupOptions?.output as OutputOptions)?.format ||
-    (serverBuildOptions.build?.rollupOptions?.output as OutputOptions)?.format;
-
   const packageJson = {
-    main: outputFile ? ssrOutput.base : ssrOutput.name + '.js',
-    type: /^esm?$/i.test(moduleFormat || '') ? 'module' : 'commonjs',
+    exports: outputFile ? ssrOutput.base : ssrOutput.name + '.js', // Vite 3.0 default
+    type: 'module', // Vite 3.0 default
     ssr: {
       // This can be used later to serve static assets
       assets: (

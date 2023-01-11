@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import * as http from 'http';
+import * as http from 'node:http';
 import chalk from 'chalk';
 import { isObject } from '@fastkit/helpers';
 import { ProxyOptions, ResolvedConfig, HttpProxy } from 'vite';

@@ -9,13 +9,11 @@ export function globalsPlugin(options = {}): Plugin {
           'process.env.NODE_ENV': JSON.stringify('production'),
           __PLAY__: true,
           __COMMIT__: JSON.stringify('---'),
-          __GLOBAL__: false,
           __TEST__: false,
           __DEV__: true,
           __ESM_BUNDLER__: false,
           __VERSION__: JSON.stringify('0.0.0'),
-          __BROWSER__: !options.ssr,
-          __NODE_JS__: options.ssr,
+          // __NODE_JS__: options.ssr,
         };
         Object.entries(values).forEach(([key, value]) => {
           code = code.replace(new RegExp(key, 'g'), JSON.stringify(value));

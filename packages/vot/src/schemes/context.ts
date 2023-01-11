@@ -1,4 +1,4 @@
-import type { ServerResponse } from 'http';
+import type { ServerResponse } from 'node:http';
 import type { IncomingMessage } from 'connect';
 import type { App } from 'vue';
 import type { Router } from 'vue-router';

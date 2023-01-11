@@ -1,5 +1,5 @@
 import { hashElement, HashElementNode } from 'folder-hash';
-import path from 'path';
+import path from 'node:path';
 import fs from 'fs-extra';
 import { pathExists } from './path';
 import { NodeUtilError } from './logger';

@@ -1,0 +1,55 @@
+{
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "paths": {
+      "@fastkit/vui/dist/tool": ["../packages/vui/dist/tool"],
+      "@fastkit/vot/dist/tool": ["../packages/vot/dist/tool"],
+      "@fastkit/*": ["../packages/*/src"],
+      "fastkit/*": ["../packages/fastkit/src"],
+      "~~~": [
+        ".."
+      ],
+      "~~~/*": [
+        "../*"
+      ],
+      "@@@": [
+        ".."
+      ],
+      "@@@/*": [
+        "../*"
+      ],
+      "~~": [
+        "."
+      ],
+      "~~/*": [
+        "./*"
+      ],
+      "@@": [
+        "."
+      ],
+      "@@/*": [
+        "./*"
+      ],
+      "~": [
+        "./src"
+      ],
+      "~/*": [
+        "./src/*"
+      ],
+      "@": [
+        "./src"
+      ],
+      "@/*": [
+        "./src/*"
+      ],
+    }
+  },
+  "include": [
+    "../packages/global.d.ts",
+    "../packages/*/src",
+    "../core",
+    "./",
+  ]
+}

@@ -7,15 +7,15 @@
 :root {
   --docs-theme-font: 'Zen Dots', sans-serif;
   --docs-container-width: 960px;
-
-  // @FIXME vuiに書きたいけど mqミックスインが使えない
   --v-app-container-padding: 16px;
 
-  @include mq(sm) {
+  // @FIXME
+  // I really want to use css variables in the query so that the user can control the breakpoints.
+  @include mq(md) {
     --v-app-container-padding: 32px;
   }
 
-  @include mq(lg) {
+  @include mq(xl) {
     --v-app-container-padding: 40px;
   }
 }

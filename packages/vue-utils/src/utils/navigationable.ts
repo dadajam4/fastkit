@@ -5,7 +5,7 @@ import {
   SetupContext,
   CSSProperties,
 } from 'vue';
-import { ButtonHTMLAttributes } from '@vue/runtime-dom';
+import { ButtonHTMLAttributes } from 'vue';
 import { RouterLinkProps, RouteLocationRaw, RouterLink } from 'vue-router';
 
 let _defaultRouterLink = RouterLink;

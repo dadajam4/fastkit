@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/catcher",
-  "version": "0.9.0",
+  "version": "0.10.6",
   "description": "Custom classes for Type-safe handling of exceptions in your application.",
   "buildOptions": {
     "name": "Catcher"
@@ -13,10 +13,13 @@
       "ja": "あなたのアプリケーションで例外をTypeセーフに取り扱うためのカスタムクラス。"
     }
   },
-  "main": "index.js",
-  "module": "dist/catcher.mjs",
+  "main": "./dist/catcher.mjs",
+  "exports": {
+    ".": "./dist/catcher.mjs",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "index.js",
     "dist"
   ],
   "types": "dist/catcher.d.ts",

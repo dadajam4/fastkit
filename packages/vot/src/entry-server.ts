@@ -142,7 +142,7 @@ export const createEntry: SsrHandler = function createSsrEntry(
         headTags = '',
         htmlAttrs = '',
         bodyAttrs = '',
-      } = head ? renderHeadToString(head) : {};
+      } = head ? await renderHeadToString(head) : {};
 
       return { body, headTags, htmlAttrs, bodyAttrs };
     };
