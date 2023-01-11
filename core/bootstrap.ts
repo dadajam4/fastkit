@@ -56,6 +56,7 @@ files.forEach((shortName) => {
       main: mainModule,
       exports: {
         '.': mainModule,
+        './dist/*': './dist/*',
         './package.json': './package.json',
       },
       module: mainModule,
