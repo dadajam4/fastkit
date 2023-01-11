@@ -16,6 +16,7 @@
   "main": "./dist/sprite-images.mjs",
   "exports": {
     ".": "./dist/sprite-images.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

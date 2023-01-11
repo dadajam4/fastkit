@@ -15,6 +15,7 @@
   },
   "exports": {
     "./*.css": "./*.css",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

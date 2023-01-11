@@ -16,6 +16,7 @@
   "main": "./dist/node-util.mjs",
   "exports": {
     ".": "./dist/node-util.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [
@@ -42,7 +43,7 @@
     "chokidar": "^3.5.0",
     "esbuild": "^0.16.16",
     "execa": "^6.1.0",
-    "folder-hash": "^4.0.1",
+    "folder-hash": "^4.0.3",
     "fs-extra": "^11.1.0"
   }
 }

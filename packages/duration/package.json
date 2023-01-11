@@ -16,6 +16,7 @@
   "main": "./dist/duration.mjs",
   "exports": {
     ".": "./dist/duration.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

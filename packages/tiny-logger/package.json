@@ -16,6 +16,7 @@
   "main": "./dist/tiny-logger.mjs",
   "exports": {
     ".": "./dist/tiny-logger.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

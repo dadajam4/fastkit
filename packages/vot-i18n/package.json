@@ -13,6 +13,7 @@
   "main": "./dist/vot-i18n.mjs",
   "exports": {
     ".": "./dist/vot-i18n.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

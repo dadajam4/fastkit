@@ -16,6 +16,7 @@
   "main": "./dist/cache-control.mjs",
   "exports": {
     ".": "./dist/cache-control.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

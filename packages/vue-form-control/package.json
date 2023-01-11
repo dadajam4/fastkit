@@ -13,6 +13,7 @@
   "main": "./dist/vue-form-control.mjs",
   "exports": {
     ".": "./dist/vue-form-control.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

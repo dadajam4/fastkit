@@ -195,18 +195,6 @@ function createConfig(
     'chalk',
   );
 
-  // const nodePlugins =
-  //   format !== 'cjs'
-  //     ? [
-  //         require('@rollup/plugin-commonjs')({
-  //           sourceMap: false,
-  //         }),
-  //         require('rollup-plugin-polyfill-node')(),
-  //         require('@rollup/plugin-node-resolve').nodeResolve(),
-  //       ]
-  //     : [];
-  const nodePlugins: any[] = [];
-
   const externalRe = /^(vue|@fastkit|node:)/;
 
   if (packageOptions.rawStyles) {
@@ -249,7 +237,6 @@ function createConfig(
       vueJsx(),
       postcssPlugin,
       createReplacePlugin(isProductionBuild, isBundlerESMBuild),
-      ...nodePlugins,
       ..._plugins,
     ],
     output,
@@ -267,7 +254,6 @@ function createConfig(
 function createReplacePlugin(
   isProduction: boolean,
   isBundlerESMBuild: boolean,
-  // isNodeBuild: boolean,
 ) {
   const replacements: RollupReplaceOptions['values'] = {
     __COMMIT__: `"${COMMIT}"`,
@@ -281,9 +267,8 @@ function createReplacePlugin(
     // this is only used during Fastkit's internal tests
     __TEST__: String(false),
     __ESM_BUNDLER__: String(isBundlerESMBuild),
-    // is targeting Node (SSR)?
-    // __NODE_JS__: String(isNodeBuild),
   };
+
   // allow inline overrides like
   //__RUNTIME_COMPILE__=true yarn build runtime-core
   Object.keys(replacements).forEach((key) => {
@@ -294,6 +279,7 @@ function createReplacePlugin(
       }
     }
   });
+
   return replace({
     values: replacements,
     preventAssignment: true,

@@ -19,6 +19,7 @@
   "main": "./dist/icon-font-gen.mjs",
   "exports": {
     ".": "./dist/icon-font-gen.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

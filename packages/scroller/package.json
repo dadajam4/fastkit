@@ -16,6 +16,7 @@
   "main": "./dist/scroller.mjs",
   "exports": {
     ".": "./dist/scroller.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

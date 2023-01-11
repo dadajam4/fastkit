@@ -16,6 +16,7 @@
   "main": "./dist/cookies.mjs",
   "exports": {
     ".": "./dist/cookies.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

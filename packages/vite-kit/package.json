@@ -13,6 +13,7 @@
   "main": "./dist/vite-kit.mjs",
   "exports": {
     ".": "./dist/vite-kit.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

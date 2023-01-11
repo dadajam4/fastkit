@@ -13,6 +13,7 @@
   "main": "./dist/icon-font.mjs",
   "exports": {
     ".": "./dist/icon-font.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

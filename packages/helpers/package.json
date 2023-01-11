@@ -16,6 +16,7 @@
   "main": "./dist/helpers.mjs",
   "exports": {
     ".": "./dist/helpers.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

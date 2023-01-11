@@ -13,6 +13,7 @@
   "main": "./dist/vue-i18n.mjs",
   "exports": {
     ".": "./dist/vue-i18n.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

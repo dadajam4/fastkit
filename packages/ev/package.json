@@ -16,6 +16,7 @@
   "main": "./dist/ev.mjs",
   "exports": {
     ".": "./dist/ev.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

@@ -16,6 +16,7 @@
   "main": "./dist/media-match-gen.mjs",
   "exports": {
     ".": "./dist/media-match-gen.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

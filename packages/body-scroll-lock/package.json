@@ -5,6 +5,7 @@
   "main": "./dist/body-scroll-lock.mjs",
   "exports": {
     ".": "./dist/body-scroll-lock.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

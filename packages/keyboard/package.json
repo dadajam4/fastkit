@@ -13,6 +13,7 @@
   "main": "./dist/keyboard.mjs",
   "exports": {
     ".": "./dist/keyboard.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

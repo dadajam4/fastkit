@@ -13,6 +13,7 @@
   "main": "./dist/rules.mjs",
   "exports": {
     ".": "./dist/rules.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

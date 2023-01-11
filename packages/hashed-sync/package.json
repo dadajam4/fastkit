@@ -16,6 +16,7 @@
   "main": "./dist/hashed-sync.mjs",
   "exports": {
     ".": "./dist/hashed-sync.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [
@@ -41,7 +42,7 @@
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/hashed-sync#readme",
   "dependencies": {
     "@fastkit/tiny-logger": "0.10.6",
-    "folder-hash": "^4.0.1",
+    "folder-hash": "^4.0.3",
     "fs-extra": "^11.1.0",
     "imagemin": "^8.0.1",
     "imagemin-mozjpeg": "^10.0.0",

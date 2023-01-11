@@ -13,6 +13,7 @@
   "main": "./dist/universal-logger.mjs",
   "exports": {
     ".": "./dist/universal-logger.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [

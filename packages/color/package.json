@@ -16,6 +16,7 @@
   "main": "./dist/color.mjs",
   "exports": {
     ".": "./dist/color.mjs",
+    "./dist/*": "./dist/*",
     "./package.json": "./package.json"
   },
   "files": [
