@@ -298,10 +298,11 @@ export function useScrollerControl(setting: UseScrollerSetting) {
       if (!(el instanceof Element)) return;
       scroller.setElement(el);
     });
+
+    onBeforeUnmount(() => {
+      _scroller.destroy();
+    });
   }
-  onBeforeUnmount(() => {
-    _scroller.destroy();
-  });
 
   return _scroller;
 }

@@ -6,6 +6,7 @@ import { i18n } from '~/i18n';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
 import { LocaleLink, useLink } from '@fastkit/vue-i18n';
 import './main.scss';
+import './main.css';
 
 export default createVotEntry(App, {
   ErrorComponent: VErrorPage,

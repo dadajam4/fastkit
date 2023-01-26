@@ -1,5 +1,6 @@
-import { DirectiveHook, VNode, ObjectDirective } from 'vue';
+import { DirectiveHook, VNode, ObjectDirective, App } from 'vue';
 import { debounce, Debounced } from '@fastkit/helpers';
+import { installDirective } from './utils';
 
 export type ResizeDirective = ObjectDirective<
   ResizableElement,
@@ -129,4 +130,12 @@ export function resizeDirectiveArgument(
   bindingValue: RawResizeDirectiveBindingValue,
 ): [ResizeDirective, RawResizeDirectiveBindingValue] {
   return [resizeDirective, bindingValue];
+}
+
+export interface ResizeDirectiveAttrs {
+  'v-resize'?: RawResizeDirectiveBindingValue;
+}
+
+export function installResizeDirective(app: App) {
+  return installDirective(app, 'resize', resizeDirective);
 }

@@ -157,6 +157,10 @@ export class VueI18nSubSpaceProvider<
             dispose: () => {
               subSpace.dispose();
               arrayRemove(caches, cache);
+
+              // There is no API available to revoke provide(), so delete the cache of the app instance.
+              // @see https://github.com/vuejs/core/blob/4c3203b9b7b362fe61150ad05e231e2a35e11356/packages/runtime-core/src/apiInject.ts#L26
+              delete app._context.provides[provider.injectionKey as any];
             },
           };
           caches.push(cache);

@@ -7,6 +7,7 @@ import {
   VuiInjectionKey,
 } from './service';
 import {
+  installVueAppLayout,
   installVueStackPlugin,
   VueStackServiceOptions,
   VueColorSchemePlugin,
@@ -76,6 +77,8 @@ export class VuiPlugin {
       },
       ...stack,
     });
+
+    installVueAppLayout(app);
 
     // Vui
     const $vui = new VuiService(opts, app.config.globalProperties.$vstack);

@@ -3,6 +3,7 @@ import './-home.scss';
 import { defineComponent } from 'vue';
 import {
   VButton,
+  VAppBody,
   VAppContainer,
   VGridContainer,
   VGridItem,
@@ -26,7 +27,7 @@ export default defineComponent({
 
     return () => {
       return (
-        <div class="pg-home">
+        <VAppBody class="pg-home" center>
           <VAppContainer>
             <div class="text-center">
               <VBusyImage
@@ -81,7 +82,7 @@ export default defineComponent({
               </VGridContainer>
             </div>
           </VAppContainer>
-        </div>
+        </VAppBody>
       );
     };
   },

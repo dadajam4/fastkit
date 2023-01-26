@@ -1,5 +1,5 @@
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
-
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import { viteVuiPlugin } from '@fastkit/vui/tool';
 import { votPlugin } from '@fastkit/vot/tool';
 import { aliasesPlugin } from '../core/playground-aliases';
@@ -42,6 +42,11 @@ export default defineConfig({
     splitVendorChunkPlugin(),
     globalsPlugin(),
     aliasesPlugin(),
+    vanillaExtractPlugin({
+      esbuildOptions: {
+        external: ['node:*'],
+      },
+    }),
     PackageLoader(),
     votPlugin({
       pages: {

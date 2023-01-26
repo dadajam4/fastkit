@@ -1,5 +1,6 @@
 import { RollupOptions, OutputOptions, Plugin } from 'rollup';
 import { RollupReplaceOptions } from '@rollup/plugin-replace';
+import { vanillaExtractPlugin } from '@vanilla-extract/rollup-plugin';
 import path from 'node:path';
 import ts from 'rollup-plugin-typescript2';
 import replace from '@rollup/plugin-replace';
@@ -10,6 +11,7 @@ import { rawStylesPlugin } from '../core/raw-styles';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import postcss from 'rollup-plugin-postcss';
 import chalk from 'chalk';
+import { cssBundlePlugin } from './css-bundle-plugin';
 
 const TARGET: string | undefined = process.env.TARGET;
 const COMMIT: string | undefined = process.env.COMMIT;
@@ -195,7 +197,7 @@ function createConfig(
     'chalk',
   );
 
-  const externalRe = /^(vue|@fastkit|node:)/;
+  const externalRe = /^(vue|@fastkit|@vanilla-extract|node:)/;
 
   if (packageOptions.rawStyles) {
     _plugins.push(rawStylesPlugin(packageOptions.rawStyles));
@@ -209,7 +211,10 @@ function createConfig(
 
   return {
     input: resolve(entryFile),
-    external(id) {
+    external(id, importer) {
+      if (id.endsWith('.css') && !importer?.startsWith(packageDir)) {
+        return true;
+      }
       return external.includes(id) || externalRe.test(id);
     },
     plugins: [
@@ -235,6 +240,15 @@ function createConfig(
       }),
       tsPlugin,
       vueJsx(),
+      vanillaExtractPlugin({
+        identifiers: 'short',
+        esbuildOptions: {
+          external: ['node:*'],
+        },
+      }),
+      cssBundlePlugin({
+        output,
+      }),
       postcssPlugin,
       createReplacePlugin(isProductionBuild, isBundlerESMBuild),
       ..._plugins,

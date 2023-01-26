@@ -1,11 +1,15 @@
 export function findDependencies(
   modules: string[],
   manifest: Record<string, string[]>,
+  excludes?: string[],
 ) {
   const files = new Set<string>();
 
   for (const id of modules || []) {
     for (const file of manifest[id] || []) {
+      if (excludes && excludes.includes(file)) {
+        continue;
+      }
       files.add(file);
     }
   }
@@ -39,11 +43,14 @@ type DocParts = {
   headTags?: string;
   body?: string;
   initialState?: string;
+  bodyPrepend?: string;
 };
+
+const BODY_PREPEND_MATCH_RE = /<body([^>]*)>/;
 
 export function buildHtmlDocument(
   template: string,
-  { htmlAttrs, bodyAttrs, headTags, body, initialState }: DocParts,
+  { htmlAttrs, bodyAttrs, headTags, body, initialState, bodyPrepend }: DocParts,
 ) {
   if (__DEV__) {
     if (template.indexOf(`id="${containerId}"`) === -1) {
@@ -65,7 +72,7 @@ export function buildHtmlDocument(
     template = template.replace('</head>', `\n${headTags}\n</head>`);
   }
 
-  return template.replace(
+  let html = template.replace(
     containerRE,
     // Use function parameter here to avoid replacing `$1` in body or initialState.
     (_, d1) =>
@@ -75,4 +82,30 @@ export function buildHtmlDocument(
         initialState || "'{}'"
       }</script>`,
   );
+
+  if (bodyPrepend) {
+    const bodyStart = html.match(BODY_PREPEND_MATCH_RE)?.[0];
+    if (bodyStart) {
+      html = html.replace(bodyStart, `${bodyStart}${bodyPrepend}`);
+    }
+  }
+  return html;
+}
+
+const HEAD_MATCH_RE = /<\s*?head(\s+[^>]+)?\s*?>([\s\S]*?)<\/\s*?head\s*?>/;
+
+const ASSET_MATCH_RE = /<\s*?(script|link)[^>]+href="([^"]+)"[^>]+/g;
+
+const HREF_MATCH_RE = /href="([^"]+)"/;
+
+export function extractHeadAssets(html: string) {
+  const head = html.match(HEAD_MATCH_RE)?.[0] || '';
+  const assets =
+    head
+      .match(ASSET_MATCH_RE)
+      ?.map((code) => {
+        return code.match(HREF_MATCH_RE)?.[1];
+      })
+      .filter((asset): asset is string => !!asset) || [];
+  return assets;
 }

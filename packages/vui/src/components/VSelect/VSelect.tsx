@@ -37,7 +37,7 @@ import { VIcon } from '../VIcon';
 import { VMenu } from '../kits';
 import { VOptionGroup } from '../VOptionGroup';
 import { VOption } from '../VOption';
-import { VButton } from '..';
+import { VButton } from '../VButton';
 import { VMenuControl } from '@fastkit/vue-stack';
 
 export const ARROW_KEY_TYPES = useKeyboard.Key(['ArrowUp', 'ArrowDown']);

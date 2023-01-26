@@ -1,4 +1,3 @@
-export * from './ClientOnly';
 export * from './VPage';
 export * from './VPageProgress';
 export * from './VPageLink';

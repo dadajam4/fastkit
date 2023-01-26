@@ -1,9 +1,5 @@
 import { defineComponent } from 'vue';
-import {
-  VStackRoot,
-  useInjectTheme,
-  renderSlotOrEmpty,
-} from '@fastkit/vue-kit';
+import { VAppLayout, VStackRoot, useInjectTheme } from '@fastkit/vue-kit';
 
 export const VApp = defineComponent({
   name: 'VApp',
@@ -11,7 +7,11 @@ export const VApp = defineComponent({
     useInjectTheme();
 
     return () => {
-      return <VStackRoot>{renderSlotOrEmpty(ctx.slots, 'default')}</VStackRoot>;
+      return (
+        <VStackRoot>
+          <VAppLayout v-slots={ctx.slots} />
+        </VStackRoot>
+      );
     };
   },
 });

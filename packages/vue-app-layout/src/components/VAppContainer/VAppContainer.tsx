@@ -1,4 +1,4 @@
-import './VAppContainer.scss';
+import * as styles from './VAppContainer.css';
 
 import {
   defineComponent,
@@ -51,9 +51,9 @@ export const VAppContainer = defineComponent({
     const provideState = computed(() => state.value.inject);
 
     const classes = computed(() => {
-      const classes = ['v-app-container'];
+      const classes = ['VAppContainer', styles.container];
       const myState = state.value.self;
-      myState && classes.push(`v-app-container--${myState}`);
+      myState && classes.push(styles.states[myState]);
       return classes;
     });
 
@@ -62,7 +62,7 @@ export const VAppContainer = defineComponent({
     return () => {
       return (
         <div class={classes.value}>
-          <div class="v-app-container__inner">
+          <div class={styles.inner}>
             {ctx.slots.default && ctx.slots.default()}
           </div>
         </div>

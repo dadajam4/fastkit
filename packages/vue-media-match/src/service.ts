@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue';
 import { MEDIA_MATCH_CONDITIONS } from '@fastkit/media-match';
-import type { MediaMatchCondition, MediaMatchKey } from '@fastkit/media-match';
+import type { MediaMatchConditions, MediaMatchKey } from '@fastkit/media-match';
 import { arrayRemove, IN_WINDOW } from '@fastkit/helpers';
 
 export type MediaMatchServiceState = Record<MediaMatchKey, boolean>;
@@ -18,7 +18,7 @@ export interface VueMediaMatchService {
   (key: MediaMatchKey): boolean;
   state(): MediaMatchServiceState;
   listeners(): MediaMatchListener[];
-  conditions(): MediaMatchCondition[];
+  conditions(): MediaMatchConditions;
   bootState(): BootState;
   isPending(): boolean;
   isBooted(): boolean;

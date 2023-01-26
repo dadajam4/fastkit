@@ -10,6 +10,7 @@ import {
   buildHtmlDocument,
   findDependencies,
   renderPreloadLinks,
+  extractHeadAssets,
 } from './utils/html';
 import { createMockPathRoute } from '@fastkit/vue-utils';
 import { setupVotPluginsAndHooks } from './schemes';
@@ -28,6 +29,7 @@ const getEmptyHtmlParts = () => ({
   body: '',
   initialState: undefined as any,
   dependencies: [] as string[],
+  bodyPrepend: undefined as string | undefined,
 });
 
 export const createEntry: SsrHandler = function createSsrEntry(
@@ -144,7 +146,13 @@ export const createEntry: SsrHandler = function createSsrEntry(
         bodyAttrs = '',
       } = head ? await renderHeadToString(head) : {};
 
-      return { body, headTags, htmlAttrs, bodyAttrs };
+      return {
+        body,
+        headTags,
+        htmlAttrs,
+        bodyAttrs,
+        bodyPrepend: context.teleports?.body,
+      };
     };
 
     // Wait for either rendering finished or redirection detected
@@ -168,12 +176,18 @@ export const createEntry: SsrHandler = function createSsrEntry(
       ),
     };
 
+    // <script type="module" crossorigin src="/fastkit/assets/index-29316854.js"></script>
+    // <link rel="modulepreload" crossorigin href="/fastkit/assets/vendor-5aee0fb5.js">
+
+    const templateAssets = extractHeadAssets(template);
+
     // If a manifest is provided and the current framework is able to add
     // modules to the context (e.g. Vue) while rendering, collect the dependencies.
     if (manifest) {
       htmlParts.dependencies = findDependencies(
         (context as any).modules,
         manifest,
+        templateAssets,
       );
 
       if (preload && htmlParts.dependencies.length > 0) {
@@ -181,12 +195,12 @@ export const createEntry: SsrHandler = function createSsrEntry(
       }
     }
 
+    const html = buildHtmlDocument(template, htmlParts);
+
     return {
-      html: buildHtmlDocument(template, htmlParts),
+      html,
       ...htmlParts,
       ...writtenResponse,
     };
   };
 };
-
-// export default viteSSR;

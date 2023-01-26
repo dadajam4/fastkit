@@ -1,4 +1,11 @@
-import { DirectiveBinding, DirectiveHook, ObjectDirective, VNode } from 'vue';
+import {
+  DirectiveBinding,
+  DirectiveHook,
+  ObjectDirective,
+  VNode,
+  App,
+} from 'vue';
+import { installDirective } from './utils';
 
 export type ClickOutsideDirectiveHandler =
   | ((ev: MouseEvent | PointerEvent) => any)
@@ -101,4 +108,12 @@ export function clickOutsideDirectiveArgument(
   bindingValue: RawClickOutsideDirectiveBindingValue,
 ): [ClickOutsideDirective, RawClickOutsideDirectiveBindingValue] {
   return [clickOutsideDirective, bindingValue];
+}
+
+export interface ClickOutsideDirectiveAttrs {
+  'v-click-outside'?: ClickOutsideDirectiveBindingValue;
+}
+
+export function installClickOutsideDirective(app: App) {
+  return installDirective(app, 'click-outside', clickOutsideDirective);
 }

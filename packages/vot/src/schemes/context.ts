@@ -19,4 +19,5 @@ export interface VotContext {
   initialRoute: ReturnType<Router['resolve']>;
   plugins: VotPlugin[];
   hooks: VotHooks;
+  teleports?: Record<string, string>;
 }

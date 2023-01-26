@@ -1,5 +1,6 @@
 import { defineComponent } from 'vue';
-import { VDocsSection, VCode } from '~/components';
+// import { VDocsSection, VCode } from '~/components';
+import { VPage } from '@fastkit/vui';
 import { VPackageProvider } from 'virtual:package-provider:vue-app-layout';
 import { i18n } from '~/i18n';
 import { pkg } from './-i18n';
@@ -16,16 +17,7 @@ export default defineComponent({
       return (
         <VPackageProvider
           v-slots={{
-            default: ({ pkg }) => (
-              <>
-                {pkg.renderHeader()}
-                <VDocsSection title={common.t.usage}>
-                  <VCode language="ts">
-                    {`// ${common.t.docIsInPreparation}`}
-                  </VCode>
-                </VDocsSection>
-              </>
-            ),
+            default: ({ pkg }) => <VPage />,
           }}
         />
       );

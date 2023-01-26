@@ -21,7 +21,7 @@ import { VCheckbox } from '../VCheckbox';
 import { VIcon, resolveRawIconProp } from '../VIcon';
 import { VProgressCircular } from '../loading';
 import { resizeDirectiveArgument, VNodeChildOrSlot } from '@fastkit/vue-utils';
-import { VAppLayoutControl } from '@fastkit/vue-app-layout';
+import { VueAppLayout } from '@fastkit/vue-app-layout';
 import { VPaper } from '../VPaper';
 
 export type DataTableHeaderAlign = 'left' | 'center' | 'right';
@@ -254,7 +254,7 @@ export const VDataTable = defineComponent({
       },
     ]);
 
-    const layout = VAppLayoutControl.use();
+    const layout = VueAppLayout.use();
 
     const bodyInnerStylesRef = computed<CSSProperties | undefined>(() => {
       if (!bootedRef.value) return;

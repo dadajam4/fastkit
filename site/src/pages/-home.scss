@@ -1,9 +1,5 @@
 .pg-home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  padding: 40px;
 
   &__title {
     font-size: 48px;
