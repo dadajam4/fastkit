@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cache-control",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Helper implementation for plugging cache controls into a JavaScript implementation.",
   "buildOptions": {
     "name": "CacheControl"
@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/cache-control#readme",
   "dependencies": {
-    "@fastkit/duration": "0.12.0",
-    "@fastkit/helpers": "0.12.0"
+    "@fastkit/duration": "0.12.1",
+    "@fastkit/helpers": "0.12.1"
   }
 }

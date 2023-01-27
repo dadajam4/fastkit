@@ -43,6 +43,17 @@ export class MediaMatchConditions {
     return this._array.forEach(callbackfn, thisArg);
   }
 
+  map<U>(
+    callbackfn: (
+      value: MediaMatchCondition,
+      index: number,
+      array: MediaMatchCondition[],
+    ) => U,
+    thisArg?: any,
+  ): U[] {
+    return this._array.map<U>(callbackfn, thisArg);
+  }
+
   push(...items: MediaMatchCondition[]): number {
     const length = this._array.push(...items);
     items.forEach((item) => {
