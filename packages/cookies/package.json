@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cookies",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "Helper implementation for universal server/browser control of cookie headers.",
   "buildOptions": {
     "name": "Cookies"
@@ -38,9 +38,9 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/cookies#readme",
   "dependencies": {
-    "@fastkit/ev": "0.12.1",
-    "@fastkit/helpers": "0.12.1",
-    "@fastkit/tiny-logger": "0.12.1",
+    "@fastkit/ev": "0.12.2",
+    "@fastkit/helpers": "0.12.2",
+    "@fastkit/tiny-logger": "0.12.2",
     "cookie": "^0.5.0",
     "set-cookie-parser": "^2.5.1"
   }

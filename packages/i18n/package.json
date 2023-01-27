@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/i18n",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "A library for localizing applications into multiple languages, regardless of the server/browser execution environment.",
   "buildOptions": {
     "name": "I18n"
@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/i18n#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.12.1",
-    "@fastkit/tiny-logger": "0.12.1"
+    "@fastkit/helpers": "0.12.2",
+    "@fastkit/tiny-logger": "0.12.2"
   }
 }
