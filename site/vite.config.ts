@@ -43,6 +43,9 @@ export default defineConfig({
     globalsPlugin(),
     aliasesPlugin(),
     vanillaExtractPlugin({
+      // @TODO
+      // If set to short, the selector is not output correctly when Generate is used.
+      identifiers: 'debug',
       esbuildOptions: {
         external: ['node:*'],
       },

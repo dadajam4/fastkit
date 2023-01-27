@@ -44,6 +44,7 @@ export const VAppDrawer = defineComponent({
     const layout = useVueAppLayout();
     const drawer = layout.launchDrawer(props);
     const staticStyles = ['VAppDrawer', styles.host];
+
     const classesRef = computed(() => {
       const positionStyles = styles.positions[drawer.position];
       const hostClasses: (string | string[])[] = [staticStyles];

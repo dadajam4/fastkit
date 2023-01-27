@@ -176,9 +176,6 @@ export const createEntry: SsrHandler = function createSsrEntry(
       ),
     };
 
-    // <script type="module" crossorigin src="/fastkit/assets/index-29316854.js"></script>
-    // <link rel="modulepreload" crossorigin href="/fastkit/assets/vendor-5aee0fb5.js">
-
     const templateAssets = extractHeadAssets(template);
 
     // If a manifest is provided and the current framework is able to add
