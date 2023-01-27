@@ -94,7 +94,7 @@ export function buildHtmlDocument(
 
 const HEAD_MATCH_RE = /<\s*?head(\s+[^>]+)?\s*?>([\s\S]*?)<\/\s*?head\s*?>/;
 
-const ASSET_MATCH_RE = /<\s*?(script|link)[^>]+href="([^"]+)"[^>]+/g;
+const ASSET_MATCH_RE = /<\s*?(script|link)[^>]+href="([^"]+)"/g;
 
 const HREF_MATCH_RE = /href="([^"]+)"/;
 
