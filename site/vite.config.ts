@@ -53,7 +53,7 @@ export default defineConfig({
     PackageLoader(),
     votPlugin({
       pages: {
-        exclude: ['**/-*/**/*', '**/-*.*'],
+        exclude: ['**/-*/**/*', '**/-*.*', '**/*.css.ts'],
         onRoutesGenerated(routes) {
           routes.unshift({
             name: 'home',

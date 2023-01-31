@@ -59,8 +59,6 @@ export const barSpacers = verticals((y) => [
   bars((bar) => {
     const { transition } = computedTokens[bar][y];
 
-    console.log(y, bar);
-
     return [
       bar,
       style({
