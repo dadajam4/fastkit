@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/hashed-sync",
-  "version": "0.12.3",
+  "version": "0.12.4",
   "description": "Compare and synchronize the status of entire files and directories by hash value.",
   "buildOptions": {
     "name": "HashedSync"
@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/hashed-sync#readme",
   "dependencies": {
-    "@fastkit/tiny-logger": "0.12.3",
+    "@fastkit/tiny-logger": "0.12.4",
     "folder-hash": "^4.0.3",
     "fs-extra": "^11.1.0",
     "imagemin": "^8.0.1",

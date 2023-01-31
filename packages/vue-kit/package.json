@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-kit",
-  "version": "0.12.3",
+  "version": "0.12.4",
   "description": "Utilities for Vue applications.",
   "buildOptions": {
     "name": "VueKit"
@@ -41,15 +41,15 @@
     "vue": "^3.2.45"
   },
   "dependencies": {
-    "fastkit": "0.12.3",
-    "@fastkit/vue-app-layout": "0.12.3",
-    "@fastkit/vue-color-scheme": "0.12.3",
-    "@fastkit/vue-form-control": "0.12.3",
-    "@fastkit/vue-loading": "0.12.3",
-    "@fastkit/vue-media-match": "0.12.3",
-    "@fastkit/vue-page": "0.12.3",
-    "@fastkit/vue-scroller": "0.12.3",
-    "@fastkit/vue-stack": "0.12.3",
-    "@fastkit/vue-utils": "0.12.3"
+    "fastkit": "0.12.4",
+    "@fastkit/vue-app-layout": "0.12.4",
+    "@fastkit/vue-color-scheme": "0.12.4",
+    "@fastkit/vue-form-control": "0.12.4",
+    "@fastkit/vue-loading": "0.12.4",
+    "@fastkit/vue-media-match": "0.12.4",
+    "@fastkit/vue-page": "0.12.4",
+    "@fastkit/vue-scroller": "0.12.4",
+    "@fastkit/vue-stack": "0.12.4",
+    "@fastkit/vue-utils": "0.12.4"
   }
 }
