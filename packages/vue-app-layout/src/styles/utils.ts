@@ -4,12 +4,15 @@ import {
   VAL_X_POSITIONS,
   VAL_STICK_X_POSITIONS,
   VAL_STICK_Y_POSITIONS,
+  VAL_BAR_TYPES,
 } from '../schemes';
 import { style, globalStyle, GlobalStyleRule } from '@vanilla-extract/css';
 
 export const verticals = objectFromArray.build(VAL_Y_POSITIONS);
 
 export const horizontals = objectFromArray.build(VAL_X_POSITIONS);
+
+export const bars = objectFromArray.build(VAL_BAR_TYPES);
 
 export const sticks = {
   x: objectFromArray.build(VAL_STICK_X_POSITIONS),

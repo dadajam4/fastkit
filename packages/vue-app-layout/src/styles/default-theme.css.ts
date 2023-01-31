@@ -5,7 +5,7 @@ import { horizontals, verticals } from './utils';
 createGlobalTheme(':root', tokens, {
   zIndex: '10',
   transition: {
-    duration: '250ms',
+    duration: '200ms',
     function: 'ease',
   },
   stack: {
@@ -33,7 +33,11 @@ createGlobalTheme(':root', tokens, {
   },
   drawer: {
     width: '240px',
-    ...horizontals((x) => [x, { width: tokens.drawer.width }]),
+    railWidth: '56px',
+    ...horizontals((x) => [
+      x,
+      { width: tokens.drawer.width, railWidth: tokens.drawer.railWidth },
+    ]),
   },
   container: {
     padding: '32px',

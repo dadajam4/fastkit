@@ -10,11 +10,13 @@ import {
   VueAppDrawer,
   VueAppDrawerControl,
   VueAppDrawerStaticCondition,
+  VueAppDrawerRaleCondition,
   VueAppDrawerStickedSettings,
   VueAppStackTransitionSettings,
 } from '../../controls';
 import { defineSlotsProps } from '@fastkit/vue-utils';
 import { VAppStack, VAppStackVerticalPositionProps } from '../VAppStack';
+import { useBooting } from '../../composables/booting';
 
 export interface VAppDrawerRef {
   get: () => VueAppDrawer;
@@ -31,6 +33,7 @@ export const VAppDrawer = defineComponent({
     ...VAppStackVerticalPositionProps,
     sticked: [String, Boolean, Object] as PropType<VueAppDrawerStickedSettings>,
     static: [Boolean, Function] as PropType<VueAppDrawerStaticCondition>,
+    rale: [Boolean, Function] as PropType<VueAppDrawerRaleCondition>,
     transition: [String, Object] as PropType<VueAppStackTransitionSettings>,
     backdrop: {
       type: Boolean as PropType<boolean>,
@@ -44,13 +47,19 @@ export const VAppDrawer = defineComponent({
     const layout = useVueAppLayout();
     const drawer = layout.launchDrawer(props);
     const staticStyles = ['VAppDrawer', styles.host];
+    const booting = useBooting();
 
     const classesRef = computed(() => {
       const positionStyles = styles.positions[drawer.position];
-      const hostClasses: (string | string[])[] = [staticStyles];
+      const hostClasses: (string | string[] | undefined)[] = [
+        staticStyles,
+        positionStyles.host,
+        booting.styles,
+      ];
 
       drawer.isActive && hostClasses.push(positionStyles.isActive);
       drawer.isStatic && hostClasses.push(positionStyles.isStatic);
+      drawer.isRale && hostClasses.push(positionStyles.isRale);
       drawer.hasBackdrop && hostClasses.push(positionStyles.hasBackdrop);
       VAL_Y_POSITIONS.forEach((y) => {
         const stickPosition = drawer[y];

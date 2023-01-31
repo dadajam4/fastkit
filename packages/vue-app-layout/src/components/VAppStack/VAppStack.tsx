@@ -13,6 +13,8 @@ import {
   VueAppLayoutStickPositionY,
   VAL_X_POSITIONS,
   VAL_Y_POSITIONS,
+  VueAppLayoutPositionY,
+  VAL_BAR_TYPES,
 } from '../../schemes';
 import {
   useVueAppLayout,
@@ -71,6 +73,13 @@ export const VAppStack = defineComponent({
       return classes;
     });
 
+    const renderBarSpacers = (y: VueAppLayoutPositionY) => {
+      const barClasses = styles.barSpacers[y];
+      return VAL_BAR_TYPES.map((bar) => (
+        <div key={bar} class={barClasses[bar]} />
+      ));
+    };
+
     const api: VAppStackRef = {
       get: () => stack,
     };
@@ -84,20 +93,24 @@ export const VAppStack = defineComponent({
       return (
         <Teleport to="body">
           <div class={hostClasses.value} {...ctx.attrs}>
-            {backdrop && (
-              <Transition key="backdrop" {...backdrop.transition}>
-                {stack.active && (
-                  <div
-                    class={styles.backdrop}
-                    v-body-scroll-lock={stack.active}
-                    onClick={backdrop.onClick}
-                  />
-                )}
+            {renderBarSpacers('top')}
+            <div class={styles.inner}>
+              {backdrop && (
+                <Transition key="backdrop" {...backdrop.transition}>
+                  {stack.active && (
+                    <div
+                      class={styles.backdrop}
+                      v-body-scroll-lock={stack.active}
+                      onClick={backdrop.onClick}
+                    />
+                  )}
+                </Transition>
+              )}
+              <Transition key="body" {...stack.transition}>
+                {!!body && withDirectives(body as any, [[vShow, stack.active]])}
               </Transition>
-            )}
-            <Transition key="body" {...stack.transition}>
-              {!!body && withDirectives(body as any, [[vShow, stack.active]])}
-            </Transition>
+            </div>
+            {renderBarSpacers('bottom')}
           </div>
         </Teleport>
       );

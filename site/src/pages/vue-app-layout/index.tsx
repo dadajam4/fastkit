@@ -10,8 +10,8 @@ const PkgI18nSubSpace = i18n.defineSubSpace({ pkg });
 export default defineComponent({
   i18n: PkgI18nSubSpace,
   setup() {
-    const pkgI18n = PkgI18nSubSpace.use();
-    const { common } = pkgI18n.at;
+    // const pkgI18n = PkgI18nSubSpace.use();
+    // const { common } = pkgI18n.at;
 
     return () => {
       return (

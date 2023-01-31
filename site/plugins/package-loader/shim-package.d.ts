@@ -20,6 +20,6 @@ declare module 'virtual:package:*' {
 }
 
 declare module 'virtual:packages' {
-  const packages: typeof PackageInfo[];
+  const packages: (typeof PackageInfo)[];
   export default packages;
 }

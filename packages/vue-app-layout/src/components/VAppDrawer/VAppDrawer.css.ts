@@ -6,9 +6,11 @@ import {
   horizontals,
   verticals,
   extractTokenName,
+  createSimpleVueTransition,
 } from '../../styles';
 import { VAL_Y_POSITIONS, VAL_STICK_Y_POSITIONS } from '../../schemes';
 import { objectFromArray } from '@fastkit/helpers';
+import { booting } from '../../composables/booting.css';
 
 const stickes = objectFromArray.build(VAL_STICK_Y_POSITIONS);
 
@@ -25,7 +27,7 @@ export const bodyBase = style({
 
 export const positions = horizontals((x) => {
   const computed = computedTokens.drawer[x];
-  const { width } = tokens.drawer[x];
+  const { width } = computed;
 
   const host = style({});
 
@@ -39,13 +41,19 @@ export const positions = horizontals((x) => {
     width,
     pointerEvents: 'auto',
     willChange: 'transform',
+    transition: `width ${computed.transition}`,
   });
 
   const positionStyles = {
     host,
     body,
-    isActive: style({}),
-    isStatic: style({}),
+    isActive: style({
+      // zIndex: calc.add(tokens.zIndex, 2),
+    }),
+    isStatic: style({
+      zIndex: tokens.zIndex,
+    }),
+    isRale: style({}),
     hasBackdrop: style({}),
     stickedTo: verticals((y) => {
       return [y, stickes((stickPosition) => [stickPosition, style({})])];
@@ -54,36 +62,56 @@ export const positions = horizontals((x) => {
 
   const leaveTo = calc.multiply(width, x === 'left' ? -1 : 1);
 
-  globalStyle(`${body}-enter-active, ${body}-leave-active`, {
-    transition: `transform ${computedTokens.transition}`,
-  });
+  createSimpleVueTransition(
+    {
+      in: {
+        transition: `transform ${computed.transition}`,
+      },
+      out: {
+        transform: `translateX(${leaveTo})`,
+      },
+    },
+    body,
+  );
 
-  globalStyle(`${body}-enter-from, ${body}-leave-to`, {
-    transform: `translateX(${leaveTo})`,
-  });
-
-  const offsetEnd = extractTokenName(computed.offsetEnd);
-  const staticOffsetEnd = extractTokenName(
+  const widthToken = extractTokenName(width);
+  const offsetEndToken = extractTokenName(computed.offsetEnd);
+  const staticOffsetEndToken = extractTokenName(
     computedTokens.staticDrawer[x].offsetEnd,
   );
+  const transitionToken = extractTokenName(computed.transition);
 
   globalStyle(':root', {
     vars: {
-      [offsetEnd]: '0px',
-      [staticOffsetEnd]: '0px',
+      [widthToken]: tokens.drawer[x].width,
+      [offsetEndToken]: '0px',
+      [staticOffsetEndToken]: '0px',
+      [transitionToken]: '0s',
+    },
+  });
+
+  globalStyle(`:root:has(${positionStyles.isRale})`, {
+    vars: {
+      [widthToken]: tokens.drawer[x].railWidth,
+    },
+  });
+
+  globalStyle(`:root:has(${positionStyles.host}:not(${booting}))`, {
+    vars: {
+      [transitionToken]: tokens.transition.duration,
     },
   });
 
   globalStyle(`:root:has(${positionStyles.isActive})`, {
     vars: {
-      [offsetEnd]: width,
+      [offsetEndToken]: width,
     },
   });
 
   globalStyle(`:root:has(${positionStyles.isStatic})`, {
     vars: {
-      [offsetEnd]: width,
-      [staticOffsetEnd]: width,
+      [offsetEndToken]: width,
+      [staticOffsetEndToken]: width,
     },
   });
 

@@ -12,6 +12,7 @@ import {
   VNodeArrayChildren,
   withDirectives,
   Transition,
+  isVNode,
 } from 'vue';
 import { useVui } from '../../injections';
 import type { VuiService } from '../../service';
@@ -657,7 +658,8 @@ export const VDataTable = defineComponent({
           if (
             _children &&
             !Array.isArray(_children) &&
-            typeof _children === 'object'
+            typeof _children === 'object' &&
+            !isVNode(_children)
           ) {
             _children = JSON.stringify(_children);
           }

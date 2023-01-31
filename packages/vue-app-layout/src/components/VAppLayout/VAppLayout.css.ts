@@ -1,22 +1,59 @@
 import { style, globalStyle } from '@vanilla-extract/css';
-import { computedTokens, extractTokenName, tokens } from '../../styles';
+import {
+  computedTokens,
+  extractTokenName,
+  tokens,
+  verticals,
+  bars,
+} from '../../styles';
 import * as drawerStyles from '../VAppDrawer/VAppDrawer.css';
 import { VAL_X_POSITIONS, VAL_POSITIONS } from '../../schemes';
 import { objectFromArray } from '@fastkit/helpers';
 import * as bodyStyles from '../VAppBody/VAppBody.css';
+
+const transitions = [
+  ...VAL_X_POSITIONS.map(
+    (position) =>
+      `padding-${position} ${computedTokens.drawer[position].transition}`,
+  ),
+];
 
 export const host = style({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
   minHeight: '100vh',
-  paddingTop: computedTokens.viewport.top,
-  paddingBottom: computedTokens.viewport.bottom,
   paddingLeft: computedTokens.viewport.left,
   paddingRight: computedTokens.viewport.right,
-  transition: `padding ${computedTokens.transition}`,
+  transitionTimingFunction: tokens.transition.function,
+  transition: transitions.join(', '),
   willChange: 'padding',
 });
+
+export const inner = style({
+  flexGrow: '2',
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+});
+
+export const barSpacers = verticals((y) => [
+  y,
+  bars((bar) => {
+    const { height, transition } = computedTokens[bar][y];
+
+    return [
+      bar,
+      style({
+        height,
+        flex: `0 0 ${height}`,
+        transition: `all ${transition}`,
+        // willChange: 'height',
+        // transition: `height 1s`,
+      }),
+    ];
+  }),
+]);
 
 export const viewport = style({
   flexGrow: '2',
@@ -48,7 +85,7 @@ VAL_X_POSITIONS.forEach((x) => {
     `:root:has(${drawer.isActive}:not(${drawer.hasBackdrop})), :root:has(${drawer.isStatic})`,
     {
       vars: {
-        [computedPosition]: tokens.drawer[x].width,
+        [computedPosition]: computedTokens.drawer[x].width,
       },
     },
   );

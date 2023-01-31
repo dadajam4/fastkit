@@ -9,6 +9,7 @@ import {
   VSelect,
   FormSelectorItem,
   useVui,
+  VLink,
 } from '@fastkit/vui';
 import { PackageExploerI18nSpace, FilterInfo } from './i18n';
 import { i18n } from '~/i18n';
@@ -228,7 +229,9 @@ export const VPackageExplorer = defineComponent({
       {
         key: 'name',
         label: () => _trans.header.name,
-        cell: (payload) => payload.item.name,
+        cell: (payload) => (
+          <VLink to={`/${payload.item.name}/`}>{payload.item.name}</VLink>
+        ),
         sortQuery: 'name',
       },
       {

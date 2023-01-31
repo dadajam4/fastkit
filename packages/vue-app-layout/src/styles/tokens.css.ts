@@ -18,7 +18,7 @@ export const tokens = createGlobalThemeContract({
      * Duration of transitions
      * @default "250ms"
      */
-    duration: 'val-drawer-transition-duration',
+    duration: 'val-transition-duration',
     /**
      * timing function
      *
@@ -26,7 +26,7 @@ export const tokens = createGlobalThemeContract({
      *
      * @default "ease"
      */
-    function: 'val-drawer-transition-function',
+    function: 'val-transition-function',
   },
   /** Elements covering windows and viewports */
   stack: {
@@ -82,6 +82,11 @@ export const tokens = createGlobalThemeContract({
      * @default "240px"
      */
     width: 'val-drawer-width',
+    /**
+     * Width of drawer in rail condition
+     * @default "56px"
+     */
+    railWidth: 'val-drawer-railWidth',
     ...horizontals((x) => [
       x,
       {
@@ -90,6 +95,11 @@ export const tokens = createGlobalThemeContract({
          * @default "val-drawer-width"
          */
         width: `val-${x}Drawer-width`,
+        /**
+         * Width of drawer in rail condition
+         * @default "val-drawer-railWidth"
+         */
+        railWidth: `val-${x}Drawer-railWidth`,
       },
     ]),
   },
@@ -134,6 +144,12 @@ export const computedTokens = createGlobalThemeContract({
            */
           offsetEnd: `val-computed-${y}SystemBar-offsetEnd`,
           /**
+           * Coordinates for starting point of transition
+           *
+           * This value is used inside vue-app-layout.
+           */
+          transitionOut: `val-computed-${y}SystemBar-transitionOut`,
+          /**
            * Offset coordinates of the left edge of the system bar
            *
            * Width of the left drawer when it satisfies the following conditions
@@ -151,6 +167,12 @@ export const computedTokens = createGlobalThemeContract({
            * - Statically placed or opened in non-overlay mode
            */
           right: `val-computed-${y}SystemBar-right`,
+          /**
+           * Transition at system bar open/close
+           *
+           * This value is set to `0s` until the first rendering completes in the browser to avoid busy animations, such as during page transitions.
+           */
+          transition: `val-computed-${y}SystemBar-transition`,
         },
       ];
     }),
@@ -176,6 +198,12 @@ export const computedTokens = createGlobalThemeContract({
            */
           offsetEnd: `val-computed-${y}Toolbar-offsetEnd`,
           /**
+           * Coordinates for starting point of transition
+           *
+           * This value is used inside vue-app-layout.
+           */
+          transitionOut: `val-computed-${y}Toolbar-transitionOut`,
+          /**
            * Offset coordinates of the left edge of the toolbar
            *
            * Width of the left drawer when it satisfies the following conditions
@@ -193,6 +221,12 @@ export const computedTokens = createGlobalThemeContract({
            * - Statically placed or opened in non-overlay mode
            */
           right: `val-computed-${y}Toolbar-right`,
+          /**
+           * Transition at toolbar open/close
+           *
+           * This value is set to `0s` until the first rendering completes in the browser to avoid busy animations, such as during page transitions.
+           */
+          transition: `val-computed-${y}Toolbar-transition`,
         },
       ];
     }),
@@ -221,6 +255,12 @@ export const computedTokens = createGlobalThemeContract({
       x,
       {
         /**
+         * Drawer width
+         *
+         * Size differs between normal and rail conditions.
+         */
+        width: `val-computed-${x}Drawer-width`,
+        /**
          * Offset coordinates of top edge
          *
          * When the stick is installed, the inner end coordinates of the toolbar are applied, otherwise the inner end coordinates of the system bar are applied.
@@ -236,6 +276,12 @@ export const computedTokens = createGlobalThemeContract({
          * Coordinates of the end of the drawer inside the screen
          */
         offsetEnd: `val-computed-${x}Drawer-offsetEnd`,
+        /**
+         * Transition at drawer open/close
+         *
+         * This value is set to `0s` until the first rendering completes in the browser to avoid busy animations, such as during page transitions.
+         */
+        transition: `val-computed-${x}Drawer-transition`,
       },
     ]),
   },
@@ -292,5 +338,11 @@ globalStyle(':root', {
       extractTokenName(computedTokens.viewport[y]),
       computedTokens.toolbar[y].offsetEnd,
     ]),
+    [extractTokenName(
+      computedTokens.viewport.width,
+    )]: `calc(100svw - ${computedTokens.drawer.left.offsetEnd} - ${computedTokens.drawer.right.offsetEnd})`,
+    [extractTokenName(
+      computedTokens.viewport.height,
+    )]: `calc(100svh - ${computedTokens.toolbar.top.offsetEnd} - ${computedTokens.toolbar.bottom.offsetEnd})`,
   },
 });

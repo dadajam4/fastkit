@@ -957,6 +957,7 @@ export class FormNodeControl<T = any, D = T> {
   }
 
   blurHandler(ev: FocusEvent) {
+    if (!this._ctx) return;
     const before = this.focused;
     this._focused.value = false;
     if ((before && this.validateTimingIsBlur) || this.validateTimingIsAlways) {
