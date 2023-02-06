@@ -83,7 +83,7 @@ export interface DataTableHeader {
   key: number | string;
   label?: VNodeChild | ((vui: VuiService) => VNodeChild);
   sortQuery?: string;
-  hidden?: boolean;
+  hidden?: boolean | (() => boolean);
   align?: DataTableHeaderAlign;
   cell?: (payload: DataTableCellSlotPayload) => VNodeChild;
 }
@@ -207,7 +207,11 @@ export const VDataTable = defineComponent({
           key: SELECTABLE_HEADER_SYMBOL,
         });
       }
-      ret.push(...headers.filter((h) => !h.hidden));
+      ret.push(
+        ...headers.filter(
+          ({ hidden }) => !(typeof hidden === 'function' ? hidden() : hidden),
+        ),
+      );
       return ret;
     });
 

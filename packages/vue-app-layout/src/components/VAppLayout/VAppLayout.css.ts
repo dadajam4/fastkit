@@ -48,8 +48,6 @@ export const barSpacers = verticals((y) => [
         height,
         flex: `0 0 ${height}`,
         transition: `all ${transition}`,
-        // willChange: 'height',
-        // transition: `height 1s`,
       }),
     ];
   }),

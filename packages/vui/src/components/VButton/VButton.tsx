@@ -32,7 +32,7 @@ export type RawVButtonIcon = IconName | VButtonIcon;
 
 export const BUTTON_ALIGNS = ['left', 'center', 'right'] as const;
 
-export type VButtonAlign = typeof BUTTON_ALIGNS[number];
+export type VButtonAlign = (typeof BUTTON_ALIGNS)[number];
 
 function resolveRawVButtonIcon(
   raw?: RawVButtonIcon,
