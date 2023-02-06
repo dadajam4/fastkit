@@ -168,7 +168,7 @@ export const VDataTable = defineComponent({
       default: () => DATA_TABLE_DEFAULTS.contorolThreshold,
     },
     headers: {
-      type: Array as PropType<DataTableHeader[]>,
+      type: Array as PropType<DataTableHeader<any>[]>,
       required: true,
     },
     items: {
