@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot-i18n",
-  "version": "0.12.6",
+  "version": "0.12.7",
   "description": "Library for multilingual localization of vot applications.",
   "_docs": {
     "scope": "vot",
@@ -41,10 +41,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vot-i18n#readme",
   "peerDependencies": {
-    "@fastkit/vot": "0.12.6"
+    "@fastkit/vot": "0.12.7"
   },
   "dependencies": {
-    "@fastkit/accept-language": "0.12.6",
-    "@fastkit/vue-i18n": "0.12.6"
+    "@fastkit/accept-language": "0.12.7",
+    "@fastkit/vue-i18n": "0.12.7"
   }
 }

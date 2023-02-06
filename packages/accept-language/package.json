@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/accept-language",
-  "version": "0.12.6",
+  "version": "0.12.7",
   "description": "Small parser that parses Accept-Language headers and sorts by quality.",
   "buildOptions": {
     "name": "AcceptLanguage"
@@ -40,6 +40,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/accept-language#readme",
   "dependencies": {
-    "@fastkit/helpers": "0.12.6"
+    "@fastkit/helpers": "0.12.7"
   }
 }

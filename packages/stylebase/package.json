@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/stylebase",
-  "version": "0.12.6",
+  "version": "0.12.7",
   "description": "Variations of the base CSS implementation recommended by fastkit.",
   "buildOptions": {
     "ignore": true
