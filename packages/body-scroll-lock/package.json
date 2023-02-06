@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/body-scroll-lock",
-  "version": "0.12.5",
+  "version": "0.12.6",
   "description": "@fastkit/body-scroll-lock",
   "main": "./dist/body-scroll-lock.mjs",
   "exports": {
@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/body-scroll-lock#readme",
   "dependencies": {
-    "@fastkit/tiny-logger": "0.12.5"
+    "@fastkit/tiny-logger": "0.12.6"
   }
 }

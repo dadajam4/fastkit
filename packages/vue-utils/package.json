@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.12.5",
+  "version": "0.12.6",
   "description": "Utilities for efficient development of Vue applications.",
   "buildOptions": {
     "name": "VueUtils"
@@ -42,9 +42,9 @@
     "vue-router": "^4.1.6"
   },
   "dependencies": {
-    "@fastkit/body-scroll-lock": "0.12.5",
-    "@fastkit/visibility": "0.12.5",
-    "@fastkit/keyboard": "0.12.5",
-    "@fastkit/helpers": "0.12.5"
+    "@fastkit/body-scroll-lock": "0.12.6",
+    "@fastkit/visibility": "0.12.6",
+    "@fastkit/keyboard": "0.12.6",
+    "@fastkit/helpers": "0.12.6"
   }
 }
