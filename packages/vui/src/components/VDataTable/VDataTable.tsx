@@ -79,13 +79,13 @@ export interface DataTableCellSlotPayload<
   selected: boolean;
 }
 
-export interface DataTableHeader {
+export interface DataTableHeader<T extends DataTableItem = DataTableItem> {
   key: number | string;
   label?: VNodeChild | ((vui: VuiService) => VNodeChild);
   sortQuery?: string;
   hidden?: boolean | (() => boolean);
   align?: DataTableHeaderAlign;
-  cell?: (payload: DataTableCellSlotPayload) => VNodeChild;
+  cell?: (payload: DataTableCellSlotPayload<T>) => VNodeChild;
 }
 
 const SELECTABLE_HEADER_SYMBOL = '__selectable_header__';
