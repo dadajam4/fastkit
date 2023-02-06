@@ -1,3 +1,12 @@
+## [0.12.5](https://github.com/dadajam4/fastkit/compare/v0.12.4...v0.12.5) (2023-02-06)
+
+
+### Features
+
+* **vui:** Allow functions to be specified for the hidden property of VDataTable ([21711b4](https://github.com/dadajam4/fastkit/commit/21711b402cb53a4a4a14ecd07df81e444ed8d1c4))
+
+
+
 ## [0.12.4](https://github.com/dadajam4/fastkit/compare/v0.12.3...v0.12.4) (2023-01-31)
 
 

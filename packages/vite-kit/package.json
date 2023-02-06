@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-kit",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "description": "A collection of toolkits for vite application setup.",
   "_docs": {
     "scope": "vite",
@@ -38,12 +38,12 @@
     "vite": "^4.0.4"
   },
   "dependencies": {
-    "@fastkit/color-scheme-gen": "0.12.4",
-    "@fastkit/hashed-sync": "0.12.4",
-    "@fastkit/icon-font-gen": "0.12.4",
-    "@fastkit/media-match-gen": "0.12.4",
-    "@fastkit/node-util": "0.12.4",
-    "@fastkit/sprite-images": "0.12.4",
-    "@fastkit/tiny-logger": "0.12.4"
+    "@fastkit/color-scheme-gen": "0.12.5",
+    "@fastkit/hashed-sync": "0.12.5",
+    "@fastkit/icon-font-gen": "0.12.5",
+    "@fastkit/media-match-gen": "0.12.5",
+    "@fastkit/node-util": "0.12.5",
+    "@fastkit/sprite-images": "0.12.5",
+    "@fastkit/tiny-logger": "0.12.5"
   }
 }

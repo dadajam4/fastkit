@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/nodepack",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "description": "A small bundled tool for developing Node.js server and tool implementations.",
   "buildOptions": {
     "name": "Nodepack"
@@ -39,8 +39,8 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/nodepack#readme",
   "dependencies": {
-    "@fastkit/node-util": "0.12.4",
-    "@fastkit/tiny-logger": "0.12.4",
+    "@fastkit/node-util": "0.12.5",
+    "@fastkit/tiny-logger": "0.12.5",
     "esbuild": "^0.16.0",
     "nodemon": "^2.0.18"
   }
