@@ -1,6 +1,6 @@
 {
   "name": "create-fastkit-app",
-  "version": "0.12.7",
+  "version": "0.12.8",
   "description": "CLI to generate scaffolding for applications proposed by fastkit.",
   "buildOptions": {
     "description": {

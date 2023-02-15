@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-app-layout",
-  "version": "0.12.7",
+  "version": "0.12.8",
   "description": "Component implementation to control the overall layout of the Vue application.",
   "_docs": {
     "scope": "vue",
@@ -41,9 +41,9 @@
     "vue-router": "^4.1.6"
   },
   "dependencies": {
-    "@fastkit/helpers": "0.12.7",
-    "@fastkit/tiny-logger": "0.12.7",
-    "@fastkit/vue-utils": "0.12.7",
-    "@fastkit/vue-scroller": "0.12.7"
+    "@fastkit/helpers": "0.12.8",
+    "@fastkit/tiny-logger": "0.12.8",
+    "@fastkit/vue-utils": "0.12.8",
+    "@fastkit/vue-scroller": "0.12.8"
   }
 }

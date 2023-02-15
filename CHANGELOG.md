@@ -1,3 +1,12 @@
+## [0.12.8](https://github.com/dadajam4/fastkit/compare/v0.12.7...v0.12.8) (2023-02-15)
+
+
+### Features
+
+* **vui:** Allow VDataTable to accept row settings ([032b0f2](https://github.com/dadajam4/fastkit/commit/032b0f27edb4fb37cadafc2a2ea23cdc75d3f984))
+
+
+
 ## [0.12.7](https://github.com/dadajam4/fastkit/compare/v0.12.6...v0.12.7) (2023-02-06)
 
 
