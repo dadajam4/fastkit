@@ -13,6 +13,7 @@ import {
   withDirectives,
   Transition,
   isVNode,
+  HTMLAttributes,
 } from 'vue';
 import { useVui } from '../../injections';
 import type { VuiService } from '../../service';
@@ -23,6 +24,7 @@ import { VIcon, resolveRawIconProp } from '../VIcon';
 import { VProgressCircular } from '../loading';
 import { resizeDirectiveArgument, VNodeChildOrSlot } from '@fastkit/vue-utils';
 import { VueAppLayout } from '@fastkit/vue-app-layout';
+import { ScopeName, toScopeColorClass } from '@fastkit/vue-color-scheme';
 import { VPaper } from '../VPaper';
 
 export type DataTableHeaderAlign = 'left' | 'center' | 'right';
@@ -87,6 +89,19 @@ export interface DataTableHeader<T extends DataTableItem = DataTableItem> {
   align?: DataTableHeaderAlign;
   cell?: (payload: DataTableCellSlotPayload<T>) => VNodeChild;
 }
+
+export interface DataTableRowSettings<T extends DataTableItem = DataTableItem> {
+  color?: ScopeName;
+  attrs?: HTMLAttributes;
+}
+
+export type DataTableRowSettingsFn<T extends DataTableItem = DataTableItem> = (
+  payload: DataTableItemSlotPayload<T>,
+) => DataTableRowSettings<T>;
+
+export type RawDataTableRowSettings<T extends DataTableItem = DataTableItem> =
+  | DataTableRowSettingsFn<T>
+  | DataTableRowSettings<T>;
 
 const SELECTABLE_HEADER_SYMBOL = '__selectable_header__';
 
@@ -186,6 +201,7 @@ export const VDataTable = defineComponent({
     noDataMessage: {} as PropType<VNodeChildOrSlot>,
     // eslint-disable-next-line vue/require-prop-types
     noResultsMessage: {} as PropType<VNodeChildOrSlot>,
+    rowSettings: [Object, Function] as PropType<RawDataTableRowSettings>,
   },
   emits: {
     input: (selecteds: string[]) => true,
@@ -195,6 +211,15 @@ export const VDataTable = defineComponent({
     const bootedRef = ref(false);
     const footerHeightRef = ref(0);
     const internalValues = ref<string[]>(props.modelValue.slice());
+    const rowSettings = computed<DataTableRowSettingsFn>(() => {
+      const { rowSettings } = props;
+      if (!rowSettings) return () => ({});
+      return typeof rowSettings === 'function'
+        ? rowSettings
+        : () => rowSettings;
+    });
+    const containedVariant = vui.setting('containedVariant');
+
     const sortedItemKeysRef = computed(() =>
       props.items.map((item) => item[props.itemKey]),
     );
@@ -725,15 +750,21 @@ export const VDataTable = defineComponent({
           </td>
         );
       });
+
+      const { color, attrs } = rowSettings.value(payload);
+      const colorClass = color && toScopeColorClass(color);
+      const classes = [
+        'v-data-table__table__item',
+        {
+          'v-data-table__table__item--selected': selected,
+        },
+      ];
+      if (colorClass) {
+        classes.push(colorClass, containedVariant);
+      }
+
       return (
-        <tr
-          class={[
-            'v-data-table__table__item',
-            {
-              'v-data-table__table__item--selected': selected,
-            },
-          ]}
-          key={key}>
+        <tr class={classes} key={key} {...attrs}>
           {children}
         </tr>
       );
