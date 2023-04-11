@@ -14,7 +14,7 @@ body:
       label: Target Packages
       description: |
         If it is clear which package should hold the functionality, please give us the package name and version.
-      placeholder: @fastkit/vui
+      placeholder: "@fastkit/vui"
   - type: textarea
     id: description
     attributes:
