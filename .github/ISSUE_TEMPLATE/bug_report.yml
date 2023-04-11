@@ -14,7 +14,7 @@ body:
       label: Target Packages
       description: |
         If the package in which the problem occurred is clear, please tell us the package name and version.
-      placeholder: @fastkit/vui@0.13.18
+      placeholder: "@fastkit/vui@0.13.18"
   - type: input
     id: reproduction-link
     attributes:
