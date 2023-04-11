@@ -1,0 +1,70 @@
+/* eslint-disable */
+// @ts-nocheck
+import { ColorSchemeInfo } from '@fastkit/color-scheme';
+
+export interface ThemeSettings {
+<% it.scheme.themeNames.forEach((name) => { %>
+  <%~ name %>: true;
+<% }) %>
+}
+
+export interface PaletteSettings {
+<% it.scheme.paletteNames.forEach((name) => { %>
+  <%~ name %>: true;
+<% }) %>
+}
+
+export interface ScopeSettings {
+<% it.scheme.scopeNames.forEach((name) => { %>
+  <%~ name %>: true;
+<% }) %>
+}
+
+export interface ColorVariantSettings {
+<% it.scheme.variants.forEach((variant) => { %>
+  <%~ variant %>: true;
+<% }) %>
+}
+
+export type ThemeName = keyof ThemeSettings;
+export type PaletteName = keyof PaletteSettings;
+export type ScopeName = keyof ScopeSettings;
+export type ColorVariant = keyof ColorVariantSettings;
+
+declare module '@fastkit/color-scheme' {
+  export interface ThemeSettings {
+  <% it.scheme.themeNames.forEach((name) => { %>
+    <%~ name %>: true;
+  <% }) %>
+  }
+
+  export interface PaletteSettings {
+  <% it.scheme.paletteNames.forEach((name) => { %>
+    <%~ name %>: true;
+  <% }) %>
+  }
+
+  export interface ScopeSettings {
+  <% it.scheme.scopeNames.forEach((name) => { %>
+    <%~ name %>: true;
+  <% }) %>
+  }
+
+  export interface ColorVariantSettings {
+  <% it.scheme.variants.forEach((variant) => { %>
+    <%~ variant %>: true;
+  <% }) %>
+  }
+}
+
+export type ColorScheme = ColorSchemeInfo<ThemeName, PaletteName, ScopeName, ColorVariant>;
+
+export const colorScheme: ColorScheme = {
+  defaultTheme: '<%~ it.scheme.themeNames[0] %>',
+  themeNames: [<%~ it.list(it.scheme.themeNames) %>],
+  paletteNames: [<%~ it.list(it.scheme.paletteNames) %>],
+  scopeNames: [<%~ it.list(it.scheme.scopeNames) %>],
+  variants: [<%~ it.list(it.scheme.variants) %>],
+};
+
+export default colorScheme;

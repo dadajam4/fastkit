@@ -1,0 +1,19 @@
+.v-stack-guard-effect {
+  animation-name: v-stack-guard-effect;
+  animation-duration: 0.15s;
+  animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes v-stack-guard-effect {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.03);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

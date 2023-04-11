@@ -1,0 +1,34 @@
+.v-code {
+  position: relative;
+  display: block;
+  margin: 0.5em 0;
+
+  & &__prism {
+    margin: 0;
+  }
+
+  &__language {
+    position: absolute;
+    right: 1em;
+    bottom: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--palette-muted);
+    text-transform: uppercase;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &__copy {
+    position: absolute;
+    top: 0.25em;
+    right: 0.25em;
+    opacity: 0.25;
+    transition: opacity 0.3s;
+  }
+
+  &:hover &__copy,
+  &:focus &__copy {
+    opacity: 1;
+  }
+}

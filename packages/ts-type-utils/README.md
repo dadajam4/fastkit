@@ -1,0 +1,1 @@
+# @fastkit/ts-generic-types

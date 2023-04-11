@@ -1,0 +1,79 @@
+{
+  "name": "@fastkit/vue-scroller",
+  "version": "0.13.0",
+  "description": "A library for controlling the scrolling state of elements and components in Vue applications.",
+  "keywords": [
+    "fastkit",
+    "vue",
+    "scroll"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-scroller#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    "./vue-scroller.css": "./dist/vue-scroller.css",
+    ".": {
+      "types": "./dist/vue-scroller.d.ts",
+      "import": {
+        "default": "./dist/vue-scroller.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vue-scroller.mjs",
+  "types": "./dist/vue-scroller.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-scroller.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run \"/^(eslint:fix|stylelint:fix)$/\"",
+    "lint": "pnpm run \"/^(eslint|stylelint)$/\"",
+    "stub": "plugboy stub",
+    "stylelint": "stylelint \"**/*.{css,scss,vue,html}\" --allow-empty-input",
+    "stylelint:fix": "stylelint \"**/*.{css,scss,vue,html}\" --fix --allow-empty-input",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/scroller": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/vue-utils": "workspace:*"
+  },
+  "devDependencies": {
+    "vue": "^3.2.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  },
+  "buildOptions": {
+    "name": "VueScroller"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "ui",
+    "description": {
+      "en": "A library for controlling the scrolling state of elements and components in Vue applications.",
+      "ja": "Vueアプリケーションで要素やコンポーネントのスクロール状態をコントロールするためのライブラリ。"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+@use './core.scss';
+
+@for $level from 1 through 6 {
+  // h#{$level} {
+  //   color: var(--palette-heading);
+  // }
+
+  h#{$level} {
+    @include core.typo('h' + $level);
+  }
+}

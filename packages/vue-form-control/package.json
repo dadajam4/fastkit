@@ -1,0 +1,79 @@
+{
+  "name": "@fastkit/vue-form-control",
+  "version": "0.13.0",
+  "description": "Basic form implementation library for Vue applications.",
+  "keywords": [
+    "fastkit",
+    "vue",
+    "form",
+    "validation",
+    "rule"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-form-control#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/vue-form-control.d.ts",
+      "import": {
+        "default": "./dist/vue-form-control.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vue-form-control.mjs",
+  "types": "./dist/vue-form-control.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-form-control.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/debounce": "workspace:*",
+    "@fastkit/dom": "workspace:*",
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/rules": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/vue-utils": "workspace:*",
+    "imask": "^6.5.0"
+  },
+  "devDependencies": {
+    "vue": "^3.2.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "ui",
+    "description": {
+      "en": "Basic form implementation library for Vue applications.",
+      "ja": "Vueアプリケーションのためのフォームの基礎実装ライブラリ。"
+    }
+  }
+}

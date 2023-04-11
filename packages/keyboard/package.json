@@ -1,0 +1,64 @@
+{
+  "name": "@fastkit/keyboard",
+  "version": "0.13.0",
+  "description": "Observer implementation to handle keyboard input to Type safe.",
+  "keywords": [
+    "fastkit",
+    "keyboard"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/keyboard#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/keyboard.d.ts",
+      "import": {
+        "default": "./dist/keyboard.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/keyboard.mjs",
+  "types": "./dist/keyboard.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/keyboard.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/helpers": "workspace:*"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "ui",
+    "description": {
+      "en": "Observer implementation to handle keyboard input to Type safe.",
+      "ja": "キーボード入力をTypeセーフにハンドルするオブザーバ実装。"
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "name": "@fastkit/helpers",
+  "version": "0.13.0",
+  "description": "A small collection of helper implementations for processing primitive values and objects.",
+  "keywords": [
+    "fastkit",
+    "helper"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/helpers#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/helpers.d.ts",
+      "import": {
+        "default": "./dist/helpers.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/helpers.mjs",
+  "types": "./dist/helpers.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/helpers.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/ts-type-utils": "workspace:*"
+  },
+  "buildOptions": {
+    "name": "Helpers"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "A small collection of helper implementations for processing primitive values and objects.",
+      "ja": "プリミティブな値やオブジェクトを処理するための小さなヘルパー実装のコレクションです。"
+    }
+  }
+}

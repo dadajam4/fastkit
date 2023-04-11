@@ -1,0 +1,41 @@
+{
+  "name": "@fastkit/stylebase",
+  "version": "0.13.0",
+  "description": "Variations of the base CSS implementation recommended by fastkit.",
+  "buildOptions": {
+    "ignore": true
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "css",
+    "description": {
+      "en": "Variations of the base CSS implementation recommended by fastkit.",
+      "ja": "fastkitが推奨するベースCSS実装のバリエーション。"
+    }
+  },
+  "exports": {
+    "./*.css": "./*.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "destyle.css",
+    "normalize.css",
+    "reset.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit",
+    "css",
+    "style",
+    "reset"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/stylebase#readme"
+}

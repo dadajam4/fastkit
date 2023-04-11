@@ -1,0 +1,93 @@
+{
+  "name": "@fastkit/plugboy",
+  "version": "0.1.0",
+  "description": "",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    "./dependencies/bundle-require": {
+      "import": "./dist/dependencies/bundle-require.mjs"
+    },
+    "./dependencies/cac": {
+      "import": "./dist/dependencies/cac"
+    },
+    "./dependencies/esbuild": {
+      "import": "./dist/dependencies/esbuild"
+    },
+    "./dependencies/glob": {
+      "import": "./dist/dependencies/glob"
+    },
+    "./dependencies/inquirer": {
+      "import": "./dist/dependencies/inquirer"
+    },
+    "./dependencies/pkg-types": {
+      "import": "./dist/dependencies/pkg-types"
+    },
+    "./dependencies/sort-package-json": {
+      "import": "./dist/dependencies/sort-package-json"
+    },
+    "./dependencies/tsup": {
+      "import": "./dist/dependencies/tsup"
+    },
+    "./cli": {
+      "import": "./dist/cli.mjs"
+    },
+    ".": {
+      "import": "./dist/plugboy.mjs"
+    }
+  },
+  "main": "./dist/plugboy.mjs",
+  "types": "./dist/plugboy.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/plugboy.d.ts"
+      ],
+      "cli": [
+        "./dist/cli.d.ts"
+      ],
+      "dependencies/*": [
+        "./dist/dependencies/*.d.ts"
+      ]
+    }
+  },
+  "bin": {
+    "plugboy": "./cli.mjs"
+  },
+  "files": [
+    "env.d.ts",
+    "cli.mjs",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "lint": "pnpm run eslint",
+    "format": "pnpm run eslint:fix",
+    "typecheck": "tsc --noEmit --skipLibCheck",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "bundle-require": "^4.0.1",
+    "cac": "^6.7.14",
+    "esbuild": "^0.17.16",
+    "execa": "^7.1.1",
+    "glob": "^9.3.5",
+    "inquirer": "^9.1.5",
+    "pkg-types": "^1.0.2",
+    "sort-package-json": "^2.4.1",
+    "tsup": "^6.7.0"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3"
+  }
+}

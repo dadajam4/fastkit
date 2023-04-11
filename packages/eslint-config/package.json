@@ -1,0 +1,51 @@
+{
+  "name": "@fastkit/eslint-config",
+  "type": "module",
+  "version": "0.13.0",
+  "description": "@fastkit/eslint-config",
+  "buildOptions": {
+    "ignore": true
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "lint",
+    "description": {
+      "en": "fastkit recommended eslint settings.",
+      "ja": "fastkitが推奨するeslintの設定。"
+    }
+  },
+  "main": "./index.cjs",
+  "exports": {
+    ".": "./index.cjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.cjs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit",
+    "eslint",
+    "lint"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/eslint-config#readme",
+  "peerDependencies": {
+    "eslint": "^8.31.0",
+    "prettier": "^2.8.2"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-html-parser": "^6.8.2",
+    "eslint-plugin-prettier": "^4.2.1"
+  }
+}

@@ -1,0 +1,46 @@
+.v-scroller {
+  position: relative;
+
+  &__container {
+    width: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__guide {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    &--active {
+      opacity: 0.25;
+    }
+
+    &--top,
+    &--bottom {
+      right: 0;
+      left: 0;
+      height: var(--scroller-guide-size);
+    }
+
+    &--left,
+    &--right {
+      top: 0;
+      bottom: 0;
+      width: var(--scroller-guide-size);
+    }
+
+    @each $vec, $to in (top: bottom, right: left, bottom: top, left: right) {
+      &--#{$vec} {
+        #{$vec}: 0;
+        background: linear-gradient(
+          to #{$to},
+          var(--scroller-guide-from-color),
+          var(--scroller-guide-to-color)
+        );
+      }
+    }
+  }
+}

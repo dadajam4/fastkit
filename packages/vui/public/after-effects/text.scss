@@ -1,0 +1,90 @@
+$props-map: (
+  (
+    prop: 'text-align',
+    values: (
+      (
+        selector: 'text-left',
+        value: 'left',
+      ),
+      (
+        selector: 'text-center',
+        value: 'center',
+      ),
+      (
+        selector: 'text-right',
+        value: 'right',
+      ),
+    ),
+  ),
+  (
+    prop: 'font-weight',
+    values: (
+      (
+        selector: 'font-weight-normal',
+        value: 'normal',
+      ),
+      (
+        selector: 'font-weight-bold',
+        value: 'bold',
+      ),
+      (
+        selector: 'font-weight-lighter',
+        value: 'lighter',
+      ),
+      (
+        selector: 'font-weight-bolder',
+        value: 'bolder',
+      ),
+    ),
+  )
+);
+
+@mixin text($breakpoint-suffix: '') {
+  .text-base {
+    margin: var(--typo-base-margin);
+    font-size: var(--typo-base-size);
+    font-weight: var(--typo-base-weight);
+    line-height: var(--typo-base-height);
+    color: var(--typo-base-color);
+    letter-spacing: var(--typo-base-height);
+  }
+
+  @for $level from 1 through 6 {
+    .text-h#{$level}#{$breakpoint-suffix} {
+      margin: var(--typo-h#{$level}-margin);
+      font-size: var(--typo-h#{$level}-size);
+      font-weight: var(--typo-h#{$level}-weight);
+      line-height: var(--typo-h#{$level}-height);
+      color: var(--typo-h#{$level}-color);
+      letter-spacing: var(--typo-h#{$level}-height);
+    }
+  }
+
+  @each $prop-info in $props-map {
+    $prop: map-get($prop-info, prop);
+    $values: map-get($prop-info, values);
+
+    @each $value-info in $values {
+      $selector: map-get($value-info, selector);
+      $value: map-get($value-info, value);
+
+      .#{$selector}#{$breakpoint-suffix} {
+        #{$prop}: unquote($value);
+      }
+    }
+  }
+
+  @for $i from 1 through 9 {
+    $weight: $i * 100;
+
+    .font-weight-#{$weight}#{$breakpoint-suffix} {
+      font-weight: $weight;
+    }
+  }
+}
+
+@include text();
+
+@include mq-each() {
+  @include text($breakpoint-suffix: '--' + $mq-each-target);
+}

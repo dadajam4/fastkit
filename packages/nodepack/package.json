@@ -1,0 +1,74 @@
+{
+  "name": "@fastkit/nodepack",
+  "version": "0.13.0",
+  "description": "A small bundled tool for developing Node.js server and tool implementations.",
+  "keywords": [
+    "fastkit",
+    "bundle",
+    "node"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/nodepack#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/nodepack.d.ts",
+      "import": {
+        "default": "./dist/nodepack.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/nodepack.mjs",
+  "types": "./dist/nodepack.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/nodepack.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/node-util": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "esbuild": "^0.17.16",
+    "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "@types/nodemon": "^1.19.2"
+  },
+  "buildOptions": {
+    "name": "Nodepack"
+  },
+  "_docs": {
+    "scope": "node",
+    "feature": "",
+    "description": {
+      "en": "A small bundled tool for developing Node.js server and tool implementations.",
+      "ja": "Node.jsのサーバやツール実装を開発するための小さなバンドルツール。"
+    }
+  }
+}

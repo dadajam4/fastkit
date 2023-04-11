@@ -1,0 +1,94 @@
+@use '../../styles/core.scss';
+
+@layer vui {
+  .v-select {
+    &__input {
+      cursor: pointer;
+
+      &__element {
+        @include core.hidden-input-element;
+      }
+
+      // &__element {
+      //   width: 100%;
+      //   min-width: 0;
+      //   // width: calc(100% - 8px);
+      //   padding: 0;
+      //   margin: 0;
+      //   overflow: hidden;
+      //   // margin: 0 8px;
+      //   font-size: inherit;
+      //   text-overflow: ellipsis;
+      //   white-space: nowrap;
+      //   background: transparent;
+      //   border: 0;
+      //   border-radius: 0;
+      //   outline: 0;
+
+      //   &:-webkit-autofill {
+      //     color: inherit !important;
+      //     // box-shadow: 0 0 0 1000px get-color(field) inset;
+      //   }
+
+      //   &::-ms-clear {
+      //     display: none;
+      //   }
+
+      //   // @include placeholder {
+      //   //   color: get-color(text-muted);
+      //   // }
+      // }
+    }
+
+    &__body {
+      padding: 0.5em 0;
+    }
+
+    &__selections {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+      // display: flex;
+      // align-items: center;
+      // width: 100%;
+      // min-width: 0;
+      &__inner {
+        display: table-cell;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+      }
+
+      .v-select--multiple & {
+        display: block;
+      }
+
+      .v-select--multiple &__inner {
+        display: block;
+        overflow: auto;
+        white-space: unset;
+      }
+    }
+
+    &--multiple .v-control-field__body {
+      padding: 0.2em 0;
+    }
+
+    &__placeholder {
+      font-style: italic;
+      color: var(--control-disabled-color);
+    }
+
+    // &__selection {
+    //   // // box-sizing: content-box;
+    //   // display: table-cell;
+    //   // // width: 100%;
+    //   // // min-width: 0;
+    //   // overflow: hidden;
+    //   // text-overflow: ellipsis;
+    //   // white-space: nowrap;
+    //   // vertical-align: middle;
+    // }
+  }
+}

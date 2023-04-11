@@ -1,0 +1,64 @@
+.v-dialog {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: auto;
+  // pointer-events: none;
+  outline: 0;
+  -webkit-overflow-scrolling: touch;
+
+  &__scroller {
+    display: table;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__centerer {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  &__content {
+    position: relative;
+    display: inline-block;
+    min-width: 280px;
+    margin: 24px;
+    text-align: left;
+    pointer-events: auto;
+    border-radius: 2px;
+    outline: 0;
+    box-shadow: var(--dialog-shadow);
+  }
+
+  &__header {
+    box-sizing: border-box;
+    padding: 16px;
+    font-size: 24px;
+    line-height: 1.4;
+  }
+
+  &__body {
+    box-sizing: border-box;
+    padding: 16px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  &--dense &__body {
+    padding-bottom: 0;
+  }
+
+  &__actions {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px;
+  }
+
+  &--dense &__actions {
+    padding-top: 0;
+  }
+}

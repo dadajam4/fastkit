@@ -1,0 +1,65 @@
+@use 'sass:math';
+
+@layer vui {
+  .v-radio {
+    --my-color: var(--color);
+
+    // color: var(--my-color);
+    // --my-faux-bg-color: transparent;
+
+    // &--selected,
+    // &--indeterminate {
+    //   --my-border-color: transparent;
+    //   --my-faux-bg-color: var(--color);
+    // }
+
+    &__faux {
+      position: relative;
+      // display: flex;
+      // align-items: center;
+      // justify-content: center;
+      display: block;
+      width: 100%;
+      height: 100%;
+      // background: var(--my-faux-bg-color);
+      // border: solid 2px currentColor;
+      // border-radius: 100%;
+      transition: border-color 0.2s, background-color 0.2s;
+
+      &::before,
+      &::after {
+        position: absolute;
+        display: block;
+        content: '';
+        border-radius: 100%;
+      }
+
+      &::before {
+        inset: 0;
+        border: solid 2px currentColor;
+        // display: block;
+        // width: 60%;
+        // height: 60%;
+        // content: '';
+        // background: currentColor;
+        // border-radius: 100%;
+      }
+
+      &::after {
+        top: 50%;
+        left: 50%;
+        width: 50%;
+        height: 50%;
+        background: currentColor;
+        transition: transform 0.2s;
+        transform: translate(-50%, -50%) scale(0);
+      }
+    }
+
+    &--selected &__faux {
+      &::after {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+  }
+}

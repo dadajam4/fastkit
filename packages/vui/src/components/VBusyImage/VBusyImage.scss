@@ -1,0 +1,57 @@
+@layer vui {
+  .v-busy-image {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: bottom;
+
+    &--clickable {
+      cursor: pointer;
+    }
+
+    &--cover {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+
+    &--loading::before {
+      position: absolute;
+      inset: 0;
+      display: block;
+      content: '';
+      background: rgba(0, 0, 0, 0.1);
+      animation: v-tiny-image-blink normal 1.5s infinite ease-in-out;
+    }
+
+    &__node {
+      position: relative;
+      display: inline-block;
+      max-width: 100%;
+      vertical-align: bottom;
+    }
+
+    &__slot {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  }
+
+  @keyframes v-tiny-image-blink {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+}

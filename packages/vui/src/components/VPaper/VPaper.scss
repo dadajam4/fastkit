@@ -1,0 +1,45 @@
+@layer vui {
+  .v-paper {
+    --paper-radius: var(--control-field-radius);
+
+    &--plain {
+      --paper-background--color: var(--palette-background);
+      --paper-text-color: inherit;
+      --paper-link-color: var(--link-color);
+    }
+
+    &--has-color {
+      --paper-background--color: var(--main-color);
+      --paper-text-color: var(--text-color);
+      --paper-link-color: var(--nav-color);
+    }
+
+    display: block;
+    color: var(--paper-text-color);
+    background-color: var(--paper-background--color);
+    border-radius: var(--paper-radius);
+
+    &__inner {
+      position: relative;
+      border-radius: inherit;
+    }
+
+    &--square {
+      --paper-radius: 0px;
+    }
+
+    // a:not(.v-paper) {
+    //   color: var(--paper-link-color);
+    // }
+
+    &__header {
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+    }
+
+    &__footer {
+      border-bottom-right-radius: inherit;
+      border-bottom-left-radius: inherit;
+    }
+  }
+}

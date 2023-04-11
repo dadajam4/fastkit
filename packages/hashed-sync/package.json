@@ -1,0 +1,80 @@
+{
+  "name": "@fastkit/hashed-sync",
+  "version": "0.13.0",
+  "description": "Compare and synchronize the status of entire files and directories by hash value.",
+  "keywords": [
+    "fastkit",
+    "sync",
+    "file",
+    "directory",
+    "hash"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/hashed-sync#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/hashed-sync.d.ts",
+      "import": {
+        "default": "./dist/hashed-sync.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/hashed-sync.mjs",
+  "types": "./dist/hashed-sync.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/hashed-sync.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/tiny-logger": "workspace:*",
+    "folder-hash": "^4.0.4",
+    "fs-extra": "^11.1.1",
+    "imagemin": "^8.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/folder-hash": "^4.0.2",
+    "@types/imagemin": "^8.0.1",
+    "@types/imagemin-mozjpeg": "^8.0.1"
+  },
+  "buildOptions": {
+    "name": "HashedSync"
+  },
+  "_docs": {
+    "scope": "node",
+    "feature": "file",
+    "description": {
+      "en": "Compare and synchronize the status of entire files and directories by hash value.",
+      "ja": "ファイルやディレクトリ全体の状態をハッシュ値で比較して同期する。"
+    }
+  }
+}

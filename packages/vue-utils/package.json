@@ -1,0 +1,75 @@
+{
+  "name": "@fastkit/vue-utils",
+  "version": "0.13.0",
+  "description": "Utilities for efficient development of Vue applications.",
+  "keywords": [
+    "fastkit",
+    "vue"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-utils#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/vue-utils.d.ts",
+      "import": {
+        "default": "./dist/vue-utils.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vue-utils.mjs",
+  "types": "./dist/vue-utils.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-utils.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/visibility": "workspace:*"
+  },
+  "devDependencies": {
+    "vue-router": "^4.1.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0",
+    "vue-router": "^4.1.0"
+  },
+  "buildOptions": {
+    "name": "VueUtils"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "",
+    "description": {
+      "en": "Utilities for efficient development of Vue applications.",
+      "ja": "Vueアプリケーションを効率的に開発するためのユーティリティー。"
+    }
+  }
+}

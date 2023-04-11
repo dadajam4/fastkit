@@ -1,0 +1,66 @@
+{
+  "name": "@fastkit/plugboy-vanilla-extract-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/plugboy-vanilla-extract-plugin.d.ts",
+      "import": {
+        "default": "./dist/plugboy-vanilla-extract-plugin.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/plugboy-vanilla-extract-plugin.mjs",
+  "types": "./dist/plugboy-vanilla-extract-plugin.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/plugboy-vanilla-extract-plugin.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vanilla-extract/css": "^1.11.0",
+    "@vanilla-extract/esbuild-plugin": "^2.2.2",
+    "@vanilla-extract/vite-plugin": "^3.8.0"
+  },
+  "devDependencies": {
+    "@fastkit/plugboy": "workspace:*",
+    "vite": "^4.1.1"
+  },
+  "peerDependencies": {
+    "@fastkit/plugboy": "workspace:*",
+    "vite": "^4.1.1"
+  },
+  "peerDependenciesMeta": {
+    "@vanilla-extract/vite-plugin": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
+  }
+}

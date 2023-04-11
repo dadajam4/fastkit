@@ -1,0 +1,78 @@
+{
+  "name": "@fastkit/vue-color-scheme",
+  "version": "0.13.0",
+  "description": "A library for using Type-safe \"color\" schemas in Vue applications.",
+  "keywords": [
+    "fastkit",
+    "vue",
+    "color"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vue-color-scheme#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/vue-color-scheme.d.ts",
+      "import": {
+        "default": "./dist/vue-color-scheme.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vue-color-scheme.mjs",
+  "types": "./dist/vue-color-scheme.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-color-scheme.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit --skipLibCheck"
+  },
+  "dependencies": {
+    "@fastkit/color-scheme": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/vue-utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@vueuse/head": "^1.1.23",
+    "vue": "^3.2.0"
+  },
+  "peerDependencies": {
+    "@vueuse/head": "^1.1.0",
+    "vue": "^3.2.0"
+  },
+  "buildOptions": {
+    "name": "VueColorScheme"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "color",
+    "description": {
+      "en": "A library for using Type-safe \"color\" schemas in Vue applications.",
+      "ja": "VueアプリケーションでTypeセーフな「色」のスキーマを利用するためのライブラリ。"
+    }
+  }
+}

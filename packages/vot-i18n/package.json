@@ -1,0 +1,77 @@
+{
+  "name": "@fastkit/vot-i18n",
+  "version": "1.0.0",
+  "description": "Library for multilingual localization of vot applications.",
+  "keywords": [
+    "fastkit",
+    "i18n",
+    "translation",
+    "localisation",
+    "localization",
+    "locale",
+    "intl",
+    "vot"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vot-i18n#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/vot-i18n.d.ts",
+      "import": {
+        "default": "./dist/vot-i18n.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vot-i18n.mjs",
+  "types": "./dist/vot-i18n.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vot-i18n.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit --skipLibCheck"
+  },
+  "dependencies": {
+    "@fastkit/accept-language": "workspace:*",
+    "@fastkit/vue-i18n": "workspace:*"
+  },
+  "devDependencies": {
+    "@fastkit/vot": "workspace:*"
+  },
+  "peerDependencies": {
+    "@fastkit/vot": "workspace:*"
+  },
+  "_docs": {
+    "scope": "vot",
+    "feature": "i18n",
+    "description": {
+      "en": "Library for multilingual localization of vot applications.",
+      "ja": "votアプリケーションを多言語ローカライズするためのライブラリ。"
+    }
+  }
+}

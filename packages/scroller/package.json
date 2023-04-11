@@ -1,0 +1,71 @@
+{
+  "name": "@fastkit/scroller",
+  "version": "0.13.0",
+  "description": "Library for controlling the scrolling state of DOM elements.",
+  "keywords": [
+    "fastkit",
+    "scroll"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/scroller#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/scroller.d.ts",
+      "import": {
+        "default": "./dist/scroller.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/scroller.mjs",
+  "types": "./dist/scroller.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/scroller.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/ev": "workspace:*",
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/visibility": "workspace:*",
+    "bezier-easing": "^2.1.0"
+  },
+  "buildOptions": {
+    "name": "Scroller"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "ui",
+    "description": {
+      "en": "Library for controlling the scrolling state of DOM elements.",
+      "ja": "DOM要素のスクロール状態をコントロールするためのライブラリ。"
+    }
+  }
+}

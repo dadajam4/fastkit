@@ -1,0 +1,75 @@
+{
+  "name": "@fastkit/cookies",
+  "version": "0.13.0",
+  "description": "Helper implementation for universal server/browser control of cookie headers.",
+  "keywords": [
+    "fastkit",
+    "cookie"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/cookies#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/cookies.d.ts",
+      "import": {
+        "default": "./dist/cookies.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/cookies.mjs",
+  "types": "./dist/cookies.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/cookies.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/ev": "workspace:*",
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "cookie": "^0.5.0",
+    "set-cookie-parser": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.5.1",
+    "@types/set-cookie-parser": "^2.4.2"
+  },
+  "buildOptions": {
+    "name": "Cookies"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "Helper implementation for universal server/browser control of cookie headers.",
+      "ja": "サーバ/ブラウザでユニバーサルにクッキーヘッダを制御するためのヘルパ実装。"
+    }
+  }
+}

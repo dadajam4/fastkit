@@ -1,0 +1,13 @@
+declare module '@vue/runtime-core' {
+  export interface ComponentCustomOptions {
+    prefetch?: RawPrefetchContext;
+    prefetchHandler?: PrefetchHandler;
+    watchQuery?: WatchQueryOption;
+    middleware?: VuePageControlMiddlewareFn | VuePageControlMiddlewareFn[];
+    scrollBehavior?: RawRouterScrollBehavior;
+  }
+
+  export interface ComponentCustomProperties {
+    $vpc: VuePageControl;
+  }
+}

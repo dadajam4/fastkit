@@ -1,0 +1,83 @@
+{
+  "name": "@fastkit/color-scheme",
+  "version": "1.0.0",
+  "description": "An implementation to control the schema associated with \"color\".",
+  "keywords": [
+    "fastkit",
+    "color"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/color-scheme#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/color-scheme.d.ts",
+      "import": {
+        "default": "./dist/color-scheme.mjs"
+      }
+    },
+    "./plugboy-dts-preserve": {
+      "types": "./dist/plugboy-dts-preserve.d.ts",
+      "import": {
+        "default": "./dist/plugboy-dts-preserve.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/color-scheme.mjs",
+  "types": "./dist/color-scheme.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/color-scheme.d.ts"
+      ],
+      "plugboy-dts-preserve": [
+        "./dist/plugboy-dts-preserve.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/color": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*"
+  },
+  "devDependencies": {
+    "@fastkit/plugboy": "workspace:*"
+  },
+  "peerDependencies": {
+    "@fastkit/plugboy": "workspace:*"
+  },
+  "buildOptions": {
+    "name": "ColorScheme"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "color",
+    "description": {
+      "en": "An implementation to control the schema associated with \"color\".",
+      "ja": "「色」に関連するスキーマを制御するための実装。"
+    }
+  }
+}

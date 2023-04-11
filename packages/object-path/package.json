@@ -1,0 +1,46 @@
+{
+  "name": "@fastkit/object-path",
+  "version": "0.1.0",
+  "description": "object-path",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/object-path.d.ts",
+      "import": {
+        "default": "./dist/object-path.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/object-path.mjs",
+  "types": "./dist/object-path.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/object-path.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  }
+}

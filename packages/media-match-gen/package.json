@@ -1,0 +1,72 @@
+{
+  "name": "@fastkit/media-match-gen",
+  "version": "0.13.0",
+  "description": "A tool to generate Type-safe media query breakpoint schemas.",
+  "keywords": [
+    "fastkit",
+    "mediaquery",
+    "mediamatch"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/media-match-gen#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/media-match-gen.d.ts",
+      "import": {
+        "default": "./dist/media-match-gen.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/media-match-gen.mjs",
+  "types": "./dist/media-match-gen.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/media-match-gen.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/ev": "workspace:*",
+    "@fastkit/media-match": "workspace:*",
+    "@fastkit/node-util": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "fs-extra": "^11.1.1"
+  },
+  "buildOptions": {
+    "name": "MediaMatchGen"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "ui",
+    "description": {
+      "en": "A tool to generate Type-safe media query breakpoint schemas.",
+      "ja": "Typeセーフなメディアクエリブレイクポイントスキーマを生成するツール。"
+    }
+  }
+}

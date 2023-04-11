@@ -1,0 +1,23 @@
+.<%= it.selector %> {
+  position: relative;
+  background-color: var(--invert-color, var(--text-color));
+  border-color: var(--outlineBorder-color, var(--main-color));
+  color: var(--outlineText-color, var(--main-color));
+
+  &.clickable {
+    box-shadow: 0 1px 1px var(--shadow-color);
+  }
+
+  &.clickable:hover,
+  &:focus {
+    background-color: var(--focusInvert-color, var(--invert-color, var(--text-color)));
+  }
+
+  &.clickable:focus {
+    box-shadow: 0 1px 1px var(--shadow-color), 0 1px 3px 2px var(--focusShadow-color);
+  }
+
+  &.clickable:active {
+    background-color: var(--activeInvert-color, var(--focusInvert-color, var(--invert-color, var(--text-color))));
+  }
+}

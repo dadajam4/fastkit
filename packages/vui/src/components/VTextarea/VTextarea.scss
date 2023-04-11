@@ -1,0 +1,43 @@
+@use '../../styles/core.scss';
+
+@layer vui {
+  .v-textarea {
+    &__input {
+      cursor: text;
+
+      &__element {
+        width: 100%;
+        min-width: 0;
+        padding: 8px 0;
+        margin: 0;
+        font-size: inherit;
+        line-height: inherit;
+        letter-spacing: inherit;
+        resize: none;
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        outline: 0;
+
+        &:-webkit-autofill {
+          @include core.auto-fill-cancel;
+          // color: inherit !important;
+          // box-shadow: 0 0 0 1000px get-color(field) inset;
+        }
+
+        &::-ms-clear {
+          display: none;
+        }
+
+        &::placeholder {
+          font-style: italic;
+          color: var(--control-disabled-color);
+        }
+
+        // @include placeholder {
+        //   color: get-color(text-muted);
+        // }
+      }
+    }
+  }
+}

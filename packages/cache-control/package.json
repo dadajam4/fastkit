@@ -1,0 +1,70 @@
+{
+  "name": "@fastkit/cache-control",
+  "version": "0.13.0",
+  "description": "Helper implementation for plugging cache controls into a JavaScript implementation.",
+  "keywords": [
+    "fastkit",
+    "cache",
+    "async"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/cache-control#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/cache-control.d.ts",
+      "import": {
+        "default": "./dist/cache-control.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/cache-control.mjs",
+  "types": "./dist/cache-control.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/cache-control.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/cloner": "workspace:*",
+    "@fastkit/duration": "workspace:*",
+    "@fastkit/helpers": "workspace:*"
+  },
+  "buildOptions": {
+    "name": "CacheControl"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "Helper implementation for plugging cache controls into a JavaScript implementation.",
+      "ja": "JavaScript実装にキャッシュの制御をプラグインするためのヘルパ実装。"
+    }
+  }
+}

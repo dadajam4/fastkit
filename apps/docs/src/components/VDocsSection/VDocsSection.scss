@@ -1,0 +1,24 @@
+.v-docs-section {
+  &__heading {
+    &__anchor {
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+      // color: var(--palette-muted);
+      color: var(--palette-primary);
+      text-decoration: none;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+
+      &__icon {
+        font-size: 80%;
+      }
+    }
+
+    &:hover &__anchor {
+      pointer-events: auto;
+      opacity: 1;
+    }
+  }
+}

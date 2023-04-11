@@ -1,0 +1,69 @@
+{
+  "name": "@fastkit/plugboy-vue-jsx-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/plugboy-vue-jsx-plugin.d.ts",
+      "import": {
+        "default": "./dist/plugboy-vue-jsx-plugin.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/plugboy-vue-jsx-plugin.mjs",
+  "types": "./dist/plugboy-vue-jsx-plugin.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/plugboy-vue-jsx-plugin.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/plugin-transform-typescript": "^7.21.3",
+    "@vue/babel-plugin-jsx": "^1.1.1"
+  },
+  "devDependencies": {
+    "@fastkit/plugboy": "workspace:*",
+    "@types/babel__core": "^7.20.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
+    "vite": "^4.1.1"
+  },
+  "peerDependencies": {
+    "@fastkit/plugboy": "workspace:*",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
+    "vite": "^4.1.1"
+  },
+  "peerDependenciesMeta": {
+    "@vitejs/plugin-vue-jsx": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
+  }
+}

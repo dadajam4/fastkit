@@ -1,0 +1,79 @@
+{
+  "name": "@fastkit/vue-app-layout",
+  "version": "0.13.0",
+  "description": "Component implementation to control the overall layout of the Vue application.",
+  "keywords": [
+    "fastkit",
+    "vue",
+    "layout"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-app-layout#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    "./vue-app-layout.css": "./dist/vue-app-layout.css",
+    ".": {
+      "types": "./dist/vue-app-layout.d.ts",
+      "import": {
+        "default": "./dist/vue-app-layout.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vue-app-layout.mjs",
+  "types": "./dist/vue-app-layout.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-app-layout.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/vue-body-scroll-lock": "workspace:*",
+    "@fastkit/vue-resize": "workspace:*",
+    "@fastkit/vue-scroller": "workspace:*",
+    "@fastkit/vue-utils": "workspace:*"
+  },
+  "devDependencies": {
+    "vue": "^3.2.0",
+    "vue-router": "^4.1.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0",
+    "vue-router": "^4.1.0"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "ui",
+    "description": {
+      "en": "Component implementation to control the overall layout of the Vue application.",
+      "ja": "Vueアプリケーションの全体レイアウトを制御するためのコンポーネント実装。"
+    }
+  }
+}

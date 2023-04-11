@@ -1,0 +1,9 @@
+// @use '../../styles/core.scss';
+
+@layer vui {
+  .v-toolbar-menu {
+    height: 100%;
+    margin: 0;
+    box-shadow: none;
+  }
+}

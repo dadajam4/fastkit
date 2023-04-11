@@ -1,0 +1,53 @@
+{
+  "name": "@fastkit/vue-location",
+  "version": "0.1.0",
+  "description": "vue-location",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/vue-location.d.ts",
+      "import": {
+        "default": "./dist/vue-location.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vue-location.mjs",
+  "types": "./dist/vue-location.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-location.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/vue-utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0",
+    "vue-router": "^4.1.0"
+  }
+}

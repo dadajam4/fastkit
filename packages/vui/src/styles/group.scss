@@ -1,0 +1,57 @@
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace;
+}
+
+code {
+  padding: 0.2em 0.4em;
+  font-size: 85%;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.87); // @TODO
+  background-color: rgba(0, 0, 0, 0.05); // @TODO
+  border-radius: 3px; // @TODO
+}
+
+table {
+  display: table;
+  max-width: 100%;
+  margin: var(--table-vertical-margin) 0;
+  font-size: var(--table-font-size);
+  border-collapse: collapse;
+  border: 0;
+  border-radius: 0;
+}
+
+caption {
+  display: table-caption;
+  width: 100%;
+  padding: 0;
+  margin: 0 0 var(--table-caption-vertical-margin);
+  font-size: var(--table-caption-font-size);
+  font-weight: var(--table-caption-font-weight);
+  text-align: center;
+}
+
+th,
+td {
+  height: var(--table-cell-height);
+  padding: var(--table-cell-vertial-padding)
+    var(--table-cell-horizontal-padding);
+  text-align: left;
+  vertical-align: middle;
+  border: 0;
+}
+
+th {
+  font-weight: var(--table-header-font-weight);
+  color: var(--table-header-color);
+  white-space: nowrap;
+}
+
+thead {
+  th {
+    text-align: center;
+  }
+}

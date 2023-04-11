@@ -1,0 +1,67 @@
+{
+  "name": "@fastkit/visibility",
+  "version": "0.13.0",
+  "description": "A library to watch the visible state of the browser window.",
+  "keywords": [
+    "fastkit",
+    "visibility"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/visibility#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/visibility.d.ts",
+      "import": {
+        "default": "./dist/visibility.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/visibility.mjs",
+  "types": "./dist/visibility.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/visibility.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/helpers": "workspace:*"
+  },
+  "buildOptions": {
+    "name": "visibilityManager"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "ui",
+    "description": {
+      "en": "A library to watch the visible state of the browser window.",
+      "ja": "ブラウザウィンドウの可視状態をウォッチするライブラリ。"
+    }
+  }
+}

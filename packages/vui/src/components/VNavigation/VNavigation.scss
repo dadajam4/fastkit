@@ -1,0 +1,14 @@
+@layer vui {
+  .v-navigation {
+    // noop
+    &__caption {
+      display: block;
+      padding: calc(var(--root-em) * 0.625) calc(var(--root-em) * 1.5625);
+      margin: 1em 0 0;
+      // font-size: 0.6875rem;
+      font-size: 0.75rem;
+      color: var(--caption-color);
+      text-transform: uppercase;
+    }
+  }
+}

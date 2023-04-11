@@ -1,0 +1,35 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**/*",
+        "public/**/*",
+        "plugboy.workspace.ts"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "lint": {},
+    "format": {},
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+      "inputs": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "**/__tests__/**/*.ts",
+        "**/__tests__/**/*.tsx"
+      ]
+    },
+    "test": {
+      "inputs": [
+        "src/**/*",
+        "public/**/*",
+        "**/__tests__/**/*"
+      ]
+    },
+    "deploy": {
+      "dependsOn": ["build", "test", "lint"]
+    }
+  }
+}

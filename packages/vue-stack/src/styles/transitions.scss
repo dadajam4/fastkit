@@ -1,0 +1,87 @@
+//
+// Transitions
+//
+@use './variables.scss';
+
+.v-stack-fade {
+  &-enter-active,
+  &-leave-active {
+    transition: opacity var(--stack-transition-primary);
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+  }
+}
+
+.v-stack-scale {
+  &-enter-active,
+  &-leave-active {
+    transition: opacity var(--stack-transition-primary),
+      transform var(--stack-transition-primary);
+  }
+
+  &-enter-from,
+  &-leave-from,
+  &-leave-to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.v-stack-slide-y {
+  &-enter-active,
+  &-leave-active {
+    transition: opacity var(--stack-transition-primary),
+      transform var(--stack-transition-primary);
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+}
+
+.v-stack-slide-y-reverse {
+  &-enter-active,
+  &-leave-active {
+    transition: opacity var(--stack-transition-primary),
+      transform var(--stack-transition-primary);
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+}
+
+.v-stack-slide-x {
+  &-enter-active,
+  &-leave-active {
+    transition: opacity var(--stack-transition-primary),
+      transform var(--stack-transition-primary);
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+}
+
+.v-stack-slide-x-reverse {
+  &-enter-active,
+  &-leave-active {
+    transition: opacity var(--stack-transition-primary),
+      transform var(--stack-transition-primary);
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(15px);
+  }
+}

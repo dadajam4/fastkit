@@ -1,0 +1,30 @@
+@layer vui {
+  .v-navigation-item {
+    &--opened {
+      --tile-background: var(--tile-active-background);
+      --tile-text-color: var(--tile-text-active-color);
+    }
+
+    &__expand {
+      transition: height 0.2s;
+
+      .v-navigation-item {
+        --tile-background: var(--tile-active-background);
+      }
+    }
+
+    &--depth {
+      &-1 {
+        --depth-padding: calc(var(--list-tile-padding) * 2);
+      }
+
+      &-2 {
+        --depth-padding: calc(var(--list-tile-padding) * 3);
+      }
+
+      &-3 {
+        --depth-padding: calc(var(--list-tile-padding) * 4);
+      }
+    }
+  }
+}

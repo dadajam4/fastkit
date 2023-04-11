@@ -1,0 +1,52 @@
+{
+  "name": "@fastkit/stylelint-config",
+  "version": "0.13.0",
+  "description": "@fastkit/stylelint-config",
+  "buildOptions": {
+    "ignore": true
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "lint",
+    "description": {
+      "en": "fastkit recommended stylelint settings.",
+      "ja": "fastkitが推奨するstylelintの設定。"
+    }
+  },
+  "main": "./index.cjs",
+  "exports": {
+    ".": "./index.cjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.cjs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit",
+    "stylelint"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/stylelint-config#readme",
+  "peerDependencies": {
+    "postcss": "^8.4.19",
+    "stylelint": "^15.3.0"
+  },
+  "dependencies": {
+    "postcss-html": "^1.5.0",
+    "postcss-scss": "^4.0.6",
+    "stylelint-config-css-modules": "^4.2.0",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-recess-order": "^4.0.0",
+    "stylelint-config-standard": "^31.0.0",
+    "stylelint-prettier": "^3.0.0",
+    "stylelint-scss": "^4.6.0"
+  }
+}

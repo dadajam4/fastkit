@@ -1,0 +1,48 @@
+.v-sheet-modal {
+  --v-sheet-modal-width: 90vw;
+  --v-sheet-modal-max-width: none;
+  --v-sheet-background: var(--palette-foundation);
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: var(--v-sheet-modal-width);
+  max-width: var(--v-sheet-modal-max-width);
+  padding: 0;
+  outline: 0;
+  box-shadow: var(--dialog-shadow);
+  transition: transform var(--stack-transition-slowly);
+
+  &__header {
+    position: relative;
+    z-index: 1;
+    flex: 0 0;
+    background-color: var(--v-sheet-background);
+  }
+
+  &__scroller {
+    flex: 1 1;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    overflow-y: auto;
+    background-color: var(--v-sheet-background);
+  }
+
+  &--has-active-child {
+    transform: translateX(calc(-100vw + var(--v-sheet-modal-width)));
+  }
+
+  &-enter-active,
+  &-leave-active {
+    transition: transform var(--stack-transition-slowly);
+  }
+
+  &-enter-from,
+  &-leave-to {
+    transform: translateX(var(--v-sheet-modal-width));
+  }
+}

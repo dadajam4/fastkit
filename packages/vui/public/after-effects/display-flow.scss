@@ -1,0 +1,346 @@
+$props-map: (
+  (
+    prop: 'display',
+    values: (
+      (
+        selector: 'inline',
+        value: 'inline',
+      ),
+      (
+        selector: 'inline-block',
+        value: 'inline-block',
+      ),
+      (
+        selector: 'block',
+        value: 'block',
+      ),
+      (
+        selector: 'flex',
+        value: 'flex',
+      ),
+      (
+        selector: 'inline-flex',
+        value: 'inline-flex',
+      ),
+      (
+        selector: 'fragment',
+        value: 'contents',
+      ),
+    ),
+  ),
+  (
+    prop: 'flex-direction',
+    values: (
+      (
+        selector: 'direction-row',
+        value: 'row',
+      ),
+      (
+        selector: 'direction-row-reverse',
+        value: 'row-reverse',
+      ),
+      (
+        selector: 'direction-column',
+        value: 'column',
+      ),
+      (
+        selector: 'direction-column-reverse',
+        value: 'column-reverse',
+      ),
+    ),
+  ),
+  (
+    prop: 'flex-wrap',
+    values: (
+      (
+        selector: 'wrap',
+        value: 'wrap',
+      ),
+      (
+        selector: 'nowrap',
+        value: 'nowrap',
+      ),
+      (
+        selector: 'wrap-reverse',
+        value: 'wrap-reverse',
+      ),
+    ),
+  ),
+  (
+    prop: 'align-items',
+    values: (
+      (
+        selector: 'align-flex-start',
+        value: 'flex-start',
+      ),
+      (
+        selector: 'align-flex-end',
+        value: 'flex-end',
+      ),
+      (
+        selector: 'align-start',
+        value: 'start',
+      ),
+      (
+        selector: 'align-end',
+        value: 'end',
+      ),
+      (
+        selector: 'align-stretch',
+        value: 'stretch',
+      ),
+      (
+        selector: 'align-baseline',
+        value: 'baseline',
+      ),
+      (
+        selector: 'align-center',
+        value: 'center',
+      ),
+      (
+        selector: 'align-self-start',
+        value: 'self-start',
+      ),
+      (
+        selector: 'align-self-end',
+        value: 'self-end',
+      ),
+    ),
+  ),
+  (
+    prop: 'justify-content',
+    values: (
+      (
+        selector: 'justify-start',
+        value: 'start',
+      ),
+      (
+        selector: 'justify-end',
+        value: 'end',
+      ),
+      (
+        selector: 'justify-flex-start',
+        value: 'flex-start',
+      ),
+      (
+        selector: 'justify-flex-end',
+        value: 'flex-end',
+      ),
+      (
+        selector: 'justify-center',
+        value: 'center',
+      ),
+      (
+        selector: 'justify-baseline',
+        value: 'baseline',
+      ),
+      (
+        selector: 'justify-space-between',
+        value: 'space-between',
+      ),
+      (
+        selector: 'justify-space-around',
+        value: 'space-around',
+      ),
+      (
+        selector: 'justify-space-evenly',
+        value: 'space-evenly',
+      ),
+      (
+        selector: 'justify-stretch',
+        value: 'stretch',
+      ),
+    ),
+  ),
+  (
+    prop: 'align-self',
+    values: (
+      (
+        selector: 'self-align-flex-start',
+        value: 'flex-start',
+      ),
+      (
+        selector: 'self-align-flex-end',
+        value: 'flex-end',
+      ),
+      (
+        selector: 'self-align-start',
+        value: 'start',
+      ),
+      (
+        selector: 'self-align-end',
+        value: 'end',
+      ),
+      (
+        selector: 'self-align-stretch',
+        value: 'stretch',
+      ),
+      (
+        selector: 'self-align-baseline',
+        value: 'baseline',
+      ),
+      (
+        selector: 'self-align-center',
+        value: 'center',
+      ),
+      (
+        selector: 'self-align-self-start',
+        value: 'self-start',
+      ),
+      (
+        selector: 'self-align-self-end',
+        value: 'self-end',
+      ),
+    ),
+  ),
+  (
+    prop: 'justify-self',
+    values: (
+      (
+        selector: 'self-justify-start',
+        value: 'start',
+      ),
+      (
+        selector: 'self-justify-end',
+        value: 'end',
+      ),
+      (
+        selector: 'self-justify-flex-start',
+        value: 'flex-start',
+      ),
+      (
+        selector: 'self-justify-flex-end',
+        value: 'flex-end',
+      ),
+      (
+        selector: 'self-justify-center',
+        value: 'center',
+      ),
+      (
+        selector: 'self-justify-baseline',
+        value: 'baseline',
+      ),
+      (
+        selector: 'self-justify-stretch',
+        value: 'stretch',
+      ),
+    ),
+  )
+);
+
+@mixin grid-spacing($breakpoint-suffix: '', $direction: 'all') {
+  $props: if(
+    $direction == 'all',
+    ('top', 'left'),
+    if($direction == 'x', ('left'), ('top'))
+  );
+
+  $suffix: if($direction == 'all', '', '-' + $direction);
+
+  @for $i from 1 through 10 {
+    $base-value: if(
+      $i == 0,
+      0,
+      if($i == 1, var(--root-spacing), calc(var(--root-spacing) * #{$i}))
+    );
+    $half-value: calc(var(--root-spacing) * #{$i + 0.5});
+    $negative-base-value: if(
+      $i == 1,
+      calc(var(--root-spacing) * -1),
+      calc(var(--root-spacing) * -#{$i})
+    );
+    $negative-half-value: calc(var(--root-spacing) * -#{$i + 0.5});
+    $container-width: if(
+      $i == 0,
+      100%,
+      if(
+        $i == 1,
+        calc(100% + var(--root-spacing)),
+        calc(100% + (var(--root-spacing) * #{$i}))
+      )
+    );
+    $container-width-half: calc(100% + (var(--root-spacing) * #{$i + 0.5}));
+
+    .grid-spacing#{$suffix}-#{$i}#{$breakpoint-suffix} {
+      @if $direction != 'y' {
+        width: $container-width;
+      }
+
+      @each $prop in $props {
+        margin-#{$prop}: $negative-base-value;
+      }
+
+      & > .grid-item {
+        @each $prop in $props {
+          padding-#{$prop}: $base-value;
+        }
+      }
+    }
+
+    .grid-spacing#{$suffix}-#{$i}h#{$breakpoint-suffix} {
+      @if $direction != 'y' {
+        width: $container-width-half;
+      }
+
+      @each $prop in $props {
+        margin-#{$prop}: $negative-half-value;
+      }
+
+      & > .grid-item {
+        @each $prop in $props {
+          padding-#{$prop}: $half-value;
+        }
+      }
+    }
+  }
+}
+
+@mixin display-flow($breakpoint-suffix: '') {
+  @each $prop-info in $props-map {
+    $prop: map-get($prop-info, prop);
+    $values: map-get($prop-info, values);
+
+    @each $value-info in $values {
+      $selector: map-get($value-info, selector);
+      $value: map-get($value-info, value);
+
+      .#{$selector}#{$breakpoint-suffix} {
+        #{$prop}: unquote($value);
+      }
+    }
+  }
+
+  @for $i from 0 through 10 {
+    .order-#{$i}#{$breakpoint-suffix} {
+      order: $i;
+    }
+  }
+
+  $columns-length: 12;
+
+  @for $i from 1 through $columns-length {
+    .grid-size-#{$i}#{$breakpoint-suffix} {
+      --basis: calc(#{$i} / #{$columns-length} * 100%);
+
+      flex-basis: var(--basis);
+      flex-grow: 0;
+      max-width: var(--basis);
+    }
+  }
+
+  .grid-size-auto#{$breakpoint-suffix} {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+  }
+
+  @include grid-spacing($breakpoint-suffix);
+  @include grid-spacing($breakpoint-suffix, 'x');
+  @include grid-spacing($breakpoint-suffix, 'y');
+}
+
+@include display-flow();
+
+@include mq-each() {
+  @include display-flow($breakpoint-suffix: '--' + $mq-each-target);
+}

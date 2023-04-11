@@ -1,0 +1,72 @@
+{
+  "name": "@fastkit/async-control",
+  "version": "0.13.0",
+  "description": "A helper implementation that efficiently controls asynchronous processing.",
+  "keywords": [
+    "fastkit",
+    "async"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/async-control#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/async-control.d.ts",
+      "import": {
+        "default": "./dist/async-control.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/async-control.mjs",
+  "types": "./dist/async-control.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/async-control.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/cache-control": "workspace:*",
+    "@fastkit/cloner": "workspace:*",
+    "@fastkit/duration": "workspace:*",
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/tiny-hash": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*"
+  },
+  "buildOptions": {
+    "name": "AsyncControl"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "A helper implementation that efficiently controls asynchronous processing.",
+      "ja": "非同期処理を効率的にコントロールするためのへルパ実装。"
+    }
+  }
+}

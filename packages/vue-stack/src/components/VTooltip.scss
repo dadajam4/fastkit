@@ -1,0 +1,14 @@
+.v-tooltip {
+  --menu-shadow: var(--tooltip-shadow);
+
+  font-size: var(--tooltip-font-size);
+  color: var(--tooltip-color) !important;
+  background: var(--tooltip-background) !important;
+  border-radius: var(--tooltip-radius);
+  // opacity: var(--tooltip-opacity);
+
+  &__inner {
+    display: inline-block;
+    padding: var(--tooltip-padding);
+  }
+}

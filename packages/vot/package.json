@@ -1,0 +1,115 @@
+{
+  "name": "@fastkit/vot",
+  "version": "0.13.0",
+  "description": "Orchestration tools for building Vue applications.",
+  "keywords": [
+    "fastkit",
+    "vot"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vot#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/vot.d.ts",
+      "import": {
+        "default": "./dist/vot.mjs"
+      }
+    },
+    "./tool": {
+      "types": "./dist/tool.d.ts",
+      "import": {
+        "default": "./dist/tool.mjs"
+      }
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": {
+        "default": "./dist/server.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vot.mjs",
+  "types": "./dist/vot.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vot.d.ts"
+      ],
+      "tool": [
+        "./dist/tool.d.ts"
+      ],
+      "server": [
+        "./dist/server.d.ts"
+      ]
+    }
+  },
+  "bin": {
+    "vot": "./bin/vot.mjs"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit --skipLibCheck"
+  },
+  "dependencies": {
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/vue-page": "workspace:*",
+    "@fastkit/vue-utils": "workspace:*",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@types/connect": "^3.4.35",
+    "@types/express": "^4.17.17",
+    "@types/http-proxy": "^1.17.10",
+    "@types/node": "^18.15.11",
+    "@vitejs/plugin-vue": "^4.1.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
+    "@vue/server-renderer": "^3.2.47",
+    "@vueuse/head": "^1.1.23",
+    "chalk": "^5.2.0",
+    "connect": "^3.7.0",
+    "express": "^4.18.2",
+    "fs-extra": "^11.1.1",
+    "http-proxy": "^1.18.1",
+    "vite": "^4.1.1",
+    "vite-plugin-pages": "^0.29.0",
+    "vue": "^3.2.0",
+    "vue-router": "^4.1.0"
+  },
+  "buildOptions": {
+    "name": "Vot",
+    "tool": true,
+    "hooks": {
+      "after": [
+        "./scripts/after.ts"
+      ]
+    }
+  },
+  "_docs": {
+    "scope": "vot",
+    "feature": "framework",
+    "description": {
+      "en": "Orchestration tools for building Vue applications.",
+      "ja": "Vueアプリケーションを構築するためのオーケストレーションツール。"
+    }
+  }
+}

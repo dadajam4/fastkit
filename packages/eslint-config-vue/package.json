@@ -1,0 +1,46 @@
+{
+  "name": "@fastkit/eslint-config-vue",
+  "type": "module",
+  "version": "0.13.0",
+  "description": "@fastkit/eslint-config-vue",
+  "buildOptions": {
+    "ignore": true
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "lint",
+    "description": {
+      "en": "fastkit recommended eslint configuration for vue applications.",
+      "ja": "fastkitが推奨するvueアプリケーション用のeslintの設定。"
+    }
+  },
+  "main": "./index.cjs",
+  "exports": {
+    ".": "./index.cjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.cjs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "keywords": [
+    "fastkit",
+    "eslint",
+    "lint",
+    "vue"
+  ],
+  "author": "dadajam4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/eslint-config-vue#readme",
+  "dependencies": {
+    "@fastkit/eslint-config": "workspace:*",
+    "eslint-plugin-vue": "^9.10.0",
+    "vue-eslint-parser": "^9.1.1"
+  }
+}

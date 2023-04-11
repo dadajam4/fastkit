@@ -1,0 +1,102 @@
+@use '../../styles/core.scss';
+
+@layer vui {
+  .v-pagination {
+    --pagination-size: var(--pagination-item-size);
+    --pagination-margin: var(--pagination-item-margin);
+    --pagination-font-size: var(--pagination-item-font-size);
+    --pagination-radius: var(--pagination-item-radius);
+
+    &::before {
+      width: var(--pagination-size);
+      margin: var(--pagination-margin);
+      content: none;
+    }
+
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    font-weight: bold;
+    line-height: 1;
+
+    &--left {
+      justify-content: flex-start;
+    }
+
+    &--center {
+      justify-content: center;
+    }
+
+    &--right {
+      justify-content: flex-end;
+    }
+
+    &__item,
+    a#{&}__item {
+      @include core.button-reset;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: var(--pagination-size);
+      height: var(--pagination-size);
+      margin: calc(var(--pagination-margin) * 0.5);
+      font-size: var(--pagination-font-size);
+      color: inherit;
+      border-radius: var(--pagination-radius);
+      transition: 0.1s;
+
+      &:hover,
+      &:focus {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      &--active {
+        &,
+        &:hover,
+        &:focus,
+        &:active {
+          color: var(--text-color);
+          pointer-events: none;
+          background-color: var(--main-color);
+        }
+      }
+
+      &--disabled {
+        color: var(--palette-muted) !important;
+        pointer-events: none !important;
+        background: transparent !important;
+      }
+
+      &--truncate {
+        color: var(--palette-muted) !important;
+        pointer-events: none !important;
+        background: transparent !important;
+      }
+
+      .v-icon {
+        font-size: 125%;
+      }
+    }
+
+    &--dense &__item {
+      --pagination-size: var(--pagination-item-size-dense);
+      --pagination-margin: var(--pagination-item-margin-dense);
+      --pagination-font-size: var(--pagination-item-font-size-dense);
+    }
+
+    &--disabled &__item {
+      color: var(--palette-muted);
+      pointer-events: none;
+
+      &:hover,
+      &:focus {
+        background: transparent;
+      }
+
+      &--active {
+        background: var(--palette-muted);
+      }
+    }
+  }
+}

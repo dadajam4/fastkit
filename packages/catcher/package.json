@@ -1,0 +1,80 @@
+{
+  "name": "@fastkit/catcher",
+  "version": "0.13.0",
+  "description": "Custom classes for Type-safe handling of exceptions in your application.",
+  "keywords": [
+    "fastkit",
+    "error",
+    "exception",
+    "throw"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/catcher#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/catcher.d.ts",
+      "import": {
+        "default": "./dist/catcher.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/catcher.mjs",
+  "types": "./dist/catcher.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/catcher.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/helpers": "workspace:*"
+  },
+  "devDependencies": {
+    "axios": "^1.3.5"
+  },
+  "peerDependencies": {
+    "axios": "^1.3.4"
+  },
+  "peerDependenciesMeta": {
+    "axios": {
+      "optional": true
+    }
+  },
+  "buildOptions": {
+    "name": "Catcher"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "Custom classes for Type-safe handling of exceptions in your application.",
+      "ja": "あなたのアプリケーションで例外をTypeセーフに取り扱うためのカスタムクラス。"
+    }
+  }
+}

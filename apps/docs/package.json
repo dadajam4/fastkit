@@ -1,0 +1,33 @@
+{
+  "name": "docs",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vot",
+    "build": "vot build",
+    "typecheck": "tsc --noEmit --skipLibCheck"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/icon-font": "workspace:*",
+    "@fastkit/media-match": "workspace:*",
+    "@fastkit/vite-plugin-vui": "workspace:*",
+    "@fastkit/vot": "workspace:*",
+    "@fastkit/vue-app-layout": "workspace:*",
+    "@fastkit/vue-loading": "workspace:*",
+    "@fastkit/vue-scroller": "workspace:*",
+    "@fastkit/vue-stack": "workspace:*",
+    "@fastkit/vui": "workspace:*",
+    "@fastkit/vui-wysiwyg": "workspace:*"
+  },
+  "devDependencies": {
+    "@mdi/svg": "^7.2.96",
+    "vite-tsconfig-paths": "^4.1.0"
+  }
+}

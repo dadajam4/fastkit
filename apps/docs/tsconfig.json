@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "types": [
+      "node",
+      "@fastkit/plugboy/env",
+      "vite/client",
+      "./.vui/vui"
+    ],
+    "paths": {
+      "@@": [
+        "./modules"
+      ],
+      "@@/*": [
+        "./modules/*"
+      ],
+      "~/*": [
+        "./src/*"
+      ],
+    }
+  }
+}

@@ -1,0 +1,73 @@
+@use '../../styles/core.scss';
+
+@layer vui {
+  .v-option {
+    @include core.button-reset();
+
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: 0.75em 1em;
+    // font-size: 0.875em;
+
+    input {
+      @include core.hidden-input-element;
+    }
+
+    &::before,
+    &::after {
+      position: absolute;
+      inset: 0;
+      display: block;
+      pointer-events: none;
+      content: '';
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    &::before {
+      background: currentColor;
+    }
+
+    &::after {
+      background: var(--palette-primary);
+    }
+
+    &:hover,
+    &:focus-within,
+    &--key-focused {
+      &::before {
+        opacity: 0.12;
+      }
+    }
+
+    &__label {
+      position: relative;
+      display: block;
+    }
+
+    &--selected::after {
+      opacity: 0.12;
+    }
+
+    &--selected &__label {
+      font-weight: 500;
+      color: var(--palette-primary);
+    }
+
+    &--has-not-value &__label {
+      font-style: italic;
+    }
+
+    &[disabled],
+    &[tabindex='-1'] {
+      color: var(--palette-muted);
+      pointer-events: none;
+      opacity: 0.4;
+
+      &::before {
+        opacity: 0 !important;
+      }
+    }
+  }
+}

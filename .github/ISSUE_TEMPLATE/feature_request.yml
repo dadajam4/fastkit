@@ -1,0 +1,43 @@
+name: "\U0001F680 New feature proposal"
+description: Suggest an idea for this project
+labels: [":sparkles: feature request", "pending triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+      **Thanks for requesting the feature !**
+
+        Please search open/closed issues before submitting. Someone might have asked the same thing before 😉!
+  - type: textarea
+    id: packages
+    attributes:
+      label: Target Packages
+      description: |
+        If it is clear which package should hold the functionality, please give us the package name and version.
+      placeholder: @fastkit/vui
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Please describe your request in one or two sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What problem does this feature solve?
+      description: |
+        Please explain the use case, context, and rationale behind this feature request.
+      placeholder: Problem description
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-API
+    attributes:
+      label: Proposed Solution or API
+      description: |
+        Describe how you propose to solve the problem and provide code samples of how the API would work once implemented. Note that you can use [Markdown](https://guides.github.com/features/mastering-markdown/) to format your code blocks.
+      placeholder: Steps to reproduce
+    validations:
+      required: true

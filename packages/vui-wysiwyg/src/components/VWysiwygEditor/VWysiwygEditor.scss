@@ -1,0 +1,68 @@
+// @use '../../styles/core.scss';
+
+@layer vui {
+  .v-wysiwyg-editor {
+    &--sm {
+      --min-height: var(--wysiwyg-min-height-sm);
+      --max-height: var(--wysiwyg-max-height-sm);
+    }
+
+    &--md {
+      --min-height: var(--wysiwyg-min-height-md);
+      --max-height: var(--wysiwyg-max-height-md);
+    }
+
+    &--lg {
+      --min-height: var(--wysiwyg-min-height-lg);
+      --max-height: var(--wysiwyg-max-height-lg);
+    }
+
+    &__wrapper {
+      position: relative;
+    }
+
+    .v-control-field__body {
+      width: 100%;
+    }
+
+    &__floating-toolbar {
+      position: absolute;
+      right: 0;
+      bottom: 100%;
+      z-index: 1;
+    }
+
+    &__body {
+      position: relative;
+      width: 100%;
+      max-height: var(--max-height);
+      // max-height: 200px;
+      overflow: auto;
+    }
+
+    &__input {
+      cursor: text;
+
+      &__element {
+        width: 100%;
+        min-width: 0;
+        padding: 8px 0;
+        margin: 0;
+      }
+
+      &__prose {
+        width: 100%;
+        min-height: var(--min-height);
+        outline: none;
+      }
+    }
+
+    &--disabled-min-heihgt &__input__prose {
+      min-height: 0;
+    }
+
+    &--disabled-max-heihgt &__body {
+      max-height: none;
+    }
+  }
+}

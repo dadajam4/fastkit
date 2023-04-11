@@ -1,0 +1,24 @@
+@layer vui {
+  .v-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25em;
+    aspect-ratio: 1 / 1;
+    // -webkit-user-drag: none;
+    // pointer-events: none;
+    user-select: none;
+
+    &--clickable {
+      // pointer-events: auto;
+      cursor: pointer;
+    }
+
+    &__body {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 150ms linear;
+    }
+  }
+}

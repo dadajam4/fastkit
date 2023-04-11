@@ -1,0 +1,102 @@
+@use '../../styles/core.scss';
+
+@layer vui {
+  .v-checkable {
+    --outer-size: var(--control-checkable-outer-size);
+    --icon-size: var(--control-checkable-icon-size);
+    --color: var(--control-checkable-base-color);
+
+    &--checked {
+      --color: var(--main-color);
+    }
+
+    display: inline-flex;
+    align-items: center;
+    padding-right: 1em;
+    cursor: pointer;
+    user-select: none;
+
+    &--invalid:not(#{&}--readonly) {
+      --color: var(--main-color);
+    }
+
+    &--disabled {
+      --color: var(--control-disabled-color);
+      // --color: var(--main-color);
+
+      pointer-events: none;
+      cursor: default;
+    }
+
+    &--readonly {
+      pointer-events: none;
+      cursor: default;
+    }
+
+    input {
+      @include core.hidden-input-element;
+    }
+
+    &__faux {
+      position: relative;
+      display: inline-flex;
+      flex: 0 0 var(--outer-size);
+      align-items: center;
+      justify-content: center;
+      width: var(--outer-size);
+      height: var(--outer-size);
+      margin: var(--control-checkable-faux-margin);
+      margin-left: 0;
+      color: var(--color);
+      cursor: pointer;
+
+      &__icon {
+        position: relative;
+        display: block;
+        width: var(--icon-size);
+        height: var(--icon-size);
+        pointer-events: none;
+        transform: scale(var(--control-checkable-faux-scale));
+      }
+
+      &::before {
+        position: absolute;
+        inset: 0;
+        display: block;
+        pointer-events: none;
+        content: '';
+        background: currentColor;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      &:hover::before {
+        opacity: 0.1;
+      }
+    }
+
+    &--custom-icon &__faux {
+      flex-basis: auto;
+      width: auto;
+
+      &::before {
+        content: none;
+      }
+    }
+
+    &:focus-within &__faux {
+      &::before {
+        opacity: 0.2;
+      }
+    }
+
+    &__label {
+      line-height: 1.5;
+    }
+
+    &--disabled &__label {
+      color: var(--color);
+    }
+  }
+}

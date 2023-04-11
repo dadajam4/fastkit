@@ -1,0 +1,37 @@
+.pg-vui-root {
+  // noop
+  &__header {
+    --paper-link-color: #fff;
+
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    background: var(--deep-color);
+
+    &:hover,
+    &:focus {
+      background: var(--deep-color);
+    }
+  }
+
+  .pg-columns {
+    $sub-width: 160px;
+    $margin: 20px;
+
+    display: flex;
+
+    &__main {
+      flex: 1 1 100%;
+      max-width: calc(100% - #{$sub-width + $margin});
+    }
+
+    &__sub {
+      flex: 0 0 $sub-width;
+      padding-left: $margin;
+    }
+  }
+}

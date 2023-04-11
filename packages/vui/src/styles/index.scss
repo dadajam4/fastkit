@@ -1,0 +1,23 @@
+@use 'sass:meta';
+
+@layer vui-normalize, vui-color-scheme, vui;
+
+@layer vui-normalize {
+  @include meta.load-css('@fastkit/stylebase/normalize.css');
+
+  button {
+    background-color: transparent;
+  }
+}
+
+@layer vui {
+  // @include meta.load-css('@fastkit/stylebase/normalize.css');
+
+  @include meta.load-css('./variables.scss');
+  @include meta.load-css('./base.scss');
+  @include meta.load-css('./typo.scss');
+  @include meta.load-css('./elevation.scss');
+  @include meta.load-css('./group.scss');
+  @include meta.load-css('./control.scss');
+  @include meta.load-css('./wysiwyg.scss');
+}

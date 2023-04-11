@@ -1,0 +1,11 @@
+.v-control {
+  $sizes: sm, md, lg;
+
+  @each $size in $sizes {
+    &--#{$size} {
+      --control-field-rem: var(--control-field-rem-#{$size});
+
+      font-size: var(--control-field-rem);
+    }
+  }
+}

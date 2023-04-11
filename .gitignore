@@ -1,0 +1,24 @@
+# Temporary
+.DS_Store
+*.log
+.tmp
+vitest.config.ts.timestamp-*
+vite.config.ts.timestamp-*
+
+# Deps
+node_modules
+
+# Cache
+.turbo
+
+# Distribution
+dist
+coverage
+**/.dynamic/**/*
+.vui-installer.ts
+.vui
+.nuxt
+
+# Private
+play.ts
+.memo

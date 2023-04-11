@@ -1,0 +1,76 @@
+{
+  "name": "@fastkit/node-util",
+  "version": "0.13.0",
+  "description": "Utilities for Node.js server and tool implementation.",
+  "keywords": [
+    "fastkit",
+    "node"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/node-util#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/node-util.d.ts",
+      "import": {
+        "default": "./dist/node-util.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/node-util.mjs",
+  "types": "./dist/node-util.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/node-util.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/ev": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "chokidar": "^3.5.3",
+    "esbuild": "^0.17.16",
+    "execa": "^7.1.1",
+    "folder-hash": "^4.0.4",
+    "fs-extra": "^11.1.1"
+  },
+  "devDependencies": {
+    "@types/folder-hash": "^4.0.2"
+  },
+  "buildOptions": {
+    "name": "NodeUtil"
+  },
+  "_docs": {
+    "scope": "node",
+    "feature": "",
+    "description": {
+      "en": "Utilities for Node.js server and tool implementation.",
+      "ja": "Node.jsのサーバやツール実装のためのユーティリティー。"
+    }
+  }
+}

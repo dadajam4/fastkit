@@ -1,0 +1,66 @@
+{
+  "name": "@fastkit/duration",
+  "version": "0.13.0",
+  "description": "@fastkit/duration",
+  "keywords": [
+    "fastkit",
+    "duration",
+    "time",
+    "date"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/duration#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/duration.d.ts",
+      "import": {
+        "default": "./dist/duration.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/duration.mjs",
+  "types": "./dist/duration.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/duration.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "buildOptions": {
+    "name": "Value object implementation expressing \"duration\"."
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "",
+    "description": {
+      "en": "Value object implementation expressing \"duration\".",
+      "ja": "「期間」を表現する値オブジェクト実装。"
+    }
+  }
+}

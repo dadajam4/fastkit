@@ -1,0 +1,43 @@
+{
+  "name": "@fastkit/ts-type-utils",
+  "version": "0.1.0",
+  "description": "ts-type-utils",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": {
+        "default": "./types/index.mjs"
+      }
+    },
+    "./*": "./types/*"
+  },
+  "main": "./types/index.mjs",
+  "types": "./types/index.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./types/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "types"
+  ],
+  "scripts": {
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  }
+}

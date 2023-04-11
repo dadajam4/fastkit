@@ -1,0 +1,65 @@
+@function get-typo-family($level) {
+  @return var(--typo-#{$level}-family);
+}
+
+@function get-typo-size($level) {
+  @return var(--typo-#{$level}-size);
+}
+
+@function get-typo-weight($level) {
+  @return var(--typo-#{$level}-weight);
+}
+
+@function get-typo-height($level) {
+  @return var(--typo-#{$level}-height);
+}
+
+@function get-typo-spacing($level) {
+  @return var(--typo-#{$level}-height);
+}
+
+@function get-typo-margin($level) {
+  @return var(--typo-#{$level}-margin);
+}
+
+@function get-typo-color($level) {
+  @return var(--typo-#{$level}-color);
+}
+
+@mixin typo-family($level) {
+  font-family: get-typo-family($level);
+}
+
+@mixin typo-size($level) {
+  font-size: get-typo-size($level);
+}
+
+@mixin typo-weight($level) {
+  font-weight: get-typo-weight($level);
+}
+
+@mixin typo-height($level) {
+  line-height: get-typo-height($level);
+}
+
+@mixin typo-spacing($level) {
+  letter-spacing: get-typo-spacing($level);
+}
+
+@mixin typo-margin($level) {
+  margin: get-typo-margin($level);
+}
+
+@mixin typo-color($level) {
+  color: get-typo-color($level);
+}
+
+@mixin typo($level) {
+  @include typo-family($level);
+  @include typo-size($level);
+  @include typo-weight($level);
+  @include typo-height($level);
+  @include typo-spacing($level);
+  @include typo-margin($level);
+  @include typo-color($level);
+}

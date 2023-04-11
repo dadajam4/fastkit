@@ -1,0 +1,79 @@
+{
+  "name": "@fastkit/universal-logger",
+  "version": "0.13.0",
+  "description": "Pluggable and universal log output library for any server/browser execution environment.",
+  "keywords": [
+    "fastkit",
+    "logger",
+    "log"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/universal-logger#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/universal-logger.d.ts",
+      "import": {
+        "default": "./dist/universal-logger.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/universal-logger.mjs",
+  "types": "./dist/universal-logger.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/universal-logger.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/cloner": "workspace:*",
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/json": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*"
+  },
+  "devDependencies": {
+    "@datadog/browser-logs": "^4.38.0"
+  },
+  "peerDependencies": {
+    "@datadog/browser-logs": "^4.36.0"
+  },
+  "peerDependenciesMeta": {
+    "@datadog/browser-logs": {
+      "optional": true
+    }
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "log",
+    "description": {
+      "en": "Pluggable and universal log output library for any server/browser execution environment.",
+      "ja": "サーバ／ブラウザの実行環境を問わないプラグイン可能でユニバーサルなログ出力用ライブラリ。"
+    }
+  }
+}

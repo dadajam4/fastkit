@@ -1,0 +1,185 @@
+@layer vui {
+  .v-control-field {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    height: var(--control-field-height);
+    padding: 0 8px;
+    font-size: var(--control-field-font-size);
+    line-height: var(--control-field-line-height);
+    letter-spacing: var(--control-field-letter-spacing);
+
+    --my-bottom-color: var(--control-field-bottom-color);
+    --my-bottom-hover-color: var(--control-field-bottom-hover-color);
+    --my-focused-color: var(--main-color);
+    --my-fill-color: var(--control-field-fill-color);
+    --my-fill-hover-color: var(--control-field-fill-hover-color);
+    --my-outline-color: var(--control-field-outline-color);
+    --my-outline-hover-color: var(--control-field-outline-hover-color);
+
+    &--invalid:not(#{&}--disabled):not(#{&}--readonly) {
+      --my-bottom-color: var(--main-color);
+      --my-bottom-hover-color: var(--main-color);
+      --my-outline-color: var(--main-color);
+      --my-outline-hover-color: var(--main-color);
+    }
+
+    &--readonly {
+      // pointer-events: none !important;
+      cursor: default;
+    }
+
+    &--disabled {
+      color: var(--control-disabled-color);
+      pointer-events: none;
+      // cursor: not-allowed !important;
+      user-select: none;
+    }
+
+    &::before,
+    &::after {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      pointer-events: none;
+      content: '';
+      // transition: all 0.2s;
+    }
+
+    &::before {
+      height: 1px;
+      border-bottom: solid 1px var(--my-bottom-color);
+      transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    }
+
+    &::after {
+      height: 2px;
+      background: var(--my-focused-color);
+      transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+      transform: scaleX(0);
+    }
+
+    &--focused,
+    &:focus-within {
+      --my-outline-color: var(--my-focused-color);
+      --my-outline-hover-color: var(--my-focused-color);
+
+      outline: none;
+
+      &::after {
+        transform: scaleX(1);
+      }
+    }
+
+    // &:focus-within {
+    //   &::after {
+    //     transform: scaleX(1);
+    //   }
+    // }
+
+    &--auto-height {
+      height: auto;
+    }
+
+    &__body {
+      display: flex;
+      flex: 1 1 auto;
+      align-items: stretch;
+      align-self: stretch;
+      // margin: 0 8px;
+      margin: 0;
+      // pointer-events: none;
+
+      // color: #f00;
+
+      // background-color: var(--control-fill-color);
+      // border: solid 1px;
+    }
+
+    &--flat {
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    &--filled {
+      background-color: var(--my-fill-color);
+      border-top-left-radius: var(--control-field-radius);
+      border-top-right-radius: var(--control-field-radius);
+      transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+
+      &:hover:not(:focus-within) {
+        background-color: var(--my-fill-hover-color);
+      }
+    }
+
+    &--flat:hover,
+    &--filled:hover {
+      &::before {
+        border-color: var(--my-bottom-hover-color);
+      }
+    }
+
+    &--flat:hover {
+      &::before {
+        height: 2px;
+        border-bottom-width: 2px;
+      }
+    }
+
+    &--flat#{&}--disabled,
+    &--filled#{&}--disabled {
+      &::before {
+        border-bottom-style: dotted;
+      }
+    }
+
+    &--outlined {
+      // border: solid 1px var(--my-outline-color);
+      border-radius: var(--control-field-radius);
+      transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+
+      &::before {
+        top: 0;
+        height: auto;
+        background: transparent;
+        border: solid 1px var(--my-outline-color);
+        border-radius: inherit;
+      }
+
+      &:hover::before {
+        border-color: var(--my-outline-hover-color);
+      }
+
+      &::after {
+        content: none;
+      }
+
+      &:focus-within {
+        box-shadow: 0 0 1px var(--shadow-color),
+          0 0 2px 2px var(--focusShadow-color);
+        // border-color: var(--my-focused-color);
+      }
+    }
+
+    &__adornment {
+      // pointer-events: none;
+
+      $my-offset: 0.25em;
+
+      &--start {
+        padding-right: $my-offset;
+      }
+
+      &--end {
+        padding-left: $my-offset;
+      }
+
+      .v-icon {
+        font-size: 1.2em;
+      }
+    }
+  }
+}

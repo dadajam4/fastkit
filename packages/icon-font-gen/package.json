@@ -1,0 +1,88 @@
+{
+  "name": "@fastkit/icon-font-gen",
+  "version": "0.13.0",
+  "description": "A tool to generate icon web fonts and their definitions Type-safe for your application.",
+  "keywords": [
+    "fastkit",
+    "icon"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/icon-font-gen#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/icon-font-gen.d.ts",
+      "import": {
+        "default": "./dist/icon-font-gen.mjs"
+      }
+    },
+    "./cli": {
+      "types": "./dist/cli.d.ts",
+      "import": {
+        "default": "./dist/cli.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/icon-font-gen.mjs",
+  "types": "./dist/icon-font-gen.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/icon-font-gen.d.ts"
+      ],
+      "cli": [
+        "./dist/cli.d.ts"
+      ]
+    }
+  },
+  "bin": {
+    "icon-font": "./bin/cli.mjs"
+  },
+  "files": [
+    "./cli.mjs",
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/ev": "workspace:*",
+    "@fastkit/helpers": "workspace:*",
+    "@fastkit/icon-font": "workspace:*",
+    "@fastkit/node-util": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:*",
+    "cac": "^6.7.14",
+    "chokidar": "^3.5.3",
+    "fs-extra": "^11.1.1",
+    "webfont": "^11.2.26"
+  },
+  "buildOptions": {
+    "name": "IconFont"
+  },
+  "_docs": {
+    "scope": "",
+    "feature": "icon",
+    "description": {
+      "en": "A tool to generate icon web fonts and their definitions Type-safe for your application.",
+      "ja": "アプリケーションのためにアイコンWebフォントとその定義をTypeセーフに生成するツール。"
+    }
+  }
+}
