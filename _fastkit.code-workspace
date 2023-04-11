@@ -283,6 +283,7 @@
   ],
 	"settings": {
     "search.followSymlinks": false,
+    "search.maxResults": 5000,
     "search.searchOnType": false,
     "search.exclude": {
       "**/.git": true,
