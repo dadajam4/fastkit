@@ -1,8 +1,8 @@
-blank_issues_enabled: true
-# contact_links:
-#   - name: 📚 Fastkit Documentation
-#     url: https://xxx.xxx/docs/
-#     about: Check the documentation for usage of Fastkit
-#   - name: 💬 Discussions
-#     url: https://github.com/dadajam4/fastkit/discussions
-#     about: Use discussions if you have another issue, an idea for improvement or for asking questions.
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Fastkit Documentation
+    url: https://dadajam4.github.io/fastkit/
+    about: Check the documentation for usage of Fastkit
+  - name: 💬 Discussions
+    url: https://github.com/dadajam4/fastkit/discussions
+    about: Use discussions if you have another issue, an idea for improvement or for asking questions.
