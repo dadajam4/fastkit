@@ -24,7 +24,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: description
+    id: problem-description
     attributes:
       label: What problem does this feature solve?
       description: |
