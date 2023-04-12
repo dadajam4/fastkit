@@ -39,7 +39,7 @@ jobs:
           # Specify the title of the PR
           commit: "ci(changesets): version packages"
           setupGitUser: false
-          # GitHubのReleaseを作成しない（任意）2
+          # GitHubのReleaseを作成しない（任意）
           createGithubReleases: true
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
