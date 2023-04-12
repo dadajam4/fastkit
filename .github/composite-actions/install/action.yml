@@ -33,3 +33,12 @@ runs:
       env:
         # NODE_AUTH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
         PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+
+   - name: Turbo Cache
+      id: turbo-cache
+      uses: actions/cache@v2
+      with:
+        path: .turbo-cache
+        key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        restore-keys: |
+          turbo-${{ github.job }}-${{ github.ref_name }}-
