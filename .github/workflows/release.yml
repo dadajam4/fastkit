@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    paths:
+      - ".github/composite-actions/**"
+      - ".github/workflows/release.yml"
+      - ".changeset/**"
+      - "packages/**"
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Release
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: Install
+        uses: ./.github/composite-actions/install
+        # with:
+        #   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          # Changesets標準のコマンドの代わりに
+          # ルートプロジェクトのpackage.jsonのnpm-scriptsを実行する
+          version: pnpm ci:version
+          publish: pnpm ci:publish
+          # PRのタイトルを指定
+          commit: "ci(changesets): version packages"
+          setupGitUser: false
+          # GitHubのReleaseを作成しない（任意）
+          createGithubReleases: true
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #   NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Send a Slack notification if a publish happens
+      #   if: steps.changesets.outputs.published == 'true'
+      #   # You can do something when a publish happens.
+      #   run: my-slack-bot send-notification --message "A new version of ${GITHUB_REPOSITORY} was published!"

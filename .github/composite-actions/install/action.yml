@@ -1,0 +1,35 @@
+name: "Install"
+description: "Sets up Node.js and runs install"
+inputs:
+  NODE_AUTH_TOKEN:
+    default: ''
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 7
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: ".node-version"
+        # registry-url: 'https://npm.pkg.github.com'
+        # scope: '@dadajam4'
+        cache: "pnpm"
+
+    - name: Setup Git User
+      shell: bash
+      run: |
+        git config --global user.email "dadajam4@gmail.com"
+        git config --global user.name "Ayumu Fujii"
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install
+      env:
+        # NODE_AUTH_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
