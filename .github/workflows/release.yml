@@ -33,8 +33,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          # Changesets標準のコマンドの代わりに
-          # ルートプロジェクトのpackage.jsonのnpm-scriptsを実行する
+          # Run npm-scripts in the root project's package.json instead of the standard Changesets command
           version: pnpm ci:version
           publish: pnpm ci:publish
           # PRのタイトルを指定
