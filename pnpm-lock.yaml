@@ -542,7 +542,6 @@ importers:
       postcss-html: ^1.5.0
       postcss-scss: ^4.0.6
       stylelint-config-css-modules: ^4.2.0
-      stylelint-config-prettier: ^9.0.5
       stylelint-config-recess-order: ^4.0.0
       stylelint-config-standard: ^31.0.0
       stylelint-prettier: ^3.0.0
@@ -551,7 +550,6 @@ importers:
       postcss-html: 1.5.0
       postcss-scss: 4.0.6
       stylelint-config-css-modules: 4.2.0
-      stylelint-config-prettier: 9.0.5
       stylelint-config-recess-order: 4.0.0
       stylelint-config-standard: 31.0.0
       stylelint-prettier: 3.0.0
@@ -8939,17 +8937,6 @@ packages:
         optional: true
     optionalDependencies:
       stylelint-scss: 4.6.0
-    dev: false
-
-  /stylelint-config-prettier/9.0.5:
-    resolution: {integrity: sha512-U44lELgLZhbAD/xy/vncZ2Pq8sh2TnpiPvo38Ifg9+zeioR+LAkHu0i6YORIOxFafZoVg0xqQwex6e6F25S5XA==}
-    engines: {node: '>= 12'}
-    hasBin: true
-    peerDependencies:
-      stylelint: '>= 11.x < 15'
-    peerDependenciesMeta:
-      stylelint:
-        optional: true
     dev: false
 
   /stylelint-config-recess-order/4.0.0:
