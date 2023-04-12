@@ -9,20 +9,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:plugboy": "turbo run build --filter=@fastkit/plugboy*",
+    "build:plugboy": "turbo run build --filter=@fastkit/plugboy* --cache-dir=./.turbo-cache",
     "clean": "pnpm -r run clean && rm -rf node_modules",
     "reset": "pnpm clean && pnpm i",
     "dev:docs": "cd ./apps/docs && pnpm dev",
     "dev": "pnpm build && pnpm dev:docs",
-    "build": "pnpm build:plugboy && turbo run build --filter=@fastkit/* --filter=!@fastkit/plugboy*",
+    "build": "pnpm build:plugboy && turbo run build --filter=@fastkit/* --filter=!@fastkit/plugboy* --cache-dir=./.turbo-cache",
     "ci:version": "changeset version",
     "ci:publish": "pnpm build && changeset publish",
-    "lint": "turbo run lint",
-    "format": "turbo run format",
-    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint --cache-dir=./.turbo-cache",
+    "format": "turbo run format --cache-dir=./.turbo-cache",
+    "typecheck": "turbo run typecheck --cache-dir=./.turbo-cache",
+    "typecheck:packages": "turbo run typecheck --filter=!docs --cache-dir=./.turbo-cache",
     "plugboy": "plugboy",
     "gen": "pnpm run plugboy gen",
-    "test": "turbo run test --concurrency 1"
+    "test": "turbo run test --concurrency 1 --cache-dir=./.turbo-cache"
   },
   "resolutions": {
     "@types/node": "^18.11.19",

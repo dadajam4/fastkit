@@ -10,6 +10,7 @@ node_modules
 
 # Cache
 .turbo
+.turbo-cache
 
 # Distribution
 dist
