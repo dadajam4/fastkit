@@ -291,6 +291,7 @@
       "**/bower_components": true,
       "**/.vui": true,
       "**/.turbo": true,
+      "**/.turbo-cache": true,
       "**/dist": true,
       "**/pnpm-lock.yaml": true,
       "**/*.code-search": true
@@ -302,12 +303,10 @@
       "**/dist": true,
       "**/node_modules": true,
       "**/.turbo": true,
+      "**/.turbo-cache": true,
       "**/.vui": true,
       "coverage": true
     },
-
-    // Force show recommendations
-    "extensions.showRecommendationsOnlyOnDemand": false,
 
     // Use the project's typescript version
     "typescript.tsdk": "node_modules/typescript/lib",
