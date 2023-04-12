@@ -126,7 +126,7 @@ export const VPackageHome = defineComponent({
                 width={24}
                 height={24}
               />
-              {'Powered by '}
+              <>{'Powered by '}</>
               <VLink class="ml-1" to="/">
                 Fastkit
               </VLink>
