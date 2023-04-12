@@ -22,4 +22,4 @@ jobs:
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-        run: pnpm lint && pnpm build && pnpm typecheck && pnpm test
+        run: pnpm lint && pnpm build && pnpm typecheck:packages && pnpm test

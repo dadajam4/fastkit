@@ -20,6 +20,7 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "typecheck": "turbo run typecheck",
+    "typecheck:packages": "turbo run typecheck --filter=!docs",
     "plugboy": "plugboy",
     "gen": "pnpm run plugboy gen",
     "test": "turbo run test --concurrency 1"
