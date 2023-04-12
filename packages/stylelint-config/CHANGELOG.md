@@ -1,5 +1,11 @@
 # @fastkit/stylelint-config
 
+## 0.13.2
+
+### Patch Changes
+
+- [#12](https://github.com/dadajam4/fastkit/pull/12) [`7ea8d4c1`](https://github.com/dadajam4/fastkit/commit/7ea8d4c112f70990887a345e0dd61e9060434bc7) Thanks [@dadajam4](https://github.com/dadajam4)! - No changes have been made to the content. This is a re-release with fixes to the publish settings.
+
 ## 0.13.1
 
 ### Patch Changes
