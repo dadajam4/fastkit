@@ -4,15 +4,12 @@ module.exports = {
   extends: [
     'stylelint-config-standard',
     'stylelint-prettier/recommended',
-    'stylelint-config-prettier',
     'stylelint-config-recess-order',
   ],
   rules: {
     'at-rule-no-unknown': null,
     'scss/at-rule-no-unknown': true,
     'prettier/prettier': true,
-    indentation: 2,
-    'string-quotes': 'single',
     'length-zero-no-unit': null,
     'value-keyword-case': null,
     'no-descending-specificity': null,
