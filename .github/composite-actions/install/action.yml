@@ -40,5 +40,8 @@ runs:
       with:
         path: .turbo-cache
         key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        # restore-keys: |
+        #   turbo-${{ github.job }}-${{ github.ref_name }}-
+        # turborepo cache will be persistent (7 days & 10GB limit)
         restore-keys: |
-          turbo-${{ github.job }}-${{ github.ref_name }}-
+          turbo-
