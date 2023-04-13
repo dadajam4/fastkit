@@ -1,4 +1,4 @@
-import { serve } from '../dist/server';
+import { serve } from '../dist/server.mjs';
 
 const [, , ...args] = process.argv;
 
