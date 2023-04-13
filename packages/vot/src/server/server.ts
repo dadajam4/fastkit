@@ -1,9 +1,17 @@
 import path from 'node:path';
 import express, { Express } from 'express';
-import { loadConfigFromFile, Plugin, resolveConfig } from 'vite';
+import {
+  loadConfigFromFile,
+  Plugin,
+  resolveConfig,
+  ResolvedServerUrls,
+} from 'vite';
 import { proxyMiddleware } from './proxy';
 import module from 'node:module';
 import type { Server } from 'node:http';
+import { resolveServerUrls } from '../utils/host';
+import chalk from 'chalk';
+import { capitalize } from '@fastkit/helpers';
 
 const require = module.createRequire(import.meta.url);
 
@@ -11,7 +19,14 @@ export interface ServeOptions {
   memwatch?: boolean;
 }
 
-export async function serve(opts: ServeOptions = {}) {
+export interface ServedResult {
+  server: Server;
+  port: number;
+  host: string;
+  resolvedUrls: ResolvedServerUrls;
+}
+
+export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
   let memwatch: any;
 
   if (opts.memwatch) {
@@ -132,11 +147,32 @@ export async function serve(opts: ServeOptions = {}) {
     response.end(html);
   });
 
-  const launched = await new Promise<Server>((resolve, reject) => {
+  const launched = await new Promise<{
+    server: Server;
+    resolvedUrls: ResolvedServerUrls;
+  }>((resolve, reject) => {
     try {
-      const launched = server.listen(port, host, () => {
-        console.log(`Server started: http://localhost:${port}`);
-        resolve(launched);
+      const launched = server.listen(port, host, async () => {
+        const { server: serverOptioins } = resolvedConfig;
+        const resolvedUrls = await resolveServerUrls(
+          launched,
+          serverOptioins,
+          resolvedConfig,
+        );
+
+        console.log('');
+        console.log(chalk.green('vot server running at:'));
+        console.log('');
+
+        (['local', 'network'] as const).forEach((type) => {
+          const urls = resolvedUrls[type];
+          const urlsText = urls.length
+            ? chalk.cyan(urls.join(' '))
+            : chalk.gray('Not exposed.');
+          console.log(`> ${capitalize(type)}: ${urlsText}`);
+        });
+
+        resolve({ server: launched, resolvedUrls });
       });
     } catch (err) {
       reject(err);
@@ -144,9 +180,10 @@ export async function serve(opts: ServeOptions = {}) {
   });
 
   return {
-    server: launched,
+    server: launched.server,
     port,
     host,
+    resolvedUrls: launched.resolvedUrls,
   };
 
   function findPlugin(

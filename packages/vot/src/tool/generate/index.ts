@@ -12,7 +12,6 @@ import {
 } from '../../schemes/generate';
 import http, { Server } from 'node:http';
 import chalk from 'chalk';
-import dns from 'node:dns';
 
 function isIncomingMessage(source: unknown): source is http.IncomingMessage {
   return (
@@ -22,10 +21,10 @@ function isIncomingMessage(source: unknown): source is http.IncomingMessage {
   );
 }
 
-function httpRequest(options: http.RequestOptions) {
+function httpRequest(url: string, options: http.RequestOptions) {
   return new Promise<string | { status: number }>((resolve, reject) => {
     let chunks = '';
-    const req = http.request(options, (res) => {
+    const req = http.request(url, options, (res) => {
       if (res.statusCode !== 200) {
         return reject(res);
       }
@@ -44,9 +43,6 @@ function httpRequest(options: http.RequestOptions) {
 }
 
 export async function generate(_config?: ResolvedConfig) {
-  // @FIXME Node18用の対策。もうちょっと良い解決がありそう
-  dns.setDefaultResultOrder('ipv4first');
-
   const viteConfig = _config || (await resolveViteConfig());
   const distDir =
     viteConfig.build?.outDir ?? path.resolve(process.cwd(), 'dist');
@@ -66,48 +62,33 @@ export async function generate(_config?: ResolvedConfig) {
 
   const { serve } = await import('../../server');
 
-  let basePrefix = '';
-  let viteBase = viteConfig.base;
-
-  if (viteBase) {
-    if (viteBase.startsWith('http')) {
-      viteBase = viteBase.replace(/^https?:\/\//, '');
-      viteBase = viteBase.replace(viteBase.split('/')[0], '');
-    }
-    viteBase = viteBase.replace(/^\//, '').replace(/\/$/, '');
-    basePrefix = `/${viteBase}`;
-  }
-
   const launched = await serve();
   const server: Server = launched.server;
-  const host = launched.host;
-  const port = launched.port;
-  const normalizePath = (path: string) => {
+
+  const urlParseRe = /(https?:)([^?]+)(\?.+)?/;
+  const normalizeUrl = (url: string) => {
+    const matched = url.replace(/\/+/g, '/').match(urlParseRe);
+    if (!matched) throw new Error(`Invalid url: ${url}`);
+    const protocol = matched[1];
+    let path = matched[2];
+    const query = matched[3] || '';
     if (!path.endsWith('/')) {
       path += '/';
     }
-    path = path.replace(/^\/\//, '/');
-    return path;
+    return `${protocol}/${path}${query}`;
   };
 
-  const PAGES_PATH = normalizePath(
-    `${basePrefix.replace(/\/$/, '')}/${VOT_GENERATE_PAGES_PATH}/`,
-  );
+  /**
+   * @TODO
+   * If you have not released the host, it may not exist
+   */
+  const baseUrl = launched.resolvedUrls.network[0];
 
-  console.log(
-    '■■■■',
-    host === '0.0.0.0' ? 'localhost' : host,
-    port,
-    PAGES_PATH,
-  );
+  const PAGES_URL = normalizeUrl(`${baseUrl}${VOT_GENERATE_PAGES_PATH}/`);
 
   const routes = JSON.parse(
     (
-      await httpRequest({
-        protocol: 'http:',
-        host: host === '0.0.0.0' ? 'localhost' : host,
-        port,
-        path: PAGES_PATH,
+      await httpRequest(PAGES_URL, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -133,17 +114,13 @@ export async function generate(_config?: ResolvedConfig) {
   try {
     await Promise.all(
       filteredPages.map(async (pagePath) => {
-        const requestPath = normalizePath(`${basePrefix}${pagePath}`);
+        const requestUrl = normalizeUrl(`${baseUrl}${pagePath}`);
         const outDir = path.join(clientOutDir, pagePath);
         const outPath = path.join(outDir, 'index.html');
         await fs.remove(outPath);
 
         try {
-          const html = await httpRequest({
-            protocol: 'http:',
-            host: host === '0.0.0.0' ? 'localhost' : host,
-            port,
-            path: requestPath,
+          const html = await httpRequest(requestUrl, {
             method: 'GET',
             headers: {
               'Content-Type': 'text/html',
