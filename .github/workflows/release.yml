@@ -65,3 +65,6 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           path: apps/docs/dist/client/
+      - name: Deploy docs to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
