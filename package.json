@@ -16,6 +16,7 @@
     "dev": "pnpm build && pnpm dev:docs",
     "build": "pnpm build:plugboy && turbo run build --filter=@fastkit/* --filter=!@fastkit/plugboy* --cache-dir=./.turbo-cache",
     "build:docs": "turbo run build --filter=docs --cache-dir=./.turbo-cache",
+    "preview:docs": "pnpm build:docs && cd apps/docs && pnpm serve",
     "ci:version": "changeset version",
     "ci:publish": "pnpm build && changeset publish",
     "lint": "turbo run lint --cache-dir=./.turbo-cache",

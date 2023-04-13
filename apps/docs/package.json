@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vot",
     "build": "vot build",
+    "serve": "vot serve",
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "keywords": [],
