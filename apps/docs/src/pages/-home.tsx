@@ -23,7 +23,7 @@ export default defineComponent({
               to: '/guide/',
               color: 'primary',
               startIcon: 'mdi-compass',
-              label: subSpace.at.common.t.tryItOut,
+              label: subSpace.at.common.t.howToUse,
             },
             {
               to: '/guide/what/',

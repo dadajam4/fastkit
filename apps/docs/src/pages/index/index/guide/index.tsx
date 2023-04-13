@@ -1,35 +1,34 @@
 import { defineComponent } from 'vue';
 import { VHero } from '@fastkit/vui';
-import { VDocsSection, VCode, VDocsPaging } from '~/components';
+import { VDocsSection, VCode, VDocsPaging, VMarked } from '~/components';
 import { i18n, PackageProvide } from '@@';
 
 export default defineComponent({
   setup() {
-    const { trans } = i18n.use().at.common;
+    const $i18n = i18n.use();
+    const { trans } = $i18n.at.common;
 
     PackageProvide.useHead({
-      title: trans.tryItOut,
+      title: trans.howToUse,
     });
 
     return () => {
       return (
         <div>
-          <VHero>{trans.tryItOut}</VHero>
+          <VHero>{trans.howToUse}</VHero>
 
           <VDocsSection title={trans.installation}>
-            <p>
+            <VMarked
+              code={`
               あなたのアプリケーションにとって必要なもの探して、それらを個別にインストールするだけです。
-            </p>
+
+              Fastkitでこねこねしているパッケージは[ここ](/packages/)に一覧があります。
+              `}
+            />
 
             <VCode language="sh">
               npm i @fastkit/universal-logger @fastkit/ev -D
             </VCode>
-
-            <p class="mt-8">
-              以下のように<code>fastkit</code>
-              パッケージをインストールすることで、よく使われるツールをまとめてインストール可能です。
-            </p>
-            <VCode language="sh">npm i fastkit -D</VCode>
 
             {/* <>
               <p>

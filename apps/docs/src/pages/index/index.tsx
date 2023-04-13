@@ -31,7 +31,7 @@ export default defineComponent({
                 {
                   key: 'try',
                   to: '/guide/',
-                  label: trans.tryItOut,
+                  label: trans.howToUse,
                 },
               ],
             },

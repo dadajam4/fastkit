@@ -2,10 +2,10 @@ import { commonScheme } from './scheme';
 
 export const ja = commonScheme.defineLocale.strict({
   translations: {
-    appName: 'fastkit',
+    appName: 'Fastkit',
     guide: 'ガイド',
-    whatIsFastkit: 'fastkitって何？',
-    tryItOut: '使ってみる', // 使ってみる
+    whatIsFastkit: 'Fastkitって何？',
+    howToUse: '使いかた',
     installation: 'インストール',
     translations: '翻訳',
     copied: 'コピーしました',

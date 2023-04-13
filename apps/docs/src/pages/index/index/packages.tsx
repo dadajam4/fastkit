@@ -31,7 +31,7 @@ export default defineComponent({
           <VDocsPaging
             prev={{
               to: '/guide/',
-              title: trans.tryItOut,
+              title: trans.howToUse,
             }}
           />
         </div>

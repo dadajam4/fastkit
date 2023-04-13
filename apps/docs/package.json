@@ -25,7 +25,9 @@
     "@fastkit/vue-scroller": "workspace:*",
     "@fastkit/vue-stack": "workspace:*",
     "@fastkit/vui": "workspace:*",
-    "@fastkit/vui-wysiwyg": "workspace:*"
+    "@fastkit/vui-wysiwyg": "workspace:*",
+    "@types/marked": "^4.0.8",
+    "marked": "^4.3.0"
   },
   "devDependencies": {
     "@mdi/svg": "^7.2.96",

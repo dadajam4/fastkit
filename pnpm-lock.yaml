@@ -113,6 +113,8 @@ importers:
       '@fastkit/vui': workspace:*
       '@fastkit/vui-wysiwyg': workspace:*
       '@mdi/svg': ^7.2.96
+      '@types/marked': ^4.0.8
+      marked: ^4.3.0
       vite-tsconfig-paths: ^4.1.0
     dependencies:
       '@fastkit/helpers': link:../../packages/helpers
@@ -126,6 +128,8 @@ importers:
       '@fastkit/vue-stack': link:../../packages/vue-stack
       '@fastkit/vui': link:../../packages/vui
       '@fastkit/vui-wysiwyg': link:../../packages/vui-wysiwyg
+      '@types/marked': 4.0.8
+      marked: 4.3.0
     devDependencies:
       '@mdi/svg': 7.2.96
       vite-tsconfig-paths: 4.1.0
@@ -2733,6 +2737,10 @@ packages:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
       '@types/node': 18.15.11
+    dev: false
+
+  /@types/marked/4.0.8:
+    resolution: {integrity: sha512-HVNzMT5QlWCOdeuBsgXP8EZzKUf0+AXzN+sLmjvaB3ZlLqO+e4u0uXrdw9ub69wBKFs+c6/pA4r9sy6cCDvImw==}
     dev: false
 
   /@types/mime/3.0.1:
@@ -6782,6 +6790,12 @@ packages:
       linkify-it: 4.0.1
       mdurl: 1.0.1
       uc.micro: 1.0.6
+    dev: false
+
+  /marked/4.3.0:
+    resolution: {integrity: sha512-PRsaiG84bK+AMvxziE/lCFss8juXjNaWzVbN5tXAm4XjeaS9NAHhop+PjQxz2A9h8Q4M/xGmzP8vqNwy6JeK0A==}
+    engines: {node: '>= 12'}
+    hasBin: true
     dev: false
 
   /mathml-tag-names/2.1.3:

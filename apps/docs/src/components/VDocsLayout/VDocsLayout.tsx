@@ -155,7 +155,7 @@ export const VDocsLayout = defineComponent({
                       width={24}
                       height={24}
                     />
-                    fastkit
+                    Fastkit
                   </VPageLink>
                 ),
               }}>

@@ -4,7 +4,7 @@ export type CommonTranslations = {
   appName: string;
   guide: string;
   whatIsFastkit: string;
-  tryItOut: string;
+  howToUse: string;
   installation: string;
   translations: string;
   copied: string;

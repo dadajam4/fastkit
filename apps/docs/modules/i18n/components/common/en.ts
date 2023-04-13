@@ -2,10 +2,10 @@ import { commonScheme } from './scheme';
 
 export const en = commonScheme.defineLocale.strict({
   translations: (component) => ({
-    appName: 'fastkit',
+    appName: 'Fastkit',
     guide: 'Guide',
-    whatIsFastkit: 'What is fastkit?',
-    tryItOut: 'Try it out',
+    whatIsFastkit: 'What is Fastkit?',
+    howToUse: 'How to use',
     installation: 'Installation',
     translations: 'Translations',
     copied: 'Copied',
