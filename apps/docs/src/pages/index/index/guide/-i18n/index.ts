@@ -1,4 +1,5 @@
 import { scheme } from './scheme';
+import { i18n } from '@@';
 
 export const guide = scheme.defineComponent({
   locales: {
@@ -6,3 +7,5 @@ export const guide = scheme.defineComponent({
     en: () => import('./en'),
   },
 });
+
+export const GuideI18nSpace = i18n.defineSubSpace({ guide });

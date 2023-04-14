@@ -1,17 +1,15 @@
 import { defineComponent } from 'vue';
 import { VHero } from '@fastkit/vui';
 import { VDocsSection, VDocsPaging, VMarked } from '~/components';
-import { i18n, PackageProvide } from '@@';
-import { guide } from './-i18n';
-
-const GuideI18nSubSpace = i18n.defineSubSpace({ guide });
+import { PackageProvide } from '@@';
+import { GuideI18nSpace } from './-i18n';
 
 export default defineComponent({
-  i18n: GuideI18nSubSpace,
+  i18n: GuideI18nSpace,
   setup() {
-    const guideI18n = GuideI18nSubSpace.use();
+    const guideI18n = GuideI18nSpace.use();
     const guide = guideI18n.at.guide.t;
-    const { trans } = i18n.use().at.common;
+    const { trans } = guideI18n.at.common;
 
     PackageProvide.useHead({
       title: trans.whatIsFastkit,

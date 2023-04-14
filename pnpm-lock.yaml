@@ -101,6 +101,7 @@ importers:
 
   apps/docs:
     specifiers:
+      '@fastkit/cookies': workspace:^0.13.0
       '@fastkit/helpers': workspace:*
       '@fastkit/icon-font': workspace:*
       '@fastkit/media-match': workspace:*
@@ -117,6 +118,7 @@ importers:
       marked: ^4.3.0
       vite-tsconfig-paths: ^4.1.0
     dependencies:
+      '@fastkit/cookies': link:../../packages/cookies
       '@fastkit/helpers': link:../../packages/helpers
       '@fastkit/icon-font': link:../../packages/icon-font
       '@fastkit/media-match': link:../../packages/media-match

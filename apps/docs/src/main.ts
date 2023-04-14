@@ -1,7 +1,7 @@
 import { createVotEntry } from '@fastkit/vot';
 import { installVui } from '../.vui/installer';
 import { App } from './App';
-import { i18n } from '@@';
+import { i18n, pmScriptPlugin } from '@@';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
 import { LocaleLink, useLink } from '@fastkit/vue-i18n';
 
@@ -25,6 +25,7 @@ export default createVotEntry(App, {
         },
       });
     },
+    pmScriptPlugin,
     i18n,
   ],
   middleware: [

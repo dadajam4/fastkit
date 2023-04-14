@@ -14,6 +14,18 @@ export type Translations = {
     title: string;
     body: string;
   };
+  installation: {
+    description: string;
+  };
+  optimization: {
+    title: string;
+    description: string;
+    npm: string;
+  };
+  packages: {
+    title: string;
+    description: string;
+  };
 };
 
 export const scheme = I18nSpaceDefine.defineScheme({

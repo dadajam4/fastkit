@@ -38,6 +38,30 @@ export const en = scheme.defineLocale.strict({
         Please read [this guide](https://github.com/dadajam4/fastkit/blob/main/CONTRIBUTING.md) and submit a pull request.
       `,
     },
+    installation: {
+      description: `
+        Find what you need for your application and install them individually.
+
+        Find the feature you are looking for [here](/packages/).
+      `,
+    },
+    optimization: {
+      title: 'Optimization',
+      description: `
+        The internal packages of the Fastkit project are divided into smaller packages and dependencies to avoid duplicate functionality as much as possible.
+        When adding new packages or upgrading packages, please keep all packages as up-to-date as possible.
+      `,
+      npm: `
+        Tools such as [npm-check-updates](https://www.npmjs.com/package/npm-check-updates) can be used for bulk updates.
+      `,
+    },
+    packages: {
+      title: 'Package Composition',
+      description: `
+        Fastkit is divided into a Vanilla JS implementation that can be used in a variety of situations and a plugin implementation for use with commonly used frameworks and libraries.
+        Use the explorer to find the tools you need.
+      `,
+    },
   },
 });
 

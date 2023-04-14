@@ -1,12 +1,17 @@
 import { defineComponent } from 'vue';
 import { VHero } from '@fastkit/vui';
-import { VDocsSection, VCode, VDocsPaging, VMarked } from '~/components';
-import { i18n, PackageProvide } from '@@';
+import { VDocsSection, VDocsPaging, VMarked, VCode } from '~/components';
+import { PackageProvide, PMScript } from '@@';
+import { GuideI18nSpace } from './-i18n';
 
 export default defineComponent({
+  i18n: GuideI18nSpace,
   setup() {
-    const $i18n = i18n.use();
-    const { trans } = $i18n.at.common;
+    const guideI18n = GuideI18nSpace.use();
+    const guide = guideI18n.at.guide.t;
+    const { trans } = guideI18n.at.common;
+
+    const pm = PMScript.use();
 
     PackageProvide.useHead({
       title: trans.howToUse,
@@ -18,32 +23,31 @@ export default defineComponent({
           <VHero>{trans.howToUse}</VHero>
 
           <VDocsSection title={trans.installation}>
-            <VMarked
-              code={`
-              あなたのアプリケーションにとって必要なもの探して、それらを個別にインストールするだけです。
+            <VMarked code={guide.installation.description} />
 
-              Fastkitでこねこねしているパッケージは[ここ](/packages/)に一覧があります。
-              `}
+            {pm.renderInstallCommand([
+              '@fastkit/universal-logger',
+              '@fastkit/ev',
+            ])}
+          </VDocsSection>
+
+          <VDocsSection title={guide.optimization.title}>
+            <VMarked code={guide.optimization.description} />
+
+            <h4>npm</h4>
+            <VMarked code={guide.optimization.npm} />
+
+            <h4>yarn</h4>
+            <VCode
+              code="yarn upgrade --pattern @fastkit/ --latest"
+              language="sh"
             />
 
-            <VCode language="sh">
-              npm i @fastkit/universal-logger @fastkit/ev -D
-            </VCode>
-
-            {/* <>
-              <p>
-                このインストールによって以下のパッケージが依存関係としてインストールされます。
-                <br />
-                これらのツールはあなたのアプリケーションが適切なバンドラ（vite等）を利用している限り、利用していないパッケージはtree
-                shakingによってバンドルから除外されるでしょう。node_modulesへの不用なインストールを避けたい場合、個別インストールを検討してください。
-              </p>
-
-              <ul>
-                {pkg.dependencies.map(({ name }) => (
-                  <li key={name}>{name.replace('@fastkit/', '')}</li>
-                ))}
-              </ul>
-            </> */}
+            <h4>pnpm</h4>
+            <VCode
+              code="pnpm update --filter @fastkit/ --latest"
+              language="sh"
+            />
           </VDocsSection>
 
           <VDocsPaging

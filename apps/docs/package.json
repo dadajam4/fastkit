@@ -15,6 +15,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@fastkit/cookies": "workspace:*",
     "@fastkit/helpers": "workspace:*",
     "@fastkit/icon-font": "workspace:*",
     "@fastkit/media-match": "workspace:*",

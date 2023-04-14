@@ -39,6 +39,30 @@ export const ja = scheme.defineLocale.strict({
         [こちらのガイド](https://github.com/dadajam4/fastkit/blob/main/CONTRIBUTING.md)をお読みになり、プルリクエストを送信してください。
       `,
     },
+    installation: {
+      description: `
+        あなたのアプリケーションにとって必要なもの探して、それらを個別にインストールします。
+
+        [こちら](/packages/)にあなたの探している機能があるか探してください。
+      `,
+    },
+    optimization: {
+      title: '最適化のポイント',
+      description: `
+        Fastkitプロジェクトの内部パッケージはできる限り重複した機能が存在しないように小さく分割し依存関係を構築しています。
+        新しくパッケージを追加する際やパッケージのアップグレードを行う際は可能な限り全てのパッケージを最新に保つようにしてください。
+      `,
+      npm: `
+        [npm-check-updates](https://www.npmjs.com/package/npm-check-updates) のようなツールを利用することで一括で更新が可能です。
+      `,
+    },
+    packages: {
+      title: 'パッケージ構成',
+      description: `
+        Fastkitは様々な状況で利用可能なVanilla JSの実装と、よく利用されるフレームワークやライブラリと併用するプラグイン実装に分かれています。
+        エクスプローラーを利用して必要なツールを見つけてください。
+      `,
+    },
   },
 });
 
