@@ -161,6 +161,13 @@ function __plugboyPublicDir(...paths) {
       /\.ts$/,
       '',
     )}';`;
+    const srcFromDir = path.dirname(from);
+    const dtsDir = path.dirname(dtsPath);
+    await Promise.all(
+      [srcFromDir, dtsDir].map((dir) => {
+        return fs.mkdir(dir, { recursive: true });
+      }),
+    );
     await Promise.all([
       fs.writeFile(from, `${shebang ? shebang + '\n' : ''}${code}`),
       fs.writeFile(dtsPath, dtsCode),

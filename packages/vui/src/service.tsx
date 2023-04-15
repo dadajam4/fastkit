@@ -103,6 +103,10 @@ export interface VuiServiceIconSettings {
   editorformatItalic: IconName;
   editorformatListBulleted: IconName;
   editorformatListNumbered: IconName;
+  editorAlignLeft: IconName;
+  editorAlignCenter: IconName;
+  editorAlignRight: IconName;
+  editorAlignJustify: IconName;
   editorLink: IconName;
   editorLinkOff: IconName;
   editorUndo: IconName;

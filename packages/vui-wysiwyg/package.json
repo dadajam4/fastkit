@@ -145,6 +145,12 @@
         "default": "./dist/tiptap/extensions/text-style.mjs"
       }
     },
+    "./tiptap/extensions/text-align": {
+      "types": "./dist/tiptap/extensions/text-align.d.ts",
+      "import": {
+        "default": "./dist/tiptap/extensions/text-align.mjs"
+      }
+    },
     "./tiptap/extensions/ordered-list": {
       "types": "./dist/tiptap/extensions/ordered-list.d.ts",
       "import": {
@@ -253,6 +259,9 @@
       "tiptap/extensions/text-style": [
         "./dist/tiptap/extensions/text-style.d.ts"
       ],
+      "tiptap/extensions/text-align": [
+        "./dist/tiptap/extensions/text-align.d.ts"
+      ],
       "tiptap/extensions/ordered-list": [
         "./dist/tiptap/extensions/ordered-list.d.ts"
       ],
@@ -290,17 +299,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tiptap/extension-bold": "^2.0.2",
-    "@tiptap/extension-bullet-list": "^2.0.2",
-    "@tiptap/extension-history": "^2.0.2",
-    "@tiptap/extension-italic": "^2.0.2",
-    "@tiptap/extension-link": "^2.0.2",
-    "@tiptap/extension-ordered-list": "^2.0.2",
-    "@tiptap/extension-text-style": "^2.0.2",
-    "@tiptap/extension-underline": "^2.0.2",
-    "@tiptap/pm": "^2.0.2",
-    "@tiptap/starter-kit": "^2.0.2",
-    "@tiptap/vue-3": "^2.0.2"
+    "@tiptap/extension-bold": "^2.0.3",
+    "@tiptap/extension-bullet-list": "^2.0.3",
+    "@tiptap/extension-history": "^2.0.3",
+    "@tiptap/extension-italic": "^2.0.3",
+    "@tiptap/extension-link": "^2.0.3",
+    "@tiptap/extension-ordered-list": "^2.0.3",
+    "@tiptap/extension-text-align": "^2.0.3",
+    "@tiptap/extension-text-style": "^2.0.3",
+    "@tiptap/extension-underline": "^2.0.3",
+    "@tiptap/pm": "^2.0.3",
+    "@tiptap/starter-kit": "^2.0.3",
+    "@tiptap/vue-3": "^2.0.3"
   },
   "devDependencies": {
     "@fastkit/vui": "workspace:*"

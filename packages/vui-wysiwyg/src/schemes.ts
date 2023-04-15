@@ -194,7 +194,9 @@ export interface WysiwygEditorTool {
   key: string;
   icon:
     | IconName
-    | ((ctx: WysiwygEditorContext) => IconName | (() => VNodeChild));
+    | ((
+        ctx: WysiwygEditorContext,
+      ) => IconName | (() => VNodeChild) | undefined);
   active?: boolean | ((ctx: WysiwygEditorContext) => boolean);
   disabled?: boolean | ((ctx: WysiwygEditorContext) => boolean);
   onClick: (ctx: WysiwygEditorContext, ev: MouseEvent) => any;

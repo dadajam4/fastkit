@@ -21,6 +21,7 @@ import {
   WysiwygHistoryTool,
   WysiwygLinter,
   WysiwygLinterBadWords,
+  WysiwygTextAlignTool,
 } from '@fastkit/vui-wysiwyg';
 import { DocsSection } from '../../../-components';
 
@@ -47,6 +48,7 @@ const tools = [
   WysiwygFormatBoldTool,
   WysiwygFormatItalicTool,
   WysiwygFormatUnderlineTool,
+  WysiwygTextAlignTool,
   WysiwygBulletListTool,
   WysiwygOrderedListTool,
   WysiwygLinkTool,
