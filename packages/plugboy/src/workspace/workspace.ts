@@ -189,7 +189,7 @@ export class PlugboyWorkspace {
         },
         stubLink: {
           from: destFullPath,
-          to: dir.join(src).value,
+          to: path.isAbsolute(src) ? src : dir.join(src).value,
           type: 'js',
         },
       });
