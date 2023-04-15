@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-stack",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "Library for displaying dialogs, tooltips and menus in Vue applications.",
   "keywords": [
     "fastkit",
