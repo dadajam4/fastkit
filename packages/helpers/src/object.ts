@@ -202,7 +202,7 @@ objectFromArray.build =
 
 export function removeUndef<T extends Record<string, any>>(
   obj: T,
-  deep?: boolean,
+  deep = false,
 ): T {
   return Object.keys(obj).reduce((result, key) => {
     let value: any = obj[key];

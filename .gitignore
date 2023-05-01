@@ -22,4 +22,5 @@ coverage
 
 # Private
 play.ts
+_private
 .memo

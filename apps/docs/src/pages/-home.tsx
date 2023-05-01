@@ -2,6 +2,9 @@ import { defineComponent } from 'vue';
 import { Home } from './-i18n';
 import { i18n } from '@@';
 import { VPackageHome } from '~/components';
+// import { _VuiService } from '@@@/packages/vui/src/Test.$types';
+
+// console.log(JSON.parse(JSON.stringify(_VuiService)));
 
 const I18nSubSpace = i18n.defineSubSpace({ Home });
 

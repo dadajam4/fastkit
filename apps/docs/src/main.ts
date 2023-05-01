@@ -5,8 +5,8 @@ import { i18n, pmScriptPlugin } from '@@';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
 import { LocaleLink, useLink } from '@fastkit/vue-i18n';
 
-import './main.scss';
-import './main.css';
+import '~/main.scss';
+import '~/main.css';
 
 export default createVotEntry(App, {
   ErrorComponent: VErrorPage,

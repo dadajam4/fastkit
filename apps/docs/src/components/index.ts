@@ -6,3 +6,4 @@ export * from './VDocsLayout';
 export * from './VDocsSection';
 export * from './VDocsPaging';
 export * from './VPackageHome';
+export * from './ts-docs';

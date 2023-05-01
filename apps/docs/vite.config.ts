@@ -5,6 +5,7 @@ import { votPlugin } from '@fastkit/vot/tool';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { PackageLoader } from './modules/package-loader/plugin';
 import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
+import { ViteTSTinyMeta } from '@fastkit/ts-tiny-meta/vite';
 
 const USE_GENERATE = true;
 
@@ -16,6 +17,9 @@ const viteVui = viteVuiPlugin({
 });
 
 export default defineConfig({
+  css: {
+    devSourcemap: true,
+  },
   root: __dirname,
   base: '/fastkit/',
   server: {
@@ -27,6 +31,7 @@ export default defineConfig({
   },
   plugins: [
     tsconfigPaths(),
+    ViteTSTinyMeta(),
     splitVendorChunkPlugin(),
     ViteVanillaExtractPlugin({
       // @TODO

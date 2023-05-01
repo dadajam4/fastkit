@@ -101,7 +101,9 @@ export const VPackageHome = defineComponent({
                 height={120}
               />
             )}
-            <h1 class={[styles.title, 'docs-theme-font']}>{nameRef.value}</h1>
+            <h1 class={[styles.title, 'docs-theme-font', 'notranslate']}>
+              {nameRef.value}
+            </h1>
             {description && <p class={styles.description}>{description}</p>}
 
             <VLanguageSwitcher class={styles.languages} inline />
@@ -127,7 +129,7 @@ export const VPackageHome = defineComponent({
                 height={24}
               />
               {'Powered by '}
-              <VLink class="ml-1" to="/">
+              <VLink class="ml-1 notranslate" to="/">
                 Fastkit
               </VLink>
             </div>

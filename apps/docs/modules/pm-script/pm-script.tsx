@@ -24,7 +24,7 @@ const INSTALL_COMMAND_MAP: Record<PackageManagerName, string> = {
 
 const tabsItems: VTabsItem[] = PACKAGE_MANAGER_NAMES.map((name) => {
   return {
-    label: name,
+    label: () => <span class="notranslate">{name}</span>,
     value: name,
   };
 });
@@ -48,7 +48,6 @@ export class PMScript {
 
   set selected(selected) {
     if (this.selected === selected) return;
-    // console.log();
     this._selected.value = selected;
     this._setCookie(selected);
   }

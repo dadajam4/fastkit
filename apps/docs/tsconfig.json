@@ -5,10 +5,17 @@
     "types": [
       "node",
       "@fastkit/plugboy/env",
+      "@fastkit/ts-tiny-meta/client",
       "vite/client",
       "./.vui/vui"
     ],
     "paths": {
+      "@@@": [
+        "../.."
+      ],
+      "@@@/*": [
+        "../../*"
+      ],
       "@@": [
         "./modules"
       ],

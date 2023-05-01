@@ -6,8 +6,9 @@ import { useHead, HeadObject } from '@vueuse/head';
 import { useVuePageControl, VuePageControl } from '@fastkit/vot';
 import { i18n } from '../i18n';
 import { arrayUnique } from '@fastkit/helpers';
-import { VDocsSection, VCode } from '~/components';
+import { VDocsSection } from '~/components';
 import { VHero } from '@fastkit/vui';
+import { PMScript } from '@@/pm-script';
 
 const FASTKIT_AUTHOR = fastkitPackageJson.author;
 
@@ -71,6 +72,8 @@ export class PackageProvide {
   /** Document Page Home Path */
   readonly home: string;
 
+  readonly pm: PMScript;
+
   get i18n(): ReturnType<typeof i18n.use> {
     return this.vpc.i18n as any;
   }
@@ -126,8 +129,7 @@ export class PackageProvide {
     this.displayName = displayName;
     this.github = github;
     this.home = home;
-
-    // this.useHead({});
+    this.pm = PMScript.use();
   }
 
   provide() {
@@ -142,10 +144,7 @@ export class PackageProvide {
   renderInstallation() {
     return (
       <VDocsSection title={this.i18n.at.common.t.installation}>
-        <h3>NPM</h3>
-        <VCode language="sh">{`npm install ${this.info.fullName} -D`}</VCode>
-        <h3>Yarn</h3>
-        <VCode language="sh">{`yarn add ${this.info.fullName} -D`}</VCode>
+        {this.pm.renderInstallCommand(this.info.fullName)}
       </VDocsSection>
     );
   }
