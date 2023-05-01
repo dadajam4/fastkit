@@ -41,6 +41,8 @@ function fixEntryPoint(vite: ViteDevServer) {
 //   }) => Promise<WrittenResponse>;
 // }
 
+const SCSS_MAP_MATCH_RE = /\.s?(a|c)ss\.map$/;
+
 export const createSSRDevHandler = (
   server: ViteDevServer,
   options: SsrOptions = {},
@@ -49,6 +51,8 @@ export const createSSRDevHandler = (
     ...server.config.inlineConfig, // CLI flags
     ...options,
   };
+
+  const useCSSDevSourcemap = !!server.config.css?.devSourcemap;
 
   const pluginOptions = getPluginOptions(server.config);
   const resolve = (p: string) => path.resolve(server.config.root, p);
@@ -82,7 +86,13 @@ export const createSSRDevHandler = (
     response,
     next,
   ) => {
-    if (request.method !== 'GET' || request.originalUrl === '/favicon.ico') {
+    const { originalUrl = '' } = request;
+
+    if (
+      request.method !== 'GET' ||
+      originalUrl === '/favicon.ico' ||
+      (!useCSSDevSourcemap && SCSS_MAP_MATCH_RE.test(originalUrl))
+    ) {
       return next();
     }
 

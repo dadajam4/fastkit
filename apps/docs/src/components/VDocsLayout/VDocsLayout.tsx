@@ -90,8 +90,8 @@ export const VDocsLayout = defineComponent({
                     width={24}
                     height={24}
                   />
-                  <span class="docs-theme-font v-docs-layout__home__label">
-                    fastkit
+                  <span class="docs-theme-font v-docs-layout__home__label notranslate">
+                    Fastkit
                   </span>
                 </VToolbarMenu>
               )}
@@ -147,7 +147,9 @@ export const VDocsLayout = defineComponent({
               color="secondary"
               v-slots={{
                 header: () => (
-                  <VPageLink class="v-docs-layout__drawer__header" to="/">
+                  <VPageLink
+                    class="v-docs-layout__drawer__header notranslate"
+                    to="/">
                     <VBusyImage
                       class="v-docs-layout__drawer__header__icon"
                       src={`${import.meta.env.BASE_URL}logo.svg`}

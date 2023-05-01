@@ -3,28 +3,8 @@ import { marked } from 'marked';
 import { MarkedDirectiveArgument } from './directive';
 import { useRouter } from 'vue-router';
 import { i18n } from '@@';
-
-const indentMatchRe = /^\s+/;
-const trimMatchRe = /(^\n+|\n\s+$)/g;
-function trimWithIndent(str: string) {
-  str = str.replace(trimMatchRe, '');
-
-  const rows = str.split('\n');
-  let minLength = -1;
-  for (const row of rows) {
-    const spaceMatch = row.match(indentMatchRe);
-    if (!spaceMatch) {
-      continue;
-    }
-    const length = spaceMatch[0].length;
-    if (minLength === -1 || length < minLength) {
-      minLength = length;
-    }
-  }
-  if (!minLength) return str;
-  const replacement = ' '.repeat(minLength);
-  return rows.map((row) => row.replace(replacement, '')).join('\n');
-}
+import { trimCode } from '../VPrism/utils';
+import { highlight } from '../VPrism/prism';
 
 const EXTERNAL_LINK_RE = /^https?:\/\//;
 
@@ -73,8 +53,13 @@ export const VMarked = defineComponent({
       }${title ? ` title="${title}"` : ''}>${text}</a>`;
     };
 
+    renderer.code = (code, language, isEscaped) => {
+      const result = highlight(code, language);
+      return result.html();
+    };
+
     const htmlRef = computed(() => {
-      return marked.parse(trimWithIndent(props.code), {
+      return marked.parse(trimCode(props.code), {
         renderer,
       });
     });

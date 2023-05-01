@@ -25,6 +25,8 @@
     "typecheck:packages": "turbo run typecheck --filter=!docs --cache-dir=./.turbo-cache",
     "plugboy": "plugboy",
     "gen": "pnpm run plugboy gen",
+    "esbuild": "node --loader esbuild-register/loader -r esbuild-register",
+    "play": "pnpm run esbuild play.ts",
     "test": "turbo run test --concurrency 1 --cache-dir=./.turbo-cache"
   },
   "resolutions": {
@@ -54,6 +56,7 @@
     "@fastkit/plugboy-vue-jsx-plugin": "workspace:*",
     "@fastkit/scroller": "workspace:*",
     "@fastkit/stylelint-config": "workspace:*",
+    "@fastkit/ts-tiny-meta": "workspace:*",
     "@fastkit/vite-plugin-vui": "workspace:*",
     "@fastkit/vot": "workspace:*",
     "@fastkit/vot-i18n": "workspace:*",
@@ -68,6 +71,7 @@
     "@vueuse/head": "^1.1.23",
     "bezier-easing": "^2.1.0",
     "cookie": "^0.5.0",
+    "esbuild-register": "^3.4.2",
     "eslint": "^8.38.0",
     "fs-extra": "^11.1.1",
     "load-tsconfig": "^0.2.5",

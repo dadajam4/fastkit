@@ -173,6 +173,10 @@
       "path": "packages/tiny-logger"
     },
     {
+      "name": "📦 @fastkit/ts-tiny-meta",
+      "path": "packages/ts-tiny-meta"
+    },
+    {
       "name": "📦 @fastkit/ts-type-utils",
       "path": "packages/ts-type-utils"
     },

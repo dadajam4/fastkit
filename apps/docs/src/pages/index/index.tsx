@@ -43,7 +43,7 @@ export default defineComponent({
               startIcon: 'mdi-package-variant',
               children: packages.map((pkg) => ({
                 key: pkg.name,
-                label: pkg.name,
+                label: () => <span class="notranslate">{pkg.name}</span>,
                 to: `/${pkg.name}/`,
               })),
             },

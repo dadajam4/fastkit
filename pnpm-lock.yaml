@@ -23,6 +23,7 @@ importers:
       '@fastkit/plugboy-vue-jsx-plugin': workspace:*
       '@fastkit/scroller': workspace:*
       '@fastkit/stylelint-config': workspace:*
+      '@fastkit/ts-tiny-meta': workspace:*
       '@fastkit/vite-plugin-vui': workspace:*
       '@fastkit/vot': workspace:*
       '@fastkit/vot-i18n': workspace:*
@@ -37,6 +38,7 @@ importers:
       '@vueuse/head': ^1.1.23
       bezier-easing: ^2.1.0
       cookie: ^0.5.0
+      esbuild-register: ^3.4.2
       eslint: ^8.38.0
       fs-extra: ^11.1.1
       load-tsconfig: ^0.2.5
@@ -68,6 +70,7 @@ importers:
       '@fastkit/plugboy-vue-jsx-plugin': link:packages/plugboy-vue-jsx-plugin
       '@fastkit/scroller': link:packages/scroller
       '@fastkit/stylelint-config': link:packages/stylelint-config
+      '@fastkit/ts-tiny-meta': link:packages/ts-tiny-meta
       '@fastkit/vite-plugin-vui': link:packages/vite-plugin-vui
       '@fastkit/vot': link:packages/vot
       '@fastkit/vot-i18n': link:packages/vot-i18n
@@ -82,6 +85,7 @@ importers:
       '@vueuse/head': 1.1.23_vue@3.2.47
       bezier-easing: 2.1.0
       cookie: 0.5.0
+      esbuild-register: 3.4.2
       eslint: 8.38.0
       fs-extra: 11.1.1
       load-tsconfig: 0.2.5
@@ -572,6 +576,23 @@ importers:
       '@fastkit/helpers': workspace:*
     dependencies:
       '@fastkit/helpers': link:../helpers
+
+  packages/ts-tiny-meta:
+    specifiers:
+      '@types/fs-extra': ^11.0.1
+      chokidar: ^3.5.3
+      fs-extra: ^11.1.1
+      joycon: ^3.1.1
+      ts-morph: ^18.0.0
+      vite: ^4.1.1
+    dependencies:
+      chokidar: 3.5.3
+      fs-extra: 11.1.1
+      joycon: 3.1.1
+      ts-morph: 18.0.0
+    devDependencies:
+      '@types/fs-extra': 11.0.1
+      vite: 4.2.1
 
   packages/ts-type-utils:
     specifiers: {}
@@ -2611,6 +2632,15 @@ packages:
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
     dev: false
 
+  /@ts-morph/common/0.19.0:
+    resolution: {integrity: sha512-Unz/WHmd4pGax91rdIKWi51wnVUW11QttMEPpBiBgIewnc9UQIX7UDLxr5vRlqeByXCwhkF6VabSsI0raWcyAQ==}
+    dependencies:
+      fast-glob: 3.2.12
+      minimatch: 7.4.6
+      mkdirp: 2.1.6
+      path-browserify: 1.0.1
+    dev: false
+
   /@types/babel__core/7.20.0:
     resolution: {integrity: sha512-+n8dL/9GWblDO0iU6eZAwEIJVr5DWigtle+Q6HLOrh/pdbXOhOtqzq8VPPE2zvNJzSKY4vH/z3iT3tn0A3ypiQ==}
     dependencies:
@@ -3969,6 +3999,10 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
 
+  /code-block-writer/12.0.0:
+    resolution: {integrity: sha512-q4dMFMlXtKR3XNBHyMHt/3pwYNA69EDk00lloMOaaUMKPUXBw6lpXtbu3MMVG6/uOihGnRDOlkyqsONEUj60+w==}
+    dev: false
+
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -4665,6 +4699,19 @@ packages:
       is-callable: 1.2.7
       is-date-object: 1.0.5
       is-symbol: 1.0.4
+    dev: true
+
+  /esbuild-register/3.4.2:
+    resolution: {integrity: sha512-kG/XyTDyz6+YDuyfB9ZoSIOOmgyFCH+xPRtsCa8W85HLRV5Csp+o3jWVbOSHgSLfyLc5DmP+KFDNwty4mEjC+Q==}
+    peerDependencies:
+      esbuild: '>=0.12 <1'
+    peerDependenciesMeta:
+      esbuild:
+        optional: true
+    dependencies:
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /esbuild-sass-plugin/2.8.0:
@@ -6942,6 +6989,13 @@ packages:
       brace-expansion: 2.0.1
     dev: false
 
+  /minimatch/7.4.6:
+    resolution: {integrity: sha512-sBz8G/YjVniEz6lKPNpKxXwazJe4c19fEfV2GDMX6AjFz+MX9uDWIZW8XreVhkFW3fkIdTv/gxWr/Kks5FFAVw==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: false
+
   /minimatch/8.0.3:
     resolution: {integrity: sha512-tEEvU9TkZgnFDCtpnrEYnPsjT7iUx42aXfs4bzmQ5sMA09/6hZY0jeZcGkXyDagiBOvkUjNo8Viom+Me6+2x7g==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -6976,6 +7030,12 @@ packages:
     hasBin: true
     dependencies:
       minimist: 1.2.8
+    dev: false
+
+  /mkdirp/2.1.6:
+    resolution: {integrity: sha512-+hEnITedc8LAtIP9u3HJDFIdcLV2vXP33sqLLIzkv1Db1zO/1OxbvYf0Y1OC/S/Qo5dxHXepofhmxL02PsKe+A==}
+    engines: {node: '>=10'}
+    hasBin: true
     dev: false
 
   /mlly/1.2.0:
@@ -7505,6 +7565,10 @@ packages:
   /parseurl/1.3.3:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==}
     engines: {node: '>= 0.8'}
+    dev: false
+
+  /path-browserify/1.0.1:
+    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
     dev: false
 
   /path-exists/4.0.0:
@@ -9350,6 +9414,13 @@ packages:
 
   /ts-interface-checker/0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
+    dev: false
+
+  /ts-morph/18.0.0:
+    resolution: {integrity: sha512-Kg5u0mk19PIIe4islUI/HWRvm9bC1lHejK4S0oh1zaZ77TMZAEmQC0sHQYiu2RgCQFZKXz1fMVi/7nOOeirznA==}
+    dependencies:
+      '@ts-morph/common': 0.19.0
+      code-block-writer: 12.0.0
     dev: false
 
   /tsconfck/2.1.1:
