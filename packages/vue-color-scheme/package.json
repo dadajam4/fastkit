@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-color-scheme",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "description": "A library for using Type-safe \"color\" schemas in Vue applications.",
   "keywords": [
     "fastkit",
