@@ -75,6 +75,14 @@ export type ParseDateInputResult =
       source: string;
     };
 
+/**
+ * Parse a date/time string to obtain individual values
+ *
+ * @param source - {@link DATE_INPUT_PARSE_RE ISO 8601-like date/time string}
+ * @returns Date input parse results (null if not parsed)
+ *
+ * @see {@link ParseDateInputResult}
+ */
 export function parseDateInput(source: string): ParseDateInputResult | null {
   let result: ParseDateInputResult | null = null;
   const matched = source.match(DATE_INPUT_PARSE_RE);
