@@ -22,6 +22,7 @@ import {
   WysiwygLinter,
   WysiwygLinterBadWords,
   WysiwygTextAlignTool,
+  createWysiwygCustomTagTool,
 } from '@fastkit/vui-wysiwyg';
 import { DocsSection } from '../../../-components';
 
@@ -53,6 +54,13 @@ const tools = [
   WysiwygOrderedListTool,
   WysiwygLinkTool,
   WysiwygHistoryTool,
+  createWysiwygCustomTagTool('custom-tag', {
+    // tag: 'pg-custom-tag',
+    icon: 'mdi-asterisk',
+    attrs: {
+      class: 'pg-custom-tag-class',
+    },
+  }),
 ];
 export default defineComponent({
   setup() {
