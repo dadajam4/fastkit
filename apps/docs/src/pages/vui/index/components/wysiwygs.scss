@@ -1,3 +1,11 @@
 .pg-docs-components-wysiwygs {
   display: block;
+
+  pg-custom-tag {
+    background: cyan;
+  }
+
+  .pg-custom-tag-class {
+    background: cyan;
+  }
 }

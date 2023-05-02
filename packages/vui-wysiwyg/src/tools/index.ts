@@ -7,3 +7,4 @@ export * from './link';
 export * from './ordered-list';
 export * from './color';
 export * from './text-align';
+export * from './custom-tag';

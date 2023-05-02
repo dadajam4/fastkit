@@ -190,17 +190,31 @@ export function resolveRawWysiwygExtensions(
   return raws.map((raw) => resolveRawWysiwygExtension(raw, ctx));
 }
 
+export type WysiwygEditorToolIcon =
+  | IconName
+  | ((ctx: WysiwygEditorContext) => IconName | (() => VNodeChild) | undefined);
+
+/**
+ * Tool Configuration
+ */
 export interface WysiwygEditorTool {
+  /**
+   * Tool Key
+   *
+   * Must be unique to identify the tool
+   */
   key: string;
-  icon:
-    | IconName
-    | ((
-        ctx: WysiwygEditorContext,
-      ) => IconName | (() => VNodeChild) | undefined);
+  /** Icons to be displayed on the toolbar */
+  icon: WysiwygEditorToolIcon;
+  /** Conditions for displaying the icon as active */
   active?: boolean | ((ctx: WysiwygEditorContext) => boolean);
+  /** Conditions for deactivating the icon */
   disabled?: boolean | ((ctx: WysiwygEditorContext) => boolean);
+  /** Handler when mark text is clicked */
   onClick: (ctx: WysiwygEditorContext, ev: MouseEvent) => any;
+  /** Whether to display tools in floating menu or not */
   floating?: boolean;
+  /** Extensions that the tool depends on */
   extensions?: Extensions;
 }
 
