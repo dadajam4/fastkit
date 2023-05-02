@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/sprite-images",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "Tools for generating sprite images.",
   "keywords": [
     "fastkit",

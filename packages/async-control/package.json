@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/async-control",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "A helper implementation that efficiently controls asynchronous processing.",
   "keywords": [
     "fastkit",
