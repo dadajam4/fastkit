@@ -1,5 +1,11 @@
 # @fastkit/vui-wysiwyg
 
+## 1.1.0
+
+### Minor Changes
+
+- [#22](https://github.com/dadajam4/fastkit/pull/22) [`455140b7`](https://github.com/dadajam4/fastkit/commit/455140b77dfe37535b948b3d5e3adab2177215a6) Thanks [@dadajam4](https://github.com/dadajam4)! - Added tools for custom tags
+
 ## 1.0.1
 
 ### Patch Changes
