@@ -1,13 +1,8 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
-import {
-  tokens,
-  computedTokens,
-  verticals,
-  horizontals,
-  extractTokenName,
-  createSimpleVueTransition,
-} from '../../styles';
+import { tokens, computedTokens, extractTokenName } from '../../styles';
+import { verticals, horizontals } from '../../helpers';
+import { createSimpleVueTransition } from '../../styles/transition';
 import {
   VueAppLayoutPositionY,
   VAL_X_POSITIONS,

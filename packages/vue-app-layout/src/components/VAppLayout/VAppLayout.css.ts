@@ -1,11 +1,6 @@
 import { style, globalStyle } from '@vanilla-extract/css';
-import {
-  computedTokens,
-  extractTokenName,
-  tokens,
-  verticals,
-  bars,
-} from '../../styles';
+import { computedTokens, extractTokenName, tokens } from '../../styles';
+import { verticals, bars } from '../../helpers';
 import * as drawerStyles from '../VAppDrawer/VAppDrawer.css';
 import { VAL_X_POSITIONS, VAL_POSITIONS } from '../../schemes';
 import { objectFromArray } from '@fastkit/helpers';

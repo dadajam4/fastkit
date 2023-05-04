@@ -1,13 +1,7 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
-import {
-  tokens,
-  computedTokens,
-  verticals,
-  horizontals,
-  sticks,
-  bars,
-} from '../../styles';
+import { tokens, computedTokens } from '../../styles';
+import { verticals, horizontals, sticks, bars } from '../../helpers';
 import { VAL_Y_POSITIONS, VAL_BAR_TYPES } from '../../schemes';
 
 export const host = style({

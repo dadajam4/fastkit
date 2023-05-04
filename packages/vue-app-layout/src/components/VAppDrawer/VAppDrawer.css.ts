@@ -1,13 +1,8 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
-import {
-  tokens,
-  computedTokens,
-  horizontals,
-  verticals,
-  extractTokenName,
-  createSimpleVueTransition,
-} from '../../styles';
+import { tokens, computedTokens, extractTokenName } from '../../styles';
+import { horizontals, verticals } from '../../helpers';
+import { createSimpleVueTransition } from '../../styles/transition';
 import { VAL_Y_POSITIONS, VAL_STICK_Y_POSITIONS } from '../../schemes';
 import { objectFromArray } from '@fastkit/helpers';
 import { booting } from '../../composables/booting.css';

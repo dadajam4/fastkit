@@ -1,5 +1,6 @@
 import { createGlobalThemeContract, globalStyle } from '@vanilla-extract/css';
-import { verticals, horizontals, sticks, extractTokenName } from './utils';
+import { extractTokenName } from './utils';
+import { verticals, horizontals, sticks } from '../helpers';
 
 /**
  * Style token in vue-app-layout
