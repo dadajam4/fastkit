@@ -1,6 +1,6 @@
 import { createGlobalTheme } from '@vanilla-extract/css';
 import { tokens } from './tokens.css';
-import { horizontals, verticals } from './utils';
+import { horizontals, verticals } from '../helpers';
 
 createGlobalTheme(':root', tokens, {
   zIndex: '10',

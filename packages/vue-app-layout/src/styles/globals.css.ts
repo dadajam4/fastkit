@@ -1,5 +1,5 @@
 import { tokens } from './tokens.css';
-import { createSimpleVueTransition } from './utils';
+import { createSimpleVueTransition } from './transition';
 
 export const fadeTransition = createSimpleVueTransition({
   in: {
