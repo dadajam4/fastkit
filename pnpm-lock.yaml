@@ -287,10 +287,12 @@ importers:
   packages/eslint-config-vue:
     specifiers:
       '@fastkit/eslint-config': workspace:*
+      '@vue/eslint-config-prettier': ^7.1.0
       eslint-plugin-vue: ^9.10.0
       vue-eslint-parser: ^9.1.1
     dependencies:
       '@fastkit/eslint-config': link:../eslint-config
+      '@vue/eslint-config-prettier': 7.1.0
       eslint-plugin-vue: 9.10.0
       vue-eslint-parser: 9.1.1
 
@@ -3271,6 +3273,21 @@ packages:
 
   /@vue/devtools-api/6.5.0:
     resolution: {integrity: sha512-o9KfBeaBmCKl10usN4crU53fYtC1r7jJwdGKjPT24t348rHxgfpZ0xL3Xm/gLUYnc0oTp8LAmrxOeLyu6tbk2Q==}
+
+  /@vue/eslint-config-prettier/7.1.0:
+    resolution: {integrity: sha512-Pv/lVr0bAzSIHLd9iz0KnvAr4GKyCEl+h52bc4e5yWuDVtLgFwycF7nrbWTAQAS+FU6q1geVd07lc6EWfJiWKQ==}
+    peerDependencies:
+      eslint: '>= 7.28.0'
+      prettier: '>= 2.0.0'
+    peerDependenciesMeta:
+      eslint:
+        optional: true
+      prettier:
+        optional: true
+    dependencies:
+      eslint-config-prettier: 8.8.0
+      eslint-plugin-prettier: 4.2.1_oaez6fkrrb5zzrowm57o6j34fq
+    dev: false
 
   /@vue/reactivity-transform/3.2.47:
     resolution: {integrity: sha512-m8lGXw8rdnPVVIdIFhf0LeQ/ixyHkH5plYuS83yop5n7ggVJU+z5v0zecwEnX7fa7HNLBhh2qngJJkxpwEEmYA==}
