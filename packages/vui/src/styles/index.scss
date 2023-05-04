@@ -1,6 +1,6 @@
 @use 'sass:meta';
 
-@layer vui-normalize, vui-color-scheme, vui;
+@layer vui-normalize, vui-color-scheme, vue-loading, vui;
 
 @layer vui-normalize {
   @include meta.load-css('@fastkit/stylebase/normalize.css');
