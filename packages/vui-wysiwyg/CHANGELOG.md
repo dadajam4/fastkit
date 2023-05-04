@@ -1,5 +1,12 @@
 # @fastkit/vui-wysiwyg
 
+## 1.1.2
+
+### Patch Changes
+
+- Updated dependencies [[`821790ac`](https://github.com/dadajam4/fastkit/commit/821790acf74c162e584a535a7888e69bd3f1b9eb)]:
+  - @fastkit/vui@0.13.3
+
 ## 1.1.1
 
 ### Patch Changes
