@@ -14,12 +14,20 @@ module.exports = {
       parser: 'eslint-html-parser',
     },
     {
-      files: ['*.ts', '*.tsx', '*.js', '*.jsx', '*.mjs'],
+      files: [
+        '*.ts',
+        '*.tsx',
+        '*.mts',
+        '*.cts',
+        '*.js',
+        '*.cjs',
+        '*.jsx',
+        '*.mjs',
+      ],
       extends: [
         'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
       ],
       parser: '@typescript-eslint/parser',
-      // parser: 'vue-eslint-parser',
       parserOptions: {
         parser: '@typescript-eslint/parser', // Specifies the ESLint parser
         ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features
@@ -45,9 +53,6 @@ module.exports = {
           },
         ],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        'vue/one-component-per-file': 'off',
-        'vue/require-explicit-emits': 'off',
-        'vue/require-default-prop': 'off',
         'prettier/prettier': [
           'error',
           {
