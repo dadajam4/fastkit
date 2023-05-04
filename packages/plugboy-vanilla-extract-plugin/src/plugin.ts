@@ -9,6 +9,33 @@ declare module '@fastkit/plugboy' {
   }
 }
 
+const extMatchRe = /\.(mjs|css)$/;
+
+function extractExt(filePath: string) {
+  return filePath.match(extMatchRe)?.[1] as 'mjs' | 'css' | undefined;
+}
+
+const emptyVanillaImportRe = /(^|\n)import '@vanilla-extract\/css';?/g;
+
+function cleanJS(code: string) {
+  return code.replace(emptyVanillaImportRe, '');
+}
+
+const allLayerDefMatchRe = /(^|\n)@layer ([a-zA-Z\d\-_\$\.]+?);/g;
+
+function cleanCSS(code: string) {
+  const layersDefs = code.match(allLayerDefMatchRe);
+  if (!layersDefs?.length) return code;
+  const uniques = Array.from(new Set(layersDefs)).map((row) => row.trim());
+
+  for (const def of uniques) {
+    code = code.replace(new RegExp(def + '\n?', 'g'), '');
+  }
+
+  code = uniques.join('\n') + '\n\n' + code;
+  return code;
+}
+
 export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
   return definePlugin<VanillaExtractPlugin>({
     name: PLUGIN_NAME,
@@ -26,12 +53,14 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
       },
       async onSuccess(builder, files) {
         if (!builder.workspace.meta.hasVanillaExtract) return;
-        const emptyVanillaImportRe = /(^|\n)import '@vanilla-extract\/css';?/g;
         await Promise.all(
           files.map(async ({ path: filePath }) => {
-            if (!filePath.endsWith('.mjs')) return;
+            const ext = extractExt(filePath);
+            if (!ext) return;
+
             const code = await fs.readFile(filePath, 'utf-8');
-            const replaced = code.replace(emptyVanillaImportRe, '');
+            const cleaner = ext === 'mjs' ? cleanJS : cleanCSS;
+            const replaced = cleaner(code);
             if (code === replaced) return;
 
             await fs.writeFile(filePath, replaced.trimStart(), 'utf-8');

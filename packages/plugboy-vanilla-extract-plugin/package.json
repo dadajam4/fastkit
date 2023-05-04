@@ -18,6 +18,12 @@
         "default": "./dist/plugboy-vanilla-extract-plugin.mjs"
       }
     },
+    "./css": {
+      "types": "./dist/css.d.ts",
+      "import": {
+        "default": "./dist/css.mjs"
+      }
+    },
     "./*": "./dist/*"
   },
   "main": "./dist/plugboy-vanilla-extract-plugin.mjs",
@@ -26,6 +32,9 @@
     "*": {
       ".": [
         "./dist/plugboy-vanilla-extract-plugin.d.ts"
+      ],
+      "css": [
+        "./dist/css.d.ts"
       ]
     }
   },

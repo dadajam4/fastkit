@@ -4,5 +4,6 @@ export default defineWorkspaceConfig({
   ignoreProjectConfig: true,
   entries: {
     '.': './src/index.ts',
+    css: './src/css/index.ts',
   },
 });
