@@ -1,16 +1,16 @@
-import { style } from '@vanilla-extract/css';
+import { component } from '~/styles/layers.css';
 import { calc } from '@vanilla-extract/css-utils';
 
 import { tokens } from '../../styles';
 
-export const container = style({});
+export const container = component.style({});
 
-export const padded = style({
+export const padded = component.style({
   paddingLeft: tokens.container.padding,
   paddingRight: tokens.container.padding,
 });
 
-export const pulled = style({
+export const pulled = component.style({
   marginLeft: calc.multiply(tokens.container.padding, -1),
   marginRight: calc.multiply(tokens.container.padding, -1),
 });
@@ -20,6 +20,6 @@ export const states = {
   pulled,
 };
 
-export const inner = style({
+export const inner = component.style({
   width: '100%',
 });

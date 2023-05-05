@@ -1,4 +1,4 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import { component } from '~/styles/layers.css';
 import { computedTokens, extractTokenName, tokens } from '../../styles';
 import { verticals, bars } from '../../helpers';
 import * as drawerStyles from '../VAppDrawer/VAppDrawer.css';
@@ -13,7 +13,7 @@ const transitions = [
   ),
 ];
 
-export const host = style({
+export const host = component.style({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
@@ -25,7 +25,7 @@ export const host = style({
   willChange: 'padding',
 });
 
-export const inner = style({
+export const inner = component.style({
   flexGrow: '2',
   display: 'flex',
   flexDirection: 'column',
@@ -39,7 +39,7 @@ export const barSpacers = verticals((y) => [
 
     return [
       bar,
-      style({
+      component.style({
         height,
         flex: `0 0 ${height}`,
         transition: `all ${transition}`,
@@ -48,18 +48,18 @@ export const barSpacers = verticals((y) => [
   }),
 ]);
 
-export const viewport = style({
+export const viewport = component.style({
   flexGrow: '2',
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
 });
 
-export const viewportFooter = style({
+export const viewportFooter = component.style({
   marginTop: 'auto',
 });
 
-globalStyle(`${viewport}:has(${bodyStyles.isCenter})`, {
+component.global(`${viewport}:has(${bodyStyles.isCenter})`, {
   alignItems: 'center',
   justifyContent: 'center',
 });
@@ -68,32 +68,30 @@ VAL_X_POSITIONS.forEach((x) => {
   const computedPosition = extractTokenName(computedTokens.viewport[x]);
   const drawer = drawerStyles.positions[x];
 
-  globalStyle(':root', {
-    vars: {
-      [computedPosition]: '0px',
-    },
+  component.pushGlobalVars(':root', {
+    [computedPosition]: '0px',
   });
 
-  globalStyle(
+  component.pushGlobalVars(
     `:root:has(${drawer.isActive}:not(${drawer.hasBackdrop})), :root:has(${drawer.isStatic})`,
     {
-      vars: {
-        [computedPosition]: computedTokens.drawer[x].width,
-      },
+      [computedPosition]: computedTokens.drawer[x].width,
     },
   );
 });
 
 export const sideDetect = {
-  wrapper: style({
+  wrapper: component.style({
     width: 0,
     height: 0,
     overflow: 'hidden',
   }),
   ...objectFromArray(VAL_POSITIONS, (position) => [
     position,
-    style({
+    component.style({
       width: computedTokens.viewport[position],
     }),
   ]),
 };
+
+component.dumpGlobalVars();

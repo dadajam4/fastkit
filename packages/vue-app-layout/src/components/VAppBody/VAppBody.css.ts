@@ -1,5 +1,5 @@
-import { style } from '@vanilla-extract/css';
+import { component } from '~/styles/layers.css';
 
-export const host = style({});
+export const host = component.style({});
 
-export const isCenter = style({});
+export const isCenter = component.style({});

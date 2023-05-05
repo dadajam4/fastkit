@@ -1,3 +1,3 @@
-import { style } from '@vanilla-extract/css';
+import { component } from '~/styles/layers.css';
 
-export const booting = style({});
+export const booting = component.style({});

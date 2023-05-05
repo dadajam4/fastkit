@@ -1,4 +1,4 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import { component } from '~/styles/layers.css';
 import { calc } from '@vanilla-extract/css-utils';
 import { tokens, computedTokens, extractTokenName } from '../../styles';
 import { verticals, horizontals } from '../../helpers';
@@ -22,7 +22,7 @@ interface CreateBarStylesOptions {
 
 const transitionBase = `left ${computedTokens.drawer.left.transition}, right ${computedTokens.drawer.right.transition}`;
 
-export const hostBase = style({
+export const hostBase = component.style({
   display: 'flex',
   alignItems: 'stretch',
   position: 'fixed',
@@ -50,7 +50,7 @@ function createBarStyles(
       transitions.push(`${y} ${computedTokens.transition}`);
     }
 
-    const host = style({
+    const host = component.style({
       height: tokens[type][y].height,
       left: computed.left,
       right: computed.right,
@@ -58,7 +58,7 @@ function createBarStyles(
       [y]: startPosition ? startPosition(ctx) : 0,
     });
 
-    const isUnder = style({
+    const isUnder = component.style({
       zIndex: tokens.zIndex,
     });
 
@@ -85,30 +85,24 @@ function createBarStyles(
 
     const transitionToken = extractTokenName(computed.transition);
 
-    globalStyle(':root', {
-      vars: {
-        [computedHeightToken]: '0px',
-        [computedOffsetEndToken]: offsetEnd,
-        [computedTransitionOutToken]: `calc(100% * ${transitionOutVec})`,
-        [transitionToken]: '0s',
-        ...horizontals((x) => [extractTokenName(computed[x]), '0px']),
-      },
+    component.pushGlobalVars(':root', {
+      [computedHeightToken]: '0px',
+      [computedOffsetEndToken]: offsetEnd,
+      [computedTransitionOutToken]: `calc(100% * ${transitionOutVec})`,
+      [transitionToken]: '0s',
+      ...horizontals((x) => [extractTokenName(computed[x]), '0px']),
     });
 
-    globalStyle(`:root:has(${host}:not(${host}-leave-active))`, {
-      vars: {
-        [computedHeightToken]: tokens[type][y].height,
-      },
+    component.pushGlobalVars(`:root:has(${host}:not(${host}-leave-active))`, {
+      [computedHeightToken]: tokens[type][y].height,
     });
 
-    globalStyle(`${host}-enter-active, ${host}-leave-active`, {
+    component.global(`${host}-enter-active, ${host}-leave-active`, {
       zIndex: `${tokens.zIndex}`,
     });
 
-    globalStyle(`:root:has(${host}:not(${booting}))`, {
-      vars: {
-        [transitionToken]: computedTokens.transition,
-      },
+    component.pushGlobalVars(`:root:has(${host}:not(${booting}))`, {
+      [transitionToken]: computedTokens.transition,
     });
 
     return [y, positionStyles];
@@ -129,3 +123,5 @@ export const toolbar = createBarStyles('toolbar', {
     return systemBarComputed.height;
   },
 });
+
+component.dumpGlobalVars();

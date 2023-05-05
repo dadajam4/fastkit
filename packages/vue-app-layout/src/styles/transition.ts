@@ -1,4 +1,5 @@
-import { GlobalStyleRule, style, globalStyle } from '@vanilla-extract/css';
+import { GlobalStyleRule } from '@vanilla-extract/css';
+import { framework } from './layers.css';
 
 type VueTransitionHook = `${'enter' | 'leave'}-${'from' | 'active' | 'to'}`;
 
@@ -8,14 +9,14 @@ type CreateVueTransitionRow = [
 ];
 export function createVueTransition(
   rows: CreateVueTransitionRow[],
-  selector = style({}),
+  selector = framework.style({}),
 ): string {
   rows.forEach(([hooks, rule]) => {
     if (!Array.isArray(hooks)) {
       hooks = [hooks];
     }
     const hooksSelector = hooks.map((hook) => `${selector}-${hook}`).join(', ');
-    globalStyle(hooksSelector, rule);
+    framework.global(hooksSelector, rule);
   });
   return selector;
 }
