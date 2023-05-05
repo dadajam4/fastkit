@@ -21,21 +21,6 @@ function cleanJS(code: string) {
   return code.replace(emptyVanillaImportRe, '');
 }
 
-const allLayerDefMatchRe = /(^|\n)@layer ([a-zA-Z\d\-_\$\.]+?);/g;
-
-function cleanCSS(code: string) {
-  const layersDefs = code.match(allLayerDefMatchRe);
-  if (!layersDefs?.length) return code;
-  const uniques = Array.from(new Set(layersDefs)).map((row) => row.trim());
-
-  for (const def of uniques) {
-    code = code.replace(new RegExp(def + '\n?', 'g'), '');
-  }
-
-  code = uniques.join('\n') + '\n\n' + code;
-  return code;
-}
-
 export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
   return definePlugin<VanillaExtractPlugin>({
     name: PLUGIN_NAME,
@@ -59,7 +44,8 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
             if (!ext) return;
 
             const code = await fs.readFile(filePath, 'utf-8');
-            const cleaner = ext === 'mjs' ? cleanJS : cleanCSS;
+            const cleaner = ext === 'mjs' ? cleanJS : undefined;
+            if (!cleaner) return;
             const replaced = cleaner(code);
             if (code === replaced) return;
 
