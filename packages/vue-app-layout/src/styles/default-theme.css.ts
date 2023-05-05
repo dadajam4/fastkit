@@ -1,8 +1,8 @@
-import { createGlobalTheme } from '@vanilla-extract/css';
 import { tokens } from './tokens.css';
 import { horizontals, verticals } from '../helpers';
+import { base } from '~/styles/layers.css';
 
-createGlobalTheme(':root', tokens, {
+base.globalTheme(':root', tokens, {
   zIndex: '10',
   transition: {
     duration: '200ms',

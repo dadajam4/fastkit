@@ -1,10 +1,10 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import { component } from '~/styles/layers.css';
 import { calc } from '@vanilla-extract/css-utils';
 import { tokens, computedTokens } from '../../styles';
 import { verticals, horizontals, sticks, bars } from '../../helpers';
 import { VAL_Y_POSITIONS, VAL_BAR_TYPES } from '../../schemes';
 
-export const host = style({
+export const host = component.style({
   position: 'fixed',
   zIndex: calc.add(tokens.zIndex, 2),
   pointerEvents: 'none',
@@ -19,7 +19,7 @@ export const host = style({
   justifyContent: 'stretch',
 });
 
-export const inner = style({
+export const inner = component.style({
   position: 'relative',
   width: '100%',
   height: '100%',
@@ -32,7 +32,7 @@ export const hostPositions = {
     y,
     sticks.y((stick) => [
       stick,
-      style({
+      component.style({
         // [y]: stick === 'window' ? '0px' : computedTokens[stick][y].offsetEnd,
       }),
     ]),
@@ -41,7 +41,7 @@ export const hostPositions = {
     x,
     sticks.x((stick) => [
       stick,
-      style({
+      component.style({
         [x]: stick === 'window' ? '0px' : computedTokens[stick][x].offsetEnd,
       }),
     ]),
@@ -55,7 +55,7 @@ export const barSpacers = verticals((y) => [
 
     return [
       bar,
-      style({
+      component.style({
         height: '0px',
         flex: '0 0 0px',
         transition: `all ${transition}`,
@@ -75,14 +75,14 @@ VAL_Y_POSITIONS.forEach((y) => {
       classes.push(`${hostPosition.toolbar} ${barSpacer[bar]}`);
     }
 
-    globalStyle(classes.join(', '), {
+    component.global(classes.join(', '), {
       height,
       flexBasis: height,
     });
   });
 });
 
-export const backdrop = style({
+export const backdrop = component.style({
   position: 'absolute',
   pointerEvents: 'auto',
   cursor: 'pointer',

@@ -7,6 +7,7 @@ import type { OutputFile, Plugin } from 'esbuild';
 import { copyDirSync, rmrf } from '../utils';
 import { emitDTS } from './dts';
 import { glob } from 'glob';
+import type { Processor } from 'postcss';
 
 const SHEBANG_MATCH_RE = /^(#!.+?)\n/;
 type EnvVarName = '__PLUGBOY_DEV__' | '__PLUGBOY_STUB__';
@@ -17,6 +18,48 @@ type EnvFnName =
 
 interface ResolvedOptions extends Options {
   esbuildPlugins: Plugin[];
+}
+
+let _postcssCache: Processor | undefined;
+
+async function getPostcss() {
+  if (!_postcssCache) {
+    const [postcss, cssnano] = await Promise.all([
+      import('postcss').then((mod) => mod.default),
+      import('cssnano').then((mod) => mod.default),
+    ]);
+    _postcssCache = postcss([
+      cssnano({
+        preset: [
+          'default',
+          {
+            normalizeWhitespace: false,
+          },
+        ],
+      }),
+    ]);
+  }
+  return _postcssCache;
+}
+
+function safeRemoveCSSMap(cssFilePath: string) {
+  const mapFilePath = `${cssFilePath}.map`;
+  return fs.rm(mapFilePath, { force: true });
+}
+
+const sourceMappingURLCommentRe = /\/\*# sourceMappingURL=.+? \*\//g;
+
+async function optimizeCSS(cssFilePath: string) {
+  const css = await fs.readFile(cssFilePath, 'utf-8');
+  const postcss = await getPostcss();
+  const result = await postcss.process(css, { from: cssFilePath });
+  await Promise.all([
+    fs.writeFile(
+      cssFilePath,
+      result.css.replace(sourceMappingURLCommentRe, ''),
+    ),
+    safeRemoveCSSMap(cssFilePath),
+  ]);
 }
 
 export class Builder {
@@ -355,6 +398,10 @@ function __plugboyPublicDir(...paths) {
         const emptyNativeNodeModuleRe = /(^|\n)import 'node:.+?';?/g;
         await Promise.all(
           _outputFiles.map(async ({ path: filePath }) => {
+            if (filePath.endsWith('.css')) {
+              await optimizeCSS(filePath);
+              return;
+            }
             if (!filePath.endsWith('.mjs')) return;
             const code = await fs.readFile(filePath, 'utf-8');
             const replaced = code.replace(emptyNativeNodeModuleRe, '');

@@ -5,7 +5,9 @@ import {
   StyleRule,
   globalStyle,
   GlobalStyleRule,
+  createGlobalTheme as _createGlobalTheme,
 } from '@vanilla-extract/css';
+import { createGlobalTheme } from './theme';
 
 type LayerStyleRules = NonNullable<StyleRule['@layer']>[string];
 
@@ -29,9 +31,31 @@ export interface LayerStyle {
    */
   global(selector: string, rule: LayerGlobalStyleRules): void;
 
+  /**
+   * @see {@link _createGlobalTheme}
+   */
+  globalTheme: typeof _createGlobalTheme;
+
   defineNestedLayer(
     globalNameOrNestedOptions?: string | NestedLayerOptions,
   ): LayerStyle;
+
+  /**
+   * Add global CSS variable with layer
+   *
+   * @remarks The vanilla-extract API is buggy when handling layered css variables.
+   *
+   * @param selector - selector
+   * @param vars - variables
+   */
+  pushGlobalVars(selector: string, vars: Record<string, string>): void;
+
+  /**
+   * Output variables accumulated by `pushGlobalVars`.
+   *
+   * @remarks The vanilla-extract API is buggy when handling layered css variables.
+   */
+  dumpGlobalVars(): void;
 }
 
 export interface DefineLayerBaseOptions {
@@ -97,6 +121,29 @@ export function defineLayerStyle(
         [layerName]: rule,
       },
     });
+  };
+
+  layerStyle.globalTheme = (...args: any) =>
+    (createGlobalTheme as any)(layerName, ...args);
+
+  let _varQueues: [string, Record<string, string>][] = [];
+
+  layerStyle.pushGlobalVars = function pushGlobalVars(selector, vars) {
+    let queue = _varQueues.find((q) => q[0] === selector);
+    if (!queue) {
+      queue = [selector, {}];
+      _varQueues.push(queue);
+    }
+    Object.assign(queue[1], vars);
+  };
+
+  layerStyle.dumpGlobalVars = function dumpGlobalVars() {
+    for (const [selector, vars] of _varQueues) {
+      layerStyle.global(selector, {
+        vars,
+      });
+    }
+    _varQueues = [];
   };
 
   layerStyle.defineNestedLayer = function defineNestedLayer(

@@ -1,6 +1,7 @@
-import { createGlobalThemeContract, globalStyle } from '@vanilla-extract/css';
+import { createGlobalThemeContract } from '@vanilla-extract/css';
 import { extractTokenName } from './utils';
 import { verticals, horizontals, sticks } from '../helpers';
+import { base } from './layers.css';
 
 /**
  * Style token in vue-app-layout
@@ -330,7 +331,7 @@ export const computedTokens = createGlobalThemeContract({
   },
 });
 
-globalStyle(':root', {
+base.global(':root', {
   vars: {
     [extractTokenName(
       computedTokens.transition,

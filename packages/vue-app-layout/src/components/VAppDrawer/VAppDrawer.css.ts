@@ -1,4 +1,4 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import { component } from '~/styles/layers.css';
 import { calc } from '@vanilla-extract/css-utils';
 import { tokens, computedTokens, extractTokenName } from '../../styles';
 import { horizontals, verticals } from '../../helpers';
@@ -9,9 +9,9 @@ import { booting } from '../../composables/booting.css';
 
 const stickes = objectFromArray.build(VAL_STICK_Y_POSITIONS);
 
-export const host = style({});
+export const host = component.style({});
 
-export const bodyBase = style({
+export const bodyBase = component.style({
   position: 'absolute',
   top: 0,
   bottom: 0,
@@ -24,14 +24,14 @@ export const positions = horizontals((x) => {
   const computed = computedTokens.drawer[x];
   const { width } = computed;
 
-  const host = style({});
+  const host = component.style({});
 
   /**
    * Styles applied to body elements
    *
    * * This style name should not be compounded because we want to use it for Vue transitions as well!
    */
-  const body = style({
+  const body = component.style({
     [x]: 0,
     width,
     pointerEvents: 'auto',
@@ -42,16 +42,19 @@ export const positions = horizontals((x) => {
   const positionStyles = {
     host,
     body,
-    isActive: style({
+    isActive: component.style({
       // zIndex: calc.add(tokens.zIndex, 2),
     }),
-    isStatic: style({
+    isStatic: component.style({
       zIndex: tokens.zIndex,
     }),
-    isRale: style({}),
-    hasBackdrop: style({}),
+    isRale: component.style({}),
+    hasBackdrop: component.style({}),
     stickedTo: verticals((y) => {
-      return [y, stickes((stickPosition) => [stickPosition, style({})])];
+      return [
+        y,
+        stickes((stickPosition) => [stickPosition, component.style({})]),
+      ];
     }),
   };
 
@@ -76,38 +79,31 @@ export const positions = horizontals((x) => {
   );
   const transitionToken = extractTokenName(computed.transition);
 
-  globalStyle(':root', {
-    vars: {
-      [widthToken]: tokens.drawer[x].width,
-      [offsetEndToken]: '0px',
-      [staticOffsetEndToken]: '0px',
-      [transitionToken]: '0s',
-    },
+  component.pushGlobalVars(':root', {
+    [widthToken]: tokens.drawer[x].width,
+    [offsetEndToken]: '0px',
+    [staticOffsetEndToken]: '0px',
+    [transitionToken]: '0s',
   });
 
-  globalStyle(`:root:has(${positionStyles.isRale})`, {
-    vars: {
-      [widthToken]: tokens.drawer[x].railWidth,
-    },
+  component.pushGlobalVars(`:root:has(${positionStyles.isRale})`, {
+    [widthToken]: tokens.drawer[x].railWidth,
   });
 
-  globalStyle(`:root:has(${positionStyles.host}:not(${booting}))`, {
-    vars: {
+  component.pushGlobalVars(
+    `:root:has(${positionStyles.host}:not(${booting}))`,
+    {
       [transitionToken]: tokens.transition.duration,
     },
+  );
+
+  component.pushGlobalVars(`:root:has(${positionStyles.isActive})`, {
+    [offsetEndToken]: width,
   });
 
-  globalStyle(`:root:has(${positionStyles.isActive})`, {
-    vars: {
-      [offsetEndToken]: width,
-    },
-  });
-
-  globalStyle(`:root:has(${positionStyles.isStatic})`, {
-    vars: {
-      [offsetEndToken]: width,
-      [staticOffsetEndToken]: width,
-    },
+  component.pushGlobalVars(`:root:has(${positionStyles.isStatic})`, {
+    [offsetEndToken]: width,
+    [staticOffsetEndToken]: width,
   });
 
   VAL_Y_POSITIONS.forEach((y) => {
@@ -115,17 +111,16 @@ export const positions = horizontals((x) => {
     const systemBarComputed = computedTokens.systemBar[y];
     const toolbarComputed = computedTokens.toolbar[y];
 
-    globalStyle(':root', {
-      vars: {
-        [computedTokenName]: systemBarComputed.offsetEnd,
-      },
+    component.pushGlobalVars(':root', {
+      [computedTokenName]: systemBarComputed.offsetEnd,
     });
 
-    globalStyle(`:root:has(${positionStyles.stickedTo[y]})`, {
-      vars: {
+    component.pushGlobalVars(
+      `:root:has(${positionStyles.stickedTo[y].toolbar})`,
+      {
         [computedTokenName]: toolbarComputed.offsetEnd,
       },
-    });
+    );
 
     VAL_STICK_Y_POSITIONS.forEach((stickPosition) => {
       const stickClass = positionStyles.stickedTo[y][stickPosition];
@@ -137,12 +132,10 @@ export const positions = horizontals((x) => {
       }
 
       targets.forEach((target) => {
-        globalStyle(
+        component.pushGlobalVars(
           `:root:has(${stickClass}):has(${positionStyles.isStatic}), :root:has(${stickClass}):has(${positionStyles.isActive}):not(:has(${positionStyles.hasBackdrop}))`,
           {
-            vars: {
-              [extractTokenName(computedTokens[target][y][x])]: width,
-            },
+            [extractTokenName(computedTokens[target][y][x])]: width,
           },
         );
       });
@@ -151,3 +144,5 @@ export const positions = horizontals((x) => {
 
   return [x, positionStyles];
 });
+
+component.dumpGlobalVars();
