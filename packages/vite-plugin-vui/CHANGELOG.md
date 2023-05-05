@@ -1,5 +1,16 @@
 # @fastkit/vite-plugin-vui
 
+## 1.0.4
+
+### Patch Changes
+
+- [#31](https://github.com/dadajam4/fastkit/pull/31) [`8e04503f`](https://github.com/dadajam4/fastkit/commit/8e04503f7acb585f50ceb482af0128e2263a94f9) Thanks [@dadajam4](https://github.com/dadajam4)! - A CSS layer has been added to vue-app-layout to properly override styles.
+
+- Updated dependencies [[`8e04503f`](https://github.com/dadajam4/fastkit/commit/8e04503f7acb585f50ceb482af0128e2263a94f9)]:
+  - @fastkit/vui@0.13.4
+  - @fastkit/icon-font-gen@0.13.3
+  - @fastkit/vite-kit@0.13.3
+
 ## 1.0.3
 
 ### Patch Changes

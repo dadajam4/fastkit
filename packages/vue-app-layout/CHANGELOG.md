@@ -1,5 +1,11 @@
 # @fastkit/vue-app-layout
 
+## 0.13.2
+
+### Patch Changes
+
+- [#31](https://github.com/dadajam4/fastkit/pull/31) [`8e04503f`](https://github.com/dadajam4/fastkit/commit/8e04503f7acb585f50ceb482af0128e2263a94f9) Thanks [@dadajam4](https://github.com/dadajam4)! - A CSS layer has been added to vue-app-layout to properly override styles.
+
 ## 0.13.1
 
 ### Patch Changes

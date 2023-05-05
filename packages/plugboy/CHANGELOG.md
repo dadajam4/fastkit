@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 0.1.2
+
+### Patch Changes
+
+- [#31](https://github.com/dadajam4/fastkit/pull/31) [`8e04503f`](https://github.com/dadajam4/fastkit/commit/8e04503f7acb585f50ceb482af0128e2263a94f9) Thanks [@dadajam4](https://github.com/dadajam4)! - The output CSS is now optimized using cssnano.
+
 ## 0.1.1
 
 ### Patch Changes

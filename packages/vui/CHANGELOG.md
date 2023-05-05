@@ -1,5 +1,23 @@
 # @fastkit/vui
 
+## 0.13.4
+
+### Patch Changes
+
+- [#31](https://github.com/dadajam4/fastkit/pull/31) [`8e04503f`](https://github.com/dadajam4/fastkit/commit/8e04503f7acb585f50ceb482af0128e2263a94f9) Thanks [@dadajam4](https://github.com/dadajam4)! - A CSS layer has been added to vue-app-layout to properly override styles.
+
+- Updated dependencies [[`8e04503f`](https://github.com/dadajam4/fastkit/commit/8e04503f7acb585f50ceb482af0128e2263a94f9)]:
+  - @fastkit/vue-app-layout@0.13.2
+  - @fastkit/color-scheme@1.0.3
+  - @fastkit/icon-font@1.0.2
+  - @fastkit/media-match@1.0.2
+  - @fastkit/color-scheme-gen@0.13.3
+  - @fastkit/vue-color-scheme@0.13.3
+  - @fastkit/vue-loading@0.13.4
+  - @fastkit/vue-stack@0.13.3
+  - @fastkit/media-match-gen@0.13.3
+  - @fastkit/vue-media-match@0.13.3
+
 ## 0.13.3
 
 ### Patch Changes
