@@ -7,6 +7,7 @@ import { GuideI18nSpace } from './-i18n';
 export default defineComponent({
   i18n: GuideI18nSpace,
   setup() {
+    // i18n
     const guideI18n = GuideI18nSpace.use();
     const guide = guideI18n.at.guide.t;
     const { trans } = guideI18n.at.common;
