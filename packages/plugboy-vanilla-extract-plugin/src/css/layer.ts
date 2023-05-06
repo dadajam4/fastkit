@@ -37,7 +37,7 @@ export interface LayerStyle {
   globalTheme: typeof _createGlobalTheme;
 
   defineNestedLayer(
-    globalNameOrNestedOptions?: string | NestedLayerOptions,
+    globalNameOrNestedOptions?: string | DefineLayerOptions,
   ): LayerStyle;
 
   /**
@@ -58,15 +58,19 @@ export interface LayerStyle {
   dumpGlobalVars(): void;
 }
 
-export interface DefineLayerBaseOptions {
+export interface DefineLayerParentOptions {
   parent?: string;
 }
 
-export interface DefineLayerScopedOptions extends DefineLayerBaseOptions {
+export interface DefineLayerScopedOptions {
+  /** Debug ID */
   debugId?: string;
+  globalName?: never;
 }
 
-export interface DefineLayerGlobalOptions extends DefineLayerBaseOptions {
+export interface DefineLayerGlobalOptions {
+  debugId?: never;
+  /** Parent layer name */
   globalName: string;
 }
 
@@ -74,7 +78,8 @@ export type DefineLayerOptions =
   | DefineLayerScopedOptions
   | DefineLayerGlobalOptions;
 
-export type NestedLayerOptions = Omit<DefineLayerOptions, 'parent'>;
+export type DefineNestableLayerOptions = DefineLayerOptions &
+  DefineLayerParentOptions;
 
 function isGlobalOptions(
   options: DefineLayerOptions,
@@ -82,7 +87,7 @@ function isGlobalOptions(
   return 'globalName' in options;
 }
 
-function normalizeToObject<T extends NestedLayerOptions>(
+function normalizeToObject<T extends DefineLayerOptions>(
   source?: string | T,
 ): T {
   if (!source) return {} as T;
@@ -91,7 +96,7 @@ function normalizeToObject<T extends NestedLayerOptions>(
 }
 
 export function defineLayerStyle(
-  globalNameOrOptions?: string | DefineLayerOptions,
+  globalNameOrOptions?: string | DefineNestableLayerOptions,
 ): LayerStyle {
   const options = normalizeToObject(globalNameOrOptions);
   const { parent } = options;
