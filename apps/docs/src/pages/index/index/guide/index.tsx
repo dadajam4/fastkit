@@ -44,10 +44,7 @@ export default defineComponent({
             />
 
             <h4>pnpm</h4>
-            <VCode
-              code="pnpm update --filter @fastkit/ --latest"
-              language="sh"
-            />
+            <VCode code={'pnpm update "@fastkit/*" --latest'} language="sh" />
           </VDocsSection>
 
           <VDocsPaging
