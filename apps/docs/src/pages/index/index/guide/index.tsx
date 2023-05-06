@@ -7,6 +7,7 @@ import { GuideI18nSpace } from './-i18n';
 export default defineComponent({
   i18n: GuideI18nSpace,
   setup() {
+    // i18n
     const guideI18n = GuideI18nSpace.use();
     const guide = guideI18n.at.guide.t;
     const { trans } = guideI18n.at.common;
@@ -44,10 +45,7 @@ export default defineComponent({
             />
 
             <h4>pnpm</h4>
-            <VCode
-              code="pnpm update --filter @fastkit/ --latest"
-              language="sh"
-            />
+            <VCode code={'pnpm update "@fastkit/*" --latest'} language="sh" />
           </VDocsSection>
 
           <VDocsPaging

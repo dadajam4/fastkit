@@ -48,15 +48,33 @@ function safeRemoveCSSMap(cssFilePath: string) {
 }
 
 const sourceMappingURLCommentRe = /\/\*# sourceMappingURL=.+? \*\//g;
+const allLayerDefRe = /(^|\n)@layer\s+([a-zA-Z\d\-_$\. ,]+);/g;
+const layerDefTrimRe = /((^|\n)@layer\s+|;)/g;
 
 async function optimizeCSS(cssFilePath: string) {
   const css = await fs.readFile(cssFilePath, 'utf-8');
   const postcss = await getPostcss();
   const result = await postcss.process(css, { from: cssFilePath });
+  const layerDefs = (() => {
+    const matched = css.match(allLayerDefRe);
+    if (!matched) return '';
+    const layerNames: string[] = [];
+    matched.forEach((row) => {
+      const trimed = row.replace(layerDefTrimRe, '');
+      const chunks = trimed.split(',');
+      chunks.forEach((chunk) => layerNames.push(chunk.trim()));
+    });
+    const uniqued = Array.from(new Set(layerNames));
+    const def = `@layer ${uniqued.join(', ')};\n`;
+    return def;
+  })();
   await Promise.all([
     fs.writeFile(
       cssFilePath,
-      result.css.replace(sourceMappingURLCommentRe, ''),
+      layerDefs +
+        result.css
+          .replace(allLayerDefRe, '')
+          .replace(sourceMappingURLCommentRe, ''),
     ),
     safeRemoveCSSMap(cssFilePath),
   ]);
