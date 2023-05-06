@@ -1,5 +1,23 @@
 # @fastkit/vui
 
+## 0.13.5
+
+### Patch Changes
+
+- [#33](https://github.com/dadajam4/fastkit/pull/33) [`dc6b10a4`](https://github.com/dadajam4/fastkit/commit/dc6b10a4d3279dd24de1f7f1b5113dcec52b63ad) Thanks [@dadajam4](https://github.com/dadajam4)! - Updated build to optimize CSS layers.
+
+- Updated dependencies [[`dc6b10a4`](https://github.com/dadajam4/fastkit/commit/dc6b10a4d3279dd24de1f7f1b5113dcec52b63ad), [`dc6b10a4`](https://github.com/dadajam4/fastkit/commit/dc6b10a4d3279dd24de1f7f1b5113dcec52b63ad)]:
+  - @fastkit/vue-loading@0.13.5
+  - @fastkit/vue-app-layout@0.13.3
+  - @fastkit/color-scheme@1.0.4
+  - @fastkit/icon-font@1.0.3
+  - @fastkit/media-match@1.0.3
+  - @fastkit/color-scheme-gen@0.13.4
+  - @fastkit/vue-color-scheme@0.13.4
+  - @fastkit/vue-stack@0.13.4
+  - @fastkit/media-match-gen@0.13.4
+  - @fastkit/vue-media-match@0.13.4
+
 ## 0.13.4
 
 ### Patch Changes
