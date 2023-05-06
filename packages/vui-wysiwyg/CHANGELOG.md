@@ -1,5 +1,14 @@
 # @fastkit/vui-wysiwyg
 
+## 1.1.4
+
+### Patch Changes
+
+- [#33](https://github.com/dadajam4/fastkit/pull/33) [`dc6b10a4`](https://github.com/dadajam4/fastkit/commit/dc6b10a4d3279dd24de1f7f1b5113dcec52b63ad) Thanks [@dadajam4](https://github.com/dadajam4)! - Updated build to optimize CSS layers.
+
+- Updated dependencies [[`dc6b10a4`](https://github.com/dadajam4/fastkit/commit/dc6b10a4d3279dd24de1f7f1b5113dcec52b63ad)]:
+  - @fastkit/vui@0.13.5
+
 ## 1.1.3
 
 ### Patch Changes

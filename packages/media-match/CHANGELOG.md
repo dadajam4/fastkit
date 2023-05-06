@@ -1,5 +1,12 @@
 # @fastkit/media-match
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`dc6b10a4`](https://github.com/dadajam4/fastkit/commit/dc6b10a4d3279dd24de1f7f1b5113dcec52b63ad)]:
+  - @fastkit/plugboy@0.1.3
+
 ## 1.0.2
 
 ### Patch Changes
