@@ -1,5 +1,11 @@
 # @fastkit/eslint-config-vue
 
+## 0.13.2
+
+### Patch Changes
+
+- [#35](https://github.com/dadajam4/fastkit/pull/35) [`2a176c2`](https://github.com/dadajam4/fastkit/commit/2a176c2367e968a5905b61a494cf2a782dd32ad0) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed a rule that conflicts with prettire to ensure proper linting.
+
 ## 0.13.1
 
 ### Patch Changes
