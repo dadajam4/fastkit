@@ -1,3 +1,5 @@
+require('@rushstack/eslint-patch/modern-module-resolution');
+
 module.exports = {
   extends: ['@fastkit/eslint-config'],
   overrides: [
@@ -13,7 +15,7 @@ module.exports = {
         '*.mjs',
         '*.vue',
       ],
-      extends: ['plugin:vue/vue3-recommended'],
+      extends: ['plugin:vue/vue3-recommended', '@vue/eslint-config-prettier'],
       parser: 'vue-eslint-parser',
       rules: {
         'vue/one-component-per-file': 'off',
