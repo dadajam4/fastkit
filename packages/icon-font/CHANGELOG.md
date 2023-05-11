@@ -1,5 +1,12 @@
 # @fastkit/icon-font
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [[`50e81c9`](https://github.com/dadajam4/fastkit/commit/50e81c949e0e99c54ffe227e3274826ed31c04af)]:
+  - @fastkit/plugboy@0.1.4
+
 ## 1.0.3
 
 ### Patch Changes

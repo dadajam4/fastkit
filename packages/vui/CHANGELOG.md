@@ -1,5 +1,20 @@
 # @fastkit/vui
 
+## 0.13.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/color-scheme@1.0.5
+  - @fastkit/icon-font@1.0.4
+  - @fastkit/media-match@1.0.4
+  - @fastkit/color-scheme-gen@0.13.5
+  - @fastkit/vue-color-scheme@0.13.5
+  - @fastkit/vue-loading@0.13.6
+  - @fastkit/vue-stack@0.13.5
+  - @fastkit/media-match-gen@0.13.5
+  - @fastkit/vue-media-match@0.13.5
+
 ## 0.13.5
 
 ### Patch Changes

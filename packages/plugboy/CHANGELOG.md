@@ -1,5 +1,12 @@
 # @fastkit/plugboy
 
+## 0.1.4
+
+### Patch Changes
+
+- [#37](https://github.com/dadajam4/fastkit/pull/37) [`50e81c9`](https://github.com/dadajam4/fastkit/commit/50e81c949e0e99c54ffe227e3274826ed31c04af) Thanks [@dadajam4](https://github.com/dadajam4)! - Output file to determine when stub is executed.
+  This allows you to check if a package is stub built and change the behavior of the application.
+
 ## 0.1.3
 
 ### Patch Changes
