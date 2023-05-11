@@ -257,6 +257,11 @@ function __plugboyPublicDir(...paths) {
         }
       }),
     );
+    await fs.writeFile(
+      this.workspace.dirs.dist.join('.stub').value,
+      '',
+      'utf-8',
+    );
   }
 
   normalizeDTSBySettings(
