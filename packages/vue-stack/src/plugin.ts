@@ -6,7 +6,7 @@ import {
 } from './service';
 import { onAppUnmount } from '@fastkit/vue-utils';
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface ComponentCustomProperties {
     $vstack: VueStackService;
   }

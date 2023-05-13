@@ -4,6 +4,7 @@
 .tmp
 vitest.config.ts.timestamp-*
 vite.config.ts.timestamp-*
+*.bundled_*.mjs
 
 # Deps
 node_modules

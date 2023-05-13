@@ -70,10 +70,10 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
-    "vite": "^4.1.1"
+    "vite": "^4.3.5"
   },
   "peerDependencies": {
-    "vite": "^4.1.1"
+    "vite": "^4.3.0"
   },
   "peerDependenciesMeta": {
     "vite": {

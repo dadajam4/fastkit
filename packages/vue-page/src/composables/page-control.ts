@@ -79,7 +79,7 @@ export interface PrefetchHandlerContext {
 
 export type PrefetchHandler = (ctx: PrefetchHandlerContext) => boolean | void;
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   interface ComponentCustomOptions {
     prefetch?: RawPrefetchContext;
     prefetchHandler?: PrefetchHandler;

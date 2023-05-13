@@ -5,7 +5,7 @@ import { getSuspenseRouteBucket } from './suspense-route-bucket';
 
 export type RawRouterScrollBehavior = 'top' | RouterScrollBehavior;
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface ComponentCustomOptions {
     scrollBehavior?: RawRouterScrollBehavior;
   }

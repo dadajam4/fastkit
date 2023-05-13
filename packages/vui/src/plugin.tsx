@@ -44,7 +44,7 @@ export function mergeVuiPluginOptions(
   return merged;
 }
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface ComponentCustomProperties {
     $vui: VuiService;
   }

@@ -30,7 +30,7 @@ export function useVueAppLayout(): VueAppLayout {
   return layout;
 }
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface ComponentCustomProperties {
     $appLayout: VueAppLayout;
   }

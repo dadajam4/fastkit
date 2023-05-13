@@ -157,7 +157,7 @@ export interface VueI18nSpaceOptions<
  *
  * @example
  * ```
- * declare module '@vue/runtime-core' {
+ * declare module 'vue' {
  *   export interface ComponentCustomProperties {
  *     $i18n: I18nSpace<YourAppLocaleName, YourAppBaseLocale, YourAppLocaleMeta, YourAppGlobalComponents>;
  *   }
