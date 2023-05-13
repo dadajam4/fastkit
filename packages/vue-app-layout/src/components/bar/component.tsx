@@ -6,13 +6,17 @@ import {
   VueAppBar,
   VueAppBarActivateCondition,
 } from '../../controls';
-import { defineSlotsProps } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 import { useBooting } from '../../composables/booting';
 
 export interface DefineBarComponentSettings {
   name: string;
   type: VueAppLayoutBarType;
 }
+
+const slots = defineSlots<{
+  default?: (bar: VueAppBar) => any;
+}>();
 
 export function defineBarComponent(settings: DefineBarComponentSettings) {
   const { name, type } = settings;
@@ -27,10 +31,9 @@ export function defineBarComponent(settings: DefineBarComponentSettings) {
         type: [Boolean, Function] as PropType<VueAppBarActivateCondition>,
         default: true,
       },
-      ...defineSlotsProps<{
-        default: VueAppBar;
-      }>(),
+      ...slots(),
     },
+    slots,
     setup(props, ctx) {
       const layout = useVueAppLayout();
       const bar = layout.launchBar(props);

@@ -43,7 +43,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/core": "^7.21.4",
+    "@babel/core": "^7.21.8",
     "@babel/plugin-transform-typescript": "^7.21.3",
     "@vue/babel-plugin-jsx": "^1.1.1"
   },
@@ -51,12 +51,12 @@
     "@fastkit/plugboy": "workspace:*",
     "@types/babel__core": "^7.20.0",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
-    "vite": "^4.1.1"
+    "vite": "^4.3.5"
   },
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:*",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
-    "vite": "^4.1.1"
+    "vite": "^4.3.0"
   },
   "peerDependenciesMeta": {
     "@vitejs/plugin-vue-jsx": {

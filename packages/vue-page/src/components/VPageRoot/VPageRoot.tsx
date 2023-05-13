@@ -1,5 +1,5 @@
 import { defineComponent, h } from 'vue';
-import { renderSlotOrEmpty, ClientOnly } from '@fastkit/vue-utils';
+import { ClientOnly } from '@fastkit/vue-utils';
 import { VPageProgress } from '../VPageProgress';
 import { useVuePageControl } from '../../injections';
 import { useRouter } from 'vue-router';
@@ -19,7 +19,7 @@ export const VPageRoot = defineComponent({
       const { pageError } = control;
       const content = pageError
         ? h(control.ErrorComponent as any, { key: 'error' })
-        : renderSlotOrEmpty(ctx.slots, 'default');
+        : ctx.slots.default?.();
 
       return (
         <>

@@ -28,7 +28,6 @@ export const VBreadcrumbs = defineComponent({
     divider: [String, Function] as PropType<
       VNodeChild | ((vui: VuiService) => VNodeChild)
     >,
-    // ...defineSlotsProps<{}>(),
   },
   setup(props, ctx) {
     const vui = useVui();

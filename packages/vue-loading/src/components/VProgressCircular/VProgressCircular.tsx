@@ -1,10 +1,6 @@
 import './VProgressCircular.scss';
 import { defineComponent, computed, h, PropType } from 'vue';
-import {
-  NumberishPropOption,
-  resolveNumberish,
-  renderSlotOrEmpty,
-} from '@fastkit/vue-utils';
+import { NumberishPropOption, resolveNumberish } from '@fastkit/vue-utils';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 
 export const VProgressCircular = defineComponent({
@@ -116,7 +112,7 @@ export const VProgressCircular = defineComponent({
       const info = h(
         'span',
         { class: 'v-progress-circular__info' },
-        renderSlotOrEmpty(ctx.slots, 'default'),
+        ctx.slots.default?.(),
       );
 
       const svg = genSvg();

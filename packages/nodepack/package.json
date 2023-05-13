@@ -54,7 +54,7 @@
   "dependencies": {
     "@fastkit/node-util": "workspace:*",
     "@fastkit/tiny-logger": "workspace:*",
-    "esbuild": "^0.17.16",
+    "esbuild": "^0.17.19",
     "nodemon": "^2.0.22"
   },
   "devDependencies": {

@@ -24,7 +24,7 @@ import {
   createControlFieldProviderProps,
   useControlField,
   VTextCounter,
-  defineSlotsProps,
+  defineSlots,
   useVui,
   VButton,
   VButtonGroup,
@@ -47,6 +47,8 @@ import {
   WysiwygEditorInitializeContext,
 } from '../../schemes';
 
+const slots = defineSlots<FormControlSlots & InputBoxSlots>();
+
 export const VWysiwygEditor = defineComponent({
   name: 'VWysiwygEditor',
   props: {
@@ -55,7 +57,7 @@ export const VWysiwygEditor = defineComponent({
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),
-    ...defineSlotsProps<FormControlSlots & InputBoxSlots>(),
+    ...slots(),
     extensions: {
       type: Array as PropType<RawWysiwygExtension[]>,
       default: () => [],
@@ -71,6 +73,7 @@ export const VWysiwygEditor = defineComponent({
   emits: {
     ...createTextableEmits(),
   },
+  slots,
   setup(props, ctx) {
     const vui = useVui();
 

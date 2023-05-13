@@ -4,7 +4,6 @@ import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
 } from '@fastkit/vue-form-control';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { createControlProps, useControl } from '../../composables';
 import { VUI_RADIO_GROUP_SYMBOL, VUI_RADIO_SYMBOL } from '../../injections';
 import { VCheckable } from '../VCheckable';
@@ -48,7 +47,7 @@ export const VRadio = defineComponent({
           input: () =>
             selectorItemControl.createInputElement({ type: 'radio' }),
           faux: () => <span class="v-radio__faux"></span>,
-          label: () => renderSlotOrEmpty(this.$slots, 'default'),
+          label: () => this.$slots.default?.(),
         }}
       />
     );

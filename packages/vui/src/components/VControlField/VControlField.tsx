@@ -6,8 +6,8 @@ import {
   resolveVNodeChildOrSlots,
   TypedSlot,
   createPropsOptions,
-  defineSlotsProps,
-  renderSlotOrEmpty,
+  defineSlots,
+  DefineSlotsType,
 } from '@fastkit/vue-utils';
 import {
   createControlProps,
@@ -43,11 +43,13 @@ export function createControlFieldProps() {
 //   startAdornment: () => true,
 //   endAdornment: () => true,
 // };
-export interface InputBoxSlots {
-  default: void;
-  startAdornment: void;
-  endAdornment: void;
-}
+export type InputBoxSlots = DefineSlotsType<{
+  default?: () => any;
+  startAdornment?: () => any;
+  endAdornment?: () => any;
+}>;
+
+const slots = defineSlots<InputBoxSlots>();
 
 type ResolvedSlots = Partial<Record<AdornmentPosition, TypedSlot<void>>>;
 
@@ -57,10 +59,10 @@ export const VControlField = defineComponent({
     ...createControlFieldProps(),
     focused: Boolean,
     autoHeight: Boolean,
-    ...defineSlotsProps<InputBoxSlots>(),
+    ...slots(),
     error: Boolean,
   },
-  // _slots: inputBoxSlots,
+  slots,
   emits: {
     click: (ev: MouseEvent) => true,
   },
@@ -122,7 +124,7 @@ export const VControlField = defineComponent({
           />
         );
       } else {
-        child = renderSlotOrEmpty(resolvedSlots.value, position);
+        child = resolvedSlots.value[position]?.();
       }
       if (!child) return;
       return (
@@ -159,9 +161,7 @@ export const VControlField = defineComponent({
         // tabindex={this.computedTabindex}
         ref={this.hostElRef()}>
         {this.renderAdornment('start')}
-        <div class="v-control-field__body">
-          {renderSlotOrEmpty(this.$slots, 'default')}
-        </div>
+        <div class="v-control-field__body">{this.$slots.default?.()}</div>
         {this.renderAdornment('end')}
       </div>
     );

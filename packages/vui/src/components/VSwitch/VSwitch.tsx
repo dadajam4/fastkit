@@ -4,7 +4,6 @@ import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
 } from '@fastkit/vue-form-control';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { createControlProps, useControl } from '../../composables';
 import { VUI_SWITCH_GROUP_SYMBOL, VUI_SWITCH_SYMBOL } from '../../injections';
 import { VCheckable } from '../VCheckable';
@@ -58,7 +57,7 @@ export const VSwitch = defineComponent({
               <span class="v-switch__faux__pin"></span>
             </span>
           ),
-          label: () => renderSlotOrEmpty(this.$slots, 'default'),
+          label: () => this.$slots.default?.(),
         }}
       />
     );

@@ -14,13 +14,17 @@ import {
   VueAppDrawerStickedSettings,
   VueAppStackTransitionSettings,
 } from '../../controls';
-import { defineSlotsProps } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 import { VAppStack, VAppStackVerticalPositionProps } from '../VAppStack';
 import { useBooting } from '../../composables/booting';
 
 export interface VAppDrawerRef {
   get: () => VueAppDrawer;
 }
+
+const slots = defineSlots<{
+  default?: (drawer: VueAppDrawer) => any;
+}>();
 
 export const VAppDrawer = defineComponent({
   name: 'VAppDrawer',
@@ -39,10 +43,9 @@ export const VAppDrawer = defineComponent({
       type: Boolean as PropType<boolean>,
       default: true,
     },
-    ...defineSlotsProps<{
-      default: VueAppDrawer;
-    }>(),
+    ...slots(),
   },
+  slots,
   setup(props, ctx) {
     const layout = useVueAppLayout();
     const drawer = layout.launchDrawer(props);

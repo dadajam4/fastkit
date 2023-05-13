@@ -22,7 +22,7 @@ import {
   VueAppStackTransitionSettings,
   VueAppStackBackdropSettings,
 } from '../../controls';
-import { defineSlotsProps } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 
 export interface VAppStackRef {
   get: () => VueAppStack;
@@ -32,6 +32,10 @@ export const VAppStackVerticalPositionProps = {
   top: String as PropType<VueAppLayoutStickPositionY>,
   bottom: String as PropType<VueAppLayoutStickPositionY>,
 };
+
+const slots = defineSlots<{
+  default?: (stack: VueAppStack) => any;
+}>();
 
 export const VAppStack = defineComponent({
   name: 'VAppStack',
@@ -45,13 +49,12 @@ export const VAppStack = defineComponent({
     ...VAppStackVerticalPositionProps,
     left: String as PropType<VueAppLayoutStickPositionX>,
     right: String as PropType<VueAppLayoutStickPositionX>,
-    ...defineSlotsProps<{
-      default: VueAppStack;
-    }>(),
+    ...slots(),
   },
   emits: {
     'update:modelValue': (modelValue: boolean) => true,
   },
+  slots,
   setup(props, ctx) {
     const layout = useVueAppLayout();
     const stack = layout.launchStack(props, (modelValue) =>
@@ -107,7 +110,7 @@ export const VAppStack = defineComponent({
                 </Transition>
               )}
               <Transition key="body" {...stack.transition}>
-                {!!body && withDirectives(body as any, [[vShow, stack.active]])}
+                {!!body && withDirectives(body, [[vShow, stack.active]])}
               </Transition>
             </div>
             {renderBarSpacers('bottom')}

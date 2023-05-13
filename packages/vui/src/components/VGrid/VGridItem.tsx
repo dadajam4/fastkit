@@ -1,8 +1,6 @@
 import './VGridItem.scss';
 
 import { defineComponent, computed } from 'vue';
-// import { MediaMatchKey, MEDIA_MATCH_CONDITIONS } from '@fastkit/media-match';
-import { htmlAttributesPropOptions } from '@fastkit/vue-utils';
 import { RawGridValueProp, extractRawGridValueClasses } from './schemes';
 
 export type GridItemNumberSizeValue =
@@ -50,7 +48,6 @@ export const VGridItem = defineComponent({
   name: 'VGridItem',
   inheritAttrs: false,
   props: {
-    ...htmlAttributesPropOptions,
     tag: {
       type: String,
       default: 'div',

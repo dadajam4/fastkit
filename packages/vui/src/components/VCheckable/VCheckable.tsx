@@ -1,7 +1,14 @@
 import './VCheckable.scss';
 import { computed, defineComponent } from 'vue';
-import { defineSlotsProps, renderSlotOrEmpty } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 import { useVuiColorProvider } from '../../injections';
+
+const slots = defineSlots<{
+  input?: () => any;
+  faux?: () => any;
+  icon?: () => any;
+  label?: () => any;
+}>();
 
 export const VCheckable = defineComponent({
   name: 'VCheckable',
@@ -10,14 +17,10 @@ export const VCheckable = defineComponent({
     disabled: Boolean,
     readonly: Boolean,
     checked: Boolean,
-    ...defineSlotsProps<{
-      input: void;
-      faux: void;
-      icon: void;
-      label: void;
-    }>(),
+    ...slots(),
     // autoWidth: Boolean,
   },
+  slots,
   setup(props, ctx) {
     const colorProvider = useVuiColorProvider();
     const invalid = computed(() => props.invalid);
@@ -42,18 +45,14 @@ export const VCheckable = defineComponent({
     return () => (
       <label class={['v-checkable', classes.value]}>
         <span class="v-checkable__faux">
-          {renderSlotOrEmpty(ctx.slots, 'input')}
+          {ctx.slots.input?.()}
           {ctx.slots.icon ? (
-            renderSlotOrEmpty(ctx.slots, 'icon')
+            ctx.slots.icon()
           ) : (
-            <span class="v-checkable__faux__icon">
-              {renderSlotOrEmpty(ctx.slots, 'faux')}
-            </span>
+            <span class="v-checkable__faux__icon">{ctx.slots.faux?.()}</span>
           )}
         </span>
-        <span class="v-checkable__label">
-          {renderSlotOrEmpty(ctx.slots, 'label')}
-        </span>
+        <span class="v-checkable__label">{ctx.slots.label?.()}</span>
       </label>
     );
   },

@@ -1,6 +1,5 @@
 import { defineComponent } from 'vue';
 import { useActionable } from '../actionable';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { actionableInheritProps } from '../schemes';
 
 export const VAction = defineComponent({
@@ -19,7 +18,7 @@ export const VAction = defineComponent({
       const { Tag, attrs } = actionable.value;
       return (
         <Tag {...attrs} class="v-action">
-          {renderSlotOrEmpty(ctx.slots)}
+          {ctx.slots.default?.()}
         </Tag>
       );
     };

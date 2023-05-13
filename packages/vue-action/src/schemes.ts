@@ -1,34 +1,119 @@
 import type { PropType, ExtractPropTypes, CSSProperties } from 'vue';
 import type { ButtonHTMLAttributes } from 'vue';
 import type { RouterLinkProps, RouteLocationRaw } from 'vue-router';
+import type {
+  PointableAttributesProps,
+  FocusableAttributesProps,
+} from '@fastkit/vue-utils';
 
-export interface ActionableInheritPropOptions {
+/** Attributes for actionable components */
+export interface ActionableAttrs {
+  /**
+   * User-level route location
+   * @see {@link RouteLocationRaw}
+   */
+  to?: RouteLocationRaw;
+  /**
+   * Calls `router.replace` instead of `router.push`.
+   * @see {@link RouterLinkProps.replace}
+   */
+  replace?: boolean;
+  /**
+   * Class to apply when the link is active
+   * @see {@link RouterLinkProps.activeClass}
+   */
+  activeClass?: string;
+  /**
+   * Class to apply when the link is exact active
+   * @see {@link RouterLinkProps.exactActiveClass}
+   */
+  exactActiveClass?: string;
+  /**
+   * Whether RouterLink should not wrap its content in an `a` tag. Useful when
+   * using `v-slot` to create a custom RouterLink
+   * @see {@link RouterLinkProps.custom}
+   */
+  custom?: boolean;
+  /**
+   * Value passed to the attribute `aria-current` when the link is exact active.
+   *
+   * @defaultValue `'page'`
+   * @see {@link RouterLinkProps.ariaCurrentValue}
+   */
+  ariaCurrentValue?: RouterLinkProps['ariaCurrentValue'];
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#attr-href
+   */
+  href?: string;
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#target
+   */
+  target?: string;
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#rel
+   */
+  rel?: string;
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Element/button#name
+   */
+  name?: string;
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#hreflang
+   */
+  hreflang?: string;
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#download
+   */
+  download?: boolean | string;
+  /**
+   * @see https://www.w3schools.com/tags/att_a_media.asp
+   */
+  media?: string;
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#ping
+   */
+  ping?: string;
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#referrerpolicy
+   */
+  referrerpolicy?: string;
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Element/button#type
+   */
+  type?: ButtonHTMLAttributes['type'];
+  /**
+   * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/title
+   */
+  title?: string;
+  /**
+   * disabled state
+   */
+  disabled?: boolean;
+}
+
+type ActionableAttrsRequired = Required<ActionableAttrs>;
+
+type ActionableAttrsProps = {
+  [Name in keyof ActionableAttrsRequired]: PropType<
+    ActionableAttrsRequired[Name]
+  >;
+};
+
+/** Component property options for actionable components */
+export interface ActionableInheritPropOptions
+  extends ActionableAttrsProps,
+    PointableAttributesProps,
+    FocusableAttributesProps {
+  /** tag name */
   tag: PropType<string>;
+  /** class name */
   class: PropType<any>;
+  /** style */
   style: PropType<CSSProperties>;
-  to: PropType<RouteLocationRaw>;
-  replace: PropType<boolean>;
-  activeClass: PropType<string>;
-  exactActiveClass: PropType<string>;
-  custom: PropType<boolean>;
-  ariaCurrentValue: {
-    type: PropType<RouterLinkProps['ariaCurrentValue']>;
-    default: 'page';
-  };
-  disabled: PropType<boolean>;
-  href: PropType<string>;
-  target: PropType<string>;
-  rel: PropType<string>;
-  name: PropType<string>;
-  charset: PropType<string>;
-  hreflang: PropType<string>;
-  download: PropType<boolean | string>;
-  media: PropType<string>;
-  ping: PropType<string>;
-  referrerpolicy: PropType<string>;
-  type: PropType<ButtonHTMLAttributes['type']>;
+  /**
+   * HTML tag name to be adopted if neither the `a` tag nor the `button` tag is resolved
+   */
   linkFallbackTag: PropType<string | (() => string | undefined)>;
-  onClick: PropType<(ev: MouseEvent) => any>;
 }
 
 export const actionableInheritProps: ActionableInheritPropOptions = {} as any;
@@ -37,37 +122,31 @@ export type ActionableInheritProps = ExtractPropTypes<
   typeof actionableInheritProps
 >;
 
+/** Actionable Tags */
 export type ActionableTag = any;
 
-export interface ActionableAttrs {
-  to?: RouteLocationRaw;
-  replace?: boolean;
-  activeClass?: string;
-  exactActiveClass?: string;
-  custom?: boolean;
-  ariaCurrentValue?: RouterLinkProps['ariaCurrentValue'];
-  href?: string;
-  target?: string;
-  rel?: string;
-  name?: string;
-  charset?: string;
-  hreflang?: string;
-  download?: boolean | string;
-  media?: string;
-  ping?: string;
-  referrerpolicy?: string;
-  type?: ButtonHTMLAttributes['type'];
-  disabled?: boolean;
-}
-
+/** Actionable context */
 export interface ActionableContext {
+  /** Actionable Tags */
   Tag: ActionableTag;
+  /** attributes */
   attrs: Record<string, unknown>;
+  /** clickable or not */
   clickable: boolean;
 }
 
+/** Actionable option */
 export interface UseActionableOptions {
+  /** Class name to be assigned when clickable */
   clickableClassName?: string | (() => string | undefined);
+  /**
+   * `RouterLink` Component
+   *
+   * This is set when you want to change the behavior with something like NuxtLink.
+   */
   RouterLink?: any;
+  /**
+   * HTML tag name to be adopted if neither the `a` tag nor the `button` tag is resolved
+   */
   linkFallbackTag?: string | (() => string | undefined);
 }

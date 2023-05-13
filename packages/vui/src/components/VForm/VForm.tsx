@@ -4,7 +4,7 @@ import {
   createFormSettings,
   useForm,
 } from '@fastkit/vue-form-control';
-import { defineSlotsProps, renderSlotOrEmpty } from '@fastkit/vue-utils';
+import { DefineSlotsType, defineSlots } from '@fastkit/vue-utils';
 import { getDocumentScroller } from '@fastkit/vue-scroller';
 import { createControlProps, useControl } from '../../composables';
 import { VUI_FORM_SYMBOL, useVui } from '../../injections';
@@ -13,15 +13,17 @@ const { props, emits } = createFormSettings({
   nodeType: VUI_FORM_SYMBOL,
 });
 
-export interface VFormSlots {
-  default: VueForm;
-}
+export type VFormSlots = DefineSlotsType<{
+  default?: (form: VueForm) => any;
+}>;
+
+export const formSlots = defineSlots<VFormSlots>();
 
 export function createVFormProps() {
   return {
     ...props,
     ...createControlProps(),
-    ...defineSlotsProps<VFormSlots>(),
+    ...formSlots(),
     // disableAutoScroll: Boolean,
   };
 }
@@ -30,6 +32,7 @@ export const VForm = defineComponent({
   name: 'VForm',
   props: createVFormProps(),
   emits,
+  slots: formSlots,
   setup(props, ctx) {
     const vui = useVui();
     const nodeControl = useForm(props, ctx as any, {
@@ -70,7 +73,7 @@ export const VForm = defineComponent({
         action={this.nativeAction}
         spellcheck={this.spellcheck}
         onSubmit={form.handleSubmit}>
-        {renderSlotOrEmpty(this.$slots, 'default', form as any)}
+        {this.$slots.default?.(form)}
       </form>
     );
   },

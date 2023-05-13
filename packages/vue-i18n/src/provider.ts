@@ -192,7 +192,7 @@ export type VueI18nComponentOption =
   | VueI18nInjectedComponent
   | VueI18nComponentOption[];
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface ComponentCustomOptions {
     /**
      * Provider of the subspace to be initialized when this root component is activated.

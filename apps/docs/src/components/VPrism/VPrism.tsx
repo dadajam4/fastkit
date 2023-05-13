@@ -1,7 +1,12 @@
 import { defineComponent } from 'vue';
-import { defineSlotsProps } from '@fastkit/vui';
+import { defineSlots } from '@fastkit/vui';
 import './VPrism.scss';
 import { useHighlighter } from './prism';
+
+const slots = defineSlots<{
+  default?: () => any;
+  appends?: (ctx: { code: string; el: () => HTMLElement }) => any;
+}>();
 
 export const VPrism = defineComponent({
   name: 'VPrism',
@@ -12,10 +17,9 @@ export const VPrism = defineComponent({
       type: String,
       default: 'markup',
     },
-    ...defineSlotsProps<{
-      appends: { code: string; el: () => HTMLElement };
-    }>(),
+    ...slots(),
   },
+  slots,
   setup(props, ctx) {
     const highlighter = useHighlighter(ctx);
 

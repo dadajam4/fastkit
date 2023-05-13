@@ -4,7 +4,6 @@ import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
 } from '@fastkit/vue-form-control';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { createControlProps, useControl } from '../../composables';
 import {
   VUI_CHECKBOX_GROUP_SYMBOL,
@@ -55,7 +54,7 @@ export const VCheckbox = defineComponent({
           input: () =>
             selectorItemControl.createInputElement({ type: 'checkbox' }),
           faux: () => <span class="v-checkbox__faux"></span>,
-          label: () => renderSlotOrEmpty(this.$slots, 'default'),
+          label: () => this.$slots.default?.(),
         }}
       />
     );

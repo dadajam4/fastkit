@@ -4,6 +4,7 @@ import {
   PropType,
   ComponentCustomOptions,
 } from 'vue';
+import type { defineSlots } from './slots';
 
 export type ExtractComponentPropTypes<
   C extends {
@@ -11,14 +12,19 @@ export type ExtractComponentPropTypes<
   },
 > = Parameters<NonNullable<C['setup']>>[0];
 
-export interface RawSlotsSettings {
+interface RawSlotsSettings {
   [key: string]: any;
 }
 
-export type ResolveRawSlots<R extends RawSlotsSettings> = {
+type ResolveRawSlots<R extends RawSlotsSettings> = {
   [K in keyof R]?: (prop: R[K]) => VNodeChild;
 };
 
+/**
+ * Define properties for slots for tsx support
+ *
+ * @deprecated This functionality has been moved to {@link defineSlots} with Vue 3.3 slots type support. It may be removed in the next minor version.
+ */
 export function defineSlotsProps<R extends RawSlotsSettings>() {
   return undefined as unknown as {
     'v-slots': PropType<ResolveRawSlots<R>>;

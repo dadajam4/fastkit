@@ -8,7 +8,7 @@ import {
   watch,
 } from 'vue';
 import { rawIconProp, resolveRawIconProp } from '../VIcon';
-import { renderSlotOrEmpty, createPropsOptions } from '@fastkit/vue-utils';
+import { createPropsOptions } from '@fastkit/vue-utils';
 import { actionableInheritProps, VAction } from '@fastkit/vue-action';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 import { useVui } from '../../injections';
@@ -108,9 +108,7 @@ export const VListTile = defineComponent({
               {_startIcon}
             </span>
           )}
-          <span class="v-list-tile__body">
-            {renderSlotOrEmpty(ctx.slots, 'default')}
-          </span>
+          <span class="v-list-tile__body">{ctx.slots.default?.()}</span>
           {_endIcon && (
             <span class="v-list-tile__icon v-list-tile__icon--end">
               {_endIcon}

@@ -1,26 +1,23 @@
 import './VPaper.scss';
 import { defineComponent, computed, PropType, VNodeProps } from 'vue';
 import { createElevationProps, useElevation } from '../../composables';
-import {
-  renderSlotOrEmpty,
-  defineSlotsProps,
-  htmlAttributesPropOptions,
-} from '@fastkit/vue-utils';
+import { renderSlotOrEmpty, defineSlots } from '@fastkit/vue-utils';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
+
+export const paperBaseSlots = defineSlots<{
+  header?: () => void;
+  default?: () => void;
+  footer?: () => void;
+}>();
 
 export function createPaperBaseProps() {
   return {
-    ...htmlAttributesPropOptions,
     color: String as PropType<ScopeName>,
     tag: {
       type: [String, Object] as PropType<any>,
       default: 'div',
     },
-    ...defineSlotsProps<{
-      header: void;
-      default: void;
-      footer: void;
-    }>(),
+    ...paperBaseSlots(),
   };
 }
 
@@ -42,6 +39,7 @@ export const VPaper = defineComponent({
   name: 'VPaper',
   inheritAttrs: false,
   props: createPaperProps(),
+  slots: paperBaseSlots,
   setup(props, ctx) {
     const tag = computed(() => props.tag);
     const elevation = useElevation(props, { defaultValue: 1 });
@@ -72,7 +70,7 @@ export const VPaper = defineComponent({
               </div>
             )}
             <div class="v-paper__body" {...bodyProps.value}>
-              {renderSlotOrEmpty(ctx.slots, 'default')}
+              {ctx.slots.default?.()}
             </div>
             {footer && (
               <div class="v-paper__footer" {...footerProps.value}>

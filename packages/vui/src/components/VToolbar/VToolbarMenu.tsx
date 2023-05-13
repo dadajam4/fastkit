@@ -1,6 +1,5 @@
 import './VToolbarMenu.scss';
 import { defineComponent } from 'vue';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { VButton, vueButtonProps } from '../VButton';
 import { useVui } from '../../injections';
 
@@ -23,7 +22,7 @@ export const VToolbarMenu = defineComponent({
       const variant = props.variant || plain;
       return (
         <VButton {...ctx.attrs} variant={variant} class={['v-toolbar-menu']}>
-          {renderSlotOrEmpty(ctx.slots)}
+          {ctx.slots.default?.()}
         </VButton>
       );
     };

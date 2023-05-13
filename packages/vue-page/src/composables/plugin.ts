@@ -1,7 +1,7 @@
 import { VuePageControl, VuePageControlSettings } from './page-control';
 import { VuePageControlInjectionKey } from '../injections';
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface ComponentCustomProperties {
     $vpc: VuePageControl;
   }

@@ -6,7 +6,7 @@ import {
   createFormControlProps,
   FormControlSlots,
 } from '@fastkit/vue-form-control';
-import { defineSlotsProps } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 import { VFormControl } from '../VFormControl';
 import {
   VControlField,
@@ -24,6 +24,8 @@ import { VUI_TEXTAREA_SYMBOL, useVui } from '../../injections';
 
 const { props, emits } = createTextareaSettings();
 
+const slots = defineSlots<FormControlSlots & InputBoxSlots>();
+
 export const VTextarea = defineComponent({
   name: 'VTextarea',
   props: {
@@ -32,7 +34,7 @@ export const VTextarea = defineComponent({
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),
-    ...defineSlotsProps<FormControlSlots & InputBoxSlots>(),
+    ...slots(),
   },
   emits,
   setup(props, ctx) {

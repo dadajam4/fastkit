@@ -1,12 +1,13 @@
 import './VDrawerLayout.scss';
 import { defineComponent, computed } from 'vue';
-import { createPaperBaseProps, VPaper } from '../VPaper';
+import { createPaperBaseProps, paperBaseSlots, VPaper } from '../VPaper';
 
 export const VDrawerLayout = defineComponent({
   name: 'VDrawerLayout',
   props: {
     ...createPaperBaseProps(),
   },
+  slots: paperBaseSlots,
   setup(props, ctx) {
     return () => {
       const paperProps = computed(() => ({
