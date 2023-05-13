@@ -1,5 +1,37 @@
 # @fastkit/vui
 
+## 0.14.0
+
+### Minor Changes
+
+- [#39](https://github.com/dadajam4/fastkit/pull/39) [`40ee82f`](https://github.com/dadajam4/fastkit/commit/40ee82f4501b88e44ad9b67918df2237298493a0) Thanks [@dadajam4](https://github.com/dadajam4)! - Updated Vue to improve type support for slots, etc.
+  This improvement is based on the following Vue.js 3.3 release
+
+  https://blog.vuejs.org/posts/vue-3-3
+
+### Patch Changes
+
+- Updated dependencies [[`40ee82f`](https://github.com/dadajam4/fastkit/commit/40ee82f4501b88e44ad9b67918df2237298493a0), [`40ee82f`](https://github.com/dadajam4/fastkit/commit/40ee82f4501b88e44ad9b67918df2237298493a0)]:
+  - @fastkit/vue-form-control@0.14.0
+  - @fastkit/vue-app-layout@0.14.0
+  - @fastkit/vue-scroller@0.14.0
+  - @fastkit/vue-loading@0.14.0
+  - @fastkit/vue-action@0.2.0
+  - @fastkit/vue-stack@0.14.0
+  - @fastkit/vue-utils@0.14.0
+  - @fastkit/color-scheme-gen@0.13.6
+  - @fastkit/vue-color-scheme@0.13.6
+  - @fastkit/vue-body-scroll-lock@0.1.2
+  - @fastkit/vue-click-outside@0.1.2
+  - @fastkit/vue-location@0.1.2
+  - @fastkit/vue-resize@0.1.2
+  - @fastkit/vue-transitions@0.1.2
+  - @fastkit/media-match-gen@0.13.6
+  - @fastkit/color-scheme@1.0.6
+  - @fastkit/icon-font@1.0.5
+  - @fastkit/media-match@1.0.5
+  - @fastkit/vue-media-match@0.13.6
+
 ## 0.13.6
 
 ### Patch Changes
