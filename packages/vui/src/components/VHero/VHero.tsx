@@ -1,6 +1,6 @@
 import './VHero.scss';
 import { defineComponent, PropType } from 'vue';
-import { htmlAttributesPropOptions, defineSlots } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 import { toScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 import { VAppContainer } from '@fastkit/vue-app-layout';
 
@@ -12,7 +12,6 @@ const slots = defineSlots<{
 export const VHero = defineComponent({
   name: 'VHero',
   props: {
-    ...htmlAttributesPropOptions,
     color: {
       type: String as PropType<ScopeName>,
       default: 'primary',

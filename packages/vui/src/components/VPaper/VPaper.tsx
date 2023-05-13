@@ -1,11 +1,7 @@
 import './VPaper.scss';
 import { defineComponent, computed, PropType, VNodeProps } from 'vue';
 import { createElevationProps, useElevation } from '../../composables';
-import {
-  renderSlotOrEmpty,
-  defineSlots,
-  htmlAttributesPropOptions,
-} from '@fastkit/vue-utils';
+import { renderSlotOrEmpty, defineSlots } from '@fastkit/vue-utils';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 
 export const paperBaseSlots = defineSlots<{
@@ -16,7 +12,6 @@ export const paperBaseSlots = defineSlots<{
 
 export function createPaperBaseProps() {
   return {
-    ...htmlAttributesPropOptions,
     color: String as PropType<ScopeName>,
     tag: {
       type: [String, Object] as PropType<any>,

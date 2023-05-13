@@ -1,7 +1,6 @@
 import './VGridContainer.scss';
 
 import { defineComponent, computed } from 'vue';
-import { htmlAttributesPropOptions } from '@fastkit/vue-utils';
 import { RawGridValueProp, extractRawGridValueClasses } from './schemes';
 
 export type GridContainerSpacingValue =
@@ -66,7 +65,6 @@ export const VGridContainer = defineComponent({
   name: 'VGridContainer',
   inheritAttrs: false,
   props: {
-    ...htmlAttributesPropOptions,
     wrapperTag: {
       type: String,
       default: 'div',

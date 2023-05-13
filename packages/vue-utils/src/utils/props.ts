@@ -1,6 +1,6 @@
 import { PropType, Prop, ComponentPropsOptions } from 'vue';
 
-import { HTMLAttributes } from 'vue';
+import type { HTMLAttributes } from 'vue';
 
 export const rawNumberPropType = [String, Number] as PropType<string | number>;
 
@@ -124,9 +124,80 @@ export function resolveNumberish<
   return typeof source === 'number' ? source : Number(source);
 }
 
-export type HTMLAttributesPropOptions = {
-  [K in keyof HTMLAttributes]-?: PropType<HTMLAttributes[K]>;
+type HTMLAttributeName = keyof HTMLAttributes;
+
+export type HTMLAttributesPropOptions<
+  Names extends HTMLAttributeName = HTMLAttributeName,
+> = {
+  [K in Names]-?: PropType<HTMLAttributes[K]>;
 };
 
-export const htmlAttributesPropOptions =
-  undefined as unknown as HTMLAttributesPropOptions;
+const _mock: unknown = undefined;
+
+/**
+ * Focusable Element Events
+ */
+export const FOCUSABLE_ATTRIBUTES_PROPS = _mock as HTMLAttributesPropOptions<
+  'tabindex' | 'onFocus' | 'onFocusin' | 'onFocusout' | 'onBlur'
+>;
+
+/**
+ * Focusable Element Events
+ * @see {@link FOCUSABLE_ATTRIBUTES_PROPS}
+ */
+export type FocusableAttributesProps = typeof FOCUSABLE_ATTRIBUTES_PROPS;
+
+/**
+ * Keyboard Operable Element Events
+ */
+export const KEYBOARDABLE_ATTRIBUTES_PROPS = _mock as HTMLAttributesPropOptions<
+  'onKeydown' | 'onKeypress' | 'onKeyup'
+>;
+
+/**
+ * Keyboard Operable Element Events
+ * @see {@link KEYBOARDABLE_ATTRIBUTES_PROPS}
+ */
+export type KeyboardableAttributesProps = typeof KEYBOARDABLE_ATTRIBUTES_PROPS;
+
+/**
+ * Pointer Operable Element Events
+ */
+export const POINTABLE_ATTRIBUTES_PROPS = _mock as HTMLAttributesPropOptions<
+  | 'onAuxclick'
+  | 'onClick'
+  | 'onContextmenu'
+  | 'onDblclick'
+  | 'onMousedown'
+  | 'onMouseenter'
+  | 'onMouseleave'
+  | 'onMousemove'
+  | 'onMouseout'
+  | 'onMouseover'
+  | 'onMouseup'
+  | 'onTouchcancel'
+  | 'onTouchend'
+  | 'onTouchmove'
+  | 'onTouchstart'
+  | 'onPointerdown'
+  | 'onPointermove'
+  | 'onPointerup'
+  | 'onPointercancel'
+  | 'onPointerenter'
+  | 'onPointerleave'
+  | 'onPointerover'
+  | 'onPointerout'
+>;
+
+/**
+ * Pointer Operable Element Events
+ * @see {@link POINTABLE_ATTRIBUTES_PROPS}
+ */
+export type PointableAttributesProps = typeof POINTABLE_ATTRIBUTES_PROPS;
+
+/**
+ * Events held by HTML elements
+ *
+ * @deprecated - This symbol may be removed in the next minor version; consider using {@link HTMLAttributesPropOptions} to define only the necessary events.
+ */
+export const htmlAttributesPropOptions = _mock as HTMLAttributesPropOptions;
