@@ -16,7 +16,7 @@ import {
   FormSelectorItemControl,
 } from '@fastkit/vue-form-control';
 import {
-  defineSlotsProps,
+  defineSlots,
   createPropsOptions,
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
@@ -53,6 +53,16 @@ export const KEYBORD_EVENT_TYPES = useKeyboard.Key([
 
 const { props, emits } = createFormSelectorSettings();
 
+const slots = defineSlots<
+  FormControlSlots &
+    InputBoxSlots & {
+      selection?: (ctx: {
+        item: FormSelectorItemControl;
+        index: number;
+      }) => any;
+    }
+>();
+
 export const VSelect = defineComponent({
   name: 'VSelect',
   props: {
@@ -61,12 +71,7 @@ export const VSelect = defineComponent({
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),
-    ...defineSlotsProps<
-      FormControlSlots &
-        InputBoxSlots & {
-          selection: { item: FormSelectorItemControl; index: number };
-        }
-    >(),
+    ...slots(),
     ...createPropsOptions({
       placeholder: String,
       loadingMessage: {} as PropType<VNodeChildOrSlot>,
@@ -74,6 +79,7 @@ export const VSelect = defineComponent({
     }),
     closeOnNavigation: Boolean,
   },
+  slots,
   emits,
   setup(props, ctx) {
     const menuRef: Ref<{ stackMenuControl: VMenuControl } | null> = ref(null);
@@ -282,7 +288,7 @@ export const VSelect = defineComponent({
   },
   render() {
     const { nodeControl, selectorControl, selectorItems, selectedItems } = this;
-    const children = (this.$slots.default && this.$slots.default()) || [];
+    const children = this.$slots.default?.() || [];
     const propGroups = this.propGroups.map((group) => {
       return (
         <VOptionGroup

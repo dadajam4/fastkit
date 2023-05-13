@@ -1,6 +1,5 @@
 import './VToolbar.scss';
 import { defineComponent, computed } from 'vue';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
 import { createElevationProps, useElevation } from '../../composables';
 import { useVui } from '../../injections';
@@ -35,9 +34,7 @@ export const VToolbar = defineComponent({
 
     return () => {
       return (
-        <div class={['v-toolbar', classes.value]}>
-          {renderSlotOrEmpty(ctx.slots, 'default')}
-        </div>
+        <div class={['v-toolbar', classes.value]}>{ctx.slots.default?.()}</div>
       );
     };
   },

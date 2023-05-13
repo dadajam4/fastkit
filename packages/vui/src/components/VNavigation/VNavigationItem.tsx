@@ -10,7 +10,7 @@ import {
   watch,
 } from 'vue';
 import { createListTileProps, listTileEmits, VListTile } from '../VListTile';
-import { ExtractPropInput, renderSlotOrEmpty } from '@fastkit/vue-utils';
+import { ExtractPropInput } from '@fastkit/vue-utils';
 import { VExpandTransition } from '@fastkit/vue-transitions';
 import { useVui } from '../../injections';
 import { useRoute } from 'vue-router';
@@ -259,7 +259,7 @@ export const VNavigationItem = defineComponent({
             class={['v-navigation-item', classes.value]}
             onClick={onClick}
             onChangeActive={onChangeActive}>
-            {renderSlotOrEmpty(ctx.slots, 'default')}
+            {ctx.slots.default?.()}
           </VListTile>
           {_children && (
             <VExpandTransition>

@@ -4,7 +4,6 @@ import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
 } from '@fastkit/vue-form-control';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { createControlProps, useControl } from '../../composables';
 import { VUI_SELECT_SYMBOL, VUI_OPTION_SYMBOL } from '../../injections';
 
@@ -50,9 +49,7 @@ export const VOption = defineComponent({
         {...({
           'aria-disabled': selectorItemControl.isDisabled,
         } as any)}>
-        <span class="v-option__label">
-          {renderSlotOrEmpty(this.$slots, 'default')}
-        </span>
+        <span class="v-option__label">{this.$slots.default?.()}</span>
       </label>
     );
   },

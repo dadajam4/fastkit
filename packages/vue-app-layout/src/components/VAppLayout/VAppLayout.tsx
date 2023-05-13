@@ -1,6 +1,6 @@
 import * as styles from './VAppLayout.css';
 import { defineComponent, onBeforeUnmount } from 'vue';
-import { defineSlotsProps } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 import { VueAppLayout } from '../../controls';
 import {
   VAL_POSITIONS,
@@ -13,13 +13,16 @@ import { hasParentLayout, provideLayout } from './injections';
 import { VAL_BOTTOM_ID } from '../../constants';
 import { useRouter } from 'vue-router';
 
+const slots = defineSlots<{
+  default?: (layout: VueAppLayout) => any;
+}>();
+
 export const VAppLayout = defineComponent({
   name: 'VAppLayout',
   props: {
-    ...defineSlotsProps<{
-      default: VueAppLayout;
-    }>(),
+    ...slots(),
   },
+  slots,
   setup(props, ctx) {
     const layout = VueAppLayout.use();
 

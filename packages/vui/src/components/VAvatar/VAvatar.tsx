@@ -1,6 +1,5 @@
 import './VAvatar.scss';
 import { defineComponent, computed, PropType } from 'vue';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { actionableInheritProps, useActionable } from '@fastkit/vue-action';
 import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
 import { useVui } from '../../injections';
@@ -75,7 +74,7 @@ export const VAvatar = defineComponent({
           class={['v-avatar', classes.value, color.colorClasses.value]}
           style={styles.value}>
           {(!!src && <VBusyImage class="v-avatar__image" src={src} cover />) ||
-            renderSlotOrEmpty(ctx.slots)}
+            ctx.slots.default?.()}
         </Tag>
       );
     };

@@ -10,7 +10,6 @@ import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
 import {
   ExtractPropInput,
   createPropsOptions,
-  renderSlotOrEmpty,
   htmlAttributesPropOptions,
 } from '@fastkit/vue-utils';
 import { VAction, actionableInheritProps } from '@fastkit/vue-action';
@@ -136,12 +135,11 @@ export const VButton = defineComponent({
     ]);
 
     return () => {
-      const children = renderSlotOrEmpty(ctx.slots);
       return (
         <VAction {...ctx.attrs} class={['v-button', classes.value]}>
           <span class="v-button__content">
             {startIcon.value}
-            {children}
+            {ctx.slots.default?.()}
             {icon.value}
             {endIcon.value}
           </span>

@@ -8,7 +8,6 @@ import {
 } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
 import { RawIconProp, resolveRawIconProp } from '../VIcon';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { RouterLink } from 'vue-router';
 
 export interface VTabExpose {
@@ -54,7 +53,7 @@ export const VTab = defineComponent({
             resolveRawIconProp(active, icon, {
               class: 'v-tab__icon',
             })}
-          {renderSlotOrEmpty(ctx.slots)}
+          {ctx.slots.default?.()}
         </span>
       );
 

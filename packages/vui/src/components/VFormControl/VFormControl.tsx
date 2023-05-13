@@ -7,7 +7,7 @@ import {
   FormControl,
   RequiredChipSource,
 } from '@fastkit/vue-form-control';
-import { defineSlotsProps, renderSlotOrEmpty } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 import { useVuiColorProvider, useVui } from '../../injections';
 import type { VuiService } from '../../service';
 import { VIcon } from '../VIcon';
@@ -41,17 +41,20 @@ export function createRequiredChipRenderer(
   };
 }
 
+const slots = defineSlots<
+  FormControlSlots & {
+    default?: (form: FormControl) => any;
+  }
+>();
+
 export const VFormControl = defineComponent({
   name: 'VFormControl',
   props: {
     ...props,
-    ...defineSlotsProps<
-      FormControlSlots & {
-        default: FormControl;
-      }
-    >(),
+    ...slots(),
     error: Boolean,
   },
+  slots,
   emits,
   setup(props, ctx) {
     const vui = useVui();
@@ -152,7 +155,7 @@ export const VFormControl = defineComponent({
             </label>
           )}
           <div class="v-form-control__body">
-            {renderSlotOrEmpty(ctx.slots, 'default', control as any)}
+            {ctx.slots.default?.(control)}
             {!props.hiddenInfo && (
               <div class="v-form-control__info">
                 {!!message && (

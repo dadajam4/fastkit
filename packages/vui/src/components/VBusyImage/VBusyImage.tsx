@@ -14,7 +14,7 @@ import {
 } from 'vue';
 import { IN_WINDOW } from '@fastkit/helpers';
 import { loadImage } from '@fastkit/dom';
-import { defineSlotsProps } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 
 export declare type ImgHTMLAttributesPropOptions = {
   [K in keyof ImgHTMLAttributes]-?: PropType<ImgHTMLAttributes[K]>;
@@ -75,6 +75,10 @@ export interface BusyImageRects {
   main: BusyImageRect;
 }
 
+const slots = defineSlots<{
+  default?: () => any;
+}>();
+
 /**
  * 画像表示用コンポーネント
  * <img /> タグのように振る舞うが、ローディング表示や、表示サイズの調整など、ちょっといい感じにやるためのコンポーネント
@@ -87,14 +91,13 @@ export const VBusyImage = defineComponent({
     width: NUMBERISH_PROP,
     height: NUMBERISH_PROP,
     cover: Boolean,
-    ...defineSlotsProps<{
-      default: void;
-    }>(),
+    ...slots(),
   },
   emits: {
     load: (ev: Event) => true,
     error: (ev: Event) => true,
   },
+  slots,
   setup(props, ctx) {
     const loadStateRef = ref<BusyImageLoadState>(
       props.cover && isAvailableSrc(ctx.attrs.src as any)
@@ -245,7 +248,7 @@ export const VBusyImage = defineComponent({
     return () => {
       const { el: elAttrs, img: imgAttrs } = attrsRef.value;
       const styles = stylesRef.value;
-      const children = ctx.slots.default && ctx.slots.default();
+      const children = ctx.slots.default?.();
 
       return (
         <span

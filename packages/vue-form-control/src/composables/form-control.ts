@@ -13,6 +13,7 @@ import {
   resolveVNodeChildOrSlots,
   TypedSlot,
   cleanupEmptyVNodeChild,
+  DefineSlotsType,
 } from '@fastkit/vue-utils';
 import { FormNodeControl, FormNodeError } from './node';
 
@@ -75,11 +76,11 @@ export function createFormControlSettings() {
 
 export type FormControlContext = SetupContext<FormControlEmitOptions>;
 
-export interface FormControlSlots {
-  label: FormControl;
-  hint: FormControl;
-  infoAppends: FormControl;
-}
+export type FormControlSlots = DefineSlotsType<{
+  label?: (form: FormControl) => any;
+  hint?: (form: FormControl) => any;
+  infoAppends?: (form: FormControl) => any;
+}>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormControlOptions {

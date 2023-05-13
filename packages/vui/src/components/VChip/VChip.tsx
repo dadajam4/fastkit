@@ -1,6 +1,5 @@
 import './VChip.scss';
 import { defineComponent, computed, PropType, VNodeChild } from 'vue';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 import { actionableInheritProps, useActionable } from '@fastkit/vue-action';
 import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
 import { useVui } from '../../injections';
@@ -95,7 +94,7 @@ export const VChip = defineComponent({
           {...attrs}
           class={['v-chip', classes.value, color.colorClasses.value]}>
           {startIcon.value}
-          <span class="v-chip__content">{renderSlotOrEmpty(ctx.slots)}</span>
+          <span class="v-chip__content">{ctx.slots.default?.()}</span>
           {endIcon.value}
         </Tag>
       );

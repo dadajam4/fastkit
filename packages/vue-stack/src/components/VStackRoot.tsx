@@ -13,7 +13,6 @@ import { useVueStack } from '../composables';
 import { VStackControl } from '../schemes/control';
 import { normalizeVStackDynamicChildren } from '../schemes/dynamic';
 import { VStackRootInjectKey } from '../injections';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 
 export interface VStackRootControl {
   root: Ref<HTMLElement | null>;
@@ -21,7 +20,7 @@ export interface VStackRootControl {
 
 export const VStackRoot = defineComponent({
   name: 'VStackRoot',
-  setup(props, ctx) {
+  setup(_props, ctx) {
     const $vstack = useVueStack();
     const rootRef = ref<HTMLElement | null>(null);
     const booted = ref(false);
@@ -43,12 +42,6 @@ export const VStackRoot = defineComponent({
       },
       booted,
     };
-    // return () => (
-    //   <div class="v-stack-root" ref={root}>
-    //     {defaultSlot && defaultSlot()}
-    //     {$dynamicStacks}
-    //   </div>
-    // );
   },
   render() {
     const { settings, $slots } = this;
@@ -65,9 +58,6 @@ export const VStackRoot = defineComponent({
               key,
             },
             $children,
-            // {
-            //   default: $children,
-            // },
           ),
           {
             onClose: (control: VStackControl) => {
@@ -84,7 +74,7 @@ export const VStackRoot = defineComponent({
 
     return (
       <div class="v-stack-root" ref={this.rootRef()}>
-        {renderSlotOrEmpty($slots, 'default')}
+        {$slots.default?.()}
         {$dynamicStacks}
       </div>
     );

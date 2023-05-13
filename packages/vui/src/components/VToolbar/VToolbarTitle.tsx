@@ -1,6 +1,10 @@
 import './VToolbarTitle.scss';
 import { defineComponent, computed } from 'vue';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
+
+const slots = defineSlots<{
+  default?: () => any;
+}>();
 
 export const VToolbarTitle = defineComponent({
   name: 'VToolbarTitle',
@@ -9,17 +13,15 @@ export const VToolbarTitle = defineComponent({
       type: String,
       default: 'span',
     },
+    ...slots(),
   },
+  slots,
   setup(props, ctx) {
     const _TagName = computed(() => props.tag);
     return () => {
       const TagName = _TagName.value as 'span';
 
-      return (
-        <TagName class="v-toolbar-title">
-          {renderSlotOrEmpty(ctx.slots, 'default')}
-        </TagName>
-      );
+      return <TagName class="v-toolbar-title">{ctx.slots.default?.()}</TagName>;
     };
   },
 });

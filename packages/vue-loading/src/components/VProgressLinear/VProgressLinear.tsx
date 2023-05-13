@@ -205,28 +205,6 @@ export const VProgressLinear = defineComponent({
           {[background, bar, content]}
         </div>
       );
-      // const info = h(
-      //   'span',
-      //   { class: 'v-progress-circular__info' },
-      //   renderSlotOrEmpty(ctx.slots, 'default'),
-      // );
-
-      // const svg = genSvg();
-
-      // return (
-      //   <span
-      //     class={['v-progress-circular', classes.value]}
-      //     style={styles.value}
-      //     role="progressbar"
-      //     aria-valuemin="0"
-      //     aria-valuemax="100"
-      //     aria-valuenow={
-      //       indeterminate.value ? undefined : normalizedValue.value
-      //     }>
-      //     {svg}
-      //     {info}
-      //   </span>
-      // );
     };
   },
 });

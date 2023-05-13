@@ -10,7 +10,6 @@ import {
 } from 'vue';
 import { getDocumentScroller } from '@fastkit/vue-scroller';
 import { VTabsItem } from '../VTabs/VTabs';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 
 export interface ContentSwitcherSeeTopOptions {
   /**
@@ -116,7 +115,7 @@ export const VContentSwitcher = defineComponent({
 
     return () => {
       const current = currentRef.value;
-      const children = renderSlotOrEmpty(ctx.slots) || [];
+      const children = ctx.slots.default?.() || [];
       const currentSlot = ctx.slots[current];
 
       if (currentSlot) {

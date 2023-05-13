@@ -7,7 +7,7 @@ import {
   FormControlSlots,
   TextInputEmits,
 } from '@fastkit/vue-form-control';
-import { defineSlotsProps } from '@fastkit/vue-utils';
+import { defineSlots, ExtractPropInput } from '@fastkit/vue-utils';
 import { VFormControl } from '../VFormControl';
 import {
   VControlField,
@@ -22,9 +22,10 @@ import {
 } from '../../composables';
 import { VTextCounter } from '../VTextCounter';
 import { VUI_TEXT_FIELD_SYMBOL } from '../../injections';
-import { ExtractPropInput } from '@fastkit/vue-utils';
 
 const { props, emits } = createTextInputSettings();
+
+const slots = defineSlots<FormControlSlots & InputBoxSlots>();
 
 function createTextFieldProps() {
   return {
@@ -33,7 +34,7 @@ function createTextFieldProps() {
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),
-    ...defineSlotsProps<FormControlSlots & InputBoxSlots>(),
+    ...slots(),
   };
 }
 
@@ -49,6 +50,7 @@ export const VTextField = defineComponent({
   name: 'VTextField',
   props: createTextFieldProps(),
   emits,
+  slots,
   setup(props, ctx) {
     const inputControl = useTextInputControl(props, ctx, {
       nodeType: VUI_TEXT_FIELD_SYMBOL,

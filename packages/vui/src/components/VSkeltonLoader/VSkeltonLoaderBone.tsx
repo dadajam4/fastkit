@@ -1,7 +1,6 @@
 import './VSkeltonLoaderBone.scss';
 
 import { defineComponent } from 'vue';
-import { renderSlotOrEmpty } from '@fastkit/vue-utils';
 
 export const VSkeltonLoaderBone = defineComponent({
   name: 'VSkeltonLoaderBone',
@@ -17,7 +16,7 @@ export const VSkeltonLoaderBone = defineComponent({
       const TagName = props.tag as 'div';
       return (
         <TagName {...ctx.attrs} class="v-skelton-loader-bone">
-          {renderSlotOrEmpty(ctx.slots)}
+          {ctx.slots.default?.()}
         </TagName>
       );
     };

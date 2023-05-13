@@ -10,9 +10,8 @@ import {
   FormNodeControl,
 } from '@fastkit/vue-form-control';
 import {
-  defineSlotsProps,
+  defineSlots,
   TypedSlot,
-  renderSlotOrEmpty,
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
 } from '@fastkit/vue-utils';
@@ -40,6 +39,12 @@ export interface DefineFormSelectorComponentOptions {
   }) => VNodeChild;
 }
 
+const slots = defineSlots<
+  FormControlSlots & {
+    default?: () => any;
+  }
+>();
+
 export function defineFormSelectorComponent(
   opts: DefineFormSelectorComponentOptions,
 ) {
@@ -62,8 +67,9 @@ export function defineFormSelectorComponent(
       loadingMessage: {} as PropType<VNodeChildOrSlot>,
       // eslint-disable-next-line vue/require-prop-types
       failedToLoadItemsMessage: {} as PropType<VNodeChildOrSlot>,
-      ...defineSlotsProps<FormControlSlots>(),
+      ...slots(),
     },
+    slots,
     emits,
     setup(props, ctx) {
       const selectorControl = useFormSelectorControl(props, ctx, {
@@ -161,7 +167,7 @@ export function defineFormSelectorComponent(
                     </>
                   );
                 })}
-                {renderSlotOrEmpty(this.$slots, 'default')}
+                {this.$slots.default?.()}
               </div>
             ),
           }}

@@ -6,12 +6,16 @@ import {
   FormSelectorItemGroupControl,
 } from '@fastkit/vue-form-control';
 import {
-  defineSlotsProps,
+  defineSlots,
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
-  renderSlotOrEmpty,
 } from '@fastkit/vue-utils';
 import { VUI_SELECT_SYMBOL } from '../../injections';
+
+const slots = defineSlots<{
+  label?: (control: FormSelectorItemGroupControl) => any;
+  default?: () => any;
+}>();
 
 export const VOptionGroup = defineComponent({
   name: 'VOptionGroup',
@@ -19,10 +23,9 @@ export const VOptionGroup = defineComponent({
     ...createFormSelectorItemGroupProps(),
     // eslint-disable-next-line vue/require-prop-types
     label: {} as PropType<VNodeChildOrSlot<FormSelectorItemGroupControl>>,
-    ...defineSlotsProps<{
-      label: FormSelectorItemGroupControl;
-    }>(),
+    ...slots(),
   },
+  slots,
   setup(props, ctx) {
     const groupControl = useFormSelectorItemGroupControl(props, ctx, {
       parentNodeType: VUI_SELECT_SYMBOL,
@@ -50,7 +53,7 @@ export const VOptionGroup = defineComponent({
     return (
       <div class={classes}>
         {!!label && <div class="v-option-group__label">{label}</div>}
-        {renderSlotOrEmpty(this.$slots, 'default')}
+        {this.$slots.default?.()}
       </div>
     );
   },

@@ -13,7 +13,7 @@ import {
 import { RawIconProp } from '../VIcon';
 import { VuiService } from '../../service';
 import { useVui } from '../../injections';
-import { defineSlotsProps } from '@fastkit/vue-utils';
+import { defineSlots } from '@fastkit/vue-utils';
 import { RouteLocationRaw, RouteLocation } from 'vue-router';
 import { VTab, VTabRef } from './VTab';
 import {
@@ -44,6 +44,10 @@ export interface VTabsItem {
   icon?: RawIconProp;
   label?: VNodeChild | VTabsItemLabelSlot;
 }
+
+const slots = defineSlots<{
+  item?: (ctx: VTabsItemLabelSlotCtx) => any;
+}>();
 
 export const VTabs = defineComponent({
   name: 'VTabs',
@@ -76,17 +80,15 @@ export const VTabs = defineComponent({
      * タブのURLが /page1?tab=xxx のようになる時に設定する
      */
     withQuery: Boolean,
-    ...defineSlotsProps<{
-      item: VTabsItemLabelSlotCtx;
-    }>(),
-
     color: String as PropType<ScopeName>,
     onBeforeChange: Function as PropType<VTabsGuard>,
+    ...slots(),
   },
   emits: {
     'update:modelValue': (newValue: string) => true,
     change: (newValue: string) => true,
   },
+  slots,
   setup(props, ctx) {
     const vui = useVui();
 
@@ -296,7 +298,7 @@ export const VTabs = defineComponent({
 
     return () => {
       const items = computedItemsRef.value;
-      const itemSlot = ctx.slots.item as VTabsItemLabelSlot | undefined;
+      const itemSlot = ctx.slots.item;
       const children = items.map(({ value, active, label, icon, location }) => {
         if (!label) {
           label = itemSlot;

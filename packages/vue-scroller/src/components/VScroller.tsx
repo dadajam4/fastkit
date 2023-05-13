@@ -13,7 +13,7 @@ import {
   UseScrollerSetting,
   ScrollerControl,
 } from '../composables';
-import { ExtractPropInput, renderSlotOrEmpty } from '@fastkit/vue-utils';
+import { ExtractPropInput } from '@fastkit/vue-utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VScrollerSettings extends UseScrollerSetting {}
@@ -116,7 +116,7 @@ export const VScroller = defineComponent({
           <div
             class={['v-scroller__container', containerClass]}
             ref={scroller.elementRef}>
-            {renderSlotOrEmpty(ctx.slots, 'default')}
+            {ctx.slots.default?.()}
           </div>
           {$guides}
         </div>
