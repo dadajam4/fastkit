@@ -92,8 +92,8 @@
     "http-proxy": "^1.18.1",
     "vite": "^4.3.5",
     "vite-plugin-pages": "^0.29.0",
-    "vue": "^3.2.0",
-    "vue-router": "^4.1.0"
+    "vue": "^3.3.0",
+    "vue-router": "^4.2.0"
   },
   "buildOptions": {
     "name": "Vot",

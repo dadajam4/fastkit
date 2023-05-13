@@ -58,11 +58,11 @@
   },
   "devDependencies": {
     "@vueuse/head": "^1.1.26",
-    "vue": "^3.2.0"
+    "vue": "^3.3.0"
   },
   "peerDependencies": {
     "@vueuse/head": "^1.1.0",
-    "vue": "^3.2.0"
+    "vue": "^3.3.0"
   },
   "buildOptions": {
     "name": "VueColorScheme"

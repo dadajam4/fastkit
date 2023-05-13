@@ -60,10 +60,10 @@
     "@fastkit/vue-utils": "workspace:*"
   },
   "devDependencies": {
-    "vue": "^3.2.0"
+    "vue": "^3.3.0"
   },
   "peerDependencies": {
-    "vue": "^3.2.0"
+    "vue": "^3.3.0"
   },
   "buildOptions": {
     "name": "VueScroller"
