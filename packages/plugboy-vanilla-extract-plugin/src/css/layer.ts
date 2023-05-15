@@ -11,6 +11,12 @@ import { createGlobalTheme } from './theme';
 
 type LayerStyleRules = NonNullable<StyleRule['@layer']>[string];
 
+type ClassNames = string | Array<ClassNames>;
+
+type ComplexLayerStyleRule =
+  | LayerStyleRules
+  | Array<LayerStyleRules | ClassNames>;
+
 type LayerGlobalStyleRules = NonNullable<GlobalStyleRule['@layer']>[string];
 
 export interface LayerStyle {
@@ -19,12 +25,12 @@ export interface LayerStyle {
   /**
    * @see {@link style}
    */
-  (rule: LayerStyleRules, debugId?: string): string;
+  (rule: ComplexLayerStyleRule, debugId?: string): string;
 
   /**
    * @see {@link style}
    */
-  style(rule: LayerStyleRules, debugId?: string): string;
+  style(rule: ComplexLayerStyleRule, debugId?: string): string;
 
   /**
    * @see {@link globalStyle}
@@ -106,14 +112,16 @@ export function defineLayerStyle(
     : layer({ parent }, options.debugId);
 
   const layerStyle: LayerStyle = function layerStyle(rule, debugId) {
-    return style(
-      {
+    const rules = Array.isArray(rule) ? rule : [rule];
+    const layerAppliedRules = rules.map((rule) => {
+      if (typeof rule === 'string' || Array.isArray(rule)) return rule;
+      return {
         '@layer': {
           [layerName]: rule,
         },
-      },
-      debugId,
-    );
+      };
+    });
+    return style(layerAppliedRules, debugId);
   };
 
   layerStyle.layerName = layerName;
