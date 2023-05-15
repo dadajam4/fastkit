@@ -1,5 +1,13 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 1.0.7
+
+### Patch Changes
+
+- [#41](https://github.com/dadajam4/fastkit/pull/41) [`094e94d`](https://github.com/dadajam4/fastkit/commit/094e94d808725b6f1b58a279cdb635abf0371a50) Thanks [@dadajam4](https://github.com/dadajam4)! - Style Composition is now supported.
+
+  https://vanilla-extract.style/documentation/api/style/#style-composition
+
 ## 1.0.6
 
 ### Patch Changes
