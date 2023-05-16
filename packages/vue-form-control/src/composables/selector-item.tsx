@@ -133,12 +133,11 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
       modelValue: Boolean,
     });
 
-    // ctx.slots
-
     (
       [
         '_get',
         '_valueChangeHandler',
+        'handleChange',
         'handleClickInputElement',
         'handleClickElement',
       ] as const
@@ -215,7 +214,23 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
   }
 
   protected _valueChangeHandler(value: boolean) {
-    this._parentSelector && this._parentSelector._itemValueChangeHandler(this);
+    if (this._parentSelector) {
+      this._parentSelector &&
+        this._parentSelector._itemValueChangeHandler(this);
+    } else {
+      if (value && !this.multiple && this.currentEl && this.name) {
+        const query = `input[name="${this.name}"]`;
+        const myInput = this.currentEl.querySelector(query);
+        if (!myInput) return;
+        const siblings: NodeListOf<HTMLInputElement> =
+          document.querySelectorAll(query);
+        siblings.forEach((sibling) => {
+          if (sibling === myInput) return;
+          sibling.checked = false;
+          sibling.dispatchEvent(new Event('change'));
+        });
+      }
+    }
   }
 
   select() {
@@ -264,13 +279,15 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
         disabled={this.isDisabled || this.isReadonly}
         // v-model={this.selected}
         checked={this.selected}
-        onChange={(ev) => {
-          this.selected = (ev.target as HTMLInputElement).checked;
-        }}
         value={this.propValue}
+        onChange={this.handleChange}
         onClick={this.handleClickInputElement}
       />
     );
+  }
+
+  handleChange(ev: Event) {
+    this.selected = (ev.target as HTMLInputElement).checked;
   }
 
   handleClickInputElement(ev: MouseEvent) {
