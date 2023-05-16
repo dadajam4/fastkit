@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.14.1
+
+### Patch Changes
+
+- [#43](https://github.com/dadajam4/fastkit/pull/43) [`258cebe`](https://github.com/dadajam4/fastkit/commit/258cebe3a2a24deab71e7e5ffd9c5dd310e9cd24) Thanks [@dadajam4](https://github.com/dadajam4)! - Improved behavior of single radio not belonging to a group.
+
 ## 0.14.0
 
 ### Minor Changes
