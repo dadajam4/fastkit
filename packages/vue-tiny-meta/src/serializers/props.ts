@@ -6,6 +6,7 @@ import {
   SourceFileExporter,
   _extractMetaDocs,
   getTypeText,
+  TYPE_TEXT_MAPPING,
 } from '@fastkit/ts-tiny-meta/ts';
 import { PropMeta, UserFilter } from '../types';
 import { getMetaDocsByNodeAndSymbol, resolveUserFilter } from '../utils';
@@ -35,9 +36,13 @@ export function serializeProps(
     const _types = isRequired
       ? [type]
       : unionTypes.filter((type) => !type.isUndefined());
+    const values: string[] = [];
     const types = _types.map((type) => {
       const text = getTypeText(type, dec);
       const literal = type.getLiteralValue();
+      if (typeof literal === 'string' || typeof literal === 'number') {
+        values.push(String(literal));
+      }
       return {
         text,
         literal,
@@ -52,7 +57,7 @@ export function serializeProps(
       name,
       description: docs[0]?.description.text,
       type: {
-        name: text,
+        name: TYPE_TEXT_MAPPING[text] || text,
       },
       required: isRequired,
       defaultValue: defaultValue
@@ -60,7 +65,7 @@ export function serializeProps(
             value: defaultValue,
           }
         : undefined,
-      values: [],
+      values: values.length ? values : undefined,
       docs,
     };
   });

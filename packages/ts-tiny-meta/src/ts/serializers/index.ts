@@ -124,7 +124,7 @@ export function isLibType(type: Type, declarations?: Node[]): boolean {
 
 const TYPE_TEXT_IMPORTS_MATCH_RE = /(^|\s|<)import\(.+?\)\./g;
 
-const TYPE_TEXT_MAPPING: Record<string, string> = {
+export const TYPE_TEXT_MAPPING: Record<string, string> = {
   'true | false': 'boolean',
   'false | true': 'boolean',
 };
