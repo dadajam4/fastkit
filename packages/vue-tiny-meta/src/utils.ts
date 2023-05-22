@@ -8,6 +8,7 @@ import {
 import { VUE_BUILTIN_PROPS } from './constants';
 
 export function filterByRules(name: string, rules: IgnoreRule[]) {
+  if (name.startsWith('_') || name.startsWith('$')) return false;
   for (const rule of rules) {
     if (typeof rule === 'string') {
       if (name === rule) return false;

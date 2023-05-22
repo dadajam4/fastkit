@@ -9,8 +9,10 @@ import { ComponentMeta, SerializeVueOptions } from '../types';
 import {
   SUPPORT_EXPRESSION_NAME,
   SUPPORT_SOURCE_FILE_SUFFIX,
+  SUPPORT_ANNOTATION,
 } from '../constants';
 import { serializeDefineComponent } from './component';
+// import { getMetaDocsByNodeAndSymbol } from '../utils';
 
 export interface SerializeVueSource {
   exportName: string;
@@ -24,6 +26,15 @@ export function extractSerializeVueSource(
 ): SerializeVueSource | undefined {
   if (!exportName) return;
   if (!Node.isCallExpression(declaration)) return;
+  const docs = _extractMetaDocs(exporter, declaration);
+  if (
+    docs.some((doc) => doc.tags.some((tag) => tag.name === SUPPORT_ANNOTATION))
+  ) {
+    return {
+      exportName,
+      expression: declaration,
+    };
+  }
   const expression = declaration.getExpression();
   const typeChecker = exporter.workspace.project.getTypeChecker();
   const symbol = typeChecker
@@ -95,6 +106,7 @@ export function extractAll(
     if (!initializer || !Node.isCallExpression(initializer)) continue;
 
     const source = extractSerializeVueSource(exporter, initializer, name);
+
     if (!source) continue;
     const meta = serializeVue(exporter, source, options);
     results.push(meta);

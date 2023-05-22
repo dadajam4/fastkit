@@ -4,7 +4,6 @@ import {
 } from '@fastkit/ts-tiny-meta/ts-morph';
 import {
   SourceFileExporter,
-  _extractMetaDocs,
   getTypeText,
   TYPE_TEXT_MAPPING,
 } from '@fastkit/ts-tiny-meta/ts';
@@ -26,7 +25,8 @@ export function serializeProps(
 
   return filteredProperties.map((prop) => {
     const name = prop.getName();
-    const propDeclaration = prop.getDeclarations()[0];
+    // const propDeclaration = prop.getDeclarations()[0];
+    const propDeclaration = undefined;
     const dec = prop.getDeclarations()[0] || defineExpression;
     const type = prop.getTypeAtLocation(dec);
     const docs = getMetaDocsByNodeAndSymbol(exporter, propDeclaration, prop);

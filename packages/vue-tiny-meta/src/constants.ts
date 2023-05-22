@@ -3,6 +3,8 @@ export const SUPPORT_EXPRESSION_NAME = 'defineComponent';
 export const SUPPORT_SOURCE_FILE_SUFFIX =
   '@vue/runtime-core/dist/runtime-core.d.ts';
 
+export const SUPPORT_ANNOTATION = 'vue-tiny-meta';
+
 export const VUE_BUILTIN_PROPS = [
   'class',
   'style',

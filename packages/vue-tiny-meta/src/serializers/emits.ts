@@ -1,5 +1,9 @@
 import { Type, Symbol as MorphSymbol } from '@fastkit/ts-tiny-meta/ts-morph';
-import { SourceFileExporter, _extractMetaDocs } from '@fastkit/ts-tiny-meta/ts';
+import {
+  SourceFileExporter,
+  _extractMetaDocs,
+  getTypeText,
+} from '@fastkit/ts-tiny-meta/ts';
 import { MetaDoc } from '@fastkit/ts-tiny-meta';
 import { EventMeta, UserFilter } from '../types';
 import {
@@ -31,7 +35,10 @@ export function serializeEmits(
     if (typeof name !== 'string' || !filter(name)) return;
 
     const payloadType = payloadSymbol.getTypeAtLocation($emitDec);
-    const payload = payloadType.getText().replace(EMIT_PAYLOAD_REPLACE_RE, '');
+    const payload = getTypeText(payloadType, $emitDec).replace(
+      EMIT_PAYLOAD_REPLACE_RE,
+      '',
+    );
     const text = `(${payload}) => void`;
     fns.push({ name, text });
   });
@@ -47,8 +54,10 @@ export function serializeEmits(
 
     // @TODO I really want to consider mixins and extensions, but for some reason I can't pick them up.
     if (emit) {
-      const dec = emit.getDeclarations()[0];
-      docs = getMetaDocsByNodeAndSymbol(exporter, dec, emit);
+      // const dec = emit.getDeclarations()[0];
+      // docs = getMetaDocsByNodeAndSymbol(exporter, dec, emit);
+      // const dec = emit.getDeclarations()[0];
+      docs = getMetaDocsByNodeAndSymbol(exporter, undefined, emit);
     } else {
       docs = [];
     }

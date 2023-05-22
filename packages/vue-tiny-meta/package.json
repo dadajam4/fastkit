@@ -24,6 +24,12 @@
         "default": "./dist/vite.mjs"
       }
     },
+    "./storybook": {
+      "types": "./dist/storybook.d.ts",
+      "import": {
+        "default": "./dist/storybook.mjs"
+      }
+    },
     "./*": "./dist/*"
   },
   "main": "./dist/vue-tiny-meta.mjs",
@@ -35,6 +41,9 @@
       ],
       "vite": [
         "./dist/vite.d.ts"
+      ],
+      "storybook": [
+        "./dist/storybook.d.ts"
       ]
     }
   },

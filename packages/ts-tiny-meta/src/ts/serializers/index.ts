@@ -124,6 +124,8 @@ export function isLibType(type: Type, declarations?: Node[]): boolean {
 
 const TYPE_TEXT_IMPORTS_MATCH_RE = /(^|\s|<)import\(.+?\)\./g;
 
+const TYPE_TEXT_NAMESPACES_MATCH_RE = /([a-zA-Z\d_]+)\.([a-zA-Z\d_]+)/g;
+
 export const TYPE_TEXT_MAPPING: Record<string, string> = {
   'true | false': 'boolean',
   'false | true': 'boolean',
@@ -135,7 +137,9 @@ export function getTypeText(
   typeFormatFlags?: TypeFormatFlags | undefined,
 ): string {
   const text = type.getText(enclosingNode, typeFormatFlags);
-  const replaced = text.replace(TYPE_TEXT_IMPORTS_MATCH_RE, '$1');
+  const replaced = text
+    .replace(TYPE_TEXT_IMPORTS_MATCH_RE, '$1')
+    .replace(TYPE_TEXT_NAMESPACES_MATCH_RE, '$2');
   return TYPE_TEXT_MAPPING[replaced] || replaced;
 }
 
