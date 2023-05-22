@@ -1,6 +1,9 @@
 import path from 'node:path';
 import { Project, SourceFile } from 'ts-morph';
-import { SourceFileExporter } from './source-file-exporter';
+import {
+  SourceFileExporter,
+  ExportorSerializeHook,
+} from './source-file-exporter';
 import JoyCon from 'joycon';
 import chokidar, { FSWatcher } from 'chokidar';
 
@@ -10,19 +13,34 @@ function normalizeWorkspacePath(workspacePath: string) {
   return path.resolve(workspacePath);
 }
 
+export interface WorkspacePlugin {
+  name: string;
+  hooks?: ExportorSerializeHook[];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface WorkspaceOptions {
+  plugins?: WorkspacePlugin[];
+}
+
+type RawOptions = WorkspaceOptions | (() => WorkspaceOptions);
+
 export class Workspace {
   static cache: WorkspaceInstanceCache = {};
 
-  static get(workspacePath: string) {
+  static get(workspacePath: string, options?: RawOptions) {
     const normalizedPath = normalizeWorkspacePath(workspacePath);
     const cachedWorkspace = this.cache[normalizedPath];
     if (cachedWorkspace) return cachedWorkspace;
-    const workspace = new Workspace(normalizedPath);
+    const workspace = new Workspace(
+      normalizedPath,
+      typeof options === 'function' ? options() : options,
+    );
     this.cache[normalizedPath] = workspace;
     return workspace;
   }
 
-  static getBySourceFilePath(sourceFilePath: string) {
+  static getBySourceFilePath(sourceFilePath: string, options?: RawOptions) {
     const cwd = path.dirname(sourceFilePath);
     const loader = new JoyCon({
       cwd,
@@ -33,19 +51,20 @@ export class Workspace {
       throw new Error('missing tsconfig.json >>> ' + sourceFilePath);
     }
     const workspacePath = path.dirname(loadResult.path);
-    return this.get(workspacePath);
+    return this.get(workspacePath, options);
   }
 
   readonly dirPath: string;
   readonly tsConfigFilePath: string;
   readonly project: Project;
+  readonly plugins: WorkspacePlugin[];
   private _sourceFilePaths: string[] = [];
 
   get sourceFilePaths() {
     return this._sourceFilePaths;
   }
 
-  constructor(workspacePath: string) {
+  constructor(workspacePath: string, options: WorkspaceOptions = {}) {
     const normalizedPath = normalizeWorkspacePath(workspacePath);
     this.dirPath = normalizedPath;
     this.tsConfigFilePath = path.join(normalizedPath, 'tsconfig.json');
@@ -53,6 +72,7 @@ export class Workspace {
       tsConfigFilePath: this.tsConfigFilePath,
       skipAddingFilesFromTsConfig: true,
     });
+    this.plugins = options.plugins || [];
   }
 
   normalizeSourceFilePath(filePath: string) {
@@ -139,9 +159,22 @@ export class Workspace {
 
   // private _updateWatcherFiles() {}
 
-  createSourceFileExports(filePath: string) {
+  getHooks(): ExportorSerializeHook[] {
+    const hooks: ExportorSerializeHook[] = [];
+    for (const plugin of this.plugins) {
+      plugin.hooks && hooks.push(...plugin.hooks);
+    }
+    return hooks;
+  }
+
+  createSourceFileExporter(filePath: string): SourceFileExporter {
     const sourceFile = this.addSourceFileAtPath(filePath);
     const exporter = new SourceFileExporter(this, sourceFile);
+    return exporter;
+  }
+
+  createSourceFileExports(filePath: string) {
+    const exporter = this.createSourceFileExporter(filePath);
     return exporter.export();
   }
 

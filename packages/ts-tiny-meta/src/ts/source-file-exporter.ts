@@ -186,6 +186,18 @@ export type ExportMetaVisitor<Meta extends AnyMeta = AnyMeta> = (
   scope: ExportVisitorScope,
 ) => Meta | MetaRef<Meta>;
 
+export type ExportorSerializeHook<Meta extends AnyMeta = AnyMeta> = (
+  exporter: SourceFileExporter,
+  declaration: Node,
+  name?: string,
+) => Meta | void;
+
+export function defineSerializeHook<Meta extends AnyMeta = AnyMeta>(
+  hook: ExportorSerializeHook<Meta>,
+): ExportorSerializeHook<Meta> {
+  return hook;
+}
+
 export class SourceFileExporter {
   readonly deps: string[] = [];
   readonly workspace: Workspace;
@@ -196,6 +208,14 @@ export class SourceFileExporter {
   constructor(workspace: Workspace, sourceFile: SourceFile) {
     this.workspace = workspace;
     this.sourceFile = sourceFile;
+  }
+
+  callHook(declaration: Node, name?: string): AnyMeta | void {
+    const hooks = this.workspace.getHooks();
+    for (const hook of hooks) {
+      const meta = hook(this, declaration, name);
+      if (meta) return meta;
+    }
   }
 
   getExportItems(): ExportItem[] {

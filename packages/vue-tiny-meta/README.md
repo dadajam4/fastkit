@@ -1,0 +1,1 @@
+# @fastkit/vue-tiny-meta

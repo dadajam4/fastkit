@@ -51,6 +51,8 @@ import { getMetaDocs, hasPrivateLikeTag } from './doc';
 
 import type { SourceFileExporter } from '../source-file-exporter';
 
+export * from './doc';
+
 type ObjectPropertyType =
   | MethodDeclaration
   | PropertyDeclaration
@@ -122,14 +124,19 @@ export function isLibType(type: Type, declarations?: Node[]): boolean {
 
 const TYPE_TEXT_IMPORTS_MATCH_RE = /(^|\s|<)import\(.+?\)\./g;
 
-function getTypeText(
+export const TYPE_TEXT_MAPPING: Record<string, string> = {
+  'true | false': 'boolean',
+  'false | true': 'boolean',
+};
+
+export function getTypeText(
   type: Type,
   enclosingNode?: Node,
   typeFormatFlags?: TypeFormatFlags | undefined,
 ): string {
-  return type
-    .getText(enclosingNode, typeFormatFlags)
-    .replace(TYPE_TEXT_IMPORTS_MATCH_RE, '$1');
+  const text = type.getText(enclosingNode, typeFormatFlags);
+  const replaced = text.replace(TYPE_TEXT_IMPORTS_MATCH_RE, '$1');
+  return TYPE_TEXT_MAPPING[replaced] || replaced;
 }
 
 function _normalizeTypeOrNode(typeOrNode: Type | Node): Node | undefined {
@@ -164,7 +171,7 @@ function _searchJSDocableNode(
  * @param docNode
  * @returns
  */
-function _extractJSDocs(
+export function _extractJSDocs(
   exporter: SourceFileExporter,
   typeOrNode: Type | Node,
 ): JSDoc[] {
@@ -173,7 +180,7 @@ function _extractJSDocs(
   return node.getJsDocs();
 }
 
-function _extractMetaDocs(
+export function _extractMetaDocs(
   exporter: SourceFileExporter,
   typeOrNode: Type | Node,
 ) {
@@ -191,9 +198,13 @@ export function extractBasicMetaBody(
   //   types = [type];
   // }
 
-  const text = type.isUnion()
-    ? types.map((type) => getTypeText(type, docNode)).join(' | ')
-    : getTypeText(type, docNode);
+  let text: string;
+  if (type.isUnion()) {
+    text = types.map((type) => getTypeText(type, docNode)).join(' | ');
+    text = TYPE_TEXT_MAPPING[text] || text;
+  } else {
+    text = getTypeText(type, docNode);
+  }
 
   return {
     text,
@@ -288,7 +299,6 @@ export function extractFunctionMetaBody(
 ): FunctionMetaBody {
   const { declarations, declarationKind } = (() => {
     if (Node.isNode(declaration)) {
-      declaration.getType;
       const overloads =
         (Node.isOverloadable(declaration) && declaration.getOverloads()) || [];
       const declarations = [...overloads, declaration];
@@ -657,6 +667,9 @@ function _serializeDeclaration(
   declaration: Node,
   name?: string,
 ): AnyMeta {
+  const hookResolved = exporter.callHook(declaration, name);
+  if (hookResolved) return hookResolved;
+
   const type = declaration.getType();
 
   if (isLibType(type)) {

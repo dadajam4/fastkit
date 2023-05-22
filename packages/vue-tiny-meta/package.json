@@ -1,7 +1,7 @@
 {
-  "name": "@fastkit/ts-tiny-meta",
-  "version": "0.1.1",
-  "description": "ts-tiny-meta",
+  "name": "@fastkit/vue-tiny-meta",
+  "version": "0.0.0",
+  "description": "vue-tiny-meta",
   "keywords": [],
   "repository": {
     "type": "git",
@@ -13,15 +13,9 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/ts-tiny-meta.d.ts",
+      "types": "./dist/vue-tiny-meta.d.ts",
       "import": {
-        "default": "./dist/ts-tiny-meta.mjs"
-      }
-    },
-    "./ts": {
-      "types": "./dist/ts.d.ts",
-      "import": {
-        "default": "./dist/ts.mjs"
+        "default": "./dist/vue-tiny-meta.mjs"
       }
     },
     "./vite": {
@@ -30,35 +24,22 @@
         "default": "./dist/vite.mjs"
       }
     },
-    "./ts-morph": {
-      "types": "./dist/ts-morph.d.ts",
-      "import": {
-        "default": "./dist/ts-morph.mjs"
-      }
-    },
     "./*": "./dist/*"
   },
-  "main": "./dist/ts-tiny-meta.mjs",
-  "types": "./dist/ts-tiny-meta.d.ts",
+  "main": "./dist/vue-tiny-meta.mjs",
+  "types": "./dist/vue-tiny-meta.d.ts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/ts-tiny-meta.d.ts"
-      ],
-      "ts": [
-        "./dist/ts.d.ts"
+        "./dist/vue-tiny-meta.d.ts"
       ],
       "vite": [
         "./dist/vite.d.ts"
-      ],
-      "ts-morph": [
-        "./dist/ts-morph.d.ts"
       ]
     }
   },
   "files": [
-    "dist",
-    "client.d.ts"
+    "dist"
   ],
   "scripts": {
     "build": "plugboy build",
@@ -72,13 +53,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "chokidar": "^3.5.3",
-    "fs-extra": "^11.1.1",
-    "joycon": "^3.1.1",
-    "ts-morph": "^18.0.0"
+    "@fastkit/ts-tiny-meta": "workspace:*",
+    "magic-string": "^0.30.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.1",
     "vite": "^4.3.5"
   },
   "peerDependencies": {

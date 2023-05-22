@@ -6,7 +6,10 @@ import {
   JSDocLinkCode,
   JSDocLinkPlain,
   JSDocTag,
+  Symbol as MorphSymbol,
+  JSDocTagInfo,
 } from 'ts-morph';
+import * as ts from 'typescript';
 
 import {
   MetaDoc,
@@ -17,6 +20,7 @@ import {
   ParameterDoc,
   ParameterDocs,
 } from '../../types';
+import { SourceFileExporter } from '../source-file-exporter';
 
 type JSDocCommentNode =
   | { text: string; getText(): string }
@@ -50,7 +54,9 @@ export function getLinkSourceFromJSDocCommentNode(node: JSDocCommentNode):
 
 const LINK_TEXT_PARSE_RE = /^([^\s]+)(\s+)?(.*)?$/;
 
-type JSDocCommentType = ReturnType<JSDocTag['getComment']>;
+type JSDocCommentType =
+  | ReturnType<JSDocTag['getComment']>
+  | ts.SymbolDisplayPart[];
 
 export function normalizeJSDocComment(
   comment: JSDocCommentType,
@@ -66,10 +72,43 @@ export function normalizeJSDocComment(
   }
   const nodes: JSDocCommentNode[] = [];
   comment.forEach((node) => {
-    node && nodes.push(node);
+    if (!node) return;
+    if ('getText' in node) {
+      nodes.push(node);
+    } else {
+      if (node.kind !== 'link') {
+        nodes.push({
+          text: node.text,
+          getText: () => node.text,
+        });
+      }
+      // console.log('★★★★', node.text);
+      // nodes.push({
+      //   text: node.text,
+      //   getText: () => node.text,
+      // });
+    }
+    // node && nodes.push(node);
   });
   return nodes;
 }
+
+// function normalizeSymbolDisplayParts(
+//   parts: ts.SymbolDisplayPart[],
+// ): JSDocCommentNode[] {
+//   return parts.map((part) => {
+//     return {
+//       text: part.text,
+//       getText: () => part.text,
+//     };
+//   });
+// }
+
+// function extractMetaDocPartsFromSymbolDisplayParts(
+//   parts: ts.SymbolDisplayPart[],
+// ) {
+//   const normalizedNodes = normalizeSymbolDisplayParts(parts);
+// }
 
 export function extractMetaDocPartsFromJSDocComment(
   comment: JSDocCommentType,
@@ -82,7 +121,9 @@ export function extractMetaDocPartsFromJSDocComment(
       text: node.getText(),
     };
     if (isParameter && nodeIndex === 0) {
-      part.text = part.text.replace(/^-?\s*/, '');
+      part.text = part.text
+        .replace(PARAMETER_NAME_MATCH_RE, '')
+        .replace(/^-?\s*/, '');
     }
 
     parts.push(part);
@@ -144,9 +185,36 @@ export function parseJSDocComment(
   };
 }
 
-const PARAMETER_NAME_MATCH_RE = /^@param\s([^\s]+)\s/;
+const PARAMETER_NAME_MATCH_RE = /^(@param\s)?([^\s]+)\s/;
 
-export function parseJSDocTags(tags: JSDocTag[]): {
+function displayPartsToString(parts: ts.SymbolDisplayPart[]) {
+  return parts
+    .filter((part) => part.kind !== 'link')
+    .map((part) => part.text)
+    .join('');
+}
+
+function normalizeTag(tag: JSDocTag | JSDocTagInfo): {
+  name: string;
+  text: string;
+  getComment(): ReturnType<JSDocTag['getComment']>;
+} {
+  if (tag instanceof JSDocTag) {
+    return {
+      name: tag.getTagName(),
+      text: tag.getText(),
+      getComment: () => tag.getComment(),
+    };
+  }
+
+  return {
+    name: tag.getName(),
+    text: displayPartsToString(tag.getText()),
+    getComment: () => displayPartsToString(tag.getText()),
+  };
+}
+
+export function parseJSDocTags(tags: JSDocTag[] | JSDocTagInfo[]): {
   tags: ParsedTag[];
   params: ParameterDocs;
 } {
@@ -159,14 +227,15 @@ export function parseJSDocTags(tags: JSDocTag[]): {
   };
 
   tags.forEach((tag) => {
-    const name = tag.getTagName();
+    const normalized = normalizeTag(tag);
+    const name = normalized.name;
     if (name === 'param') {
-      const parameterName = tag.getText().match(PARAMETER_NAME_MATCH_RE)?.[1];
+      const parameterName = normalized.text.match(PARAMETER_NAME_MATCH_RE)?.[2];
       if (!parameterName) return;
       const docs: ParameterDoc[] = [
         {
           parameterName,
-          ...parseJSDocComment(tag.getComment(), true),
+          ...parseJSDocComment(normalized.getComment(), true),
         },
       ];
       result.params[parameterName] = docs;
@@ -174,7 +243,7 @@ export function parseJSDocTags(tags: JSDocTag[]): {
     }
     result.tags.push({
       name,
-      ...parseJSDocComment(tag.getComment()),
+      ...parseJSDocComment(normalized.getComment()),
     });
   });
 
@@ -214,40 +283,21 @@ export function hasPrivateLikeTag(docs: MetaDoc[]) {
   );
 }
 
-// export type ParameterDocs = Record<string, MetaDoc>;
-
-// export function extractParameterDocTags(tags: JSDocTag[]): ParameterDocs {
-//   const result: ParameterDocs = {};
-//   const parsedTags = parseJSDocTags(tags);
-//   parsedTags.forEach((tag) => {
-//     if (tag.name !== 'param') return;
-
-//     // const parts = tag.getText();
-//     // const parameterNamePart = parts.find(
-//     //   (part) => part.kind === 'parameterName',
-//     // );
-//     // if (!parameterNamePart) return;
-//     // // const index = parts.indexOf(parameterNamePart);
-
-//     // const parameterName = parameterNamePart.text;
-//     // if (!parameterName) return;
-//     // const bodyParts: ts.SymbolDisplayPart[] = [];
-//     // let hited = false;
-//     // parts.forEach(({ text, kind }) => {
-//     //   if (!hited) {
-//     //     if (['parameterName', 'space'].includes(kind)) {
-//     //       return;
-//     //     }
-//     //     hited = true;
-//     //     text = text.replace(/^[\-\s]+/, '');
-//     //   }
-//     //   bodyParts.push({
-//     //     text,
-//     //     kind,
-//     //   });
-//     // });
-//     // const doc = toMetaDoc(bodyParts);
-//     // result[parameterName] = doc;
-//   });
-//   return result;
-// }
+export function getMetaDocsBySymbol(
+  exporter: SourceFileExporter,
+  symbol: MorphSymbol,
+): MetaDoc[] {
+  const comment = symbol.compilerSymbol.getDocumentationComment(
+    exporter.workspace.project.getTypeChecker().compilerObject,
+  );
+  const description = parseJSDocComment(comment);
+  const tags = parseJSDocTags(symbol.getJsDocTags());
+  if (!description.text && tags.tags.length === 0) {
+    return [];
+  }
+  const doc: MetaDoc = {
+    description,
+    ...tags,
+  };
+  return [doc];
+}

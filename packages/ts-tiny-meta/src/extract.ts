@@ -1,22 +1,28 @@
-import { ExtractMeta, AnyMeta } from './types';
+import { AnyMeta } from './types';
 
 /**
  * Extract meta-information for a given type argument
  */
-export function extractMeta<T>(): ExtractMeta<T>;
+export function extractMeta(): AnyMeta;
 
 /**
  * Extract meta-information for a given argument
  * @param source - Value to be extracted
  */
-export function extractMeta<T>(source: T): ExtractMeta<T>;
+export function extractMeta<T>(): AnyMeta;
+
+/**
+ * Extract meta-information for a given argument
+ * @param source - Value to be extracted
+ */
+export function extractMeta<T>(source: T): AnyMeta;
 
 /**
  * Extract meta-information from specified type argument or arguments
  * @param source - Value to be extracted
  * @returns meta-information
  */
-export function extractMeta<T>(source?: T): ExtractMeta<T> {
+export function extractMeta<T>(source?: T): AnyMeta {
   return undefined as any;
 }
 

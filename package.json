@@ -62,6 +62,7 @@
     "@fastkit/vot-i18n": "workspace:*",
     "@fastkit/vue-i18n": "workspace:*",
     "@fastkit/vue-page": "workspace:*",
+    "@fastkit/vue-tiny-meta": "workspace:*",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.16.8",
     "@types/prismjs": "^1.26.0",
