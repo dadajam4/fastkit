@@ -124,13 +124,19 @@ export function isLibType(type: Type, declarations?: Node[]): boolean {
 
 const TYPE_TEXT_IMPORTS_MATCH_RE = /(^|\s|<)import\(.+?\)\./g;
 
+const TYPE_TEXT_MAPPING: Record<string, string> = {
+  'true | false': 'boolean',
+  'false | true': 'boolean',
+};
+
 export function getTypeText(
   type: Type,
   enclosingNode?: Node,
   typeFormatFlags?: TypeFormatFlags | undefined,
 ): string {
   const text = type.getText(enclosingNode, typeFormatFlags);
-  return text.replace(TYPE_TEXT_IMPORTS_MATCH_RE, '$1');
+  const replaced = text.replace(TYPE_TEXT_IMPORTS_MATCH_RE, '$1');
+  return TYPE_TEXT_MAPPING[replaced] || replaced;
 }
 
 function _normalizeTypeOrNode(typeOrNode: Type | Node): Node | undefined {
@@ -192,9 +198,13 @@ export function extractBasicMetaBody(
   //   types = [type];
   // }
 
-  const text = type.isUnion()
-    ? types.map((type) => getTypeText(type, docNode)).join(' | ')
-    : getTypeText(type, docNode);
+  let text: string;
+  if (type.isUnion()) {
+    text = types.map((type) => getTypeText(type, docNode)).join(' | ');
+    text = TYPE_TEXT_MAPPING[text] || text;
+  } else {
+    text = getTypeText(type, docNode);
+  }
 
   return {
     text,

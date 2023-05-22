@@ -9,6 +9,12 @@ export function extractMeta(): AnyMeta;
  * Extract meta-information for a given argument
  * @param source - Value to be extracted
  */
+export function extractMeta<T>(): AnyMeta;
+
+/**
+ * Extract meta-information for a given argument
+ * @param source - Value to be extracted
+ */
 export function extractMeta<T>(source: T): AnyMeta;
 
 /**
