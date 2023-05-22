@@ -131,7 +131,13 @@ export function normalizeMeta(
     // }
   }
 
-  if (!overloadable && type !== 'class' && !properties && !staticMembers) {
+  if (
+    !overloadable &&
+    type !== 'class' &&
+    !properties &&
+    !staticMembers &&
+    meta.kind !== 'custom'
+  ) {
     text = meta.text;
   }
 
