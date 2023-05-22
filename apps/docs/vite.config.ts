@@ -6,6 +6,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { PackageLoader } from './modules/package-loader/plugin';
 import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
 import { ViteTSTinyMeta } from '@fastkit/ts-tiny-meta/vite';
+// import { ViteVueTinyMeta } from '@fastkit/vue-tiny-meta/vite';
 
 const USE_GENERATE = true;
 
@@ -38,6 +39,9 @@ export default defineConfig({
       // If set to short, the selector is not output correctly when Generate is used.
       identifiers: 'debug',
     }),
+    // ViteVueTinyMeta({
+    //   include: ['./src/components/**/*'],
+    // }),
     PackageLoader(),
     votPlugin({
       pages: {

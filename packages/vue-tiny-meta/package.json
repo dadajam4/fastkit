@@ -1,0 +1,70 @@
+{
+  "name": "@fastkit/vue-tiny-meta",
+  "version": "0.0.0",
+  "description": "vue-tiny-meta",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/vue-tiny-meta.d.ts",
+      "import": {
+        "default": "./dist/vue-tiny-meta.mjs"
+      }
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "import": {
+        "default": "./dist/vite.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vue-tiny-meta.mjs",
+  "types": "./dist/vue-tiny-meta.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-tiny-meta.d.ts"
+      ],
+      "vite": [
+        "./dist/vite.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/ts-tiny-meta": "workspace:*",
+    "magic-string": "^0.30.0"
+  },
+  "devDependencies": {
+    "vite": "^4.3.5"
+  },
+  "peerDependencies": {
+    "vite": "^4.3.0"
+  },
+  "peerDependenciesMeta": {
+    "vite": {
+      "optional": true
+    }
+  }
+}

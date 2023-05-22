@@ -265,6 +265,10 @@
       "path": "packages/vue-stack"
     },
     {
+      "name": "📦 @fastkit/vue-tiny-meta",
+      "path": "packages/vue-tiny-meta"
+    },
+    {
       "name": "📦 @fastkit/vue-transitions",
       "path": "packages/vue-transitions"
     },
