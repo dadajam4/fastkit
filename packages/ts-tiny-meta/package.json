@@ -30,6 +30,12 @@
         "default": "./dist/vite.mjs"
       }
     },
+    "./ts-morph": {
+      "types": "./dist/ts-morph.d.ts",
+      "import": {
+        "default": "./dist/ts-morph.mjs"
+      }
+    },
     "./*": "./dist/*"
   },
   "main": "./dist/ts-tiny-meta.mjs",
@@ -44,6 +50,9 @@
       ],
       "vite": [
         "./dist/vite.d.ts"
+      ],
+      "ts-morph": [
+        "./dist/ts-morph.d.ts"
       ]
     }
   },

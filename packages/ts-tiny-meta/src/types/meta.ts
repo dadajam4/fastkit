@@ -216,14 +216,25 @@ export interface ClassMeta<T extends ClassType = ClassType> {
   staticMembers: ObjectMembers<Omit<T, 'prototype'>>;
 }
 
+export interface CustomMeta<T = any> {
+  /** meta kind */
+  kind: 'custom';
+  /** Custom name */
+  name: string;
+  details: T;
+  /** Custom meta Documentation */
+  docs: MetaDoc[];
+}
+
 export type AnyMeta =
   | BasicMeta
   | SignatureMeta
   | FunctionMata
   | ObjectMeta
-  | ClassMeta;
+  | ClassMeta
+  | CustomMeta;
 
-export type ExtractMeta<T> = T extends ClassType
+export type InferMeta<T> = T extends ClassType
   ? ClassMeta<T>
   : T extends Callable
   ? FunctionMata
