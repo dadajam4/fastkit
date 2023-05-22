@@ -1,5 +1,11 @@
 # @fastkit/ts-tiny-meta
 
+## 0.1.3
+
+### Patch Changes
+
+- [#47](https://github.com/dadajam4/fastkit/pull/47) [`84602ce`](https://github.com/dadajam4/fastkit/commit/84602ce0512c744d0e9e1e7a8f78acf383e03076) Thanks [@dadajam4](https://github.com/dadajam4)! - Omit namespace in type string.
+
 ## 0.1.2
 
 ### Patch Changes
