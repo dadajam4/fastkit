@@ -19,7 +19,8 @@ export function serializeSlots(
     .map((slot) => {
       const name = slot.getName();
       const slotDec = slot.getDeclarations()[0];
-      const docs = getMetaDocsByNodeAndSymbol(exporter, slotDec, slot);
+      // const docs = getMetaDocsByNodeAndSymbol(exporter, slotDec, slot);
+      const docs = getMetaDocsByNodeAndSymbol(exporter, undefined, slot);
       const slotType = slotDec.getType();
       const unionTypes = slotType.getUnionTypes();
       const isOptional = slot.isOptional();

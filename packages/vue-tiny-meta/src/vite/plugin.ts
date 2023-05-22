@@ -3,6 +3,7 @@ import type { PluginOption, FilterPattern } from 'vite';
 import { createFilter } from 'vite';
 import MagicString from 'magic-string';
 import { SerializeVueOptions } from '../types';
+import { SUPPORT_ANNOTATION } from '../constants';
 
 const EXTENSION_INCLUDES_RE = /\.(tsx|ts)$/;
 const BASE_FILTER_RE = /\sdefineComponent\(/;
@@ -29,7 +30,8 @@ export function ViteVueTinyMeta(
     async transform(src: string, id: string) {
       if (!extensionFilter(id)) return;
       if (!customFilter(id)) return;
-      if (!BASE_FILTER_RE.test(src)) return;
+      if (!BASE_FILTER_RE.test(src) && !src.includes(`@${SUPPORT_ANNOTATION}`))
+        return;
 
       const allData = await extractAll(id, options);
       if (!allData.length) return;
