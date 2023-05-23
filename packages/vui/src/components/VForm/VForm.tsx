@@ -53,7 +53,7 @@ export const VForm = defineComponent({
           'v-form--disabled': nodeControl.isDisabled,
           'v-form--validating': nodeControl.validating,
           'v-form--pending': nodeControl.pending,
-          'v-form--submiting': nodeControl.submiting,
+          'v-form--sending': nodeControl.sending,
         },
       ];
     });

@@ -35,12 +35,30 @@ export function createFormProps(options: FormOptions = {}) {
   return {
     ...createFormNodeProps(),
     ...createPropsOptions({
+      /**
+       * Action settings for form submission
+       *
+       * Set the destination URL or callback handler
+       */
       action: [String, Function] as PropType<FormAction>,
+      /**
+       * Automatic validation on transmission
+       *
+       * If this setting is enabled, all validation will be done before transmission and the transmission process will be canceled if there are invalid entries
+       *
+       * @default true
+       */
       autoValidate: {
         type: Boolean,
         default: true,
       },
-      submiting: Boolean,
+      /**
+       * Form is sending
+       */
+      sending: Boolean,
+      /**
+       * Autoscroll to the location of the form when invalid input is detected in the validation on submission
+       */
       disableAutoScroll: Boolean,
     }),
   };
@@ -51,8 +69,22 @@ export type FormProps = ExtractPropTypes<ReturnType<typeof createFormProps>>;
 export function createFormEmits() {
   return {
     ...createFormNodeEmits(),
+    /**
+     * Form Submission
+     *
+     * This event is notified when the validation is complete and before the action is called
+     *
+     * @param form - VueForm instance
+     * @param ev - Event
+     */
     submit: (form: VueForm, ev: Event) => true,
-    'update:submiting': (submiting: boolean, form: VueForm) => true,
+    /**
+     * Updating sending status
+     *
+     * @param sending - sending status
+     * @param form - VueForm instance
+     */
+    'update:sending': (sending: boolean, form: VueForm) => true,
   };
 }
 
@@ -81,12 +113,12 @@ export class VueForm extends FormNodeControl {
   protected _fnAction: ComputedRef<FormFunctionableAction | undefined>;
   protected _formRef = ref<HTMLFormElement | null>(null);
   protected _actionPromise = ref<Promise<any> | null>(null);
-  protected _submiting: ComputedRef<boolean>;
+  protected _sending: ComputedRef<boolean>;
   protected _onAutoValidateError?: VueFormHook;
   protected _scrollToElement?: (element: HTMLElement) => any;
 
-  get submiting() {
-    return this._submiting.value;
+  get sending() {
+    return this._sending.value;
   }
 
   get autoValidate() {
@@ -112,8 +144,8 @@ export class VueForm extends FormNodeControl {
       if (typeof props.action === 'function') return props.action;
       return undefined;
     });
-    this._submiting = computed(
-      () => props.submiting || this._actionPromise.value !== null,
+    this._sending = computed(
+      () => props.sending || this._actionPromise.value !== null,
     );
     this._onAutoValidateError = options.onAutoValidateError;
     this._scrollToElement = options.scrollToElement;
@@ -131,9 +163,9 @@ export class VueForm extends FormNodeControl {
     });
 
     watch(
-      () => this._submiting.value,
-      (submiting) => {
-        ctx.emit('update:submiting', submiting, this);
+      () => this._sending.value,
+      (sending) => {
+        ctx.emit('update:sending', sending, this);
       },
     );
 
@@ -182,7 +214,7 @@ export class VueForm extends FormNodeControl {
 
   async handleSubmit(ev: Event) {
     ev.preventDefault();
-    if (this.submiting || this.isDisabled || this.isReadonly) return;
+    if (this.sending || this.isDisabled || this.isReadonly) return;
     if (this.autoValidate) {
       const valid = await this.validateAndScroll();
       if (!valid) {

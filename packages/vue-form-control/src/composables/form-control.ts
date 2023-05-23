@@ -28,29 +28,52 @@ export type FormControlHinttipDelay = 'click' | number;
 export function createFormControlProps() {
   return {
     ...createPropsOptions({
+      /**
+       * Instance of FormNodeControl
+       */
       nodeControl: {} as PropType<FormNodeControl>,
+      /** label */
       label: {} as PropType<VNodeChildOrSlot>,
+      /** hint message */
       hint: {} as PropType<VNodeChildOrSlot>,
+      /** Settings for displaying hint as tips */
       hinttip: [Boolean, String, Function] as PropType<FormControlHinttip>,
+      /** hint tip Display Delay */
       hinttipDelay: [String, Number] as PropType<FormControlHinttipDelay>,
+      /** Elements to be added to the information message */
       infoAppends: {} as PropType<VNodeChildOrSlot>,
+      /** Under validation */
       validating: Boolean,
+      /** pending */
       pending: Boolean,
+      /** In Focus */
       focused: Boolean,
+      /** Already value changed */
       dirty: Boolean,
+      /** Not yet value changed */
       pristine: Boolean,
+      /** List of errors */
       errors: {
         type: Array as PropType<FormNodeError[]>,
         default: () => [] as FormNodeError[],
       },
+      /** disabled state */
       disabled: Boolean,
+      /** read-only state */
       readonly: Boolean,
+      /** Already touched form */
       touched: Boolean,
+      /** Not yet touching the form */
       untouched: Boolean,
+      /** required */
       required: Boolean,
+      /** There is an incorrect entry. */
       invalid: Boolean,
+      /** Input is correct. */
       valid: Boolean,
+      /** Hide information */
       hiddenInfo: Boolean,
+      /** Chip(required) display settings */
       requiredChip: {} as PropType<RequiredChipSource>,
     }),
   };
@@ -77,8 +100,11 @@ export function createFormControlSettings() {
 export type FormControlContext = SetupContext<FormControlEmitOptions>;
 
 export type FormControlSlots = DefineSlotsType<{
+  /** label */
   label?: (form: FormControl) => any;
+  /** hint message */
   hint?: (form: FormControl) => any;
+  /** Elements to be added to the information message */
   infoAppends?: (form: FormControl) => any;
 }>;
 

@@ -21,12 +21,16 @@ export function createNumberInputProps() {
     }),
     ...createPropsOptions({
       value: String,
+      /** minimum value */
       min: [String, Number],
+      /** greatest value */
       max: [String, Number],
+      /** Input Value Steps */
       step: {
         type: [String, Number],
         default: 1,
       },
+      /** placeholder */
       placeholder: String,
     }),
   };

@@ -21,6 +21,7 @@ type AnyMaskedOptions = any;
 
 export function createMaskControlProps() {
   return {
+    /** Text Mask Settings */
     mask: {} as PropType<IMaskInput>,
   };
 }

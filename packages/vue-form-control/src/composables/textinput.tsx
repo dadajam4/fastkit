@@ -30,12 +30,30 @@ export function createTextInputProps() {
     ...createTextableProps(),
     ...createMaskControlProps(),
     ...createPropsOptions({
+      /**
+       * Input type
+       *
+       * @default "text"
+       */
       type: {
         type: String as PropType<TextInputType>,
         default: 'text',
       },
+      /**
+       * Model value of masked value
+       *
+       * @see https://imask.js.org/guide.html
+       */
       masked: String,
+      /**
+       * Model value of the normalized value based on the input type.
+       */
       typed: [String, Number, Date],
+      /**
+       * Model value for unmasked values
+       *
+       * @see https://imask.js.org/guide.html
+       */
       unmasked: String,
     }),
   };
@@ -48,10 +66,35 @@ export type TextInputProps = ExtractPropTypes<
 export function createTextInputEmits() {
   return {
     ...createTextableEmits(),
+    /**
+     * 'accept' event fired on input when mask value has changed
+     *
+     * @see https://imask.js.org/guide.html
+     */
     accept: (ev: IMaskEvent) => true,
+    /**
+     * 'complete' event fired when the value is completely filled
+     *
+     * @see https://imask.js.org/guide.html
+     */
     complete: (ev: IMaskEvent) => true,
+    /**
+     * Updating the masked value.
+     *
+     * @param maskedValue - Masked value
+     */
     'update:masked': (maskedValue: string) => true,
+    /**
+     * Updating the normalized value with the specified type.
+     *
+     * @param typedValue - Normalized value with the specified type
+     */
     'update:typed': (typedValue: IMaskTypedValue | undefined) => true,
+    /**
+     * Updating the unmasked value.
+     *
+     * @param unmaskedValue - unmasked value
+     */
     'update:unmasked': (unmaskedValue: string) => true,
   };
 }

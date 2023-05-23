@@ -69,18 +69,37 @@ export function createTextableProps() {
     }),
     ...createAutocompleteableInputProps(),
     ...createPropsOptions({
+      /** Minimum number of characters */
       minlength: [String, Number],
+      /** maximum number of characters */
       maxlength: [String, Number],
+      /** input pattern */
       pattern: [String, RegExp],
+      /** placeholder */
       placeholder: String,
+      /**
+       * Perform capitalization of the input string's first letter when it is entered/edited by the user.
+       *
+       * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/autocapitalize
+       */
       autocapitalize: String as PropType<FormAutoCapitalize>,
+      /**
+       * Text correction settings.
+       */
       finishings: [
         String,
         Array,
         Function,
       ] as PropType<RawTextableFinishingProp>,
+      /**
+       * Character counter.
+       */
       counter: [Boolean, String, Number] as PropType<boolean | string | number>,
+      /**
+       * Calculation logic for performing custom character count.
+       */
       counterValue: Function as PropType<(value: string) => number>,
+      /** Limit the input value based on the maximum character count. */
       limit: Boolean,
     }),
   };

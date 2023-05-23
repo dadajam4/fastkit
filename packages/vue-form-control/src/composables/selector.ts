@@ -32,15 +32,22 @@ import { IN_WINDOW } from '@fastkit/helpers';
 export const DEFAULT_FORM_SELECTOR_GROUP_ID = '__default__';
 
 export interface FormSelectorItem {
+  /** selection value */
   value: string | number;
+  /** label */
   label: VNodeChildOrSlot<FormSelectorControl>;
+  /** disabled state */
   disabled?: boolean;
 }
 
 export interface FormSelectorGroup {
+  /** Group ID */
   id: string | number;
+  /** label */
   label: VNodeChildOrSlot<FormSelectorControl>;
+  /** disabled state */
   disabled?: boolean;
+  /** List of choices */
   items: FormSelectorItem[];
 }
 

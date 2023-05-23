@@ -15,7 +15,9 @@ import { FormSelectorItemGroupInjectionKey } from '../injections';
 export function createFormSelectorItemGroupProps() {
   return {
     ...createPropsOptions({
+      /** disabled state */
       disabled: Boolean,
+      /** Group ID */
       groupId: {
         type: [String, Number],
         required: true,

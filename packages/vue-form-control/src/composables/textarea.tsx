@@ -45,7 +45,9 @@ export function createTextareaProps(options: TextareaControlOptions = {}) {
     ...createTextableProps(),
     ...createMaskControlProps(),
     ...createPropsOptions({
+      /** Automatically adjust the height of the box based on the number of input lines. */
       autosize: [Boolean, Object] as PropType<RawTextareaAutosizeSettings>,
+      /** Size (number of lines) of the input box. */
       rows: {
         ...NumberishPropOption,
         default: options.defaultRows,
