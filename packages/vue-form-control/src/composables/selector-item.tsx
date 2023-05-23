@@ -27,6 +27,7 @@ export function createFormSelectorItemProps() {
   return {
     ...createFormNodeProps({ modelValue: Boolean }),
     ...createPropsOptions({
+      /** selection value */
       value: {
         type: [String, Number],
         // default: '',

@@ -30,7 +30,7 @@ export default defineComponent({
     const readonly = ref(false);
     const form1Sending = ref(false);
     const form2Sending = ref(false);
-    const dynamicKey = ref<typeof DYNAMIC_KEYS[number]>(DYNAMIC_KEYS[0]);
+    const dynamicKey = ref<(typeof DYNAMIC_KEYS)[number]>(DYNAMIC_KEYS[0]);
     const dynamicInput = ref({
       k1: '',
       k2: '',
@@ -81,7 +81,7 @@ export default defineComponent({
         <DocsSection title="Basic">
           <VForm
             disabled={this.form1Sending}
-            submiting
+            sending
             onSubmit={(form) => {
               this.submit1();
             }}

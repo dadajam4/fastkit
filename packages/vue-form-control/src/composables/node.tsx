@@ -93,31 +93,76 @@ export function createFormNodeProps<T, D = T>(
   const { modelValue, defaultValidateTiming } = options;
   return {
     ...createPropsOptions({
+      /**
+       * form node name
+       *
+       * This is set as is for input elements.
+       */
       name: String,
+      /** model value */
       modelValue: modelValue || {},
+      /**
+       * Tab index
+       *
+       * @default 0
+       *
+       * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/tabindex
+       */
       tabindex: {
         type: [String, Number],
         default: 0,
       },
+      /** Automatic focus */
       autofocus: Boolean,
+      /** disabled state */
       disabled: Boolean,
+      /** read-only state */
       readonly: Boolean,
+      /**
+       * Spell Check Settings
+       *
+       * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/spellcheck
+       */
       spellcheck: Boolean,
       viewonly: Boolean,
+      /** required */
       required: Boolean,
+      /** clearable */
       clearable: Boolean,
+      /**
+       * Validation Timing
+       *
+       * - `always` Always validate
+       * - `touch` Once touched, always validated thereafter.
+       * - `blur` Once the focus is removed from the element at least once, subsequent validations will always be performed.
+       * - `change` Once the value is changed at least once, subsequent validations will always be performed.
+       * - `manual` Validation is not performed automatically. Only manual validation through programming is possible.
+       *
+       * @see {@link ValidateTiming}
+       */
       validateTiming: {
         type: String as PropType<ValidateTiming>,
         default: defaultValidateTiming || 'touch',
       },
+      /**
+       * List of validation rules
+       */
       rules: {
         type: Array as PropType<RecursiveValidatableRule>,
         default: () => [],
       },
+      /**
+       * Validation dependencies
+       *
+       * In vue-form-control, validation is performed again whenever the input value or related values change. However, if the validation condition references values from other nodes or external reactive values that are not included in the node, those changes cannot be detected.
+       * By registering a function that returns such external reactive values, validation can be automatically triggered.
+       */
       validationDeps: Function as PropType<
         (nodeControl: FormNodeControl) => any
       >,
+      /** Force an error state. */
       error: Boolean,
+      /** List of error messages. */
       errorMessages: [String, Array] as PropType<string | string[]>,
     }),
   };
@@ -131,10 +176,28 @@ export function createFormNodeEmits<T, D = T>(
   options: FormNodeControlOptions<T, D> = {},
 ) {
   return {
+    /**
+     * Update Model Values
+     */
     'update:modelValue': (value: T | D) => true,
+    /**
+     * Updating error content.
+     * @param errors - List of error contents.
+     */
     'update:errors': (errors: FormNodeError[]) => true,
+    /**
+     * Update Model Values
+     */
     change: (value: T | D) => true,
+    /**
+     * Focus on an element.
+     * @param ev - FocusEvent
+     */
     focus: (ev: FocusEvent) => true,
+    /**
+     * The focus is removed from an element.
+     * @param ev - FocusEvent
+     */
     blur: (ev: FocusEvent) => true,
   };
 }
@@ -205,7 +268,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _hasRequired: ComputedRef<boolean>;
   protected _hasInvalidChild: ComputedRef<boolean>;
   protected _tabindex: ComputedRef<number>;
-  protected _submiting: ComputedRef<boolean>;
+  protected _sending: ComputedRef<boolean>;
   protected _cii: ComponentInternalInstance | null = null;
   protected _validationValueGetter?: () => any;
   protected _validationSkip = false;
@@ -409,8 +472,8 @@ export class FormNodeControl<T = any, D = T> {
     return this._spellcheck.value;
   }
 
-  get submiting() {
-    return this._submiting.value;
+  get sending() {
+    return this._sending.value;
   }
 
   get currentInstance() {
@@ -461,8 +524,8 @@ export class FormNodeControl<T = any, D = T> {
       },
     });
 
-    this._submiting = computed(() => {
-      return (!!this._parentForm && this._parentForm.submiting) || false;
+    this._sending = computed(() => {
+      return (!!this._parentForm && this._parentForm.sending) || false;
     });
 
     this._errorMessages = computed(() => {
@@ -498,7 +561,7 @@ export class FormNodeControl<T = any, D = T> {
       return (
         props.disabled ||
         (!!parentNode && parentNode.isDisabled) ||
-        this.submiting
+        this.sending
       );
     });
 
@@ -996,7 +1059,7 @@ export class FormNodeControl<T = any, D = T> {
       valid: computed(() => this.valid),
       shouldValidate: computed(() => this._shouldValidate.value),
       spellcheck: this._spellcheck,
-      submiting: this._submiting,
+      sending: this._sending,
       focus: this.focus,
       blur: this.blur,
       validateSelf: this.validateSelf,

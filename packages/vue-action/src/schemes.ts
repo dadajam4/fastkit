@@ -42,14 +42,32 @@ export interface ActionableAttrs {
    */
   ariaCurrentValue?: RouterLinkProps['ariaCurrentValue'];
   /**
+   * The URL that the hyperlink points to. Links are not restricted to HTTP-based URLs — they can use any URL scheme supported by browsers:
+   *
+   * - Sections of a page with document fragments
+   * - Specific text portions with [text fragments](https://developer.mozilla.org/docs/Web/Text_fragments)
+   * - Pieces of media files with media fragments
+   * - Telephone numbers with `tel:` URLs
+   * - Email addresses with `mailto:` URLs
+   * - While web browsers may not support other URL schemes, websites can with [registerProtocolHandler()](https://developer.mozilla.org/docs/Web/API/Navigator/registerProtocolHandler)
+   *
    * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#attr-href
    */
   href?: string;
   /**
+   * Where to display the linked URL, as the name for a browsing context (a tab, window, or <iframe>). The following keywords have special meanings for where to load the URL:
+   *
+   * - `_self`: the current browsing context. (Default)
+   * - `_blank`: usually a new tab, but users can configure browsers to open a new window instead.
+   * - `_parent`: the parent browsing context of the current one. If no parent, behaves as `_self`.
+   * - `_top`: the topmost browsing context (the "highest" context that's an ancestor of the current one). If no ancestors, behaves as _self.
+   *
    * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#target
    */
   target?: string;
   /**
+   * The relationship of the linked URL as space-separated link types.
+   *
    * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#rel
    */
   rel?: string;
@@ -58,6 +76,8 @@ export interface ActionableAttrs {
    */
   name?: string;
   /**
+   * Hints at the human language of the linked URL. No built-in functionality. Allowed values are the same as the [global lang attribute](https://developer.mozilla.org/docs/Web/HTML/Global_attributes/lang).
+   *
    * @see https://developer.mozilla.org/docs/Web/HTML/Element/a#hreflang
    */
   hreflang?: string;
