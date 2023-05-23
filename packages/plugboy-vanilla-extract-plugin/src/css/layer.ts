@@ -9,33 +9,54 @@ import {
 } from '@vanilla-extract/css';
 import { createGlobalTheme } from './theme';
 
-type LayerStyleRules = NonNullable<StyleRule['@layer']>[string];
+type CustomStyleRules = Record<string, any>;
 
-type ClassNames = string | Array<ClassNames>;
+type _LayerStyleRules = NonNullable<StyleRule['@layer']>[string];
 
-type ComplexLayerStyleRule =
-  | LayerStyleRules
-  | Array<LayerStyleRules | ClassNames>;
+type LayerStyleRules<CustomRules extends CustomStyleRules | null = null> =
+  CustomRules extends null ? _LayerStyleRules : _LayerStyleRules & CustomRules;
 
-type LayerGlobalStyleRules = NonNullable<GlobalStyleRule['@layer']>[string];
+type ClassNames = string | ClassNames[];
 
-export interface LayerStyle {
+type ComplexLayerStyleRule<CustomRules extends CustomStyleRules | null = null> =
+  LayerStyleRules<CustomRules> | (LayerStyleRules<CustomRules> | ClassNames)[];
+
+type _LayerGlobalStyleRules = NonNullable<GlobalStyleRule['@layer']>[string];
+
+type LayerGlobalStyleRules<CustomRules extends CustomStyleRules | null = null> =
+  CustomRules extends null
+    ? _LayerGlobalStyleRules
+    : _LayerGlobalStyleRules & CustomRules;
+
+type AnyStyleRule<CustomRules extends CustomStyleRules | null = null> =
+  | LayerStyleRules<CustomRules>
+  | LayerGlobalStyleRules<CustomRules>;
+
+type LayerStyleHooks<CustomRules extends CustomStyleRules | null = null> = {
+  style?: (rule: ComplexLayerStyleRule<CustomRules>, debugId?: string) => void;
+  global?: (selector: string, rule: LayerGlobalStyleRules<CustomRules>) => void;
+  anyStyle?: (style: AnyStyleRule<CustomRules>) => void;
+};
+
+export interface LayerStyle<
+  CustomRules extends CustomStyleRules | null = null,
+> {
   layerName: string;
   parentLayerName: string | null;
   /**
    * @see {@link style}
    */
-  (rule: ComplexLayerStyleRule, debugId?: string): string;
+  (rule: ComplexLayerStyleRule<CustomRules>, debugId?: string): string;
 
   /**
    * @see {@link style}
    */
-  style(rule: ComplexLayerStyleRule, debugId?: string): string;
+  style(rule: ComplexLayerStyleRule<CustomRules>, debugId?: string): string;
 
   /**
    * @see {@link globalStyle}
    */
-  global(selector: string, rule: LayerGlobalStyleRules): void;
+  global(selector: string, rule: LayerGlobalStyleRules<CustomRules>): void;
 
   /**
    * @see {@link _createGlobalTheme}
@@ -43,8 +64,8 @@ export interface LayerStyle {
   globalTheme: typeof _createGlobalTheme;
 
   defineNestedLayer(
-    globalNameOrNestedOptions?: string | DefineLayerOptions,
-  ): LayerStyle;
+    globalNameOrNestedOptions?: string | DefineLayerOptions<CustomRules>,
+  ): LayerStyle<CustomRules>;
 
   /**
    * Add global CSS variable with layer
@@ -62,38 +83,52 @@ export interface LayerStyle {
    * @remarks The vanilla-extract API is buggy when handling layered css variables.
    */
   dumpGlobalVars(): void;
+  hooks: LayerStyleHooks<CustomRules>;
 }
 
 export interface DefineLayerParentOptions {
   parent?: string;
 }
 
-export interface DefineLayerScopedOptions {
+export interface DefineLayerBaseOptions<
+  CustomRules extends CustomStyleRules | null = null,
+> {
+  hooks?: LayerStyleHooks<CustomRules>;
+}
+
+export interface DefineLayerScopedOptions<
+  CustomRules extends CustomStyleRules | null = null,
+> extends DefineLayerBaseOptions<CustomRules> {
   /** Debug ID */
   debugId?: string;
   globalName?: never;
 }
 
-export interface DefineLayerGlobalOptions {
+export interface DefineLayerGlobalOptions<
+  CustomRules extends CustomStyleRules | null = null,
+> extends DefineLayerBaseOptions<CustomRules> {
   debugId?: never;
   /** Parent layer name */
   globalName: string;
 }
 
-export type DefineLayerOptions =
-  | DefineLayerScopedOptions
-  | DefineLayerGlobalOptions;
+export type DefineLayerOptions<
+  CustomRules extends CustomStyleRules | null = null,
+> =
+  | DefineLayerScopedOptions<CustomRules>
+  | DefineLayerGlobalOptions<CustomRules>;
 
-export type DefineNestableLayerOptions = DefineLayerOptions &
-  DefineLayerParentOptions;
+export type DefineNestableLayerOptions<
+  CustomRules extends CustomStyleRules | null = null,
+> = DefineLayerOptions<CustomRules> & DefineLayerParentOptions;
 
 function isGlobalOptions(
-  options: DefineLayerOptions,
+  options: DefineLayerOptions<any>,
 ): options is DefineLayerGlobalOptions {
   return 'globalName' in options;
 }
 
-function normalizeToObject<T extends DefineLayerOptions>(
+function normalizeToObject<T extends DefineLayerOptions<any>>(
   source?: string | T,
 ): T {
   if (!source) return {} as T;
@@ -101,17 +136,19 @@ function normalizeToObject<T extends DefineLayerOptions>(
   return source;
 }
 
-export function defineLayerStyle(
-  globalNameOrOptions?: string | DefineNestableLayerOptions,
-): LayerStyle {
+export function defineLayerStyle<
+  CustomRules extends CustomStyleRules | null = null,
+>(
+  globalNameOrOptions?: string | DefineNestableLayerOptions<CustomRules>,
+): LayerStyle<CustomRules> {
   const options = normalizeToObject(globalNameOrOptions);
-  const { parent } = options;
+  const { parent, hooks = {} } = options;
 
   const layerName = isGlobalOptions(options)
     ? globalLayer({ parent }, options.globalName)
     : layer({ parent }, options.debugId);
 
-  const layerStyle: LayerStyle = function layerStyle(rule, debugId) {
+  const layerStyle = function layerStyle(rule, debugId) {
     const rules = Array.isArray(rule) ? rule : [rule];
     const layerAppliedRules = rules.map((rule) => {
       if (typeof rule === 'string' || Array.isArray(rule)) return rule;
@@ -121,14 +158,28 @@ export function defineLayerStyle(
         },
       };
     });
+    if (hooks.anyStyle) {
+      for (const rule of rules) {
+        if (typeof rule === 'string' || Array.isArray(rule)) return rule;
+        hooks.anyStyle && hooks.anyStyle(rule);
+      }
+    }
+    hooks.style && hooks.style(rule, debugId);
     return style(layerAppliedRules, debugId);
-  };
+  } as LayerStyle<CustomRules>;
 
   layerStyle.layerName = layerName;
   layerStyle.parentLayerName = parent || null;
   layerStyle.style = layerStyle;
+  layerStyle.hooks = hooks;
 
-  layerStyle.global = function layerGlobalStyle(selector, rule) {
+  layerStyle.global = function layerGlobalStyle(
+    selector: string,
+    rule: LayerGlobalStyleRules<CustomRules>,
+  ) {
+    hooks.anyStyle && hooks.anyStyle(rule);
+    hooks.global && hooks.global(selector, rule);
+
     return globalStyle(selector, {
       '@layer': {
         [layerName]: rule,
@@ -141,7 +192,10 @@ export function defineLayerStyle(
 
   let _varQueues: [string, Record<string, string>][] = [];
 
-  layerStyle.pushGlobalVars = function pushGlobalVars(selector, vars) {
+  layerStyle.pushGlobalVars = function pushGlobalVars(
+    selector: string,
+    vars: Record<string, string>,
+  ) {
     let queue = _varQueues.find((q) => q[0] === selector);
     if (!queue) {
       queue = [selector, {}];
@@ -154,17 +208,23 @@ export function defineLayerStyle(
     for (const [selector, vars] of _varQueues) {
       layerStyle.global(selector, {
         vars,
-      });
+      } as any);
     }
     _varQueues = [];
   };
 
   layerStyle.defineNestedLayer = function defineNestedLayer(
-    globalNameOrNestedOptions,
+    globalNameOrNestedOptions?: string | DefineLayerOptions<CustomRules>,
   ) {
     const options = normalizeToObject(globalNameOrNestedOptions);
+    const nestedHooks = options.hooks;
+
     return defineLayerStyle({
       ...options,
+      hooks: {
+        ...hooks,
+        ...nestedHooks,
+      },
       parent: layerName,
     });
   };
