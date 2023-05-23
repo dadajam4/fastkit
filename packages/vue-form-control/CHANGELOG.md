@@ -1,5 +1,12 @@
 # @fastkit/vue-form-control
 
+## 0.15.0
+
+### Minor Changes
+
+- [#49](https://github.com/dadajam4/fastkit/pull/49) [`53af680`](https://github.com/dadajam4/fastkit/commit/53af680b854d7f5f86c36f1ab51e43043f49eaa5) Thanks [@dadajam4](https://github.com/dadajam4)! - - Added JSDocs and improved code hints.
+  - Property names with incorrect meanings have been corrected(`submiting` to `sending`).
+
 ## 0.14.1
 
 ### Patch Changes
