@@ -1,5 +1,11 @@
 # @fastkit/ts-tiny-meta
 
+## 0.1.4
+
+### Patch Changes
+
+- [#49](https://github.com/dadajam4/fastkit/pull/49) [`53af680`](https://github.com/dadajam4/fastkit/commit/53af680b854d7f5f86c36f1ab51e43043f49eaa5) Thanks [@dadajam4](https://github.com/dadajam4)! - Clean up unnecessary TYPE text.
+
 ## 0.1.3
 
 ### Patch Changes
