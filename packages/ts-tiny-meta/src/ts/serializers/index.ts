@@ -131,15 +131,28 @@ export const TYPE_TEXT_MAPPING: Record<string, string> = {
   'false | true': 'boolean',
 };
 
+export const TYPE_TEXT_REPLACE_MAP: [RegExp, string][] = [
+  [
+    new RegExp(
+      'VNode<RendererNode, RendererElement, \\{ \\[key: string\\]: any; \\}>',
+      'g',
+    ),
+    'VNode',
+  ],
+];
+
 export function getTypeText(
   type: Type,
   enclosingNode?: Node,
   typeFormatFlags?: TypeFormatFlags | undefined,
 ): string {
   const text = type.getText(enclosingNode, typeFormatFlags);
-  const replaced = text
+  let replaced = text
     .replace(TYPE_TEXT_IMPORTS_MATCH_RE, '$1')
     .replace(TYPE_TEXT_NAMESPACES_MATCH_RE, '$2');
+  for (const [re, replacement] of TYPE_TEXT_REPLACE_MAP) {
+    replaced = replaced.replace(re, replacement);
+  }
   return TYPE_TEXT_MAPPING[replaced] || replaced;
 }
 
