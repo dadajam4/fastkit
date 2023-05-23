@@ -1,5 +1,12 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 1.0.8
+
+### Patch Changes
+
+- [#51](https://github.com/dadajam4/fastkit/pull/51) [`f3b13f6`](https://github.com/dadajam4/fastkit/commit/f3b13f6d32cdfebd44f4d3f662fdb5c91e4b90e0) Thanks [@dadajam4](https://github.com/dadajam4)! - - We have extended the type to allow declaring custom interfaces for styles.
+  - Allows registration of hooks when defining styles.
+
 ## 1.0.7
 
 ### Patch Changes
