@@ -1,6 +1,6 @@
 import type { Component } from 'vue';
 import type { VuePageControlMiddlewareFn } from '@fastkit/vue-page';
-import type { HeadClient } from '@vueuse/head';
+import type { VueHeadClient } from '@unhead/vue';
 import type {
   RouteLocationRaw,
   RouterOptions,
@@ -141,5 +141,5 @@ export interface Hook {
 }
 
 export type HookResponse = void | {
-  head?: HeadClient;
+  head?: VueHeadClient<{}>;
 };

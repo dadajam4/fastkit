@@ -3,7 +3,7 @@
 import { App, h, Component } from 'vue';
 import { Router } from 'vue-router';
 import { createEntry } from './entry';
-import { createHead } from '@vueuse/head';
+import { createHead } from '@unhead/vue';
 import { isPromise, IN_WINDOW, removeUndef } from '@fastkit/helpers';
 import {
   installVuePageControl,

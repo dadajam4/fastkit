@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { createRouter, createMemoryHistory, RouteRecordRaw } from 'vue-router';
 import { getFullPath, withoutSuffix } from './utils/route';
-import { renderHeadToString } from '@vueuse/head';
+import { renderSSRHead } from '@unhead/ssr';
 import { serializeState } from './utils/serialize-state';
 import { createUrl } from './utils/route';
 import { useSsrResponse } from './utils/response';
@@ -144,7 +144,7 @@ export const createEntry: SsrHandler = function createSsrEntry(
         headTags = '',
         htmlAttrs = '',
         bodyAttrs = '',
-      } = head ? await renderHeadToString(head) : {};
+      } = head ? await renderSSRHead(head) : {};
 
       return {
         body,

@@ -2,7 +2,7 @@ import { inject, provide, isRef, computed } from 'vue';
 import type { PackageInfo } from './schemes';
 import fastkitPackageJson from '../../../../package.json';
 import { PACKAGE_PROVIDE_INJECTION_KEY } from './injections';
-import { useHead, HeadObject } from '@vueuse/head';
+import { useHead, UseHeadInput, ReactiveHead } from '@unhead/vue';
 import { useVuePageControl, VuePageControl } from '@fastkit/vot';
 import { i18n } from '../i18n';
 import { arrayUnique } from '@fastkit/helpers';
@@ -12,13 +12,11 @@ import { PMScript } from '@@/pm-script';
 
 const FASTKIT_AUTHOR = fastkitPackageJson.author;
 
-type UseHeadInput = Parameters<typeof useHead>[0];
-
 const extractTitleFromHeadObject = (
   input?: UseHeadInput,
 ): {
   title?: string;
-  obj: HeadObject;
+  obj: ReactiveHead;
 } => {
   if (!input) return { obj: {} };
   const value = isRef(input) ? input.value : input;
@@ -43,7 +41,7 @@ export class PackageProvide {
   }
 
   static useHead(input?: UseHeadInput, titleAppends?: string) {
-    const ref = computed<HeadObject>(() => {
+    const ref = computed<ReactiveHead>(() => {
       const { title, obj } = extractTitleFromHeadObject(input);
       const titleChunks: string[] = ['fastkit'];
       titleAppends && titleChunks.unshift(titleAppends);

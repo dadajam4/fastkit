@@ -15,7 +15,7 @@ import {
   VButtonGroup,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
-import { useHead } from '@vueuse/head';
+import { useHead } from '@unhead/vue';
 
 export default defineComponent({
   setup() {
