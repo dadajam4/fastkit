@@ -1,5 +1,18 @@
 # @fastkit/vui
 
+## 0.16.0
+
+### Minor Changes
+
+- [#53](https://github.com/dadajam4/fastkit/pull/53) [`326fa29`](https://github.com/dadajam4/fastkit/commit/326fa29bf34fe8501be6c5a4fa190244d1068090) Thanks [@dadajam4](https://github.com/dadajam4)! - We have made vue-stack more headless and easier to customize.
+
+### Patch Changes
+
+- Updated dependencies [[`326fa29`](https://github.com/dadajam4/fastkit/commit/326fa29bf34fe8501be6c5a4fa190244d1068090), [`326fa29`](https://github.com/dadajam4/fastkit/commit/326fa29bf34fe8501be6c5a4fa190244d1068090)]:
+  - @fastkit/vue-color-scheme@0.14.0
+  - @fastkit/vue-stack@0.15.0
+  - @fastkit/vue-loading@0.14.1
+
 ## 0.15.0
 
 ### Minor Changes

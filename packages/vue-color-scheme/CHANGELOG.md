@@ -1,5 +1,11 @@
 # @fastkit/vue-color-scheme
 
+## 0.14.0
+
+### Minor Changes
+
+- [#53](https://github.com/dadajam4/fastkit/pull/53) [`326fa29`](https://github.com/dadajam4/fastkit/commit/326fa29bf34fe8501be6c5a4fa190244d1068090) Thanks [@dadajam4](https://github.com/dadajam4)! - Migrated head to unhead package.
+
 ## 0.13.6
 
 ### Patch Changes
