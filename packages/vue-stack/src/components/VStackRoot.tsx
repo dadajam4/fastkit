@@ -1,17 +1,8 @@
 import './VStackRoot.scss';
 
-import {
-  defineComponent,
-  ref,
-  Ref,
-  provide,
-  h,
-  cloneVNode,
-  onMounted,
-} from 'vue';
+import { defineComponent, ref, Ref, provide, h, cloneVNode } from 'vue';
 import { useVueStack } from '../composables';
 import { VStackControl } from '../schemes/control';
-import { normalizeVStackDynamicChildren } from '../schemes/dynamic';
 import { VStackRootInjectKey } from '../injections';
 
 export interface VStackRootControl {
@@ -23,60 +14,46 @@ export const VStackRoot = defineComponent({
   setup(_props, ctx) {
     const $vstack = useVueStack();
     const rootRef = ref<HTMLElement | null>(null);
-    const booted = ref(false);
     const control: VStackRootControl = {
       root: rootRef,
     };
 
-    onMounted(() => {
-      booted.value = true;
-    });
-
     provide(VStackRootInjectKey, control);
-    return {
-      get settings() {
-        return $vstack.dynamicSettings;
-      },
-      rootRef() {
-        return rootRef;
-      },
-      booted,
-    };
-  },
-  render() {
-    const { settings, $slots } = this;
 
-    const $dynamicStacks = settings.map(
-      ({ id: key, setting, resolve, remove }) => {
-        const { Ctor, props, children } = setting;
-        const $children = normalizeVStackDynamicChildren(children);
-        const node = cloneVNode(
-          h(
-            Ctor,
+    return () => {
+      const { dynamicSettings: settings } = $vstack;
+
+      const $dynamicStacks = settings.map(
+        ({ id: key, setting, resolve, remove }) => {
+          const { Ctor, props, slots } = setting;
+          const node = cloneVNode(
+            h(
+              Ctor,
+              {
+                ...props,
+                key,
+              },
+              slots,
+            ),
             {
-              ...props,
-              key,
+              onClose: (control: VStackControl) => {
+                resolve(control.value);
+              },
+              onAfterLeave: () => {
+                remove();
+              },
             },
-            $children,
-          ),
-          {
-            onClose: (control: VStackControl) => {
-              resolve(control.value);
-            },
-            onAfterLeave: () => {
-              remove();
-            },
-          },
-        );
-        return node;
-      },
-    );
+          );
+          return node;
+        },
+      );
 
-    return (
-      <div class="v-stack-root" ref={this.rootRef()}>
-        {$slots.default?.()}
-        {$dynamicStacks}
-      </div>
-    );
+      return (
+        <div class="v-stack-root" ref={rootRef}>
+          {ctx.slots.default?.()}
+          {$dynamicStacks}
+        </div>
+      );
+    };
   },
 });

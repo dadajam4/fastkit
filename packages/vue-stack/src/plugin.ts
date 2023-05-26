@@ -13,7 +13,7 @@ declare module 'vue' {
 }
 
 export class VueStackPlugin {
-  static install(app: App, opts: VueStackServiceOptions) {
+  static install(app: App, opts?: VueStackServiceOptions) {
     const $vstack = new VueStackService(opts);
     app.provide(VueStackInjectionKey, $vstack);
     app.config.globalProperties.$vstack = $vstack;
@@ -24,6 +24,6 @@ export class VueStackPlugin {
   }
 }
 
-export function installVueStackPlugin(app: App, opts: VueStackServiceOptions) {
+export function installVueStackPlugin(app: App, opts?: VueStackServiceOptions) {
   return app.use(VueStackPlugin, opts);
 }

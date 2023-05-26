@@ -34,11 +34,11 @@ export default defineComponent({
             dense
             length="32"
             beforeChange={async (page) => {
-              const result = await this.stack.confirm(
+              const result = await this.$vui.confirm(
                 `${page}ページへ変更して良いですか？`,
               );
               if (!result) {
-                this.stack.alert('キャンセルしました');
+                this.$vui.alert('キャンセルしました');
                 return false;
               }
             }}

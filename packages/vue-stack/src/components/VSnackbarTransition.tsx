@@ -23,13 +23,14 @@ export const stackSnackbarTransitionProps = {
   right: Boolean,
 };
 
-export type VSnackbarTransitionProps = ExtractPropInput<
-  typeof stackSnackbarTransitionProps
->;
+export type SnackbarTransitionPropsOptions =
+  typeof stackSnackbarTransitionProps;
 
-export type VSnackbarTransitionResolvedProps = ExtractPropTypes<
-  typeof stackSnackbarTransitionProps
->;
+export type VSnackbarTransitionProps =
+  ExtractPropInput<SnackbarTransitionPropsOptions>;
+
+export type VSnackbarTransitionResolvedProps =
+  ExtractPropTypes<SnackbarTransitionPropsOptions>;
 
 export const VSnackbarTransition = generateJavaScriptTransition({
   displayName: 'VSnackbarTransition',

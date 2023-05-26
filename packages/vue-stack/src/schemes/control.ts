@@ -9,10 +9,6 @@ import {
 } from 'vue';
 import type { VueStackService } from '../service';
 import { RouteLocationNormalized } from 'vue-router';
-import {
-  colorSchemeProps,
-  ColorClassesResult,
-} from '@fastkit/vue-color-scheme';
 import { StyleValue } from '@fastkit/vue-utils';
 import { UseKeyboardRef } from '@fastkit/vue-keyboard';
 import { rawNumberProp } from '@fastkit/vue-utils';
@@ -72,7 +68,7 @@ export interface VStackControl {
   readonly isActive: boolean;
   value: any;
   readonly $service: VueStackService;
-  readonly color: ColorClassesResult;
+  // readonly color: ColorClassesResult;
   readonly classes: any[];
   readonly styles: StyleValue[];
   readonly transitioning: boolean;
@@ -162,6 +158,8 @@ export const stackableEmits = {
   leaveCancelled: (el: HTMLElement, control: VStackControl) => true,
 };
 
+export type StackableEmits = typeof stackableEmits;
+
 export interface VStackActivatorPayload {
   attrs: VStackActivatorAttributes;
   control: VStackControl;
@@ -173,7 +171,9 @@ export type VStackSlots = {
 };
 
 export interface CreateStackablePropsOptions {
-  /*extends ColorSchemePropsStaticOptions*/ defaultTransition?: string;
+  /*extends ColorSchemePropsStaticOptions*/
+  /** @default "v-stack-fade" */
+  defaultTransition?: string;
   /** @default false */
   defaultFocusTrap?: boolean;
   /** @default false */
@@ -199,10 +199,6 @@ export type RawVStackObjectTransitionProp<
   T extends string | JavaScriptTransition,
 > = string | VStackObjectTransitionProp<T>;
 
-// const hoge: VStackObjectTransitionProp<typeof Transition> = {
-//   transition: Transition,
-// };
-
 export function createStackableProps<T extends string | JavaScriptTransition>(
   opts: CreateStackablePropsOptions = {},
 ) {
@@ -217,7 +213,7 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
   } = opts;
 
   return {
-    ...colorSchemeProps(),
+    // ...colorSchemeProps(),
     modelValue: Boolean,
     lazyBoot: Boolean,
     value: null,
@@ -281,9 +277,10 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
   };
 }
 
-export type VStackProps = ExtractPropTypes<
-  ReturnType<typeof createStackableProps>
->;
+export type StackablePropsOptions = ReturnType<typeof createStackableProps>;
+
+export type VStackProps = ExtractPropTypes<StackablePropsOptions>;
+
 export type VStackSetupContext = SetupContext<typeof stackableEmits>;
 
 export function createStackableDefine(opts?: CreateStackablePropsOptions) {

@@ -59,7 +59,6 @@
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "workspace:*",
     "@fastkit/dom": "workspace:*",
     "@fastkit/helpers": "workspace:*",
     "@fastkit/tiny-logger": "workspace:*",

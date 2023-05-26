@@ -15,7 +15,7 @@ import {
   VButtonGroup,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
-import { useHead } from '@vueuse/head';
+import { useHead } from '@unhead/vue';
 
 export default defineComponent({
   setup() {
@@ -58,7 +58,7 @@ export default defineComponent({
             startIcon="mdi-cursor-default-click"
             color="info"
             onClick={(ev) => {
-              this.stack.alert('Clicked!!');
+              this.$vui.alert('Clicked!!');
             }}>
             Button
           </VButton>

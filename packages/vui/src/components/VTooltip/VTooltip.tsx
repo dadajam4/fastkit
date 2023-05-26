@@ -1,13 +1,12 @@
 import './VTooltip.scss';
+
 import { defineComponent } from 'vue';
-import { VMenu, stackMenuProps, stackMenuEmits } from './VMenu';
+import { VMenu } from '../VMenu';
 
 export const VTooltip = defineComponent({
   name: 'VTooltip',
   inheritAttrs: false,
-  props: {} as unknown as typeof stackMenuProps,
-  emits: {} as unknown as typeof stackMenuEmits,
-  setup(props, ctx) {
+  setup(_props, ctx) {
     return () => {
       const attrs = {
         ...ctx.attrs,
@@ -20,6 +19,7 @@ export const VTooltip = defineComponent({
       if (attrs.openDelay == null) {
         attrs.openDelay = 200;
       }
+
       return (
         <VMenu
           {...attrs}
@@ -39,6 +39,4 @@ export const VTooltip = defineComponent({
       );
     };
   },
-});
-
-export type VTooltipStatic = typeof VTooltip;
+}) as typeof VMenu;

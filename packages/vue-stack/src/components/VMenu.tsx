@@ -1,29 +1,28 @@
 import './VMenu.scss';
 import {
   defineComponent,
-  ExtractPropTypes,
   computed,
   PropType,
   reactive,
   CSSProperties,
   withDirectives,
   ref,
+  ComponentPropsOptions,
+  EmitsOptions,
+  Ref,
+  SlotsType,
 } from 'vue';
+import { createStackableDefine } from '../schemes';
 import {
-  createStackableDefine,
-  createStackActionProps,
-  VMenuRect,
-  VMenuState,
-  VMenuControl,
-} from '../schemes';
-import { useStackControl } from '../composables';
-import { ExtractPropInput } from '@fastkit/vue-utils';
+  DefineStackableSettings,
+  setupStackableComponent,
+} from '../composables';
 import {
   useWindow,
   resizeDirectiveArgument,
   ResizeDirectivePayload,
 } from '@fastkit/vue-resize';
-import { logger } from '../logger';
+import { logger, VueStackError } from '../logger';
 import { IN_WINDOW } from '@fastkit/helpers';
 
 const DEFAULT_EDGE_MARGIN = 20;
@@ -31,39 +30,74 @@ const DEFAULT_DISTANCE = 10;
 const DEFAULT_RESIZE_WATCH_DEBOUNCE = 250;
 const DEFAULT_TRANSITION = 'v-menu-auto';
 
-const { props, emits } = createStackableDefine({
-  defaultTransition: DEFAULT_TRANSITION,
-  defaultScrollLock: true,
-});
+interface CreateMenuSchemeOptions {
+  /**
+   * @default "v-menu-auto"
+   */
+  defaultTransition?: string;
+  /**
+   * @default true
+   */
+  defaultScrollLock?: boolean;
+  defaultDistance?: number;
+  defaultEdgeMargin?: number;
+  defaultResizeWatchDebounce?: number;
+}
 
-export const stackMenuProps = {
-  ...props,
-  ...createStackActionProps(),
-  x: String as PropType<VMenuXPosition>,
-  y: String as PropType<VMenuYPosition>,
-  allowOverflow: Boolean,
-  width: [Number, String] as PropType<number | 'fit'>,
-  height: [Number, String] as PropType<number | 'fit'>,
-  maxWidth: [Number, String] as PropType<number | 'fit' | 'free'>,
-  maxHeight: [Number, String] as PropType<number | 'fit' | 'free'>,
-  distance: {
-    type: Number,
-    default: DEFAULT_DISTANCE,
-  },
-  edgeMargin: {
-    type: Number,
-    default: DEFAULT_EDGE_MARGIN,
-  },
-  resizeWatchDebounce: {
-    type: Number,
-    default: DEFAULT_RESIZE_WATCH_DEBOUNCE,
-  },
-  overlap: Boolean,
-};
+function createMenuProps(options: CreateMenuSchemeOptions = {}) {
+  const {
+    defaultDistance = DEFAULT_DISTANCE,
+    defaultEdgeMargin = DEFAULT_EDGE_MARGIN,
+    defaultResizeWatchDebounce = DEFAULT_RESIZE_WATCH_DEBOUNCE,
+  } = options;
 
-export const stackMenuEmits = {
-  ...emits,
-};
+  return {
+    x: String as PropType<VMenuXPosition>,
+    y: String as PropType<VMenuYPosition>,
+    allowOverflow: Boolean,
+    width: [Number, String] as PropType<number | 'fit'>,
+    height: [Number, String] as PropType<number | 'fit'>,
+    maxWidth: [Number, String] as PropType<number | 'fit' | 'free'>,
+    maxHeight: [Number, String] as PropType<number | 'fit' | 'free'>,
+    distance: {
+      type: Number,
+      default: defaultDistance,
+    },
+    edgeMargin: {
+      type: Number,
+      default: defaultEdgeMargin,
+    },
+    resizeWatchDebounce: {
+      type: Number,
+      default: defaultResizeWatchDebounce,
+    },
+    overlap: Boolean,
+  };
+}
+
+function createMenuScheme(options: CreateMenuSchemeOptions = {}) {
+  const { defaultTransition = DEFAULT_TRANSITION, defaultScrollLock = true } =
+    options;
+
+  const { props, emits } = createStackableDefine({
+    defaultTransition,
+    defaultScrollLock,
+  });
+
+  return {
+    props: {
+      ...props,
+      ...createMenuProps(options),
+    },
+    emits,
+  };
+}
+
+export type MenuPropsOptions = ReturnType<typeof createMenuProps>;
+
+export type MenuEmits = ReturnType<typeof createMenuScheme>['emits'];
+
+// export const stackMenuEmits = emits;
 
 export type VMenuXPosition =
   | 'left'
@@ -79,482 +113,560 @@ export type VMenuYPosition =
   | 'bottom'
   | 'bottom-inner';
 
-export type VMenuProps = ExtractPropInput<typeof stackMenuProps>;
+export interface VMenuRect {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+  width: number;
+  height: number;
+}
 
-export type VMenuResolvedProps = ExtractPropTypes<typeof stackMenuProps>;
+export interface VMenuState {
+  pageXOffset: number;
+  pageYOffset: number;
+  rect: VMenuRect | null;
+  activatorRect: VMenuRect | null;
+}
 
-export const VMenu = defineComponent({
-  name: 'VMenu',
-  inheritAttrs: false,
-  props: stackMenuProps,
-  emits: stackMenuEmits,
-  setup(props, ctx) {
-    const stackControl = useStackControl(props, ctx as any, {
-      onContentMounted: () => {
-        updateRects();
-        // startHandleResize();
-      },
-      // onContentDetached: stopHandleResize,
-      transitionResolver,
-    });
+export interface MenuAPI {
+  readonly attrs: Record<string, any>;
+  readonly pageXOffset: number;
+  readonly pageYOffset: number;
+  readonly distance: number;
+  readonly resizeWatchDebounce: number;
+  readonly overlap: boolean;
+  readonly edgeMargin: number;
+  readonly minLeft: number;
+  readonly minTop: number;
+  readonly maxRight: number;
+  readonly maxBottom: number;
+  readonly styles: CSSProperties;
+  readonly scrollerRef: Ref<HTMLElement | null>;
+  readonly bodyRef: Ref<HTMLElement | null>;
+  updatePageOffset(): void;
+  updateMenuRect(menuBodyRect?: ResizeDirectivePayload): void;
+  updateActivatorRect(): void;
+  updateRects(menuBodyRect?: ResizeDirectivePayload): void;
+}
 
-    const state: VMenuState = reactive({
-      pageXOffset: 0,
-      pageYOffset: 0,
-      rect: null,
-      activatorRect: null,
-    });
+export interface DefineMenuSettings<
+  Props extends Readonly<ComponentPropsOptions>,
+  Emits extends EmitsOptions,
+  Slots extends SlotsType,
+> extends DefineStackableSettings<
+      Props & MenuPropsOptions,
+      Emits,
+      Slots,
+      MenuAPI
+    >,
+    CreateMenuSchemeOptions {
+  props?: Props;
+  emits?: Emits;
+  slots?: Slots;
+  attrs?: Record<string, any>;
+}
 
-    const _scrollerRef = ref<HTMLElement | null>(null);
-    const _bodyRef = ref<HTMLElement | null>(null);
-    const _distance = computed(() => props.distance);
-    const _resizeWatchDebounce = computed(() => props.resizeWatchDebounce);
-    const $window = useWindow();
+export function defineMenuComponent<
+  Props extends Readonly<ComponentPropsOptions> = {},
+  Emits extends EmitsOptions = {},
+  Slots extends SlotsType = {},
+>(settings: DefineMenuSettings<Props, Emits, Slots>) {
+  const baseScheme = createMenuScheme(settings);
+  const { name, props, emits } = settings;
 
-    const _overlap = computed(() => props.overlap);
-    const _edgeMargin = computed(() => props.edgeMargin);
-    const _minLeft = computed(() => _edgeMargin.value + state.pageXOffset);
-    const _minTop = computed(() => _edgeMargin.value + state.pageYOffset);
-    const _maxRight = computed(
-      () => $window.width - _edgeMargin.value + state.pageXOffset,
-    );
-    const _maxBottom = computed(
-      () => $window.height - _edgeMargin.value + state.pageYOffset,
-    );
-    const _width = computed(() => props.width);
-    const _height = computed(() => props.height);
-    const _maxWidth = computed(() => props.maxWidth);
-    const _maxHeight = computed(() => props.maxHeight);
+  const Component = defineComponent({
+    name,
+    inheritAttrs: false,
+    props: {
+      ...baseScheme.props,
+      ...props,
+    } as typeof baseScheme.props & Props,
+    emits: {
+      ...baseScheme.emits,
+      ...emits,
+    } as typeof baseScheme.emits & Emits,
+    slots: settings.slots,
+    setup(_props, _ctx) {
+      const baseCtx = setupStackableComponent<
+        MenuPropsOptions,
+        {},
+        Slots,
+        MenuAPI
+      >(_props, _ctx, {
+        onContentMounted: () => {
+          updateRects();
+          // startHandleResize();
+        },
+        // onContentDetached: stopHandleResize,
+        transitionResolver,
+      });
 
-    const _positionFlags = computed(() => {
-      const { x = 'center', y = 'bottom' } = props;
-      // let { y } = props;
-      // if (!x && !y) {
-      //   y = 'bottom';
-      // }
+      const { props, control } = baseCtx;
 
-      return {
-        x,
-        y,
-        xInner: x === 'left-inner' || x === 'right-inner',
-        yInner: y === 'top-inner' || y === 'bottom-inner',
-        left: x === 'left' || x === 'left-inner',
-        right: x === 'right' || x === 'right-inner',
-        top: y === 'top' || y === 'top-inner',
-        bottom: y === 'bottom' || y === 'bottom-inner',
-      };
-    });
+      const state: VMenuState = reactive({
+        pageXOffset: 0,
+        pageYOffset: 0,
+        rect: null,
+        activatorRect: null,
+      });
 
-    function transitionResolver() {
-      return _transition.value;
-    }
-    const _transition = computed(() => {
-      const { transition } = props;
-      if (typeof transition === 'string' && transition !== DEFAULT_TRANSITION)
-        return transition;
-      const { x, y } = _positionFlags.value;
-      if (y === 'top') return 'v-stack-slide-y-reverse';
-      if (y === 'bottom') return 'v-stack-slide-y';
-      if (x === 'left') return 'v-stack-slide-x-reverse';
-      if (x === 'right') return 'v-stack-slide-x';
-      if (y === 'top-inner') return 'v-stack-slide-y';
-      if (y === 'bottom-inner') return 'v-stack-slide-y-reverse';
-      if (x === 'left-inner') return 'v-stack-slide-x';
-      if (x === 'right-inner') return 'v-stack-slide-x-reverse';
-      return 'v-stack-scale';
-    });
+      const _scrollerRef = ref<HTMLElement | null>(null);
+      const _bodyRef = ref<HTMLElement | null>(null);
+      const _distance = computed(() => props.distance);
+      const _resizeWatchDebounce = computed(() => props.resizeWatchDebounce);
+      const $window = useWindow();
 
-    const _rect = computed<VMenuRect | null>(() => {
-      const { rect, activatorRect } = state;
-      if (!rect) return null;
-      if (!activatorRect) return null;
+      const _overlap = computed(() => props.overlap);
+      const _edgeMargin = computed(() => props.edgeMargin);
+      const _minLeft = computed(() => _edgeMargin.value + state.pageXOffset);
+      const _minTop = computed(() => _edgeMargin.value + state.pageYOffset);
+      const _maxRight = computed(
+        () => $window.width - _edgeMargin.value + state.pageXOffset,
+      );
+      const _maxBottom = computed(
+        () => $window.height - _edgeMargin.value + state.pageYOffset,
+      );
+      const _width = computed(() => props.width);
+      const _height = computed(() => props.height);
+      const _maxWidth = computed(() => props.maxWidth);
+      const _maxHeight = computed(() => props.maxHeight);
 
-      const { allowOverflow } = props;
-      const { pageXOffset, pageYOffset } = state;
-      const minLeft = _minLeft.value;
-      const minTop = _minTop.value;
-      const maxRight = _maxRight.value;
-      const maxBottom = _maxBottom.value;
-      const distance = _distance.value;
-      const overlap = _overlap.value;
+      const _positionFlags = computed(() => {
+        const { x = 'center', y = 'bottom' } = props;
+        // let { y } = props;
+        // if (!x && !y) {
+        //   y = 'bottom';
+        // }
 
-      let computedWidth = _width.value;
-      let computedHeight = _height.value;
-      let computedMaxWidth = _maxWidth.value;
-      let computedMaxHeight = _maxHeight.value;
+        return {
+          x,
+          y,
+          xInner: x === 'left-inner' || x === 'right-inner',
+          yInner: y === 'top-inner' || y === 'bottom-inner',
+          left: x === 'left' || x === 'left-inner',
+          right: x === 'right' || x === 'right-inner',
+          top: y === 'top' || y === 'top-inner',
+          bottom: y === 'bottom' || y === 'bottom-inner',
+        };
+      });
 
-      let left: number, top: number, width: number, height: number;
+      function transitionResolver(): string {
+        return _transition.value;
+      }
 
-      const { width: myWidth, height: myHeight } = rect;
+      const _transition = computed<string>(() => {
+        const { transition } = props;
+        if (typeof transition === 'string' && transition !== DEFAULT_TRANSITION)
+          return transition;
+        const { x, y } = _positionFlags.value;
+        if (y === 'top') return 'v-stack-slide-y-reverse';
+        if (y === 'bottom') return 'v-stack-slide-y';
+        if (x === 'left') return 'v-stack-slide-x-reverse';
+        if (x === 'right') return 'v-stack-slide-x';
+        if (y === 'top-inner') return 'v-stack-slide-y';
+        if (y === 'bottom-inner') return 'v-stack-slide-y-reverse';
+        if (x === 'left-inner') return 'v-stack-slide-x';
+        if (x === 'right-inner') return 'v-stack-slide-x-reverse';
+        return 'v-stack-scale';
+      });
 
-      const {
-        top: activatorTop,
-        left: activatorLeft,
-        right: activatorRight,
-        bottom: activatorBottom,
-        width: activatorWidth,
-        height: activatorHeight,
-      } = activatorRect;
+      const _rect = computed<VMenuRect | null>(() => {
+        const { rect, activatorRect } = state;
+        if (!rect) return null;
+        if (!activatorRect) return null;
 
-      if (computedWidth === 'fit')
-        computedWidth = Math.max(activatorWidth, myWidth);
-      if (computedHeight === 'fit')
-        computedHeight = Math.max(activatorHeight, myHeight);
-      if (computedMaxWidth === 'fit') computedMaxWidth = activatorWidth;
-      if (computedMaxHeight === 'fit') computedMaxHeight = activatorHeight;
+        const { allowOverflow } = props;
+        const { pageXOffset, pageYOffset } = state;
+        const minLeft = _minLeft.value;
+        const minTop = _minTop.value;
+        const maxRight = _maxRight.value;
+        const maxBottom = _maxBottom.value;
+        const distance = _distance.value;
+        const overlap = _overlap.value;
 
-      let {
-        top: isTop,
-        bottom: isBottom,
-        left: isLeft,
-        right: isRight,
-      } = _positionFlags.value;
+        let computedWidth = _width.value;
+        let computedHeight = _height.value;
+        let computedMaxWidth = _maxWidth.value;
+        let computedMaxHeight = _maxHeight.value;
 
-      const { xInner, yInner } = _positionFlags.value;
+        let left: number, top: number, width: number, height: number;
 
-      width = typeof computedWidth === 'number' ? computedWidth : myWidth;
-      height = typeof computedHeight === 'number' ? computedHeight : myHeight;
+        const { width: myWidth, height: myHeight } = rect;
 
-      const overlapHeight = overlap ? activatorHeight : 0;
-      const overlapWidth = overlap ? activatorWidth : 0;
-      const topFree = activatorTop - _edgeMargin.value + overlapHeight;
-      const bottomFree =
-        $window.height - _edgeMargin.value - activatorBottom + overlapHeight;
-      const leftFree = activatorLeft - _edgeMargin.value + overlapWidth;
-      const rightFree =
-        $window.width - _edgeMargin.value - activatorRight + overlapWidth;
+        const {
+          top: activatorTop,
+          left: activatorLeft,
+          right: activatorRight,
+          bottom: activatorBottom,
+          width: activatorWidth,
+          height: activatorHeight,
+        } = activatorRect;
 
-      if (!yInner && computedMaxHeight == null) {
-        if (isBottom) {
-          if (height > bottomFree) {
-            if (bottomFree < topFree) {
-              isBottom = false;
-              isTop = true;
-              computedMaxHeight = topFree;
-            } else {
-              computedMaxHeight = bottomFree;
+        if (computedWidth === 'fit')
+          computedWidth = Math.max(activatorWidth, myWidth);
+        if (computedHeight === 'fit')
+          computedHeight = Math.max(activatorHeight, myHeight);
+        if (computedMaxWidth === 'fit') computedMaxWidth = activatorWidth;
+        if (computedMaxHeight === 'fit') computedMaxHeight = activatorHeight;
+
+        let {
+          top: isTop,
+          bottom: isBottom,
+          left: isLeft,
+          right: isRight,
+        } = _positionFlags.value;
+
+        const { xInner, yInner } = _positionFlags.value;
+
+        width = typeof computedWidth === 'number' ? computedWidth : myWidth;
+        height = typeof computedHeight === 'number' ? computedHeight : myHeight;
+
+        const overlapHeight = overlap ? activatorHeight : 0;
+        const overlapWidth = overlap ? activatorWidth : 0;
+        const topFree = activatorTop - _edgeMargin.value + overlapHeight;
+        const bottomFree =
+          $window.height - _edgeMargin.value - activatorBottom + overlapHeight;
+        const leftFree = activatorLeft - _edgeMargin.value + overlapWidth;
+        const rightFree =
+          $window.width - _edgeMargin.value - activatorRight + overlapWidth;
+
+        if (!yInner && computedMaxHeight == null) {
+          if (isBottom) {
+            if (height > bottomFree) {
+              if (bottomFree < topFree) {
+                isBottom = false;
+                isTop = true;
+                computedMaxHeight = topFree;
+              } else {
+                computedMaxHeight = bottomFree;
+              }
+            }
+          } else if (isTop) {
+            if (height > topFree) {
+              if (topFree < bottomFree) {
+                isTop = false;
+                isBottom = true;
+                computedMaxHeight = bottomFree;
+              } else {
+                computedMaxHeight = topFree;
+              }
             }
           }
-        } else if (isTop) {
-          if (height > topFree) {
-            if (topFree < bottomFree) {
-              isTop = false;
-              isBottom = true;
-              computedMaxHeight = bottomFree;
-            } else {
-              computedMaxHeight = topFree;
+        }
+
+        if (!xInner && computedMaxWidth == null) {
+          if (isRight) {
+            if (width > rightFree) {
+              if (rightFree < leftFree) {
+                isRight = false;
+                isLeft = true;
+                computedMaxWidth = leftFree;
+              } else {
+                computedMaxWidth = rightFree;
+              }
+            }
+          } else if (isLeft) {
+            if (width > leftFree) {
+              if (leftFree < rightFree) {
+                isLeft = false;
+                isRight = true;
+                computedMaxWidth = rightFree;
+              } else {
+                computedMaxWidth = leftFree;
+              }
             }
           }
         }
-      }
 
-      if (!xInner && computedMaxWidth == null) {
-        if (isRight) {
-          if (width > rightFree) {
-            if (rightFree < leftFree) {
-              isRight = false;
-              isLeft = true;
-              computedMaxWidth = leftFree;
-            } else {
-              computedMaxWidth = rightFree;
-            }
+        if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
+          width = computedMaxWidth;
+        }
+        if (
+          typeof computedMaxHeight === 'number' &&
+          height > computedMaxHeight
+        ) {
+          height = computedMaxHeight;
+        }
+
+        if (isTop) {
+          if (yInner) {
+            top = activatorTop;
+          } else {
+            top = activatorTop - height;
+            if (overlap) top += activatorHeight;
           }
-        } else if (isLeft) {
-          if (width > leftFree) {
-            if (leftFree < rightFree) {
-              isLeft = false;
-              isRight = true;
-              computedMaxWidth = rightFree;
-            } else {
-              computedMaxWidth = leftFree;
-            }
+        } else if (isBottom) {
+          if (yInner) {
+            top = activatorBottom - height;
+          } else {
+            top = activatorBottom;
+            if (overlap) top -= activatorHeight;
+          }
+        } else {
+          top = activatorTop - (height - activatorHeight) / 2;
+        }
+
+        top += pageYOffset;
+
+        if (isLeft) {
+          if (xInner) {
+            left = activatorLeft;
+          } else {
+            left = activatorLeft - width;
+            if (overlap) left += activatorWidth;
+          }
+        } else if (isRight) {
+          if (xInner) {
+            left = activatorRight - width;
+          } else {
+            left = activatorRight;
+            if (overlap) left -= activatorWidth;
+          }
+        } else {
+          left = activatorLeft - (width - activatorWidth) / 2;
+        }
+
+        left += pageXOffset;
+
+        if (!overlap) {
+          if (isBottom) {
+            top += distance;
+          } else if (isTop) {
+            top -= distance;
+          }
+
+          if (isRight) {
+            left += distance;
+          } else if (isLeft) {
+            left -= distance;
           }
         }
-      }
 
-      if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
-        width = computedMaxWidth;
-      }
-      if (typeof computedMaxHeight === 'number' && height > computedMaxHeight) {
-        height = computedMaxHeight;
-      }
+        let right = left + width;
+        let bottom = top + height;
 
-      if (isTop) {
-        if (yInner) {
-          top = activatorTop;
+        const rightDiff = right - maxRight;
+        if (rightDiff > 0) {
+          left -= rightDiff;
+          right -= rightDiff;
+        }
+
+        const bottomDiff = bottom - maxBottom;
+        if (bottomDiff > 0) {
+          top -= bottomDiff;
+          bottom -= bottomDiff;
+        }
+
+        const leftDiff = minLeft - left;
+        if (leftDiff > 0) {
+          left += leftDiff;
+          right += leftDiff;
+        }
+
+        const topDiff = minTop - top;
+        if (topDiff > 0) {
+          top += topDiff;
+          bottom += topDiff;
+        }
+
+        if (!allowOverflow) {
+          const overflowX = right - maxRight;
+          if (overflowX > 0) {
+            width -= overflowX;
+            right -= overflowX;
+          }
+          const overflowY = bottom - maxBottom;
+          if (overflowY > 0) {
+            height -= overflowY;
+            bottom -= overflowY;
+          }
+        }
+
+        return {
+          left,
+          right,
+          top,
+          bottom,
+          width,
+          height,
+        };
+      });
+
+      const _styles = computed<CSSProperties>(() => {
+        const styles: CSSProperties = {
+          position: 'absolute',
+        };
+        const rect = _rect.value;
+        if (rect) {
+          styles.left = rect.left + 'px';
+          styles.top = rect.top + 'px';
+          styles.width = rect.width + 'px';
+          styles.height = rect.height + 'px';
         } else {
-          top = activatorTop - height;
-          if (overlap) top += activatorHeight;
+          styles.visibility = 'hidden';
         }
-      } else if (isBottom) {
-        if (yInner) {
-          top = activatorBottom - height;
-        } else {
-          top = activatorBottom;
-          if (overlap) top -= activatorHeight;
+        return styles;
+      });
+
+      function updatePageOffset() {
+        if (!IN_WINDOW) return;
+        const { scrollingElement } = document;
+        if (!scrollingElement) {
+          logger.warn('missing document.scrollingElement try use polyfill');
+          return;
         }
-      } else {
-        top = activatorTop - (height - activatorHeight) / 2;
+        state.pageXOffset = scrollingElement.scrollLeft;
+        state.pageYOffset = scrollingElement.scrollTop;
       }
 
-      top += pageYOffset;
+      function updateMenuRect(menuBodyRect?: ResizeDirectivePayload) {
+        const content = control.contentRef.value;
+        const body = _bodyRef.value;
 
-      if (isLeft) {
-        if (xInner) {
-          left = activatorLeft;
-        } else {
-          left = activatorLeft - width;
-          if (overlap) left += activatorWidth;
-        }
-      } else if (isRight) {
-        if (xInner) {
-          left = activatorRight - width;
-        } else {
-          left = activatorRight;
-          if (overlap) left -= activatorWidth;
-        }
-      } else {
-        left = activatorLeft - (width - activatorWidth) / 2;
-      }
-
-      left += pageXOffset;
-
-      if (!overlap) {
-        if (isBottom) {
-          top += distance;
-        } else if (isTop) {
-          top -= distance;
+        if (!content || !body) {
+          state.rect = null;
+          return;
         }
 
-        if (isRight) {
-          left += distance;
-        } else if (isLeft) {
-          left -= distance;
+        const originalDisplay = content.style.display;
+        const originalWidth = content.style.width;
+        const originalHeight = content.style.height;
+        const originalMaxWidth = content.style.maxWidth;
+        const originalMaxHeight = content.style.maxHeight;
+
+        const rect = body.getBoundingClientRect();
+
+        content.style.display = '';
+        content.style.width = '';
+        content.style.height = '';
+        content.style.maxWidth = '';
+        content.style.maxHeight = '';
+
+        content.style.display = originalDisplay;
+        content.style.width = originalWidth;
+        content.style.height = originalHeight;
+        content.style.maxWidth = originalMaxWidth;
+        content.style.maxHeight = originalMaxHeight;
+
+        state.rect = {
+          left: rect.left,
+          right: rect.right,
+          top: rect.top,
+          bottom: rect.bottom,
+          // width: menuBodyRect ? menuBodyRect.width : rect.width,
+          // height: menuBodyRect ? menuBodyRect.height : rect.height,
+          width: rect.width,
+          height: rect.height,
+        };
+      }
+
+      function updateActivatorRect() {
+        const $activator = control.activator;
+        const el = $activator instanceof Event ? $activator.target : $activator;
+        if (!el) {
+          state.activatorRect = null;
+          return;
         }
+        const rect = (el as HTMLElement).getBoundingClientRect();
+
+        state.activatorRect = {
+          left: rect.left,
+          right: rect.right,
+          top: rect.top,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+        };
       }
 
-      let right = left + width;
-      let bottom = top + height;
-
-      const rightDiff = right - maxRight;
-      if (rightDiff > 0) {
-        left -= rightDiff;
-        right -= rightDiff;
+      function updateRects(menuBodyRect?: ResizeDirectivePayload) {
+        if (!IN_WINDOW) return;
+        updatePageOffset();
+        updateMenuRect(menuBodyRect);
+        updateActivatorRect();
       }
 
-      const bottomDiff = bottom - maxBottom;
-      if (bottomDiff > 0) {
-        top -= bottomDiff;
-        bottom -= bottomDiff;
-      }
-
-      const leftDiff = minLeft - left;
-      if (leftDiff > 0) {
-        left += leftDiff;
-        right += leftDiff;
-      }
-
-      const topDiff = minTop - top;
-      if (topDiff > 0) {
-        top += topDiff;
-        bottom += topDiff;
-      }
-
-      if (!allowOverflow) {
-        const overflowX = right - maxRight;
-        if (overflowX > 0) {
-          width -= overflowX;
-          right -= overflowX;
-        }
-        const overflowY = bottom - maxBottom;
-        if (overflowY > 0) {
-          height -= overflowY;
-          bottom -= overflowY;
-        }
-      }
-
-      return {
-        left,
-        right,
-        top,
-        bottom,
-        width,
-        height,
+      const stackMenuCtx: typeof baseCtx = {
+        ...baseCtx,
+        get pageXOffset() {
+          return state.pageXOffset;
+        },
+        get pageYOffset() {
+          return state.pageYOffset;
+        },
+        get distance() {
+          return _distance.value;
+        },
+        get resizeWatchDebounce() {
+          return _resizeWatchDebounce.value;
+        },
+        get overlap() {
+          return _overlap.value;
+        },
+        get edgeMargin() {
+          return _edgeMargin.value;
+        },
+        get minLeft() {
+          return _minLeft.value;
+        },
+        get minTop() {
+          return _minTop.value;
+        },
+        get maxRight() {
+          return _maxRight.value;
+        },
+        get maxBottom() {
+          return _maxBottom.value;
+        },
+        get styles() {
+          return _styles.value;
+        },
+        get attrs() {
+          return {
+            // class: snackClasses.value,
+            ref: _bodyRef,
+          };
+        },
+        bodyRef: _bodyRef,
+        scrollerRef: _scrollerRef,
+        updatePageOffset,
+        updateMenuRect,
+        updateActivatorRect,
+        updateRects,
       };
-    });
 
-    const _styles = computed<CSSProperties>(() => {
-      const styles: CSSProperties = {
-        position: 'absolute',
+      const render = settings.setup?.(stackMenuCtx as any) || settings.render;
+      if (!render) {
+        throw new VueStackError('render function is required.');
+      }
+
+      const hostBaseAttrs = settings.attrs || {};
+
+      const hostAttrs = {
+        ...hostBaseAttrs,
+        class: ['v-stack-menu', hostBaseAttrs.class],
       };
-      const rect = _rect.value;
-      if (rect) {
-        styles.left = rect.left + 'px';
-        styles.top = rect.top + 'px';
-        styles.width = rect.width + 'px';
-        styles.height = rect.height + 'px';
-      } else {
-        styles.visibility = 'hidden';
-      }
-      return styles;
-    });
 
-    function updatePageOffset() {
-      if (!IN_WINDOW) return;
-      const { scrollingElement } = document;
-      if (!scrollingElement) {
-        logger.warn('missing document.scrollingElement try use polyfill');
-        return;
-      }
-      state.pageXOffset = scrollingElement.scrollLeft;
-      state.pageYOffset = scrollingElement.scrollTop;
-    }
-
-    function updateMenuRect(menuBodyRect?: ResizeDirectivePayload) {
-      const content = stackControl.contentRef.value;
-      const body = _bodyRef.value;
-
-      if (!content || !body) {
-        state.rect = null;
-        return;
-      }
-
-      const originalDisplay = content.style.display;
-      const originalWidth = content.style.width;
-      const originalHeight = content.style.height;
-      const originalMaxWidth = content.style.maxWidth;
-      const originalMaxHeight = content.style.maxHeight;
-
-      const rect = body.getBoundingClientRect();
-
-      content.style.display = '';
-      content.style.width = '';
-      content.style.height = '';
-      content.style.maxWidth = '';
-      content.style.maxHeight = '';
-
-      content.style.display = originalDisplay;
-      content.style.width = originalWidth;
-      content.style.height = originalHeight;
-      content.style.maxWidth = originalMaxWidth;
-      content.style.maxHeight = originalMaxHeight;
-
-      state.rect = {
-        left: rect.left,
-        right: rect.right,
-        top: rect.top,
-        bottom: rect.bottom,
-        // width: menuBodyRect ? menuBodyRect.width : rect.width,
-        // height: menuBodyRect ? menuBodyRect.height : rect.height,
-        width: rect.width,
-        height: rect.height,
-      };
-    }
-
-    function updateActivatorRect() {
-      const $activator = stackControl.activator;
-      const el = $activator instanceof Event ? $activator.target : $activator;
-      if (!el) {
-        state.activatorRect = null;
-        return;
-      }
-      const rect = (el as HTMLElement).getBoundingClientRect();
-
-      state.activatorRect = {
-        left: rect.left,
-        right: rect.right,
-        top: rect.top,
-        bottom: rect.bottom,
-        width: rect.width,
-        height: rect.height,
-      };
-    }
-
-    function updateRects(menuBodyRect?: ResizeDirectivePayload) {
-      if (!IN_WINDOW) return;
-      updatePageOffset();
-      updateMenuRect(menuBodyRect);
-      updateActivatorRect();
-    }
-
-    const stackMenuControl: VMenuControl = {
-      get pageXOffset() {
-        return state.pageXOffset;
-      },
-      get pageYOffset() {
-        return state.pageYOffset;
-      },
-      get distance() {
-        return _distance.value;
-      },
-      get resizeWatchDebounce() {
-        return _resizeWatchDebounce.value;
-      },
-      get overlap() {
-        return _overlap.value;
-      },
-      get edgeMargin() {
-        return _edgeMargin.value;
-      },
-      get minLeft() {
-        return _minLeft.value;
-      },
-      get minTop() {
-        return _minTop.value;
-      },
-      get maxRight() {
-        return _maxRight.value;
-      },
-      get maxBottom() {
-        return _maxBottom.value;
-      },
-      get styles() {
-        return _styles.value;
-      },
-      bodyRef: _bodyRef,
-      scrollerRef: _scrollerRef,
-      updatePageOffset,
-      updateMenuRect,
-      updateActivatorRect,
-      updateRects,
-    };
-
-    return {
-      stackControl,
-      stackMenuControl,
-    };
-  },
-  render() {
-    const { stackControl, stackMenuControl } = this;
-    const { render, color } = stackControl;
-    const { styles } = stackMenuControl;
-
-    return render((children) => {
-      return withDirectives(
-        <div
-          class={['v-menu', color.colorClasses.value]}
-          style={styles}
-          ref={stackMenuControl.scrollerRef}>
-          {withDirectives(
-            <div class="v-menu__body" ref={stackMenuControl.bodyRef}>
-              {children}
+      return () => {
+        return control.render((children) => {
+          return withDirectives(
+            <div {...hostAttrs} style={_styles.value} ref={_scrollerRef}>
+              {withDirectives(render(children, stackMenuCtx as any), [
+                resizeDirectiveArgument(updateRects),
+              ])}
             </div>,
             [
-              resizeDirectiveArgument((payload) => {
-                stackMenuControl.updateRects(payload);
+              resizeDirectiveArgument({
+                handler: updateRects,
+                rootMode: true,
               }),
             ],
-          )}
-        </div>,
-        [
-          resizeDirectiveArgument({
-            handler: stackMenuControl.updateRects,
-            rootMode: true,
-          }),
-        ],
-      );
-    });
-  },
-});
+          );
+        });
+      };
+    },
+  });
 
-export type VMenuStatic = typeof VMenu;
+  return Component;
+}

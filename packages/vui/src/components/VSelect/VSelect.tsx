@@ -36,11 +36,11 @@ import {
 } from '../../composables';
 import { VUI_SELECT_SYMBOL, useVui } from '../../injections';
 import { VIcon } from '../VIcon';
-import { VMenu } from '../kits';
+import { VMenu } from '../VMenu';
 import { VOptionGroup } from '../VOptionGroup';
 import { VOption } from '../VOption';
 import { VButton } from '../VButton';
-import { VMenuControl } from '@fastkit/vue-stack';
+import { MenuAPI } from '@fastkit/vue-stack';
 
 export const ARROW_KEY_TYPES = useKeyboard.Key(['ArrowUp', 'ArrowDown']);
 
@@ -82,7 +82,7 @@ export const VSelect = defineComponent({
   slots,
   emits,
   setup(props, ctx) {
-    const menuRef: Ref<{ stackMenuControl: VMenuControl } | null> = ref(null);
+    const menuRef: Ref<{ menu: MenuAPI } | null> = ref(null);
     const menuOpened = ref(false);
     const showMenu = () => {
       menuOpened.value = true;
@@ -155,9 +155,9 @@ export const VSelect = defineComponent({
     };
 
     const clearKeyFocused = () => {
-      const menu = menuRef.value;
+      const menu = menuRef.value?.menu;
       if (!menu) return;
-      const bodyEl = menu.stackMenuControl.bodyRef.value;
+      const bodyEl = menu.bodyRef.value;
       if (!bodyEl) return;
 
       const els = Array.from(
@@ -168,10 +168,10 @@ export const VSelect = defineComponent({
     };
 
     const getItemElements = (): HTMLElement[] | void => {
-      const menu = menuRef.value;
+      const menu = menuRef.value?.menu;
       if (!menu) return;
 
-      const bodyEl = menu.stackMenuControl.bodyRef.value;
+      const bodyEl = menu.bodyRef.value;
 
       if (!bodyEl) return;
 

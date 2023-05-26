@@ -11,7 +11,7 @@ import {
   VLink,
 } from '@fastkit/vui';
 import { PackageProvide } from '@@';
-import { useHead } from '@vueuse/head';
+import { useHead } from '@unhead/vue';
 import { VLanguageSwitcher } from '~/components';
 import { capitalize } from '@fastkit/helpers';
 

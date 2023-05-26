@@ -12,6 +12,32 @@ export default defineComponent({
           Components
         </VHero>
 
+        <VButton
+          onClick={() => {
+            this.$vui.alert('ok');
+          }}>
+          alert
+        </VButton>
+
+        <VButton
+          onClick={() => {
+            this.$vui.snackbar({
+              content: 'snackbar',
+            });
+          }}>
+          snackbar
+        </VButton>
+
+        <VButton
+          onClick={() => {
+            this.$vui.sheet({
+              content: 'ok',
+              backdrop: true,
+            });
+          }}>
+          sheet
+        </VButton>
+
         <VGridContainer class="mt-4" spacing={1} spacingY={5}>
           <VGridItem size={4}>
             <VCard>4</VCard>
