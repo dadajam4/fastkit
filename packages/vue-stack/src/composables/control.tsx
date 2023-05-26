@@ -15,7 +15,6 @@ import {
   DirectiveArguments,
   cloneVNode,
 } from 'vue';
-import { useColorClasses } from '@fastkit/vue-color-scheme';
 import { toInt, IN_WINDOW } from '@fastkit/helpers';
 import { attemptFocus, focusFirstDescendant } from '@fastkit/dom';
 import { StyleValue } from '@fastkit/vue-utils';
@@ -73,9 +72,7 @@ export function useStackControl(
 
   const $vstack = useVueStack();
   const rootControl = useStackRoot();
-  const color = useColorClasses(props, { useRootThemeDefault: true });
   const state = reactive<VStackControlState>({
-    // id,
     isActive: props.lazyBoot ? false : props.modelValue,
     activator: null,
     closeReason: 'indeterminate',
@@ -122,7 +119,8 @@ export function useStackControl(
         class="v-stack-backdrop"
         style={style}
         v-show={control.isActive}
-        ref={backdropRef}></div>
+        ref={backdropRef}
+      />
     );
   });
   const navigationGuard = computed<VStackNavigationGuard>(() => {
@@ -467,9 +465,6 @@ export function useStackControl(
     },
     get timeout() {
       return timeout.value;
-    },
-    get color() {
-      return color;
     },
     get classes() {
       const classes = ['v-stack', inheritedAttrs.value.classes];

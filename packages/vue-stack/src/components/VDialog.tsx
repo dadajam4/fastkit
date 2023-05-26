@@ -1,68 +1,106 @@
 import './VDialog.scss';
-import { defineComponent, ExtractPropTypes } from 'vue';
-import { createStackableDefine, createStackActionProps } from '../schemes';
-import { useStackControl, useStackAction } from '../composables';
-import { ExtractPropInput } from '@fastkit/vue-utils';
+import {
+  defineComponent,
+  ComponentPropsOptions,
+  EmitsOptions,
+  SlotsType,
+} from 'vue';
+import { createStackableDefine } from '../schemes';
+import {
+  DefineStackableSettings,
+  setupStackableComponent,
+} from '../composables';
+import { VueStackError } from '../logger';
 
-const { props, emits } = createStackableDefine({
-  defaultTransition: 'v-stack-slide-y',
-  defaultFocusTrap: true,
-  defaultFocusRestorable: true,
-  defaultScrollLock: true,
-});
+interface CreateDialogSchemeOptions {
+  /**
+   * @default "v-stack-slide-y"
+   */
+  defaultTransition?: string;
+}
 
-export const stackDialogProps = {
-  ...props,
-  ...createStackActionProps(),
-  dense: Boolean,
-};
+function createDialogScheme(options: CreateDialogSchemeOptions = {}) {
+  const { defaultTransition = 'v-stack-slide-y' } = options;
 
-export type VDialogProps = ExtractPropInput<typeof stackDialogProps>;
+  const { props, emits } = createStackableDefine({
+    defaultTransition,
+    defaultFocusTrap: true,
+    defaultFocusRestorable: true,
+    defaultScrollLock: true,
+  });
 
-export type VDialogResolvedProps = ExtractPropTypes<typeof stackDialogProps>;
+  return {
+    props,
+    emits,
+  };
+}
 
-export const VDialog = defineComponent({
-  name: 'VDialog',
-  inheritAttrs: false,
-  props: stackDialogProps,
-  emits,
-  setup(props, ctx) {
-    const stackControl = useStackControl(props, ctx);
-    const actionControl = useStackAction(props, stackControl);
-    return {
-      stackControl,
-      actionControl,
-    };
-  },
-  render() {
-    const { render, color } = this.stackControl;
-    const { $actions } = this.actionControl;
-    return render((children, { withClickOutside }) => {
-      return (
-        <div
-          class={[
-            'v-dialog',
-            {
-              'v-dialog--dense': this.dense,
-            },
-          ]}
-          tabindex="0">
-          <div class="v-dialog__scroller">
-            <div class="v-dialog__centerer">
-              {withClickOutside(
-                <div class={['v-dialog__content', color.colorClasses.value]}>
-                  <div class="v-dialog__body">{children}</div>
-                  {$actions.length > 0 && (
-                    <div class="v-dialog__actions">{$actions}</div>
-                  )}
-                </div>,
-              )}
-            </div>
-          </div>
-        </div>
+export interface DefineDialogSettings<
+  Props extends Readonly<ComponentPropsOptions>,
+  Emits extends EmitsOptions,
+  Slots extends SlotsType,
+> extends DefineStackableSettings<Props, Emits, Slots>,
+    CreateDialogSchemeOptions {
+  props?: Props;
+  emits?: Emits;
+  slots?: Slots;
+  attrs?: Record<string, any>;
+}
+
+export function defineDialogComponent<
+  Props extends Readonly<ComponentPropsOptions>,
+  Emits extends EmitsOptions,
+  Slots extends SlotsType,
+>(settings: DefineDialogSettings<Props, Emits, Slots>) {
+  const baseScheme = createDialogScheme(settings);
+  const { name, props, emits } = settings;
+
+  const Component = defineComponent({
+    name,
+    inheritAttrs: false,
+    props: {
+      ...baseScheme.props,
+      ...props,
+    } as typeof baseScheme.props & Props,
+    emits: {
+      ...baseScheme.emits,
+      ...emits,
+    } as typeof baseScheme.emits & Emits,
+    slots: settings.slots,
+    setup(_props, _ctx) {
+      const dialogCtx = setupStackableComponent<typeof baseScheme.props>(
+        _props,
+        _ctx,
       );
-    });
-  },
-});
+      const { control } = dialogCtx;
+      const render = settings.setup?.(dialogCtx as any) || settings.render;
+      if (!render) {
+        throw new VueStackError('render function is required.');
+      }
 
-export type VDialogStatic = typeof VDialog;
+      const hostBaseAttrs = settings.attrs || {};
+
+      const hostAttrs = {
+        ...hostBaseAttrs,
+        class: ['v-stack-dialog', hostBaseAttrs.class],
+        tabindex: '0',
+      };
+
+      return () => {
+        return control.render((children, { withClickOutside }) => {
+          return (
+            <div {...hostAttrs}>
+              <div class="v-stack-dialog__scroller">
+                <div class="v-stack-dialog__centerer">
+                  {withClickOutside(render(children, dialogCtx as any))}
+                </div>
+              </div>
+            </div>
+          );
+        });
+      };
+    },
+  });
+
+  return Component;
+}

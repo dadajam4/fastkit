@@ -1,128 +1,152 @@
-import { h, VNode, VNodeChild } from 'vue';
-
+import { ComponentPublicInstance, VNodeChild, h, VNode } from 'vue';
 import { VStackControl } from './control';
-import type { VDialogStatic, VDialogProps } from '../components/VDialog';
-import type { VSnackbarStatic, VSnackbarProps } from '../components/VSnackbar';
-import type { VMenuStatic, VMenuProps } from '../components/VMenu';
-import type {
-  VSheetModalStatic,
-  VSheetModalProps,
-} from '../components/VSheetModal';
 
-// export type VStackDynamicCtor = VDialogStatic;
+export interface StackableComponent {
+  new (): ComponentPublicInstance<
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any
+  >;
+}
 
-export type VStackDynamicChildren =
-  | VNodeChild
-  | ((control: VStackControl) => VNodeChild);
+type ComponentProps<T extends StackableComponent> = InstanceType<T>['$props'];
 
-export function normalizeVStackDynamicChildren(
-  children: VStackDynamicChildren,
-) {
-  if (typeof children === 'string') {
+type ComponentSlots<T extends StackableComponent> = Omit<
+  InstanceType<T>['$slots'],
+  'default'
+> & {
+  default?: DefaultSlot;
+};
+
+type SlotLike = (...args: any[]) => any;
+
+type SlotsLike = Record<keyof any, SlotLike>;
+
+type NormalizeSlot<Slot extends SlotLike | undefined> = (
+  ...args: Parameters<Exclude<Slot, undefined>>
+) => VNodeChild;
+
+type RawSlots<Slots extends SlotsLike> = {
+  [K in keyof Slots]: NormalizeSlot<Slots[K]> | VNodeChild;
+};
+
+type DefaultSlot = (stackControl: VStackControl) => VNodeChild;
+
+export type DefaultContent = VNodeChild | DefaultSlot;
+
+export type ExtractDynamicStackProps<
+  T extends StackableComponent,
+  _Slots = ComponentSlots<T>,
+> = (ComponentProps<T> & { content?: DefaultContent }) | null;
+
+export type ExtractDynamicStackSlots<
+  T extends StackableComponent,
+  _Slots = ComponentSlots<T>,
+> = RawSlots<_Slots extends SlotsLike ? _Slots : SlotsLike>;
+
+export type DynamicStackPayload<Payload = any> = Promise<Payload>;
+
+export type StackableLauncher<
+  T extends StackableComponent,
+  Payload = any,
+  _Props = ExtractDynamicStackProps<T>,
+> = ((content: DefaultContent) => DynamicStackPayload<Payload>) &
+  ((props: _Props, content: DefaultContent) => DynamicStackPayload<Payload>) &
+  ((
+    props: _Props,
+    slots: ExtractDynamicStackSlots<T>,
+  ) => DynamicStackPayload<Payload>);
+
+export interface DynamicStackSettings<T extends StackableComponent> {
+  Ctor: T;
+  props: any;
+  slots: any;
+}
+
+const isObject = (source: unknown): source is Record<keyof any, any> => {
+  return !!source && typeof source === 'object' && !Array.isArray(source);
+};
+
+const normalizeSlot = (source: unknown) => {
+  if (typeof source === 'function') return source;
+  if (typeof source === 'string') {
     const tmp: (VNode | string)[] = [];
-    const lines = children.trim().split('\n');
+    const lines = source.trim().split('\n');
     lines.forEach((line, index) => {
       if (index !== 0) tmp.push(h('br'));
       tmp.push(line);
     });
     return () => tmp;
   }
-  return typeof children === 'function'
-    ? {
-        default: (control: VStackControl) => {
-          const child = children(control);
-          return [child];
-        },
-      }
-    : () => [children];
-}
-
-export interface VStackDynamicBaseSetting {
-  children: VStackDynamicChildren;
-}
-
-export interface VStackDynamicDialogSetting extends VStackDynamicBaseSetting {
-  Ctor: VDialogStatic;
-  props: Partial<VDialogProps>;
-}
-
-export interface VStackDynamicSnackbarSetting extends VStackDynamicBaseSetting {
-  Ctor: VSnackbarStatic;
-  props: Partial<VSnackbarProps>;
-}
-
-export interface VStackDynamicMenuSetting extends VStackDynamicBaseSetting {
-  Ctor: VMenuStatic;
-  props: Partial<VMenuProps>;
-}
-
-export interface VStackDynamicSheetSetting extends VStackDynamicBaseSetting {
-  Ctor: VSheetModalStatic;
-  props: Partial<VSheetModalProps>;
-}
-
-// import type { VSheetModalStatic, VSheetModalProps } from '../components/VSheetModal';
-
-export type VStackDynamicSetting =
-  | VStackDynamicDialogSetting
-  | VStackDynamicSnackbarSetting
-  | VStackDynamicMenuSetting
-  | VStackDynamicSheetSetting;
-
-export type VStackDynamicResolver = (value: any) => void;
-
-export interface VStackDynamicInternalSetting {
-  id: number;
-  setting: VStackDynamicSetting;
-  remove: () => void;
-  resolve: VStackDynamicResolver;
-  reject: () => any;
-}
-
-export type VStackDynamicInput<T extends { [key: string]: any }> =
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | (T & { content: VStackDynamicChildren });
-
-export type ResolvedVStackDynamicInput<
-  T extends { content: VStackDynamicChildren },
-> = {
-  props: Omit<T, 'content'>;
-  children: VStackDynamicChildren;
+  return () => source;
 };
 
-export function resolveVStackDynamicInput<
-  T extends { content: VStackDynamicChildren },
->(input: VStackDynamicInput<T>): ResolvedVStackDynamicInput<T> {
-  const _input: T =
-    input === null || typeof input !== 'object'
-      ? ({ content: input } as T)
-      : input;
+export function resolveDynamicStackSettings<T extends StackableComponent>(
+  Ctor: T,
+  contentOrProps: DefaultContent | ExtractDynamicStackProps<T>,
+  contentOrSlots?: DefaultContent | ExtractDynamicStackSlots<T>,
+  propsResolver?: (
+    props: ExtractDynamicStackProps<T>,
+  ) => ExtractDynamicStackProps<T>,
+): DynamicStackSettings<T> {
+  let slots: any;
+  let props: any;
 
-  const props: Omit<T, 'content'> = {
-    ..._input,
-  };
-  delete (props as T).content;
+  if (isObject(contentOrProps)) {
+    slots = isObject(contentOrSlots)
+      ? {
+          ...contentOrSlots,
+        }
+      : {
+          default: contentOrSlots,
+        };
+    props = {
+      ...contentOrProps,
+    };
+    if ('content' in props) {
+      slots.default = props.content;
+      delete props.content;
+    }
+  } else {
+    slots = {
+      default: contentOrProps,
+    };
+  }
+
+  for (const key of Object.keys(slots)) {
+    slots[key] = normalizeSlot(slots[key]);
+  }
+
+  if (propsResolver) {
+    props = propsResolver(props);
+  }
 
   return {
-    props,
-    children: _input.content,
+    Ctor,
+    props: {
+      ...props,
+      lazyBoot: true,
+      modelValue: true,
+    },
+    slots,
   };
 }
 
-export type VStackDynamicDialogInput = VStackDynamicInput<
-  Partial<VDialogProps>
->;
+export type DynamicStackResolver = (value: any) => void;
 
-export type VStackDynamicSnackbarInput = VStackDynamicInput<
-  Partial<VSnackbarProps>
->;
-
-export type VStackDynamicMenuInput = VStackDynamicInput<Partial<VMenuProps>>;
-
-export type VStackDynamicSheetInput = VStackDynamicInput<
-  Partial<VSheetModalProps>
->;
+export interface DynamicStackInternalSetting {
+  id: number;
+  setting: DynamicStackSettings<any>;
+  remove: () => void;
+  resolve: DynamicStackResolver;
+  reject: () => any;
+}

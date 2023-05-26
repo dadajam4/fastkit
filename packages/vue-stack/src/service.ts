@@ -2,47 +2,29 @@ import { Ref, ref, markRaw, ComputedRef, computed } from 'vue';
 import { VStackControl } from './schemes/control';
 export type { VStackControl } from './schemes/control';
 import {
-  VStackDynamicSetting,
-  VStackDynamicInternalSetting,
-  VStackDynamicDialogInput,
-  VStackDynamicSnackbarInput,
-  VStackDynamicMenuInput,
-  resolveVStackDynamicInput,
-  ResolvedVStackDynamicInput,
-  VStackDynamicChildren,
-  VStackDynamicSheetInput,
+  DynamicStackInternalSetting,
+  StackableComponent,
+  ExtractDynamicStackProps,
+  DefaultContent,
+  ExtractDynamicStackSlots,
+  DynamicStackPayload,
+  resolveDynamicStackSettings,
+  StackableLauncher,
 } from './schemes/dynamic';
-export {
-  type VStackDynamicDialogInput,
-  type VStackDynamicInput,
-  resolveVStackDynamicInput,
-} from './schemes/dynamic';
-import {
-  VStackAction,
-  VStackBuiltinActionType,
-  VStackBuiltinActions,
-  BUILTIN_ACTION_HANDLERS,
-} from './schemes/action';
 export { VueStackInjectionKey } from './injections';
-// import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
-import { VDialogProps } from './components/VDialog';
-// import { VSheetModalProps } from './components/VSheetModal';
 
 export interface VueStackServiceOptions {
   zIndex?: number;
-  actions: VStackBuiltinActions;
   snackbarDefaultPosition?: 'top' | 'bottom';
 }
 
 export class VueStackService {
   private readonly _controls: Ref<(() => VStackControl)[]> = ref([]);
   private readonly __controls: ComputedRef<VStackControl[]>;
-  // readonly controls: VStackControl[] = [];
   readonly zIndex: number;
   readonly snackbarDefaultPosition: 'top' | 'bottom';
-  readonly builtinActions: VStackBuiltinActions;
   private _increment = 0;
-  private readonly _dynamicSettings: Ref<VStackDynamicInternalSetting[]> = ref(
+  private readonly _dynamicSettings: Ref<DynamicStackInternalSetting[]> = ref(
     [],
   );
 
@@ -54,10 +36,9 @@ export class VueStackService {
     return this._dynamicSettings.value;
   }
 
-  constructor(opts: VueStackServiceOptions) {
-    const { zIndex = 32767, actions, snackbarDefaultPosition = 'top' } = opts;
+  constructor(opts: VueStackServiceOptions = {}) {
+    const { zIndex = 32767, snackbarDefaultPosition = 'top' } = opts;
     this.zIndex = zIndex;
-    this.builtinActions = actions;
     this.snackbarDefaultPosition = snackbarDefaultPosition;
 
     this.__controls = computed(() => this._controls.value.map((c) => c()));
@@ -111,7 +92,7 @@ export class VueStackService {
     return this.getFront(filter) === control;
   }
 
-  private removeDynamicSetting(setting: VStackDynamicInternalSetting) {
+  private removeDynamicSetting(setting: DynamicStackInternalSetting) {
     const settings = this._dynamicSettings.value;
     const index = settings.indexOf(setting);
     if (index !== -1) {
@@ -119,120 +100,66 @@ export class VueStackService {
     }
   }
 
-  dynamic(setting: VStackDynamicSetting) {
+  dynamic<T extends StackableComponent, Payload = any>(
+    Ctor: T,
+    content: DefaultContent,
+  ): DynamicStackPayload<Payload>;
+  dynamic<T extends StackableComponent, Payload = any>(
+    Ctor: T,
+    props: ExtractDynamicStackProps<T>,
+    content: DefaultContent,
+    propsResolver?: (
+      props: ExtractDynamicStackProps<T>,
+    ) => ExtractDynamicStackProps<T>,
+  ): DynamicStackPayload<Payload>;
+  dynamic<T extends StackableComponent, Payload = any>(
+    Ctor: T,
+    props: ExtractDynamicStackProps<T>,
+    slots: ExtractDynamicStackSlots<T>,
+    propsResolver?: (
+      props: ExtractDynamicStackProps<T>,
+    ) => ExtractDynamicStackProps<T>,
+  ): DynamicStackPayload<Payload>;
+  dynamic<T extends StackableComponent, Payload = any>(
+    Ctor: T,
+    contentOrProps: DefaultContent | ExtractDynamicStackProps<T>,
+    contentOrSlots?: DefaultContent | ExtractDynamicStackSlots<T>,
+    propsResolver?: (
+      props: ExtractDynamicStackProps<T>,
+    ) => ExtractDynamicStackProps<T>,
+  ): DynamicStackPayload<Payload> {
+    const setting = resolveDynamicStackSettings(
+      Ctor,
+      contentOrProps,
+      contentOrSlots,
+      propsResolver,
+    );
     return new Promise<any>((resolve, reject) => {
-      const _setting: VStackDynamicInternalSetting = {
+      const _setting: DynamicStackInternalSetting = markRaw({
         id: this.genId(),
-        setting: {
-          ...setting,
-          props: {
-            ...setting.props,
-            lazyBoot: true,
-            modelValue: true,
-          },
-        },
+        setting,
         resolve,
         reject,
         remove: () => {
           this.removeDynamicSetting(_setting);
         },
-      };
+      });
       this._dynamicSettings.value.push(_setting);
     });
   }
 
-  async dialog(
-    resolvedInput: ResolvedVStackDynamicInput<
-      VDialogProps & {
-        content: VStackDynamicChildren;
-      }
-    >,
-  ) {
-    const { VDialog } = await import('./components/VDialog');
-    const { props, children } = resolvedInput;
-    // if (!props.actions) {
-    //   props.actions = [this.action('close')];
-    // }
-    return this.dynamic({
-      Ctor: markRaw(VDialog),
-      props: markRaw(props),
-      children,
-    });
-  }
-
-  async alert(input: VStackDynamicDialogInput) {
-    const resolvedInput = resolveVStackDynamicInput(input);
-    if (!resolvedInput.props.actions) {
-      resolvedInput.props.actions = [this.action('ok')];
-    }
-    if (resolvedInput.props.backdrop == null) {
-      resolvedInput.props.backdrop = true;
-    }
-    return this.dialog(resolvedInput);
-  }
-
-  async confirm(input: VStackDynamicDialogInput) {
-    const resolvedInput = resolveVStackDynamicInput(input);
-    if (!resolvedInput.props.actions) {
-      resolvedInput.props.actions = [this.action('cancel'), this.action('ok')];
-    }
-    if (resolvedInput.props.backdrop == null) {
-      resolvedInput.props.backdrop = true;
-    }
-    return this.dialog(resolvedInput);
-  }
-
-  async snackbar(input: VStackDynamicSnackbarInput) {
-    const { VSnackbar } = await import('./components/VSnackbar');
-    const { props, children } = resolveVStackDynamicInput(input);
-    return this.dynamic({
-      Ctor: markRaw(VSnackbar),
-      props: markRaw(props),
-      children,
-    });
-  }
-
-  async menu(input: VStackDynamicMenuInput) {
-    const { VMenu } = await import('./components/VMenu');
-    const { props, children } = resolveVStackDynamicInput(input);
-    return this.dynamic({
-      Ctor: markRaw(VMenu),
-      props: markRaw(props),
-      children,
-    });
-  }
-
-  async sheet(input: VStackDynamicSheetInput) {
-    const resolvedInput = resolveVStackDynamicInput(input);
-    const { VSheetModal } = await import('./components/VSheetModal');
-    const { props, children } = resolvedInput;
-    return this.dynamic({
-      Ctor: markRaw(VSheetModal),
-      props: markRaw(props),
-      children,
-    });
-  }
-
-  action(
-    key: VStackBuiltinActionType,
-    override?: Partial<VStackAction>,
-    attrs?: Record<string, unknown>,
-  ) {
-    const factory = this.builtinActions[key];
-    const _onClick = BUILTIN_ACTION_HANDLERS[key];
-    const action: VStackAction = {
-      key,
-      content: ({ control, key }) => {
-        const onClick = (ev: MouseEvent) => _onClick(control, ev);
-        return factory({
-          service: this,
-          control,
-          key,
-          bindings: { onClick, ...attrs },
-        });
-      },
-      ...override,
-    };
-    return action;
+  createLauncher<T extends StackableComponent, Payload = any>(
+    Ctor: T,
+    propsResolver?: (
+      props: ExtractDynamicStackProps<T>,
+    ) => ExtractDynamicStackProps<T>,
+  ): StackableLauncher<T, Payload> {
+    return ((contentOrProps: any, contentOrSlots: any) =>
+      this.dynamic(
+        Ctor,
+        contentOrProps,
+        contentOrSlots,
+        propsResolver,
+      )) as StackableLauncher<T, Payload>;
   }
 }

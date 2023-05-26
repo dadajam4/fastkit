@@ -16,7 +16,6 @@ import { installResizeDirective } from '@fastkit/vue-resize';
 import { VueColorSchemePlugin } from '@fastkit/vue-color-scheme';
 import { installVueAppLayout } from '@fastkit/vue-app-layout';
 import { onAppUnmount } from '@fastkit/vue-utils';
-import { VButton } from './components/VButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VuiPluginStackOptions extends VueStackServiceOptions {}
@@ -52,34 +51,14 @@ declare module 'vue' {
 
 export class VuiPlugin {
   static install(app: App, opts: VuiPluginOptions) {
-    const { colorScheme, stack, uiSettings } = opts;
+    const { colorScheme, stack } = opts;
 
     // ColorScheme
     const vueColorSchemePlugin = new VueColorSchemePlugin(colorScheme);
     app.use(vueColorSchemePlugin);
 
     // Stack
-    installVueStackPlugin(app, {
-      actions: {
-        ok: ({ bindings }) => (
-          <VButton {...uiSettings.dialogOk} {...bindings}>
-            OK
-          </VButton>
-        ),
-        cancel: ({ bindings }) => (
-          <VButton {...uiSettings.dialogCancel} {...bindings}>
-            CANCEL
-          </VButton>
-        ),
-        close: ({ bindings }) => (
-          <VButton {...uiSettings.dialogClose} {...bindings}>
-            CLOSE
-          </VButton>
-        ),
-        ...(stack ? stack.actions : {}),
-      },
-      ...stack,
-    });
+    installVueStackPlugin(app, stack);
 
     installVueAppLayout(app);
     installBodyScrollLockDirective(app);

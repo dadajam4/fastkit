@@ -5,9 +5,12 @@ import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import type { IconName, RawIconProp } from './components/VIcon';
 import {
   type VueStackService,
-  type VDialogProps,
   type VStackControl,
-  resolveVStackDynamicInput,
+  type VStackBuiltinActionType,
+  type VStackAction,
+  type StackableLauncher,
+  VStackBuiltinActions,
+  BUILTIN_ACTION_HANDLERS,
 } from '@fastkit/vue-stack';
 import { type VNodeChildOrSlot } from '@fastkit/vue-utils';
 import { type VueColorSchemePluginSettings } from '@fastkit/vue-color-scheme';
@@ -20,8 +23,15 @@ import { VTextField, TextFieldInput } from './components/VTextField';
 import { VueForm, FormControlHinttipDelay } from '@fastkit/vue-form-control';
 import { getDocumentScroller, UseScroller } from '@fastkit/vue-scroller';
 import { ControlSize } from './schemes';
+import { VButton } from './components/VButton';
+import { VDialog } from './components/VDialog';
+import { VSnackbar } from './components/VSnackbar';
+import { VMenu } from './components/VMenu';
+import { VSheetModal } from './components/VSheetModal';
 
 export type UseLinkResult = ReturnType<typeof useLink>;
+
+type VDialogProps = InstanceType<typeof VDialog>['$props'];
 
 export interface VuiFormPromptSettings<
   T extends { [key: string]: any } = { [key: string]: any },
@@ -192,6 +202,13 @@ export class VuiService {
   readonly location: LocationService;
   readonly stack: VueStackService;
   readonly useLink: typeof useLink;
+  readonly stackActions: VStackBuiltinActions;
+  readonly dialog: StackableLauncher<typeof VDialog>;
+  readonly alert: StackableLauncher<typeof VDialog>;
+  readonly confirm: StackableLauncher<typeof VDialog, boolean>;
+  readonly snackbar: StackableLauncher<typeof VSnackbar>;
+  readonly menu: StackableLauncher<typeof VMenu>;
+  readonly sheet: StackableLauncher<typeof VSheetModal>;
 
   get scroller(): UseScroller {
     return getDocumentScroller();
@@ -215,8 +232,53 @@ export class VuiService {
     this.location = new LocationService({
       router: this.router,
     });
-    this.stack = stackService;
     this.useLink = options.useLink || useLink;
+
+    this.stack = stackService;
+    const { uiSettings } = options;
+    this.stackActions = {
+      ok: ({ bindings }) => (
+        <VButton {...uiSettings.dialogOk} {...bindings}>
+          OK
+        </VButton>
+      ),
+      cancel: ({ bindings }) => (
+        <VButton {...uiSettings.dialogCancel} {...bindings}>
+          CANCEL
+        </VButton>
+      ),
+      close: ({ bindings }) => (
+        <VButton {...uiSettings.dialogClose} {...bindings}>
+          CLOSE
+        </VButton>
+      ),
+    };
+
+    this.dialog = stackService.createLauncher(VDialog);
+    this.alert = stackService.createLauncher(VDialog, (props) => {
+      const actions = [...(props?.actions || [])];
+      if (!actions.length) {
+        actions.push(this.stackAction('ok'));
+      }
+      return {
+        ...props,
+        actions,
+      };
+    });
+
+    this.confirm = stackService.createLauncher(VDialog, (props) => {
+      const actions = [...(props?.actions || [])];
+      if (!actions.length) {
+        actions.push(this.stackAction('cancel'), this.stackAction('ok'));
+      }
+      return {
+        ...props,
+        actions,
+      };
+    });
+    this.snackbar = stackService.createLauncher(VSnackbar);
+    this.menu = stackService.createLauncher(VMenu);
+    this.sheet = stackService.createLauncher(VSheetModal);
   }
 
   configure(options?: Partial<VuiServiceOptions>) {
@@ -253,26 +315,6 @@ export class VuiService {
     return requiredChip && requiredChip();
   }
 
-  dialog(...args: Parameters<VueStackService['dialog']>) {
-    return this.stack.dialog(...args);
-  }
-
-  alert(...args: Parameters<VueStackService['alert']>) {
-    return this.stack.alert(...args);
-  }
-
-  confirm(...args: Parameters<VueStackService['confirm']>) {
-    return this.stack.confirm(...args);
-  }
-
-  snackbar(...args: Parameters<VueStackService['snackbar']>) {
-    return this.stack.snackbar(...args);
-  }
-
-  menu(...args: Parameters<VueStackService['menu']>) {
-    return this.stack.menu(...args);
-  }
-
   formPrompt<T extends { [key: string]: any } = { [key: string]: any }>(
     settings: VuiFormPromptSettings<T>,
     slot: (
@@ -292,8 +334,8 @@ export class VuiService {
     const _state = reactive(state);
 
     options.actions = options.actions || [
-      this.stack.action('cancel', undefined, { size }),
-      this.stack.action('ok', undefined, {
+      this.stackAction('cancel', undefined, { size }),
+      this.stackAction('ok', undefined, {
         size,
         onClick: () => {
           if (form) {
@@ -304,34 +346,29 @@ export class VuiService {
       }),
     ];
 
-    const resolved = resolveVStackDynamicInput({
-      ...options,
-      content: (stack) => {
-        return (
-          <VForm
-            disableAutoScroll
-            size={size}
-            // onVnodeMounted={(vnode) => {
-            //   form = (vnode.component as any).ctx.form as VueForm;
-            // }}
-            onVnodeBeforeUnmount={() => {
-              form = undefined;
-            }}
-            onSubmit={(ev) => {
-              stack.resolve(_state);
-            }}
-            v-slots={{
-              default: (_form) => {
-                form = _form;
-                return slot(_state, { form, stack });
-              },
-            }}
-          />
-        );
-      },
+    return this.dialog(options, (stack) => {
+      return (
+        <VForm
+          disableAutoScroll
+          size={size}
+          // onVnodeMounted={(vnode) => {
+          //   form = (vnode.component as any).ctx.form as VueForm;
+          // }}
+          onVnodeBeforeUnmount={() => {
+            form = undefined;
+          }}
+          onSubmit={(ev) => {
+            stack.resolve(_state);
+          }}
+          v-slots={{
+            default: (_form) => {
+              form = _form;
+              return slot(_state, { form, stack });
+            },
+          }}
+        />
+      );
     });
-
-    return this.dialog(resolved);
   }
 
   prompt(rawOptions: RawVuiPromptOptions = {}) {
@@ -369,5 +406,28 @@ export class VuiService {
     ).then((result) => {
       return result ? result.input : result;
     });
+  }
+
+  stackAction(
+    key: VStackBuiltinActionType,
+    override?: Partial<VStackAction>,
+    attrs?: Record<string, unknown>,
+  ) {
+    const factory = this.stackActions[key];
+    const _onClick = BUILTIN_ACTION_HANDLERS[key];
+    const action: VStackAction = {
+      key,
+      content: ({ control, key }) => {
+        const onClick = (ev: MouseEvent) => _onClick(control, ev);
+        return factory({
+          service: this.stack,
+          control,
+          key,
+          bindings: { onClick, ...attrs },
+        });
+      },
+      ...override,
+    };
+    return action;
   }
 }

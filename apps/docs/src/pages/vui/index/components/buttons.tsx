@@ -58,7 +58,7 @@ export default defineComponent({
             startIcon="mdi-cursor-default-click"
             color="info"
             onClick={(ev) => {
-              this.stack.alert('Clicked!!');
+              this.$vui.alert('Clicked!!');
             }}>
             Button
           </VButton>

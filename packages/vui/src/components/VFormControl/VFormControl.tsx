@@ -11,7 +11,7 @@ import { defineSlots } from '@fastkit/vue-utils';
 import { useVuiColorProvider, useVui } from '../../injections';
 import type { VuiService } from '../../service';
 import { VIcon } from '../VIcon';
-import { VTooltip } from '../kits';
+import { VTooltip } from '../VTooltip';
 
 const { props, emits } = createFormControlSettings();
 

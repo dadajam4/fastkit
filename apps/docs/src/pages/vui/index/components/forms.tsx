@@ -14,7 +14,7 @@ import {
   VCheckboxGroup,
   VTextField,
   VButton,
-  useVueStack,
+  useVui,
   VRadioGroup,
 } from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
@@ -39,7 +39,7 @@ export default defineComponent({
       value: String(i),
       label: `アイテム${i}`,
     }));
-    const stack = useVueStack();
+    const vui = useVui();
     const checks1 = ref(['1', '2']);
 
     async function submit1() {
@@ -47,7 +47,7 @@ export default defineComponent({
       form1Sending.value = true;
       await new Promise((resolve) => setTimeout(resolve, 2000));
       form1Sending.value = false;
-      stack.snackbar('送信しました。');
+      vui.snackbar('送信しました。');
     }
 
     async function submit2() {
@@ -55,7 +55,7 @@ export default defineComponent({
       form2Sending.value = true;
       await new Promise((resolve) => setTimeout(resolve, 2000));
       form2Sending.value = false;
-      stack.snackbar('送信しました。');
+      vui.snackbar('送信しました。');
     }
 
     return {

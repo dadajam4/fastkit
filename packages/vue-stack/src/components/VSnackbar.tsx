@@ -1,25 +1,24 @@
 import './VSnackbar.scss';
-import { defineComponent, ExtractPropTypes, computed } from 'vue';
-import { createStackableDefine, createStackActionProps } from '../schemes';
-import { useStackControl, useStackAction } from '../composables';
+import {
+  defineComponent,
+  computed,
+  ComponentPropsOptions,
+  EmitsOptions,
+  SlotsType,
+} from 'vue';
+import { createStackableDefine } from '../schemes';
+import {
+  DefineStackableSettings,
+  setupStackableComponent,
+} from '../composables';
 import {
   VSnackbarTransition,
   stackSnackbarTransitionProps,
+  SnackbarTransitionPropsOptions,
 } from './VSnackbarTransition';
-import { ExtractPropInput } from '@fastkit/vue-utils';
+import { VueStackError } from '../logger';
 
-const { props, emits } = createStackableDefine({
-  defaultTransition: 'v-stack-fade',
-  defaultCloseOnOutsideClick: false,
-  defaultCloseOnNavigation: false,
-  defaultTimeout: 6000,
-});
-
-const stackSnackbarProps = {
-  ...props,
-  ...createStackActionProps(),
-  ...stackSnackbarTransitionProps,
-};
+type SnackbarPropsOptions = SnackbarTransitionPropsOptions;
 
 interface SnackPosition {
   top: boolean;
@@ -28,102 +27,151 @@ interface SnackPosition {
   right: boolean;
 }
 
-export type VSnackbarProps = ExtractPropInput<typeof stackSnackbarProps>;
+interface SnackbarAPI {
+  readonly position: SnackPosition;
+  readonly attrs: Record<string, any>;
+}
 
-export type VSnackbarResolvedProps = ExtractPropTypes<
-  typeof stackSnackbarProps
->;
+export interface DefineSnackbarSettings<
+  Props extends Readonly<ComponentPropsOptions>,
+  Emits extends EmitsOptions,
+  Slots extends SlotsType,
+> extends DefineStackableSettings<
+    Props & SnackbarPropsOptions,
+    Emits,
+    Slots,
+    SnackbarAPI
+  > {
+  props?: Props;
+  emits?: Emits;
+  slots?: Slots;
+  /**
+   * @default "v-stack-fade"
+   */
+  defaultTransition?: string;
+  /**
+   * @default 6000
+   */
+  defaultTimeout?: number;
+}
 
-export const VSnackbar = defineComponent({
-  name: 'VSnackbar',
-  inheritAttrs: false,
-  props: stackSnackbarProps,
-  emits,
-  setup(props, ctx) {
-    const stackControl = useStackControl(props, ctx);
-    const actionControl = useStackAction(props, stackControl, {
-      resolver: (actions) => {
-        if (actions.length === 0) {
-          return [stackControl.$service.action('close')];
-        } else {
-          return actions;
+export function defineSnackbarComponent<
+  Props extends Readonly<ComponentPropsOptions>,
+  Emits extends EmitsOptions,
+  Slots extends SlotsType,
+>(settings: DefineSnackbarSettings<Props, Emits, Slots>) {
+  const {
+    name,
+    defaultTransition = 'v-stack-fade',
+    defaultTimeout = 6000,
+  } = settings;
+  const { props, emits } = createStackableDefine({
+    defaultTransition,
+    defaultCloseOnOutsideClick: false,
+    defaultCloseOnNavigation: false,
+    defaultTimeout,
+  });
+
+  const stackSnackbarProps = {
+    ...props,
+    ...stackSnackbarTransitionProps,
+  };
+
+  const Component = defineComponent({
+    name,
+    inheritAttrs: false,
+    props: {
+      ...stackSnackbarProps,
+      ...settings.props,
+    } as typeof stackSnackbarProps & Props,
+    emits: {
+      ...emits,
+      ...settings.emits,
+    } as typeof emits & Emits,
+    slots: settings.slots,
+    setup(_props, _ctx) {
+      const baseCtx = setupStackableComponent<
+        SnackbarPropsOptions,
+        {},
+        Slots,
+        SnackbarAPI
+      >(_props, _ctx);
+
+      const { control, props } = baseCtx;
+
+      const { snackbarDefaultPosition } = control.$service;
+
+      const snackPosition = computed<SnackPosition>(() => {
+        let { top, bottom, left } = props;
+        const { right } = props;
+
+        if (top === bottom) {
+          top = snackbarDefaultPosition === 'top';
+          bottom = !top;
         }
-      },
-    });
 
-    const { snackbarDefaultPosition } = stackControl.$service;
+        if (left && right) {
+          left = false;
+        }
 
-    const snackPosition = computed<SnackPosition>(() => {
-      let { top, bottom, left } = props;
-      const { right } = props;
+        return {
+          top,
+          bottom,
+          left,
+          right,
+        };
+      });
 
-      if (top === bottom) {
-        top = snackbarDefaultPosition === 'top';
-        bottom = !top;
-      }
+      const snackClasses = computed(() => {
+        const { left, right, top, bottom } = snackPosition.value;
+        const hasHorizontal = left || right;
+        return [
+          'v-stack-snackbar',
+          {
+            'v-stack-snackbar--top': top,
+            'v-stack-snackbar--bottom': bottom,
+            'v-stack-snackbar--left': left,
+            'v-stack-snackbar--right': right,
+            'v-stack-snackbar--x-center': !hasHorizontal,
+            'v-stack-snackbar--has-horizontal': hasHorizontal,
+          },
+        ];
+      });
 
-      if (left && right) {
-        left = false;
-      }
-
-      return {
-        top,
-        bottom,
-        left,
-        right,
-      };
-    });
-
-    const snackClasses = computed(() => {
-      const { left, right, top, bottom } = snackPosition.value;
-      const hasHorizontal = left || right;
-      return {
-        'v-snackbar--top': top,
-        'v-snackbar--bottom': bottom,
-        'v-snackbar--left': left,
-        'v-snackbar--right': right,
-        'v-snackbar--x-center': !hasHorizontal,
-        'v-snackbar--has-horizontal': hasHorizontal,
-      };
-    });
-
-    return {
-      stackControl,
-      actionControl,
-      snackControl: {
-        classes: snackClasses,
-        position: snackPosition,
-      },
-    };
-  },
-  render() {
-    const { render, color } = this.stackControl;
-    const { $actions } = this.actionControl;
-    const { classes, position } = this.snackControl;
-    return render(
-      (children) => {
-        return (
-          <div class={['v-snackbar', color.colorClasses.value, classes.value]}>
-            <div class="v-snackbar__inner">
-              <div class="v-snackbar__body">{children}</div>
-              {$actions.length > 0 && (
-                <div class="v-snackbar__actions">{$actions}</div>
-              )}
-            </div>
-          </div>
-        );
-      },
-      {
-        transition: (child) => {
-          return (
-            <VSnackbarTransition {...position.value}>
-              {child}
-            </VSnackbarTransition>
-          );
+      const snackbarContext: typeof baseCtx = {
+        ...baseCtx,
+        get position() {
+          return snackPosition.value;
         },
-      },
-    );
-  },
-});
+        get attrs() {
+          return {
+            class: snackClasses.value,
+          };
+        },
+      };
 
-export type VSnackbarStatic = typeof VSnackbar;
+      const render =
+        settings.setup?.(snackbarContext as any) || settings.render;
+      if (!render) {
+        throw new VueStackError('render function is required.');
+      }
+
+      return () => {
+        return control.render(
+          (children) => render(children, snackbarContext as any),
+          {
+            transition: (child) => {
+              return (
+                <VSnackbarTransition {...snackPosition.value}>
+                  {child}
+                </VSnackbarTransition>
+              );
+            },
+          },
+        );
+      };
+    },
+  });
+
+  return Component;
+}

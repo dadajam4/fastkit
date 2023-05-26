@@ -4,9 +4,16 @@ import { App } from './App';
 import { i18n, pmScriptPlugin } from '@@';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
 import { LocaleLink, useLink } from '@fastkit/vue-i18n';
+import type { VuiService } from '@fastkit/vui';
 
 import '~/main.scss';
 import '~/main.css';
+
+declare module '@fastkit/vue-page' {
+  interface VuePageControl {
+    $vui: VuiService;
+  }
+}
 
 export default createVotEntry(App, {
   ErrorComponent: VErrorPage,
@@ -24,6 +31,7 @@ export default createVotEntry(App, {
           noResultsMessage: '検索結果が見つかりませんでした。',
         },
       });
+      (ctx as any).$vui = ctx.app.config.globalProperties.$vui;
     },
     pmScriptPlugin,
     i18n,

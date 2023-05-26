@@ -41,7 +41,6 @@ export const VSwitch = defineComponent({
           {
             'v-switch--selected': selectorItemControl.selected,
             'v-switch--disabled': selectorItemControl.isDisabled,
-            xxxxx: selectorItemControl.booted,
           },
           this.classes,
         ]}

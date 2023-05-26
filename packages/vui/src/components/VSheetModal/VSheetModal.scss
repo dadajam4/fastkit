@@ -15,7 +15,7 @@
   padding: 0;
   outline: 0;
   box-shadow: var(--dialog-shadow);
-  transition: transform var(--stack-transition-slowly);
+  transition: transform var(--v-stack-transition-slowly);
 
   &__header {
     position: relative;
@@ -38,7 +38,7 @@
 
   &-enter-active,
   &-leave-active {
-    transition: transform var(--stack-transition-slowly);
+    transition: transform var(--v-stack-transition-slowly);
   }
 
   &-enter-from,

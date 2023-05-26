@@ -895,7 +895,6 @@ importers:
 
   packages/vue-stack:
     specifiers:
-      '@fastkit/color-scheme': workspace:*
       '@fastkit/dom': workspace:*
       '@fastkit/helpers': workspace:*
       '@fastkit/tiny-logger': workspace:*
@@ -907,7 +906,6 @@ importers:
       '@fastkit/vue-transitions': workspace:*
       '@fastkit/vue-utils': workspace:*
     dependencies:
-      '@fastkit/color-scheme': link:../color-scheme
       '@fastkit/dom': link:../dom
       '@fastkit/helpers': link:../helpers
       '@fastkit/tiny-logger': link:../tiny-logger

@@ -1,14 +1,20 @@
 import './VSheetModal.scss';
 import {
   defineComponent,
-  ExtractPropTypes,
+  // ExtractPropTypes,
   PropType,
   VNodeChild,
   computed,
 } from 'vue';
-import { createStackableDefine, VStackSlots, VStackControl } from '../schemes';
-import { useStackControl } from '../composables';
-import { ExtractPropInput } from '@fastkit/vue-utils';
+import {
+  createStackableDefine,
+  VStackSlots,
+  VStackControl,
+  useStackControl,
+} from '@fastkit/vue-stack';
+// import {  } from '../schemes';
+// import { useStackControl } from '../composables';
+// import { ExtractPropInput } from '@fastkit/vue-utils';
 
 const { props, emits } = createStackableDefine({
   defaultTransition: 'v-sheet-modal',
@@ -27,11 +33,7 @@ export const sheetModalProps = {
   'v-slots': undefined as unknown as PropType<VSheetModalSlots>,
 };
 
-export type VSheetModalProps = ExtractPropInput<typeof sheetModalProps>;
-
-export type VSheetModalResolvedProps = ExtractPropTypes<typeof sheetModalProps>;
-
-const SHEET_STACK_TYPE = Symbol();
+const SHEET_STACK_TYPE = Symbol('VSheetModal');
 
 export const VSheetModal = defineComponent({
   name: 'VSheetModal',
@@ -55,7 +57,10 @@ export const VSheetModal = defineComponent({
     };
   },
   render() {
-    const { render, color } = this.stackControl;
+    const {
+      render,
+      // color,
+    } = this.stackControl;
     const headerSlot = this.$slots.header || this.header;
     return render((children) => {
       return (
@@ -65,7 +70,7 @@ export const VSheetModal = defineComponent({
             {
               'v-sheet-modal--has-active-child': this.hasActiveChild,
             },
-            color.colorClasses.value,
+            // color.colorClasses.value,
           ]}
           tabindex="0">
           {headerSlot && (
@@ -80,4 +85,4 @@ export const VSheetModal = defineComponent({
   },
 });
 
-export type VSheetModalStatic = typeof VSheetModal;
+// export type VSheetModalStatic = typeof VSheetModal;
