@@ -1,5 +1,11 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 1.0.9
+
+### Patch Changes
+
+- [#55](https://github.com/dadajam4/fastkit/pull/55) [`caf4e36`](https://github.com/dadajam4/fastkit/commit/caf4e36172e94a98e389df3201410f639d457d43) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed incorrect style generation when applying compound styles.
+
 ## 1.0.8
 
 ### Patch Changes
