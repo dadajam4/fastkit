@@ -160,8 +160,8 @@ export function defineLayerStyle<
     });
     if (hooks.anyStyle) {
       for (const rule of rules) {
-        if (typeof rule === 'string' || Array.isArray(rule)) return rule;
-        hooks.anyStyle && hooks.anyStyle(rule);
+        if (typeof rule === 'string' || Array.isArray(rule)) continue;
+        hooks.anyStyle(rule);
       }
     }
     hooks.style && hooks.style(rule, debugId);
