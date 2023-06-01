@@ -111,6 +111,8 @@ export const VFormControl = defineComponent({
       vui,
     );
 
+    const handleClick = (ev: MouseEvent) => ctx.emit('clickLabel', ev, control);
+
     return () => {
       const label = control.renderLabel();
       const message = control.renderMessage();
@@ -121,11 +123,7 @@ export const VFormControl = defineComponent({
       return (
         <div class={['v-form-control', classes.value]}>
           {label && (
-            <label
-              class="v-form-control__label"
-              onClick={(ev) => {
-                ctx.emit('clickLabel', ev, control);
-              }}>
+            <label class="v-form-control__label" onClick={handleClick}>
               {label}
               {getRequiredChip()}
               {hinttip && (

@@ -18,7 +18,7 @@ function Rows(num: number) {
   return (
     <div>
       {range(num, 1).map((n) => (
-        <p key={n}>Hello World. {n}</p>
+        <p key={n}>{`Hello World. ${n}`}</p>
       ))}
     </div>
   );
@@ -41,7 +41,7 @@ export default defineComponent({
             display: 'flex',
             alignItems: 'center',
           }}>
-          <div style={{ width: '100px ' }}>xxxxx</div>
+          <div style={{ width: '100px' }}>xxxxx</div>
           {Test({
             style: {
               width: '200px',

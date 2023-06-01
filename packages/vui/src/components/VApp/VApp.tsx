@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
 import { VAppLayout } from '@fastkit/vue-app-layout';
-import { VStackRoot } from '@fastkit/vue-stack';
+import { VStackContainer } from '@fastkit/vue-stack';
 import { useInjectTheme } from '@fastkit/vue-color-scheme';
 
 export const VApp = defineComponent({
@@ -10,9 +10,9 @@ export const VApp = defineComponent({
 
     return () => {
       return (
-        <VStackRoot>
+        <VStackContainer>
           <VAppLayout v-slots={ctx.slots} />
-        </VStackRoot>
+        </VStackContainer>
       );
     };
   },
