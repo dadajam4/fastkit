@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.16.1
+
+### Patch Changes
+
+- [#57](https://github.com/dadajam4/fastkit/pull/57) [`b4f0281`](https://github.com/dadajam4/fastkit/commit/b4f0281a2a0cabbc5789f3f158462a3f3e918272) Thanks [@dadajam4](https://github.com/dadajam4)! - Improved tracking of coordinates of menu elements to activator elements.
+
+- Updated dependencies [[`b4f0281`](https://github.com/dadajam4/fastkit/commit/b4f0281a2a0cabbc5789f3f158462a3f3e918272)]:
+  - @fastkit/vue-stack@0.15.1
+
 ## 0.16.0
 
 ### Minor Changes
