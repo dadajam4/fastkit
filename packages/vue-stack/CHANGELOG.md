@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.2
+
+### Patch Changes
+
+- [#59](https://github.com/dadajam4/fastkit/pull/59) [`bb78094`](https://github.com/dadajam4/fastkit/commit/bb7809429fecab3e97106c111a1cb7a0c7686f3c) Thanks [@dadajam4](https://github.com/dadajam4)! - Applications like Storybook instantiate multiple Vue applications. I have made modifications to ensure that even in such cases, vue-stack can accurately track the position.
+
 ## 0.15.1
 
 ### Patch Changes
