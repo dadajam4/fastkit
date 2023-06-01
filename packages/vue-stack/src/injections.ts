@@ -3,4 +3,4 @@ import type { VueStackService } from './service';
 
 export const VueStackInjectionKey: InjectionKey<VueStackService> = Symbol();
 
-export const V_STACK_CONTAINER_ID = 'v-stack-container';
+export const V_STACK_CONTAINER_CLASS = 'v-stack-container';
