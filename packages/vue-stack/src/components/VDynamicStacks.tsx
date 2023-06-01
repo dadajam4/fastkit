@@ -1,10 +1,9 @@
 import { defineComponent, h, cloneVNode } from 'vue';
 import { useVueStack } from '../composables';
 import { VStackControl } from '../schemes/control';
-import { V_STACK_CONTAINER_ID } from '../injections';
 
-export const VStackContainer = defineComponent({
-  name: 'VStackContainer',
+export const VDynamicStacks = defineComponent({
+  name: 'VDynamicStacks',
   setup(_props, ctx) {
     const $vstack = useVueStack();
 
@@ -37,10 +36,10 @@ export const VStackContainer = defineComponent({
       );
 
       return (
-        <div id={V_STACK_CONTAINER_ID} class="v-stack-container">
+        <>
           {ctx.slots.default?.()}
           {$dynamicStacks}
-        </div>
+        </>
       );
     };
   },

@@ -32,7 +32,7 @@ import {
   VStackNavigationGuard,
 } from '../schemes';
 import { useVueStack } from './service';
-import { V_STACK_CONTAINER_ID } from '../injections';
+import { useTeleport } from './teleport';
 
 export type VStackCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
@@ -54,6 +54,7 @@ export function useStackControl(
   const { onContentMounted, onContentDetached, transitionResolver } = opts;
 
   const router = useRouter();
+  const teleportTarget = useTeleport();
 
   const beforeEachHookRemover = router.beforeEach(async (to, from) => {
     if (!control.isActive) return true;
@@ -665,7 +666,7 @@ export function useStackControl(
         }
 
         $contents.push(
-          <Teleport to={`#${V_STACK_CONTAINER_ID}`}>
+          <Teleport to={teleportTarget.value}>
             {[
               <Transition name="v-stack-fade">{backdrop.value}</Transition>,
               $transition,

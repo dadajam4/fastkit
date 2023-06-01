@@ -1,18 +1,18 @@
 import { defineComponent } from 'vue';
 import { VAppLayout } from '@fastkit/vue-app-layout';
-import { VStackContainer } from '@fastkit/vue-stack';
+import { VDynamicStacks } from '@fastkit/vue-stack';
 import { useInjectTheme } from '@fastkit/vue-color-scheme';
 
 export const VApp = defineComponent({
   name: 'VApp',
-  setup(props, ctx) {
+  setup(_props, ctx) {
     useInjectTheme();
 
     return () => {
       return (
-        <VStackContainer>
+        <VDynamicStacks>
           <VAppLayout v-slots={ctx.slots} />
-        </VStackContainer>
+        </VDynamicStacks>
       );
     };
   },
