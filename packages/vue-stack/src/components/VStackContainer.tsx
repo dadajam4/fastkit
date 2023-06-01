@@ -1,24 +1,12 @@
-import './VStackRoot.scss';
-
-import { defineComponent, ref, Ref, provide, h, cloneVNode } from 'vue';
+import { defineComponent, h, cloneVNode } from 'vue';
 import { useVueStack } from '../composables';
 import { VStackControl } from '../schemes/control';
-import { VStackRootInjectKey } from '../injections';
+import { V_STACK_CONTAINER_ID } from '../injections';
 
-export interface VStackRootControl {
-  root: Ref<HTMLElement | null>;
-}
-
-export const VStackRoot = defineComponent({
-  name: 'VStackRoot',
+export const VStackContainer = defineComponent({
+  name: 'VStackContainer',
   setup(_props, ctx) {
     const $vstack = useVueStack();
-    const rootRef = ref<HTMLElement | null>(null);
-    const control: VStackRootControl = {
-      root: rootRef,
-    };
-
-    provide(VStackRootInjectKey, control);
 
     return () => {
       const { dynamicSettings: settings } = $vstack;
@@ -49,7 +37,7 @@ export const VStackRoot = defineComponent({
       );
 
       return (
-        <div class="v-stack-root" ref={rootRef}>
+        <div id={V_STACK_CONTAINER_ID} class="v-stack-container">
           {ctx.slots.default?.()}
           {$dynamicStacks}
         </div>

@@ -138,32 +138,20 @@ export const VControlField = defineComponent({
       );
     };
 
-    const handleClick = (ev: MouseEvent) => {
-      ctx.emit('click', ev);
-      // if (ev.target === hostElRef.value) {
-      //   ctx.emit('clickHost', ev);
-      // }
-    };
+    const handleClick = (ev: MouseEvent) => ctx.emit('click', ev);
 
-    return {
-      classes,
-      renderAdornment,
-      hostElRef: () => hostElRef,
-      handleClick,
-      // computedTabindex,
+    return () => {
+      return (
+        <div
+          class={classes.value}
+          onClick={handleClick}
+          // tabindex={this.computedTabindex}
+          ref={hostElRef}>
+          {renderAdornment('start')}
+          <div class="v-control-field__body">{ctx.slots.default?.()}</div>
+          {renderAdornment('end')}
+        </div>
+      );
     };
-  },
-  render() {
-    return (
-      <div
-        class={this.classes}
-        onClick={this.handleClick}
-        // tabindex={this.computedTabindex}
-        ref={this.hostElRef()}>
-        {this.renderAdornment('start')}
-        <div class="v-control-field__body">{this.$slots.default?.()}</div>
-        {this.renderAdornment('end')}
-      </div>
-    );
   },
 });

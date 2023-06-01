@@ -32,7 +32,7 @@ import {
   VStackNavigationGuard,
 } from '../schemes';
 import { useVueStack } from './service';
-import { useStackRoot } from './root';
+import { V_STACK_CONTAINER_ID } from '../injections';
 
 export type VStackCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
@@ -71,7 +71,6 @@ export function useStackControl(
   });
 
   const $vstack = useVueStack();
-  const rootControl = useStackRoot();
   const state = reactive<VStackControlState>({
     isActive: props.lazyBoot ? false : props.modelValue,
     activator: null,
@@ -612,11 +611,9 @@ export function useStackControl(
       //   $contents.push(...$activator);
       // }
 
-      const rootContainer = rootControl.root.value;
-
-      if (rootContainer) {
-        let $child: VNode | undefined;
-        if (booted && needRender) {
+      let $child: VNode | undefined;
+      if (booted) {
+        if (needRender) {
           const children = defaultSlot && defaultSlot(control);
           const _clickOutside = clickOutsideDirectiveArgument({
             handler: (ev) => {
@@ -667,16 +664,14 @@ export function useStackControl(
           );
         }
 
-        if (state.booted) {
-          $contents.push(
-            <Teleport to={rootContainer}>
-              {[
-                <Transition name="v-stack-fade">{backdrop.value}</Transition>,
-                $transition,
-              ]}
-            </Teleport>,
-          );
-        }
+        $contents.push(
+          <Teleport to={`#${V_STACK_CONTAINER_ID}`}>
+            {[
+              <Transition name="v-stack-fade">{backdrop.value}</Transition>,
+              $transition,
+            ]}
+          </Teleport>,
+        );
       }
 
       return (

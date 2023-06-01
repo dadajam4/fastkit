@@ -119,7 +119,7 @@ export const VSelect = defineComponent({
     });
 
     const focus = (opts?: FocusOptions): void => {
-      fieldRef.value && fieldRef.value.focus(opts);
+      fieldRef.value?.focus?.(opts);
     };
 
     const renderSelections = (selectedItems: FormSelectorItemControl[]) => {

@@ -4,6 +4,7 @@
   box-sizing: border-box;
   padding: 0;
   overflow: auto;
+  overscroll-behavior: contain;
   outline: 0;
   -webkit-overflow-scrolling: touch;
 
