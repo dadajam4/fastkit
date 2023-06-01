@@ -11,6 +11,8 @@ import {
   EmitsOptions,
   Ref,
   SlotsType,
+  watch,
+  onBeforeUnmount,
 } from 'vue';
 import { createStackableDefine } from '../schemes';
 import {
@@ -24,6 +26,7 @@ import {
 } from '@fastkit/vue-resize';
 import { logger, VueStackError } from '../logger';
 import { IN_WINDOW } from '@fastkit/helpers';
+import { getScrollParents } from '../utils';
 
 const DEFAULT_EDGE_MARGIN = 20;
 const DEFAULT_DISTANCE = 10;
@@ -76,7 +79,7 @@ function createMenuProps(options: CreateMenuSchemeOptions = {}) {
 }
 
 function createMenuScheme(options: CreateMenuSchemeOptions = {}) {
-  const { defaultTransition = DEFAULT_TRANSITION, defaultScrollLock = true } =
+  const { defaultTransition = DEFAULT_TRANSITION, defaultScrollLock = false } =
     options;
 
   const { props, emits } = createStackableDefine({
@@ -561,14 +564,35 @@ export function defineMenuComponent<
         };
       }
 
-      function updateActivatorRect() {
+      function getActivatorElement() {
         const $activator = control.activator;
-        const el = $activator instanceof Event ? $activator.target : $activator;
+        return $activator instanceof Event
+          ? ($activator.target as HTMLElement)
+          : $activator;
+      }
+
+      function getCurrentScrollParents():
+        | {
+            activator: HTMLElement;
+            parents: HTMLElement[];
+          }
+        | undefined {
+        const activator = getActivatorElement();
+        if (!activator) return;
+        const parents = getScrollParents(activator);
+        return {
+          activator,
+          parents,
+        };
+      }
+
+      function updateActivatorRect() {
+        const el = getActivatorElement();
         if (!el) {
           state.activatorRect = null;
           return;
         }
-        const rect = (el as HTMLElement).getBoundingClientRect();
+        const rect = el.getBoundingClientRect();
 
         state.activatorRect = {
           left: rect.left,
@@ -586,6 +610,62 @@ export function defineMenuComponent<
         updateMenuRect(menuBodyRect);
         updateActivatorRect();
       }
+
+      let _currentScrollParents:
+        | {
+            activator: HTMLElement;
+            parents: HTMLElement[];
+          }
+        | undefined;
+      let _activatorResizeObserver: ResizeObserver | undefined;
+
+      function handleScrollerScroll(ev: Event) {
+        updateRects();
+      }
+
+      function resetScrollerScroll() {
+        if (_activatorResizeObserver) {
+          _activatorResizeObserver.disconnect();
+          _activatorResizeObserver = undefined;
+        }
+        if (!_currentScrollParents) return;
+        for (const el of _currentScrollParents.parents) {
+          const eventTarget = el === document.documentElement ? document : el;
+          eventTarget.removeEventListener('scroll', handleScrollerScroll, {
+            capture: false,
+          });
+        }
+        _currentScrollParents = undefined;
+      }
+
+      function setupScrollerScroll() {
+        resetScrollerScroll();
+        _currentScrollParents = getCurrentScrollParents();
+        if (!_currentScrollParents) return;
+
+        const { activator, parents } = _currentScrollParents;
+        _activatorResizeObserver = new ResizeObserver(() => {
+          updateRects();
+        });
+        _activatorResizeObserver.observe(activator);
+
+        for (const el of parents) {
+          const eventTarget = el === document.documentElement ? document : el;
+          eventTarget.addEventListener('scroll', handleScrollerScroll, {
+            capture: false,
+            passive: true,
+          });
+        }
+      }
+
+      watch(
+        () => control.isActive,
+        (isActive) => {
+          return isActive ? setupScrollerScroll() : resetScrollerScroll();
+        },
+      );
+
+      onBeforeUnmount(resetScrollerScroll);
 
       const stackMenuCtx: typeof baseCtx = {
         ...baseCtx,
