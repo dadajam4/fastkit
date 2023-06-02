@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.16.3
+
+### Patch Changes
+
+- [#61](https://github.com/dadajam4/fastkit/pull/61) [`04717a8`](https://github.com/dadajam4/fastkit/commit/04717a8b395e07ae14268e2eb2f6c46db575c64d) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed incorrect tracking of activators when controlling the Stack menu with v-models and improved behavior.
+
+- Updated dependencies [[`04717a8`](https://github.com/dadajam4/fastkit/commit/04717a8b395e07ae14268e2eb2f6c46db575c64d)]:
+  - @fastkit/vue-stack@0.15.3
+
 ## 0.16.2
 
 ### Patch Changes
