@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.4
+
+### Patch Changes
+
+- [#63](https://github.com/dadajam4/fastkit/pull/63) [`ab6cdcb`](https://github.com/dadajam4/fastkit/commit/ab6cdcb48db76782cbac6000f65fc3748d742919) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed incorrect coordinates when backdrop elements are displayed while content is scrolled.
+
 ## 0.15.3
 
 ### Patch Changes
