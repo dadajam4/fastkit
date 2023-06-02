@@ -1,5 +1,13 @@
 # @fastkit/vui
 
+## 0.16.5
+
+### Patch Changes
+
+- [#65](https://github.com/dadajam4/fastkit/pull/65) [`49f608b`](https://github.com/dadajam4/fastkit/commit/49f608b9bba80ad081a0018941c60d6ffeddddca) Thanks [@dadajam4](https://github.com/dadajam4)! - The alert and confirm dialogs were designed to display backdrops by default, but this was no longer being done due to the vue-stack migration.
+  This behavior has been fixed and backdrops are now displayed as before.
+  Backdrops can still be optionally disabled.
+
 ## 0.16.4
 
 ### Patch Changes
