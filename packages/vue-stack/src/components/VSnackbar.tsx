@@ -6,7 +6,7 @@ import {
   EmitsOptions,
   SlotsType,
 } from 'vue';
-import { createStackableDefine } from '../schemes';
+import { createStackableDefine, MergeStackBaseSlots } from '../schemes';
 import {
   DefineStackableSettings,
   setupStackableComponent,
@@ -56,9 +56,9 @@ export interface DefineSnackbarSettings<
 }
 
 export function defineSnackbarComponent<
-  Props extends Readonly<ComponentPropsOptions>,
-  Emits extends EmitsOptions,
-  Slots extends SlotsType,
+  Props extends Readonly<ComponentPropsOptions> = {},
+  Emits extends EmitsOptions = {},
+  Slots extends SlotsType = SlotsType<{}>,
 >(settings: DefineSnackbarSettings<Props, Emits, Slots>) {
   const {
     name,
@@ -88,7 +88,7 @@ export function defineSnackbarComponent<
       ...emits,
       ...settings.emits,
     } as typeof emits & Emits,
-    slots: settings.slots,
+    slots: settings.slots as MergeStackBaseSlots<Slots>,
     setup(_props, _ctx) {
       const baseCtx = setupStackableComponent<
         SnackbarPropsOptions,

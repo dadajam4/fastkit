@@ -6,10 +6,12 @@ import {
   PropType,
   ExtractPropTypes,
   SetupContext,
+  SlotsType,
+  ComponentPublicInstance,
 } from 'vue';
 import type { VueStackService } from '../service';
 import { RouteLocationNormalized } from 'vue-router';
-import { StyleValue } from '@fastkit/vue-utils';
+import { StyleValue, defineSlots } from '@fastkit/vue-utils';
 import { UseKeyboardRef } from '@fastkit/vue-keyboard';
 import { rawNumberProp } from '@fastkit/vue-utils';
 import { JavaScriptTransition } from '@fastkit/vue-transitions';
@@ -18,23 +20,23 @@ type DelayTimerProps = 'openDelay' | 'closeDelay';
 
 export type StackableCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
-export type VueStackActivatorPayload = HTMLElement | MouseEvent;
-
 export type VStackNavigationGuard = (
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
 ) => boolean | Promise<boolean>;
 
 export interface VStackActivatorAttributes {
+  ref: Ref;
   onClick?: (ev: MouseEvent) => void;
   onContextmenu?: (ev: MouseEvent) => void;
   onMouseenter?: (ev: MouseEvent) => void;
   onMouseleave?: (ev: MouseEvent) => void;
+  onFocus?: (ev: FocusEvent) => void;
 }
 
 export interface VStackControlState {
   isActive: boolean;
-  activator: HTMLElement | Event | null;
+  readonly activator: HTMLElement | undefined;
   closeReason: StackableCloseReason;
   initialValue: any;
   inputValue: any;
@@ -86,7 +88,7 @@ export interface VStackControl {
   readonly closeDelay: number;
   readonly isDestroyed: boolean;
   readonly contentRef: Ref<HTMLElement | null>;
-  readonly activator: HTMLElement | Event | null;
+  readonly activator: HTMLElement | undefined;
   readonly backdropRef: Ref<HTMLElement | null>;
   readonly stackType?: string | symbol;
 
@@ -122,8 +124,9 @@ export interface VStackControl {
     clearGuardEffect(): void;
   };
 
-  show(activator?: VueStackActivatorPayload): Promise<void>;
-  toggle(activator?: VueStackActivatorPayload): Promise<void>;
+  setActivator(query: VStackActivatorQuery): this;
+  show(): Promise<void>;
+  toggle(): Promise<void>;
   close(opts?: VStackCloseOptions): Promise<void>;
   resolve(payload?: any): Promise<void>;
   cancel(force?: boolean): Promise<void>;
@@ -170,6 +173,17 @@ export type VStackSlots = {
   activator?: (payload: VStackActivatorPayload) => VNodeChild;
 };
 
+export const V_STACK_SLOTS = defineSlots<VStackSlots>();
+
+type MergeSlots<A extends SlotsType, B extends SlotsType> = SlotsType<
+  NonNullable<A[keyof A]> & NonNullable<B[keyof B]>
+>;
+
+export type MergeStackBaseSlots<Slots extends SlotsType> = MergeSlots<
+  Slots,
+  typeof V_STACK_SLOTS
+>;
+
 export interface CreateStackablePropsOptions {
   /*extends ColorSchemePropsStaticOptions*/
   /** @default "v-stack-fade" */
@@ -198,6 +212,13 @@ export interface VStackObjectTransitionProp<
 export type RawVStackObjectTransitionProp<
   T extends string | JavaScriptTransition,
 > = string | VStackObjectTransitionProp<T>;
+
+export type VStackActivatorQuery =
+  | string
+  | Event
+  | Element
+  | ComponentPublicInstance
+  | (() => Element | ComponentPublicInstance | void | undefined | null);
 
 export function createStackableProps<T extends string | JavaScriptTransition>(
   opts: CreateStackablePropsOptions = {},
@@ -242,8 +263,16 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
       type: Boolean,
       default: defaultScrollLock,
     },
+    openOnClick: {
+      type: Boolean,
+      default: undefined,
+    },
     openOnHover: Boolean,
     openOnContextmenu: Boolean,
+    openOnFocus: {
+      type: Boolean,
+      default: undefined,
+    },
     openDelay: rawNumberProp(0),
     closeDelay: rawNumberProp(200),
     closeOnOutsideClick: {
@@ -269,11 +298,9 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
       type: [Boolean, String],
       default: true,
     },
-    activator: {
-      type: [Object, Boolean] as PropType<Element | Event | boolean | null>,
-      default: null,
-    },
-    'v-slots': undefined as unknown as PropType<VStackSlots>,
+    activator: {} as PropType<VStackActivatorQuery>,
+    ...V_STACK_SLOTS(),
+    // activator: [String, Object] as PropType<() => any>,
   };
 }
 

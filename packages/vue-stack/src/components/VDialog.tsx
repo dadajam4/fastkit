@@ -5,7 +5,7 @@ import {
   EmitsOptions,
   SlotsType,
 } from 'vue';
-import { createStackableDefine } from '../schemes';
+import { createStackableDefine, MergeStackBaseSlots } from '../schemes';
 import {
   DefineStackableSettings,
   setupStackableComponent,
@@ -48,9 +48,9 @@ export interface DefineDialogSettings<
 }
 
 export function defineDialogComponent<
-  Props extends Readonly<ComponentPropsOptions>,
-  Emits extends EmitsOptions,
-  Slots extends SlotsType,
+  Props extends Readonly<ComponentPropsOptions> = {},
+  Emits extends EmitsOptions = {},
+  Slots extends SlotsType = SlotsType<{}>,
 >(settings: DefineDialogSettings<Props, Emits, Slots>) {
   const baseScheme = createDialogScheme(settings);
   const { name, props, emits } = settings;
@@ -66,7 +66,7 @@ export function defineDialogComponent<
       ...baseScheme.emits,
       ...emits,
     } as typeof baseScheme.emits & Emits,
-    slots: settings.slots,
+    slots: settings.slots as MergeStackBaseSlots<Slots>,
     setup(_props, _ctx) {
       const dialogCtx = setupStackableComponent<typeof baseScheme.props>(
         _props,
