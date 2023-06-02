@@ -14,6 +14,7 @@ import {
   nextTick,
   DirectiveArguments,
   cloneVNode,
+  watchEffect,
 } from 'vue';
 import { toInt, IN_WINDOW } from '@fastkit/helpers';
 import { attemptFocus, focusFirstDescendant } from '@fastkit/dom';
@@ -30,6 +31,7 @@ import {
   VStackSlots,
   VStackActivatorAttributes,
   VStackNavigationGuard,
+  VStackActivatorQuery,
 } from '../schemes';
 import { useVueStack } from './service';
 import { useTeleport } from './teleport';
@@ -45,6 +47,12 @@ export interface UseStackControlOptions {
 
 const outsideClickControlFilter = (control: VStackControl) =>
   control.closeOnOutsideClick;
+
+const SUPPORTS_FOCUS_VISIBLE =
+  IN_WINDOW &&
+  typeof CSS !== 'undefined' &&
+  typeof CSS.supports !== 'undefined' &&
+  CSS.supports('selector(:focus-visible)');
 
 export function useStackControl(
   props: VStackProps,
@@ -71,10 +79,31 @@ export function useStackControl(
     }
   });
 
+  const activatorRef = ref();
+  const activatorEl = ref<HTMLElement>();
+
+  watchEffect(() => {
+    if (!activatorRef.value) return;
+
+    nextTick(() => {
+      activatorEl.value = refElement(activatorRef.value);
+    });
+  });
+
+  watch(
+    () => props.activator,
+    (activator) => {
+      activatorEl.value = getActivator(activator);
+    },
+    { immediate: true },
+  );
+
   const $vstack = useVueStack();
   const state = reactive<VStackControlState>({
     isActive: props.lazyBoot ? false : props.modelValue,
-    activator: null,
+    get activator() {
+      return activatorEl.value;
+    },
     closeReason: 'indeterminate',
     initialValue: props.value,
     inputValue: props.value,
@@ -105,7 +134,20 @@ export function useStackControl(
   const backdropRef = ref<null | HTMLElement>(null);
   const focusTrap = computed(() => props.focusTrap);
   const focusRestorable = computed(() => props.focusRestorable);
-  const computedActivator = computed(() => props.activator);
+  // const computedActivator = computed(() => props.activator);
+
+  const openOnFocus = computed(
+    () => props.openOnFocus || (props.openOnFocus == null && props.openOnHover),
+  );
+  const openOnClick = computed(
+    () =>
+      props.openOnClick ||
+      (props.openOnClick == null &&
+        !props.openOnContextmenu &&
+        !props.openOnHover &&
+        !openOnFocus.value),
+  );
+
   const backdrop = computed(() => {
     const { backdrop } = props;
     if (!backdrop) return;
@@ -147,19 +189,10 @@ export function useStackControl(
     return zIndex || $vstack.zIndex + control.activateOrder;
   });
 
-  // const isActive = computed<boolean>({
-  //   get() {
-  //     return state.isActive;
-  //   },
-  //   set(value) {
-  //     state.isActive = value;
-  //   },
-  // });
-
   const keyboard = useKeyboard(
     {
       key: 'Escape',
-      handler: (ev) => {
+      handler: (_ev) => {
         if (!closeOnEsc.value || !control.isFront()) return;
         if (persistent.value) {
           control.guardEffect();
@@ -171,60 +204,86 @@ export function useStackControl(
     { autorun: true },
   );
 
-  const activatorAttrs = computed<VStackActivatorAttributes>(() => {
-    if (props.openOnHover) {
-      return {
-        onMouseenter: (ev) => {
-          if (control.transitioning) return;
-          privateApi.clearDelay();
-          if (control.isActive) return;
-          privateApi.runDelay('openDelay', () => {
-            !control.isActive && control.show(ev);
-          });
-        },
-        onMouseleave: (ev) => {
-          privateApi.clearDelay();
-          if (!control.isActive) return;
-          privateApi.runDelay('closeDelay', () => {
-            if (!control.isActive) return;
-            const $content = contentRef.value;
-            const relatedTarget = ev.relatedTarget as HTMLElement;
-            if (
-              $content &&
-              (relatedTarget === $content || $content.contains(relatedTarget))
-            ) {
-              return;
-            }
-            const { activator } = state;
-            const el =
-              activator instanceof Event ? activator.target : activator;
+  const setActivatorByEvent = (ev: Event) => {
+    activatorEl.value = (ev.currentTarget ||
+      ev.target ||
+      undefined) as HTMLElement;
+  };
 
-            if (
-              el &&
-              el instanceof HTMLElement &&
-              (relatedTarget === el || el.contains(relatedTarget))
-            ) {
-              return;
-            }
-            control.close();
-          });
-        },
-      };
+  const availableEvents = {
+    onClick: (ev: MouseEvent) => {
+      setActivatorByEvent(ev);
+      control.toggle();
+    },
+    onMouseenter: (ev: MouseEvent) => {
+      if (control.transitioning) return;
+      privateApi.clearDelay();
+      if (control.isActive) return;
+      setActivatorByEvent(ev);
+      privateApi.runDelay('openDelay', () => {
+        !control.isActive && control.show();
+      });
+    },
+    onMouseleave: (ev: MouseEvent) => {
+      privateApi.clearDelay();
+      if (!control.isActive) return;
+      privateApi.runDelay('closeDelay', () => {
+        if (!control.isActive) return;
+        const $content = contentRef.value;
+        const relatedTarget = ev.relatedTarget as HTMLElement;
+        if (
+          $content &&
+          (relatedTarget === $content || $content.contains(relatedTarget))
+        ) {
+          return;
+        }
+        const { activator } = state;
+
+        if (
+          activator &&
+          (relatedTarget === activator || activator.contains(relatedTarget))
+        ) {
+          return;
+        }
+        control.close();
+      });
+    },
+    onContextmenu: (ev: MouseEvent) => {
+      if (ev.defaultPrevented) return;
+      ev.preventDefault();
+      setActivatorByEvent(ev);
+      control.toggle();
+    },
+    onFocus: (ev: FocusEvent) => {
+      if (
+        SUPPORTS_FOCUS_VISIBLE &&
+        !(ev.target as HTMLElement).matches(':focus-visible')
+      )
+        return;
+
+      setActivatorByEvent(ev);
+      control.show();
+    },
+  };
+
+  const activatorAttrs = computed<VStackActivatorAttributes>(() => {
+    const attrs: VStackActivatorAttributes = {
+      ref: activatorRef,
+    };
+    if (openOnClick.value) {
+      attrs.onClick = availableEvents.onClick;
+    }
+    if (props.openOnHover) {
+      attrs.onMouseenter = availableEvents.onMouseenter;
+      attrs.onMouseleave = availableEvents.onMouseleave;
     }
     if (props.openOnContextmenu) {
-      return {
-        onContextmenu: (ev) => {
-          if (ev.defaultPrevented) return;
-          ev.preventDefault();
-          control.toggle(ev);
-        },
-      };
+      attrs.onContextmenu = availableEvents.onContextmenu;
     }
-    return {
-      onClick: (ev) => {
-        control.toggle(ev);
-      },
-    };
+    if (openOnFocus.value) {
+      attrs.onFocus = availableEvents.onFocus;
+    }
+    return attrs;
   });
 
   const TransitionDefine = computed(() => {
@@ -520,25 +579,11 @@ export function useStackControl(
     get backdropRef() {
       return backdropRef;
     },
-    show(activator) {
-      let _activator: HTMLElement | null;
-      const propActivator = computedActivator.value;
-
-      if (propActivator === false) {
-        _activator = null;
-      } else {
-        const __activator = activator || propActivator;
-        if (__activator instanceof Event) {
-          _activator = __activator.target as HTMLElement | null;
-        } else if (__activator instanceof Element) {
-          _activator = __activator as HTMLElement;
-        } else {
-          _activator = document.activeElement as HTMLElement | null;
-        }
-      }
-
-      state.activator = _activator;
-
+    setActivator(query) {
+      activatorEl.value = getActivator(query);
+      return this;
+    },
+    show() {
       // Fix for bubbling cue.
       return new Promise((resolve) =>
         setTimeout(() => {
@@ -547,8 +592,8 @@ export function useStackControl(
         }, 0),
       );
     },
-    toggle(activator) {
-      return control.isActive ? control.close() : control.show(activator);
+    toggle() {
+      return control.isActive ? control.close() : control.show();
     },
     close(opts = {}) {
       const { force = false, reason = 'indeterminate' } = opts;
@@ -617,7 +662,7 @@ export function useStackControl(
         if (needRender) {
           const children = defaultSlot && defaultSlot(control);
           const _clickOutside = clickOutsideDirectiveArgument({
-            handler: (ev) => {
+            handler: (_ev) => {
               control.close();
             },
             conditional: privateApi.outsideClickCloseConditional,
@@ -705,7 +750,7 @@ export function useStackControl(
     privateApi.clearTimeoutId();
     privateApi.removeFocusTrapper();
     state.isDestroyed = true;
-    state.activator = null;
+    activatorEl.value = undefined;
     beforeEachHookRemover();
     afterEachHookRemover();
     $vstack.remove(control);
@@ -734,13 +779,8 @@ export function useStackControl(
       } else {
         if (state.activator) {
           if (focusRestorable.value) {
-            const el =
-              state.activator instanceof Event
-                ? state.activator.target
-                : state.activator;
-            el && attemptFocus(el as HTMLElement);
+            attemptFocus(state.activator);
           }
-          state.activator = null;
         }
       }
       privateApi.checkFocusTrap();
@@ -776,4 +816,26 @@ export function useStackControl(
   }
 
   return control;
+}
+
+function refElement<T extends object | undefined>(
+  obj: T,
+): HTMLElement | undefined {
+  return (
+    (obj && '$el' in obj ? (obj.$el as HTMLElement) : (obj as HTMLElement)) ||
+    undefined
+  );
+}
+
+function getActivator(
+  query: VStackActivatorQuery | undefined,
+): HTMLElement | undefined {
+  if (!IN_WINDOW || !query) return;
+  if (typeof query === 'string')
+    return (document.querySelector(query) as HTMLElement) || undefined;
+  if (typeof query === 'function') query = query();
+  if (query instanceof Event) {
+    return ((query.currentTarget || query.target) as HTMLElement) || undefined;
+  }
+  return refElement(query);
 }

@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import { createStackableDefine } from '../schemes';
+import { createStackableDefine, V_STACK_SLOTS } from '../schemes';
 
 import { useStackControl } from '../composables';
 
@@ -10,6 +10,7 @@ export const VStack = defineComponent({
   inheritAttrs: false,
   props,
   emits,
+  slots: V_STACK_SLOTS,
   setup(props, ctx) {
     const stackControl = useStackControl(props, ctx);
     return () => stackControl.render((children) => <div>{children}</div>);

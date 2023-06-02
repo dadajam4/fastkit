@@ -14,7 +14,7 @@ import {
   watch,
   onBeforeUnmount,
 } from 'vue';
-import { createStackableDefine } from '../schemes';
+import { createStackableDefine, MergeStackBaseSlots } from '../schemes';
 import {
   DefineStackableSettings,
   setupStackableComponent,
@@ -173,7 +173,7 @@ export interface DefineMenuSettings<
 export function defineMenuComponent<
   Props extends Readonly<ComponentPropsOptions> = {},
   Emits extends EmitsOptions = {},
-  Slots extends SlotsType = {},
+  Slots extends SlotsType = SlotsType<{}>,
 >(settings: DefineMenuSettings<Props, Emits, Slots>) {
   const baseScheme = createMenuScheme(settings);
   const { name, props, emits } = settings;
@@ -189,7 +189,7 @@ export function defineMenuComponent<
       ...baseScheme.emits,
       ...emits,
     } as typeof baseScheme.emits & Emits,
-    slots: settings.slots,
+    slots: settings.slots as MergeStackBaseSlots<Slots>,
     setup(_props, _ctx) {
       const baseCtx = setupStackableComponent<
         MenuPropsOptions,

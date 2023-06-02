@@ -366,7 +366,7 @@ export const VSelect = defineComponent({
                           }
                           t = t.parentElement as HTMLElement;
                         }
-                        control.show(hit ? t : ev);
+                        control.setActivator(hit ? t : ev).show();
                       }
                     }}
                     v-slots={{

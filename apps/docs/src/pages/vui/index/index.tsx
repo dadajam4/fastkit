@@ -1,5 +1,5 @@
-import { defineComponent } from 'vue';
-import { VSelect } from '@fastkit/vui';
+import { defineComponent, ref } from 'vue';
+import { VSelect, VMenu } from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
 
 function Test(attrs: any = {}) {
@@ -25,10 +25,37 @@ function Rows(num: number) {
 }
 
 export default defineComponent({
-  render() {
-    return (
+  setup() {
+    const opened = ref(false);
+
+    return () => (
       <div>
         <h1>Vui</h1>
+
+        <button
+          type="button"
+          onClick={() => {
+            opened.value = true;
+          }}
+          onFocus={() => {
+            opened.value = true;
+          }}>
+          hello
+        </button>
+
+        <VMenu
+          v-model={opened.value}
+          v-slots={{
+            activator: ({ attrs }) => {
+              return (
+                <button type="button" {...attrs}>
+                  open
+                </button>
+              );
+            },
+          }}>
+          <div>Hello</div>
+        </VMenu>
 
         {Rows(3)}
 
