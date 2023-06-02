@@ -218,7 +218,7 @@ export type VStackActivatorQuery =
   | Event
   | Element
   | ComponentPublicInstance
-  | (() => Element | ComponentPublicInstance);
+  | (() => Element | ComponentPublicInstance | void | undefined | null);
 
 export function createStackableProps<T extends string | JavaScriptTransition>(
   opts: CreateStackablePropsOptions = {},

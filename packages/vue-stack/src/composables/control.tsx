@@ -833,9 +833,13 @@ function getActivator(
   if (!IN_WINDOW || !query) return;
   if (typeof query === 'string')
     return (document.querySelector(query) as HTMLElement) || undefined;
-  if (typeof query === 'function') query = query();
-  if (query instanceof Event) {
-    return ((query.currentTarget || query.target) as HTMLElement) || undefined;
+  const queryOrEl = typeof query === 'function' ? query() : query;
+  if (!queryOrEl) return;
+  if (queryOrEl instanceof Event) {
+    return (
+      ((queryOrEl.currentTarget || queryOrEl.target) as HTMLElement) ||
+      undefined
+    );
   }
-  return refElement(query);
+  return refElement(queryOrEl);
 }
