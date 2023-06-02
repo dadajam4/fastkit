@@ -260,8 +260,10 @@ export class VuiService {
       if (!actions.length) {
         actions.push(this.stackAction('ok'));
       }
+      const backdrop = props?.backdrop == null ? true : props?.backdrop;
       return {
         ...props,
+        backdrop,
         actions,
       };
     });
@@ -271,8 +273,10 @@ export class VuiService {
       if (!actions.length) {
         actions.push(this.stackAction('cancel'), this.stackAction('ok'));
       }
+      const backdrop = props?.backdrop == null ? true : props?.backdrop;
       return {
         ...props,
+        backdrop,
         actions,
       };
     });
