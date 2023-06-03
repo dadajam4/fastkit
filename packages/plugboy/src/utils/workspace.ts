@@ -52,12 +52,18 @@ export function resolveRawWorkspaceEntries(
 export async function resolveUserWorkspaceConfig(
   userConfig: UserWorkspaceConfig,
 ): Promise<ResolvedWorkspaceConfig> {
-  const { ignoreProjectConfig = false, entries, plugins } = userConfig;
+  const {
+    ignoreProjectConfig = false,
+    entries,
+    plugins,
+    optimizeCSS = true,
+  } = userConfig;
   return {
     ...userConfig,
     ignoreProjectConfig,
     entries: resolveRawWorkspaceEntries(entries),
     plugins: await resolveUserPluginOptions(plugins),
+    optimizeCSS: optimizeCSS === true ? {} : optimizeCSS,
   };
 }
 

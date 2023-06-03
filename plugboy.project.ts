@@ -64,4 +64,9 @@ export default defineProjectConfig({
     }),
     createVueJSXPlugin(),
   ],
+  optimizeCSS: {
+    combineRules: {
+      rules: [':root'],
+    },
+  },
 });

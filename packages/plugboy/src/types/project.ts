@@ -5,6 +5,7 @@ import { UserPluginOption, Plugin } from './plugin';
 import type { Path } from '../path';
 import { UserHooks } from './hook';
 import { DTSSettings } from './dts';
+import { OptimizeCSSOptions } from './css';
 
 export const PROJECT_REQUIRED_FIELDS = ['name'] as const;
 
@@ -68,6 +69,16 @@ export interface UserProjectConfig {
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
+  /**
+   * CSS optimization options
+   *
+   * Disable the operation with `false`.
+   *
+   * @default true
+   *
+   * @see {@link OptimizeCSSOptions}
+   */
+  optimizeCSS?: OptimizeCSSOptions | boolean;
 }
 
 /**
@@ -78,7 +89,7 @@ export interface ResolvedProjectConfig
   extends Required<
     Omit<
       UserProjectConfig,
-      'scripts' | 'tsconfig' | 'hooks' | 'plugins' | 'dts'
+      'scripts' | 'tsconfig' | 'hooks' | 'plugins' | 'dts' | 'optimizeCSS'
     >
   > {
   /**
@@ -106,6 +117,14 @@ export interface ResolvedProjectConfig
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
+  /**
+   * CSS optimization options
+   *
+   * Disable the operation with `false`.
+   *
+   * @see {@link OptimizeCSSOptions}
+   */
+  optimizeCSS: OptimizeCSSOptions | false;
 }
 
 export type ProjectPackageJson = RequiredPackageJSON<ProjectRequiredField>;

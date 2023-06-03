@@ -17,6 +17,8 @@ import {
   ESBuildPlugin,
   mergeDTSSettingsList,
   NormalizedDTSSettings,
+  ResolvedOptimizeCSSOptions,
+  resolveOptimizeCSSOptions,
 } from '../types';
 import { Path } from '../path';
 import { WORKSPACE_SPEC_PREFIX } from '../constants';
@@ -102,6 +104,7 @@ export class PlugboyWorkspace {
   readonly hooks: BuildedHooks;
   readonly dtsFiles: string[] = [];
   readonly dts: NormalizedDTSSettings;
+  readonly optimizeCSSOptions: ResolvedOptimizeCSSOptions | false;
   private _json: WorkspacePackageJson;
 
   get json() {
@@ -121,6 +124,7 @@ export class PlugboyWorkspace {
       plugins,
       hooks,
       dts,
+      optimizeCSS,
     } = ctx;
 
     this.name = dir.basename;
@@ -135,6 +139,9 @@ export class PlugboyWorkspace {
     this.plugins = plugins;
     this.hooks = hooks;
     this.dts = dts;
+    this.optimizeCSSOptions = optimizeCSS
+      ? resolveOptimizeCSSOptions(optimizeCSS)
+      : false;
 
     const entry: Record<string, string> = {};
     const exports: WorkspaceExport[] = [
@@ -401,6 +408,14 @@ export async function getWorkspace<
 
   const dts = mergeDTSSettingsList(project?.config.dts, config.dts);
 
+  let { optimizeCSS } = config;
+  if (optimizeCSS !== false && project && project.config.optimizeCSS) {
+    optimizeCSS = {
+      ...project.config.optimizeCSS,
+      ...optimizeCSS,
+    };
+  }
+
   const ctx: WorkspaceSetupContext = {
     dir,
     json,
@@ -413,6 +428,7 @@ export async function getWorkspace<
     plugins,
     hooks,
     dts,
+    optimizeCSS,
   };
 
   await hooks.setupWorkspace(ctx);

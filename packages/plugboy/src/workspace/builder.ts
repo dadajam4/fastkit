@@ -2,12 +2,16 @@ import { Options, build } from 'tsup';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { PlugboyWorkspace, WorkspaceObjectExport } from './workspace';
-import { TSUP_SYNC_OPTIONS, NormalizedDTSPreserveTypeSettings } from '../types';
+import {
+  TSUP_SYNC_OPTIONS,
+  NormalizedDTSPreserveTypeSettings,
+  ResolvedOptimizeCSSOptions,
+} from '../types';
 import type { OutputFile, Plugin } from 'esbuild';
 import { copyDirSync, rmrf } from '../utils';
 import { emitDTS } from './dts';
 import { glob } from 'glob';
-import type { Processor } from 'postcss';
+import type { Processor, AcceptedPlugin as PostcssPlugin } from 'postcss';
 
 const SHEBANG_MATCH_RE = /^(#!.+?)\n/;
 type EnvVarName = '__PLUGBOY_DEV__' | '__PLUGBOY_STUB__';
@@ -20,69 +24,48 @@ interface ResolvedOptions extends Options {
   esbuildPlugins: Plugin[];
 }
 
-let _postcssCache: Processor | undefined;
-
-async function getPostcss() {
-  if (!_postcssCache) {
-    const [postcss, cssnano] = await Promise.all([
-      import('postcss').then((mod) => mod.default),
-      import('cssnano').then((mod) => mod.default),
-    ]);
-    _postcssCache = postcss([
-      cssnano({
-        preset: [
-          'default',
-          {
-            normalizeWhitespace: false,
-          },
-        ],
-      }),
-    ]);
-  }
-  return _postcssCache;
-}
-
 function safeRemoveCSSMap(cssFilePath: string) {
   const mapFilePath = `${cssFilePath}.map`;
   return fs.rm(mapFilePath, { force: true });
 }
 
-const sourceMappingURLCommentRe = /\/\*# sourceMappingURL=.+? \*\//g;
+const SOURCE_MAPPING_URL_COMMENT_RE = /\/\*# sourceMappingURL=.+? \*\//g;
 const allLayerDefRe = /(^|\n)@layer\s+([a-zA-Z\d\-_$\. ,]+);/g;
 const layerDefTrimRe = /((^|\n)@layer\s+|;)/g;
 
-async function optimizeCSS(cssFilePath: string) {
-  const css = await fs.readFile(cssFilePath, 'utf-8');
-  const postcss = await getPostcss();
-  const result = await postcss.process(css, { from: cssFilePath });
-  const layerDefs = (() => {
-    const matched = css.match(allLayerDefRe);
-    if (!matched) return '';
-    const layerNames: string[] = [];
-    matched.forEach((row) => {
-      const trimed = row.replace(layerDefTrimRe, '');
-      const chunks = trimed.split(',');
-      chunks.forEach((chunk) => layerNames.push(chunk.trim()));
-    });
-    const uniqued = Array.from(new Set(layerNames));
-    const def = `@layer ${uniqued.join(', ')};\n`;
-    return def;
-  })();
-  await Promise.all([
-    fs.writeFile(
-      cssFilePath,
-      layerDefs +
-        result.css
-          .replace(allLayerDefRe, '')
-          .replace(sourceMappingURLCommentRe, ''),
-    ),
-    safeRemoveCSSMap(cssFilePath),
+async function getPostcss(
+  options: ResolvedOptimizeCSSOptions,
+): Promise<Processor> {
+  const { layer, media, combineRules, cssnano } = options;
+  const [postcss, _layer, _media, _combineRules, _cssnano] = await Promise.all([
+    import('postcss').then((mod) => mod.default),
+    layer &&
+      import('../postcss/plugins/optimize-layer').then((mod) =>
+        mod.OptimizeLayer(layer),
+      ),
+    media &&
+      import('../postcss/plugins/optimize-media').then((mod) =>
+        mod.OptimizeMedia(media),
+      ),
+    combineRules &&
+      import('../postcss/plugins/combine-rules').then((mod) =>
+        mod.CombineRules(combineRules),
+      ),
+    cssnano && import('cssnano').then((mod) => mod.default(cssnano)),
   ]);
+  const plugins: PostcssPlugin[] = [];
+  _layer && plugins.push(_layer);
+  _media && plugins.push(_media);
+  _combineRules && plugins.push(_combineRules);
+  _cssnano && plugins.push(_cssnano);
+
+  return postcss(plugins);
 }
 
 export class Builder {
   readonly workspace: PlugboyWorkspace;
   private _tsupOptions?: ResolvedOptions;
+  private _postcssCache?: Processor;
 
   get entry() {
     return this.workspace.entry;
@@ -422,7 +405,7 @@ function __plugboyPublicDir(...paths) {
         await Promise.all(
           _outputFiles.map(async ({ path: filePath }) => {
             if (filePath.endsWith('.css')) {
-              await optimizeCSS(filePath);
+              await this._handleCSSOutput(filePath);
               return;
             }
             if (!filePath.endsWith('.mjs')) return;
@@ -443,5 +426,50 @@ function __plugboyPublicDir(...paths) {
     } else {
       await this.normalizeDTSFiles();
     }
+  }
+
+  async optimizeCSS(cssFilePath: string) {
+    const options = this.workspace.optimizeCSSOptions;
+    if (!options) return Promise.resolve();
+
+    let postcss = this._postcssCache;
+    if (!postcss) {
+      postcss = await getPostcss(options);
+      this._postcssCache = postcss;
+    }
+
+    function prepare(css: string): string {
+      const layerDefs = (() => {
+        const matched = css.match(allLayerDefRe);
+        if (!matched) return '';
+        const layerNames: string[] = [];
+        matched.forEach((row) => {
+          const trimmed = row.replace(layerDefTrimRe, '');
+          const chunks = trimmed.split(',');
+          chunks.forEach((chunk) => layerNames.push(chunk.trim()));
+        });
+        const uniqued = Array.from(new Set(layerNames));
+        const def = `@layer ${uniqued.join(', ')};\n`;
+        return def;
+      })();
+      return (
+        layerDefs +
+        css
+          .replace(allLayerDefRe, '')
+          .replace(SOURCE_MAPPING_URL_COMMENT_RE, '')
+      );
+    }
+
+    const css = prepare(await fs.readFile(cssFilePath, 'utf-8'));
+
+    const result = await postcss.process(css, { from: cssFilePath });
+    await fs.writeFile(cssFilePath, result.css);
+  }
+
+  private async _handleCSSOutput(cssFilePath: string) {
+    await Promise.all([
+      this.optimizeCSS(cssFilePath),
+      safeRemoveCSSMap(cssFilePath),
+    ]);
   }
 }

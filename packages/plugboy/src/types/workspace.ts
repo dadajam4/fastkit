@@ -5,6 +5,7 @@ import type { UserPluginOption, Plugin } from './plugin';
 import type { UserHooks, BuildedHooks } from './hook';
 import { Options as TSUpOptions } from 'tsup';
 import { DTSSettings, NormalizedDTSSettings } from './dts';
+import { OptimizeCSSOptions } from './css';
 
 export const WORKSPACE_REQUIRED_FIELDS = ['name', 'version'] as const;
 
@@ -94,6 +95,16 @@ export interface UserWorkspaceConfig extends TSUpSyncOptions {
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
+  /**
+   * CSS optimization options
+   *
+   * Disable the operation with `false`.
+   *
+   * @default true
+   *
+   * @see {@link OptimizeCSSOptions}
+   */
+  optimizeCSS?: OptimizeCSSOptions | boolean;
 }
 
 /**
@@ -103,7 +114,7 @@ export interface ResolvedWorkspaceConfig
   extends Required<
       Omit<
         UserWorkspaceConfig,
-        'entries' | 'hooks' | 'plugins' | 'dts' | TSUpSyncOption
+        'entries' | 'hooks' | 'plugins' | 'dts' | 'optimizeCSS' | TSUpSyncOption
       >
     >,
     TSUpSyncOptions {
@@ -128,6 +139,14 @@ export interface ResolvedWorkspaceConfig
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
+  /**
+   * CSS optimization options
+   *
+   * Disable the operation with `false`.
+   *
+   * @see {@link OptimizeCSSOptions}
+   */
+  optimizeCSS: OptimizeCSSOptions | false;
 }
 
 export type WorkspacePackageJson = RequiredPackageJSON<WorkspaceRequiredField>;
@@ -196,4 +215,12 @@ export interface WorkspaceSetupContext {
    * @see {@link NormalizedDTSSettings}
    */
   dts: NormalizedDTSSettings;
+  /**
+   * CSS optimization options
+   *
+   * Disable the operation with `false`.
+   *
+   * @see {@link OptimizeCSSOptions}
+   */
+  optimizeCSS: OptimizeCSSOptions | false;
 }
