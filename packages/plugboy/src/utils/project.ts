@@ -31,6 +31,7 @@ export async function resolveUserProjectConfig(
     tsconfig,
     readme = (json) => `# ${json.name}\n`,
     plugins,
+    optimizeCSS = true,
   } = userConfig;
   return {
     workspacesDir,
@@ -39,6 +40,7 @@ export async function resolveUserProjectConfig(
     tsconfig,
     readme,
     plugins: await resolveUserPluginOptions(plugins),
+    optimizeCSS: optimizeCSS === true ? {} : optimizeCSS,
   };
 }
 
