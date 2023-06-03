@@ -1,5 +1,14 @@
 # @fastkit/vue-stack
 
+## 0.15.5
+
+### Patch Changes
+
+- [#67](https://github.com/dadajam4/fastkit/pull/67) [`93488f2`](https://github.com/dadajam4/fastkit/commit/93488f21251f32ed5d577f854146815bd6307161) Thanks [@dadajam4](https://github.com/dadajam4)! - Rebuild in build dependency update.
+
+- Updated dependencies []:
+  - @fastkit/vue-color-scheme@0.14.1
+
 ## 0.15.4
 
 ### Patch Changes
