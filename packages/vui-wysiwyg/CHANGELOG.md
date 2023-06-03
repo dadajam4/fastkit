@@ -1,5 +1,14 @@
 # @fastkit/vui-wysiwyg
 
+## 4.0.6
+
+### Patch Changes
+
+- [#67](https://github.com/dadajam4/fastkit/pull/67) [`93488f2`](https://github.com/dadajam4/fastkit/commit/93488f21251f32ed5d577f854146815bd6307161) Thanks [@dadajam4](https://github.com/dadajam4)! - Rebuild in build dependency update.
+
+- Updated dependencies [[`93488f2`](https://github.com/dadajam4/fastkit/commit/93488f21251f32ed5d577f854146815bd6307161)]:
+  - @fastkit/vui@0.16.6
+
 ## 4.0.5
 
 ### Patch Changes

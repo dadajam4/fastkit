@@ -1,5 +1,12 @@
 # @fastkit/vue-color-scheme
 
+## 0.14.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/color-scheme@1.0.7
+
 ## 0.14.0
 
 ### Minor Changes

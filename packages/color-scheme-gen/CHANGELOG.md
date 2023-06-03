@@ -1,5 +1,12 @@
 # @fastkit/color-scheme-gen
 
+## 0.13.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/color-scheme@1.0.7
+
 ## 0.13.6
 
 ### Patch Changes

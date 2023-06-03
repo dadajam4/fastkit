@@ -1,5 +1,24 @@
 # @fastkit/vui
 
+## 0.16.6
+
+### Patch Changes
+
+- [#67](https://github.com/dadajam4/fastkit/pull/67) [`93488f2`](https://github.com/dadajam4/fastkit/commit/93488f21251f32ed5d577f854146815bd6307161) Thanks [@dadajam4](https://github.com/dadajam4)! - Rebuild in build dependency update.
+
+- Updated dependencies [[`93488f2`](https://github.com/dadajam4/fastkit/commit/93488f21251f32ed5d577f854146815bd6307161)]:
+  - @fastkit/vue-app-layout@0.14.1
+  - @fastkit/vue-loading@0.14.2
+  - @fastkit/vue-scroller@0.14.1
+  - @fastkit/vue-stack@0.15.5
+  - @fastkit/color-scheme@1.0.7
+  - @fastkit/icon-font@1.0.6
+  - @fastkit/media-match@1.0.6
+  - @fastkit/color-scheme-gen@0.13.7
+  - @fastkit/vue-color-scheme@0.14.1
+  - @fastkit/media-match-gen@0.13.7
+  - @fastkit/vue-media-match@0.13.7
+
 ## 0.16.5
 
 ### Patch Changes

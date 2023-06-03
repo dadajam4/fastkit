@@ -1,5 +1,12 @@
 # @fastkit/plugboy-vue-jsx-plugin
 
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies [[`93488f2`](https://github.com/dadajam4/fastkit/commit/93488f21251f32ed5d577f854146815bd6307161)]:
+  - @fastkit/plugboy@0.1.6
+
 ## 1.0.5
 
 ### Patch Changes
