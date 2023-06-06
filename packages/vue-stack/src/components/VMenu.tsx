@@ -589,18 +589,21 @@ export function defineMenuComponent<
       function updateActivatorRect() {
         const el = getActivatorElement();
         if (!el) {
-          state.activatorRect = null;
+          // state.activatorRect = null;
           return;
         }
         const rect = el.getBoundingClientRect();
+
+        const { width, height } = rect;
+        if (width === 0 && height === 0) return;
 
         state.activatorRect = {
           left: rect.left,
           right: rect.right,
           top: rect.top,
           bottom: rect.bottom,
-          width: rect.width,
-          height: rect.height,
+          width,
+          height,
         };
       }
 
@@ -618,6 +621,22 @@ export function defineMenuComponent<
           }
         | undefined;
       let _activatorResizeObserver: ResizeObserver | undefined;
+      let _activatorResizeRAFID: number | undefined;
+
+      const _clearActivatorResizeRAF = () => {
+        if (_activatorResizeRAFID !== undefined) {
+          cancelAnimationFrame(_activatorResizeRAFID);
+          _activatorResizeRAFID = undefined;
+        }
+      };
+
+      const _handleActivatorResize = () => {
+        _clearActivatorResizeRAF();
+        _activatorResizeRAFID = requestAnimationFrame(() => {
+          _clearActivatorResizeRAF();
+          updateRects();
+        });
+      };
 
       function handleScrollerScroll(ev: Event) {
         updateRects();
@@ -628,6 +647,7 @@ export function defineMenuComponent<
           _activatorResizeObserver.disconnect();
           _activatorResizeObserver = undefined;
         }
+        _clearActivatorResizeRAF();
         if (!_currentScrollParents) return;
         for (const el of _currentScrollParents.parents) {
           const eventTarget = el === document.documentElement ? document : el;
@@ -644,9 +664,7 @@ export function defineMenuComponent<
         if (!_currentScrollParents) return;
 
         const { activator, parents } = _currentScrollParents;
-        _activatorResizeObserver = new ResizeObserver(() => {
-          updateRects();
-        });
+        _activatorResizeObserver = new ResizeObserver(_handleActivatorResize);
         _activatorResizeObserver.observe(activator);
 
         for (const el of parents) {
