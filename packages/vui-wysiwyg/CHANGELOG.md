@@ -1,5 +1,12 @@
 # @fastkit/vui-wysiwyg
 
+## 4.0.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vui@0.16.7
+
 ## 4.0.6
 
 ### Patch Changes
