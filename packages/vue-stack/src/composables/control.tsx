@@ -836,10 +836,11 @@ function getActivator(
   const queryOrEl = typeof query === 'function' ? query() : query;
   if (!queryOrEl) return;
   if (queryOrEl instanceof Event) {
-    return (
-      ((queryOrEl.currentTarget || queryOrEl.target) as HTMLElement) ||
-      undefined
-    );
+    const { currentTarget } = queryOrEl;
+    if (currentTarget && currentTarget !== document) {
+      return currentTarget as HTMLElement;
+    }
+    return (queryOrEl.target as HTMLElement) || undefined;
   }
   return refElement(queryOrEl);
 }
