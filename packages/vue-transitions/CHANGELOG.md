@@ -1,5 +1,11 @@
 # @fastkit/vue-transitions
 
+## 0.1.3
+
+### Patch Changes
+
+- [#71](https://github.com/dadajam4/fastkit/pull/71) [`46f2f16`](https://github.com/dadajam4/fastkit/commit/46f2f16e5b54643b01fbcd8bb173330ef23d21ee) Thanks [@dadajam4](https://github.com/dadajam4)! - Added option to Expand transition to animate fade animation simultaneously with opening and closing.
+
 ## 0.1.2
 
 ### Patch Changes

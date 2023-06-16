@@ -1,5 +1,12 @@
 # @fastkit/vue-stack
 
+## 0.15.7
+
+### Patch Changes
+
+- Updated dependencies [[`46f2f16`](https://github.com/dadajam4/fastkit/commit/46f2f16e5b54643b01fbcd8bb173330ef23d21ee)]:
+  - @fastkit/vue-transitions@0.1.3
+
 ## 0.15.6
 
 ### Patch Changes
