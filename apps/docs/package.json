@@ -25,6 +25,7 @@
     "@fastkit/vue-loading": "workspace:*",
     "@fastkit/vue-scroller": "workspace:*",
     "@fastkit/vue-stack": "workspace:*",
+    "@fastkit/vue-transitions": "workspace:*",
     "@fastkit/vui": "workspace:*",
     "@fastkit/vui-wysiwyg": "workspace:*",
     "@types/marked": "^4.3.0",

@@ -14,6 +14,7 @@ interface HTMLExpandElement extends HTMLElement {
     overflow: string | null;
     height?: string | null;
     width?: string | null;
+    opacity?: string | null;
   };
 }
 
@@ -56,6 +57,8 @@ export const VExpandTransition = generateJavaScriptTransition({
       type: String as PropType<'width' | 'height'>,
       default: 'height' as const,
     },
+    /** Fade IN/OUT as it opens and closes. */
+    fade: Boolean,
   },
   setup(props) {
     const { expand: sizeProperty } = props;
@@ -75,6 +78,7 @@ export const VExpandTransition = generateJavaScriptTransition({
       if (size != null) {
         el.style[sizeProperty] = size;
       }
+      el.style.opacity = _initialStyle.opacity || '';
       delete (el as any)._initialStyle;
     };
 
@@ -87,6 +91,7 @@ export const VExpandTransition = generateJavaScriptTransition({
           overflow: el.style.overflow,
           [sizeProperty]: el.style[sizeProperty],
         };
+        if (props.fade) el._initialStyle.opacity = el.style.opacity;
       },
       onEnter(_el, done) {
         const el = _el as HTMLExpandElement;
@@ -100,6 +105,7 @@ export const VExpandTransition = generateJavaScriptTransition({
         el.style.visibility = initialStyle.visibility || '';
         el.style.overflow = 'hidden';
         el.style[sizeProperty] = '0';
+        if (props.fade) el.style.opacity = '0';
 
         // eslint-disable-next-line no-void
         void el.offsetHeight; // Force reflow
@@ -112,6 +118,7 @@ export const VExpandTransition = generateJavaScriptTransition({
             properties: sizeProperty,
           });
           el.style[sizeProperty] = offset;
+          if (props.fade) el.style.opacity = '1';
         });
       },
       onAfterEnter: resetStyles,
@@ -124,9 +131,11 @@ export const VExpandTransition = generateJavaScriptTransition({
           overflow: el.style.overflow,
           [sizeProperty]: el.style[sizeProperty],
         };
+        if (props.fade) el._initialStyle.opacity = el.style.opacity;
 
         el.style.overflow = 'hidden';
         el.style[sizeProperty] = `${el[offsetProperty]}px`;
+
         // eslint-disable-next-line no-void
         void el.offsetHeight; // Force reflow
 
@@ -136,6 +145,7 @@ export const VExpandTransition = generateJavaScriptTransition({
             properties: sizeProperty,
           });
           el.style[sizeProperty] = '0';
+          if (props.fade) el.style.opacity = '0';
         });
       },
       onAfterLeave: resetStyles,
