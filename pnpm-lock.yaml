@@ -119,7 +119,7 @@ importers:
       '@fastkit/vue-loading': workspace:*
       '@fastkit/vue-scroller': workspace:*
       '@fastkit/vue-stack': workspace:*
-      '@fastkit/vue-transitions': workspace:^0.1.2
+      '@fastkit/vue-transitions': workspace:*
       '@fastkit/vui': workspace:*
       '@fastkit/vui-wysiwyg': workspace:*
       '@mdi/svg': ^7.2.96
