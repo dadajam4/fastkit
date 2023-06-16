@@ -177,7 +177,7 @@ export class TextableControl extends FormNodeControl<string> {
   }
 
   get finishings() {
-    return this._finishings.value;
+    return this._finishings?.value;
   }
 
   get counterSettings() {

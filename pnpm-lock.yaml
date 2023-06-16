@@ -119,6 +119,7 @@ importers:
       '@fastkit/vue-loading': workspace:*
       '@fastkit/vue-scroller': workspace:*
       '@fastkit/vue-stack': workspace:*
+      '@fastkit/vue-transitions': workspace:*
       '@fastkit/vui': workspace:*
       '@fastkit/vui-wysiwyg': workspace:*
       '@mdi/svg': ^7.2.96
@@ -136,6 +137,7 @@ importers:
       '@fastkit/vue-loading': link:../../packages/vue-loading
       '@fastkit/vue-scroller': link:../../packages/vue-scroller
       '@fastkit/vue-stack': link:../../packages/vue-stack
+      '@fastkit/vue-transitions': link:../../packages/vue-transitions
       '@fastkit/vui': link:../../packages/vui
       '@fastkit/vui-wysiwyg': link:../../packages/vui-wysiwyg
       '@types/marked': 4.3.0
