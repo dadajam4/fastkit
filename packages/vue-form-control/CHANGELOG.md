@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.1
+
+### Patch Changes
+
+- [#71](https://github.com/dadajam4/fastkit/pull/71) [`46f2f16`](https://github.com/dadajam4/fastkit/commit/46f2f16e5b54643b01fbcd8bb173330ef23d21ee) Thanks [@dadajam4](https://github.com/dadajam4)! - I have fixed the issue where text-based components were not properly initialized when validateTiming was set to `always`.
+
 ## 0.15.0
 
 ### Minor Changes
