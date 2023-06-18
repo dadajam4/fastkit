@@ -220,6 +220,8 @@ export class TextInputControl extends TextableControl {
         }, 250);
       }
     });
+
+    this.togglePasswordVisibility = this.togglePasswordVisibility.bind(this);
   }
 
   emptyValue() {
@@ -244,6 +246,10 @@ export class TextInputControl extends TextableControl {
 
   setPasswordVisibility(visibility: boolean) {
     this._passwordVisibility.value = visibility;
+  }
+
+  togglePasswordVisibility() {
+    this.setPasswordVisibility(!this.isVisiblePassword);
   }
 
   createInputElement(
