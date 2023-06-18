@@ -124,6 +124,7 @@ export class TextInputControl extends TextableControl {
   protected _masked: Ref<string>;
   protected _unmasked: Ref<string>;
   protected _typed: Ref<IMaskTypedValue | undefined>;
+  protected _passwordVisibility = ref(false);
 
   get mask() {
     return this._mask.value;
@@ -147,6 +148,10 @@ export class TextInputControl extends TextableControl {
 
   get typed() {
     return this._typed.value;
+  }
+
+  get isVisiblePassword() {
+    return this._passwordVisibility.value;
   }
 
   constructor(
@@ -237,10 +242,21 @@ export class TextInputControl extends TextableControl {
     };
   }
 
-  createInputElement(override: Pick<InputHTMLAttributes, 'class'> = {}) {
+  setPasswordVisibility(visibility: boolean) {
+    this._passwordVisibility.value = visibility;
+  }
+
+  createInputElement(
+    override: Pick<InputHTMLAttributes, 'class' | 'type'> = {},
+  ) {
+    let type = override.type || this.type;
+    if (type === 'password' && this.isVisiblePassword) {
+      type = 'text';
+    }
+
     const attrs: InputHTMLAttributes = {
       class: override.class,
-      type: this.type,
+      type,
       name: this.name,
       tabindex: this.tabindex,
       readonly: this.isReadonly,
