@@ -1,6 +1,6 @@
 import { PropType, Prop, ComponentPropsOptions } from 'vue';
 
-import type { HTMLAttributes } from 'vue';
+import type { HTMLAttributes, Events } from 'vue';
 
 export const rawNumberPropType = [String, Number] as PropType<string | number>;
 
@@ -201,3 +201,60 @@ export type PointableAttributesProps = typeof POINTABLE_ATTRIBUTES_PROPS;
  * @deprecated - This symbol may be removed in the next minor version; consider using {@link HTMLAttributesPropOptions} to define only the necessary events.
  */
 export const htmlAttributesPropOptions = _mock as HTMLAttributesPropOptions;
+
+type ReplaceOnAndUncapitalize<T extends `on${string}`> =
+  T extends `${'on'}${infer R}` ? Uncapitalize<R> : never;
+
+type HTMLEventName = ReplaceOnAndUncapitalize<keyof Events>;
+
+type HTMLEventEmitOptions = {
+  [EventName in HTMLEventName]: (
+    ev: Events[`on${Capitalize<EventName>}`],
+  ) => true;
+};
+
+/**
+ * Focusable Element Emit options mock
+ */
+export const FOCUSABLE_EMIT_OPTIONS_MOCK = _mock as Pick<
+  HTMLEventEmitOptions,
+  'focus' | 'focusin' | 'focusout' | 'blur'
+>;
+
+/**
+ * Keyboard Operable Emit options mock
+ */
+export const KEYBOARDABLE_EMIT_OPTIONS_MOCK = _mock as Pick<
+  HTMLEventEmitOptions,
+  'keydown' | 'keypress' | 'keyup'
+>;
+
+/**
+ * Pointer Operable Emit options mock
+ */
+export const POINTABLE_EMIT_OPTIONS_MOCK = _mock as Pick<
+  HTMLEventEmitOptions,
+  | 'auxclick'
+  | 'click'
+  | 'contextmenu'
+  | 'dblclick'
+  | 'mousedown'
+  | 'mouseenter'
+  | 'mouseleave'
+  | 'mousemove'
+  | 'mouseout'
+  | 'mouseover'
+  | 'mouseup'
+  | 'touchcancel'
+  | 'touchend'
+  | 'touchmove'
+  | 'touchstart'
+  | 'pointerdown'
+  | 'pointermove'
+  | 'pointerup'
+  | 'pointercancel'
+  | 'pointerenter'
+  | 'pointerleave'
+  | 'pointerover'
+  | 'pointerout'
+>;
