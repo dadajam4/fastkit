@@ -1,5 +1,14 @@
 # @fastkit/vue-form-control
 
+## 0.15.2
+
+### Patch Changes
+
+- [#73](https://github.com/dadajam4/fastkit/pull/73) [`8e25df8`](https://github.com/dadajam4/fastkit/commit/8e25df840c83d63617f5f343939fc22abf06b4a0) Thanks [@dadajam4](https://github.com/dadajam4)! - Added support for controlling the display state of passwords in TextInputControl.
+
+- Updated dependencies [[`8e25df8`](https://github.com/dadajam4/fastkit/commit/8e25df840c83d63617f5f343939fc22abf06b4a0)]:
+  - @fastkit/vue-utils@0.14.1
+
 ## 0.15.1
 
 ### Patch Changes

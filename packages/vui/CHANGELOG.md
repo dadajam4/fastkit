@@ -1,5 +1,24 @@
 # @fastkit/vui
 
+## 0.16.9
+
+### Patch Changes
+
+- Updated dependencies [[`8e25df8`](https://github.com/dadajam4/fastkit/commit/8e25df840c83d63617f5f343939fc22abf06b4a0), [`8e25df8`](https://github.com/dadajam4/fastkit/commit/8e25df840c83d63617f5f343939fc22abf06b4a0)]:
+  - @fastkit/vue-form-control@0.15.2
+  - @fastkit/vue-utils@0.14.1
+  - @fastkit/vue-action@0.2.2
+  - @fastkit/vue-app-layout@0.14.2
+  - @fastkit/vue-body-scroll-lock@0.1.3
+  - @fastkit/vue-click-outside@0.1.3
+  - @fastkit/vue-color-scheme@0.14.2
+  - @fastkit/vue-loading@0.14.3
+  - @fastkit/vue-location@0.1.3
+  - @fastkit/vue-resize@0.1.3
+  - @fastkit/vue-scroller@0.14.2
+  - @fastkit/vue-stack@0.15.8
+  - @fastkit/vue-transitions@0.1.4
+
 ## 0.16.8
 
 ### Patch Changes

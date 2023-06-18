@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.1
+
+### Patch Changes
+
+- [#73](https://github.com/dadajam4/fastkit/pull/73) [`8e25df8`](https://github.com/dadajam4/fastkit/commit/8e25df840c83d63617f5f343939fc22abf06b4a0) Thanks [@dadajam4](https://github.com/dadajam4)! - Added utilities for mocking various events of HTML elements to emits options of Vue components.
+
 ## 0.14.0
 
 ### Minor Changes
