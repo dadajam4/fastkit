@@ -16,6 +16,8 @@ import {
   DefineSlotsType,
 } from '@fastkit/vue-utils';
 import { FormNodeControl, FormNodeError } from './node';
+import type { VueFormService } from '../service';
+import { useVueForm } from '../injections';
 
 const EMPTY_MESSAGE = '\xa0'; // for keep height
 
@@ -114,6 +116,7 @@ export interface FormControlOptions {
 }
 
 export class FormControl {
+  readonly _service: VueFormService;
   protected _ctx: FormControlContext | undefined;
   protected _nodeControl: ComputedRef<FormNodeControl | undefined>;
   protected _labelSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
@@ -135,6 +138,10 @@ export class FormControl {
   protected _required: ComputedRef<boolean>;
   protected _invalid: ComputedRef<boolean>;
   protected _valid: ComputedRef<boolean>;
+
+  get service() {
+    return this._service;
+  }
 
   get nodeControl() {
     return this._nodeControl.value;
@@ -221,6 +228,7 @@ export class FormControl {
     ctx: FormControlContext,
     options: FormControlOptions = {},
   ) {
+    this._service = useVueForm();
     const { slots } = ctx;
 
     this._ctx = ctx;
@@ -311,6 +319,7 @@ export class FormControl {
 
     onBeforeUnmount(() => {
       delete this._ctx;
+      delete (this as any)._service;
     });
   }
 
@@ -344,17 +353,25 @@ export class FormControl {
     if (!firstError) return;
     const { slots } = this._getContextOrDir();
     const slot = slots[`error:${firstError.name}`] || slots.error;
-    if (!slot) return firstError.message;
+    if (!slot) {
+      return (
+        this.service.resolveErrorMessage(firstError, this.nodeControl) ||
+        firstError.message
+      );
+    }
     const errorMessage = slot(firstError);
     if (!errorMessage.length) return;
     return errorMessage;
   }
 
-  renderMessage() {
+  renderMessage(allowNotFocused?: boolean) {
     if (this.disabled || this.readonly) return EMPTY_MESSAGE;
     const error = this.renderFirstError();
     if (error) return error;
-    return (!this._hinttip.value && this.renderHint()) || EMPTY_MESSAGE;
+    return (
+      (!this._hinttip.value && this.renderHint(allowNotFocused)) ||
+      EMPTY_MESSAGE
+    );
   }
 
   renderHinttip():

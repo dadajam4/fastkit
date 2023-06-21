@@ -26,10 +26,11 @@ import {
   validate,
   required as requiredFactory,
 } from '@fastkit/rules';
-import { FormNodeInjectionKey, useParentForm } from '../injections';
+import { FormNodeInjectionKey, useParentForm, useVueForm } from '../injections';
 import type { VueForm } from './form';
 import { RecursiveArray, flattenRecursiveArray, toInt } from '@fastkit/helpers';
 import { createPropsOptions } from '@fastkit/vue-utils';
+import type { VueFormService } from '../service';
 
 export type RecursiveValidatableRule = RecursiveArray<ValidatableRule>;
 
@@ -224,6 +225,7 @@ export function createFormNodeSettings<T, D = T>(
 export type FormNodeContext<T, D = T> = SetupContext<FormNodeEmitOptions<T, D>>;
 
 export class FormNodeControl<T = any, D = T> {
+  readonly _service: VueFormService;
   readonly nodeType?: FormNodeType;
   readonly autofocus: boolean;
   readonly __multiple: boolean;
@@ -272,6 +274,10 @@ export class FormNodeControl<T = any, D = T> {
   protected _cii: ComponentInternalInstance | null = null;
   protected _validationValueGetter?: () => any;
   protected _validationSkip = false;
+
+  get service() {
+    return this._service;
+  }
 
   get name() {
     return this._name.value;
@@ -494,6 +500,7 @@ export class FormNodeControl<T = any, D = T> {
     ctx: FormNodeContext<T, D>,
     options: FormNodeControlOptions<T, D>,
   ) {
+    this._service = useVueForm();
     this._ctx = ctx;
 
     const { nodeType } = options;
@@ -723,6 +730,7 @@ export class FormNodeControl<T = any, D = T> {
       this._cii = null;
       this._isDestroyed = true;
       delete (this as any)._ctx;
+      delete (this as any)._service;
     });
 
     (['focusHandler', 'blurHandler'] as const).forEach((fn) => {
