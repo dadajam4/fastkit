@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.16.10
+
+### Patch Changes
+
+- [#75](https://github.com/dadajam4/fastkit/pull/75) [`6b4ebd5`](https://github.com/dadajam4/fastkit/commit/6b4ebd5422a41f2a09d8023d8f3c01a385b616de) Thanks [@dadajam4](https://github.com/dadajam4)! - Added option for common resolution of form validation error messages.
+
+- Updated dependencies [[`6b4ebd5`](https://github.com/dadajam4/fastkit/commit/6b4ebd5422a41f2a09d8023d8f3c01a385b616de)]:
+  - @fastkit/vue-form-control@0.15.3
+
 ## 0.16.9
 
 ### Patch Changes
