@@ -10,6 +10,10 @@ import {
   installVueStackPlugin,
   VueStackServiceOptions,
 } from '@fastkit/vue-stack';
+import {
+  installVueFormPlugin,
+  VueFormServiceOptions,
+} from '@fastkit/vue-form-control';
 import { installBodyScrollLockDirective } from '@fastkit/vue-body-scroll-lock';
 import { installClickOutsideDirective } from '@fastkit/vue-click-outside';
 import { installResizeDirective } from '@fastkit/vue-resize';
@@ -22,10 +26,12 @@ export interface VuiPluginStackOptions extends VueStackServiceOptions {}
 
 export interface VuiPluginOptions extends VuiServiceOptions {
   stack?: VuiPluginStackOptions;
+  form?: VueFormServiceOptions;
 }
 
 export interface RawVuiPluginOptions extends RawVuiServiceOptions {
   stack?: VuiPluginStackOptions;
+  form?: VueFormServiceOptions;
 }
 
 export function mergeVuiPluginOptions(
@@ -40,6 +46,12 @@ export function mergeVuiPluginOptions(
       ...override.stack,
     };
   }
+  if (override.form) {
+    merged.form = {
+      ...merged.form,
+      ...override.form,
+    };
+  }
   return merged;
 }
 
@@ -51,15 +63,14 @@ declare module 'vue' {
 
 export class VuiPlugin {
   static install(app: App, opts: VuiPluginOptions) {
-    const { colorScheme, stack } = opts;
+    const { colorScheme, stack, form } = opts;
 
     // ColorScheme
     const vueColorSchemePlugin = new VueColorSchemePlugin(colorScheme);
     app.use(vueColorSchemePlugin);
 
-    // Stack
     installVueStackPlugin(app, stack);
-
+    installVueFormPlugin(app, form);
     installVueAppLayout(app);
     installBodyScrollLockDirective(app);
     installClickOutsideDirective(app);
