@@ -15,7 +15,7 @@ import {
   cleanupEmptyVNodeChild,
   DefineSlotsType,
 } from '@fastkit/vue-utils';
-import { FormNodeControl, FormNodeError } from './node';
+import { FormNodeControl, FormNodeError, toFormNodeError } from './node';
 import type { VueFormService } from '../service';
 import { useVueForm } from '../injections';
 
@@ -59,6 +59,8 @@ export function createFormControlProps() {
         type: Array as PropType<FormNodeError[]>,
         default: () => [] as FormNodeError[],
       },
+      /** List of error messages. */
+      errorMessages: [String, Array] as PropType<string | string[]>,
       /** disabled state */
       disabled: Boolean,
       /** read-only state */
@@ -130,6 +132,7 @@ export class FormControl {
   protected _focused: ComputedRef<boolean>;
   protected _dirty: ComputedRef<boolean>;
   protected _pristine: ComputedRef<boolean>;
+  protected _errorMessages: ComputedRef<string[]>;
   protected _errors: ComputedRef<FormNodeError[]>;
   protected _disabled: ComputedRef<boolean>;
   protected _readonly: ComputedRef<boolean>;
@@ -165,6 +168,10 @@ export class FormControl {
 
   get pristine() {
     return this._pristine.value;
+  }
+
+  get errorMessages() {
+    return this._errorMessages.value;
   }
 
   get errors() {
@@ -292,9 +299,17 @@ export class FormControl {
     this._pristine = computed(() =>
       getPropOrNodeControlValue('pristine', 'pristine'),
     );
-    this._errors = computed(() =>
-      getPropOrNodeControlValue('errors', 'errors'),
-    );
+    this._errorMessages = computed(() => {
+      const { errorMessages = [] } = props;
+      return Array.isArray(errorMessages) ? errorMessages : [errorMessages];
+    });
+    this._errors = computed(() => {
+      const { errorMessages } = this;
+      const errors = [...errorMessages.map(toFormNodeError), ...props.errors];
+      const ncErrors = nc.value?.errors;
+      if (ncErrors) errors.push(...ncErrors);
+      return errors;
+    });
     this._disabled = computed(() =>
       getPropOrNodeControlValue('disabled', 'isDisabled'),
     );

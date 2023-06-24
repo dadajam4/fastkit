@@ -542,7 +542,7 @@ export class FormNodeControl<T = any, D = T> {
 
     this._errors = computed(() => {
       return [
-        ...this._errorMessages.value.map((value) => toFormNodeError(value)),
+        ...this._errorMessages.value.map(toFormNodeError),
         ...this.validationErrors,
       ];
     });

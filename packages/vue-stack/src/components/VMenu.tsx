@@ -21,6 +21,7 @@ import {
 } from '../composables';
 import {
   useWindow,
+  UseWindowRef,
   resizeDirectiveArgument,
   ResizeDirectivePayload,
 } from '@fastkit/vue-resize';
@@ -47,6 +48,12 @@ interface CreateMenuSchemeOptions {
   defaultResizeWatchDebounce?: number;
 }
 
+type MaxSize = number | 'fit' | 'free';
+
+type RawMaxSize = MaxSize | ((window: UseWindowRef) => number | undefined);
+
+const RAW_MAX_SIZE_PROP = [Number, String, Function] as PropType<RawMaxSize>;
+
 function createMenuProps(options: CreateMenuSchemeOptions = {}) {
   const {
     defaultDistance = DEFAULT_DISTANCE,
@@ -60,8 +67,8 @@ function createMenuProps(options: CreateMenuSchemeOptions = {}) {
     allowOverflow: Boolean,
     width: [Number, String] as PropType<number | 'fit'>,
     height: [Number, String] as PropType<number | 'fit'>,
-    maxWidth: [Number, String] as PropType<number | 'fit' | 'free'>,
-    maxHeight: [Number, String] as PropType<number | 'fit' | 'free'>,
+    maxWidth: RAW_MAX_SIZE_PROP,
+    maxHeight: RAW_MAX_SIZE_PROP,
     distance: {
       type: Number,
       default: defaultDistance,
@@ -230,10 +237,17 @@ export function defineMenuComponent<
       const _maxBottom = computed(
         () => $window.height - _edgeMargin.value + state.pageYOffset,
       );
+
+      const resolveMaxSize = (
+        raw: RawMaxSize | undefined,
+      ): MaxSize | undefined => {
+        if (raw == null) return raw;
+        return typeof raw === 'function' ? raw($window) : raw;
+      };
       const _width = computed(() => props.width);
       const _height = computed(() => props.height);
-      const _maxWidth = computed(() => props.maxWidth);
-      const _maxHeight = computed(() => props.maxHeight);
+      const _maxWidth = computed(() => resolveMaxSize(props.maxWidth));
+      const _maxHeight = computed(() => resolveMaxSize(props.maxHeight));
 
       const _positionFlags = computed(() => {
         const { x = 'center', y = 'bottom' } = props;
