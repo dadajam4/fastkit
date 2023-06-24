@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.9
+
+### Patch Changes
+
+- [#77](https://github.com/dadajam4/fastkit/pull/77) [`1f8ee9e`](https://github.com/dadajam4/fastkit/commit/1f8ee9e42d4a1c8e0d627a2ccad56862694781ae) Thanks [@dadajam4](https://github.com/dadajam4)! - The maximum size of the Menu component can now be set by a custom function.
+
 ## 0.15.8
 
 ### Patch Changes
