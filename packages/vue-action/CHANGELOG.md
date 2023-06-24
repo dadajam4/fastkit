@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.2.3
+
+### Patch Changes
+
+- [#77](https://github.com/dadajam4/fastkit/pull/77) [`1f8ee9e`](https://github.com/dadajam4/fastkit/commit/1f8ee9e42d4a1c8e0d627a2ccad56862694781ae) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed escaping of JSDoc html tag descriptions so that documents are properly displayed.
+
 ## 0.2.2
 
 ### Patch Changes

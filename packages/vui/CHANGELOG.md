@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.16.11
+
+### Patch Changes
+
+- Updated dependencies [[`1f8ee9e`](https://github.com/dadajam4/fastkit/commit/1f8ee9e42d4a1c8e0d627a2ccad56862694781ae), [`1f8ee9e`](https://github.com/dadajam4/fastkit/commit/1f8ee9e42d4a1c8e0d627a2ccad56862694781ae), [`1f8ee9e`](https://github.com/dadajam4/fastkit/commit/1f8ee9e42d4a1c8e0d627a2ccad56862694781ae)]:
+  - @fastkit/vue-form-control@0.15.4
+  - @fastkit/vue-action@0.2.3
+  - @fastkit/vue-stack@0.15.9
+
 ## 0.16.10
 
 ### Patch Changes
