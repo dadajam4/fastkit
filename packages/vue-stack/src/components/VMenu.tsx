@@ -48,13 +48,19 @@ interface CreateMenuSchemeOptions {
   defaultResizeWatchDebounce?: number;
 }
 
-type MaxSize = number | 'fit' | 'free';
+type MenuMaxSize = number | 'fit' | 'free';
 
-type RawMaxSize = MaxSize | ((window: UseWindowRef) => number | undefined);
+type RawMenuMaxSize =
+  | MenuMaxSize
+  | ((window: UseWindowRef) => number | undefined);
 
-const RAW_MAX_SIZE_PROP = [Number, String, Function] as PropType<RawMaxSize>;
+const RAW_MENU_MAX_SIZE_PROP = [
+  Number,
+  String,
+  Function,
+] as PropType<RawMenuMaxSize>;
 
-function createMenuProps(options: CreateMenuSchemeOptions = {}) {
+export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
   const {
     defaultDistance = DEFAULT_DISTANCE,
     defaultEdgeMargin = DEFAULT_EDGE_MARGIN,
@@ -67,8 +73,8 @@ function createMenuProps(options: CreateMenuSchemeOptions = {}) {
     allowOverflow: Boolean,
     width: [Number, String] as PropType<number | 'fit'>,
     height: [Number, String] as PropType<number | 'fit'>,
-    maxWidth: RAW_MAX_SIZE_PROP,
-    maxHeight: RAW_MAX_SIZE_PROP,
+    maxWidth: RAW_MENU_MAX_SIZE_PROP,
+    maxHeight: RAW_MENU_MAX_SIZE_PROP,
     distance: {
       type: Number,
       default: defaultDistance,
@@ -239,10 +245,13 @@ export function defineMenuComponent<
       );
 
       const resolveMaxSize = (
-        raw: RawMaxSize | undefined,
-      ): MaxSize | undefined => {
+        raw: RawMenuMaxSize | undefined,
+      ): MenuMaxSize | undefined => {
         if (raw == null) return raw;
-        return typeof raw === 'function' ? raw($window) : raw;
+        if (typeof raw === 'function') {
+          return baseCtx.control.isActive ? raw($window) : undefined;
+        }
+        return raw;
       };
       const _width = computed(() => props.width);
       const _height = computed(() => props.height);
@@ -320,6 +329,9 @@ export function defineMenuComponent<
           height: activatorHeight,
         } = activatorRect;
 
+        const _mw = computedWidth;
+        const _mh = computedHeight;
+
         if (computedWidth === 'fit')
           computedWidth = Math.max(activatorWidth, myWidth);
         if (computedHeight === 'fit')
@@ -348,7 +360,17 @@ export function defineMenuComponent<
         const rightFree =
           $window.width - _edgeMargin.value - activatorRight + overlapWidth;
 
-        if (!yInner && computedMaxHeight == null) {
+        if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
+          width = computedMaxWidth;
+        }
+        if (
+          typeof computedMaxHeight === 'number' &&
+          height > computedMaxHeight
+        ) {
+          height = computedMaxHeight;
+        }
+
+        if (!yInner && (computedMaxHeight == null || _mh !== 'fit')) {
           if (isBottom) {
             if (height > bottomFree) {
               if (bottomFree < topFree) {
@@ -372,7 +394,7 @@ export function defineMenuComponent<
           }
         }
 
-        if (!xInner && computedMaxWidth == null) {
+        if (!xInner && (computedMaxWidth == null || _mw !== 'fit')) {
           if (isRight) {
             if (width > rightFree) {
               if (rightFree < leftFree) {
@@ -396,15 +418,15 @@ export function defineMenuComponent<
           }
         }
 
-        if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
-          width = computedMaxWidth;
-        }
-        if (
-          typeof computedMaxHeight === 'number' &&
-          height > computedMaxHeight
-        ) {
-          height = computedMaxHeight;
-        }
+        // if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
+        //   width = computedMaxWidth;
+        // }
+        // if (
+        //   typeof computedMaxHeight === 'number' &&
+        //   height > computedMaxHeight
+        // ) {
+        //   height = computedMaxHeight;
+        // }
 
         if (isTop) {
           if (yInner) {
