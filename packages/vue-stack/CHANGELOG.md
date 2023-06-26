@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.11
+
+### Patch Changes
+
+- [#81](https://github.com/dadajam4/fastkit/pull/81) [`686710f`](https://github.com/dadajam4/fastkit/commit/686710fb445e1a1811caa2ae6ae8021df5d6d6ec) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed that the coordinates were not properly normalized when the maximum size (width/height) of Menu was specified.
+
 ## 0.15.10
 
 ### Patch Changes

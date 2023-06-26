@@ -1,5 +1,12 @@
 # @fastkit/vui
 
+## 0.16.13
+
+### Patch Changes
+
+- Updated dependencies [[`686710f`](https://github.com/dadajam4/fastkit/commit/686710fb445e1a1811caa2ae6ae8021df5d6d6ec)]:
+  - @fastkit/vue-stack@0.15.11
+
 ## 0.16.12
 
 ### Patch Changes
