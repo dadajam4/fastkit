@@ -418,15 +418,15 @@ export function defineMenuComponent<
           }
         }
 
-        // if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
-        //   width = computedMaxWidth;
-        // }
-        // if (
-        //   typeof computedMaxHeight === 'number' &&
-        //   height > computedMaxHeight
-        // ) {
-        //   height = computedMaxHeight;
-        // }
+        if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
+          width = computedMaxWidth;
+        }
+        if (
+          typeof computedMaxHeight === 'number' &&
+          height > computedMaxHeight
+        ) {
+          height = computedMaxHeight;
+        }
 
         if (isTop) {
           if (yInner) {
