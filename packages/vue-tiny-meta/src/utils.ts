@@ -8,6 +8,8 @@ import {
   EventResolver,
   SlotResolver,
   ResolverContext,
+  SortOption,
+  SortFn,
 } from './types';
 import { Symbol as MorphSymbol, Node } from '@fastkit/ts-tiny-meta/ts-morph';
 import {
@@ -112,4 +114,43 @@ export function applyResolvers<R extends AnyResolver, D = Parameters<R>[0]>(
     if (resolved) data = resolved as any;
   }
   return data;
+}
+
+const DEFAULT_SORT_ORDER = [
+  'modelValue',
+  'onUpdate:modelValue',
+  'v-slot:default',
+];
+
+export function resolveSortOption(
+  option: SortOption | undefined,
+): SortFn | undefined {
+  if (typeof option === 'function') return option;
+  if (option === undefined) option = true;
+  if (!option) return;
+
+  const order = Array.isArray(option) ? option : DEFAULT_SORT_ORDER;
+
+  return (a, b) => {
+    const an = a.name;
+    const ao = order.indexOf(an);
+    const bn = b.name;
+    const bo = order.indexOf(bn);
+
+    if (ao !== -1) {
+      if (bo === -1) return -1;
+      if (ao < bo) return -1;
+      if (ao > bo) return 1;
+      return 0;
+    }
+
+    if (bo !== -1) {
+      if (ao === -1) return 1;
+      return 0;
+    }
+
+    if (an < bn) return -1;
+    if (an > bn) return 1;
+    return 0;
+  };
 }

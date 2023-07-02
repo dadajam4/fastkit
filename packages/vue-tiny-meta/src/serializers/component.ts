@@ -9,7 +9,11 @@ import {
   ComponentDescription,
   ResolverContext,
 } from '../types';
-import { resolveResolvers, trimCommonSubstring } from '../utils';
+import {
+  resolveResolvers,
+  trimCommonSubstring,
+  resolveSortOption,
+} from '../utils';
 
 const EMIT_LIKE_PREFIX_RE = /^on[A-Z]/;
 
@@ -101,6 +105,14 @@ export function serializeDefineComponent(
     options.ignoreSlots,
     resolvers.slot,
   );
+
+  const sort = resolveSortOption(options.sort);
+
+  if (sort) {
+    props.sort(sort);
+    events.sort(sort);
+    slots.sort(sort);
+  }
 
   return {
     optionName,

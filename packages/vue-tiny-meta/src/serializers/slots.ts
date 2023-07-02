@@ -59,8 +59,6 @@ export function serializeSlots(
       if (applied) {
         slots.push(applied);
       }
-
-      slots.push(meta);
     });
   return slots;
 }
