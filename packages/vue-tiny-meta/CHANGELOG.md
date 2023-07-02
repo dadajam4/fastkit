@@ -1,5 +1,11 @@
 # @fastkit/vue-tiny-meta
 
+## 0.1.4
+
+### Patch Changes
+
+- [#85](https://github.com/dadajam4/fastkit/pull/85) [`5b6ae18`](https://github.com/dadajam4/fastkit/commit/5b6ae184ca4bf60b846bdbfa905d7ecd506de336) Thanks [@dadajam4](https://github.com/dadajam4)! - Component overviews can now be referenced during type customization.
+
 ## 0.1.3
 
 ### Patch Changes
