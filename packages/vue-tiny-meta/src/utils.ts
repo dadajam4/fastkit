@@ -102,7 +102,7 @@ export function resolveResolvers(
 
 type AnyResolver = PropResolver | EventResolver | SlotResolver;
 
-export function applyResolvers<R extends AnyResolver, D = Parameters<R>[0]>(
+export function applyResolver<R extends AnyResolver, D = Parameters<R>[0]>(
   data: D,
   context: ResolverContext,
   resolvers: R[] | undefined,
@@ -114,6 +114,19 @@ export function applyResolvers<R extends AnyResolver, D = Parameters<R>[0]>(
     if (resolved) data = resolved as any;
   }
   return data;
+}
+
+export function applyResolvers<R extends AnyResolver, D = Parameters<R>[0]>(
+  rows: D[],
+  context: ResolverContext,
+  resolvers: R[] | undefined,
+): D[] {
+  const applied: D[] = [];
+  for (const row of rows) {
+    const resolved = applyResolver(row, context, resolvers);
+    resolved && applied.push(resolved);
+  }
+  return applied;
 }
 
 const DEFAULT_SORT_ORDER = [

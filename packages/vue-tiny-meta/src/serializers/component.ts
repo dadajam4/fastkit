@@ -13,6 +13,7 @@ import {
   resolveResolvers,
   trimCommonSubstring,
   resolveSortOption,
+  applyResolvers,
 } from '../utils';
 
 const EMIT_LIKE_PREFIX_RE = /^on[A-Z]/;
@@ -58,36 +59,32 @@ export function serializeDefineComponent(
   };
 
   const propsSymbol = instanceType.getPropertyOrThrow('$props');
-  const props = serializeProps(
+  const _props = serializeProps(
     exporter,
-    resolverCtx,
     defineExpression,
     propsSymbol,
     options.ignoreProps,
-    resolvers.prop,
   );
 
   const emitSymbol = instanceType.getPropertyOrThrow('$emit');
-  const events = serializeEmits(
+  const _events = serializeEmits(
     exporter,
-    resolverCtx,
     optionsType,
     emitSymbol,
     options.ignoreEvents,
-    resolvers.event,
   );
 
-  const emitLikes = props.filter(
+  const emitLikes = _props.filter(
     (prop) => !prop.required && EMIT_LIKE_PREFIX_RE.test(prop.name),
   );
 
   emitLikes.forEach((emitLike) => {
-    const index = props.indexOf(emitLike);
-    props.splice(index, 1);
-    if (events.some((emit) => emit.name === emitLike.name)) {
+    const index = _props.indexOf(emitLike);
+    _props.splice(index, 1);
+    if (_events.some((emit) => emit.name === emitLike.name)) {
       return;
     }
-    events.push({
+    _events.push({
       name: emitLike.name as `on${string}`,
       description: emitLike.description,
       type: emitLike.type,
@@ -98,13 +95,11 @@ export function serializeDefineComponent(
 
   const slotsTypeSymbol = instanceType.getPropertyOrThrow('$slots');
   const slotsType = slotsTypeSymbol.getTypeAtLocation(defineExpression);
-  const slots = serializeSlots(
-    exporter,
-    resolverCtx,
-    slotsType,
-    options.ignoreSlots,
-    resolvers.slot,
-  );
+  const _slots = serializeSlots(exporter, slotsType, options.ignoreSlots);
+
+  const props = applyResolvers(_props, resolverCtx, resolvers.prop);
+  const events = applyResolvers(_events, resolverCtx, resolvers.event);
+  const slots = applyResolvers(_slots, resolverCtx, resolvers.slot);
 
   const sort = resolveSortOption(options.sort);
 

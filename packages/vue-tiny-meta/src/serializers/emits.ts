@@ -5,29 +5,21 @@ import {
   getTypeText,
 } from '@fastkit/ts-tiny-meta/ts';
 import { MetaDoc } from '@fastkit/ts-tiny-meta';
-import {
-  EventMeta,
-  UserFilter,
-  EventResolver,
-  ResolverContext,
-} from '../types';
+import { EventMeta, UserFilter } from '../types';
 import {
   getMetaDocsByNodeAndSymbol,
   capitalize,
   resolveUserFilter,
   trimCommonSubstring,
-  applyResolvers,
 } from '../utils';
 
 const EMIT_PAYLOAD_REPLACE_RE = /(^\[|\]$)/g;
 
 export function serializeEmits(
   exporter: SourceFileExporter,
-  resolverContext: ResolverContext,
   optionsType: Type,
   emitSymbol: MorphSymbol,
   userFilter?: UserFilter,
-  resolvers?: EventResolver[],
 ): EventMeta[] {
   const filter = resolveUserFilter(userFilter);
   const $emitDec = emitSymbol.getDeclarations()[0];
@@ -62,9 +54,7 @@ export function serializeEmits(
   if (!emitsDec) return [];
   const optionsEmitsType = emitsDec.getType();
 
-  const events: EventMeta[] = [];
-
-  fns.forEach(({ name, text, sourceFile }) => {
+  return fns.map(({ name, text, sourceFile }) => {
     const emit = optionsEmitsType.getProperty(name);
     let docs: MetaDoc[];
 
@@ -78,7 +68,7 @@ export function serializeEmits(
       docs = [];
     }
 
-    const meta: EventMeta = {
+    return {
       name: `on${capitalize(name)}`,
       description: docs[0]?.description.text,
       type: {
@@ -87,13 +77,5 @@ export function serializeEmits(
       docs,
       sourceFile,
     };
-
-    const applied = applyResolvers(meta, resolverContext, resolvers);
-
-    if (applied) {
-      events.push(applied);
-    }
   });
-
-  return events;
 }

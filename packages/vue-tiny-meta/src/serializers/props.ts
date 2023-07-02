@@ -7,21 +7,18 @@ import {
   getTypeText,
   TYPE_TEXT_MAPPING,
 } from '@fastkit/ts-tiny-meta/ts';
-import { PropMeta, UserFilter, PropResolver, ResolverContext } from '../types';
+import { PropMeta, UserFilter } from '../types';
 import {
   getMetaDocsByNodeAndSymbol,
   resolveUserFilter,
   trimCommonSubstring,
-  applyResolvers,
 } from '../utils';
 
 export function serializeProps(
   exporter: SourceFileExporter,
-  resolverContext: ResolverContext,
   defineExpression: CallExpression,
   propsSymbol: MorphSymbol,
   userFilter?: UserFilter,
-  resolvers?: PropResolver[],
 ): PropMeta[] {
   const filter = resolveUserFilter(userFilter);
   const $propsDec = propsSymbol.getDeclarations()[0];
@@ -30,9 +27,7 @@ export function serializeProps(
     .getProperties()
     .filter((prop) => filter(prop.getName()));
 
-  const props: PropMeta[] = [];
-
-  filteredProperties.forEach((prop) => {
+  return filteredProperties.map((prop) => {
     const name = prop.getName();
 
     const sourceFile = trimCommonSubstring(
@@ -67,7 +62,7 @@ export function serializeProps(
       (tag) => tag.name === 'default' || tag.name === 'defaultValue',
     )?.text;
 
-    const meta: PropMeta = {
+    return {
       name,
       description: docs[0]?.description.text,
       type: {
@@ -83,13 +78,5 @@ export function serializeProps(
       docs,
       sourceFile,
     };
-
-    const applied = applyResolvers(meta, resolverContext, resolvers);
-
-    if (applied) {
-      props.push(applied);
-    }
   });
-
-  return props;
 }
