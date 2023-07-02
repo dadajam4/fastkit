@@ -4,28 +4,24 @@ import {
   _extractMetaDocs,
   getTypeText,
 } from '@fastkit/ts-tiny-meta/ts';
-import { SlotMeta, UserFilter, SlotResolver, ResolverContext } from '../types';
+import { SlotMeta, UserFilter } from '../types';
 import {
   getMetaDocsByNodeAndSymbol,
   resolveUserFilter,
   trimCommonSubstring,
-  applyResolvers,
 } from '../utils';
 
 export function serializeSlots(
   exporter: SourceFileExporter,
-  resolverContext: ResolverContext,
   slotsType: Type,
   userFilter?: UserFilter,
-  resolvers?: SlotResolver[],
 ): SlotMeta[] {
   const filter = resolveUserFilter(userFilter);
-  const slots: SlotMeta[] = [];
 
-  slotsType
+  return slotsType
     .getProperties()
     .filter((slot) => filter(slot.getName()))
-    .forEach((slot) => {
+    .map((slot) => {
       const name = slot.getName();
       const slotDec = slot.getDeclarations()[0];
       // const docs = getMetaDocsByNodeAndSymbol(exporter, slotDec, slot);
@@ -43,7 +39,7 @@ export function serializeSlots(
         exporter.workspace.dirPath,
       );
 
-      const meta: SlotMeta = {
+      return {
         name: `v-slot:${name}`,
         description: docs[0]?.description.text,
         type: {
@@ -53,12 +49,5 @@ export function serializeSlots(
         docs,
         sourceFile,
       };
-
-      const applied = applyResolvers(meta, resolverContext, resolvers);
-
-      if (applied) {
-        slots.push(applied);
-      }
     });
-  return slots;
 }
