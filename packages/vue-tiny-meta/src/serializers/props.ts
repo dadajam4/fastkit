@@ -89,8 +89,6 @@ export function serializeProps(
     if (applied) {
       props.push(applied);
     }
-
-    props.push(meta);
   });
 
   return props;

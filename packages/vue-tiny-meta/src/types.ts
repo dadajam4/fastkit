@@ -41,6 +41,8 @@ export interface SlotMeta extends BaseMeta {
   docs: MetaDoc[];
 }
 
+export type AnyPropMeta = PropMeta | EventMeta | SlotMeta;
+
 export interface ComponentMeta {
   displayName: string;
   exportName: string;
@@ -99,6 +101,7 @@ export interface SerializeVueOptions {
   ignoreEvents?: UserFilter;
   ignoreSlots?: UserFilter;
   resolvers?: Resolvers | Resolvers[];
+  sort?: boolean | ((a: AnyPropMeta, b: AnyPropMeta) => number);
 }
 
 export type VueComponentMeta = CustomMeta<ComponentMeta>;

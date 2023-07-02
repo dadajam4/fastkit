@@ -5,6 +5,7 @@ import { serializeProps } from './props';
 import { serializeEmits } from './emits';
 import { serializeSlots } from './slots';
 import {
+  AnyPropMeta,
   SerializeVueOptions,
   ComponentDescription,
   ResolverContext,
@@ -12,6 +13,14 @@ import {
 import { resolveResolvers, trimCommonSubstring } from '../utils';
 
 const EMIT_LIKE_PREFIX_RE = /^on[A-Z]/;
+
+const DEFAULT_SORT = (a: AnyPropMeta, b: AnyPropMeta) => {
+  const an = a.name;
+  const bn = b.name;
+  if (an < bn) return -1;
+  if (an > bn) return 1;
+  return 0;
+};
 
 export function serializeDefineComponent(
   exporter: SourceFileExporter,
@@ -101,6 +110,17 @@ export function serializeDefineComponent(
     options.ignoreSlots,
     resolvers.slot,
   );
+
+  const sort =
+    options.sort === undefined || options.sort === true
+      ? DEFAULT_SORT
+      : options.sort;
+
+  if (sort) {
+    props.sort(sort);
+    events.sort(sort);
+    slots.sort(sort);
+  }
 
   return {
     optionName,
