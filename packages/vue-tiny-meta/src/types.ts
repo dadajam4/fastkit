@@ -5,6 +5,12 @@
 
 import { MetaDoc, CustomMeta } from '@fastkit/ts-tiny-meta';
 
+export interface ComponentDescription {
+  exportName: string;
+  optionName?: string;
+  sourceFile: string;
+}
+
 export interface BaseMeta {
   // name: string;
   description?: string;
@@ -57,13 +63,24 @@ export type UserFilter =
   | IgnoreRule[]
   | ((baseRules: IgnoreRule[]) => IgnoreRule[] | void);
 
-export type PropResolver = (prop: PropMeta) => PropMeta | false | null | void;
+export interface ResolverContext {
+  component: ComponentDescription;
+}
+
+export type PropResolver = (
+  prop: PropMeta,
+  context: ResolverContext,
+) => PropMeta | false | null | void;
 
 export type EventResolver = (
   event: EventMeta,
+  context: ResolverContext,
 ) => EventMeta | false | null | void;
 
-export type SlotResolver = (slot: SlotMeta) => SlotMeta | false | null | void;
+export type SlotResolver = (
+  slot: SlotMeta,
+  context: ResolverContext,
+) => SlotMeta | false | null | void;
 
 export interface Resolvers {
   prop?: PropResolver | PropResolver[];

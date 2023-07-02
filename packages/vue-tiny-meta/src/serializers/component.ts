@@ -4,13 +4,18 @@ import { ComponentMeta } from '../types';
 import { serializeProps } from './props';
 import { serializeEmits } from './emits';
 import { serializeSlots } from './slots';
-import { SerializeVueOptions } from '../types';
-import { resolveResolvers } from '../utils';
+import {
+  SerializeVueOptions,
+  ComponentDescription,
+  ResolverContext,
+} from '../types';
+import { resolveResolvers, trimCommonSubstring } from '../utils';
 
 const EMIT_LIKE_PREFIX_RE = /^on[A-Z]/;
 
 export function serializeDefineComponent(
   exporter: SourceFileExporter,
+  exportName: string,
   defineExpression: CallExpression,
   options: SerializeVueOptions = {},
 ): Pick<ComponentMeta, 'props' | 'slots' | 'events'> & { optionName?: string } {
@@ -35,9 +40,23 @@ export function serializeDefineComponent(
     }
   }
 
+  const componentDesc: ComponentDescription = {
+    exportName,
+    optionName,
+    sourceFile: trimCommonSubstring(
+      defineExpression.getSourceFile()?.getFilePath() || '',
+      exporter.workspace.dirPath,
+    ),
+  };
+
+  const resolverCtx: ResolverContext = {
+    component: componentDesc,
+  };
+
   const propsSymbol = instanceType.getPropertyOrThrow('$props');
   const props = serializeProps(
     exporter,
+    resolverCtx,
     defineExpression,
     propsSymbol,
     options.ignoreProps,
@@ -47,6 +66,7 @@ export function serializeDefineComponent(
   const emitSymbol = instanceType.getPropertyOrThrow('$emit');
   const events = serializeEmits(
     exporter,
+    resolverCtx,
     optionsType,
     emitSymbol,
     options.ignoreEvents,
@@ -76,6 +96,7 @@ export function serializeDefineComponent(
   const slotsType = slotsTypeSymbol.getTypeAtLocation(defineExpression);
   const slots = serializeSlots(
     exporter,
+    resolverCtx,
     slotsType,
     options.ignoreSlots,
     resolvers.slot,

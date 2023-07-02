@@ -7,6 +7,7 @@ import {
   PropResolver,
   EventResolver,
   SlotResolver,
+  ResolverContext,
 } from './types';
 import { Symbol as MorphSymbol, Node } from '@fastkit/ts-tiny-meta/ts-morph';
 import {
@@ -101,11 +102,12 @@ type AnyResolver = PropResolver | EventResolver | SlotResolver;
 
 export function applyResolvers<R extends AnyResolver, D = Parameters<R>[0]>(
   data: D,
+  context: ResolverContext,
   resolvers: R[] | undefined,
 ): D | false {
   if (!resolvers || !resolvers.length) return data;
   for (const resolver of resolvers) {
-    const resolved = resolver(data as any);
+    const resolved = resolver(data as any, context);
     if (resolved === false || resolved === null) return false;
     if (resolved) data = resolved as any;
   }

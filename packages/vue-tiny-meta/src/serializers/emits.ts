@@ -5,7 +5,12 @@ import {
   getTypeText,
 } from '@fastkit/ts-tiny-meta/ts';
 import { MetaDoc } from '@fastkit/ts-tiny-meta';
-import { EventMeta, UserFilter, EventResolver } from '../types';
+import {
+  EventMeta,
+  UserFilter,
+  EventResolver,
+  ResolverContext,
+} from '../types';
 import {
   getMetaDocsByNodeAndSymbol,
   capitalize,
@@ -18,6 +23,7 @@ const EMIT_PAYLOAD_REPLACE_RE = /(^\[|\]$)/g;
 
 export function serializeEmits(
   exporter: SourceFileExporter,
+  resolverContext: ResolverContext,
   optionsType: Type,
   emitSymbol: MorphSymbol,
   userFilter?: UserFilter,
@@ -82,7 +88,7 @@ export function serializeEmits(
       sourceFile,
     };
 
-    const applied = applyResolvers(meta, resolvers);
+    const applied = applyResolvers(meta, resolverContext, resolvers);
 
     if (applied) {
       events.push(applied);

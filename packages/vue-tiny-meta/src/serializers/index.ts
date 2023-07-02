@@ -61,6 +61,7 @@ export function serializeVue(
   const { exportName, expression } = source;
   const { optionName, props, events, slots } = serializeDefineComponent(
     exporter,
+    exportName,
     expression,
     options,
   );
