@@ -1,5 +1,13 @@
 # @fastkit/vue-tiny-meta
 
+## 0.1.5
+
+### Patch Changes
+
+- [#87](https://github.com/dadajam4/fastkit/pull/87) [`607f072`](https://github.com/dadajam4/fastkit/commit/607f072fb30d470ca365ce474f72aebdc39a6ff6) Thanks [@dadajam4](https://github.com/dadajam4)! - Component overviews can now be referenced during type customization.
+
+- [#87](https://github.com/dadajam4/fastkit/pull/87) [`607f072`](https://github.com/dadajam4/fastkit/commit/607f072fb30d470ca365ce474f72aebdc39a6ff6) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed property ignore not working.
+
 ## 0.1.4
 
 ### Patch Changes
