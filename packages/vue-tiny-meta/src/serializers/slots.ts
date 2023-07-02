@@ -4,7 +4,7 @@ import {
   _extractMetaDocs,
   getTypeText,
 } from '@fastkit/ts-tiny-meta/ts';
-import { SlotMeta, UserFilter, SlotResolver } from '../types';
+import { SlotMeta, UserFilter, SlotResolver, ResolverContext } from '../types';
 import {
   getMetaDocsByNodeAndSymbol,
   resolveUserFilter,
@@ -14,6 +14,7 @@ import {
 
 export function serializeSlots(
   exporter: SourceFileExporter,
+  resolverContext: ResolverContext,
   slotsType: Type,
   userFilter?: UserFilter,
   resolvers?: SlotResolver[],
@@ -53,7 +54,7 @@ export function serializeSlots(
         sourceFile,
       };
 
-      const applied = applyResolvers(meta, resolvers);
+      const applied = applyResolvers(meta, resolverContext, resolvers);
 
       if (applied) {
         slots.push(applied);

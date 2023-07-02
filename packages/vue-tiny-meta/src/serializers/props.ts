@@ -7,7 +7,7 @@ import {
   getTypeText,
   TYPE_TEXT_MAPPING,
 } from '@fastkit/ts-tiny-meta/ts';
-import { PropMeta, UserFilter, PropResolver } from '../types';
+import { PropMeta, UserFilter, PropResolver, ResolverContext } from '../types';
 import {
   getMetaDocsByNodeAndSymbol,
   resolveUserFilter,
@@ -17,6 +17,7 @@ import {
 
 export function serializeProps(
   exporter: SourceFileExporter,
+  resolverContext: ResolverContext,
   defineExpression: CallExpression,
   propsSymbol: MorphSymbol,
   userFilter?: UserFilter,
@@ -83,7 +84,7 @@ export function serializeProps(
       sourceFile,
     };
 
-    const applied = applyResolvers(meta, resolvers);
+    const applied = applyResolvers(meta, resolverContext, resolvers);
 
     if (applied) {
       props.push(applied);
