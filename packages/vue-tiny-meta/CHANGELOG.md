@@ -1,5 +1,11 @@
 # @fastkit/vue-tiny-meta
 
+## 0.1.3
+
+### Patch Changes
+
+- [#83](https://github.com/dadajam4/fastkit/pull/83) [`77cb4b0`](https://github.com/dadajam4/fastkit/commit/77cb4b04367d755f94ec96db1bdd92e81cbb1033) Thanks [@dadajam4](https://github.com/dadajam4)! - Source file paths have been added to various meta information, and hooks can be set to customize the content.
+
 ## 0.1.2
 
 ### Patch Changes
