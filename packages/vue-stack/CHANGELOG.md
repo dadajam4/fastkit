@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.12
+
+### Patch Changes
+
+- [#83](https://github.com/dadajam4/fastkit/pull/83) [`77cb4b0`](https://github.com/dadajam4/fastkit/commit/77cb4b04367d755f94ec96db1bdd92e81cbb1033) Thanks [@dadajam4](https://github.com/dadajam4)! - Scale transition did not animate correctly when leave.
+
 ## 0.15.11
 
 ### Patch Changes
