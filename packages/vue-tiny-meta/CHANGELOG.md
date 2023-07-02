@@ -1,5 +1,11 @@
 # @fastkit/vue-tiny-meta
 
+## 0.1.6
+
+### Patch Changes
+
+- [#89](https://github.com/dadajam4/fastkit/pull/89) [`769a090`](https://github.com/dadajam4/fastkit/commit/769a090e7ea4f6129d2b3a4bd8529431f439a3bc) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed incorrect detection of event information when resolving meta information.
+
 ## 0.1.5
 
 ### Patch Changes
