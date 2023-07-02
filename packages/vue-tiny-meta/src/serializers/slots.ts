@@ -4,19 +4,27 @@ import {
   _extractMetaDocs,
   getTypeText,
 } from '@fastkit/ts-tiny-meta/ts';
-import { SlotMeta, UserFilter } from '../types';
-import { getMetaDocsByNodeAndSymbol, resolveUserFilter } from '../utils';
+import { SlotMeta, UserFilter, SlotResolver } from '../types';
+import {
+  getMetaDocsByNodeAndSymbol,
+  resolveUserFilter,
+  trimCommonSubstring,
+  applyResolvers,
+} from '../utils';
 
 export function serializeSlots(
   exporter: SourceFileExporter,
   slotsType: Type,
   userFilter?: UserFilter,
+  resolvers?: SlotResolver[],
 ): SlotMeta[] {
   const filter = resolveUserFilter(userFilter);
-  return slotsType
+  const slots: SlotMeta[] = [];
+
+  slotsType
     .getProperties()
     .filter((slot) => filter(slot.getName()))
-    .map((slot) => {
+    .forEach((slot) => {
       const name = slot.getName();
       const slotDec = slot.getDeclarations()[0];
       // const docs = getMetaDocsByNodeAndSymbol(exporter, slotDec, slot);
@@ -29,7 +37,12 @@ export function serializeSlots(
           ? unionTypes.find((type) => !type.isUndefined()) || slotType
           : slotType;
 
-      return {
+      const sourceFile = trimCommonSubstring(
+        slotDec.getSourceFile().getFilePath() || '',
+        exporter.workspace.dirPath,
+      );
+
+      const meta: SlotMeta = {
         name: `v-slot:${name}`,
         description: docs[0]?.description.text,
         type: {
@@ -37,6 +50,16 @@ export function serializeSlots(
         },
         required: !isOptional,
         docs,
+        sourceFile,
       };
+
+      const applied = applyResolvers(meta, resolvers);
+
+      if (applied) {
+        slots.push(applied);
+      }
+
+      slots.push(meta);
     });
+  return slots;
 }

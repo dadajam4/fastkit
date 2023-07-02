@@ -12,6 +12,7 @@ export interface BaseMeta {
     name: string;
   };
   docs: MetaDoc[];
+  sourceFile: string;
 }
 
 export interface PropMeta extends BaseMeta {
@@ -56,10 +57,31 @@ export type UserFilter =
   | IgnoreRule[]
   | ((baseRules: IgnoreRule[]) => IgnoreRule[] | void);
 
+export type PropResolver = (prop: PropMeta) => PropMeta | false | null | void;
+
+export type EventResolver = (
+  event: EventMeta,
+) => EventMeta | false | null | void;
+
+export type SlotResolver = (slot: SlotMeta) => SlotMeta | false | null | void;
+
+export interface Resolvers {
+  prop?: PropResolver | PropResolver[];
+  event?: EventResolver | EventResolver[];
+  slot?: SlotResolver | SlotResolver[];
+}
+
+export interface ResolvedResolvers {
+  prop?: PropResolver[];
+  event?: EventResolver[];
+  slot?: SlotResolver[];
+}
+
 export interface SerializeVueOptions {
   ignoreProps?: UserFilter;
   ignoreEvents?: UserFilter;
   ignoreSlots?: UserFilter;
+  resolvers?: Resolvers | Resolvers[];
 }
 
 export type VueComponentMeta = CustomMeta<ComponentMeta>;

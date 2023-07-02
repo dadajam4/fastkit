@@ -5,11 +5,13 @@ import {
   getTypeText,
 } from '@fastkit/ts-tiny-meta/ts';
 import { MetaDoc } from '@fastkit/ts-tiny-meta';
-import { EventMeta, UserFilter } from '../types';
+import { EventMeta, UserFilter, EventResolver } from '../types';
 import {
   getMetaDocsByNodeAndSymbol,
   capitalize,
   resolveUserFilter,
+  trimCommonSubstring,
+  applyResolvers,
 } from '../utils';
 
 const EMIT_PAYLOAD_REPLACE_RE = /(^\[|\]$)/g;
@@ -19,12 +21,13 @@ export function serializeEmits(
   optionsType: Type,
   emitSymbol: MorphSymbol,
   userFilter?: UserFilter,
+  resolvers?: EventResolver[],
 ): EventMeta[] {
   const filter = resolveUserFilter(userFilter);
   const $emitDec = emitSymbol.getDeclarations()[0];
   const $emitType = emitSymbol.getTypeAtLocation($emitDec);
 
-  const fns: { name: string; text: string }[] = [];
+  const fns: { name: string; text: string; sourceFile: string }[] = [];
 
   $emitType.getIntersectionTypes().forEach((emit) => {
     const signature = emit.getCallSignatures()[0];
@@ -40,7 +43,12 @@ export function serializeEmits(
       '',
     );
     const text = `(${payload}) => void`;
-    fns.push({ name, text });
+
+    const sourceFile = trimCommonSubstring(
+      signature.getDeclaration()?.getSourceFile().getFilePath() || '',
+      exporter.workspace.dirPath,
+    );
+    fns.push({ name, text, sourceFile });
   });
 
   const emitsSymbol = optionsType.getProperty('emits');
@@ -48,7 +56,9 @@ export function serializeEmits(
   if (!emitsDec) return [];
   const optionsEmitsType = emitsDec.getType();
 
-  return fns.map(({ name, text }) => {
+  const events: EventMeta[] = [];
+
+  fns.forEach(({ name, text, sourceFile }) => {
     const emit = optionsEmitsType.getProperty(name);
     let docs: MetaDoc[];
 
@@ -61,13 +71,23 @@ export function serializeEmits(
     } else {
       docs = [];
     }
-    return {
+
+    const meta: EventMeta = {
       name: `on${capitalize(name)}`,
       description: docs[0]?.description.text,
       type: {
         name: text,
       },
       docs,
+      sourceFile,
     };
+
+    const applied = applyResolvers(meta, resolvers);
+
+    if (applied) {
+      events.push(applied);
+    }
   });
+
+  return events;
 }
