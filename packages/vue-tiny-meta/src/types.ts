@@ -96,12 +96,16 @@ export interface ResolvedResolvers {
   slot?: SlotResolver[];
 }
 
+export type SortFn = (a: AnyPropMeta, b: AnyPropMeta) => number;
+
+export type SortOption = boolean | string[] | SortFn;
+
 export interface SerializeVueOptions {
   ignoreProps?: UserFilter;
   ignoreEvents?: UserFilter;
   ignoreSlots?: UserFilter;
   resolvers?: Resolvers | Resolvers[];
-  sort?: boolean | ((a: AnyPropMeta, b: AnyPropMeta) => number);
+  sort?: SortOption;
 }
 
 export type VueComponentMeta = CustomMeta<ComponentMeta>;
