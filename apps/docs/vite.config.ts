@@ -41,6 +41,11 @@ export default defineConfig({
     }),
     // ViteVueTinyMeta({
     //   include: ['./src/components/**/*'],
+    //   resolvers: {
+    //     prop: (prop) => {
+    //       console.log(prop.name, prop.sourceFile);
+    //     },
+    //   },
     // }),
     PackageLoader(),
     votPlugin({

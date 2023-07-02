@@ -7,25 +7,38 @@ import {
   getTypeText,
   TYPE_TEXT_MAPPING,
 } from '@fastkit/ts-tiny-meta/ts';
-import { PropMeta, UserFilter } from '../types';
-import { getMetaDocsByNodeAndSymbol, resolveUserFilter } from '../utils';
+import { PropMeta, UserFilter, PropResolver } from '../types';
+import {
+  getMetaDocsByNodeAndSymbol,
+  resolveUserFilter,
+  trimCommonSubstring,
+  applyResolvers,
+} from '../utils';
 
 export function serializeProps(
   exporter: SourceFileExporter,
   defineExpression: CallExpression,
   propsSymbol: MorphSymbol,
-  userfilter?: UserFilter,
+  userFilter?: UserFilter,
+  resolvers?: PropResolver[],
 ): PropMeta[] {
-  const filter = resolveUserFilter(userfilter);
+  const filter = resolveUserFilter(userFilter);
   const $propsDec = propsSymbol.getDeclarations()[0];
   const $propsType = propsSymbol.getTypeAtLocation($propsDec);
   const filteredProperties = $propsType
     .getProperties()
     .filter((prop) => filter(prop.getName()));
 
-  return filteredProperties.map((prop) => {
+  const props: PropMeta[] = [];
+
+  filteredProperties.forEach((prop) => {
     const name = prop.getName();
-    // const propDeclaration = prop.getDeclarations()[0];
+
+    const sourceFile = trimCommonSubstring(
+      prop.getDeclarations()[0]?.getSourceFile().getFilePath() || '',
+      exporter.workspace.dirPath,
+    );
+
     const propDeclaration = undefined;
     const dec = prop.getDeclarations()[0] || defineExpression;
     const type = prop.getTypeAtLocation(dec);
@@ -53,7 +66,7 @@ export function serializeProps(
       (tag) => tag.name === 'default' || tag.name === 'defaultValue',
     )?.text;
 
-    return {
+    const meta: PropMeta = {
       name,
       description: docs[0]?.description.text,
       type: {
@@ -67,6 +80,17 @@ export function serializeProps(
         : undefined,
       values: values.length ? values : undefined,
       docs,
+      sourceFile,
     };
+
+    const applied = applyResolvers(meta, resolvers);
+
+    if (applied) {
+      props.push(applied);
+    }
+
+    props.push(meta);
   });
+
+  return props;
 }

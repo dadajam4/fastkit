@@ -5,6 +5,7 @@ import { serializeProps } from './props';
 import { serializeEmits } from './emits';
 import { serializeSlots } from './slots';
 import { SerializeVueOptions } from '../types';
+import { resolveResolvers } from '../utils';
 
 const EMIT_LIKE_PREFIX_RE = /^on[A-Z]/;
 
@@ -18,6 +19,8 @@ export function serializeDefineComponent(
   const instanceType = constructor.getReturnType();
   const optionsNode = defineExpression.getArguments()[0];
   const optionsType = optionsNode.getType();
+
+  const resolvers = resolveResolvers(options.resolvers);
 
   // let name = symbolName;
   let optionName: string | undefined;
@@ -38,6 +41,7 @@ export function serializeDefineComponent(
     defineExpression,
     propsSymbol,
     options.ignoreProps,
+    resolvers.prop,
   );
 
   const emitSymbol = instanceType.getPropertyOrThrow('$emit');
@@ -46,6 +50,7 @@ export function serializeDefineComponent(
     optionsType,
     emitSymbol,
     options.ignoreEvents,
+    resolvers.event,
   );
 
   const emitLikes = props.filter(
@@ -63,12 +68,18 @@ export function serializeDefineComponent(
       description: emitLike.description,
       type: emitLike.type,
       docs: emitLike.docs,
+      sourceFile: emitLike.sourceFile,
     });
   });
 
   const slotsTypeSymbol = instanceType.getPropertyOrThrow('$slots');
   const slotsType = slotsTypeSymbol.getTypeAtLocation(defineExpression);
-  const slots = serializeSlots(exporter, slotsType, options.ignoreSlots);
+  const slots = serializeSlots(
+    exporter,
+    slotsType,
+    options.ignoreSlots,
+    resolvers.slot,
+  );
 
   return {
     optionName,

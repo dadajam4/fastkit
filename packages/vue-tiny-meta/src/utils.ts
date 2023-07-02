@@ -1,4 +1,13 @@
-import { IgnoreRule, Filter, UserFilter } from './types';
+import {
+  IgnoreRule,
+  Filter,
+  UserFilter,
+  Resolvers,
+  ResolvedResolvers,
+  PropResolver,
+  EventResolver,
+  SlotResolver,
+} from './types';
 import { Symbol as MorphSymbol, Node } from '@fastkit/ts-tiny-meta/ts-morph';
 import {
   SourceFileExporter,
@@ -54,4 +63,51 @@ export function resolveUserFilter(
       : userFilter;
 
   return filterByRules.build(computedIgnore || baseRules);
+}
+
+export function trimCommonSubstring(source: string, compare: string): string {
+  const length = Math.min(source.length, compare.length);
+  let commonSubstring = '';
+
+  for (let i = 0; i < length; i++) {
+    const sourceChar = source[i];
+    if (sourceChar !== compare[i]) break;
+    commonSubstring += sourceChar;
+  }
+
+  return source.replace(commonSubstring, '');
+}
+
+export function resolveResolvers(
+  resolvers: Resolvers | Resolvers[] | undefined,
+): ResolvedResolvers {
+  const result: ResolvedResolvers = {};
+  if (!resolvers) return result;
+  const rows = Array.isArray(resolvers) ? resolvers : [resolvers];
+  for (const row of rows) {
+    const entries = Object.entries(row) as [keyof ResolvedResolvers, any][];
+    for (const [key, _fns] of entries) {
+      const fns = Array.isArray(_fns) ? _fns : [_fns];
+      if (fns.length) {
+        if (!result[key]) result[key] = [];
+        result[key]?.push(...fns);
+      }
+    }
+  }
+  return result;
+}
+
+type AnyResolver = PropResolver | EventResolver | SlotResolver;
+
+export function applyResolvers<R extends AnyResolver, D = Parameters<R>[0]>(
+  data: D,
+  resolvers: R[] | undefined,
+): D | false {
+  if (!resolvers || !resolvers.length) return data;
+  for (const resolver of resolvers) {
+    const resolved = resolver(data as any);
+    if (resolved === false || resolved === null) return false;
+    if (resolved) data = resolved as any;
+  }
+  return data;
 }
