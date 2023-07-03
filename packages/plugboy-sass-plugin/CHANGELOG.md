@@ -1,5 +1,12 @@
 # @fastkit/plugboy-sass-plugin
 
+## 1.0.7
+
+### Patch Changes
+
+- Updated dependencies [[`4a974d2`](https://github.com/dadajam4/fastkit/commit/4a974d2bc85767048abcc4ed8294058d19ebfb0f)]:
+  - @fastkit/plugboy@0.1.7
+
 ## 1.0.6
 
 ### Patch Changes

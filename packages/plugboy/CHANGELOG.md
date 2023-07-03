@@ -1,5 +1,13 @@
 # @fastkit/plugboy
 
+## 0.1.7
+
+### Patch Changes
+
+- [#91](https://github.com/dadajam4/fastkit/pull/91) [`4a974d2`](https://github.com/dadajam4/fastkit/commit/4a974d2bc85767048abcc4ed8294058d19ebfb0f) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed failure to retrieve configuration files in projects configured with polyrepo.
+
+  This was due to the `allowMissing` option of the `findConfig` method sometimes not working properly.
+
 ## 0.1.6
 
 ### Patch Changes

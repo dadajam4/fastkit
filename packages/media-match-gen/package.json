@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match-gen",
-  "version": "0.13.7",
+  "version": "0.13.8",
   "description": "A tool to generate Type-safe media query breakpoint schemas.",
   "keywords": [
     "fastkit",

@@ -1,5 +1,12 @@
 # @fastkit/vue-stack
 
+## 0.15.13
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-color-scheme@0.14.3
+
 ## 0.15.12
 
 ### Patch Changes
