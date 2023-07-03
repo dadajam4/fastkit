@@ -155,7 +155,7 @@ export async function findConfig<
   const next = (err?: unknown) => {
     const nextDir = path.dirname(dir);
     if (nextDir !== dir) {
-      return findConfig(fileName, nextDir, currentDepth + 1);
+      return findConfig(settings, nextDir, currentDepth + 1);
     }
     if (allowMissing) return null as any;
     throw err || new Error(`missing config "${fileName}"`);
