@@ -15,7 +15,12 @@ import {
   cleanupEmptyVNodeChild,
   DefineSlotsType,
 } from '@fastkit/vue-utils';
-import { FormNodeControl, FormNodeError, toFormNodeError } from './node';
+import {
+  FormNodeControl,
+  FormNodeError,
+  toFormNodeError,
+  FormNodeErrorSlots,
+} from './node';
 import type { VueFormService } from '../service';
 import { useVueForm } from '../injections';
 
@@ -26,6 +31,17 @@ export type RequiredChipSource = (() => VNodeChild) | string | boolean;
 export type FormControlHinttip = boolean | string | (() => VNodeChild);
 
 export type FormControlHinttipDelay = 'click' | number;
+
+export type FormControlSlots = DefineSlotsType<
+  {
+    /** label */
+    label?: (form: FormControl) => any;
+    /** hint message */
+    hint?: (form: FormControl) => any;
+    /** Elements to be added to the information message */
+    infoAppends?: (form: FormControl) => any;
+  } & FormNodeErrorSlots
+>;
 
 export function createFormControlProps() {
   return {
@@ -103,14 +119,7 @@ export function createFormControlSettings() {
 
 export type FormControlContext = SetupContext<FormControlEmitOptions>;
 
-export type FormControlSlots = DefineSlotsType<{
-  /** label */
-  label?: (form: FormControl) => any;
-  /** hint message */
-  hint?: (form: FormControl) => any;
-  /** Elements to be added to the information message */
-  infoAppends?: (form: FormControl) => any;
-}>;
+// FormNodeError
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormControlOptions {
@@ -354,7 +363,7 @@ export class FormControl {
     return (slot && cleanupEmptyVNodeChild(slot(this))) || undefined;
   }
 
-  protected _getContextOrDir() {
+  protected _getContextOrDie() {
     const { _ctx } = this;
     if (!_ctx) throw new Error('missing form control context');
     return _ctx;
@@ -366,7 +375,7 @@ export class FormControl {
     }
     const { firstError } = this;
     if (!firstError) return;
-    const { slots } = this._getContextOrDir();
+    const { slots } = this._getContextOrDie();
     const slot = slots[`error:${firstError.name}`] || slots.error;
     if (!slot) {
       return (

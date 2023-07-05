@@ -75,8 +75,6 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
   protected _hasValue: ComputedRef<boolean>;
   protected _defaultSlot: ComputedRef<Slot>;
 
-  // renderLabel
-
   get parentSelector() {
     return this._parentSelector;
   }

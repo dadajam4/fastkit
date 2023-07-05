@@ -47,7 +47,7 @@ export const VNumberField = defineComponent({
           onChange={(value) => {
             ctx.emit('change', toNumber(value));
           }}
-          v-slots={ctx.slots}
+          v-slots={ctx.slots as any}
         />
       );
     };
