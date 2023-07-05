@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.5
+
+### Patch Changes
+
+- [#93](https://github.com/dadajam4/fastkit/pull/93) [`da55ca8`](https://github.com/dadajam4/fastkit/commit/da55ca8725218849d65e06cade30a342ff299059) Thanks [@dadajam4](https://github.com/dadajam4)! - Improved slot types and extended API so that FormNode can also render errors.
+
 ## 0.15.4
 
 ### Patch Changes
