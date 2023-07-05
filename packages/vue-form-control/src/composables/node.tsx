@@ -29,7 +29,7 @@ import {
 import { FormNodeInjectionKey, useParentForm, useVueForm } from '../injections';
 import type { VueForm } from './form';
 import { RecursiveArray, flattenRecursiveArray, toInt } from '@fastkit/helpers';
-import { createPropsOptions } from '@fastkit/vue-utils';
+import { createPropsOptions, DefineSlotsType } from '@fastkit/vue-utils';
 import type { VueFormService } from '../service';
 
 export type RecursiveValidatableRule = RecursiveArray<ValidatableRule>;
@@ -87,6 +87,16 @@ export interface FormNodeControlOptions<T = any, D = T>
   extends FormNodeControlBaseOptions {
   modelValue?: Prop<T, D>;
 }
+
+export type FormNodeErrorSlots = DefineSlotsType<
+  {
+    /** Error message */
+    error?: (error: FormNodeError) => any;
+  } & {
+    /** Error messages per validation rule */
+    [K in `error:${string}`]: (error: FormNodeError) => any;
+  }
+>;
 
 export function createFormNodeProps<T, D = T>(
   options: FormNodeControlOptions<T, D> = {},
@@ -736,6 +746,30 @@ export class FormNodeControl<T = any, D = T> {
     (['focusHandler', 'blurHandler'] as const).forEach((fn) => {
       this[fn] = this[fn].bind(this);
     });
+  }
+
+  protected _getContextOrDie() {
+    const { _ctx } = this;
+    if (!_ctx) throw new Error('missing form node context');
+    return _ctx;
+  }
+
+  renderFirstError() {
+    if (this.isDisabled || this.isReadonly) {
+      return;
+    }
+    const { firstError } = this;
+    if (!firstError) return;
+    const { slots } = this._getContextOrDie();
+    const slot = slots[`error:${firstError.name}`] || slots.error;
+    if (!slot) {
+      return (
+        this.service.resolveErrorMessage(firstError, this) || firstError.message
+      );
+    }
+    const errorMessage = slot(firstError);
+    if (!errorMessage.length) return;
+    return errorMessage;
   }
 
   protected _finishing(): Promise<void> {
