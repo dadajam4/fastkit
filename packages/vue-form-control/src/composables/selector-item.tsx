@@ -25,7 +25,10 @@ import {
 
 export function createFormSelectorItemProps() {
   return {
-    ...createFormNodeProps({ modelValue: Boolean }),
+    ...createFormNodeProps({
+      modelValue: Boolean,
+      defaultValidateTiming: 'change',
+    }),
     ...createPropsOptions({
       /** selection value */
       value: {
