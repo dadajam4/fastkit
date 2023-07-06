@@ -526,7 +526,10 @@ export class FormNodeControl<T = any, D = T> {
     this._parentNode = parentNode;
     this._parentForm = parentForm;
 
+    let isMounted = false;
+
     onMounted(() => {
+      isMounted = true;
       this._cii = getCurrentInstance();
     });
 
@@ -675,7 +678,7 @@ export class FormNodeControl<T = any, D = T> {
 
       if (
         this.shouldValidate ||
-        this.validateTimingIsChange ||
+        (isMounted && this.validateTimingIsChange) ||
         this.validateTimingIsAlways
       ) {
         this.validateSelf();
