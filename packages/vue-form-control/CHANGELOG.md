@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.6
+
+### Patch Changes
+
+- [#95](https://github.com/dadajam4/fastkit/pull/95) [`dab8427`](https://github.com/dadajam4/fastkit/commit/dab8427d9ad56801ea1b65f4ec31f5da96d00595) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed a problem where validation would work when `change` was specified for Validate timing, even though the value had not been changed.
+
 ## 0.15.5
 
 ### Patch Changes
