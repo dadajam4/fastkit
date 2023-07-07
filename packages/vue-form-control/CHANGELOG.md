@@ -1,5 +1,14 @@
 # @fastkit/vue-form-control
 
+## 0.15.7
+
+### Patch Changes
+
+- [#98](https://github.com/dadajam4/fastkit/pull/98) [`4b4f647`](https://github.com/dadajam4/fastkit/commit/4b4f6476cd68d8d71ab0e8f0df9db2ed2dd608ef) Thanks [@dadajam4](https://github.com/dadajam4)! - There are no changes to this release.
+  This is a re-release due to a correction of an error in the settings of Changesets.
+
+- [#97](https://github.com/dadajam4/fastkit/pull/97) [`76c39a0`](https://github.com/dadajam4/fastkit/commit/76c39a0b82f538a3fd6752e7eb05151bf1ad1d5d) Thanks [@dadajam4](https://github.com/dadajam4)! - Trial release for changes in changeset format.
+
 ## 0.15.6
 
 ### Patch Changes
