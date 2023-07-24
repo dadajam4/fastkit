@@ -428,7 +428,7 @@ export class BoundableInputControl<
     const rules = super._resolveRules();
     const { min, max } = this;
     min && rules.push(boundableMin(min));
-    max && rules.push(boundableMin(max));
+    max && rules.push(boundableMax(max));
     return rules;
   }
 }
