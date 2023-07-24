@@ -418,10 +418,16 @@ export function defineMenuComponent<
           }
         }
 
-        if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
+        if (
+          !allowOverflow &&
+          typeof computedMaxWidth === 'number' &&
+          width > computedMaxWidth
+        ) {
           width = computedMaxWidth;
         }
+
         if (
+          !allowOverflow &&
           typeof computedMaxHeight === 'number' &&
           height > computedMaxHeight
         ) {
