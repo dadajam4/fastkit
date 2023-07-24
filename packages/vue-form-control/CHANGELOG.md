@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.10
+
+### Patch Changes
+
+- [#104](https://github.com/dadajam4/fastkit/pull/104) [`50293da`](https://github.com/dadajam4/fastkit/commit/50293daca0a56462951ecb64370c70120d120a11) Thanks [@dadajam4](https://github.com/dadajam4)! - Added option to omit the year in the end date format.
+
 ## 0.15.9
 
 ### Patch Changes
