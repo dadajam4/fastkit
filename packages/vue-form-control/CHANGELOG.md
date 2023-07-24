@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.9
+
+### Patch Changes
+
+- [#102](https://github.com/dadajam4/fastkit/pull/102) [`c6a762e`](https://github.com/dadajam4/fastkit/commit/c6a762ef12afd5961748e56b3ad119af0bd2aa50) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed failure to initialize controls for boundable input.
+
 ## 0.15.8
 
 ### Patch Changes
