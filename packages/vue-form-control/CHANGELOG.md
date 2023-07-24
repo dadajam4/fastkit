@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.8
+
+### Patch Changes
+
+- [#100](https://github.com/dadajam4/fastkit/pull/100) [`00473e6`](https://github.com/dadajam4/fastkit/commit/00473e6bd88eae75ebb1c6797c21c42776579514) Thanks [@dadajam4](https://github.com/dadajam4)! - Added support for values such as date and time that have an up/down relationship and are also range-selected.
+
 ## 0.15.7
 
 ### Patch Changes
