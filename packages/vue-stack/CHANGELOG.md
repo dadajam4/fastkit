@@ -1,5 +1,12 @@
 # @fastkit/vue-stack
 
+## 0.15.14
+
+### Patch Changes
+
+- [#100](https://github.com/dadajam4/fastkit/pull/100) [`00473e6`](https://github.com/dadajam4/fastkit/commit/00473e6bd88eae75ebb1c6797c21c42776579514) Thanks [@dadajam4](https://github.com/dadajam4)! - - Removed package [vue-color-scheme](https://github.com/dadajam4/fastkit/tree/main/packages/vue-color-scheme) that were no longer needed.
+  - Fixed the `allowOverflow` setting on the menu component so that it will properly extend off the screen instead of trying to fit inside the screen.
+
 ## 0.15.13
 
 ### Patch Changes
