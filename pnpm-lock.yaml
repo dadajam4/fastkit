@@ -902,7 +902,6 @@ importers:
       '@fastkit/tiny-logger': workspace:*
       '@fastkit/vue-body-scroll-lock': workspace:*
       '@fastkit/vue-click-outside': workspace:*
-      '@fastkit/vue-color-scheme': workspace:*
       '@fastkit/vue-keyboard': workspace:*
       '@fastkit/vue-resize': workspace:*
       '@fastkit/vue-transitions': workspace:*
@@ -913,7 +912,6 @@ importers:
       '@fastkit/tiny-logger': link:../tiny-logger
       '@fastkit/vue-body-scroll-lock': link:../vue-body-scroll-lock
       '@fastkit/vue-click-outside': link:../vue-click-outside
-      '@fastkit/vue-color-scheme': link:../vue-color-scheme
       '@fastkit/vue-keyboard': link:../vue-keyboard
       '@fastkit/vue-resize': link:../vue-resize
       '@fastkit/vue-transitions': link:../vue-transitions
