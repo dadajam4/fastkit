@@ -1,5 +1,4 @@
 export * from './node';
-export * from './date';
 export * from './number';
 export * from './textable';
 export * from './textinput';
@@ -7,6 +6,8 @@ export * from './textarea';
 export * from './selector-item';
 export * from './selector-item-group';
 export * from './selector';
+export * from './boundable-input';
+export * from './date-input';
 export * from './imask';
 export * from './form-control';
 export * from './form';

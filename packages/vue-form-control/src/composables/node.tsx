@@ -239,6 +239,7 @@ export class FormNodeControl<T = any, D = T> {
   readonly nodeType?: FormNodeType;
   readonly autofocus: boolean;
   readonly __multiple: boolean;
+  protected _isMounted = ref(false);
   protected _ctx: FormNodeContext<T, D>;
   protected _parentNode: FormNodeControl | null;
   protected _parentForm: VueForm | null;
@@ -505,6 +506,10 @@ export class FormNodeControl<T = any, D = T> {
     return this.__multiple;
   }
 
+  get isMounted() {
+    return this._isMounted.value;
+  }
+
   constructor(
     props: FormNodeProps,
     ctx: FormNodeContext<T, D>,
@@ -526,10 +531,8 @@ export class FormNodeControl<T = any, D = T> {
     this._parentNode = parentNode;
     this._parentForm = parentForm;
 
-    let isMounted = false;
-
     onMounted(() => {
-      isMounted = true;
+      this._isMounted.value = true;
       this._cii = getCurrentInstance();
     });
 
@@ -678,17 +681,21 @@ export class FormNodeControl<T = any, D = T> {
 
       if (
         this.shouldValidate ||
-        (isMounted && this.validateTimingIsChange) ||
+        (this.isMounted && this.validateTimingIsChange) ||
         this.validateTimingIsAlways
       ) {
         this.validateSelf();
       }
     };
 
+    watch(() => this.validationValue, onValidateValueChange, {
+      immediate: true,
+    });
+
     watch(
       () => this.value,
       (value) => {
-        onValidateValueChange();
+        // onValidateValueChange();
         this._ctx.emit('change', value as any);
       },
       { immediate: true },
