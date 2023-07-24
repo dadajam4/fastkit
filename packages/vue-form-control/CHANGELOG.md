@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.12
+
+### Patch Changes
+
+- [#106](https://github.com/dadajam4/fastkit/pull/106) [`1b573ea`](https://github.com/dadajam4/fastkit/commit/1b573ea2f02165154c9d1976997849cd5134db3d) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed an erroneous min constraint for max value validation of up/down system input.
+
 ## 0.15.11
 
 ### Patch Changes
