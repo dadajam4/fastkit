@@ -300,6 +300,10 @@ export class BoundableInputControl<
     this._currentEndValue.value = endValue;
   }
   get validationValue() {
+    if (!this.isMounted) {
+      return super.validationValue;
+    }
+
     if (this._validationValueGetter) {
       return this._validationValueGetter();
     }
