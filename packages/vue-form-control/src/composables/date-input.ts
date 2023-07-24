@@ -15,7 +15,6 @@ const DEFAULT_FORMAT: Intl.DateTimeFormatOptions = {
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
-  weekday: 'narrow',
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -28,7 +27,9 @@ export interface DateInputControlPropsOptions<
 > extends Omit<
     BoundableInputControlPropsOptions<DateInputValue, D, DS, DE, Min, Max>,
     'type'
-  > {}
+  > {
+  omitEndYearFormat?: boolean;
+}
 
 export type DateInputFormat =
   | Intl.DateTimeFormatOptions
@@ -42,13 +43,21 @@ export function createDateInputProps<
   DE extends DateInputValue | null = null,
   Min extends DateInputValue | null = null,
   Max extends DateInputValue | null = null,
->(options?: DateInputControlPropsOptions<D, DS, DE, Min, Max>) {
+>(options: DateInputControlPropsOptions<D, DS, DE, Min, Max> = {}) {
+  const { omitEndYearFormat = true } = options;
   return {
     ...createBoundableInputProps({ type: String, ...options }),
     /**
      * {@link Intl.DateTimeFormatOptions}
      */
     format: Object as PropType<Intl.DateTimeFormatOptions>,
+    /**
+     * Omit the western calendar year of the end date.
+     */
+    omitEndYearFormat: {
+      type: Boolean,
+      default: omitEndYearFormat,
+    },
     /**
      * Format locales
      */
@@ -111,6 +120,7 @@ export type DateInputProps<
   Max extends DateInputValue | null = null,
 > = BoundableInputProps<DateInputValue, MV, SV, EV, Min, Max> & {
   readonly format?: Intl.DateTimeFormatOptions;
+  readonly omitEndYearFormat: boolean;
   readonly formatLocales?: FormatLocales | (() => FormatLocales);
 };
 
@@ -127,8 +137,12 @@ export class DateInputControl<
   Min extends DateInputValue | null = null,
   Max extends DateInputValue | null = null,
 > extends BoundableInputControl<DateInputValue, MV, SV, EV, Min, Max> {
+  protected _omitEndYearFormat: ComputedRef<boolean>;
   protected _formatLocales: ComputedRef<string | string[] | undefined>;
+  protected _formatOptions: ComputedRef<Intl.DateTimeFormatOptions>;
+  protected _omitYearFormatOptions: ComputedRef<Intl.DateTimeFormatOptions>;
   protected _formatter: ComputedRef<Intl.DateTimeFormat>;
+  protected _omitYearFormatter: ComputedRef<Intl.DateTimeFormat>;
   protected _formattedValue: ComputedRef<string>;
   protected _formattedStartValue: ComputedRef<string>;
   protected _formattedEndValue: ComputedRef<string>;
@@ -138,8 +152,20 @@ export class DateInputControl<
     return this._formatLocales.value;
   }
 
+  get formatOptions() {
+    return this._formatOptions.value;
+  }
+
+  get omitYearFormatOptions() {
+    return this._omitYearFormatOptions.value;
+  }
+
   get formatter() {
     return this._formatter.value;
+  }
+
+  get omitYearFormatter() {
+    return this._omitYearFormatter.value;
   }
 
   get formattedValue() {
@@ -158,6 +184,10 @@ export class DateInputControl<
     return this._isAnySelected.value;
   }
 
+  get omitEndYearFormat() {
+    return this._omitEndYearFormat.value;
+  }
+
   constructor(
     props: DateInputProps<MV, SV, EV, Min, Max>,
     ctx: DateInputContext<MV, SV, EV>,
@@ -169,22 +199,52 @@ export class DateInputControl<
       const locales = props.formatLocales || options.formatLocales;
       return typeof locales === 'function' ? locales() : locales;
     });
-    this._formatter = computed(() => {
-      const _options = props.format || options.format || DEFAULT_FORMAT;
-      return new Intl.DateTimeFormat(this.formatLocales, _options);
+
+    this._formatOptions = computed(() => {
+      return props.format || options.format || DEFAULT_FORMAT;
     });
+
+    this._omitYearFormatOptions = computed(() => {
+      const options: Intl.DateTimeFormatOptions = {
+        ...this.formatOptions,
+      };
+      delete options.year;
+      return options;
+    });
+
+    this._formatter = computed(
+      () => new Intl.DateTimeFormat(this.formatLocales, this.formatOptions),
+    );
+
+    this._omitYearFormatter = computed(
+      () =>
+        new Intl.DateTimeFormat(this.formatLocales, this.omitYearFormatOptions),
+    );
+
+    this._omitEndYearFormat = computed(() => props.omitEndYearFormat);
+
     this._formattedValue = computed(() => {
       const { value } = this;
       return value ? this.formatValue(value) : '';
     });
+
     this._formattedStartValue = computed(() => {
       const { startValue } = this;
       return startValue ? this.formatValue(startValue) : '';
     });
+
     this._formattedEndValue = computed(() => {
-      const { endValue } = this;
-      return endValue ? this.formatValue(endValue) : '';
+      const { startValue, endValue, omitEndYearFormat } = this;
+      if (!endValue) return '';
+      if (!startValue || !omitEndYearFormat) return this.formatValue(endValue);
+      const startDt = startValue && new Date(startValue);
+      const endDt = endValue && new Date(endValue);
+      const isSameYear = startDt.getFullYear() === endDt.getFullYear();
+      return isSameYear
+        ? this.omitYearFormatValue(endDt)
+        : this.formatValue(endDt);
     });
+
     this._isAnySelected = computed(() => {
       return this.isRange ? !!this.startValue && !!this.endValue : !!this.value;
     });
@@ -198,6 +258,16 @@ export class DateInputControl<
   formatValueToParts(value: DateInputValue | Date) {
     const dt = value instanceof Date ? value : new Date(value);
     return this.formatter.formatToParts(dt);
+  }
+
+  omitYearFormatValue(value: DateInputValue | Date) {
+    const dt = value instanceof Date ? value : new Date(value);
+    return this.omitYearFormatter.format(dt);
+  }
+
+  omitYearFormatValueToParts(value: DateInputValue | Date) {
+    const dt = value instanceof Date ? value : new Date(value);
+    return this.omitYearFormatter.formatToParts(dt);
   }
 }
 
