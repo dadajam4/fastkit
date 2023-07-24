@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.11
+
+### Patch Changes
+
+- Re-release due to incomplete release.
+
 ## 0.15.10
 
 ### Patch Changes
