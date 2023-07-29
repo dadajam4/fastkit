@@ -1,3 +1,4 @@
+export * from 'imask';
 export * from './schemes';
 export * from './injections';
 export * from './composables';

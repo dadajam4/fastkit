@@ -6,7 +6,6 @@ import {
   computed,
   InputHTMLAttributes,
   ref,
-  Ref,
   watch,
   onMounted,
 } from 'vue';
@@ -18,12 +17,16 @@ import {
   TextableControlOptions,
   TextableContext,
 } from './textable';
-import { TextInputType, IMaskTypedValue, IMaskEvent } from '../schemes';
-// import { AnyMaskedOptions } from 'imask';
-import { notEmptyValue } from '@fastkit/helpers';
-import { createMaskControlProps } from './imask';
-import { useIMaskControl } from './imask';
-// type AnyMaskedOptions = any;
+import {
+  TextInputType,
+  TextInputMode,
+  IMaskTypedValue,
+  IMaskEvent,
+} from '../schemes';
+import { createMaskControlProps, IMaskInstance } from './imask';
+import { useIMaskControl, type AnyMaskedOptions } from './imask';
+
+export type TextInputMaskModel = 'masked' | 'typed' | 'unmasked';
 
 export function createTextInputProps() {
   return {
@@ -40,21 +43,20 @@ export function createTextInputProps() {
         default: 'text',
       },
       /**
-       * Model value of masked value
+       * Enumerated attribute that hints at the type of data that might be entered by the user while editing the element or its contents.
        *
-       * @see https://imask.js.org/guide.html
+       * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/inputmode
        */
-      masked: String,
+      inputmode: String as PropType<TextInputMode>,
       /**
-       * Model value of the normalized value based on the input type.
-       */
-      typed: [String, Number, Date],
-      /**
-       * Model value for unmasked values
+       * The synchronization method for utilizing the masked modelValue.
        *
-       * @see https://imask.js.org/guide.html
+       * Typically, when using the mask option, the masked and formatted value is sent along with the event. By enabling this setting, it becomes possible to synchronize unmasked values or resolved values of types.
        */
-      unmasked: String,
+      maskModel: {
+        type: String as PropType<TextInputMaskModel>,
+        default: 'masked',
+      },
     }),
   };
 }
@@ -71,13 +73,17 @@ export function createTextInputEmits() {
      *
      * @see https://imask.js.org/guide.html
      */
-    accept: (ev: IMaskEvent) => true,
+    acceptMask: (ev: IMaskEvent) => true,
+    /**
+     * Metadata event when the applied mask is changed in dynamic mask settings.
+     */
+    acceptDynamicMaskMeta: (meta?: any) => true,
     /**
      * 'complete' event fired when the value is completely filled
      *
      * @see https://imask.js.org/guide.html
      */
-    complete: (ev: IMaskEvent) => true,
+    completeMask: (ev: IMaskEvent) => true,
     /**
      * Updating the masked value.
      *
@@ -117,37 +123,25 @@ export type TextInputContext = SetupContext<TextInputEmitOptions>;
 export interface TextInputControlOptions extends TextableControlOptions {}
 
 export class TextInputControl extends TextableControl {
-  // protected _mask: ComputedRef<AnyMaskedOptions | undefined>;
-  protected _mask: ComputedRef<any | undefined>;
   protected _type: ComputedRef<TextInputType>;
+  protected _inputmode: ComputedRef<TextInputMode | undefined>;
   protected _inputElement = ref<HTMLInputElement | null>(null);
-  protected _masked: Ref<string>;
-  protected _unmasked: Ref<string>;
-  protected _typed: Ref<IMaskTypedValue | undefined>;
+  protected readonly _getMaskInput: () => AnyMaskedOptions | undefined;
+  protected readonly _getMask: () => IMaskInstance | null;
+  readonly useUnmaskedValue: () => boolean;
+  readonly useTypedValue: () => boolean;
   protected _passwordVisibility = ref(false);
-
-  get mask() {
-    return this._mask.value;
-  }
 
   get type() {
     return this._type.value;
   }
 
+  get inputmode() {
+    return this._inputmode.value;
+  }
+
   get inputElement() {
     return this._inputElement.value;
-  }
-
-  get masked() {
-    return this._masked.value;
-  }
-
-  get unmasked() {
-    return this._unmasked.value;
-  }
-
-  get typed() {
-    return this._typed.value;
   }
 
   get isVisiblePassword() {
@@ -167,48 +161,57 @@ export class TextInputControl extends TextableControl {
     const el = ref<null | HTMLInputElement>(null);
     this._inputElement = el;
 
-    const { masked, unmasked, typed } = useIMaskControl(props, {
-      el,
-      onAccept: (ev) => {
-        emit('accept', ev);
-        const v = masked.value;
-        if (this.setValue(v)) {
-          emit('update:masked', v);
-          emit('update:unmasked', unmasked.value);
-          emit('update:typed', typed.value);
-        }
-      },
-      onComplete: (ev) => {
-        emit('complete', ev);
-      },
-    });
+    this._handleNodeInput = this._handleNodeInput.bind(this);
+    this.useUnmaskedValue = () => props.maskModel === 'unmasked';
+    this.useTypedValue = () => props.maskModel === 'typed';
 
-    this._masked = ref(notEmptyValue([props.masked, this.value], ''));
-    this._unmasked = ref(notEmptyValue([props.unmasked], ''));
-    this._typed = ref(notEmptyValue([props.typed]));
+    const { maskInput, masked, unmasked, typed, inputMask } = useIMaskControl(
+      props,
+      {
+        el,
+        onAccept: (ev) => {
+          emit('acceptMask', ev);
+          const bucket = this.useUnmaskedValue()
+            ? unmasked
+            : this.useTypedValue()
+            ? typed
+            : masked;
+
+          const value = bucket.value;
+
+          if (this.setValue(value as any)) {
+            emit('update:masked', masked.value);
+            emit('update:unmasked', unmasked.value);
+            emit('update:typed', typed.value);
+          }
+        },
+        onAcceptDynamicMeta: (meta) => {
+          ctx.emit('acceptDynamicMaskMeta', meta);
+        },
+        onComplete: (ev) => {
+          emit('completeMask', ev);
+        },
+      },
+    );
+
+    this._getMaskInput = () => maskInput.value;
+    this._getMask = () => inputMask.value;
     this.focus = this.focus.bind(this);
     this.blur = this.blur.bind(this);
 
-    watch(
-      () => props.modelValue,
-      (v) => (this._masked.value = this.value),
-    );
-    watch(
-      () => props.unmasked,
-      (v) => (this._unmasked.value = notEmptyValue([v], '')),
-    );
-    watch(
-      () => props.typed,
-      (v) => (this._typed.value = v),
-    );
+    watch(this._value, (v) => {
+      if (!this._getMaskInput()) return;
+      const bucket = this.useUnmaskedValue()
+        ? unmasked
+        : this.useTypedValue()
+        ? typed
+        : masked;
 
-    this._mask = computed(() => {
-      const { mask } = props;
-      if (!mask) return;
-      return typeof mask === 'string' ? { mask } : mask;
+      bucket.value = v || '';
     });
 
     this._type = computed(() => props.type);
+    this._inputmode = computed(() => props.inputmode);
 
     /**
      * @TODO ちゃんとする
@@ -236,8 +239,6 @@ export class TextInputControl extends TextableControl {
     return {
       ...publicInterface,
       textInputControl: this as TextInputControl,
-      computedMask: _self._mask,
-      computedType: _self._type,
       inputElementRef: _self._inputElement,
       focus: _self.focus,
       blur: _self.blur,
@@ -252,6 +253,10 @@ export class TextInputControl extends TextableControl {
     this.setPasswordVisibility(!this.isVisiblePassword);
   }
 
+  protected _handleNodeInput(ev: Event) {
+    this._setTextValue((ev.target as unknown as HTMLInputElement).value);
+  }
+
   createInputElement(
     override: Pick<InputHTMLAttributes, 'class' | 'type'> = {},
   ) {
@@ -260,9 +265,12 @@ export class TextInputControl extends TextableControl {
       type = 'text';
     }
 
+    const maskInput = this._getMaskInput();
+
     const attrs: InputHTMLAttributes = {
       class: override.class,
       type,
+      inputmode: this.inputmode,
       name: this.name,
       tabindex: this.tabindex,
       readonly: this.isReadonly,
@@ -274,13 +282,18 @@ export class TextInputControl extends TextableControl {
       maxlength: this.maxlength,
       onFocus: this.focusHandler,
       onBlur: this.blurHandler,
-      value: this.value,
     };
-    const { mask } = this;
-    if (!mask || !mask.mask) {
-      attrs.onInput = (ev) => {
-        this._setTextValue((ev.target as unknown as HTMLInputElement).value);
-      };
+
+    if (!maskInput) {
+      attrs.value = this.value;
+      attrs.onInput = this._handleNodeInput;
+    } else {
+      if (!this.isMounted) {
+        attrs.value = this.value;
+      } else {
+        const mask = this._getMask();
+        attrs.value = mask?.masked?.value;
+      }
     }
     const el = <input {...attrs} ref={this._inputElement} />;
     return el;

@@ -17,6 +17,19 @@ export const TEXT_INPUT_TYPES = [
 
 export type TextInputType = (typeof TEXT_INPUT_TYPES)[number];
 
+export const TEXT_INPUT_MODES = [
+  'decimal',
+  'email',
+  'none',
+  'numeric',
+  'search',
+  'tel',
+  'text',
+  'url',
+] as const;
+
+export type TextInputMode = (typeof TEXT_INPUT_MODES)[number];
+
 export type TextFinishingFn = (
   value?: string | null,
 ) => string | Promise<string>;
