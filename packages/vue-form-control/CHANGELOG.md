@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.13
+
+### Patch Changes
+
+- [#108](https://github.com/dadajam4/fastkit/pull/108) [`1a1edf0`](https://github.com/dadajam4/fastkit/commit/1a1edf067d800500525f0832ac361b7c13e8b365) Thanks [@dadajam4](https://github.com/dadajam4)! - Improved the behavior and interface of text masks.
+
 ## 0.15.12
 
 ### Patch Changes
