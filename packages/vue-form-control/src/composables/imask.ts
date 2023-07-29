@@ -1,23 +1,32 @@
 import {
   ref,
   Ref,
-  // readonly,
   watch,
   onMounted,
   onUnmounted,
   PropType,
   ExtractPropTypes,
   computed,
+  toRaw,
 } from 'vue';
-// import IMask, { AnyMaskedOptions } from 'imask';
-import IMask from 'imask';
+import type { AnyMaskedOptions } from 'imask';
+export type { AnyMaskedOptions } from 'imask';
+import IMask, { MaskedDynamic } from 'imask';
 import {
   IMaskInput,
   resolveIMaskInput,
   IMaskEvent,
   createIMaskEvent,
+  MaskedDynamicOptionsWithMeta,
 } from '../schemes';
-type AnyMaskedOptions = any;
+
+export function createMaskedOptions<
+  Opts extends
+    | Exclude<IMask.AnyMaskedOptions, IMask.MaskedDynamicOptions>
+    | MaskedDynamicOptionsWithMeta,
+>(options: Opts): Opts {
+  return options;
+}
 
 export function createMaskControlProps() {
   return {
@@ -26,6 +35,8 @@ export function createMaskControlProps() {
   };
 }
 
+export type IMaskInstance = IMask.InputMask<AnyMaskedOptions>;
+
 export type IMaskControlProps = ExtractPropTypes<
   ReturnType<typeof createMaskControlProps>
 >;
@@ -33,34 +44,40 @@ export type IMaskControlProps = ExtractPropTypes<
 export function useIMaskControl(
   props: IMaskControlProps,
   opts: {
-    // el: any;
-    // onAccept?: any;
-    // onComplete?: any;
     el: Ref<HTMLInputElement | null>;
     onAccept?: (ev: IMaskEvent) => void;
+    onAcceptDynamicMeta?: (meta?: any) => void;
     onComplete?: (ev: IMaskEvent) => void;
   },
 ) {
-  const { el, onAccept, onComplete } = opts;
-  const maskInput = computed(() => resolveIMaskInput(props.mask));
-  const inputMask = ref<IMask.InputMask<AnyMaskedOptions> | null>(null);
+  const { el, onAccept, onAcceptDynamicMeta, onComplete } = opts;
+  const maskInput = computed(() => resolveIMaskInput(toRaw(props.mask)));
+  const inputMask: Ref<IMaskInstance | null> = ref(null);
   const masked = ref<string>('');
   const unmasked = ref<string>('');
   const typed = ref<string | number | Date | undefined>();
   let $el: HTMLInputElement | undefined;
   let $masked: string | undefined;
   let $unmasked: string | undefined;
-  // let $typed: string | number | Date | undefined;
+  let $typed: string | number | Date | undefined;
 
   function _onAccept() {
     const _inputMask = inputMask.value;
     if (!_inputMask) return;
 
     const ev = createIMaskEvent('accept', { detail: _inputMask });
-    // $typed = typed.value = _inputMask.typedValue;
+    $typed = typed.value = _inputMask.typedValue;
     $unmasked = unmasked.value = _inputMask.unmaskedValue;
     $masked = masked.value = _inputMask.value;
     if (onAccept) onAccept(ev);
+    if (onAcceptDynamicMeta) {
+      const { masked } = _inputMask;
+      if (masked instanceof MaskedDynamic) {
+        if (masked.currentMask) {
+          onAcceptDynamicMeta((masked.currentMask as any).meta);
+        }
+      }
+    }
   }
 
   function _onComplete() {
@@ -78,7 +95,7 @@ export function useIMaskControl(
 
     if (!$el || !$props || !$props.mask) return;
 
-    inputMask.value = IMask($el, $props)
+    inputMask.value = toRaw(IMask($el, $props))
       .on('accept', _onAccept)
       .on('complete', _onComplete);
 
@@ -108,9 +125,12 @@ export function useIMaskControl(
   });
 
   watch(typed, () => {
-    if (inputMask.value) {
-      // $typed = inputMask.value.typedValue = typed.value as any;
-      inputMask.value.typedValue = typed.value as any;
+    if (
+      inputMask.value &&
+      $typed !== typed.value &&
+      typed.value !== undefined
+    ) {
+      $typed = inputMask.value.typedValue = typed.value;
     }
   });
 
@@ -131,8 +151,8 @@ export function useIMaskControl(
   });
 
   return {
-    // ...The definition is too deep and the compiler dies
-    inputMask: inputMask as any,
+    maskInput,
+    inputMask,
     masked,
     unmasked,
     typed,

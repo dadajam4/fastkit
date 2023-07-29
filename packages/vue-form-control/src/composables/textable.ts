@@ -60,7 +60,7 @@ async function finishingValue(
 
 export function createTextableProps() {
   return {
-    ...createFormNodeProps({
+    ...createFormNodeProps<any>({
       modelValue: {
         type: String,
         default: '',
