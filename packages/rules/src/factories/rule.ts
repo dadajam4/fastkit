@@ -150,6 +150,7 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
       path,
       fullPath,
       value,
+      constraints,
     };
 
     try {

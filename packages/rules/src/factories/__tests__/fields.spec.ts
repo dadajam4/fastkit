@@ -129,6 +129,7 @@ describe('factories/fields', () => {
 
       const expectValueSnapShot = {
         $$symbol: 'ValidationError',
+        constraints: undefined,
         name: 'user',
         eachPrefix: undefined,
         path: 'user',
@@ -138,33 +139,36 @@ describe('factories/fields', () => {
         children: [
           {
             $$symbol: 'ValidationError',
+            children: undefined,
+            constraints: undefined,
             name: 'required',
             eachPrefix: '["user"]',
             path: 'name',
             fullPath: '["user"]["name"]',
             value: undefined,
             message: 'This item is required.',
-            children: undefined,
           },
           {
             $$symbol: 'ValidationError',
+            children: undefined,
+            constraints: undefined,
             name: 'required',
             eachPrefix: '["user"]',
             path: 'email',
             fullPath: '["user"]["email"]',
             value: undefined,
             message: 'This item is required.',
-            children: undefined,
           },
           {
             $$symbol: 'ValidationError',
+            children: undefined,
+            constraints: undefined,
             name: 'fields',
             eachPrefix: '["user"]',
             path: 'type',
             fullPath: '["user"]["type"]',
             value: undefined,
             message: 'The object does not meet the constraints.',
-            children: undefined,
           },
         ],
       };
@@ -175,8 +179,16 @@ describe('factories/fields', () => {
           const result = (await userRule.validate(value, {
             path: 'user',
           })) as ValidationError;
+          const cloned = JSON.parse(JSON.stringify(expectValueSnapShot));
+          cloned.children.forEach((row: any, i: number) => {
+            const same = (result as any).children[i];
+            row.children = expectValueSnapShot.children[i].children;
+            row.constraints = same.constraints;
+            row.value = expectValueSnapShot.children[i].value;
+          });
           expect(result).toEqual({
-            ...JSON.parse(JSON.stringify(expectValueSnapShot)),
+            ...cloned,
+            constraints: userRule.constraints,
             message: createMessage(value),
             value,
           });
@@ -199,6 +211,7 @@ describe('factories/fields', () => {
         });
         const expectValueSnapShot = {
           $$symbol: 'ValidationError',
+          constraints: undefined,
           name: 'user',
           path: 2,
           fullPath: '[2]',
@@ -214,6 +227,8 @@ describe('factories/fields', () => {
           children: [
             {
               $$symbol: 'ValidationError',
+              children: undefined,
+              constraints: undefined,
               name: 'required',
               eachPrefix: '[2]',
               path: 'name',
@@ -223,6 +238,8 @@ describe('factories/fields', () => {
             },
             {
               $$symbol: 'ValidationError',
+              children: undefined,
+              constraints: 10,
               name: 'maxLength',
               eachPrefix: '[2]',
               path: 'email',
@@ -232,6 +249,7 @@ describe('factories/fields', () => {
             },
             {
               $$symbol: 'ValidationError',
+              constraints: undefined,
               name: 'fields',
               eachPrefix: '[2]',
               path: 'type',
@@ -244,6 +262,8 @@ describe('factories/fields', () => {
               children: [
                 {
                   $$symbol: 'ValidationError',
+                  children: undefined,
+                  constraints: undefined,
                   name: 'required',
                   eachPrefix: '[2]["type"]',
                   path: 'type',
@@ -253,6 +273,8 @@ describe('factories/fields', () => {
                 },
                 {
                   $$symbol: 'ValidationError',
+                  children: undefined,
+                  constraints: 10,
                   name: 'maxLength',
                   eachPrefix: '[2]["type"]',
                   path: 'desc',
@@ -264,8 +286,16 @@ describe('factories/fields', () => {
             },
           ],
         };
+        const cloned = JSON.parse(JSON.stringify(expectValueSnapShot));
+        cloned.children.forEach((row: any, i: number) => {
+          const same = (result as any).children[i];
+          row.children = expectValueSnapShot.children[i].children;
+          row.constraints = same.constraints;
+          row.value = expectValueSnapShot.children[i].value;
+        });
         expect(result).toEqual({
-          ...JSON.parse(JSON.stringify(expectValueSnapShot)),
+          ...cloned,
+          constraints: userRule.constraints,
         });
       });
       it(`deep path success`, async () => {

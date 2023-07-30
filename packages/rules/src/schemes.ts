@@ -9,6 +9,7 @@ export interface ValidationError {
   message: string;
   value?: any;
   children?: ValidationError[];
+  constraints?: any;
 }
 
 export function isValidationError(source: unknown): source is ValidationError {

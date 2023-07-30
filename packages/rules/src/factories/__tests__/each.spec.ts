@@ -35,6 +35,7 @@ describe('factories/each', () => {
       const result = await rule.validate(list);
       const expectedValue = {
         $$symbol: 'ValidationError',
+        constraints: rule.constraints,
         name: 'each',
         eachPrefix: undefined,
         path: undefined,
@@ -44,6 +45,7 @@ describe('factories/each', () => {
         children: [
           {
             $$symbol: 'ValidationError',
+            constraints: undefined,
             name: 'required',
             eachPrefix: undefined,
             path: 0,
@@ -54,6 +56,7 @@ describe('factories/each', () => {
           },
           {
             $$symbol: 'ValidationError',
+            constraints: undefined,
             name: 'required',
             eachPrefix: undefined,
             path: 1,
@@ -64,6 +67,7 @@ describe('factories/each', () => {
           },
           {
             $$symbol: 'ValidationError',
+            constraints: undefined,
             name: 'required',
             eachPrefix: undefined,
             path: 2,
@@ -74,6 +78,7 @@ describe('factories/each', () => {
           },
           {
             $$symbol: 'ValidationError',
+            constraints: 5,
             name: 'maxLength',
             eachPrefix: undefined,
             path: 4,
@@ -107,6 +112,7 @@ describe('factories/each', () => {
       ];
       const expectedValue = {
         $$symbol: 'ValidationError',
+        constraints: myRule.constraints,
         name: 'each',
         eachPrefix: undefined,
         path: undefined,
@@ -116,6 +122,7 @@ describe('factories/each', () => {
         children: [
           {
             $$symbol: 'ValidationError',
+            constraints: undefined,
             name: 'required',
             eachPrefix: undefined,
             path: 0,
@@ -126,6 +133,7 @@ describe('factories/each', () => {
           },
           {
             $$symbol: 'ValidationError',
+            constraints: undefined,
             name: 'required',
             eachPrefix: undefined,
             path: 1,
@@ -136,6 +144,7 @@ describe('factories/each', () => {
           },
           {
             $$symbol: 'ValidationError',
+            constraints: undefined,
             name: 'required',
             eachPrefix: undefined,
             path: 2,
@@ -146,6 +155,7 @@ describe('factories/each', () => {
           },
           {
             $$symbol: 'ValidationError',
+            constraints: undefined,
             name: 'required',
             eachPrefix: undefined,
             path: 4,
@@ -156,6 +166,7 @@ describe('factories/each', () => {
           },
           {
             $$symbol: 'ValidationError',
+            constraints: 5,
             name: 'maxLength',
             eachPrefix: undefined,
             path: 5,
@@ -166,6 +177,7 @@ describe('factories/each', () => {
           },
           {
             $$symbol: 'ValidationError',
+            constraints: 5,
             name: 'maxLength',
             eachPrefix: undefined,
             path: 8,
@@ -194,6 +206,7 @@ describe('factories/each', () => {
       });
       const expectedValue = {
         $$symbol: 'ValidationError',
+        constraints: myRule.constraints,
         name: 'each',
         eachPrefix: undefined,
         path: undefined,
