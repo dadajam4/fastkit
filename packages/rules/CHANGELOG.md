@@ -1,5 +1,12 @@
 # @fastkit/rules
 
+## 0.13.2
+
+### Patch Changes
+
+- [#110](https://github.com/dadajam4/fastkit/pull/110) [`29f8daa`](https://github.com/dadajam4/fastkit/commit/29f8daa3ad94d6b013df572affd07b55d2078471) Thanks [@dadajam4](https://github.com/dadajam4)! - Validation error objects are now accompanied by an expected value object.
+  This allows for custom error messages to use the expected value used when validating the value.
+
 ## 0.13.1
 
 ### Patch Changes
