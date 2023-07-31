@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.15
+
+### Patch Changes
+
+- [#112](https://github.com/dadajam4/fastkit/pull/112) [`7bc95bd`](https://github.com/dadajam4/fastkit/commit/7bc95bdd725704891476079f305e28913efa6230) Thanks [@dadajam4](https://github.com/dadajam4)! - We have enabled the detection of skipped selections in the handler when options have already been chosen. This allows us to implement UI features such as closing the dropdown menu.
+
 ## 0.15.14
 
 ### Patch Changes
