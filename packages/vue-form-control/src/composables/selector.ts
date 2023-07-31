@@ -128,6 +128,7 @@ export type FormSelectorContext = SetupContext<FormSelectorEmitOptions>;
 export interface FormSelectorControlOptions extends FormNodeControlBaseOptions {
   defaultMultiple?: boolean;
   onSelectItem?: (item: FormSelectorItemControl, ev: MouseEvent) => any;
+  onCancelSelect?: (item: FormSelectorItemControl, ev: MouseEvent) => any;
 }
 
 export type FormSelectorLoadState = 'ready' | 'loading' | 'error';
@@ -146,6 +147,10 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   protected _selectedValues: ComputedRef<(string | number)[]>;
   protected _selectedItems: ComputedRef<FormSelectorItemControl[]>;
   protected onSelectItem?: (
+    item: FormSelectorItemControl,
+    ev: MouseEvent,
+  ) => any;
+  protected onCancelSelect?: (
     item: FormSelectorItemControl,
     ev: MouseEvent,
   ) => any;
@@ -213,6 +218,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     });
 
     this.onSelectItem = options.onSelectItem;
+    this.onCancelSelect = options.onCancelSelect;
     // this._syncValueForChoies = this._syncValueForChoies.bind(this);
 
     this._items = computed(() => {
@@ -314,6 +320,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     onBeforeUnmount(() => {
       delete this.onSelectItem;
+      delete this.onCancelSelect;
       this._propGroups.value = [];
     });
 
@@ -595,6 +602,8 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       if (!item.selected) {
         item.select();
         this.handleSelectItem(item, ev);
+      } else {
+        this.onCancelSelect?.(item, ev);
       }
     }
   }
