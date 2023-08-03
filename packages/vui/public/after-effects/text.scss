@@ -69,7 +69,8 @@ $props-map: (
       $value: map-get($value-info, value);
 
       .#{$selector}#{$breakpoint-suffix} {
-        #{$prop}: $value;
+        /* stylelint-disable-next-line scss/function-unquote-no-unquoted-strings-inside */
+        #{$prop}: unquote($value);
       }
     }
   }
