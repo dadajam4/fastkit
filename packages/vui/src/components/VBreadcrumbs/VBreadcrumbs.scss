@@ -31,6 +31,7 @@
 
     &__item--disabled &__link {
       color: inherit;
+
       // color: get-color(text-muted);
       pointer-events: none;
     }

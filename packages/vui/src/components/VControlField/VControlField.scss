@@ -34,6 +34,7 @@
     &--disabled {
       color: var(--control-disabled-color);
       pointer-events: none;
+
       // cursor: not-allowed !important;
       user-select: none;
     }
@@ -46,6 +47,7 @@
       left: 0;
       pointer-events: none;
       content: '';
+
       // transition: all 0.2s;
     }
 
@@ -89,8 +91,10 @@
       flex: 1 1 auto;
       align-items: stretch;
       align-self: stretch;
+
       // margin: 0 8px;
       margin: 0;
+
       // pointer-events: none;
 
       // color: #f00;
@@ -160,6 +164,7 @@
       &:focus-within {
         box-shadow: 0 0 1px var(--shadow-color),
           0 0 2px 2px var(--focusShadow-color);
+
         // border-color: var(--my-focused-color);
       }
     }

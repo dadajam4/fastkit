@@ -34,10 +34,12 @@
         align-items: center;
         margin-top: -0.2em;
         margin-left: 0.6em;
+
         // font-size: calc(var(--root-em) * 0.5);
         font-size: 80%;
         line-height: 1;
         color: inherit;
+
         // color: var(--palette-muted);
         text-decoration: none;
         letter-spacing: normal;
@@ -89,6 +91,7 @@
 
     &__message {
       flex: 1 0;
+
       // margin: 0 var(--control-message-horizontal-margin);
       // font-size: var(--control-message-font-size);
       // line-height: 1.66;

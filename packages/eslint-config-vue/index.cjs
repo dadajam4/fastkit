@@ -17,6 +17,11 @@ module.exports = {
       ],
       extends: ['plugin:vue/vue3-recommended', '@vue/eslint-config-prettier'],
       parser: 'vue-eslint-parser',
+      parserOptions: {
+        ecmaVersion: 'latest',
+        parser: '@typescript-eslint/parser',
+        sourceType: 'module',
+      },
       rules: {
         'vue/one-component-per-file': 'off',
         'vue/require-explicit-emits': 'off',

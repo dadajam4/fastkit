@@ -56,6 +56,7 @@
     "@fastkit/plugboy-vue-jsx-plugin": "workspace:*",
     "@fastkit/scroller": "workspace:*",
     "@fastkit/stylelint-config": "workspace:*",
+    "@fastkit/stylelint-config-vue": "workspace:*",
     "@fastkit/ts-tiny-meta": "workspace:*",
     "@fastkit/vite-plugin-vui": "workspace:*",
     "@fastkit/vot": "workspace:*",
@@ -111,7 +112,8 @@
         "vite",
         "vue",
         "@tiptap/core",
-        "@tiptap/pm"
+        "@tiptap/pm",
+        "postcss-html"
       ]
     }
   }

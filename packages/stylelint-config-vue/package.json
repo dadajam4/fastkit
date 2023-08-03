@@ -1,7 +1,7 @@
 {
-  "name": "@fastkit/stylelint-config",
-  "version": "0.13.3",
-  "description": "@fastkit/stylelint-config",
+  "name": "@fastkit/stylelint-config-vue",
+  "version": "0.0.0",
+  "description": "@fastkit/stylelint-config-vue",
   "buildOptions": {
     "ignore": true
   },
@@ -9,8 +9,8 @@
     "scope": "",
     "feature": "lint",
     "description": {
-      "en": "fastkit recommended stylelint settings.",
-      "ja": "fastkitが推奨するstylelintの設定。"
+      "en": "fastkit recommended Vue application stylelint settings.",
+      "ja": "fastkitが推奨するVueアプリケーションのstylelintの設定。"
     }
   },
   "main": "./index.cjs",
@@ -27,7 +27,8 @@
   },
   "keywords": [
     "fastkit",
-    "stylelint"
+    "stylelint",
+    "vue"
   ],
   "author": "dadajam4",
   "license": "MIT",
@@ -36,16 +37,10 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/stylelint-config#readme",
   "peerDependencies": {
-    "postcss": "^8.4.19",
     "stylelint": "^15.6.0"
   },
   "dependencies": {
-    "postcss-html": "^1.5.0",
-    "postcss-scss": "^4.0.6",
-    "stylelint-config-css-modules": "^4.2.0",
-    "stylelint-config-recess-order": "^4.0.0",
-    "stylelint-config-standard": "^31.0.0",
-    "stylelint-config-standard-scss": "^10.0.0",
-    "stylelint-prettier": "^3.0.0"
+    "@fastkit/stylelint-config": "workspace:*",
+    "stylelint-config-recommended-vue": "^1.5.0"
   }
 }

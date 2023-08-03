@@ -7,11 +7,11 @@
       margin-left: calc(var(--card-content-padding) * -1);
     }
 
-    &__empty--message {
-      // @include container;
+    // &__empty--message {
+    //   @include container;
 
-      // color: get-color(text-muted);
-    }
+    //   color: get-color(text-muted);
+    // }
 
     &__controls {
       display: flex;
@@ -49,7 +49,7 @@
         flex: 1 1 100%;
         margin-left: auto;
 
-        @media screen and (min-width: 320px) {
+        @media screen and (width >= 320px) {
           flex: 0 0 50%;
           width: 50%;
         }
@@ -78,6 +78,7 @@
       &::before,
       &::after {
         display: block;
+
         // flex: 0 0 $view-padding-narrow;
         // width: $view-padding-narrow;
         height: 1px;
@@ -103,8 +104,10 @@
 
     &__table {
       width: 100%;
+
       // min-width: calc(100% - #{$view-padding-narrow * 2});
       margin: 0;
+
       // border-collapse: separate;
       background: var(--palette-background);
       border-radius: var(--control-field-radius);
@@ -148,11 +151,11 @@
         &[tabindex='0'] {
           cursor: pointer;
 
-          &:hover,
-          &:focus {
-            // background: var(--shadow-color);
-            // background: get-color(light);
-          }
+          // &:hover,
+          // &:focus {
+          //   background: var(--shadow-color);
+          //   background: get-color(light);
+          // }
         }
 
         &__tile {
@@ -178,10 +181,10 @@
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(3px);
 
-        &--active[tabindex='0'] {
-          // color: get-color(invert-text);
-          // background: get-color(primary);
-        }
+        // &--active[tabindex='0'] {
+        //   color: get-color(invert-text);
+        //   background: get-color(primary);
+        // }
       }
 
       &__header &__cell--active &__sort-icon {
@@ -197,26 +200,26 @@
         border-bottom: none;
       }
 
-      &__item {
-        &:hover {
-          td {
-            // background: get-color(tocuh-0);
-          }
-        }
+      // &__item {
+      //   &:hover {
+      //     td {
+      //       background: get-color(tocuh-0);
+      //     }
+      //   }
 
-        &--selected {
-          // stylelint-disable-next-line no-descending-specificity
-          td {
-            // background: get-color(light);
-          }
+      //   &--selected {
+      //     stylelint-disable-next-line no-descending-specificity
+      //     td {
+      //       background: get-color(light);
+      //     }
 
-          &:hover {
-            td {
-              // background: get-color(light);
-            }
-          }
-        }
-      }
+      //     &:hover {
+      //       td {
+      //         background: get-color(light);
+      //       }
+      //     }
+      //   }
+      // }
     }
 
     // stylelint-disable-next-line no-descending-specificity

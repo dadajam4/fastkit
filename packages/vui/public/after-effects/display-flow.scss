@@ -234,7 +234,6 @@ $props-map: (
     ('top', 'left'),
     if($direction == 'x', ('left'), ('top'))
   );
-
   $suffix: if($direction == 'all', '', '-' + $direction);
 
   @for $i from 1 through 10 {
@@ -305,6 +304,7 @@ $props-map: (
       $value: map-get($value-info, value);
 
       .#{$selector}#{$breakpoint-suffix} {
+        /* stylelint-disable-next-line scss/function-unquote-no-unquoted-strings-inside */
         #{$prop}: unquote($value);
       }
     }
@@ -339,8 +339,8 @@ $props-map: (
   @include grid-spacing($breakpoint-suffix, 'y');
 }
 
-@include display-flow();
+@include display-flow;
 
-@include mq-each() {
+@include mq-each {
   @include display-flow($breakpoint-suffix: '--' + $mq-each-target);
 }

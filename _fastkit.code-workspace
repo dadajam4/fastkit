@@ -165,6 +165,10 @@
       "path": "packages/stylelint-config"
     },
     {
+      "name": "📦 @fastkit/stylelint-config-vue",
+      "path": "packages/stylelint-config-vue"
+    },
+    {
       "name": "📦 @fastkit/tiny-hash",
       "path": "packages/tiny-hash"
     },

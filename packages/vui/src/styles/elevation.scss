@@ -6,5 +6,6 @@ $z: 24;
   .elevation-#{$z} {
     @include core.elevation($z, true);
   }
+
   $z: $z - 1;
 }
