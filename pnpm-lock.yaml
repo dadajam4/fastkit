@@ -23,7 +23,7 @@ importers:
       '@fastkit/plugboy-vue-jsx-plugin': workspace:*
       '@fastkit/scroller': workspace:*
       '@fastkit/stylelint-config': workspace:*
-      '@fastkit/stylelint-config-vue': workspace:^0.0.0
+      '@fastkit/stylelint-config-vue': workspace:*
       '@fastkit/ts-tiny-meta': workspace:*
       '@fastkit/vite-plugin-vui': workspace:*
       '@fastkit/vot': workspace:*
@@ -9610,6 +9610,8 @@ packages:
       postcss-html: ^1.0.0
       stylelint: '>=14.0.0'
     peerDependenciesMeta:
+      postcss-html:
+        optional: true
       stylelint:
         optional: true
     dev: false
@@ -9648,6 +9650,8 @@ packages:
       postcss-html: ^1.0.0
       stylelint: '>=14.0.0'
     peerDependenciesMeta:
+      postcss-html:
+        optional: true
       stylelint:
         optional: true
     dependencies:
