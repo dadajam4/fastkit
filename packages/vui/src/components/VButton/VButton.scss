@@ -15,20 +15,24 @@
     align-items: center;
     justify-content: center;
     min-width: calc(var(--root-em) * 4);
+
     // height: calc(var(--root-em) * 2);
     height: var(--height);
+
     // padding: 0 var(--root-em);
     padding: 0 var(--padding);
+
     // margin: 0;
     margin: calc(var(--root-em) * 0.375) calc(var(--root-em) * 0.5);
     overflow: hidden;
     font: inherit;
+
     // font-size: calc(var(--root-em) * 0.875);
     font-weight: 500;
     line-height: 1;
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: math.div(1.25, 14) * 1em; //1.25px;
+    letter-spacing: math.div(1.25, 14) * 1em; // 1.25px;
     vertical-align: bottom;
     cursor: pointer;
     user-select: none;
@@ -49,6 +53,7 @@
 
     &--plain {
       color: inherit !important;
+
       // color: inherit !important;
 
       &[disabled] {

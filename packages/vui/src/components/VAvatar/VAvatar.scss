@@ -2,7 +2,7 @@
 
 @layer vui {
   .v-avatar {
-    @include core.button-reset();
+    @include core.button-reset;
 
     --avatar-radius: 50%;
     --avatar-font-weight: var(--typo-medium-weight);

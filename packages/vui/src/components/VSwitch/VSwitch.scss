@@ -3,6 +3,7 @@
 @layer vui {
   .v-switch {
     --my-pin-color: var(--palette-background);
+
     // --my-faux-bg-color: transparent;
 
     &--selected {
@@ -39,6 +40,7 @@
         justify-content: center;
         width: var(--outer-size);
         height: var(--outer-size);
+
         // background: #f00;
         border-radius: 50%;
         transition: left 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,

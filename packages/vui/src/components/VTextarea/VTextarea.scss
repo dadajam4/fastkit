@@ -21,6 +21,7 @@
 
         &:-webkit-autofill {
           @include core.auto-fill-cancel;
+
           // color: inherit !important;
           // box-shadow: 0 0 0 1000px get-color(field) inset;
         }

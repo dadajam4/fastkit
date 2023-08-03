@@ -2,7 +2,7 @@
 
 @layer vui {
   .v-chip {
-    @include core.button-reset();
+    @include core.button-reset;
 
     $chip-sizes: xs, sm, md, lg, xl;
 

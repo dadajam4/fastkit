@@ -8,10 +8,12 @@
       &__element {
         width: 100%;
         min-width: 0;
+
         // width: calc(100% - 8px);
         padding: 0;
         margin: 0;
         overflow: hidden;
+
         // margin: 0 8px;
         font-size: inherit;
         line-height: inherit;
@@ -25,6 +27,7 @@
 
         &:-webkit-autofill {
           @include core.auto-fill-cancel;
+
           // color: inherit !important;
           // box-shadow: 0 0 0 1000px get-color(field) inset;
         }

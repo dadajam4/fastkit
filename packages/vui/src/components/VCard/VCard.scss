@@ -2,7 +2,7 @@
 
 @layer vui {
   .v-card {
-    @include core.remove-tap-highlight();
+    @include core.remove-tap-highlight;
 
     position: relative;
     width: 100%;
@@ -48,6 +48,7 @@
         content: none;
       }
     }
+
     // noop
   }
 }

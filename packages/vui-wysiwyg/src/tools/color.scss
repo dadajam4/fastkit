@@ -44,6 +44,7 @@
       &--with-label {
         display: flex;
         flex-direction: column;
+
         // flex-wrap: nowrap;
         align-items: flex-start;
         max-width: none;
@@ -62,6 +63,7 @@
       height: var(--item-size);
       padding: 0;
       margin: 0;
+
       // margin: 2px;
       cursor: pointer;
       background: transparent;

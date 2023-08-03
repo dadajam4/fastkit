@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['@fastkit/stylelint-config'],
+  extends: ['@fastkit/stylelint-config-vue'],
   ignoreFiles: [
     '!.eslintrc.js',
     '/node_modules/',

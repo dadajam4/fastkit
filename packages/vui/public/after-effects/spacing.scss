@@ -23,7 +23,6 @@ $property-map: (
     has-auto: false,
   )
 );
-
 $sides-map: (
   (
     selector: '',
@@ -83,7 +82,7 @@ $sides-map: (
       $sides-props: map-get($sides-info, props);
       $base-selector: '.' + #{$prop-selector}#{$sides-selector};
 
-      @if ($has-auto) {
+      @if $has-auto {
         #{$base-selector}-auto#{$breakpoint-suffix} {
           @each $sides-prop in $sides-props {
             $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
@@ -118,7 +117,7 @@ $sides-map: (
         }
       }
 
-      @if ($has-negative) {
+      @if $has-negative {
         @for $i from 1 through 10 {
           $base-value: if(
             $i == 1,
@@ -148,8 +147,8 @@ $sides-map: (
   }
 }
 
-@include spacing();
+@include spacing;
 
-@include mq-each() {
+@include mq-each {
   @include spacing($breakpoint-suffix: '--' + $mq-each-target);
 }
