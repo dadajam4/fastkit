@@ -1,5 +1,6 @@
 import type { nativeErrorResolver } from './resolvers/native';
 import type { UnionToIntersection } from '@fastkit/helpers';
+import type { build } from './catcher';
 
 /**
  * List of built-in resolvers
@@ -86,8 +87,8 @@ export function createCatcherNormalizer<
  * Catcher constructor generation options
  */
 export interface CatcherBuilderOptions<
-  Resolvers extends AnyResolvers,
-  Normalizer extends AnyNormalizer<Resolvers>,
+  Resolvers extends AnyResolvers = AnyResolvers,
+  Normalizer extends AnyNormalizer<Resolvers> = AnyNormalizer<Resolvers>,
 > {
   /**
    * Default name if the name cannot be resolved from the supplemented exception
@@ -96,7 +97,7 @@ export interface CatcherBuilderOptions<
    */
   defaultName?: string;
   /**
-   * {@link Resolvers List of Exception Resolver}
+   * List of Exception Resolver
    */
   resolvers?: Resolvers;
   /**
@@ -162,6 +163,7 @@ export interface Catcher<
 /**
  * Exception catcher constructor
  *
+ * * The first thing to do is to generate this constructor in your application using the build method
  * * Instance properties are extended by type arguments at creation
  */
 export interface CatcherConstructor<
