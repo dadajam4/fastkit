@@ -1,6 +1,16 @@
+/**
+ * @file Resolver to resolve [axios](https://github.com/axios/axios) exceptions
+ */
+
 import type { AxiosError, AxiosRequestConfig } from 'axios';
 import { createCatcherResolver } from '../schemes';
 
+/**
+ * Verify that the value of the specified argument is an axios error
+ *
+ * @param source - Value to be checked
+ * @returns true if it is an axios error
+ */
 function isAxiosError(source: unknown): source is AxiosError {
   return (
     !!source &&
@@ -27,11 +37,17 @@ const ConfigPicks = [
   'proxy',
 ] as const;
 
+/**
+ * JSON serializable axios request config
+ */
 export interface SerializableAxiosRequestConfig
   extends Pick<AxiosRequestConfig, (typeof ConfigPicks)[number]> {
   fullUrl?: string;
 }
 
+/**
+ * JSON serializable axios response
+ */
 export interface SerializableAxiosResponse {
   data: any;
   status: number;
@@ -39,6 +55,9 @@ export interface SerializableAxiosResponse {
   headers: any;
 }
 
+/**
+ * axios error information
+ */
 export interface AxiosErrorInfo {
   name: string;
   message: string;
@@ -48,10 +67,15 @@ export interface AxiosErrorInfo {
   response?: SerializableAxiosResponse;
 }
 
+/**
+ * Override axios error
+ */
 export interface AxiosErrorOverrides {
-  // name: string;
-  // message: string;
-  // stack?: string;
+  /**
+   * {@link AxiosErrorInfo axios error information }
+   *
+   * Only set when an axios exception is detected
+   */
   axiosError: AxiosErrorInfo;
 }
 
@@ -88,6 +112,9 @@ export function toAxiosErrorInfo(source: AxiosError): AxiosErrorInfo {
   };
 }
 
+/**
+ * Resolver to resolve [axios](https://github.com/axios/axios) exceptions
+ */
 export const axiosErrorResolver = createCatcherResolver(
   function axiosErrorResolver(source, ctx): AxiosErrorOverrides | undefined {
     if (!isAxiosError(source)) return;

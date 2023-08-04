@@ -1,5 +1,4 @@
 import {
-  // AnyData,
   AnyResolvers,
   AnyNormalizer,
   CatcherBuilderOptions,
@@ -11,22 +10,49 @@ import {
 import { nativeErrorResolver } from './resolvers/native';
 import { isObject } from '@fastkit/helpers';
 
+/**
+ * Checks if the value of the specified argument is a catcher instance
+ * @param source - Value to be checked
+ * @returns true if it is a catcher instance
+ */
 export function isCatcher(source: unknown): source is Catcher {
   return source instanceof Error && (source as Catcher).isCatcher === true;
 }
 
+/**
+ * Checks if the value of the specified argument is a data object output from the catcher instance
+ * @param source - Value to be checked
+ * @returns true if the data is catcher output data
+ */
 export function isCatcherData<T extends Catcher>(
   source: unknown,
 ): source is T['data'] {
   return isObject<CatcherData>(source) && source.$__catcher === true;
 }
 
+const NATIVE_ERROR_PROPS = ['stack', 'message', 'name'] as const;
+
+/**
+ * Generate exception catcher constructor
+ *
+ * * The instance type is determined by the custom resolver and normalizer specified in the options
+ *
+ * @param opts - {@link CatcherBuilderOptions Catcher constructor generation options}
+ * @returns Exception catcher constructor
+ */
 export function build<
   Resolvers extends AnyResolvers,
   Normalizer extends AnyNormalizer<Resolvers>,
 >(
   opts: CatcherBuilderOptions<Resolvers, Normalizer>,
 ): CatcherConstructor<Resolvers, Normalizer> {
+  const { resolvers = [], normalizer, defaultName = 'CatcherError' } = opts;
+
+  if (!(resolvers as any).includes(nativeErrorResolver)) {
+    // Native Error resolvers are forced to be inserted into the last stage of the resolver.
+    (resolvers as any).unshift(nativeErrorResolver);
+  }
+
   class BuildedCatcher extends Error implements Catcher {
     readonly isCatcher = true;
     readonly data!: Catcher['data'];
@@ -73,13 +99,6 @@ export function build<
 
       super();
 
-      const { resolvers = [], normalizer } = opts;
-
-      if (!(resolvers as any).includes(nativeErrorResolver)) {
-        // Native Error resolvers are forced to be inserted into the last stage of the resolver.
-        (resolvers as any).unshift(nativeErrorResolver);
-      }
-
       if (isCatcherData(infoOrException)) {
         // If the error information is data that can be recovered as a Catcher instance, it will be recovered only.
         this.data = infoOrException;
@@ -112,13 +131,13 @@ export function build<
 
         this.data = {
           $__catcher: true,
-          name: opts.defaultName || 'CatcherError',
+          name: defaultName,
           ...normalizer(this.resolvedData as any)(infoOrException),
         };
 
         const { nativeError } = this.resolvedData;
         if (nativeError) {
-          (['stack', 'message', 'name'] as const).forEach((nativeProp) => {
+          NATIVE_ERROR_PROPS.forEach((nativeProp) => {
             if (this.data[nativeProp] == null && nativeError[nativeProp]) {
               this.data[nativeProp] = nativeError[nativeProp];
             }
@@ -144,7 +163,6 @@ export function build<
       }
       const data = {
         ...this.data,
-        // messages: this.messages as any,
       };
 
       if (data.name === undefined) {
@@ -173,48 +191,3 @@ export function build<
 
   return BuildedCatcher as unknown as CatcherConstructor<Resolvers, Normalizer>;
 }
-
-// const Hoge = build({
-//   resolvers: [
-//     () => {
-//       return {
-//         axios: {},
-//       };
-//     },
-//   ],
-//   normalizer: (resolvedData) => {
-//     // this!.
-//     // this.
-//     // resolvedData.
-//     const { axios } = resolvedData;
-
-//     return () => {
-//       return {
-//         status: 500,
-//         axiosData: axios,
-//       };
-//     };
-//   },
-// });
-
-// const hoge = new Hoge();
-
-// hoge.resolvedData.
-
-// hoge.data.
-
-// hoge.resolvedData.
-
-// hoge.resolvedData.
-
-// hoge
-// hoge.
-// hoge.
-// hoge.
-// hoge.
-// hoge.
-// hoge.
-// hoge.
-// hoge.s
-
-// hoge.data.
