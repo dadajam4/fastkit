@@ -1,5 +1,11 @@
 # @fastkit/catcher
 
+## 0.13.3
+
+### Patch Changes
+
+- [#116](https://github.com/dadajam4/fastkit/pull/116) [`1db21df`](https://github.com/dadajam4/fastkit/commit/1db21dfffd2df9b88bc481ff19e2a556f175e932) Thanks [@dadajam4](https://github.com/dadajam4)! - Enhanced comments by JSDocs for easier use in development.
+
 ## 0.13.2
 
 ### Patch Changes
