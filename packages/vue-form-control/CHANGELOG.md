@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.16
+
+### Patch Changes
+
+- [#118](https://github.com/dadajam4/fastkit/pull/118) [`275ff19`](https://github.com/dadajam4/fastkit/commit/275ff19573c4f175890ccc157d6cbb29ccc69ca3) Thanks [@dadajam4](https://github.com/dadajam4)! - Added options to customize three states: isDisabled, isReadonly, and canOperation.
+
 ## 0.15.15
 
 ### Patch Changes
