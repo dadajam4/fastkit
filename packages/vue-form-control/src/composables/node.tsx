@@ -77,10 +77,22 @@ function cheepClone<T = any>(source: T): T {
   return source;
 }
 
+export type FormNodeStateExtension = (
+  nodeControl: FormNodeControl,
+  computedValue: boolean,
+) => boolean;
+
+export interface FormNodeStateExtensions {
+  disabled?: FormNodeStateExtension;
+  readonly?: FormNodeStateExtension;
+  canOperation?: FormNodeStateExtension;
+}
+
 export interface FormNodeControlBaseOptions {
   nodeType?: FormNodeType;
   defaultValidateTiming?: ValidateTiming;
   validationValue?: () => any;
+  stateExtensions?: FormNodeStateExtensions;
 }
 
 export interface FormNodeControlOptions<T = any, D = T>
@@ -285,6 +297,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _cii: ComponentInternalInstance | null = null;
   protected _validationValueGetter?: () => any;
   protected _validationSkip = false;
+  protected _stateExtensions: FormNodeStateExtensions;
 
   get service() {
     return this._service;
@@ -518,12 +531,13 @@ export class FormNodeControl<T = any, D = T> {
     this._service = useVueForm();
     this._ctx = ctx;
 
-    const { nodeType } = options;
+    const { nodeType, stateExtensions } = options;
 
     this.__multiple = (props as any).multiple || false;
     this.nodeType = nodeType;
     this.autofocus = props.autofocus;
     this._validationValueGetter = options.validationValue;
+    this._stateExtensions = stateExtensions || {};
 
     const parentNode = useParentFormNode();
     const parentForm = useParentForm();
@@ -581,19 +595,27 @@ export class FormNodeControl<T = any, D = T> {
     });
 
     this._isDisabled = computed(() => {
-      return (
+      const isDisabled =
         props.disabled ||
         (!!parentNode && parentNode.isDisabled) ||
-        this.sending
-      );
+        this.sending;
+
+      const { disabled } = this._stateExtensions;
+      return disabled ? disabled(this, isDisabled) : isDisabled;
     });
 
     this._isReadonly = computed(() => {
-      return props.readonly || (!!parentNode && parentNode.isReadonly);
+      const isReadonly =
+        props.readonly || (!!parentNode && parentNode.isReadonly);
+      const { readonly: readonlyFn } = this._stateExtensions;
+      return readonlyFn ? readonlyFn(this, isReadonly) : isReadonly;
     });
 
     this._canOperation = computed(() => {
-      return !this.isDisabled && !this.isReadonly;
+      const canOperation = !this.isDisabled && !this.isReadonly;
+
+      const { canOperation: canOperationFn } = this._stateExtensions;
+      return canOperationFn ? canOperationFn(this, canOperation) : canOperation;
     });
 
     this._validateTimingIsAlways = computed(() => {
