@@ -12,7 +12,7 @@ import { isSet, isMap, copyBuffer, isArrayBufferView } from '@fastkit/helpers';
  * (key, value) => key === 'password' ? 'xxxxx' : value
  * ```
  */
-export type ClonerKeyProcesser = (key: string, value: any) => any;
+export type ClonerKeyProcessor = (key: string, value: any) => any;
 
 /**
  * Value Processor at Clone
@@ -26,7 +26,7 @@ export type ClonerKeyProcesser = (key: string, value: any) => any;
  * (value) => value instanceof Date ? value.toISOString() : value
  * ```
  */
-export type ClonerValueProcesser = (value: any) => any;
+export type ClonerValueProcessor = (value: any) => any;
 
 /**
  * Clone options
@@ -34,15 +34,15 @@ export type ClonerValueProcesser = (value: any) => any;
 export interface ClonerOptions {
   /**
    * Key & Value Processor at Clone
-   * @note Note that the order of execution of this processor is after the {@link ClonerOptions.valueProcesser valueProcesser}
-   * @see {@link ClonerKeyProcesser}
+   * @note Note that the order of execution of this processor is after the {@link ClonerOptions.valueProcessor valueProcessor}
+   * @see {@link ClonerKeyProcessor}
    */
-  keyProcesser?: ClonerKeyProcesser;
+  keyProcessor?: ClonerKeyProcessor;
   /**
    * Value Processor at Clone
-   * @see {@link ClonerValueProcesser}
+   * @see {@link ClonerValueProcessor}
    */
-  valueProcesser?: ClonerValueProcesser;
+  valueProcessor?: ClonerValueProcessor;
 }
 
 /**
@@ -57,7 +57,7 @@ export type CloneFn<T = any> = (obj: T) => T;
  * @returns Cloning function
  */
 export function Cloner(opts: ClonerOptions = {}) {
-  const { keyProcesser, valueProcesser } = opts;
+  const { keyProcessor, valueProcessor } = opts;
   const refs: any[] = [];
   const refsNew: any[] = [];
 
@@ -70,8 +70,8 @@ export function Cloner(opts: ClonerOptions = {}) {
     for (let i = 0; i < length; i++) {
       const key: any = keys[i];
       let cursor = array[key];
-      if (valueProcesser) {
-        cursor = valueProcesser(cursor);
+      if (valueProcessor) {
+        cursor = valueProcessor(cursor);
       }
       if (typeof cursor !== 'object' || cursor === null) {
         clonedArray[key] = cursor;
@@ -103,11 +103,11 @@ export function Cloner(opts: ClonerOptions = {}) {
     for (const key in obj) {
       if (Object.hasOwnProperty.call(obj, key) === false) continue;
       let cursor = obj[key];
-      if (valueProcesser) {
-        cursor = valueProcesser(cursor);
+      if (valueProcessor) {
+        cursor = valueProcessor(cursor);
       }
-      if (keyProcesser) {
-        cursor = keyProcesser(key, cursor);
+      if (keyProcessor) {
+        cursor = keyProcessor(key, cursor);
       }
       if (typeof cursor !== 'object' || cursor === null) {
         clonedObj[key] = cursor;

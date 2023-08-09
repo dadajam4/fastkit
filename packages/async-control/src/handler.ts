@@ -89,6 +89,7 @@ export class AsyncHandler<Fn extends AsyncFn> {
       enabled = true,
     } = options;
 
+    // eslint-disable-next-line no-console
     this.errorLogger = errorLogger || console.error;
     this.originalFunc = func;
     this.thisObj = thisObj;

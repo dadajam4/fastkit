@@ -34,7 +34,9 @@ export function attemptFocus(element: HTMLElement): boolean {
   // aria.Utils.IgnoreUtilFocusChanges = true;
   try {
     element.focus();
-  } catch (e) {}
+  } catch (e) {
+    // noop
+  }
   // aria.Utils.IgnoreUtilFocusChanges = false;
   return document.activeElement === element;
 }

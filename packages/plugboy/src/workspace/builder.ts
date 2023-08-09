@@ -30,7 +30,7 @@ function safeRemoveCSSMap(cssFilePath: string) {
 }
 
 const SOURCE_MAPPING_URL_COMMENT_RE = /\/\*# sourceMappingURL=.+? \*\//g;
-const allLayerDefRe = /(^|\n)@layer\s+([a-zA-Z\d\-_$\. ,]+);/g;
+const allLayerDefRe = /(^|\n)@layer\s+([a-zA-Z\d\-_$. ,]+);/g;
 const layerDefTrimRe = /((^|\n)@layer\s+|;)/g;
 
 async function getPostcss(

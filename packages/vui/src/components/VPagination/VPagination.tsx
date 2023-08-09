@@ -181,7 +181,9 @@ export const VPagination = defineComponent({
           let result = beforeChange(newPage);
           if (isPromise(result)) result = await result;
           if (result === false) return;
-        } catch (e) {}
+        } catch (e) {
+          // noop
+        }
       }
       if (routeQuery) {
         const to = createRoutableLocationByPage(newPage, routeQuery);

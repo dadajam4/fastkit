@@ -8,7 +8,7 @@ export default defineWorkspaceConfig({
   },
   external: [
     'virtual:generated-pages',
-    /^\@fastkit\/vot/,
+    /^@fastkit\/vot/,
     'node-memwatcher',
     '@airbnb/node-memwatch',
   ],

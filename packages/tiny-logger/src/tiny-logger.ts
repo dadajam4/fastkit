@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ConsoleColorPaletteName, consoleColorString } from './console-color';
 
 const TINY_LOGGER_LOG_TYPES = [

@@ -1,17 +1,39 @@
 import { Transformer } from '../schemes';
 import { Cloner, ClonerOptions } from '@fastkit/cloner';
-import { SanitizeFilter, SanitizeValueProcesser } from './sanitizer';
+import { SanitizeFilter, SanitizeValueProcessor } from './sanitizer';
 
+/**
+ * Clone transformers options
+ */
 export interface CloneOptions {
+  /**
+   * List of filter function to sanitize values
+   *
+   * @see SanitizeFilter
+   */
   sanitizers?: SanitizeFilter[];
-  valueProcesser?: SanitizeValueProcesser;
+  /**
+   * Value Processor at Clone
+   *
+   * @see SanitizeValueProcessor
+   */
+  valueProcessor?: SanitizeValueProcessor;
 }
 
+/**
+ * Generate clone transformer
+ *
+ * - Clone and dereference objects contained in the log payload
+ * - Optionally sanitize values and perform individual conversions
+ *
+ * @param options - Clone transformers options
+ * @returns Log transform function
+ */
 export function CloneTransformer(options: CloneOptions = {}): Transformer {
-  const { sanitizers, valueProcesser } = options;
-  const opts: ClonerOptions = { valueProcesser };
+  const { sanitizers, valueProcessor } = options;
+  const opts: ClonerOptions = { valueProcessor };
   if (sanitizers) {
-    opts.keyProcesser = (key, value) => {
+    opts.keyProcessor = (key, value) => {
       sanitizers.forEach((sanitizer) => {
         value = sanitizer(key, value);
       });

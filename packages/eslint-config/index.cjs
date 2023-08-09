@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   extends: ['prettier'],
   overrides: [
@@ -25,6 +26,7 @@ module.exports = {
         '*.mjs',
       ],
       extends: [
+        'eslint:recommended',
         'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
       ],
       parser: '@typescript-eslint/parser',
@@ -38,6 +40,7 @@ module.exports = {
         },
       },
       rules: {
+        'no-console': 'error',
         // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
         // e.g. "@typescript-eslint/explicit-function-return-type": "off",
         '@typescript-eslint/no-explicit-any': 'off',

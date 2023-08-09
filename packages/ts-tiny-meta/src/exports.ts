@@ -67,7 +67,7 @@ function createMetaGetter(refs: RefQueries) {
 
 const CREATE_META_GETTER_FN_STRING = createMetaGetter
   .toString()
-  .replace(/^([^\/(]+)/, 'function $__createMetaGetter');
+  .replace(/^([^/(]+)/, 'function $__createMetaGetter');
 
 export function hydrateExports<T extends Record<any, any>>(
   source: SourceFileExports,

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 export function deserializeState(state: string) {
   try {
     return JSON.parse(state || '{}');

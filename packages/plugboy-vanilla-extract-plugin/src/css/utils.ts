@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Contract, MapLeafNodes, CSSVarFunction } from './types';
 
 type Primitive = string | number | null | undefined;

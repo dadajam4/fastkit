@@ -30,12 +30,14 @@ export function WysiwygLinterBadWords(
                   </span>
                 ),
                 handler: () => {
+                  // eslint-disable-next-line no-console
                   console.log('hoge');
                 },
               },
               {
                 message: 'どうにかする',
                 handler: () => {
+                  // eslint-disable-next-line no-console
                   console.log('hoge');
                 },
               },

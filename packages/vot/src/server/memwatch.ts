@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 export async function createMemwatch() {
   const { getGc } = await import('./expose-gc');
   const gc = getGc();

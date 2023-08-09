@@ -1,5 +1,5 @@
 import type { datadogLogs, LogsInitConfiguration } from '@datadog/browser-logs';
-import { Transport, LogLevelThreshold, LogLevel } from '../schemes';
+import { Transport, LogLevel } from '../schemes';
 import { CloneTransformer, CloneOptions } from '../transformers/clone';
 
 let dd: typeof datadogLogs | undefined;
@@ -16,13 +16,43 @@ const LEVEL_MAPPINGS: Record<LogLevel, DatadogLevel> = {
   debug: 'debug',
 };
 
-export interface DDTransportSettings {
+/**
+ * Send to Datadog in a browser environment Transport settings
+ */
+export interface DDTransportSettings extends Pick<Transport, 'level'> {
+  /**
+   * datadogLogs namespace object
+   *
+   * @example
+   * ```ts
+   * import { datadogLogs } from '@datadog/browser-logs';
+   * ```
+   *
+   * @see https://github.com/DataDog/browser-sdk#readme
+   */
   dd: typeof datadogLogs;
+  /**
+   * Initialization settings for datadogLogs
+   *
+   * @see LogsInitConfiguration
+   */
   config: LogsInitConfiguration;
-  level?: LogLevelThreshold;
+  /**
+   * Clone transformers options
+   *
+   * @see CloneOptions
+   */
   clone?: CloneOptions;
 }
 
+/**
+ * Generate transports to send to Datadog in the browser environment
+ *
+ * @see https://github.com/DataDog/browser-sdk#readme
+ *
+ * @param settings - Send to Datadog in a browser environment Transport settings
+ * @returns Log transporter
+ */
 export function DDTransport(settings: DDTransportSettings): Transport {
   function getDD() {
     if (dd) return dd;

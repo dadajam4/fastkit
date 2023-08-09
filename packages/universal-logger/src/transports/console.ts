@@ -3,7 +3,6 @@ import { consoleColorString } from '@fastkit/tiny-logger';
 import {
   Transport,
   LogLevel,
-  LogLevelThreshold,
   DEFAULT_COLOR_LEVEL_MAP,
   DEFAULT_LOGGER_NAME,
 } from '../schemes';
@@ -38,16 +37,25 @@ CONSOLE_METHODS.forEach((method) => {
   }
 });
 
-export interface ConsoleTransportSettings {
-  level?: LogLevelThreshold;
+/**
+ * Console transport settings
+ */
+export interface ConsoleTransportSettings extends Pick<Transport, 'level'> {
+  /** Color decoration by log level */
   pretty?: boolean;
 }
 
-export const ConsoleTransport = function (
-  settings: ConsoleTransportSettings = {},
+/**
+ * Generate transport for output to JavaScript console
+ *
+ * @param settings - Console transport settings
+ * @returns Log transporter
+ */
+export function ConsoleTransport(
+  settings?: ConsoleTransportSettings,
 ): Transport {
   return {
-    level: settings.level,
+    level: settings?.level,
     transport(payload) {
       if (typeof console === 'undefined') return;
       const { level, message, args, logger } = payload;
@@ -57,7 +65,7 @@ export const ConsoleTransport = function (
       if (loggerName && loggerName !== DEFAULT_LOGGER_NAME) {
         prefix = `[${loggerName}]${prefix}`;
       }
-      if (settings.pretty) {
+      if (settings?.pretty) {
         const color = DEFAULT_COLOR_LEVEL_MAP[payload.level];
         if (color) {
           prefix = consoleColorString(prefix, color);
@@ -74,4 +82,4 @@ export const ConsoleTransport = function (
       console[func](prefix, ...chunks);
     },
   };
-};
+}

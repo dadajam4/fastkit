@@ -1,5 +1,5 @@
 // https://github.com/yahoo/serialize-javascript
-const UNSAFE_CHARS_REGEXP = /[<>\/\u2028\u2029]/g;
+const UNSAFE_CHARS_REGEXP = /[<>/\u2028\u2029]/g;
 const ESCAPED_CHARS = {
   '<': '\\u003C',
   '>': '\\u003E',
@@ -32,6 +32,7 @@ export function serializeState(state: any) {
     // by the browser as a string for better performance.
     return `'${state}'`;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('[SSR] On state serialization -', error, state);
     return '{}';
   }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // import { build } from './build';
 
 export async function cli() {
