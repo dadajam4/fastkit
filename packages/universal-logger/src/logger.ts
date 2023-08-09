@@ -7,7 +7,7 @@ import {
   MergedNamedSettings,
   LoggerBuilderOptions,
   transformPayload,
-  nomalizeTransports,
+  normalizeTransports,
   LoggerPayload,
   LogLevelThreshold,
   levelToIndex,
@@ -17,11 +17,18 @@ import {
 
 import { isPromise } from '@fastkit/helpers';
 
+/**
+ * Logger
+ */
 export class Logger {
+  /** Logger Name */
   readonly name: string;
+  /** List of {@link Transformer log transform functions} */
   readonly transformers: Transformer[];
+  /** List of {@link Transport Log transporter} */
   readonly transports: Transport[];
 
+  /** {@link LogLevelThreshold Log level thresholds that determine log output} */
   level: LogLevelThreshold;
 
   constructor(name: string, opts: NormalizedLoggerOptions) {
@@ -31,7 +38,14 @@ export class Logger {
     this.level = opts.level || 'trace';
   }
 
-  log(level: LogLevel, ...args: any[]) {
+  /**
+   * Output logs at a specified log level
+   *
+   * @param level - {@link LogLevel Log level}
+   * @param args - List of log arguments
+   * @returns Promise instance of log output result
+   */
+  log(level: LogLevel, ...args: any[]): Promise<any[]> {
     let payload = createPayload(this.name, level, ...args);
     const logLevelIndex = levelToIndex(payload.level);
 
@@ -57,33 +71,63 @@ export class Logger {
       },
     );
 
-    return results;
+    return Promise.all(results);
   }
 
+  /**
+   * Output logs at the `trace` level
+   * @param args - List of log arguments
+   * @returns Promise instance of log output result
+   */
   trace(...args: any[]) {
     return this.log('trace', ...args);
   }
 
+  /**
+   * Output logs at the `debug` level
+   * @param args - List of log arguments
+   * @returns Promise instance of log output result
+   */
   debug(...args: any[]) {
     return this.log('debug', ...args);
   }
 
+  /**
+   * Output logs at the `info` level
+   * @param args - List of log arguments
+   * @returns Promise instance of log output result
+   */
   info(...args: any[]) {
     return this.log('info', ...args);
   }
 
+  /**
+   * Output logs at the `warn` level
+   * @param args - List of log arguments
+   * @returns Promise instance of log output result
+   */
   warn(...args: any[]) {
     return this.log('warn', ...args);
   }
 
+  /**
+   * Output logs at the `error` level
+   * @param args - List of log arguments
+   * @returns Promise instance of log output result
+   */
   error(...args: any[]) {
     return this.log('error', ...args);
   }
 }
 
-export function combineFormater(...transformers: Transformer[]): Transformer {
+/**
+ * Combine multiple Transformers to generate a single log formatter function
+ * @param transformers - List of {@link Transformer log transform functions}
+ * @returns Combined {@link Transformer log transform functions}
+ */
+export function combineFormatter(...transformers: Transformer[]): Transformer {
   if (transformers.length === 1) return transformers[0];
-  return function combinedFormater(payload: LoggerPayload) {
+  return function combinedFormatter(payload: LoggerPayload) {
     transformers.forEach((transformer) => {
       payload = transformer(payload);
     });
@@ -91,11 +135,43 @@ export function combineFormater(...transformers: Transformer[]): Transformer {
   };
 }
 
-export function loggerBuilder(opts: LoggerBuilderOptions = {}): {
+/**
+ * Logger generation results
+ */
+export interface LoggerBuilderResult {
+  /**
+   * Retrieve loggers with specified name
+   *
+   * - If no name is specified, the `default` logger name default will be set
+   * - Once a logger instance is created, it is cached and will be reused the next time a logger acquisition request with the same name is made.
+   *
+   * @param name - Logger Name
+   * @returns Logger instance
+   */
   getLogger: (name?: string) => Logger;
+  /**
+   * Retrieves {@link NormalizedLoggerOptions logger options} corresponding to the specified logger name
+   * @param name - Logger Name
+   * @returns Logger options
+   */
   getNamedSettings: (name: string) => NormalizedLoggerOptions;
+  /**
+   * Constructor of the generated logger class
+   *
+   * * Normally it is not necessary to instantiate a logger from this constructor. To retrieve the logger, use the {@link LoggerBuilderResult.getLogger getLogger()} method.
+   */
   Logger: typeof Logger;
-} {
+}
+
+/**
+ * Generate loggers corresponding to the specified options
+ *
+ * @param opts - {@link LoggerBuilderOptions Logger builder options}
+ * @returns Logger generation results
+ */
+export function loggerBuilder(
+  opts: LoggerBuilderOptions = {},
+): LoggerBuilderResult {
   const { defaultSettings = {}, namedSettings = {} } = opts;
   const mergedNamedSettings = {} as MergedNamedSettings;
   const caches: {
@@ -107,7 +183,7 @@ export function loggerBuilder(opts: LoggerBuilderOptions = {}): {
     transformers: defaultTransformers = [],
   } = defaultSettings;
 
-  const defaultTransports = nomalizeTransports(defaultSettings.transports);
+  const defaultTransports = normalizeTransports(defaultSettings.transports);
 
   Object.keys(namedSettings).forEach((name) => {
     const {
@@ -118,7 +194,7 @@ export function loggerBuilder(opts: LoggerBuilderOptions = {}): {
     const merged: NormalizedLoggerOptions = {
       level,
       transformers: [...defaultTransformers, ...transformers],
-      transports: [...defaultTransports, ...nomalizeTransports(transports)],
+      transports: [...defaultTransports, ...normalizeTransports(transports)],
     };
     mergedNamedSettings[name] = merged;
   });
