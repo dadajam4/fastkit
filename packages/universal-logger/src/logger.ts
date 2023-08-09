@@ -23,12 +23,24 @@ import { isPromise } from '@fastkit/helpers';
 export class Logger {
   /** Logger Name */
   readonly name: string;
-  /** List of {@link Transformer log transform functions} */
+  /**
+   * List of log transform functions
+   *
+   * @see Transformer
+   */
   readonly transformers: Transformer[];
-  /** List of {@link Transport Log transporter} */
+  /**
+   * List of Log transporter
+   *
+   * @see Transport
+   */
   readonly transports: Transport[];
 
-  /** {@link LogLevelThreshold Log level thresholds that determine log output} */
+  /**
+   * Log level thresholds that determine log output
+   *
+   * @see LogLevelThreshold
+   */
   level: LogLevelThreshold;
 
   constructor(name: string, opts: NormalizedLoggerOptions) {
@@ -41,7 +53,7 @@ export class Logger {
   /**
    * Output logs at a specified log level
    *
-   * @param level - {@link LogLevel Log level}
+   * @param level - Log level
    * @param args - List of log arguments
    * @returns Promise instance of log output result
    */
@@ -122,8 +134,8 @@ export class Logger {
 
 /**
  * Combine multiple Transformers to generate a single log formatter function
- * @param transformers - List of {@link Transformer log transform functions}
- * @returns Combined {@link Transformer log transform functions}
+ * @param transformers - List of log transform functions
+ * @returns Combined log transform functions
  */
 export function combineFormatter(...transformers: Transformer[]): Transformer {
   if (transformers.length === 1) return transformers[0];
@@ -150,7 +162,7 @@ export interface LoggerBuilderResult {
    */
   getLogger: (name?: string) => Logger;
   /**
-   * Retrieves {@link NormalizedLoggerOptions logger options} corresponding to the specified logger name
+   * Retrieves logger options corresponding to the specified logger name
    * @param name - Logger Name
    * @returns Logger options
    */
@@ -158,7 +170,7 @@ export interface LoggerBuilderResult {
   /**
    * Constructor of the generated logger class
    *
-   * * Normally it is not necessary to instantiate a logger from this constructor. To retrieve the logger, use the {@link LoggerBuilderResult.getLogger getLogger()} method.
+   * * Normally it is not necessary to instantiate a logger from this constructor. To retrieve the logger, use the getLogger() method.
    */
   Logger: typeof Logger;
 }
@@ -166,7 +178,7 @@ export interface LoggerBuilderResult {
 /**
  * Generate loggers corresponding to the specified options
  *
- * @param opts - {@link LoggerBuilderOptions Logger builder options}
+ * @param opts - Logger builder options
  * @returns Logger generation results
  */
 export function loggerBuilder(

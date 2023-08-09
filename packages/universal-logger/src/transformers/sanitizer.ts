@@ -15,7 +15,11 @@ export type SanitizeFilter = (key: string, value: any) => any;
  * Sanitizing transformer options
  */
 export interface SanitizerOptions {
-  /** List of {@link SanitizeFilter filter function to sanitize values} */
+  /**
+   * List of filter function to sanitize values
+   *
+   * @see SanitizeFilter
+   */
   filters: SanitizeFilter[];
   /**
    * Value Processor at Clone
@@ -29,10 +33,12 @@ export interface SanitizerOptions {
  * Generating sanitizing transformer
  *
  * - Generates a transformer to recursively sanitize object values
- * - Internal processing uses {@link Cloner}, so processed values are completely cloned and dereferenced
+ * - Internal processing uses Cloner, so processed values are completely cloned and dereferenced
  *
- * @param options - {@link SanitizerOptions Sanitizing transformer options}
+ * @param options - Sanitizing transformer options
  * @returns Log transform function
+ *
+ * @see Cloner
  */
 export function SanitizerTransformer(options: SanitizerOptions): Transformer {
   const { filters, valueProcessor } = options;

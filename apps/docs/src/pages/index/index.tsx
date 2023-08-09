@@ -41,11 +41,33 @@ export default defineComponent({
               match: PACKAGES_MATCH,
               label: trans.packages,
               startIcon: 'mdi-package-variant',
-              children: packages.map((pkg) => ({
-                key: pkg.name,
-                label: () => <span class="notranslate">{pkg.name}</span>,
-                to: `/${pkg.name}/`,
-              })),
+              children: packages.map((pkg) => {
+                return {
+                  key: pkg.name,
+                  label: () => <span class="notranslate">{pkg.name}</span>,
+                  to: `/${pkg.name}/`,
+                  children:
+                    pkg.name === 'universal-logger'
+                      ? [
+                          {
+                            key: 'builder',
+                            label: () => <span class="ml-2">Builder API</span>,
+                            to: `/${pkg.name}/builder/`,
+                          },
+                          {
+                            key: 'transformers',
+                            label: () => <span class="ml-2">Transformers</span>,
+                            to: `/${pkg.name}/transformers/`,
+                          },
+                          {
+                            key: 'transports',
+                            label: () => <span class="ml-2">Transports</span>,
+                            to: `/${pkg.name}/transports/`,
+                          },
+                        ]
+                      : undefined,
+                };
+              }),
             },
           ],
         },

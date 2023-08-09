@@ -1,31 +1,23 @@
 import { defineComponent } from 'vue';
-import { VDocsSection, VCode } from '~/components';
 import { VPackageProvider } from 'virtual:package-provider:universal-logger';
 import { i18n } from '@@/i18n';
 import { pkg } from './-i18n';
+import { ApiMeta } from './-shared';
+import { VPage } from '@fastkit/vot';
 
-const PkgI18nSubSpace = i18n.defineSubSpace({ pkg });
+export const PkgI18nSubSpace = i18n.defineSubSpace({ pkg });
 
 export default defineComponent({
   i18n: PkgI18nSubSpace,
+  prefetch: ApiMeta.prefetch,
   setup() {
-    const pkgI18n = PkgI18nSubSpace.use();
-    const { common } = pkgI18n.at;
+    new ApiMeta();
 
     return () => {
       return (
         <VPackageProvider
           v-slots={{
-            default: ({ pkg }) => (
-              <>
-                {pkg.renderHeader()}
-                <VDocsSection title={common.t.usage}>
-                  <VCode language="ts">
-                    {`// ${common.t.docIsInPreparation}`}
-                  </VCode>
-                </VDocsSection>
-              </>
-            ),
+            default: () => <VPage />,
           }}
         />
       );

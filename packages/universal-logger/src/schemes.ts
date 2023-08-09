@@ -64,7 +64,11 @@ interface Meta {
  * This payload is passed on to the transformer or transport method in turn
  */
 export interface LoggerPayload<M extends Meta = Meta> {
-  /** {@link LogLevel Log level} */
+  /**
+   * Log level
+   *
+   * @see LogLevel
+   */
   level: LogLevel;
   /** Logger Information */
   logger: {
@@ -98,14 +102,22 @@ export type TransportFunc = (payload: LoggerPayload) => any | Promise<any>;
  */
 export interface Transport {
   /**
-   * {@link LogLevelThreshold Log level thresholds that determine log output}
+   * Log level thresholds that determine log output
    *
    * * If not set, the threshold set in the logger will be selected
    */
   level?: LogLevelThreshold;
-  /** List of transform functions */
+  /**
+   * List of transform functions
+   *
+   * @see Transformer
+   */
   transformers?: Transformer[];
-  /** {@link TransportFunc Log output function} */
+  /**
+   * Log output function
+   *
+   * @see TransportFunc
+   */
   transport: TransportFunc;
 }
 
@@ -115,8 +127,8 @@ export interface Transport {
 export type RawTransport = TransportFunc | Transport;
 
 /**
- * Normalize log transport specification to {@link Transport log transporter}
- * @param source - {@link RawTransport Log transport specification}
+ * Normalize log transport specification to log transporter
+ * @param source - Log transport specification
  * @returns Log transporter
  */
 export function normalizeTransport(source: RawTransport): Transport {
@@ -137,14 +149,24 @@ export function normalizeTransports(source?: RawTransport[]): Transport[] {
  */
 export interface LoggerOptions {
   /**
-   * {@link LogLevelThreshold Log level thresholds that determine log output}
+   * Log level thresholds that determine log output
    *
    * @default "trace"
+   *
+   * @see LogLevelThreshold
    */
   level?: LogLevelThreshold;
-  /** List of transform functions */
+  /**
+   * List of transform functions
+   *
+   * @see Transformer
+   */
   transformers?: Transformer[];
-  /** List of {@link TransportFunc log output function} */
+  /**
+   * List of log output function
+   *
+   * @see RawTransport
+   */
   transports?: RawTransport[];
 }
 
@@ -152,9 +174,17 @@ export interface LoggerOptions {
  * Normalized logger options
  */
 export interface NormalizedLoggerOptions extends Pick<LoggerOptions, 'level'> {
-  /** List of transform functions */
+  /**
+   * List of transform functions
+   *
+   * @see Transformer
+   */
   transformers: Transformer[];
-  /** List of {@link TransportFunc log output function} */
+  /**
+   * List of log output function
+   *
+   * @see Transport
+   */
   transports: Transport[];
 }
 
@@ -162,7 +192,11 @@ export interface NormalizedLoggerOptions extends Pick<LoggerOptions, 'level'> {
  * Map of logger options by name
  */
 export interface LoggerNamedSettings {
-  /** {@link LoggerOptions Logger Options} */
+  /**
+   * Logger Options
+   *
+   * @see LoggerOptions
+   */
   [key: string]: LoggerOptions;
 }
 
@@ -170,7 +204,11 @@ export interface LoggerNamedSettings {
  * Map of normalized logger options by name
  */
 export interface MergedNamedSettings {
-  /** {@link NormalizedLoggerOptions Normalized logger Options} */
+  /**
+   * Normalized logger Options
+   *
+   * @see NormalizedLoggerOptions
+   */
   [key: string]: NormalizedLoggerOptions;
 }
 
@@ -185,7 +223,9 @@ export interface LoggerBuilderOptions {
    */
   defaultSettings?: LoggerOptions;
   /**
-   * {@link LoggerNamedSettings Map of logger options by name}
+   * Map of logger options by name
+   *
+   * @see LoggerNamedSettings
    */
   namedSettings?: LoggerNamedSettings;
 }
@@ -210,7 +250,7 @@ function extractObjectMessage(source: any): string | undefined {
  * Create logger payload
  *
  * @param loggerName - Logger Name
- * @param level - {@link LogLevel Log level}
+ * @param level - Log level
  * @param args - List of log arguments
  * @returns Logger payload
  */
@@ -256,8 +296,8 @@ export function createPayload(
 /**
  * Process logger payloads with a specified list of transformers
  *
- * @param payload - {@link LoggerPayload Logger payload}
- * @param transformers - List of {@link Transformer log transform function}
+ * @param payload - Logger payload
+ * @param transformers - List of log transform function
  * @returns Processed logger payload
  */
 export function transformPayload(

@@ -26,7 +26,7 @@ export interface CloneOptions {
  * - Clone and dereference objects contained in the log payload
  * - Optionally sanitize values and perform individual conversions
  *
- * @param options - {@link CloneOptions Clone transformers options}
+ * @param options - Clone transformers options
  * @returns Log transform function
  */
 export function CloneTransformer(options: CloneOptions = {}): Transformer {

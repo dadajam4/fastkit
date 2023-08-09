@@ -21,7 +21,7 @@ const LEVEL_MAPPINGS: Record<LogLevel, DatadogLevel> = {
  */
 export interface DDTransportSettings extends Pick<Transport, 'level'> {
   /**
-   * {@link datadogLogs} namespace object
+   * datadogLogs namespace object
    *
    * @example
    * ```ts
@@ -32,10 +32,16 @@ export interface DDTransportSettings extends Pick<Transport, 'level'> {
    */
   dd: typeof datadogLogs;
   /**
-   * {@link LogsInitConfiguration Initialization settings for datadogLogs}
+   * Initialization settings for datadogLogs
+   *
+   * @see LogsInitConfiguration
    */
   config: LogsInitConfiguration;
-  /** {@link CloneOptions Clone transformers options } */
+  /**
+   * Clone transformers options
+   *
+   * @see CloneOptions
+   */
   clone?: CloneOptions;
 }
 
@@ -44,7 +50,7 @@ export interface DDTransportSettings extends Pick<Transport, 'level'> {
  *
  * @see https://github.com/DataDog/browser-sdk#readme
  *
- * @param settings - {@link DDTransportSettings Send to Datadog in a browser environment Transport settings}
+ * @param settings - Send to Datadog in a browser environment Transport settings
  * @returns Log transporter
  */
 export function DDTransport(settings: DDTransportSettings): Transport {

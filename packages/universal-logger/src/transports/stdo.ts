@@ -8,7 +8,11 @@ import { CloneTransformer, CloneOptions } from '../transformers/clone';
  * Standard output transport settings
  */
 export interface STDOTransportSettings extends Pick<Transport, 'level'> {
-  /** {@link CloneOptions Clone transformers options } */
+  /**
+   * Clone transformers options
+   *
+   * @see CloneOptions
+   */
   clone?: CloneOptions;
   /**
    * Format and colorize output at the log level
@@ -21,7 +25,7 @@ export interface STDOTransportSettings extends Pick<Transport, 'level'> {
 /**
  * Generate standard output transport
  *
- * @param settings - {@link STDOTransportSettings Standard output transport settings}
+ * @param settings - Standard output transport settings
  * @returns Log transporter
  */
 export function STDOTransport(settings?: STDOTransportSettings): Transport {

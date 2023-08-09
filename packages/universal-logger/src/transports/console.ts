@@ -48,7 +48,7 @@ export interface ConsoleTransportSettings extends Pick<Transport, 'level'> {
 /**
  * Generate transport for output to JavaScript console
  *
- * @param settings - {@link ConsoleTransportSettings Console transport settings}
+ * @param settings - Console transport settings
  * @returns Log transporter
  */
 export function ConsoleTransport(
