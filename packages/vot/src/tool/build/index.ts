@@ -25,6 +25,7 @@ import type {
 import { generate } from '../generate';
 
 export async function build(inlineBuildOptions: BuildOptions = {}) {
+  // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve) => {
     const viteConfig = await resolveViteConfig();
     const findVotPluginResult = findVotPlugin(viteConfig.plugins);

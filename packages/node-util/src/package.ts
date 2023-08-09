@@ -51,6 +51,7 @@ export async function findPackage(
     from = path.dirname(from);
   }
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const target = path.join(from, 'package.json');
     try {
@@ -109,6 +110,7 @@ export function findPackageSync(
     from = path.dirname(from);
   }
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const target = path.join(from, 'package.json');
     try {

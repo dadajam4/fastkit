@@ -1,3 +1,5 @@
+import { logger } from '../logger';
+
 export function isBodyElement(el: Element): el is HTMLBodyElement {
   return el.tagName.toLowerCase() === 'body';
 }
@@ -71,9 +73,7 @@ export function off(
 }
 
 export function warn(message: string): void {
-  if (typeof console === 'object' && console.warn) {
-    console.warn(`[scroll] ${message}`);
-  }
+  logger.warn(message);
 }
 
 export function error(message: string): Error {

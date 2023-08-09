@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import { getProject } from '../project';

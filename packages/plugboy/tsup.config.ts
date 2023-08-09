@@ -28,5 +28,5 @@ export default defineConfig({
   outExtension: ({ format }) => ({
     js: `.mjs`,
   }),
-  external: [/^@vanilla\-extract/, /^@babel/, /^@vue/, 'typescript', 'postcss'],
+  external: [/^@vanilla-extract/, /^@babel/, /^@vue/, 'typescript', 'postcss'],
 });

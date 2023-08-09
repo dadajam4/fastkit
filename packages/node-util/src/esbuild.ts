@@ -130,6 +130,7 @@ export async function esbuildRequire<T = any>(
 
   let m: T | undefined = undefined;
 
+  // eslint-disable-next-line no-useless-catch
   try {
     m = require(outfile);
   } catch (err) {

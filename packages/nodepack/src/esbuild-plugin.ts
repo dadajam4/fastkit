@@ -1,7 +1,7 @@
 import type { Plugin } from 'esbuild';
 import { NodeExternalPluginOptions } from './schemes';
 
-const NON_NODE_MODULE_RE = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
+const NON_NODE_MODULE_RE = /^[^./]|^\.[^./]|^\.\.[^/]/;
 const ALIAS_LIKE_RE = /^[~@$]+\//;
 
 export function nodeExternalPlugin(

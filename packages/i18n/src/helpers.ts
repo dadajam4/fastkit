@@ -1,7 +1,7 @@
 import { isPlainObject } from '@fastkit/helpers';
 import { logger } from './logger';
 
-const normalizeLocaleRe = /[_\-]/g;
+const normalizeLocaleRe = /[_-]/g;
 
 export function normalizeLocale(locale: string) {
   return locale.replace(normalizeLocaleRe, '-').toLowerCase();
@@ -42,6 +42,7 @@ export function resolveLocale<
   }
   localeLikeString = normalizeLocale(localeLikeString as string);
   let resolved: LocaleName | undefined;
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     for (const locale of availableLocales) {
       const normalizedLocale = normalizeLocale(locale);

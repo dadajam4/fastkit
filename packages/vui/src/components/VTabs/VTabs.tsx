@@ -190,7 +190,6 @@ export const VTabs = defineComponent({
         if (isPromise(result)) {
           result = await result;
         }
-        console.log(result);
         if (result === false) {
           return;
         }

@@ -71,6 +71,7 @@ function getMergeFunction(
 function getEnumerableOwnPropertySymbols(target: any) {
   return Object.getOwnPropertySymbols
     ? Object.getOwnPropertySymbols(target).filter((symbol) =>
+        // eslint-disable-next-line no-prototype-builtins
         target.propertyIsEnumerable(symbol),
       )
     : [];

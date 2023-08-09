@@ -966,6 +966,7 @@ export class FormNodeControl<T = any, D = T> {
   }
 
   validateSelf(force?: boolean): Promise<ValidationResult> {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve) => {
       this.setShouldValidate(true);
       if (!force && !this._lastValidateValueChanged && !this.validating) {

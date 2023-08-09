@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from 'node:path';
 import express, { Express } from 'express';
 import {

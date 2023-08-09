@@ -29,7 +29,7 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
       async setupWorkspace(ctx) {
         const { external = [] } = ctx.config;
 
-        ctx.config.external = [...external, /@vanilla\-extract/];
+        ctx.config.external = [...external, /@vanilla-extract/];
 
         ctx.meta.hasVanillaExtract = await !!findFile(
           ctx.dirs.src.value,

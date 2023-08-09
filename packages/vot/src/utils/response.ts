@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { defer } from './defer';
 import type { WrittenResponse, WriteResponseFn, RedirectFn } from '../schemes';
 

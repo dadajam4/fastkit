@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 export function findDependencies(
   modules: string[],
   manifest: Record<string, string[]>,
