@@ -1,5 +1,15 @@
 # @fastkit/icon-font-gen
 
+## 0.13.9
+
+### Patch Changes
+
+- Updated dependencies [[`5b881b9`](https://github.com/dadajam4/fastkit/commit/5b881b94ce1852c12cc3c8f6954564d5235cba4d)]:
+  - @fastkit/tiny-logger@0.13.2
+  - @fastkit/node-util@0.13.3
+  - @fastkit/helpers@0.13.2
+  - @fastkit/icon-font@1.0.8
+
 ## 0.13.8
 
 ### Patch Changes

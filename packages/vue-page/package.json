@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-page",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "Middleware for more convenient control of routing in Vue applications.",
   "keywords": [
     "fastkit",

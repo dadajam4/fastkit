@@ -1,5 +1,14 @@
 # @fastkit/vot-i18n
 
+## 3.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`5b881b9`](https://github.com/dadajam4/fastkit/commit/5b881b94ce1852c12cc3c8f6954564d5235cba4d)]:
+  - @fastkit/vot@0.15.2
+  - @fastkit/vue-i18n@0.13.4
+  - @fastkit/accept-language@0.13.2
+
 ## 3.0.1
 
 ### Patch Changes
