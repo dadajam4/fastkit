@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color-scheme",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "An implementation to control the schema associated with \"color\".",
   "keywords": [
     "fastkit",

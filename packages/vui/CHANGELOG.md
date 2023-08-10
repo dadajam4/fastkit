@@ -1,5 +1,37 @@
 # @fastkit/vui
 
+## 0.16.28
+
+### Patch Changes
+
+- [#120](https://github.com/dadajam4/fastkit/pull/120) [`5b881b9`](https://github.com/dadajam4/fastkit/commit/5b881b94ce1852c12cc3c8f6954564d5235cba4d) Thanks [@dadajam4](https://github.com/dadajam4)! - JSDocs were added and no-console lint improvements were made.
+
+- Updated dependencies [[`5b881b9`](https://github.com/dadajam4/fastkit/commit/5b881b94ce1852c12cc3c8f6954564d5235cba4d)]:
+  - @fastkit/vue-form-control@0.15.17
+  - @fastkit/tiny-logger@0.13.2
+  - @fastkit/helpers@0.13.2
+  - @fastkit/dom@0.1.2
+  - @fastkit/color-scheme@1.0.9
+  - @fastkit/color-scheme-gen@0.13.9
+  - @fastkit/media-match-gen@0.13.9
+  - @fastkit/rules@0.13.3
+  - @fastkit/vue-app-layout@0.14.3
+  - @fastkit/vue-color-scheme@0.14.4
+  - @fastkit/vue-loading@0.14.5
+  - @fastkit/vue-scroller@0.14.3
+  - @fastkit/vue-stack@0.15.15
+  - @fastkit/vue-body-scroll-lock@0.1.4
+  - @fastkit/vue-media-match@0.13.9
+  - @fastkit/vue-resize@0.1.4
+  - @fastkit/vue-transitions@0.1.5
+  - @fastkit/vue-utils@0.14.2
+  - @fastkit/icon-font@1.0.8
+  - @fastkit/media-match@1.0.8
+  - @fastkit/vue-keyboard@0.1.2
+  - @fastkit/vue-action@0.2.4
+  - @fastkit/vue-click-outside@0.1.4
+  - @fastkit/vue-location@0.1.4
+
 ## 0.16.27
 
 ### Patch Changes

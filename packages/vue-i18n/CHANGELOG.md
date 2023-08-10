@@ -1,5 +1,15 @@
 # @fastkit/vue-i18n
 
+## 0.13.4
+
+### Patch Changes
+
+- Updated dependencies [[`5b881b9`](https://github.com/dadajam4/fastkit/commit/5b881b94ce1852c12cc3c8f6954564d5235cba4d)]:
+  - @fastkit/tiny-logger@0.13.2
+  - @fastkit/helpers@0.13.2
+  - @fastkit/i18n@0.13.2
+  - @fastkit/vue-utils@0.14.2
+
 ## 0.13.3
 
 ### Patch Changes
