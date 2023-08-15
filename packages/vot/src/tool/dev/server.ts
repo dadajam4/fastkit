@@ -189,7 +189,7 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
         __VOT_GENERATE__: false,
       },
     },
-    server: options.server || { ...options },
+    server: options.server || { ...(options as any) },
   });
 
   const isMiddlewareMode = !!(

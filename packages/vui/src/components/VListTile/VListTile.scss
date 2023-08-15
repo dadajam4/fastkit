@@ -21,15 +21,16 @@
     color: var(--tile-text-color) !important;
     text-align: left;
     text-decoration: none;
+    appearance: none;
     user-select: none;
     background: var(--tile-background);
     border: 0;
     border-left: 3px solid var(--tile-pin-color);
     border-radius: 0;
     outline: 0;
-    transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    transition:
+      color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
       background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    appearance: none;
 
     &--clickable {
       cursor: pointer;

@@ -168,7 +168,9 @@
         width: 25px;
         font-size: 1.25em;
         opacity: 0;
-        transition: transform 0.2s, opacity 0.2s;
+        transition:
+          transform 0.2s,
+          opacity 0.2s;
 
         // stylelint-disable-next-line no-descending-specificity
         &--empty {

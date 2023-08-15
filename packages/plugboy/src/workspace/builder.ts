@@ -318,12 +318,19 @@ function __plugboyPublicDir(...paths) {
 
   async normalizeDTSFile(filePath: string) {
     const dts = await fs.readFile(filePath, 'utf-8');
-    const { preserveType } = this.dts;
+    const { preserveType, normalizers } = this.dts;
     let normalized = dts;
     let processed = false;
     for (const settings of preserveType) {
       const _normalized = this.normalizeDTSBySettings(normalized, settings);
       if (_normalized) {
+        processed = true;
+        normalized = _normalized;
+      }
+    }
+    for (const normalizer of normalizers) {
+      const _normalized = await normalizer(normalized, this);
+      if (_normalized && normalized !== _normalized) {
         processed = true;
         normalized = _normalized;
       }

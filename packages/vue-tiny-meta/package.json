@@ -63,10 +63,10 @@
   },
   "dependencies": {
     "@fastkit/ts-tiny-meta": "workspace:*",
-    "magic-string": "^0.30.0"
+    "magic-string": "^0.30.2"
   },
   "devDependencies": {
-    "vite": "^4.3.5"
+    "vite": "^4.4.9"
   },
   "peerDependencies": {
     "vite": "^4.3.0"

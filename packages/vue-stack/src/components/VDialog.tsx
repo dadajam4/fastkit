@@ -9,6 +9,7 @@ import { createStackableDefine, MergeStackBaseSlots } from '../schemes';
 import {
   DefineStackableSettings,
   setupStackableComponent,
+  EmitsToPropOptions,
 } from '../composables';
 import { VueStackError } from '../logger';
 
@@ -61,7 +62,9 @@ export function defineDialogComponent<
     props: {
       ...baseScheme.props,
       ...props,
-    } as typeof baseScheme.props & Props,
+    } as typeof baseScheme.props &
+      Props &
+      EmitsToPropOptions<typeof baseScheme.emits & Emits>,
     emits: {
       ...baseScheme.emits,
       ...emits,

@@ -22,7 +22,9 @@
 }
 
 @mixin elevation($z, $important: false) {
-  box-shadow: var(--shadow-key-umbra-#{$z}), var(--shadow-key-penumbra-#{$z}),
+  box-shadow:
+    var(--shadow-key-umbra-#{$z}),
+    var(--shadow-key-penumbra-#{$z}),
     var(--shadow-key-ambient-#{$z}) if($important, unquote('!important'), null);
 }
 
@@ -46,6 +48,7 @@
   @include remove-tap-highlight;
 
   padding: 0;
+  appearance: none;
   touch-action: manipulation;
   cursor: pointer;
   user-select: none;
@@ -53,7 +56,6 @@
   // background-color: transparent;
   border-width: 0;
   outline: 0;
-  appearance: none;
 
   &,
   &:hover,
