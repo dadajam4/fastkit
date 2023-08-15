@@ -1,5 +1,11 @@
 # @fastkit/eslint-config-vue
 
+## 0.13.7
+
+### Patch Changes
+
+- [#124](https://github.com/dadajam4/fastkit/pull/124) [`57e8b39`](https://github.com/dadajam4/fastkit/commit/57e8b396b97f168f57bbcf4c0e6e571bc2793813) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed conflict between Vue formatting warnings and Prettier rules.
+
 ## 0.13.6
 
 ### Patch Changes
