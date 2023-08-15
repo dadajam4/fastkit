@@ -80,13 +80,13 @@
     "bundle-require": "^4.0.1",
     "cac": "^6.7.14",
     "cssnano": "^6.0.1",
-    "esbuild": "^0.17.19",
-    "execa": "^7.1.1",
+    "esbuild": "^0.18.20",
+    "execa": "^7.2.0",
     "glob": "^9.3.5",
-    "inquirer": "^9.2.2",
+    "inquirer": "^9.2.10",
     "pkg-types": "^1.0.3",
-    "sort-package-json": "^2.4.1",
-    "tsup": "^6.7.0"
+    "sort-package-json": "^2.5.1",
+    "tsup": "^7.2.0"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.3"

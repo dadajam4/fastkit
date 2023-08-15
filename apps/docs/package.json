@@ -28,7 +28,7 @@
     "@fastkit/vue-transitions": "workspace:*",
     "@fastkit/vui": "workspace:*",
     "@fastkit/vui-wysiwyg": "workspace:*",
-    "@types/marked": "^4.3.0",
+    "@types/marked": "^4.3.1",
     "marked": "^4.3.0"
   },
   "devDependencies": {

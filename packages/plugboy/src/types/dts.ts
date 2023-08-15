@@ -1,3 +1,5 @@
+import type { Builder } from '../workspace';
+
 /**
  * Type preservation target in d.ts file
  */
@@ -64,6 +66,16 @@ export function normalizeDTSPreserveTypeSettings(
 }
 
 /**
+ * Function to normalize d.ts strings
+ * @param dts - Bundled d.ts strings
+ * @param builder - Builder
+ */
+export type DTSNormalizer = (
+  dts: string,
+  builder: Builder,
+) => string | undefined | void | Promise<string | undefined | void>;
+
+/**
  * d.ts output setting
  */
 export interface DTSSettings {
@@ -82,6 +94,11 @@ export interface DTSSettings {
    * @see {@link DTSPreserveTypeSettings}
    */
   preserveType?: DTSPreserveTypeSettings[];
+
+  /**
+   * list of function to normalize d.ts strings
+   */
+  normalizers?: DTSNormalizer[];
 }
 
 /**
@@ -99,15 +116,25 @@ export interface NormalizedDTSSettings {
    * list of type preservation settings
    */
   preserveType: NormalizedDTSPreserveTypeSettings[];
+
+  /**
+   * list of function to normalize d.ts strings
+   */
+  normalizers: DTSNormalizer[];
 }
 
 export function normalizeDTSSettings(
   settings: DTSSettings,
 ): NormalizedDTSSettings {
-  const { inline = false, preserveType = [] } = settings || {};
+  const {
+    inline = false,
+    preserveType = [],
+    normalizers = [],
+  } = settings || {};
   return {
     inline,
     preserveType: preserveType.map(normalizeDTSPreserveTypeSettings),
+    normalizers,
   };
 }
 
@@ -117,11 +144,15 @@ export function mergeDTSSettingsList(
   const merged: DTSSettings = {};
   settingsList.forEach((settings) => {
     if (!settings) return;
-    const { inline, preserveType } = settings;
+    const { inline, preserveType, normalizers } = settings;
     if (inline !== undefined) merged.inline = inline;
     if (preserveType) {
       merged.preserveType = merged.preserveType || [];
       merged.preserveType.push(...preserveType);
+    }
+    if (normalizers) {
+      merged.normalizers = merged.normalizers || [];
+      merged.normalizers.push(...normalizers);
     }
   });
   return normalizeDTSSettings(merged);

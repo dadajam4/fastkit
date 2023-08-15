@@ -34,9 +34,10 @@ export interface RendererOptions {
 }
 
 export interface Renderer {
-  (url: string | URL, options?: RendererOptions): Promise<
-    Rendered | WrittenResponse
-  >;
+  (
+    url: string | URL,
+    options?: RendererOptions,
+  ): Promise<Rendered | WrittenResponse>;
 }
 
 export interface SSRPageDescriptor {

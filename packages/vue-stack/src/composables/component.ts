@@ -6,6 +6,8 @@ import {
   EmitsOptions,
   SetupContext,
   SlotsType,
+  PropType,
+  ObjectEmitsOptions,
 } from 'vue';
 import {
   VStackControl,
@@ -45,6 +47,32 @@ export interface DefineStackableSettings<
     ctx: StackableSetupContext<Props, Emits, Slots, CustomAPI>,
   ) => VNode;
 }
+
+/**
+ * @TODO Utility to temporarily deal with the fact that emits options can no longer be merged since vue3.4.
+ */
+export type EmitsToPropOptions<T extends EmitsOptions> = T extends string[]
+  ? {
+      [K in string & `on${Capitalize<T[number]>}`]: PropType<
+        (...args: any[]) => any
+      >;
+    }
+  : T extends ObjectEmitsOptions
+  ? {
+      [K in string &
+        `on${Capitalize<string & keyof T>}`]: K extends `on${infer C}`
+        ? T[Uncapitalize<C>] extends null
+          ? never // PropType<(...args: any[]) => any>
+          : PropType<
+              (
+                ...args: T[Uncapitalize<C>] extends (...args: infer P) => any
+                  ? P
+                  : never
+              ) => any
+            >
+        : never;
+    }
+  : {};
 
 export function setupStackableComponent<
   Props extends Readonly<ComponentPropsOptions>,

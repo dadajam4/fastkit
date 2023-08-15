@@ -221,8 +221,11 @@ export function mapFromObjectArray<
   T extends Record<keyof any, any>,
   K extends keyof T,
 >(array: T[], key: K): Record<T[K], T> {
-  return array.reduce((prev, current) => {
-    prev[current[key]] = current;
-    return prev;
-  }, {} as Record<T[K], T>);
+  return array.reduce(
+    (prev, current) => {
+      prev[current[key]] = current;
+      return prev;
+    },
+    {} as Record<T[K], T>,
+  );
 }

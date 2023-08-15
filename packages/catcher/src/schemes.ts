@@ -175,10 +175,9 @@ export interface CatcherConstructor<
   /**
    * Create an error instance based on the error information.
    */
-  new (errorInfo: Parameters<ReturnType<Normalizer>>[0]): Catcher<
-    Resolvers,
-    ReturnType<ReturnType<Normalizer>>
-  > &
+  new (
+    errorInfo: Parameters<ReturnType<Normalizer>>[0],
+  ): Catcher<Resolvers, ReturnType<ReturnType<Normalizer>>> &
     ReturnType<ReturnType<Normalizer>>;
 
   /**

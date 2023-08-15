@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
@@ -15,7 +16,7 @@ module.exports = {
         '*.mjs',
         '*.vue',
       ],
-      extends: ['plugin:vue/vue3-recommended', '@vue/eslint-config-prettier'],
+      extends: ['plugin:vue/vue3-recommended'],
       parser: 'vue-eslint-parser',
       parserOptions: {
         ecmaVersion: 'latest',
@@ -23,6 +24,7 @@ module.exports = {
         sourceType: 'module',
       },
       rules: {
+        'no-console': 'warn',
         'vue/one-component-per-file': 'off',
         'vue/require-explicit-emits': 'off',
         'vue/require-default-prop': 'off',

@@ -60,7 +60,7 @@
     "@fastkit/rules": "workspace:*",
     "@fastkit/tiny-logger": "workspace:*",
     "@fastkit/vue-utils": "workspace:*",
-    "imask": "^6.6.1"
+    "imask": "^6.6.3"
   },
   "devDependencies": {
     "vue": "^3.3.0"

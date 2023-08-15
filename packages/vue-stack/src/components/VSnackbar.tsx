@@ -10,6 +10,7 @@ import { createStackableDefine, MergeStackBaseSlots } from '../schemes';
 import {
   DefineStackableSettings,
   setupStackableComponent,
+  EmitsToPropOptions,
 } from '../composables';
 import {
   VSnackbarTransition,
@@ -83,7 +84,9 @@ export function defineSnackbarComponent<
     props: {
       ...stackSnackbarProps,
       ...settings.props,
-    } as typeof stackSnackbarProps & Props,
+    } as typeof stackSnackbarProps &
+      Props &
+      EmitsToPropOptions<typeof emits & Emits>,
     emits: {
       ...emits,
       ...settings.emits,

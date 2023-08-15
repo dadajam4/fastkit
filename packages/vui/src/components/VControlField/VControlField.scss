@@ -162,7 +162,8 @@
       }
 
       &:focus-within {
-        box-shadow: 0 0 1px var(--shadow-color),
+        box-shadow:
+          0 0 1px var(--shadow-color),
           0 0 2px 2px var(--focusShadow-color);
 
         // border-color: var(--my-focused-color);

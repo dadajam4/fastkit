@@ -19,7 +19,8 @@
 .v-stack-scale {
   &-enter-active,
   &-leave-active {
-    transition: opacity var(--v-stack-transition-primary),
+    transition:
+      opacity var(--v-stack-transition-primary),
       transform var(--v-stack-transition-primary);
   }
 
@@ -33,7 +34,8 @@
 .v-stack-slide-y {
   &-enter-active,
   &-leave-active {
-    transition: opacity var(--v-stack-transition-primary),
+    transition:
+      opacity var(--v-stack-transition-primary),
       transform var(--v-stack-transition-primary);
   }
 
@@ -47,7 +49,8 @@
 .v-stack-slide-y-reverse {
   &-enter-active,
   &-leave-active {
-    transition: opacity var(--v-stack-transition-primary),
+    transition:
+      opacity var(--v-stack-transition-primary),
       transform var(--v-stack-transition-primary);
   }
 
@@ -61,7 +64,8 @@
 .v-stack-slide-x {
   &-enter-active,
   &-leave-active {
-    transition: opacity var(--v-stack-transition-primary),
+    transition:
+      opacity var(--v-stack-transition-primary),
       transform var(--v-stack-transition-primary);
   }
 
@@ -75,7 +79,8 @@
 .v-stack-slide-x-reverse {
   &-enter-active,
   &-leave-active {
-    transition: opacity var(--v-stack-transition-primary),
+    transition:
+      opacity var(--v-stack-transition-primary),
       transform var(--v-stack-transition-primary);
   }
 
