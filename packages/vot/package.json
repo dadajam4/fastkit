@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "description": "Orchestration tools for building Vue applications.",
   "keywords": [
     "fastkit",

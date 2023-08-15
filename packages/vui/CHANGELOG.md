@@ -1,5 +1,38 @@
 # @fastkit/vui
 
+## 0.16.29
+
+### Patch Changes
+
+- [#122](https://github.com/dadajam4/fastkit/pull/122) [`d0c96fa`](https://github.com/dadajam4/fastkit/commit/d0c96faf96b6c91bcb8bc0b1ca9d22fc8ede303e) Thanks [@dadajam4](https://github.com/dadajam4)! - Update major and non-major packages
+
+- Updated dependencies [[`d0c96fa`](https://github.com/dadajam4/fastkit/commit/d0c96faf96b6c91bcb8bc0b1ca9d22fc8ede303e)]:
+  - @fastkit/color-scheme-gen@0.13.10
+  - @fastkit/vue-color-scheme@0.14.5
+  - @fastkit/vue-form-control@0.15.18
+  - @fastkit/vue-stack@0.15.16
+  - @fastkit/helpers@0.13.3
+  - @fastkit/color-scheme@1.0.10
+  - @fastkit/dom@0.1.3
+  - @fastkit/icon-font@1.0.9
+  - @fastkit/media-match@1.0.9
+  - @fastkit/media-match-gen@0.13.10
+  - @fastkit/rules@0.13.4
+  - @fastkit/stylebase@0.13.1
+  - @fastkit/tiny-logger@0.13.3
+  - @fastkit/vue-action@0.2.5
+  - @fastkit/vue-app-layout@0.14.4
+  - @fastkit/vue-body-scroll-lock@0.1.5
+  - @fastkit/vue-click-outside@0.1.5
+  - @fastkit/vue-keyboard@0.1.3
+  - @fastkit/vue-loading@0.14.6
+  - @fastkit/vue-location@0.1.5
+  - @fastkit/vue-media-match@0.13.10
+  - @fastkit/vue-resize@0.1.5
+  - @fastkit/vue-scroller@0.14.4
+  - @fastkit/vue-transitions@0.1.6
+  - @fastkit/vue-utils@0.14.3
+
 ## 0.16.28
 
 ### Patch Changes
