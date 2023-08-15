@@ -3,6 +3,7 @@ require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   extends: ['@fastkit/eslint-config'],
+  plugins: ['prettier'],
   overrides: [
     {
       files: [
@@ -16,7 +17,8 @@ module.exports = {
         '*.mjs',
         '*.vue',
       ],
-      extends: ['plugin:vue/vue3-recommended'],
+      plugins: ['prettier'],
+      extends: ['plugin:vue/vue3-recommended', 'prettier'],
       parser: 'vue-eslint-parser',
       parserOptions: {
         ecmaVersion: 'latest',
