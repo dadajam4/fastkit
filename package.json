@@ -80,7 +80,7 @@
     "load-tsconfig": "^0.2.5",
     "postcss": "^8.4.27",
     "postcss-modules": "^6.0.0",
-    "prettier": "^3.0.1",
+    "prettier": "^3.0.2",
     "prismjs": "^1.29.0",
     "rollup": "^3.28.0",
     "set-cookie-parser": "^2.6.0",

@@ -47,7 +47,7 @@ importers:
       load-tsconfig: ^0.2.5
       postcss: ^8.4.27
       postcss-modules: ^6.0.0
-      prettier: ^3.0.1
+      prettier: ^3.0.2
       prismjs: ^1.29.0
       rollup: ^3.28.0
       set-cookie-parser: ^2.6.0
@@ -97,7 +97,7 @@ importers:
       load-tsconfig: 0.2.5
       postcss: 8.4.27
       postcss-modules: 6.0.0_postcss@8.4.27
-      prettier: 3.0.1
+      prettier: 3.0.2
       prismjs: 1.29.0
       rollup: 3.28.0
       set-cookie-parser: 2.6.0
@@ -8588,8 +8588,8 @@ packages:
     hasBin: true
     dev: true
 
-  /prettier/3.0.1:
-    resolution: {integrity: sha512-fcOWSnnpCrovBsmFZIGIy9UqK2FaI7Hqax+DIO0A9UxeVoY4iweyaFjS5TavZN97Hfehph0nhsZnjlVKzEQSrQ==}
+  /prettier/3.0.2:
+    resolution: {integrity: sha512-o2YR9qtniXvwEZlOKbveKfDQVyqxbEIWn48Z8m3ZJjBjcCmUy3xZGIv+7AkaeuaTr6yPXJjwv07ZWlsWbEy1rQ==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
