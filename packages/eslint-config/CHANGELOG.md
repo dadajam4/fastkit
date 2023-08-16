@@ -1,5 +1,11 @@
 # @fastkit/eslint-config
 
+## 0.13.5
+
+### Patch Changes
+
+- [#126](https://github.com/dadajam4/fastkit/pull/126) [`48c41ec`](https://github.com/dadajam4/fastkit/commit/48c41ecfe5bea16ce5cd8375829ef1058459a82c) Thanks [@dadajam4](https://github.com/dadajam4)! - Changed the version of Prettier's peer dependencies to v3.
+
 ## 0.13.4
 
 ### Patch Changes

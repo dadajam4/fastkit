@@ -1,5 +1,12 @@
 # @fastkit/eslint-config-vue
 
+## 0.13.8
+
+### Patch Changes
+
+- Updated dependencies [[`48c41ec`](https://github.com/dadajam4/fastkit/commit/48c41ecfe5bea16ce5cd8375829ef1058459a82c)]:
+  - @fastkit/eslint-config@0.13.5
+
 ## 0.13.7
 
 ### Patch Changes
