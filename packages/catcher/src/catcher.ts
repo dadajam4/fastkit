@@ -117,6 +117,9 @@ export function build<
           resolve: () => {
             resolved = true;
           },
+          get resolvedData() {
+            return this.resolvedData;
+          },
         };
 
         for (const resolver of resolvers) {
