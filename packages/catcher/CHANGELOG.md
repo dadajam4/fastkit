@@ -1,5 +1,11 @@
 # @fastkit/catcher
 
+## 0.13.6
+
+### Patch Changes
+
+- [#128](https://github.com/dadajam4/fastkit/pull/128) [`733de7f`](https://github.com/dadajam4/fastkit/commit/733de7fcc745933eca8b975aa80d8a78d23e6809) Thanks [@dadajam4](https://github.com/dadajam4)! - Export Native Error resolver type.
+
 ## 0.13.5
 
 ### Patch Changes
