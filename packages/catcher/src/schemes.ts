@@ -26,7 +26,14 @@ type ExcludeNullableReturnType<T> = T extends (...args: any[]) => any
   : (...args: any[]) => {};
 
 export type ResolverContext = {
+  /**
+   * By executing this method, it is possible to skip processing of subsequent resolvers
+   */
   resolve: () => void;
+  /**
+   * Value extracted by an already executed resolver
+   */
+  readonly resolvedData: AnyData;
 };
 
 /** Exception Resolver */
