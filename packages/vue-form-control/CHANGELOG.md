@@ -1,5 +1,12 @@
 # @fastkit/vue-form-control
 
+## 0.15.19
+
+### Patch Changes
+
+- [#130](https://github.com/dadajam4/fastkit/pull/130) [`a0afe06`](https://github.com/dadajam4/fastkit/commit/a0afe06f699d9208cb41b52c828d756ef5c53d2d) Thanks [@dadajam4](https://github.com/dadajam4)! - When a VueForm submit is executed, the submit event is now dispatched.
+  This allows automatic validation and action handler calls to be performed even when a method is called.
+
 ## 0.15.18
 
 ### Patch Changes
