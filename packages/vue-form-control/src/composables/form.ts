@@ -172,9 +172,19 @@ export class VueForm extends FormNodeControl {
     provide(FormInjectionKey, this);
   }
 
+  /**
+   * Generates SubmitEvent and dispatches it to the form element
+   *
+   * - If `preventDefault()` is called by the event handler, the sending process is canceled
+   */
   submit() {
     const form = this._formRef.value;
-    if (form) {
+    if (!form) return;
+    const ev = new SubmitEvent('submit', {
+      cancelable: true,
+      bubbles: true,
+    });
+    if (form.dispatchEvent(ev)) {
       form.submit();
     }
   }
