@@ -949,10 +949,12 @@ importers:
   packages/vue-utils:
     specifiers:
       '@fastkit/helpers': workspace:*
+      '@fastkit/ts-type-utils': workspace:*
       '@fastkit/visibility': workspace:*
       vue-router: ^4.2.0
     dependencies:
       '@fastkit/helpers': link:../helpers
+      '@fastkit/ts-type-utils': link:../ts-type-utils
       '@fastkit/visibility': link:../visibility
     devDependencies:
       vue-router: 4.2.4
