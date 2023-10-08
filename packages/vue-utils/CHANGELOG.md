@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.4
+
+### Patch Changes
+
+- [#132](https://github.com/dadajam4/fastkit/pull/132) [`25885d2`](https://github.com/dadajam4/fastkit/commit/25885d2139c445478ce9aa7ff03539398f28cd55) Thanks [@dadajam4](https://github.com/dadajam4)! - Added utilities to support emit-related definitions in Vue.
+
 ## 0.14.3
 
 ### Patch Changes
