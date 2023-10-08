@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@fastkit/helpers": "workspace:*",
+    "@fastkit/ts-type-utils": "workspace:*",
     "@fastkit/visibility": "workspace:*"
   },
   "devDependencies": {
