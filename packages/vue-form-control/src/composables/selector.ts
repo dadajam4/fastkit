@@ -82,9 +82,10 @@ export type RawFormSelectorItems =
 export function createFormSelectorProps(
   options: FormSelectorControlOptions = {},
 ) {
-  const { defaultMultiple = false } = options;
+  const { defaultMultiple = false, defaultValidateTiming } = options;
   return {
     ...createFormNodeProps({
+      defaultValidateTiming,
       modelValue,
     }),
     ...createPropsOptions({
@@ -477,7 +478,10 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     }
   }
 
-  getItems(groupId?: string | number | (string | number)[]) {
+  getItems(
+    groupId?: string | number | (string | number)[],
+    ignoreDisabled?: boolean,
+  ) {
     let { items } = this;
     if (groupId) {
       const filter = Array.isArray(groupId) ? groupId : [groupId];
@@ -486,13 +490,14 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
           _groupId != null && filter.includes(_groupId),
       );
     }
-    return items;
+    return ignoreDisabled ? items.filter((item) => !item.isDisabled) : items;
   }
 
   getItemValues(
     group?: string | number | (string | number)[],
+    ignoreDisabled?: boolean,
   ): (string | number)[] {
-    const items = this.getItems(group);
+    const items = this.getItems(group, ignoreDisabled);
     const values: (string | number)[] = [];
     items.forEach((item) => {
       if (item.propValue != null) {
@@ -519,11 +524,11 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   ) {
     if (!this.multiple) return;
     if (group == null || onlyGroup) {
-      this.value = this.getItemValues(group);
+      this.value = this.getItemValues(group, true);
       return;
     }
     const values = [...this.selectedValues];
-    const itemValues = this.getItemValues(group);
+    const itemValues = this.getItemValues(group, true);
     itemValues.forEach((value) => {
       if (!values.includes(value)) {
         values.push(value);
@@ -558,7 +563,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       return this.allSelected;
     }
     const { selectedValues } = this;
-    const itemValues = this.getItemValues(group);
+    const itemValues = this.getItemValues(group, true);
     return itemValues.every((value) => selectedValues.includes(value));
   }
 
@@ -567,7 +572,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       return this.indeterminate;
     }
     const values = this.selectedValues;
-    const itemValues = this.getItemValues(group);
+    const itemValues = this.getItemValues(group, true);
     const selectedValues = values.filter((value) => itemValues.includes(value));
     const { length: selectedLength } = selectedValues;
     return selectedLength > 0 && selectedLength < itemValues.length;
@@ -578,7 +583,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       if (this.allSelected) {
         this.value = this.multiple ? [] : undefined;
       } else {
-        const itemValues = this.getItemValues();
+        const itemValues = this.getItemValues(undefined, true);
         this.value = this.multiple ? itemValues : itemValues[0];
       }
       return;
