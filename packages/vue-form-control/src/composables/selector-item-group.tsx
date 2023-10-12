@@ -47,7 +47,11 @@ export class FormSelectorItemGroupControl {
   protected _indeterminate: ComputedRef<boolean>;
 
   get parentSelector() {
-    return this._parentSelector;
+    const { _parentSelector } = this;
+    if (!_parentSelector) {
+      throw new Error('missing parent selector.');
+    }
+    return _parentSelector;
   }
 
   get isDisabled() {
@@ -64,6 +68,10 @@ export class FormSelectorItemGroupControl {
 
   get isIndeterminate() {
     return this._indeterminate.value;
+  }
+
+  get multiple() {
+    return this.parentSelector.multiple;
   }
 
   constructor(
@@ -105,6 +113,18 @@ export class FormSelectorItemGroupControl {
     });
 
     provide(FormSelectorItemGroupInjectionKey, this);
+  }
+
+  toggle() {
+    return this.parentSelector.toggle();
+  }
+
+  selectAll() {
+    return this.parentSelector.selectAll();
+  }
+
+  unselectAll() {
+    return this.parentSelector.unselectAll();
   }
 
   expose() {
