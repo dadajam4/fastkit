@@ -116,15 +116,15 @@ export class FormSelectorItemGroupControl {
   }
 
   toggle() {
-    return this.parentSelector.toggle();
+    return this.parentSelector.toggle(this.groupId);
   }
 
   selectAll() {
-    return this.parentSelector.selectAll();
+    return this.parentSelector.selectAll(this.groupId);
   }
 
   unselectAll() {
-    return this.parentSelector.unselectAll();
+    return this.parentSelector.unselectAll(this.groupId);
   }
 
   expose() {
