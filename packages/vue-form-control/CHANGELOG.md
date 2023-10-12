@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.21
+
+### Patch Changes
+
+- [#134](https://github.com/dadajam4/fastkit/pull/134) [`40798ae`](https://github.com/dadajam4/fastkit/commit/40798ae0c15bebce59b287c671e8e14f59a8c683) Thanks [@dadajam4](https://github.com/dadajam4)! - Improved selector groups for more freedom of control.
+
 ## 0.15.20
 
 ### Patch Changes
