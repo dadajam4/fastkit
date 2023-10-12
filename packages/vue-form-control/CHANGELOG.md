@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.22
+
+### Patch Changes
+
+- [#136](https://github.com/dadajam4/fastkit/pull/136) [`a883849`](https://github.com/dadajam4/fastkit/commit/a8838498f34aa4c018f07def8ab2a2c1cbc055cd) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed selector group batch operations not working properly.
+
 ## 0.15.21
 
 ### Patch Changes
