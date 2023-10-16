@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.24
+
+### Patch Changes
+
+- Added `nativeAction` getter to `VueForm` class.
+
 ## 0.15.23
 
 ### Patch Changes
