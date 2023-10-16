@@ -41,14 +41,13 @@
       }
     }
 
-    &[disabled] {
+    &[disabled],
+    &[aria-disabled='true'] {
       pointer-events: none;
 
       &::before {
         content: none;
       }
     }
-
-    // noop
   }
 }

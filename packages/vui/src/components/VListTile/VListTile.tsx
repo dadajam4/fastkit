@@ -102,7 +102,7 @@ export const VListTile = defineComponent({
         <VAction
           {...ctx.attrs}
           class={['v-list-tile', classes.value]}
-          clickableClassName="v-list-tile--clickable">
+          actionableClass="v-list-tile--clickable">
           {_startIcon && (
             <span class="v-list-tile__icon v-list-tile__icon--start">
               {_startIcon}

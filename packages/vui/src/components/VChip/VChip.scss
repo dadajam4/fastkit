@@ -43,24 +43,6 @@
       --chip-radius: 4px;
     }
 
-    // &[disabled] {
-    //   pointer-events: none;
-
-    //   &::before {
-    //     content: none;
-    //   }
-    // }
-    // // noop
-
-    // img,
-    // &__image {
-    //   display: inline-flex;
-    //   width: inherit !important;
-    //   height: inherit !important;
-    //   border-radius: inherit;
-    //   object-fit: cover;
-    // }
-
     &__icon {
       &--start {
         margin-right: calc(var(--chip-padding) * 0.5);

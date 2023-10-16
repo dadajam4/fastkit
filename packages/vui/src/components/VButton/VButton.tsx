@@ -131,21 +131,30 @@ export const VButton = defineComponent({
 
     return () => {
       return (
-        <VAction {...ctx.attrs} class={['v-button', classes.value]}>
-          <span class="v-button__content">
-            {startIcon.value}
-            {ctx.slots.default?.()}
-            {icon.value}
-            {endIcon.value}
-          </span>
-          {isLoading.value && (
-            <VProgressCircular
-              class="v-button__loading"
-              indeterminate
-              size={LOADING_SIZE_MAP[control.size.value]}
-            />
-          )}
-        </VAction>
+        <VAction
+          {...ctx.attrs}
+          class={['v-button', classes.value]}
+          guardInProgressClass="v-button--guard-in-progress"
+          v-slots={{
+            default: () => (
+              <>
+                <span class="v-button__content">
+                  {startIcon.value}
+                  {ctx.slots.default?.()}
+                  {icon.value}
+                  {endIcon.value}
+                </span>
+                {isLoading.value && (
+                  <VProgressCircular
+                    class="v-button__loading"
+                    indeterminate
+                    size={LOADING_SIZE_MAP[control.size.value]}
+                  />
+                )}
+              </>
+            ),
+          }}
+        />
       );
     };
   },
