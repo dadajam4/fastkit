@@ -1,5 +1,12 @@
 # @fastkit/vue-location
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies [[`811800c`](https://github.com/dadajam4/fastkit/commit/811800c8aec5dc1236a887e35aa846560b8c40f7)]:
+  - @fastkit/vue-utils@0.14.5
+
 ## 0.1.6
 
 ### Patch Changes

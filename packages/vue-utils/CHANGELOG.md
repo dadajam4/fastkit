@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.5
+
+### Patch Changes
+
+- [#138](https://github.com/dadajam4/fastkit/pull/138) [`811800c`](https://github.com/dadajam4/fastkit/commit/811800c8aec5dc1236a887e35aa846560b8c40f7) Thanks [@dadajam4](https://github.com/dadajam4)! - Added utilities to extend component instance references and public IFs.
+
 ## 0.14.4
 
 ### Patch Changes
