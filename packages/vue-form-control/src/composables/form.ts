@@ -117,6 +117,10 @@ export class VueForm extends FormNodeControl {
   protected _onAutoValidateError?: VueFormHook;
   protected _scrollToElement?: (element: HTMLElement) => any;
 
+  get nativeAction() {
+    return this._nativeAction.value;
+  }
+
   get sending() {
     return this._sending.value;
   }
