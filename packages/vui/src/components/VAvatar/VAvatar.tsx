@@ -40,10 +40,6 @@ export const VAvatar = defineComponent({
       color: () => props.color || defaults.color,
       variant: () => props.variant || defaults.variant,
     });
-    const actionable = useActionable(ctx, {
-      clickableClassName: () => 'v-avatar--clickable',
-      linkFallbackTag: 'div',
-    });
 
     const classes = computed(() => {
       const { size } = props;
@@ -65,17 +61,20 @@ export const VAvatar = defineComponent({
       };
     });
 
+    const actionable = useActionable(ctx, {
+      attrs: () => ({
+        class: ['v-avatar', classes.value, color.colorClasses.value],
+        style: styles.value,
+      }),
+      actionableClass: () => 'v-avatar--clickable',
+      linkFallbackTag: 'div',
+    });
+
     return () => {
       const { src } = props;
-      const { Tag, attrs } = actionable.value;
-      return (
-        <Tag
-          {...attrs}
-          class={['v-avatar', classes.value, color.colorClasses.value]}
-          style={styles.value}>
-          {(!!src && <VBusyImage class="v-avatar__image" src={src} cover />) ||
-            ctx.slots.default?.()}
-        </Tag>
+      return actionable.render(
+        (!!src && <VBusyImage class="v-avatar__image" src={src} cover />) ||
+          ctx.slots.default?.(),
       );
     };
   },

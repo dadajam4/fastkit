@@ -61,6 +61,7 @@
     }
 
     &[disabled],
+    &[aria-disabled='true'],
     &[tabindex='-1'] {
       color: var(--palette-muted);
       pointer-events: none;

@@ -56,14 +56,14 @@
       --avatar-radius: 0;
     }
 
-    // &[disabled] {
+    // &[disabled],
+    // [aria-disabled="true"] {
     //   pointer-events: none;
 
     //   &::before {
     //     content: none;
     //   }
     // }
-    // // noop
 
     img,
     &__image {

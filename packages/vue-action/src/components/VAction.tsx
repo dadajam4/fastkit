@@ -1,26 +1,37 @@
 import { defineComponent } from 'vue';
 import { useActionable } from '../actionable';
-import { actionableInheritProps } from '../schemes';
+import { actionableInheritProps, Actionable } from '../schemes';
+import { defineSlots, defineTypedComponent } from '@fastkit/vue-utils';
 
-export const VAction = defineComponent({
+// @TODO Unable to resolve dts for `navigationableInheritProps`.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { RouteLocationRaw } from 'vue-router';
+
+export const ACTIONABLE_SLOTS = defineSlots<{
+  default?: (actionable: Actionable) => any;
+}>();
+
+export const VActionI = defineComponent({
   name: 'VAction',
   inheritAttrs: false,
   props: {
     ...actionableInheritProps,
-    clickableClassName: String,
+    ...ACTIONABLE_SLOTS(),
   },
-  setup(props, ctx) {
-    const actionable = useActionable(ctx, {
-      clickableClassName: () => props.clickableClassName,
-    });
-
-    return () => {
-      const { Tag, attrs } = actionable.value;
-      return (
-        <Tag {...attrs} class="v-action">
-          {ctx.slots.default?.()}
-        </Tag>
-      );
-    };
+  slots: ACTIONABLE_SLOTS,
+  setup(_props, ctx) {
+    const actionable = useActionable(ctx);
+    ctx.expose(actionable);
+    return () => actionable.render(ctx.slots.default?.(actionable));
   },
 });
+
+/**
+ * Action Component
+ *
+ * @vue-tiny-meta
+ *
+ * @see {@link VActionI}
+ */
+export const VAction = defineTypedComponent(VActionI).$expose<Actionable>();

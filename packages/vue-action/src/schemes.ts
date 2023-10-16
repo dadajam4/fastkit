@@ -1,46 +1,66 @@
-import type { PropType, ExtractPropTypes, CSSProperties } from 'vue';
-import type { ButtonHTMLAttributes } from 'vue';
-import type { RouterLinkProps, RouteLocationRaw } from 'vue-router';
+import type {
+  PropType,
+  ExtractPropTypes,
+  CSSProperties,
+  ButtonHTMLAttributes,
+  VNode,
+  UnwrapRef,
+  VNodeChild,
+} from 'vue';
+import type { RouterLinkProps, useLink } from 'vue-router';
 import type {
   PointableAttributesProps,
   FocusableAttributesProps,
 } from '@fastkit/vue-utils';
 
+type RouterLinkSlotPayload = UnwrapRef<ReturnType<typeof useLink>>;
+
+type ActionableGuardResult = boolean | void;
+
+type ActionableGuardReturnValue =
+  | ActionableGuardResult
+  | Promise<ActionableGuardResult>;
+
+/** Guard function for actionable components */
+export type ActionableGuard = (ev: MouseEvent) => ActionableGuardReturnValue;
+
+export interface CustomRouterLinkProps {}
+
+export type RouterLinkPropKey = keyof RouterLinkProps;
+
+export interface ActionableRouterLinkProps
+  extends Partial<Pick<RouterLinkProps, 'to'>>,
+    Omit<RouterLinkProps, 'to'>,
+    CustomRouterLinkProps {}
+
+export type ActionableRouterLinkPropKey = keyof ActionableRouterLinkProps;
+
+export type CustomRouterLinkPropKey = keyof CustomRouterLinkProps;
+
 /** Attributes for actionable components */
-export interface ActionableAttrs {
+export interface ActionableAttrs extends ActionableRouterLinkProps {
   /**
-   * User-level route location
-   * @see {@link RouteLocationRaw}
-   */
-  to?: RouteLocationRaw;
-  /**
-   * Calls `router.replace` instead of `router.push`.
-   * @see {@link RouterLinkProps.replace}
-   */
-  replace?: boolean;
-  /**
-   * Class to apply when the link is active
-   * @see {@link RouterLinkProps.activeClass}
-   */
-  activeClass?: string;
-  /**
-   * Class to apply when the link is exact active
-   * @see {@link RouterLinkProps.exactActiveClass}
-   */
-  exactActiveClass?: string;
-  /**
-   * Whether RouterLink should not wrap its content in an `a` tag. Useful when
-   * using `v-slot` to create a custom RouterLink
-   * @see {@link RouterLinkProps.custom}
-   */
-  custom?: boolean;
-  /**
-   * Value passed to the attribute `aria-current` when the link is exact active.
+   * Class name when element is in disabled state
    *
-   * @defaultValue `'page'`
-   * @see {@link RouterLinkProps.ariaCurrentValue}
+   * @see {@link ActionableStates.disabled}
    */
-  ariaCurrentValue?: RouterLinkProps['ariaCurrentValue'];
+  disabledClass?: string | (() => string | undefined);
+  /**
+   * Class name when element has Link or click handler or `button` tag
+   *
+   * @see {@link ActionableStates.hasAction}
+   */
+  hasActionClass?: string | (() => string | undefined);
+  /**
+   * Class name to be assigned when actionable
+   *
+   * @see {@link ActionableStates.actionable}
+   */
+  actionableClass?: string | (() => string | undefined);
+  /**
+   * Class name when guard processing in progress
+   */
+  guardInProgressClass?: string | (() => string | undefined);
   /**
    * The URL that the hyperlink points to. Links are not restricted to HTTP-based URLs — they can use any URL scheme supported by browsers:
    *
@@ -109,6 +129,12 @@ export interface ActionableAttrs {
    * disabled state
    */
   disabled?: boolean;
+  /**
+   * Guard function for actionable components
+   *
+   * @see {@link ActionableGuard}
+   */
+  guard?: ActionableGuard;
 }
 
 type ActionableAttrsRequired = Required<ActionableAttrs>;
@@ -145,20 +171,87 @@ export type ActionableInheritProps = ExtractPropTypes<
 /** Actionable Tags */
 export type ActionableTag = any;
 
-/** Actionable context */
-export interface ActionableContext {
+export interface ActionableRouterLinkSettings {
+  /**
+   * Router Link Props
+   *
+   * @see {@link ActionableRouterLinkProps}
+   */
+  props: ActionableRouterLinkProps;
+  slots: (children?: VNodeChild) => {
+    default: (payload: RouterLinkSlotPayload) => VNodeChild;
+  };
+}
+
+/** Actionable interface */
+export interface Actionable {
   /** Actionable Tags */
-  Tag: ActionableTag;
+  readonly Tag: ActionableTag;
   /** attributes */
-  attrs: Record<string, unknown>;
-  /** clickable or not */
-  clickable: boolean;
+  readonly attrs: Record<string, unknown>;
+  /**
+   * Router Link Settings
+   *
+   * @see {@link ActionableRouterLinkSettings}
+   */
+  readonly routerLink?: ActionableRouterLinkSettings;
+  /**
+   * Disabled state
+   *
+   * This is `true` if `disabled` or `aria-disabled` is set.
+   */
+  readonly disabled: boolean;
+  /**
+   * Link or click handler or `button` tag is set
+   */
+  readonly hasAction: boolean;
+  /**
+   * Link or click handler or `button` tag is set and not in an disabled state.
+   */
+  readonly actionable: boolean;
+  // Guard processing in progress
+  readonly guardInProgress: boolean;
+  /** render actionable element vnode */
+  render(children?: VNodeChild): VNode;
 }
 
 /** Actionable option */
 export interface UseActionableOptions {
-  /** Class name to be assigned when clickable */
-  clickableClassName?: string | (() => string | undefined);
+  attrs?:
+    | Record<string, unknown>
+    | ((context: { disabled: boolean }) => Record<string, unknown>);
+  /**
+   * Class name when element is in disabled state
+   *
+   * @see {@link ActionableStates.disabled}
+   */
+  disabledClass?: string | (() => string | undefined);
+  /**
+   * Class name when element has Link or click handler or `button` tag
+   *
+   * @see {@link ActionableStates.hasAction}
+   */
+  hasActionClass?: string | (() => string | undefined);
+  /**
+   * Class name to be assigned when actionable
+   *
+   * @see {@link ActionableStates.actionable}
+   */
+  actionableClass?: string | (() => string | undefined);
+  /**
+   * Class name when guard processing in progress
+   */
+  guardInProgressClass?: string | (() => string | undefined);
+  /**
+   * Class to apply when the link is active
+   * @see {@link RouterLinkProps.activeClass}
+   */
+  activeClass?: string;
+  /**
+   * Class to apply when the link is exact active
+   * @see {@link RouterLinkProps.exactActiveClass}
+   */
+  exactActiveClass?: string;
   /**
    * `RouterLink` Component
    *

@@ -72,10 +72,6 @@ export const VChip = defineComponent({
       const _icon = resolveRawVChipIcon(props.endIcon, 'end');
       return _icon && _icon();
     });
-    const actionable = useActionable(ctx, {
-      clickableClassName: () => 'v-chip--clickable',
-      linkFallbackTag: 'div',
-    });
 
     const classes = computed(() => {
       const { size } = props;
@@ -87,17 +83,19 @@ export const VChip = defineComponent({
       ];
     });
 
-    return () => {
-      const { Tag, attrs } = actionable.value;
-      return (
-        <Tag
-          {...attrs}
-          class={['v-chip', classes.value, color.colorClasses.value]}>
-          {startIcon.value}
-          <span class="v-chip__content">{ctx.slots.default?.()}</span>
-          {endIcon.value}
-        </Tag>
-      );
-    };
+    const actionable = useActionable(ctx, {
+      attrs: () => ({
+        class: ['v-chip', classes.value, color.colorClasses.value],
+      }),
+      actionableClass: () => 'v-chip--clickable',
+      linkFallbackTag: 'div',
+    });
+
+    return () =>
+      actionable.render([
+        startIcon.value,
+        <span class="v-chip__content">{ctx.slots.default?.()}</span>,
+        endIcon.value,
+      ]);
   },
 });

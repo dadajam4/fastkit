@@ -58,7 +58,9 @@
 
       // color: inherit !important;
 
-      &[disabled] {
+      &[disabled],
+      &[aria-disabled='true'],
+      &.v-button--guard-in-progress {
         opacity: 0.5;
       }
     }
@@ -107,7 +109,9 @@
       border: 0;
     }
 
-    &[disabled] {
+    &[disabled],
+    &[aria-disabled='true'],
+    &.v-button--guard-in-progress {
       cursor: default;
     }
 
