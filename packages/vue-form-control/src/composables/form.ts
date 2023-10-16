@@ -161,7 +161,7 @@ export class VueForm extends FormNodeControl {
       delete (this as any)._formContext;
     });
 
-    (['submit', 'handleSubmit'] as const).forEach((fn) => {
+    (['submit', 'handleSubmit', 'formRef'] as const).forEach((fn) => {
       const _fn = this[fn];
       this[fn] = _fn.bind(this) as any;
     });
@@ -240,12 +240,16 @@ export class VueForm extends FormNodeControl {
     this._doAction(ev);
   }
 
+  formRef() {
+    return this._formRef;
+  }
+
   expose() {
     const publicInterface = super.expose();
     return {
       ...publicInterface,
       form: this as VueForm,
-      formRef: () => this._formRef,
+      formRef: this.formRef,
       nativeAction: this._nativeAction,
       disableAutoScroll: this._disableAutoScroll,
     };

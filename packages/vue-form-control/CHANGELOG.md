@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.25
+
+### Patch Changes
+
+- Added `formRef` getter to `VueForm` class.
+
 ## 0.15.24
 
 ### Patch Changes
