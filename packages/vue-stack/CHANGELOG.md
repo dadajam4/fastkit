@@ -1,5 +1,16 @@
 # @fastkit/vue-stack
 
+## 0.15.18
+
+### Patch Changes
+
+- Updated dependencies [[`811800c`](https://github.com/dadajam4/fastkit/commit/811800c8aec5dc1236a887e35aa846560b8c40f7)]:
+  - @fastkit/vue-utils@0.14.5
+  - @fastkit/vue-body-scroll-lock@0.1.7
+  - @fastkit/vue-click-outside@0.1.7
+  - @fastkit/vue-resize@0.1.7
+  - @fastkit/vue-transitions@0.1.8
+
 ## 0.15.17
 
 ### Patch Changes

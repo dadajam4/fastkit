@@ -1,5 +1,14 @@
 # @fastkit/vue-action
 
+## 0.2.7
+
+### Patch Changes
+
+- [#138](https://github.com/dadajam4/fastkit/pull/138) [`811800c`](https://github.com/dadajam4/fastkit/commit/811800c8aec5dc1236a887e35aa846560b8c40f7) Thanks [@dadajam4](https://github.com/dadajam4)! - - Action guards can now be set.
+  - Relative paths can now be specified as location paths.
+- Updated dependencies [[`811800c`](https://github.com/dadajam4/fastkit/commit/811800c8aec5dc1236a887e35aa846560b8c40f7)]:
+  - @fastkit/vue-utils@0.14.5
+
 ## 0.2.6
 
 ### Patch Changes
