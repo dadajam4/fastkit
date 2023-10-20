@@ -17,7 +17,7 @@ export type ClickOutsideDirectiveHandler =
 export interface ClickOutsideDirectiveBindingValue {
   handler?: ClickOutsideDirectiveHandler;
   conditional?: (ev: MouseEvent | PointerEvent, pre?: boolean) => boolean;
-  include?: () => HTMLElement[];
+  include?: () => Element[];
 }
 
 export type RawClickOutsideDirectiveBindingValue =

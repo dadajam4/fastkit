@@ -298,6 +298,12 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
       type: [Boolean, String],
       default: true,
     },
+    /**
+     * Elements to include in the click-outside-directive check
+     *
+     * By specifying this, it is possible to skip the hiding process when clicking outside the stack elements.
+     */
+    includeElements: Function as PropType<() => Element[]>,
     activator: {} as PropType<VStackActivatorQuery>,
     ...V_STACK_SLOTS(),
     // activator: [String, Object] as PropType<() => any>,

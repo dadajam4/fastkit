@@ -666,6 +666,7 @@ export function useStackControl(
               control.close();
             },
             conditional: privateApi.outsideClickCloseConditional,
+            include: props.includeElements,
           });
           let usedClickOutside = false;
           const withClickOutside = (node: VNode) => {

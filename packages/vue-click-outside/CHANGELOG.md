@@ -1,5 +1,11 @@
 # @fastkit/vue-click-outside
 
+## 0.1.8
+
+### Patch Changes
+
+- Changed the type accepted for the `include` option from `HTMLElement` to `Element`.
+
 ## 0.1.7
 
 ### Patch Changes

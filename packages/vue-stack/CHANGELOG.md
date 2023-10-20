@@ -1,5 +1,14 @@
 # @fastkit/vue-stack
 
+## 0.15.19
+
+### Patch Changes
+
+- Now accepts an `include` option to pass to the `click-outside` directive.
+
+- Updated dependencies []:
+  - @fastkit/vue-click-outside@0.1.8
+
 ## 0.15.18
 
 ### Patch Changes
