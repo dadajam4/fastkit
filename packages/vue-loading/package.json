@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-loading",
-  "version": "0.14.8",
+  "version": "0.14.9",
   "description": "Loading component for Vue applications.",
   "keywords": [
     "fastkit",

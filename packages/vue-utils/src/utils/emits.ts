@@ -1,4 +1,4 @@
-import { ObjectEmitsOptions } from 'vue';
+import { ObjectEmitsOptions, EmitsOptions } from 'vue';
 
 import { UnionToIntersection } from '@fastkit/ts-type-utils';
 
@@ -44,3 +44,25 @@ export type EmitFn<
       : (event: key, ...args: any[]) => void;
   }[Event]
 >;
+
+/**
+ * Convert an emit option specified by a type argument to a property IF like `onXXX`.
+ */
+export type EmitsToProps<T extends EmitsOptions> = T extends string[]
+  ? {
+      [K in string & `on${Capitalize<T[number]>}`]?: (...args: any[]) => any;
+    }
+  : T extends ObjectEmitsOptions
+  ? {
+      [K in string &
+        `on${Capitalize<string & keyof T>}`]?: K extends `on${infer C}`
+        ? T[Uncapitalize<C>] extends null
+          ? (...args: any[]) => any
+          : (
+              ...args: T[Uncapitalize<C>] extends (..._args: infer P) => any
+                ? P
+                : never
+            ) => any
+        : never;
+    }
+  : {};

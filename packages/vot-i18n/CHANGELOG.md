@@ -1,5 +1,13 @@
 # @fastkit/vot-i18n
 
+## 3.0.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vot@0.15.6
+  - @fastkit/vue-i18n@0.13.8
+
 ## 3.0.5
 
 ### Patch Changes

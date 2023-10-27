@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.6
+
+### Patch Changes
+
+- Added utility type to change emit option to property IF.
+
 ## 0.14.5
 
 ### Patch Changes
