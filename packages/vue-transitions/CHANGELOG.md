@@ -1,5 +1,12 @@
 # @fastkit/vue-transitions
 
+## 0.1.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.14.8
+
 ## 0.1.10
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.8
+
+### Patch Changes
+
+- Added a utility to override Type safe attribute objects passed to Vue components.
+
 ## 0.14.7
 
 ### Patch Changes

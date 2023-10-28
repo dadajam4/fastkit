@@ -1,4 +1,4 @@
-import { PropType, Prop, ComponentPropsOptions } from 'vue';
+import { PropType, Prop, ComponentPropsOptions, mergeProps } from 'vue';
 
 import type { HTMLAttributes, Events } from 'vue';
 
@@ -258,3 +258,13 @@ export const POINTABLE_EMIT_OPTIONS_MOCK = _mock as Pick<
   | 'pointerover'
   | 'pointerout'
 >;
+
+type Data = Record<string, unknown>;
+
+export function assignProps<T extends Data>(
+  base: T | undefined | null,
+  ...overrides: T[]
+): T {
+  const processed = mergeProps(base || {}, ...overrides);
+  return processed as T;
+}
