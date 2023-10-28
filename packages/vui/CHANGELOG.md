@@ -1,5 +1,13 @@
 # @fastkit/vui
 
+## 0.16.40
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-scroller@0.14.9
+  - @fastkit/vue-app-layout@0.14.9
+
 ## 0.16.39
 
 ### Patch Changes

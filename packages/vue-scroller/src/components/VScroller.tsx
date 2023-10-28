@@ -37,8 +37,41 @@ export type VScrollerProps = ExtractPropInput<typeof scrollerProps>;
 
 export type VScrollerResolvedProps = ExtractPropTypes<typeof scrollerProps>;
 
+/** Scrollability in each direction */
+export interface ScrollerScrollability {
+  /** Whether you can scroll to the left or not */
+  left: boolean;
+  /** Whether you can scroll to the right or not */
+  right: boolean;
+  /** Whether you can scroll to the top or not */
+  top: boolean;
+  /** Whether you can scroll to the bottom or not */
+  bottom: boolean;
+}
+
+/**
+ * Combined Scrollability
+ *
+ * The information immediately below is marked as scrollable to account for the margin of the `guide` prop, so `false` may be marked even if the information is actually scrollable.
+ * If you want to check strict scrollability, check the `strict` property.
+ */
+export interface ScrollerCombinedScrollability extends ScrollerScrollability {
+  /**
+   * Strict scrollability
+   *
+   * Scrollable more than 0px will be marked as valid
+   */
+  strict: ScrollerScrollability;
+}
+
 export interface ScrollerAPI {
   get scroller(): ScrollerControl;
+  /**
+   * Combined Scrollability
+   *
+   * @see {@link ScrollerCombinedScrollability}
+   */
+  get scrollability(): ScrollerCombinedScrollability;
 }
 
 export const _ScrollerI = defineComponent({
@@ -51,10 +84,6 @@ export const _ScrollerI = defineComponent({
       el: settings.el || 'self',
     });
 
-    const scrollerRef: ScrollerAPI = {
-      scroller,
-    };
-
     const guideOffsetRef = computed(() => {
       const { guide } = props;
       if (typeof guide === 'number') return guide;
@@ -62,18 +91,42 @@ export const _ScrollerI = defineComponent({
       return undefined;
     });
 
+    const scrollabilityRef = computed<ScrollerCombinedScrollability>(() => {
+      const guideOffset = guideOffsetRef.value || DEFAULT_GUIDE_OFFSET;
+      const { scrollLeft, scrollTop, scrollRight, scrollBottom } = scroller;
+      return {
+        left: scrollLeft >= guideOffset,
+        right: scrollRight >= guideOffset,
+        top: scrollTop >= guideOffset,
+        bottom: scrollBottom >= guideOffset,
+        strict: {
+          left: scrollLeft > 0,
+          right: scrollRight > 0,
+          top: scrollTop > 0,
+          bottom: scrollBottom > 0,
+        },
+      };
+    });
+
+    const scrollerRef: ScrollerAPI = {
+      scroller,
+      get scrollability() {
+        return scrollabilityRef.value;
+      },
+    };
+
     const guidesRef = computed<VScrollerGuideType[] | undefined>(() => {
       const guideOffset = guideOffsetRef.value;
       if (guideOffset === undefined) return;
 
       const guides: VScrollerGuideType[] = [];
 
-      const { scrollLeft, scrollTop, scrollRight, scrollBottom } = scroller;
+      const scrollability = scrollabilityRef.value;
 
-      if (scrollLeft >= guideOffset) guides.push('left');
-      if (scrollTop >= guideOffset) guides.push('top');
-      if (scrollRight >= guideOffset) guides.push('right');
-      if (scrollBottom >= guideOffset) guides.push('bottom');
+      scrollability.left && guides.push('left');
+      scrollability.top && guides.push('top');
+      scrollability.right && guides.push('right');
+      scrollability.bottom && guides.push('bottom');
 
       return guides;
     });

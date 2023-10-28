@@ -1,5 +1,11 @@
 # @fastkit/vue-scroller
 
+## 0.14.9
+
+### Patch Changes
+
+- Detailed scrollability information is now exposed by the component.
+
 ## 0.14.8
 
 ### Patch Changes
