@@ -222,8 +222,8 @@ export const VPagination = defineComponent({
       } else {
         number = false;
         const isPrev = source === 'prev';
-        const ammount = isPrev ? -1 : 1;
-        page = currentPage + ammount;
+        const amount = isPrev ? -1 : 1;
+        page = currentPage + amount;
         active = false;
         disabled = page < 1 || page > length;
       }

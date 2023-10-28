@@ -16,11 +16,7 @@ import { useVui } from '../../injections';
 import { defineSlots } from '@fastkit/vue-utils';
 import { RouteLocationRaw, RouteLocation } from 'vue-router';
 import { VTab, VTabRef } from './VTab';
-import {
-  VScroller,
-  useVScrollerRef,
-  ScrollResult,
-} from '@fastkit/vue-scroller';
+import { VScroller, ScrollResult } from '@fastkit/vue-scroller';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 import { isPromise } from '@fastkit/helpers';
 
@@ -93,7 +89,7 @@ export const VTabs = defineComponent({
     const vui = useVui();
 
     const internalValueRef = ref<string>(null as any);
-    const scrollerRef = useVScrollerRef();
+    const ScrollerRef = VScroller.$ref();
     const elRef = ref<HTMLElement>(null as any);
     let scrollResult: ScrollResult | undefined;
     const tabRefs = ref<VTabRef[]>([]);
@@ -214,7 +210,7 @@ export const VTabs = defineComponent({
       const $tab = tab.$el as HTMLElement;
       if (!$tab) return;
 
-      const scroller = scrollerRef.value;
+      const scroller = ScrollerRef.instance;
       if (!scroller) return;
       const container = scroller.scroller.element();
       if (!container) return;
@@ -233,17 +229,17 @@ export const VTabs = defineComponent({
       if (hiddenLeft > 0) hiddenLeft += autoScrollOffset;
       if (hiddenRight > 0) hiddenRight += autoScrollOffset;
 
-      let scrollAmmount = 0;
+      let scrollAmount = 0;
       if (hiddenRight > 0) {
-        scrollAmmount = hiddenRight;
+        scrollAmount = hiddenRight;
       }
       if (hiddenLeft > 0) {
-        scrollAmmount = -hiddenLeft;
+        scrollAmount = -hiddenLeft;
       }
 
-      if (Math.abs(scrollAmmount) > 0) {
+      if (Math.abs(scrollAmount) > 0) {
         cancelScroll();
-        scrollResult = scroller.scroller.by(scrollAmmount, 0, {
+        scrollResult = scroller.scroller.by(scrollAmount, 0, {
           duration: 150,
         });
       }
@@ -327,13 +323,12 @@ export const VTabs = defineComponent({
 
       return (
         <div class={['v-tabs', classes.value]} ref={elRef}>
-          <VScroller
+          <ScrollerRef
             class="v-tabs__scroller"
             containerClass="v-tabs__scroller__container"
-            guide
-            ref={scrollerRef}>
+            guide>
             <div class="v-tabs__content">{children}</div>
-          </VScroller>
+          </ScrollerRef>
         </div>
       );
     };

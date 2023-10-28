@@ -1,19 +1,12 @@
 import './VScroller.scss';
 
-import {
-  defineComponent,
-  PropType,
-  ExtractPropTypes,
-  computed,
-  ref,
-  Ref,
-} from 'vue';
+import { defineComponent, PropType, ExtractPropTypes, computed } from 'vue';
 import {
   useScrollerControl,
   UseScrollerSetting,
   ScrollerControl,
 } from '../composables';
-import { ExtractPropInput } from '@fastkit/vue-utils';
+import { ExtractPropInput, defineTypedComponent } from '@fastkit/vue-utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VScrollerSettings extends UseScrollerSetting {}
@@ -44,15 +37,11 @@ export type VScrollerProps = ExtractPropInput<typeof scrollerProps>;
 
 export type VScrollerResolvedProps = ExtractPropTypes<typeof scrollerProps>;
 
-export interface VScrollerRef {
-  scroller: ScrollerControl;
+export interface ScrollerAPI {
+  get scroller(): ScrollerControl;
 }
 
-export function useVScrollerRef(): Ref<VScrollerRef | null> {
-  return ref(null);
-}
-
-export const VScroller = defineComponent({
+export const _ScrollerI = defineComponent({
   name: 'VScroller',
   props: scrollerProps,
   setup(props, ctx) {
@@ -62,7 +51,7 @@ export const VScroller = defineComponent({
       el: settings.el || 'self',
     });
 
-    const scrollerRef: VScrollerRef = {
+    const scrollerRef: ScrollerAPI = {
       scroller,
     };
 
@@ -124,3 +113,6 @@ export const VScroller = defineComponent({
     };
   },
 });
+
+export const VScroller =
+  defineTypedComponent(_ScrollerI).$expose<ScrollerAPI>();

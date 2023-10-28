@@ -1,5 +1,14 @@
 # @fastkit/vue-scroller
 
+## 0.14.8
+
+### Patch Changes
+
+- Various Typo corrections were made.
+
+- Updated dependencies []:
+  - @fastkit/scroller@0.13.4
+
 ## 0.14.7
 
 ### Patch Changes

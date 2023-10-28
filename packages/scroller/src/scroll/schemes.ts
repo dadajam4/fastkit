@@ -25,7 +25,7 @@ export interface ScrollBaseSettings {
  * Scrollerで利用するスクロール系メソッドのオプション設定です。
  */
 export interface ScrollerScrollSettings extends ScrollBaseSettings {
-  onProgoress?: ScrollCallback;
+  onProgress?: ScrollCallback;
   onCancel?: ScrollCallback;
   onDone?: ScrollCallback;
 }

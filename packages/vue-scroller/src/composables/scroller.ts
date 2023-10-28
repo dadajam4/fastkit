@@ -13,7 +13,7 @@ import {
   ScrollerScrollToElementOptions,
   ScrollToSideTargets,
   ScrollStopper,
-  ScrollToElementAddtionalOffset,
+  ScrollToElementAdditionalOffset,
 } from '@fastkit/scroller';
 
 export type UseScrollerTarget = 'self' | 'body';
@@ -276,14 +276,14 @@ export function useScrollerControl(setting: UseScrollerSetting) {
       return scroller.removeScrollStopper(stopper);
     },
 
-    setScrollToElementAddtionalOffset(
-      offset: ScrollToElementAddtionalOffset | undefined,
+    setScrollToElementAdditionalOffset(
+      offset: ScrollToElementAdditionalOffset | undefined,
     ) {
-      return scroller.setScrollToElementAddtionalOffset(offset);
+      return scroller.setScrollToElementAdditionalOffset(offset);
     },
 
-    deleteScrollToElementAddtionalOffset() {
-      return scroller.deleteScrollToElementAddtionalOffset();
+    deleteScrollToElementAdditionalOffset() {
+      return scroller.deleteScrollToElementAdditionalOffset();
     },
   };
 

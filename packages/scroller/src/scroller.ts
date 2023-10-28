@@ -40,7 +40,7 @@ import { defaultBaseSettings } from './scroll/schemes';
 
 export * from './scroll';
 
-export type ScrollToElementAddtionalOffset =
+export type ScrollToElementAdditionalOffset =
   | number
   | { x?: number; y?: number }
   | ((scroller: Scroller) => number | { x?: number; y?: number } | undefined);
@@ -79,7 +79,7 @@ export type ScrollDirection = ScrollYDirection | ScrollXDirection;
  */
 export type ScrollAxis = 'x' | 'y';
 
-export interface ScrollSizeOvserverSetting {
+export interface ScrollSizeObserverSetting {
   interval: number;
   width: boolean;
   height: boolean;
@@ -93,7 +93,7 @@ export interface ScrollerSetting {
   el: Element | string | null;
   scrollingJudgeInterval: number;
   baseAxis: ScrollAxis;
-  scrollSizeOvserver: Partial<ScrollSizeOvserverSetting>;
+  scrollSizeObserver: Partial<ScrollSizeObserverSetting>;
 }
 
 /**
@@ -145,7 +145,7 @@ export interface ScrollerPayload {
    */
   directionY: ScrollYDirection;
 
-  // tick ammount at element.on('scroll') detect
+  // tick amount at element.on('scroll') detect
 
   /**
    * [[Scroller.on]]('scroll')時の前回からの水平移動量が渡されます。
@@ -362,7 +362,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     ..._scrollToElementSettingsDefaults,
   };
 
-  scrollSizeOvserver?: ScrollSizeOvserverSetting;
+  scrollSizeObserver?: ScrollSizeObserverSetting;
 
   /**
    * 設定されたElement要素です。
@@ -595,8 +595,8 @@ export class Scroller extends EV<ScrollerEventMap> {
   private _scrollToResult: ScrollResult | null = null;
   private _observers: ScrollerObserver[] = [];
   private _scrollStoppers: ScrollStopper[] = [];
-  private _scrollSizeOvserverPollingId: number | null = null;
-  private _scrollSizeOvserverSuspended = false;
+  private _scrollSizeObserverPollingId: number | null = null;
+  private _scrollSizeObserverSuspended = false;
   private _visibilityListener: VisibilityStateListener;
 
   /**
@@ -628,27 +628,27 @@ export class Scroller extends EV<ScrollerEventMap> {
     if (convertedSetting.baseAxis) this.baseAxis = convertedSetting.baseAxis;
     this._lastAxis = this.baseAxis;
 
-    const { scrollSizeOvserver } = convertedSetting;
-    if (scrollSizeOvserver) {
-      this.scrollSizeOvserver = {
+    const { scrollSizeObserver } = convertedSetting;
+    if (scrollSizeObserver) {
+      this.scrollSizeObserver = {
         interval: 500,
         width: true,
         height: true,
-        ...scrollSizeOvserver,
+        ...scrollSizeObserver,
       };
     }
 
     this._visibilityListener = () => {
       if (visibilityManager.isVisible) {
         this.update();
-        if (this._scrollSizeOvserverSuspended) {
-          this._scrollSizeOvserverSuspended = false;
-          this._startScrollSizeOvserver();
+        if (this._scrollSizeObserverSuspended) {
+          this._scrollSizeObserverSuspended = false;
+          this._startScrollSizeObserver();
         }
       } else {
-        this._scrollSizeOvserverSuspended =
-          this._scrollSizeOvserverPollingId !== null;
-        this._stopScrollSizeOvserver();
+        this._scrollSizeObserverSuspended =
+          this._scrollSizeObserverPollingId !== null;
+        this._stopScrollSizeObserver();
       }
     };
 
@@ -698,18 +698,18 @@ export class Scroller extends EV<ScrollerEventMap> {
     this._setup();
   }
 
-  private _scrollToElementAddtionalOffset:
-    | ScrollToElementAddtionalOffset
+  private _scrollToElementAdditionalOffset:
+    | ScrollToElementAdditionalOffset
     | undefined;
 
-  setScrollToElementAddtionalOffset(
-    offset: ScrollToElementAddtionalOffset | undefined,
+  setScrollToElementAdditionalOffset(
+    offset: ScrollToElementAdditionalOffset | undefined,
   ) {
-    this._scrollToElementAddtionalOffset = offset;
+    this._scrollToElementAdditionalOffset = offset;
   }
 
-  deleteScrollToElementAddtionalOffset() {
-    delete this._scrollToElementAddtionalOffset;
+  deleteScrollToElementAdditionalOffset() {
+    delete this._scrollToElementAdditionalOffset;
   }
 
   /**
@@ -771,7 +771,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     delete (this as any)._scrollToResult;
     delete (this as any)._visibilityListener;
 
-    this.deleteScrollToElementAddtionalOffset();
+    this.deleteScrollToElementAdditionalOffset();
     this._setState(ScrollerState.Destroyed);
     this.offAll();
   }
@@ -1119,27 +1119,27 @@ export class Scroller extends EV<ScrollerEventMap> {
     }
   }
 
-  private _startScrollSizeOvserver() {
+  private _startScrollSizeObserver() {
     if (!IN_WINDOW) return;
 
-    this._stopScrollSizeOvserver();
+    this._stopScrollSizeObserver();
 
-    if (this.scrollSizeOvserver) {
-      this._scrollSizeOvserverPollingId = window.setInterval(() => {
-        if (!this.scrollSizeOvserver || this.isDestroyed) {
-          this._stopScrollSizeOvserver();
+    if (this.scrollSizeObserver) {
+      this._scrollSizeObserverPollingId = window.setInterval(() => {
+        if (!this.scrollSizeObserver || this.isDestroyed) {
+          this._stopScrollSizeObserver();
           return;
         }
 
         this._updateScrollSize();
-      }, this.scrollSizeOvserver.interval);
+      }, this.scrollSizeObserver.interval);
     }
   }
 
-  private _stopScrollSizeOvserver() {
-    if (this._scrollSizeOvserverPollingId !== null) {
-      clearInterval(this._scrollSizeOvserverPollingId);
-      this._scrollSizeOvserverPollingId = null;
+  private _stopScrollSizeObserver() {
+    if (this._scrollSizeObserverPollingId !== null) {
+      clearInterval(this._scrollSizeObserverPollingId);
+      this._scrollSizeObserverPollingId = null;
     }
   }
 
@@ -1186,10 +1186,10 @@ export class Scroller extends EV<ScrollerEventMap> {
     }
 
     if (visibilityManager.isVisible) {
-      this._scrollSizeOvserverSuspended = false;
-      this._startScrollSizeOvserver();
+      this._scrollSizeObserverSuspended = false;
+      this._startScrollSizeObserver();
     } else {
-      this._scrollSizeOvserverSuspended = true;
+      this._scrollSizeObserverSuspended = true;
     }
   }
 
@@ -1254,7 +1254,7 @@ export class Scroller extends EV<ScrollerEventMap> {
       return;
     }
 
-    // remenber before values
+    // remember before values
     const {
       _scrollTop,
       _scrollLeft,
@@ -1267,7 +1267,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     // ,,,and next update values
     this._updateScrollPositions();
 
-    // calicurate scrolled ammount at (ticked time)
+    // calculate scrolled amount at (ticked time)
     const tickedX = this._scrollLeft - _scrollLeft;
     const tickedY = this._scrollTop - _scrollTop;
     this._tickedX = tickedX;
@@ -1341,7 +1341,7 @@ export class Scroller extends EV<ScrollerEventMap> {
         // emit scroll end & start(both)
         this._triggerScrollTick('scrollEnd');
       } else {
-        // add scroll ammounts
+        // add scroll amounts
         this._lastTotalX = this._scrollLeft - this._startX;
         this._lastTotalY = this._scrollTop - this._startY;
         this._triggerScrollTick('scroll');
@@ -1410,21 +1410,21 @@ export class Scroller extends EV<ScrollerEventMap> {
       ...this.scrollToElementSettingsDefaults,
       ...source,
     };
-    let { _scrollToElementAddtionalOffset: addtionalOffset } = this;
-    if (!addtionalOffset) return merged;
-    if (typeof addtionalOffset === 'function') {
-      addtionalOffset = addtionalOffset(this);
+    let { _scrollToElementAdditionalOffset: additionalOffset } = this;
+    if (!additionalOffset) return merged;
+    if (typeof additionalOffset === 'function') {
+      additionalOffset = additionalOffset(this);
     }
-    if (!addtionalOffset) return merged;
-    if (typeof addtionalOffset === 'number') {
-      addtionalOffset = {
-        x: addtionalOffset,
-        y: addtionalOffset,
+    if (!additionalOffset) return merged;
+    if (typeof additionalOffset === 'number') {
+      additionalOffset = {
+        x: additionalOffset,
+        y: additionalOffset,
       };
     }
     let { offset } = merged;
     if (!offset) {
-      merged.offset = addtionalOffset;
+      merged.offset = additionalOffset;
       return merged;
     }
     if (typeof offset === 'number') {
@@ -1434,8 +1434,8 @@ export class Scroller extends EV<ScrollerEventMap> {
       };
     }
 
-    offset.x = (offset.x || 0) + (addtionalOffset.x || 0);
-    offset.y = (offset.y || 0) + (addtionalOffset.y || 0);
+    offset.x = (offset.x || 0) + (additionalOffset.x || 0);
+    offset.y = (offset.y || 0) + (additionalOffset.y || 0);
     merged.offset = offset;
     return merged;
   }

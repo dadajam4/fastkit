@@ -1,5 +1,11 @@
 # @fastkit/scroller
 
+## 0.13.4
+
+### Patch Changes
+
+- Various Typo corrections were made.
+
 ## 0.13.3
 
 ### Patch Changes

@@ -85,7 +85,7 @@ export class VueAppLayout {
   constructor() {
     this._scrollerOffset = this._scrollerOffset.bind(this);
     IN_WINDOW &&
-      this.scroller.setScrollToElementAddtionalOffset(this._scrollerOffset);
+      this.scroller.setScrollToElementAdditionalOffset(this._scrollerOffset);
   }
 
   get drawers() {

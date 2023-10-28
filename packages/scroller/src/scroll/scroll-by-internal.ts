@@ -51,7 +51,7 @@ export function scroll(
     duration,
     easing,
     cancelable,
-    onProgoress,
+    onProgress,
     onCancel,
     onDone,
   } = _options;
@@ -177,7 +177,7 @@ export function scroll(
     callbackValues.progress = progress;
 
     topLeft(initialY + diffY * progress, initialX + diffX * progress);
-    onProgoress && onProgoress(callbackValues);
+    onProgress && onProgress(callbackValues);
 
     timeElapsed < duration ? window.requestAnimationFrame(step) : done();
   }
