@@ -1,5 +1,11 @@
 # @fastkit/vue-scroller
 
+## 0.14.10
+
+### Patch Changes
+
+- Changed public IF for scroll availability information.
+
 ## 0.14.9
 
 ### Patch Changes

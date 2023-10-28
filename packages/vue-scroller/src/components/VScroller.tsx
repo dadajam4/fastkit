@@ -71,7 +71,7 @@ export interface ScrollerAPI {
    *
    * @see {@link ScrollerCombinedScrollability}
    */
-  get scrollability(): ScrollerCombinedScrollability;
+  get scrollable(): ScrollerCombinedScrollability;
 }
 
 export const _ScrollerI = defineComponent({
@@ -91,7 +91,7 @@ export const _ScrollerI = defineComponent({
       return undefined;
     });
 
-    const scrollabilityRef = computed<ScrollerCombinedScrollability>(() => {
+    const scrollability = computed<ScrollerCombinedScrollability>(() => {
       const guideOffset = guideOffsetRef.value || DEFAULT_GUIDE_OFFSET;
       const { scrollLeft, scrollTop, scrollRight, scrollBottom } = scroller;
       return {
@@ -110,8 +110,8 @@ export const _ScrollerI = defineComponent({
 
     const scrollerRef: ScrollerAPI = {
       scroller,
-      get scrollability() {
-        return scrollabilityRef.value;
+      get scrollable() {
+        return scrollability.value;
       },
     };
 
@@ -121,12 +121,12 @@ export const _ScrollerI = defineComponent({
 
       const guides: VScrollerGuideType[] = [];
 
-      const scrollability = scrollabilityRef.value;
+      const scrollable = scrollability.value;
 
-      scrollability.left && guides.push('left');
-      scrollability.top && guides.push('top');
-      scrollability.right && guides.push('right');
-      scrollability.bottom && guides.push('bottom');
+      scrollable.left && guides.push('left');
+      scrollable.top && guides.push('top');
+      scrollable.right && guides.push('right');
+      scrollable.bottom && guides.push('bottom');
 
       return guides;
     });
