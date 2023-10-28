@@ -133,6 +133,7 @@ export type ExposedComponent<
  */
 export type TypedComponentAPI<
   ComponentConstructor extends AnyComponentConstructor,
+  CustomInterface extends Record<keyof any, unknown> = {},
 > = {
   /**
    * Get a new constructor that extends the component's public IF type
@@ -140,7 +141,8 @@ export type TypedComponentAPI<
    * This is a support method for the inability to infer `expose()` in a jsx expression.
    */
   $expose<Exposed extends Record<string, any>>(): TypedComponent<
-    ExposedComponent<Exposed, ComponentConstructor>
+    ExposedComponent<Exposed, ComponentConstructor>,
+    CustomInterface
   >;
   /**
    * Creating a referenceable component constructor
@@ -150,7 +152,7 @@ export type TypedComponentAPI<
    * @see {@link ReferencedComponent}
    */
   $ref(): ReferencedComponent<ComponentConstructor>;
-};
+} & CustomInterface;
 
 /**
  * Constructor with component type information extension API already set up
@@ -159,28 +161,35 @@ export type TypedComponentAPI<
  */
 export type TypedComponent<
   ComponentConstructor extends AnyComponentConstructor,
-> = ComponentConstructor & TypedComponentAPI<ComponentConstructor>;
+  CustomInterface extends Record<keyof any, unknown> = {},
+> = ComponentConstructor &
+  TypedComponentAPI<ComponentConstructor, CustomInterface>;
 
 /**
  * Set up a utility API for type information extension in the component constructor
  *
  * @param Ctor - Component constructor
+ * @param customInterface - Component constructor custom interface
  * @returns Constructor with utility API already set up
  */
 export function defineTypedComponent<
   ComponentConstructor extends AnyComponentConstructor,
->(Ctor: ComponentConstructor) {
+  CustomInterface extends Record<keyof any, unknown> = {},
+>(Ctor: ComponentConstructor, customInterface?: CustomInterface) {
   const api: TypedComponentAPI<ComponentConstructor> = {
     $expose: () => _TypedComponent,
     $ref: () => componentRef(Ctor),
   };
 
   const _TypedComponent = new Proxy(
-    Ctor as TypedComponent<ComponentConstructor>,
+    Ctor as TypedComponent<ComponentConstructor, CustomInterface>,
     {
       get(target, propertyKey, receiver) {
         const apiProp = (api as any)[propertyKey];
         if (apiProp) return apiProp;
+        if (customInterface && Reflect.has(customInterface, propertyKey)) {
+          return Reflect.get(customInterface, propertyKey, receiver);
+        }
         return Reflect.get(target, propertyKey, receiver);
       },
     },

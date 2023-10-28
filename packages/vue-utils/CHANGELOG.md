@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.7
+
+### Patch Changes
+
+- Static custom IFs can now be defined for components with `defineTypedComponent`.
+
 ## 0.14.6
 
 ### Patch Changes
