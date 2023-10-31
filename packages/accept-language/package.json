@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/accept-language",
-  "version": "0.13.4",
+  "version": "0.13.5",
   "description": "Small parser that parses Accept-Language headers and sorts by quality.",
   "keywords": [
     "fastkit",

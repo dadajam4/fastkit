@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font-gen",
-  "version": "0.13.11",
+  "version": "0.13.12",
   "description": "A tool to generate icon web fonts and their definitions Type-safe for your application.",
   "keywords": [
     "fastkit",

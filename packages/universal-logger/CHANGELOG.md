@@ -1,5 +1,14 @@
 # @fastkit/universal-logger
 
+## 0.13.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.5
+  - @fastkit/cloner@0.1.5
+  - @fastkit/tiny-logger@0.13.5
+
 ## 0.13.5
 
 ### Patch Changes

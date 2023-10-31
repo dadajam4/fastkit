@@ -1,5 +1,11 @@
 # @fastkit/helpers
 
+## 0.13.5
+
+### Patch Changes
+
+- Added method (`omitProperties`) to omit partial properties from objects.
+
 ## 0.13.4
 
 ### Patch Changes

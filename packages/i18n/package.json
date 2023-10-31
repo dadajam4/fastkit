@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/i18n",
-  "version": "0.13.4",
+  "version": "0.13.5",
   "description": "A library for localizing applications into multiple languages, regardless of the server/browser execution environment.",
   "keywords": [
     "fastkit",

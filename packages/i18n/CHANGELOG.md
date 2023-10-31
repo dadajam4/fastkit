@@ -1,5 +1,13 @@
 # @fastkit/i18n
 
+## 0.13.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.5
+  - @fastkit/tiny-logger@0.13.5
+
 ## 0.13.4
 
 ### Patch Changes

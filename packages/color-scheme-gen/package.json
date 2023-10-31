@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color-scheme-gen",
-  "version": "0.13.11",
+  "version": "0.13.12",
   "description": "Generator for generating \"color\" schemas.",
   "keywords": [
     "fastkit",

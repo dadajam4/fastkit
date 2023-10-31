@@ -247,7 +247,7 @@ export function mapFromObjectArray<
  */
 export function pickProperties<
   T extends Record<keyof any, any>,
-  K extends keyof T = never,
+  K extends keyof T,
 >(obj: T, props: K[], includesUndefined?: boolean): Pick<T, K> {
   const results = {} as Pick<T, K>;
   for (const prop of props) {
@@ -257,4 +257,25 @@ export function pickProperties<
     }
   }
   return results;
+}
+
+/**
+ * Retrieve a new object by removing the property corresponding to the specified key from the given object
+ *
+ * @param obj - Source object
+ * @param props - List of property names to be removed
+ * @param excludeUndefined - After performing the removal, further undefined properties can be removed or
+ * @returns Objects with specified properties already removed
+ */
+export function omitProperties<
+  T extends Record<keyof any, any>,
+  K extends keyof T,
+>(obj: T, props: K[], excludeUndefined?: boolean): Omit<T, K> {
+  const results = {
+    ...obj,
+  } as Omit<T, K>;
+  for (const prop of props) {
+    delete (results as any)[prop];
+  }
+  return excludeUndefined ? removeUndef(results) : results;
 }
