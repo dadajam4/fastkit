@@ -1,5 +1,11 @@
 # @fastkit/helpers
 
+## 0.13.4
+
+### Patch Changes
+
+- Added method (`pickProperties`) to extract partial properties from objects.
+
 ## 0.13.3
 
 ### Patch Changes

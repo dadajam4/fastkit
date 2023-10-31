@@ -201,6 +201,13 @@ objectFromArray.build =
   ) =>
     objectFromArray(rows, cb);
 
+/**
+ * To obtain an object with all undefined properties completely removed from the specified object.
+ *
+ * @param obj - object
+ * @param deep - Recursively delete undefined properties
+ * @returns Objects with undefined properties already deleted
+ */
 export function removeUndef<T extends Record<string, any>>(
   obj: T,
   deep = false,
@@ -228,4 +235,26 @@ export function mapFromObjectArray<
     },
     {} as Record<T[K], T>,
   );
+}
+
+/**
+ * To obtain a new object that extracts properties corresponding to specified keys from the given object
+ *
+ * @param obj - Source object for extraction
+ * @param props - List of property names to extract
+ * @param includesUndefined - Extract `undefined` values as well?
+ * @returns Extracted objects
+ */
+export function pickProperties<
+  T extends Record<keyof any, any>,
+  K extends keyof T = never,
+>(obj: T, props: K[], includesUndefined?: boolean): Pick<T, K> {
+  const results = {} as Pick<T, K>;
+  for (const prop of props) {
+    const value = obj[prop];
+    if (includesUndefined || value !== undefined) {
+      results[prop] = value;
+    }
+  }
+  return results;
 }

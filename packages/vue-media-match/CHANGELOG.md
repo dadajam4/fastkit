@@ -1,5 +1,12 @@
 # @fastkit/vue-media-match
 
+## 0.13.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.4
+
 ## 0.13.10
 
 ### Patch Changes

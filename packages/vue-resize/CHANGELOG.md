@@ -1,5 +1,13 @@
 # @fastkit/vue-resize
 
+## 0.1.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.4
+  - @fastkit/vue-utils@0.14.9
+
 ## 0.1.10
 
 ### Patch Changes

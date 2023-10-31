@@ -1,5 +1,13 @@
 # @fastkit/body-scroll-lock
 
+## 0.13.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.4
+  - @fastkit/tiny-logger@0.13.4
+
 ## 0.13.3
 
 ### Patch Changes

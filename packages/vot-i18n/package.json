@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot-i18n",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "Library for multilingual localization of vot applications.",
   "keywords": [
     "fastkit",

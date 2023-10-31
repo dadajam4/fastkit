@@ -1,5 +1,12 @@
 # @fastkit/vue-keyboard
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/keyboard@0.13.4
+
 ## 0.1.3
 
 ### Patch Changes
