@@ -1,5 +1,16 @@
 # @fastkit/vui
 
+## 0.16.46
+
+### Patch Changes
+
+- Fixed typo in IF method.
+
+  `calicurateViewHeight` to `calculateViewHeight`
+
+- Updated dependencies []:
+  - @fastkit/vue-app-layout@0.14.15
+
 ## 0.16.45
 
 ### Patch Changes

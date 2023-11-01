@@ -41,7 +41,7 @@ const DATA_TABLE_DEFAULTS = {
   descQueryValue: 'DESC',
   limits: [5, 10, 20, 50, 100],
   limitDefault: 20,
-  contorolThreshold: 10,
+  controlThreshold: 10,
   searchQuery: [] as string | string[],
 };
 
@@ -179,9 +179,9 @@ export const VDataTable = defineComponent({
       type: Number,
       default: () => DATA_TABLE_DEFAULTS.limitDefault,
     },
-    contorolThreshold: {
+    controlThreshold: {
       type: Number,
-      default: () => DATA_TABLE_DEFAULTS.contorolThreshold,
+      default: () => DATA_TABLE_DEFAULTS.controlThreshold,
     },
     headers: {
       type: Array as PropType<DataTableHeader<any>[]>,
@@ -205,7 +205,7 @@ export const VDataTable = defineComponent({
     rowSettings: [Object, Function] as PropType<RawDataTableRowSettings>,
   },
   emits: {
-    input: (selecteds: string[]) => true,
+    input: (selectedValues: string[]) => true,
   },
   setup(props, ctx) {
     const vui = useVui();
@@ -300,7 +300,7 @@ export const VDataTable = defineComponent({
       }
 
       return {
-        maxHeight: layout.calicurateViewHeight(
+        maxHeight: layout.calculateViewHeight(
           _maxHeight,
           -footerHeight - 100,
           200,
@@ -328,7 +328,7 @@ export const VDataTable = defineComponent({
     );
 
     const needShowHeaderControlRef = computed(
-      () => props.items.length > props.contorolThreshold,
+      () => props.items.length > props.controlThreshold,
     );
 
     const sortByRef = computed({
@@ -348,7 +348,7 @@ export const VDataTable = defineComponent({
       props.descQueryValue,
     ]);
 
-    const usePaigingRef = computed(() => props.limits.length > 0);
+    const usePagingRef = computed(() => props.limits.length > 0);
 
     const orderByRef = computed({
       get: () => {
@@ -432,7 +432,7 @@ export const VDataTable = defineComponent({
 
       vui.location.pushQuery({
         ...queries,
-        ...(usePaigingRef.value
+        ...(usePagingRef.value
           ? {
               [props.pageQuery]: 1,
             }
@@ -565,7 +565,7 @@ export const VDataTable = defineComponent({
       const isIndeterminate = isIndeterminateRef.value;
       const isAllSelected = isAllSelectedRef.value;
       const { defaultOrder, ascQueryValue } = props;
-      // const usePaiging = usePaigingRef.value;
+      // const usePaging = usePagingRef.value;
 
       const children = headersRef.value.map((header) => {
         const { label, sortQuery, align, key } = header;
@@ -596,9 +596,6 @@ export const VDataTable = defineComponent({
             />,
           );
         }
-        // if (key === DELETOR_HEADER_SYMBOL) {
-        //   headerChildren.push('削除');
-        // }
 
         const sortActive = sortBy === sortQuery;
 
@@ -673,7 +670,6 @@ export const VDataTable = defineComponent({
     function defaultItemSlot(payload: DataTableItemSlotPayload) {
       const { key, item, selected } = payload;
       const headers = headersRef.value;
-      // const { $scopedSlots, $createElement, deletor } = this;
       const children = headers.map((header) => {
         const { cell, align, key: headerKey } = header;
         const cellSlot = cell || ctx.slots.cell;
@@ -705,37 +701,10 @@ export const VDataTable = defineComponent({
                   onChange={(ev) => {
                     toggleSelect(key);
                   }}
-                  // checkHandler={(e) => {
-                  //   this.toggleSelect(key as T[K]);
-                  // }}
                 />,
               ];
               break;
             }
-            // case DELETOR_HEADER_SYMBOL: {
-            //   if (deletor) {
-            //     const onClick = async (event: MouseEvent) => {
-            //       if (
-            //         await this.$confirm(`${key}を削除します。よろしいですか？`)
-            //       ) {
-            //         this.deletingTargets.push(key);
-            //         await deletor(item);
-            //         this.deletingTargets.splice(
-            //           this.deletingTargets.indexOf(key),
-            //           1,
-            //         );
-            //       }
-            //     };
-            //     cellChildren = [
-            //       <VBtn
-            //         icon="trush"
-            //         onClick={onClick}
-            //         disabled={this.deletingTargets.includes(key)}
-            //       />,
-            //     ];
-            //   }
-            //   break;
-            // }
           }
         }
 
@@ -809,10 +778,10 @@ export const VDataTable = defineComponent({
 
     return () => {
       const isEmpty = isEmptyRef.value;
-      const usePaiging = usePaigingRef.value;
+      const usePaging = usePagingRef.value;
       return (
         <div class={['v-data-table', classesRef.value]}>
-          {!isEmpty && usePaiging && needShowHeaderControlRef.value && (
+          {!isEmpty && usePaging && needShowHeaderControlRef.value && (
             <div class="v-data-table__header">{genControls()}</div>
           )}
           <div class="v-data-table__body container-pull">
@@ -841,7 +810,7 @@ export const VDataTable = defineComponent({
             </Transition>
           </div>
           {!isEmpty &&
-            usePaiging &&
+            usePaging &&
             withDirectives(
               <div class="v-data-table__footer">{genControls()}</div>,
               [

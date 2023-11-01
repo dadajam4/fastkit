@@ -148,7 +148,7 @@ export class VueAppLayout {
     return stack;
   }
 
-  calicurateViewHeight(height: number | string, adds = 0, minHeight = 0) {
+  calculateViewHeight(height: number | string, adds = 0, minHeight = 0) {
     if (typeof height === 'number')
       return `${Math.max(height + adds, minHeight)}px`;
     const perMatch = height.match(/([\d.]+)%$/);
