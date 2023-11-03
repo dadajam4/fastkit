@@ -235,7 +235,7 @@ export function createQueryValueExtractor(
  * @see {@link QueryValueExtractor}
  */
 export type QueriesExtractor<
-  Schema extends QueriesSchema,
+  Schema extends QueriesSchema = QueriesSchema,
   I = ExtractQueryTypes<Schema>,
 > = {
   [K in keyof I]-?: QueryValueExtractor<I[K], any, boolean>;

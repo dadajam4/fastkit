@@ -74,8 +74,8 @@
     "scope": "vue",
     "feature": "i18n",
     "description": {
-      "en": "Library for multilingual localization of Vue applications.",
-      "ja": "Vueアプリケーションを多言語ローカライズするためのライブラリ。"
+      "en": "A library for convenient and type-safe handling of vue-router.",
+      "ja": "vue-routerを便利にTypeセーフに扱うためのライブラリ"
     }
   }
 }

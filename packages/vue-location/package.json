@@ -2,7 +2,7 @@
   "name": "@fastkit/vue-location",
   "version": "0.1.12",
   "description": "vue-location",
-  "keywords": [],
+  "keywords": ["vue", "vue-router"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"
@@ -50,5 +50,13 @@
   "peerDependencies": {
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "",
+    "description": {
+      "en": "Custom classes for Type-safe handling of exceptions in your application.",
+      "ja": "あなたのアプリケーションで例外をTypeセーフに取り扱うためのカスタムクラス。"
+    }
   }
 }

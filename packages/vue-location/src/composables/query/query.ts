@@ -13,7 +13,7 @@ import { useRouter, type LocationQuery, type Router } from 'vue-router';
  *
  * @see {@link QueriesSchema}
  */
-export type TypedQuery<Schema extends QueriesSchema> =
+export type TypedQuery<Schema extends QueriesSchema = QueriesSchema> =
   ExtractQueryTypes<Schema> & {
     /**
      * Retrieve the current value corresponding to the specified query name and throw an exception if it doesn't exist.
