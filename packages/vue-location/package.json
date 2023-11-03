@@ -1,8 +1,11 @@
 {
   "name": "@fastkit/vue-location",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "vue-location",
-  "keywords": ["vue", "vue-router"],
+  "keywords": [
+    "vue",
+    "vue-router"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dadajam4/fastkit.git"

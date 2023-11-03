@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.1.13
+
+### Patch Changes
+
+- Add Typed Query composables.
+
 ## 0.1.12
 
 ### Patch Changes
