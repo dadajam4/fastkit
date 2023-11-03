@@ -41,6 +41,7 @@
     "lint": "pnpm run eslint",
     "stub": "plugboy stub",
     "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
