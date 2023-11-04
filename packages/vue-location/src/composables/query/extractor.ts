@@ -3,12 +3,15 @@ import {
   QuerySchemaSpec,
   QuerySchema,
   QueriesSchema,
-  ExtractQueryTypes,
   BooleanQuerySchema,
+  InferQueryType,
 } from './types';
-import { normalizeRawBooleanQuerySchema } from './_internal';
-
-type LocationQueryValueChunk = string | null | undefined;
+import {
+  normalizeRawBooleanQuerySchema,
+  normalizeType,
+  normalizeQuerySchemaSpec,
+  LocationQueryValueChunk,
+} from './_internal';
 
 function stringExtractor(
   queryValue: LocationQueryValueChunk,
@@ -62,11 +65,69 @@ function typedExtractor<T>(
   if (extracted === type) return extracted;
 }
 
+type NullValue = null | undefined;
+
 type ExtractorReturnValue<
   T = any,
-  D = T,
+  D extends T | NullValue = undefined,
   R extends boolean = false,
-> = R extends true ? Exclude<T | D, undefined> : T | D;
+> = R extends true
+  ? Exclude<T, undefined>
+  : D extends undefined
+  ? T
+  : Exclude<T | D, undefined>;
+
+/**
+ * The state of the query extraction result
+ *
+ * - `found` Found a value
+ * - `fallback-default` Fallback to the default value
+ * - `missing` No value was found
+ * - `validation-failed` Validation failed
+ */
+export type QueryExtractResultState =
+  | 'found'
+  | 'fallback-default'
+  | 'missing'
+  | 'validation-failed';
+
+/**
+ * The result of the query value extraction
+ */
+export interface QueryExtractorResult<
+  T = any,
+  D extends T | NullValue = undefined,
+  R extends boolean = false,
+> {
+  /**
+   * The state of the query extraction result
+   *
+   * @see {@link QueryExtractResultState}
+   */
+  state: QueryExtractResultState;
+  /**
+   * The query value from the extraction source, which is vue-router
+   */
+  source: LocationQueryValue | LocationQueryValue[] | undefined;
+  /**
+   * The validated query resource
+   */
+  validatedValues: LocationQueryValue | LocationQueryValue[] | undefined;
+  /**
+   * The list of matched query values
+   */
+  matchedValues: LocationQueryValue[];
+  /**
+   * The extracted value
+   */
+  value: ExtractorReturnValue<T, D, R>;
+  /**
+   * If a validation is specified in the schema, this refers to the exception thrown during the validation process
+   */
+  validationError?: unknown;
+}
+
+// D extends T | NullValue = undefined
 
 /**
  * Query value extractor
@@ -76,11 +137,14 @@ type ExtractorReturnValue<
  * @param required - Throw an exception when it cannot be detected
  * @returns Extracted value
  */
-export type QueryValueExtractor<T = any, D = T, R extends boolean = false> = ((
+export type QueryValueExtractor<
+  Spec extends QuerySchemaSpec = QuerySchemaSpec,
+  T = InferQueryType<Spec>,
+> = (<D extends T | NullValue = undefined, R extends boolean = false>(
   queryValues: LocationQueryValue | LocationQueryValue[] | undefined,
   defaultValue?: D,
   required?: R,
-) => ExtractorReturnValue<T, D, R>) & {
+) => QueryExtractorResult<T, D, R>) & {
   /** Query name */
   get queryName(): string;
   /**
@@ -94,26 +158,15 @@ export type QueryValueExtractor<T = any, D = T, R extends boolean = false> = ((
    * @param value - Value to serialize
    * @returns Serialized value
    */
-  serialize(value: T): LocationQueryValue | LocationQueryValue[] | undefined;
+  serialize(
+    value: InferQueryType<Spec>,
+  ): LocationQueryValue | LocationQueryValue[] | undefined;
 };
 
-const normalizeType = (type: any) =>
-  type == null || type === true ? String : type;
-
-const normalizeQuerySchemaSpec = (
-  spec: QuerySchemaSpec | null | true,
-): QuerySchema => {
-  spec = normalizeType(spec);
-  const result = {
-    ...(typeof spec === 'object' && !Array.isArray(spec)
-      ? (spec as QuerySchema)
-      : { type: spec }),
-  };
-  if (result.type === Boolean && result.default === undefined) {
-    result.default = false;
-  }
-  return result;
-};
+const createMissingError = (queryName: string) =>
+  new Error(
+    `missing required query value${queryName ? ` "${queryName}"` : ''}.`,
+  );
 
 /**
  * Generate a query value extractor
@@ -125,10 +178,10 @@ const normalizeQuerySchemaSpec = (
  * @see {@link QuerySchemaSpec}
  * @see {@link QueryValueExtractor}
  */
-export function createQueryValueExtractor(
-  spec: QuerySchemaSpec | null | true,
+export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
+  spec: Spec,
   queryName?: string,
-): QueryValueExtractor {
+): QueryValueExtractor<Spec> {
   const schema = normalizeQuerySchemaSpec(spec);
 
   const {
@@ -138,13 +191,52 @@ export function createQueryValueExtractor(
     validator,
     aliasFor,
   } = schema;
-  const resolvedQueryName = aliasFor || queryName;
+  const resolvedQueryName = aliasFor || queryName || '';
   const booleanSchema = normalizeRawBooleanQuerySchema(schema.booleanSchema);
   const types = (Array.isArray(type) ? type : [type]).map(normalizeType);
-  const extractValue = (queryValue: LocationQueryValue | undefined) => {
-    if (queryValue !== undefined && validator?.(queryValue) === false) {
-      return;
+
+  const validate = <
+    T extends LocationQueryValue | LocationQueryValue[] | undefined,
+  >(
+    queryValues: T,
+  ): T | undefined => {
+    if (!validator) return queryValues;
+    if (Array.isArray(queryValues)) {
+      return queryValues.filter((value) => validator(value) !== false) as T;
     }
+    return validator(queryValues) === false ? undefined : queryValues;
+  };
+
+  const prepareValues = <
+    T extends LocationQueryValue | LocationQueryValue[] | undefined,
+  >(
+    queryValues: T,
+  ): {
+    source: LocationQueryValue | LocationQueryValue[] | undefined;
+    validatedValues: LocationQueryValue | LocationQueryValue[] | undefined;
+    validationError?: unknown;
+  } => {
+    const source = (
+      Array.isArray(queryValues) ? [...queryValues] : queryValues
+    ) as T;
+    let validatedValues: LocationQueryValue | LocationQueryValue[] | undefined;
+    let validationError: unknown;
+    try {
+      validatedValues = validate(queryValues);
+    } catch (err) {
+      validationError = err;
+    }
+    return {
+      source,
+      validatedValues,
+      validationError,
+    };
+  };
+
+  const extractValue = (queryValue: LocationQueryValue | undefined) => {
+    // if (queryValue !== undefined && validator?.(queryValue) === false) {
+    //   return;
+    // }
     for (const type of types) {
       let extracted: any;
       if (type === String) {
@@ -183,21 +275,66 @@ export function createQueryValueExtractor(
 
   if (multiple) {
     extractor = ((queryValues, defaultValue = baseDefaultValue, required) => {
+      const prepared = prepareValues(queryValues);
+      const matchedValues: LocationQueryValue[] = [];
+      if (prepared.validationError) {
+        return {
+          state: 'validation-failed',
+          ...prepared,
+          value: undefined,
+          matchedValues,
+        };
+      }
+
+      const { validatedValues } = prepared;
+
       const extracted: any[] = [];
-      const values = Array.isArray(queryValues) ? queryValues : [queryValues];
+      const values = Array.isArray(validatedValues)
+        ? validatedValues
+        : [validatedValues];
       let isFound = false;
       for (const value of values) {
         const picked = extractValue(value);
         if (picked !== undefined) {
           extracted.push(picked);
+          matchedValues.push(value!);
           isFound = true;
         }
       }
-      if (!isFound && defaultValue) return defaultValue;
-      return extracted;
+      if (!isFound) {
+        if (required) {
+          return {
+            state: 'validation-failed',
+            ...prepared,
+            value: extracted,
+            matchedValues,
+            validationError: createMissingError(resolvedQueryName),
+          };
+        }
+        return {
+          state: 'fallback-default',
+          ...prepared,
+          value: defaultValue || extracted,
+          matchedValues,
+        };
+      }
+      if (!isFound && defaultValue) {
+        return {
+          state: 'fallback-default',
+          ...prepared,
+          value: extracted,
+          matchedValues,
+        };
+      }
+      return {
+        state: 'found',
+        ...prepared,
+        value: extracted,
+        matchedValues,
+      };
     }) as QueryValueExtractor;
 
-    extractor.serialize = (value) => {
+    extractor.serialize = (value: any) => {
       if (!value) return;
       if (!Array.isArray(value)) {
         value = [value];
@@ -207,22 +344,73 @@ export function createQueryValueExtractor(
     };
   } else {
     extractor = ((queryValues, defaultValue = baseDefaultValue, required) => {
-      const value = Array.isArray(queryValues) ? queryValues[0] : queryValues;
-      const picked = extractValue(value);
-      if (picked !== undefined) return picked;
-      if (defaultValue !== undefined) return defaultValue;
-      if (required) {
-        throw new Error(
-          `missing required query value${
-            queryName ? ` "${resolvedQueryName}"` : ''
-          }.`,
-        );
+      const prepared = prepareValues(queryValues);
+      const matchedValues: LocationQueryValue[] = [];
+      if (prepared.validationError) {
+        return {
+          state: 'validation-failed',
+          ...prepared,
+          value: undefined,
+          matchedValues,
+        };
       }
+      const { validatedValues } = prepared;
+      const values = Array.isArray(validatedValues)
+        ? validatedValues
+        : [validatedValues];
+
+      let picked: any;
+
+      for (const value of values) {
+        picked = extractValue(value);
+        if (picked !== undefined) {
+          matchedValues.push(value!);
+          break;
+        }
+      }
+      // const value = Array.isArray(validatedValues)
+      //   ? validatedValues[0]
+      //   : validatedValues;
+      // const picked = extractValue(value);
+      if (picked !== undefined) {
+        return {
+          state: 'found',
+          ...prepared,
+          value: picked,
+          matchedValues,
+        };
+      }
+
+      if (defaultValue !== undefined) {
+        return {
+          state: 'fallback-default',
+          ...prepared,
+          value: defaultValue,
+          matchedValues,
+        };
+      }
+
+      if (required) {
+        return {
+          state: 'validation-failed',
+          ...prepared,
+          value: undefined,
+          matchedValues,
+          validationError: createMissingError(resolvedQueryName),
+        };
+      }
+
+      return {
+        state: 'missing',
+        ...prepared,
+        value: undefined,
+        matchedValues,
+      };
     }) as QueryValueExtractor;
     extractor.serialize = serializeChunk;
   }
 
-  (extractor as any).queryName = resolvedQueryName || '';
+  (extractor as any).queryName = resolvedQueryName;
   (extractor as any).schema = schema;
 
   return extractor;
@@ -236,9 +424,9 @@ export function createQueryValueExtractor(
  */
 export type QueriesExtractor<
   Schema extends QueriesSchema = QueriesSchema,
-  I = ExtractQueryTypes<Schema>,
+  // I = ExtractQueryTypes<Schema>,
 > = {
-  [K in keyof I]-?: QueryValueExtractor<I[K], any, boolean>;
+  [K in keyof Schema]-?: QueryValueExtractor<Schema[K]>;
 };
 
 /**

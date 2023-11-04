@@ -15,13 +15,48 @@ describe('createQueryValueExtractor', () => {
   describe('string', () => {
     it('basic', () => {
       const extractor = createQueryValueExtractor(String);
-      expect(extractor(undefined)).toBeUndefined();
-      expect(extractor(null)).toBeUndefined();
-      expect(extractor('')).toBeUndefined();
-      expect(extractor('a')).toBe('a');
-      expect(extractor('1')).toBe('1');
-      expect(extractor([null, '', 'a', '1'])).toBeUndefined();
-      expect(extractor(['a', null, '', '1'])).toBe('a');
+      expect(extractor(undefined)).toMatchObject({
+        state: 'missing',
+        source: undefined,
+        validatedValues: undefined,
+        validationError: undefined,
+        value: undefined,
+        matchedValues: [],
+      });
+      expect(extractor(null)).toMatchObject({
+        state: 'missing',
+        source: null,
+        validatedValues: null,
+        validationError: undefined,
+        value: undefined,
+        matchedValues: [],
+      });
+      expect(extractor('')).toMatchObject({
+        state: 'missing',
+        source: '',
+        validatedValues: '',
+        validationError: undefined,
+        value: undefined,
+        matchedValues: [],
+      });
+      expect(extractor('a')).toMatchObject({
+        state: 'found',
+        source: 'a',
+        validatedValues: 'a',
+        validationError: undefined,
+        value: 'a',
+        matchedValues: ['a'],
+      });
+      expect(extractor('1').value).toBe('1');
+      expect(extractor([null, '', 'a', '1'])).toMatchObject({
+        state: 'found',
+        source: [null, '', 'a', '1'],
+        validatedValues: [null, '', 'a', '1'],
+        validationError: undefined,
+        value: 'a',
+        matchedValues: ['a'],
+      });
+      expect(extractor(['a', null, '', '1']).value).toBe('a');
     });
 
     it('with default', () => {
@@ -29,13 +64,27 @@ describe('createQueryValueExtractor', () => {
         type: String,
         default: '',
       });
-      expect(extractor(undefined)).toBe('');
-      expect(extractor(null)).toBe('');
-      expect(extractor('')).toBe('');
-      expect(extractor('a')).toBe('a');
-      expect(extractor('1')).toBe('1');
-      expect(extractor([null, '', 'a', '1'])).toBe('');
-      expect(extractor(['a', null, '', '1'])).toBe('a');
+      expect(extractor(undefined)).toMatchObject({
+        state: 'fallback-default',
+        source: undefined,
+        validatedValues: undefined,
+        validationError: undefined,
+        value: '',
+        matchedValues: [],
+      });
+      expect(extractor(null).value).toBe('');
+      expect(extractor('').value).toBe('');
+      expect(extractor('a')).toMatchObject({
+        state: 'found',
+        source: 'a',
+        validatedValues: 'a',
+        validationError: undefined,
+        value: 'a',
+        matchedValues: ['a'],
+      });
+      expect(extractor('1').value).toBe('1');
+      expect(extractor([null, '', 'a', '1']).value).toBe('a');
+      expect(extractor(['a', null, '', '1']).value).toBe('a');
     });
 
     it('multiple', () => {
@@ -43,27 +92,76 @@ describe('createQueryValueExtractor', () => {
         type: String,
         multiple: true,
       });
-      expect(extractor(undefined)).toStrictEqual([]);
-      expect(extractor(null)).toStrictEqual([]);
-      expect(extractor('')).toStrictEqual([]);
-      expect(extractor('a')).toStrictEqual(['a']);
-      expect(extractor('1')).toStrictEqual(['1']);
-      expect(extractor([null, '', 'a', '1'])).toStrictEqual(['a', '1']);
-      expect(extractor(['a', null, '', '1'])).toStrictEqual(['a', '1']);
+      expect(extractor(undefined)).toMatchObject({
+        state: 'fallback-default',
+        source: undefined,
+        validatedValues: undefined,
+        validationError: undefined,
+        value: [],
+        matchedValues: [],
+      });
+      expect(extractor(null)).toMatchObject({
+        state: 'fallback-default',
+        source: null,
+        validatedValues: null,
+        validationError: undefined,
+        value: [],
+        matchedValues: [],
+      });
+      expect(extractor('')).toMatchObject({
+        state: 'fallback-default',
+        source: '',
+        validatedValues: '',
+        validationError: undefined,
+        value: [],
+        matchedValues: [],
+      });
+      expect(extractor('a')).toMatchObject({
+        state: 'found',
+        source: 'a',
+        validatedValues: 'a',
+        validationError: undefined,
+        value: ['a'],
+        matchedValues: ['a'],
+      });
+      expect(extractor('1').value).toStrictEqual(['1']);
+      expect(extractor([null, '', 'a', '1'])).toMatchObject({
+        state: 'found',
+        source: [null, '', 'a', '1'],
+        validatedValues: [null, '', 'a', '1'],
+        validationError: undefined,
+        value: ['a', '1'],
+        matchedValues: ['a', '1'],
+      });
+      expect(extractor(['a', null, '', '1']).value).toStrictEqual(['a', '1']);
     });
   });
 
   describe('number', () => {
     it('basic', () => {
       const extractor = createQueryValueExtractor(Number);
-      expect(extractor(undefined)).toBeUndefined();
-      expect(extractor(null)).toBeUndefined();
-      expect(extractor('')).toBeUndefined();
-      expect(extractor('a')).toBeUndefined();
-      expect(extractor('0')).toBe(0);
-      expect(extractor('1')).toBe(1);
-      expect(extractor([null, '', 'a', '1'])).toBeUndefined();
-      expect(extractor(['1', 'a', null, ''])).toBe(1);
+      expect(extractor(undefined).value).toBeUndefined();
+      expect(extractor(null).value).toBeUndefined();
+      expect(extractor('').value).toBeUndefined();
+      expect(extractor('a')).toMatchObject({
+        state: 'missing',
+        source: 'a',
+        validatedValues: 'a',
+        validationError: undefined,
+        value: undefined,
+        matchedValues: [],
+      });
+      expect(extractor('0')).toMatchObject({
+        state: 'found',
+        source: '0',
+        validatedValues: '0',
+        validationError: undefined,
+        value: 0,
+        matchedValues: ['0'],
+      });
+      expect(extractor('1').value).toBe(1);
+      expect(extractor([null, '', 'a', '1']).value).toBe(1);
+      expect(extractor(['1', 'a', null, '']).value).toBe(1);
     });
 
     it('with default', () => {
@@ -71,13 +169,21 @@ describe('createQueryValueExtractor', () => {
         type: Number,
         default: 10,
       });
-      expect(extractor(undefined)).toBe(10);
-      expect(extractor(null)).toBe(10);
-      expect(extractor('')).toBe(10);
-      expect(extractor('a')).toBe(10);
-      expect(extractor('1')).toBe(1);
-      expect(extractor([null, '', 'a', '1'])).toBe(10);
-      expect(extractor(['1', 'a', null, ''])).toBe(1);
+      expect(extractor(undefined).value).toBe(10);
+      expect(extractor(null).value).toBe(10);
+      expect(extractor('').value).toBe(10);
+      expect(extractor('a')).toMatchObject({
+        state: 'fallback-default',
+        source: 'a',
+        validatedValues: 'a',
+        validationError: undefined,
+        value: 10,
+        matchedValues: [],
+      });
+      expect(extractor('1').value).toBe(1);
+      expect(extractor([null, '', 'a', 'b']).value).toBe(10);
+      expect(extractor([null, '', 'a', '1']).value).toBe(1);
+      expect(extractor(['1', 'a', null, '']).value).toBe(1);
     });
 
     it('multiple', () => {
@@ -85,15 +191,15 @@ describe('createQueryValueExtractor', () => {
         type: Number,
         multiple: true,
       });
-      expect(extractor(undefined)).toStrictEqual([]);
-      expect(extractor(null)).toStrictEqual([]);
-      expect(extractor('')).toStrictEqual([]);
-      expect(extractor('a')).toStrictEqual([]);
-      expect(extractor('10')).toStrictEqual([10]);
-      expect(extractor([null, '', '0', '1', 'a', '10'])).toStrictEqual([
+      expect(extractor(undefined).value).toStrictEqual([]);
+      expect(extractor(null).value).toStrictEqual([]);
+      expect(extractor('').value).toStrictEqual([]);
+      expect(extractor('a').value).toStrictEqual([]);
+      expect(extractor('10').value).toStrictEqual([10]);
+      expect(extractor([null, '', '0', '1', 'a', '10']).value).toStrictEqual([
         0, 1, 10,
       ]);
-      expect(extractor(['10', 'a', '1', null, '0', ''])).toStrictEqual([
+      expect(extractor(['10', 'a', '1', null, '0', '']).value).toStrictEqual([
         10, 1, 0,
       ]);
     });
@@ -102,18 +208,33 @@ describe('createQueryValueExtractor', () => {
   describe('boolean', () => {
     it('basic', () => {
       const extractor = createQueryValueExtractor(Boolean);
-      expect(extractor(undefined)).toBe(false);
-      expect(extractor(null)).toBe(true);
-      expect(extractor('')).toBe(false);
-      expect(extractor('a')).toBe(false);
-      expect(extractor('true')).toBe(true);
-      expect(extractor('false')).toBe(false);
-      expect(extractor('1')).toBe(false);
-      expect(extractor('0')).toBe(false);
-      expect(extractor(['', null, 'a', '1'])).toBe(false);
-      expect(extractor([null, '', 'a', '1'])).toBe(true);
-      expect(extractor(['true', null, 'a', '1'])).toBe(true);
-      expect(extractor([null, 'false', 'a', '1'])).toBe(true);
+      expect(extractor(undefined).value).toBe(false);
+      expect(extractor(null).value).toBe(true);
+      expect(extractor('').value).toBe(false);
+      expect(extractor('a')).toMatchObject({
+        state: 'fallback-default',
+        source: 'a',
+        validatedValues: 'a',
+        validationError: undefined,
+        value: false,
+        matchedValues: [],
+      });
+      expect(extractor('true')).toMatchObject({
+        state: 'found',
+        source: 'true',
+        validatedValues: 'true',
+        validationError: undefined,
+        value: true,
+        matchedValues: ['true'],
+      });
+      expect(extractor('false').value).toBe(false);
+      expect(extractor('1').value).toBe(false);
+      expect(extractor('0').value).toBe(false);
+      expect(extractor(['', 'a', 'b']).value).toBe(false);
+      expect(extractor(['', null, 'a', '1']).value).toBe(true);
+      expect(extractor([null, '', 'a', '1']).value).toBe(true);
+      expect(extractor(['true', null, 'a', '1']).value).toBe(true);
+      expect(extractor([null, 'false', 'a', '1']).value).toBe(true);
     });
 
     it('with default', () => {
@@ -121,32 +242,60 @@ describe('createQueryValueExtractor', () => {
         type: Boolean,
         default: true,
       });
-      expect(extractor(undefined)).toBe(true);
-      expect(extractor(null)).toBe(true);
-      expect(extractor('')).toBe(true);
-      expect(extractor('a')).toBe(true);
-      expect(extractor('true')).toBe(true);
-      expect(extractor('false')).toBe(false);
-      expect(extractor('1')).toBe(true);
-      expect(extractor('0')).toBe(true);
-      expect(extractor(['', null, 'a', '1'])).toBe(true);
-      expect(extractor([null, '', 'a', '1'])).toBe(true);
-      expect(extractor(['false', null, 'a', '1'])).toBe(false);
-      expect(extractor([null, 'false', 'a', '1'])).toBe(true);
+      expect(extractor(undefined).value).toBe(true);
+      expect(extractor(null).value).toBe(true);
+      expect(extractor('').value).toBe(true);
+      expect(extractor('a').value).toBe(true);
+      expect(extractor('true').value).toBe(true);
+      expect(extractor('false').value).toBe(false);
+      expect(extractor('1').value).toBe(true);
+      expect(extractor('0').value).toBe(true);
+      expect(extractor(['', null, 'a', '1']).value).toBe(true);
+      expect(extractor([null, '', 'a', '1']).value).toBe(true);
+      expect(extractor(['false', null, 'a', '1']).value).toBe(false);
+      expect(extractor([null, 'false', 'a', '1']).value).toBe(true);
     });
   });
 
   describe('number -> string union', () => {
     it('basic', () => {
       const extractor = createQueryValueExtractor([Number, String]);
-      expect(extractor(undefined)).toBeUndefined();
-      expect(extractor(null)).toBeUndefined();
-      expect(extractor('')).toBeUndefined();
-      expect(extractor('a')).toBe('a');
-      expect(extractor('1')).toBe(1);
-      expect(extractor([null, '', 'a', '1'])).toBeUndefined();
-      expect(extractor(['a', null, '', '1'])).toBe('a');
-      expect(extractor(['0', null, '', 'a'])).toBe(0);
+      expect(extractor(undefined).value).toBeUndefined();
+      expect(extractor(null).value).toBeUndefined();
+      expect(extractor('')).toMatchObject({
+        state: 'missing',
+        source: '',
+        validatedValues: '',
+        validationError: undefined,
+        value: undefined,
+        matchedValues: [],
+      });
+      expect(extractor('a')).toMatchObject({
+        state: 'found',
+        source: 'a',
+        validatedValues: 'a',
+        validationError: undefined,
+        value: 'a',
+        matchedValues: ['a'],
+      });
+      expect(extractor('1').value).toBe(1);
+      expect(extractor([null, '', 'a', '1'])).toMatchObject({
+        state: 'found',
+        source: [null, '', 'a', '1'],
+        validatedValues: [null, '', 'a', '1'],
+        validationError: undefined,
+        value: 'a',
+        matchedValues: ['a'],
+      });
+      expect(extractor(['a', null, '', '1']).value).toBe('a');
+      expect(extractor(['0', null, '', 'a'])).toMatchObject({
+        state: 'found',
+        source: ['0', null, '', 'a'],
+        validatedValues: ['0', null, '', 'a'],
+        validationError: undefined,
+        value: 0,
+        matchedValues: ['0'],
+      });
     });
 
     it('with default', () => {
@@ -154,14 +303,14 @@ describe('createQueryValueExtractor', () => {
         type: [Number, String],
         default: 10,
       });
-      expect(extractor(undefined)).toBe(10);
-      expect(extractor(null)).toBe(10);
-      expect(extractor('')).toBe(10);
-      expect(extractor('a')).toBe('a');
-      expect(extractor('1')).toBe(1);
-      expect(extractor([null, '', 'a', '1'])).toBe(10);
-      expect(extractor(['a', null, '', '1'])).toBe('a');
-      expect(extractor(['1', 'a', null, ''])).toBe(1);
+      expect(extractor(undefined).value).toBe(10);
+      expect(extractor(null).value).toBe(10);
+      expect(extractor('').value).toBe(10);
+      expect(extractor('a').value).toBe('a');
+      expect(extractor('1').value).toBe(1);
+      expect(extractor([null, '', 'a', '1']).value).toBe('a');
+      expect(extractor(['a', null, '', '1']).value).toBe('a');
+      expect(extractor(['1', 'a', null, '']).value).toBe(1);
     });
 
     it('multiple', () => {
@@ -169,13 +318,20 @@ describe('createQueryValueExtractor', () => {
         type: [Number, String],
         multiple: true,
       });
-      expect(extractor(undefined)).toStrictEqual([]);
-      expect(extractor(null)).toStrictEqual([]);
-      expect(extractor('')).toStrictEqual([]);
-      expect(extractor('a')).toStrictEqual(['a']);
-      expect(extractor('1')).toStrictEqual([1]);
-      expect(extractor([null, '', 'a', '1'])).toStrictEqual(['a', 1]);
-      expect(extractor(['a', null, '', '1'])).toStrictEqual(['a', 1]);
+      expect(extractor(undefined).value).toStrictEqual([]);
+      expect(extractor(null).value).toStrictEqual([]);
+      expect(extractor('').value).toStrictEqual([]);
+      expect(extractor('a').value).toStrictEqual(['a']);
+      expect(extractor('1').value).toStrictEqual([1]);
+      expect(extractor([null, '', 'a', '1'])).toMatchObject({
+        state: 'found',
+        source: [null, '', 'a', '1'],
+        validatedValues: [null, '', 'a', '1'],
+        validationError: undefined,
+        value: ['a', 1],
+        matchedValues: ['a', '1'],
+      });
+      expect(extractor(['a', null, '', '1']).value).toStrictEqual(['a', 1]);
     });
   });
 
@@ -183,18 +339,25 @@ describe('createQueryValueExtractor', () => {
     const TYPE = ['banana', '100', 'apple', 0, 100] as const;
     it('basic', () => {
       const extractor = createQueryValueExtractor(TYPE);
-      expect(extractor(undefined)).toBeUndefined();
-      expect(extractor(null)).toBeUndefined();
-      expect(extractor('')).toBeUndefined();
-      expect(extractor('a')).toBeUndefined();
-      expect(extractor('1')).toBeUndefined();
-      expect(extractor('banana')).toBe('banana');
-      expect(extractor('apple')).toBe('apple');
-      expect(extractor('0')).toBe(0);
-      expect(extractor('100')).toBe('100');
-      expect(extractor([null, '', 'a', '1'])).toBeUndefined();
-      expect(extractor(['a', null, 'banana', '1'])).toBeUndefined();
-      expect(extractor(['banana', null, 'a', '1'])).toBe('banana');
+      expect(extractor(undefined).value).toBeUndefined();
+      expect(extractor(null).value).toBeUndefined();
+      expect(extractor('').value).toBeUndefined();
+      expect(extractor('a').value).toBeUndefined();
+      expect(extractor('1').value).toBeUndefined();
+      expect(extractor('banana').value).toBe('banana');
+      expect(extractor('apple').value).toBe('apple');
+      expect(extractor('0').value).toBe(0);
+      expect(extractor('100').value).toBe('100');
+      expect(extractor([null, '', 'a', '1']).value).toBeUndefined();
+      expect(extractor(['a', null, 'banana', '1'])).toMatchObject({
+        state: 'found',
+        source: ['a', null, 'banana', '1'],
+        validatedValues: ['a', null, 'banana', '1'],
+        validationError: undefined,
+        value: 'banana',
+        matchedValues: ['banana'],
+      });
+      expect(extractor(['banana', null, 'a', '1']).value).toBe('banana');
     });
 
     it('with default', () => {
@@ -202,16 +365,30 @@ describe('createQueryValueExtractor', () => {
         type: TYPE,
         default: 0,
       });
-      expect(extractor(undefined)).toBe(0);
-      expect(extractor(null)).toBe(0);
-      expect(extractor('')).toBe(0);
-      expect(extractor('a')).toBe(0);
-      expect(extractor('0')).toBe(0);
-      expect(extractor('banana')).toBe('banana');
-      expect(extractor('100')).toBe('100');
-      expect(extractor([null, '', 'a', '1'])).toBe(0);
-      expect(extractor(['a', null, 'banana', '1'])).toBe(0);
-      expect(extractor(['banana', null, 'a', '1'])).toBe('banana');
+      expect(extractor(undefined).value).toBe(0);
+      expect(extractor(null).value).toBe(0);
+      expect(extractor('').value).toBe(0);
+      expect(extractor('a')).toMatchObject({
+        state: 'fallback-default',
+        source: 'a',
+        validatedValues: 'a',
+        validationError: undefined,
+        value: 0,
+        matchedValues: [],
+      });
+      expect(extractor('0').value).toBe(0);
+      expect(extractor('banana')).toMatchObject({
+        state: 'found',
+        source: 'banana',
+        validatedValues: 'banana',
+        validationError: undefined,
+        value: 'banana',
+        matchedValues: ['banana'],
+      });
+      expect(extractor('100').value).toBe('100');
+      expect(extractor([null, '', 'a', '1']).value).toBe(0);
+      expect(extractor(['a', null, 'banana', '1']).value).toBe('banana');
+      expect(extractor(['banana', null, 'a', '1']).value).toBe('banana');
     });
 
     it('multiple', () => {
@@ -219,18 +396,36 @@ describe('createQueryValueExtractor', () => {
         type: TYPE,
         multiple: true,
       });
-      expect(extractor(undefined)).toStrictEqual([]);
-      expect(extractor(null)).toStrictEqual([]);
-      expect(extractor('')).toStrictEqual([]);
-      expect(extractor('a')).toStrictEqual([]);
-      expect(extractor('0')).toStrictEqual([0]);
-      expect(extractor('banana')).toStrictEqual(['banana']);
-      expect(extractor('100')).toStrictEqual(['100']);
-      expect(extractor([null, '', 'a', '1'])).toStrictEqual([]);
-      expect(extractor(['0', null, 'banana', '1'])).toStrictEqual([
-        0,
-        'banana',
-      ]);
+      expect(extractor(undefined)).toMatchObject({
+        state: 'fallback-default',
+        source: undefined,
+        validatedValues: undefined,
+        validationError: undefined,
+        value: [],
+        matchedValues: [],
+      });
+      expect(extractor(null).value).toStrictEqual([]);
+      expect(extractor('').value).toStrictEqual([]);
+      expect(extractor('a').value).toStrictEqual([]);
+      expect(extractor('0')).toMatchObject({
+        state: 'found',
+        source: '0',
+        validatedValues: '0',
+        validationError: undefined,
+        value: [0],
+        matchedValues: ['0'],
+      });
+      expect(extractor('banana').value).toStrictEqual(['banana']);
+      expect(extractor('100').value).toStrictEqual(['100']);
+      expect(extractor([null, '', 'a', '1']).value).toStrictEqual([]);
+      expect(extractor(['0', null, 'banana', '1'])).toMatchObject({
+        state: 'found',
+        source: ['0', null, 'banana', '1'],
+        validatedValues: ['0', null, 'banana', '1'],
+        validationError: undefined,
+        value: [0, 'banana'],
+        matchedValues: ['0', 'banana'],
+      });
     });
   });
 });
@@ -298,7 +493,7 @@ describe('createQueriesExtractor', () => {
   it('extract', () => {
     const schema = createSchema();
     const extractor = createQueriesExtractor(schema);
-    expect(extractor.unionMultiple(['50', '2', 'apple'])).toMatchObject([
+    expect(extractor.unionMultiple(['50', '2', 'apple']).value).toMatchObject([
       50,
       'apple',
     ]);

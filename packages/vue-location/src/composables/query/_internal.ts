@@ -2,7 +2,10 @@ import type {
   RawBooleanQueryValues,
   RawBooleanQuerySchema,
   BooleanQuerySchema,
+  QuerySchemaSpec,
+  QuerySchema,
 } from './types';
+import type { LocationQueryValue } from 'vue-router';
 
 export type Data = Record<string, unknown>;
 
@@ -86,3 +89,23 @@ export type InferMultipleAndDefault<T, U> = [T] extends [{ multiple: true }]
   : [T] extends [{ default: infer D }]
   ? U | D
   : U | undefined;
+
+export const normalizeType = (type: any) =>
+  type == null || type === true ? String : type;
+
+export const normalizeQuerySchemaSpec = (
+  spec: QuerySchemaSpec | null | true,
+): QuerySchema => {
+  spec = normalizeType(spec);
+  const result = {
+    ...(typeof spec === 'object' && !Array.isArray(spec)
+      ? (spec as QuerySchema)
+      : { type: spec }),
+  };
+  if (result.type === Boolean && result.default === undefined) {
+    result.default = false;
+  }
+  return result;
+};
+
+export type LocationQueryValueChunk = LocationQueryValue | undefined;

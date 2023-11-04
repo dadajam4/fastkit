@@ -80,6 +80,10 @@ async function initRouter(query?: LocationQueryRaw) {
         path: '/some-route',
         component: {},
       },
+      {
+        path: '/another-route',
+        component: {},
+      },
     ],
   });
 
@@ -154,21 +158,6 @@ describe('useTypedQuery', () => {
     });
     const query = useTypedQuery(schema, router);
     expect(query.stringAlias).toBe('hello');
-
-    // await router.push({
-    //   path: router.currentRoute.value.path,
-    //   query: {
-    //     string2: 'hello moved',
-    //   },
-    // });
-
-    // await query.$push({
-    //   stringAlias: 'hello moved',
-    // });
-
-    // console.log(router.currentRoute.value.query, { ...query });
-
-    // expect(query.stringAlias).toBe('hello moved');
   });
 
   it('dynamic value', async () => {
@@ -211,7 +200,7 @@ describe('useTypedQuery', () => {
     it('current query', async () => {
       const router = await initRouter();
       const query = useTypedQuery(schema, router);
-      expect(query.$serialize()).toStrictEqual({
+      expect(query.$serializeCurrentValues()).toStrictEqual({
         stringWithDefault: '',
         numberWithDefault: '1',
         boolean: 'false',
@@ -248,7 +237,7 @@ describe('useTypedQuery', () => {
         unionMultiple: [],
       });
 
-      expect(query.$serialize()).toStrictEqual({
+      expect(query.$serializeCurrentValues()).toStrictEqual({
         string: 'abc',
         string2: 'def',
         stringWithDefault: '',
@@ -311,28 +300,87 @@ describe('useTypedQuery', () => {
     });
   });
 
-  it('location', async () => {
-    const router = await initRouter();
-    const query = useTypedQuery(schema, router);
-    const mergedLocation = query.$location({
-      string: 'abc',
-      stringAlias: 'def',
-      number: 123,
-      numberWithDefault: 20,
-      boolean: true,
-      stringOrNumberMultiple: [1, 'apple'],
+  describe('location', () => {
+    it('reset', async () => {
+      const router = await initRouter({
+        numberMultiple: ['1', '2'],
+      });
+      const query = useTypedQuery(schema, router);
+      const loc = query.$location({
+        string: 'abc',
+        stringAlias: 'def',
+        number: 123,
+        numberWithDefault: 20,
+        boolean: true,
+        stringOrNumberMultiple: [1, 'apple'],
+      });
+      expect(loc.query).toStrictEqual({
+        string: 'abc',
+        string2: 'def',
+        number: '123',
+        numberWithDefault: '20',
+        boolean: 'true',
+        stringOrNumberMultiple: ['1', 'apple'],
+      });
     });
-    expect(mergedLocation.query).toStrictEqual({
-      stringWithDefault: '',
-      numberWithDefault: '20',
-      boolean: 'true',
-      customBoolean: '0',
-      strictBoolean: 'false',
-      booleanWithDefault: 'true',
-      stringOrNumberMultiple: ['1', 'apple'],
-      string: 'abc',
-      string2: 'def',
-      number: '123',
+
+    it('merge', async () => {
+      const router = await initRouter({
+        string: 'hello',
+        numberMultiple: [1, 2],
+      });
+      const query = useTypedQuery(schema, router);
+      const loc = query.$location(
+        {
+          string: 'abc',
+          stringAlias: 'def',
+          number: 123,
+          numberWithDefault: 20,
+          boolean: true,
+          stringOrNumberMultiple: [1, 'apple'],
+        },
+        { merge: true },
+      );
+
+      expect(loc.query).toStrictEqual({
+        string: 'abc',
+        string2: 'def',
+        number: '123',
+        numberMultiple: ['1', '2'],
+        numberWithDefault: '20',
+        boolean: 'true',
+        stringOrNumberMultiple: ['1', 'apple'],
+      });
+    });
+
+    it('another-route', async () => {
+      const router = await initRouter({
+        string: 'hello',
+        numberMultiple: [1, 2],
+      });
+      const query = useTypedQuery(schema, router);
+      const loc = query.$location(
+        {
+          string: 'abc',
+          stringAlias: 'def',
+          number: 123,
+          numberWithDefault: 20,
+          boolean: true,
+          stringOrNumberMultiple: [1, 'apple'],
+        },
+        { to: '/another-route', merge: true },
+      );
+
+      expect(loc.path).toBe('/another-route');
+      expect(loc.query).toStrictEqual({
+        string: 'abc',
+        string2: 'def',
+        number: '123',
+        // numberMultiple: ['1', '2'],
+        numberWithDefault: '20',
+        boolean: 'true',
+        stringOrNumberMultiple: ['1', 'apple'],
+      });
     });
   });
 
@@ -342,26 +390,25 @@ describe('useTypedQuery', () => {
       stringOrNumber: 20,
     });
     const query = useTypedQuery(schema, router);
-    await query.$push({
-      string: 'abc',
-      stringAlias: 'def',
-      number: 123,
-      numberWithDefault: 20,
-      boolean: true,
-      stringOrNumberMultiple: [1, 'apple'],
-    });
+    await query.$push(
+      {
+        string: 'abc',
+        stringAlias: 'def',
+        number: 123,
+        numberWithDefault: 20,
+        boolean: true,
+        stringOrNumberMultiple: [1, 'apple'],
+      },
+      { merge: true },
+    );
     expect(router.currentRoute.value.query).toStrictEqual({
-      stringOrNumber: '20',
-      stringWithDefault: '',
-      numberWithDefault: '20',
-      boolean: 'true',
-      customBoolean: '0',
-      strictBoolean: 'false',
-      booleanWithDefault: 'true',
-      stringOrNumberMultiple: ['1', 'apple'],
       string: 'abc',
       string2: 'def',
       number: '123',
+      numberWithDefault: '20',
+      boolean: 'true',
+      stringOrNumber: '20',
+      stringOrNumberMultiple: ['1', 'apple'],
     });
   });
 
@@ -371,26 +418,25 @@ describe('useTypedQuery', () => {
       stringOrNumber: 20,
     });
     const query = useTypedQuery(schema, router);
-    await query.$replace({
-      string: 'abc',
-      stringAlias: 'def',
-      number: 123,
-      numberWithDefault: 20,
-      boolean: true,
-      stringOrNumberMultiple: [1, 'apple'],
-    });
+    await query.$replace(
+      {
+        string: 'abc',
+        stringAlias: 'def',
+        number: 123,
+        numberWithDefault: 20,
+        boolean: true,
+        stringOrNumberMultiple: [1, 'apple'],
+      },
+      { merge: true },
+    );
     expect(router.currentRoute.value.query).toStrictEqual({
-      stringOrNumber: '20',
-      stringWithDefault: '',
-      numberWithDefault: '20',
-      boolean: 'true',
-      customBoolean: '0',
-      strictBoolean: 'false',
-      booleanWithDefault: 'true',
-      stringOrNumberMultiple: ['1', 'apple'],
       string: 'abc',
       string2: 'def',
       number: '123',
+      numberWithDefault: '20',
+      boolean: 'true',
+      stringOrNumber: '20',
+      stringOrNumberMultiple: ['1', 'apple'],
     });
   });
 });

@@ -41,6 +41,8 @@ export interface BooleanQuerySchema {
   nullToTrue: boolean;
 }
 
+// export interface QueryExtractResult<T = any>
+
 /**
  * Query schema
  */
@@ -86,10 +88,12 @@ export type QuerySchema<T = any, D = T> = {
    *
    * - This process is executed for each element within an array of query values, if such an array exists.
    * - If it returns false, the value is treated as non-existent.
+   * - The extraction process is aborted if an exception is thrown
    *
    * @param value - The query values obtained by vue-router
+   * @throws If you want to send meta information in the extraction results, throw that information
    */
-  validator?(value: LocationQueryValue): boolean;
+  validator?(value: LocationQueryValue | undefined): boolean;
   /**
    * A serialization function that converts to LocationQueryValue handled in vue-router.
    * @param value - Value to serialize
@@ -100,11 +104,15 @@ export type QuerySchema<T = any, D = T> = {
 };
 
 /** Query schema specification */
-export type QuerySchemaSpec<T = any> = QueryType<T> | QuerySchema<T>;
+export type QuerySchemaSpec<T = any> =
+  | QueryType<T>
+  | QuerySchema<T>
+  | null
+  | true;
 
 /** Queries schema */
 export type QueriesSchema<P = Data> = {
-  [K in keyof P]: QuerySchemaSpec<P[K]> | null | true;
+  [K in keyof P]: QuerySchemaSpec<P[K]>;
 };
 
 export type InferQueryType<T> = [T] extends [null] | [true]

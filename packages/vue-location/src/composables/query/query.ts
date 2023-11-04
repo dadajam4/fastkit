@@ -5,68 +5,136 @@ import {
   ExtractQueryInputs,
   InferQueryType,
 } from './types';
-import { createQueriesExtractor, QueryValueExtractor } from './extractor';
-import { useRouter, type LocationQuery, type Router } from 'vue-router';
+import { createQueriesExtractor, QueryExtractorResult } from './extractor';
+import {
+  useRouter,
+  type LocationQuery,
+  type Router,
+  type RouteLocationRaw,
+} from 'vue-router';
 
 /**
- * An interface for extracting query values corresponding to a schema and utility functions
+ * Route generation options
+ */
+export interface TypedQueryRouteOptions {
+  /**
+   * Overwrite only the specified query while preserving the existing ones
+   *
+   * @default false
+   */
+  merge?: boolean;
+  /**
+   * The destination route
+   *
+   * If not specified, the current route will be selected
+   *
+   * @see {@link RouteLocationRaw}
+   */
+  to?: RouteLocationRaw;
+  // /**
+  //  * Programmatically navigate to a new URL by replacing the current entry in the history stack.
+  //  *
+  //  * @see {@link Router.replace}
+  //  */
+  // replace?: boolean;
+}
+
+/**
+ * An interface for referencing and manipulating queries in a schema-safe manner
+ */
+export interface TypedQueryInterface<
+  Schema extends QueriesSchema = QueriesSchema,
+> {
+  /**
+   * Router instance
+   *
+   * @see {@link Router}
+   */
+  get $router(): Router;
+
+  /**
+   * Current route
+   *
+   * @see {@link Router.currentRoute}
+   */
+  get $currentRoute(): Router['currentRoute']['value'];
+  /**
+   * Retrieve the current value corresponding to the specified query name and throw an exception if it doesn't exist.
+   * @param queryKey - Query name
+   */
+  $ensure<K extends keyof Schema>(
+    queryKey: K,
+  ): Exclude<InferQueryType<Schema[K]>, undefined>;
+  /**
+   * Obtain a query object that serializes all the current values for handling in vue-router.
+   */
+  $serializeCurrentValues(): LocationQuery;
+  /**
+   * Serialize the specified value into a query object that can be handled by vue-router.
+   * @param values - Value to serialize
+   */
+  $serialize(values: ExtractQueryInputs<Schema>): LocationQuery;
+  /**
+   * Serialize the specified value into a query object that can be handled by vue-router.
+   * @param values - Value to serialize
+   * @param mergeCurrentValues - Merge with the current values
+   */
+  $serialize(
+    values: ExtractQueryInputs<Schema>,
+    mergeCurrentValues: false,
+  ): LocationQuery;
+  /**
+   * Merge the specified values with all the current values and obtain a serialized object for handling in vue-router.
+   * @param values - Value to merge
+   * @param mergeCurrentValues - Merge with the current values
+   */
+  $serialize(
+    values: ExtractQueryInputs<Schema>,
+    mergeCurrentValues: true,
+  ): LocationQuery;
+  /**
+   * Get the vue-router location object corresponding to the specified value
+   * @param values - Value to query
+   * @param options - Route generation options
+   *
+   * @see {@link TypedQueryRouteOptions}
+   */
+  $location(
+    values: ExtractQueryInputs<Schema>,
+    options?: TypedQueryRouteOptions,
+  ): ReturnType<Router['resolve']>;
+  /**
+   * Set the specified value as a query and navigate to the route by executing vue-router's `push` method
+   * @param values - Value to query
+   * @param options - Route generation options
+   *
+   * @see {@link Router.push}
+   */
+  $push(
+    values: ExtractQueryInputs<Schema>,
+    options?: TypedQueryRouteOptions,
+  ): ReturnType<Router['push']>;
+  /**
+   * Set the specified value as a query and navigate to the route by executing vue-router's `replace` method
+   * @param values - Value to query
+   * @param options - Route generation options
+   *
+   * @see {@link Router.replace}
+   */
+  $replace(
+    values: ExtractQueryInputs<Schema>,
+    options?: TypedQueryRouteOptions,
+  ): ReturnType<Router['replace']>;
+}
+
+/**
+ * A query object corresponding to a schema and a custom interface for referencing and manipulating queries
  *
  * @see {@link QueriesSchema}
+ * @see {@link TypedQueryInterface}
  */
 export type TypedQuery<Schema extends QueriesSchema = QueriesSchema> =
-  ExtractQueryTypes<Schema> & {
-    /**
-     * Retrieve the current value corresponding to the specified query name and throw an exception if it doesn't exist.
-     * @param queryKey - Query name
-     */
-    $ensure<K extends keyof Schema>(
-      queryKey: K,
-    ): Exclude<InferQueryType<Schema[K]>, undefined>;
-    /**
-     * Obtain a query object that serializes all the current values for handling in vue-router.
-     */
-    $serialize(): LocationQuery;
-    /**
-     * Retrieve an object that serializes values corresponding to the schema for handling in vue-router.
-     * @param values - Value to serialize
-     */
-    $serialize(values: ExtractQueryInputs<Schema>): LocationQuery;
-    /**
-     * Retrieve an object that serializes values corresponding to the schema for handling in vue-router.
-     * @param values - Value to serialize
-     * @param mergeCurrentValues - Merge with the current values
-     */
-    $serialize(
-      values: ExtractQueryInputs<Schema>,
-      mergeCurrentValues: false,
-    ): LocationQuery;
-    /**
-     * Merge the specified values with all the current values and obtain a serialized object for handling in vue-router.
-     * @param values - Value to merge
-     * @param mergeCurrentValues - Merge with the current values
-     */
-    $serialize(
-      values: ExtractQueryInputs<Schema>,
-      mergeCurrentValues: true,
-    ): LocationQuery;
-    /**
-     * Obtain a vue-router location object with the specified values merged into the current root query.
-     * @param values - Value to merge
-     */
-    $location(
-      values: ExtractQueryInputs<Schema>,
-    ): ReturnType<Router['resolve']>;
-    /**
-     * Merge the specified values with the current values and execute the `push` method of vue-router.
-     * @param values - Value to merge
-     */
-    $push(values: ExtractQueryInputs<Schema>): ReturnType<Router['push']>;
-    /**
-     * Merge the specified values with the current values and execute the `replace` method of vue-router.
-     * @param values - Value to merge
-     */
-    $replace(values: ExtractQueryInputs<Schema>): ReturnType<Router['push']>;
-  };
+  ExtractQueryTypes<Schema> & TypedQueryInterface<Schema>;
 
 type AnySchema = Record<string, true>;
 
@@ -88,20 +156,25 @@ export function useTypedQuery<Schema extends QueriesSchema>(
   const extractors = createQueriesExtractor<AnySchema>(schema as any);
   const { currentRoute } = router;
   const getQuery = (queryName: string) => currentRoute.value.query[queryName];
-  const refs = {} as Record<string, ComputedRef>;
-  for (const [queryName, extractor] of Object.entries<QueryValueExtractor>(
-    extractors,
-  )) {
+  const refs = {} as Record<string, ComputedRef<QueryExtractorResult>>;
+  for (const [queryName, extractor] of Object.entries(extractors)) {
     refs[queryName] = computed(() => extractor(getQuery(extractor.queryName)));
   }
 
   const getters = {} as Record<string, any>;
-  const api = {} as TypedQuery<AnySchema>;
+  const api = {
+    get $router() {
+      return router;
+    },
+    get $currentRoute() {
+      return router.currentRoute.value;
+    },
+  } as unknown as TypedQuery<AnySchema>;
 
   const proxy = new Proxy(getters as unknown as TypedQuery<AnySchema>, {
     get: (_target, p) => {
       if (Reflect.has(api, p)) return Reflect.get(api, p);
-      return refs[p as string].value;
+      return refs[p as string].value.value;
     },
     getOwnPropertyDescriptor() {
       return {
@@ -110,13 +183,24 @@ export function useTypedQuery<Schema extends QueriesSchema>(
       };
     },
     ownKeys() {
-      return keys.filter((key) => refs[key].value !== undefined);
+      return keys.filter((key) => refs[key].value.value !== undefined);
     },
   });
 
   api.$ensure = (queryKey) => {
     const extractor = extractors[queryKey];
-    return extractor(getQuery(extractor.queryName), undefined, true);
+    const { value, validationError } = extractor(
+      getQuery(extractor.queryName),
+      undefined,
+      true,
+    );
+    if (value === undefined) {
+      const err =
+        validationError ||
+        new Error(`missing required query value "${extractor.queryName}".`);
+      throw err;
+    }
+    return value;
   };
 
   api.$serialize = ((
@@ -137,14 +221,33 @@ export function useTypedQuery<Schema extends QueriesSchema>(
     return queries;
   }) as TypedQuery<Schema>['$serialize'];
 
-  api.$location = (values) => {
-    const { path } = router.currentRoute.value;
-    const query = proxy.$serialize(values, true);
-    return router.resolve({ path, query });
+  api.$serializeCurrentValues = () => api.$serialize({}, true);
+
+  const normalizeRouteLocation = (raw: RouteLocationRaw | undefined) => {
+    if (!raw) {
+      const current = router.currentRoute.value;
+      return {
+        path: current.path,
+        query: current.query,
+        hash: current.hash,
+      };
+    }
+    return typeof raw === 'string' ? router.resolve(raw) : raw;
   };
 
-  api.$push = (values) => router.push(proxy.$location(values));
-  api.$replace = (values) => router.replace(proxy.$location(values));
+  api.$location = (values, options) => {
+    const targetRoute = normalizeRouteLocation(options?.to);
+    const serialized = proxy.$serialize(values);
+    const query = options?.merge
+      ? { ...targetRoute.query, ...serialized }
+      : serialized;
+    return router.resolve({ ...targetRoute, query });
+  };
+
+  api.$push = (values, options) =>
+    router.push(proxy.$location(values, options));
+  api.$replace = (values, options) =>
+    router.replace(proxy.$location(values, options));
 
   return proxy as TypedQuery<Schema>;
 }

@@ -65,7 +65,7 @@ describe('defineQueriesSchema', () => {
   it('extract', () => {
     const schema = createSchema();
     const extractor = createQueriesExtractor(schema);
-    expect(extractor.unionMultiple(['50', '2', 'apple'])).toMatchObject([
+    expect(extractor.unionMultiple(['50', '2', 'apple']).value).toMatchObject([
       50,
       'apple',
     ]);
