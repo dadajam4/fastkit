@@ -1,5 +1,12 @@
 # @fastkit/vui
 
+## 0.16.48
+
+### Patch Changes
+
+- Updated dependencies [[`2018742`](https://github.com/dadajam4/fastkit/commit/2018742147de0e5fc94c1d83754abe27fed895b3)]:
+  - @fastkit/vue-location@0.1.14
+
 ## 0.16.47
 
 ### Patch Changes
