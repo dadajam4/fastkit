@@ -133,8 +133,10 @@ export interface TypedQueryInterface<
  * @see {@link QueriesSchema}
  * @see {@link TypedQueryInterface}
  */
-export type TypedQuery<Schema extends QueriesSchema = QueriesSchema> =
-  ExtractQueryTypes<Schema> & TypedQueryInterface<Schema>;
+export type TypedQuery<Schema extends QueriesSchema = QueriesSchema> = Readonly<
+  ExtractQueryTypes<Schema>
+> &
+  TypedQueryInterface<Schema>;
 
 type AnySchema = Record<string, true>;
 
