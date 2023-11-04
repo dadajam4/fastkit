@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.1.14
+
+### Patch Changes
+
+- [#141](https://github.com/dadajam4/fastkit/pull/141) [`2018742`](https://github.com/dadajam4/fastkit/commit/2018742147de0e5fc94c1d83754abe27fed895b3) Thanks [@dadajam4](https://github.com/dadajam4)! - I have improved several interfaces and the behavior of query operations.
+
 ## 0.1.13
 
 ### Patch Changes
