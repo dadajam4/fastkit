@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.1.15
+
+### Patch Changes
+
+- I have added an interface for manual export to the TypedQuery interface and an interface for referencing the latest extraction information.
+
 ## 0.1.14
 
 ### Patch Changes

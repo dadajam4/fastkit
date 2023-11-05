@@ -114,6 +114,7 @@ describe('useTypedQuery', () => {
       'stringOrNumberMultiple',
       'unionMultiple',
     ]);
+    expect(Object.keys(query.$extractors)).toStrictEqual(Object.keys(schema));
     expect(query.$ensure).toBeTypeOf('function');
     expect(query.$serialize).toBeTypeOf('function');
     expect(query.$location).toBeTypeOf('function');
@@ -437,6 +438,51 @@ describe('useTypedQuery', () => {
       boolean: 'true',
       stringOrNumber: '20',
       stringOrNumberMultiple: ['1', 'apple'],
+    });
+  });
+
+  it('manual', async () => {
+    const router = await initRouter();
+    await router.push({
+      path: router.currentRoute.value.path,
+      query: {
+        number: '123',
+      },
+    });
+    const query = useTypedQuery(schema, router);
+    expect(query.string).toBeUndefined();
+    expect(query.number).toBe(123);
+    expect(query.boolean).toBe(false);
+
+    expect(query.$extractors.string('abc').value).toBe('abc');
+    expect(query.$extractors.number('456').value).toBe(456);
+    expect(query.$extractors.boolean('true').value).toBe(true);
+  });
+
+  it('states', async () => {
+    const router = await initRouter();
+    await router.push({
+      path: router.currentRoute.value.path,
+      query: {
+        number: '123',
+      },
+    });
+    const query = useTypedQuery(schema, router);
+    expect(query.$states.string).toMatchObject({
+      state: 'missing',
+      source: undefined,
+      validatedValues: undefined,
+      validationError: undefined,
+      value: undefined,
+      matchedValues: [],
+    });
+    expect(query.$states.number).toMatchObject({
+      state: 'found',
+      source: '123',
+      validatedValues: '123',
+      validationError: undefined,
+      value: 123,
+      matchedValues: ['123'],
     });
   });
 });

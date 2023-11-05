@@ -5,7 +5,11 @@ import {
   ExtractQueryInputs,
   InferQueryType,
 } from './types';
-import { createQueriesExtractor, QueryExtractorResult } from './extractor';
+import {
+  createQueriesExtractor,
+  QueryExtractorResult,
+  QueriesExtractor,
+} from './extractor';
 import {
   useRouter,
   type LocationQuery,
@@ -31,13 +35,18 @@ export interface TypedQueryRouteOptions {
    * @see {@link RouteLocationRaw}
    */
   to?: RouteLocationRaw;
-  // /**
-  //  * Programmatically navigate to a new URL by replacing the current entry in the history stack.
-  //  *
-  //  * @see {@link Router.replace}
-  //  */
-  // replace?: boolean;
 }
+
+/**
+ * The extraction results of all the latest queries.
+ *
+ * @see {@link QueryExtractorResult}
+ */
+export type TypedQueryExtractStates<
+  Schema extends QueriesSchema = QueriesSchema,
+> = {
+  [K in keyof Schema]-?: QueryExtractorResult<InferQueryType<Schema[K]>>;
+};
 
 /**
  * An interface for referencing and manipulating queries in a schema-safe manner
@@ -58,6 +67,18 @@ export interface TypedQueryInterface<
    * @see {@link Router.currentRoute}
    */
   get $currentRoute(): Router['currentRoute']['value'];
+  /**
+   * Interface for query value extractors corresponding to a schema.
+   *
+   * @see {@link QueriesExtractor}
+   */
+  get $extractors(): QueriesExtractor<Schema>;
+  /**
+   * The extraction results of all the latest queries.
+   *
+   * @see {@link TypedQueryExtractStates}
+   */
+  get $states(): TypedQueryExtractStates<Schema>;
   /**
    * Retrieve the current value corresponding to the specified query name and throw an exception if it doesn't exist.
    * @param queryKey - Query name
@@ -158,9 +179,27 @@ export function useTypedQuery<Schema extends QueriesSchema>(
   const extractors = createQueriesExtractor<AnySchema>(schema as any);
   const { currentRoute } = router;
   const getQuery = (queryName: string) => currentRoute.value.query[queryName];
-  const refs = {} as Record<string, ComputedRef<QueryExtractorResult>>;
+  const states = {} as Record<string, ComputedRef<QueryExtractorResult>>;
+
+  const $states = new Proxy(states, {
+    get: (_target, p) => {
+      return states[p as string].value;
+    },
+    getOwnPropertyDescriptor() {
+      return {
+        enumerable: true,
+        configurable: true,
+      };
+    },
+    ownKeys() {
+      return keys;
+    },
+  });
+
   for (const [queryName, extractor] of Object.entries(extractors)) {
-    refs[queryName] = computed(() => extractor(getQuery(extractor.queryName)));
+    states[queryName] = computed(() =>
+      extractor(getQuery(extractor.queryName)),
+    );
   }
 
   const getters = {} as Record<string, any>;
@@ -171,12 +210,18 @@ export function useTypedQuery<Schema extends QueriesSchema>(
     get $currentRoute() {
       return router.currentRoute.value;
     },
+    get $extractors() {
+      return extractors;
+    },
+    get $states() {
+      return $states;
+    },
   } as unknown as TypedQuery<AnySchema>;
 
   const proxy = new Proxy(getters as unknown as TypedQuery<AnySchema>, {
     get: (_target, p) => {
       if (Reflect.has(api, p)) return Reflect.get(api, p);
-      return refs[p as string].value.value;
+      return states[p as string].value.value;
     },
     getOwnPropertyDescriptor() {
       return {
@@ -185,7 +230,7 @@ export function useTypedQuery<Schema extends QueriesSchema>(
       };
     },
     ownKeys() {
-      return keys.filter((key) => refs[key].value.value !== undefined);
+      return keys.filter((key) => states[key].value.value !== undefined);
     },
   });
 
