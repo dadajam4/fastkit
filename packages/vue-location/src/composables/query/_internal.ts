@@ -84,10 +84,12 @@ export type NormalizeConstructor<T> = T extends StringConstructor
   ? boolean
   : T;
 
+type NormalizeDefaultType<D> = D extends (...args: any[]) => infer U ? U : D;
+
 export type InferMultipleAndDefault<T, U> = [T] extends [{ multiple: true }]
   ? U[]
   : [T] extends [{ default: infer D }]
-  ? U | D
+  ? U | NormalizeDefaultType<D>
   : U | undefined;
 
 export const normalizeType = (type: any) =>

@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.1.16
+
+### Patch Changes
+
+- Type inference for cases where a function was specified for the default has been corrected.
+
 ## 0.1.15
 
 ### Patch Changes
