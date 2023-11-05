@@ -28,7 +28,7 @@ export type QueryValueMethod<T, TConstructor = any> = [T] extends [
     }
   : never;
 
-export type DefaultFactory<T> = (props: Data) => T | null | undefined;
+export type DefaultFactory<T> = () => T | null | undefined;
 
 export const BUILTIN_BOOLEAN_SCHEMA = {
   'true/false': ['true', 'false'],

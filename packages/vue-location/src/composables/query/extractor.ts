@@ -168,6 +168,9 @@ const createMissingError = (queryName: string) =>
     `missing required query value${queryName ? ` "${queryName}"` : ''}.`,
   );
 
+const extractDefaultValue = (source: unknown) =>
+  typeof source === 'function' ? source() : source;
+
 /**
  * Generate a query value extractor
  *
@@ -301,6 +304,10 @@ export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
           isFound = true;
         }
       }
+      const extractedDefault = isFound
+        ? undefined
+        : extractDefaultValue(defaultValue);
+
       if (!isFound) {
         if (required) {
           return {
@@ -314,15 +321,7 @@ export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
         return {
           state: 'fallback-default',
           ...prepared,
-          value: defaultValue || extracted,
-          matchedValues,
-        };
-      }
-      if (!isFound && defaultValue) {
-        return {
-          state: 'fallback-default',
-          ...prepared,
-          value: extracted,
+          value: extractedDefault || extracted,
           matchedValues,
         };
       }
@@ -368,10 +367,7 @@ export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
           break;
         }
       }
-      // const value = Array.isArray(validatedValues)
-      //   ? validatedValues[0]
-      //   : validatedValues;
-      // const picked = extractValue(value);
+
       if (picked !== undefined) {
         return {
           state: 'found',
@@ -381,11 +377,13 @@ export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
         };
       }
 
-      if (defaultValue !== undefined) {
+      const extractedDefault = extractDefaultValue(defaultValue);
+
+      if (extractedDefault !== undefined) {
         return {
           state: 'fallback-default',
           ...prepared,
-          value: defaultValue,
+          value: extractedDefault,
           matchedValues,
         };
       }

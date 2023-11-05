@@ -498,4 +498,18 @@ describe('createQueriesExtractor', () => {
       'apple',
     ]);
   });
+
+  it('default value', () => {
+    const num1 = createQueryValueExtractor({
+      type: Number,
+      default: 10,
+    });
+    expect(num1(undefined).value).toBe(10);
+
+    const num2 = createQueryValueExtractor({
+      type: Number,
+      default: () => 10,
+    });
+    expect(num2(undefined).value).toBe(10);
+  });
 });

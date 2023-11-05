@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.1.17
+
+### Patch Changes
+
+- Corrected an issue in which, when the default setting is a function, the function itself was mistakenly set as the default value instead of its return value.
+
 ## 0.1.16
 
 ### Patch Changes
