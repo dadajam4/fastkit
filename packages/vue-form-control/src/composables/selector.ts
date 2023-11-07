@@ -121,15 +121,14 @@ export function createFormSelectorProps(
         default: () => [],
       },
       /**
-       * Handler to guard changes in selection state
+       * Handler before a clickable option is clicked and the selection state is changed.
        *
-       * If `false` is returned, the operation will be canceled.
-       *
-       * When passing an asynchronous process, all options will remain inactive until the process is completed.
+       * - If `false` is returned, the operation will be canceled.
+       * - When passing an asynchronous process, all options will remain inactive until the process is completed.
        *
        * @see {@link FormSelectorGuard}
        */
-      guard: Function as PropType<FormSelectorGuard>,
+      onClickItem: Function as PropType<FormSelectorGuard>,
     }),
   };
 }
@@ -180,7 +179,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   // protected _propItems: Ref<ResolvedFormSelectorItem[]> = ref([]);
   protected _selectedValues: ComputedRef<(string | number)[]>;
   protected _selectedItems: ComputedRef<FormSelectorItemControl[]>;
-  protected _guard: ComputedRef<FormSelectorGuard | undefined>;
+  protected _onClickItem: ComputedRef<FormSelectorGuard | undefined>;
   protected _guardingItem: Ref<(() => FormSelectorItemControl) | undefined>;
   protected onSelectItem?: (
     item: FormSelectorItemControl,
@@ -261,7 +260,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       modelValue,
     });
 
-    this._guard = computed(() => props.guard);
+    this._onClickItem = computed(() => props.onClickItem);
     this._guardingItem = ref();
     this.onSelectItem = options.onSelectItem;
     this.onCancelSelect = options.onCancelSelect;
@@ -651,7 +650,10 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   }
 
   handleClickItem(item: FormSelectorItemControl, ev: MouseEvent) {
+    let accepted = false;
     const accept = () => {
+      if (accepted) return;
+      accepted = true;
       if (this.multiple) {
         item.toggle();
       } else {
@@ -664,12 +666,12 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       }
     };
 
-    const { value: guard } = this._guard;
-    if (!guard) {
+    const { value: onClickItem } = this._onClickItem;
+    if (!onClickItem) {
       return accept();
     }
 
-    const result = guard({
+    const result = onClickItem({
       item,
       selector: this,
       event: ev,

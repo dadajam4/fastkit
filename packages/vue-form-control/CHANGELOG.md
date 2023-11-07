@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.33
+
+### Patch Changes
+
+- Changed the name of the guard attribute in FormSelector from `guard` to `onClickItem`.
+
 ## 0.15.32
 
 ### Patch Changes
