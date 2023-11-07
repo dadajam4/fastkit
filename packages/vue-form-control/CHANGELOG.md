@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.32
+
+### Patch Changes
+
+- Modified the interface of arguments passed to the guard function in FormSelector.
+
 ## 0.15.31
 
 ### Patch Changes

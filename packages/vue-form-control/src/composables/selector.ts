@@ -79,13 +79,27 @@ export type RawFormSelectorItems =
       selectorControl: FormSelectorControl,
     ) => Promise<FormSelectorItemOrGroups>);
 
+/** Guard function context */
+export interface FormSelectorGuardContext {
+  /** @see {@link FormSelectorItemControl} */
+  item: FormSelectorItemControl;
+  /** @see {@link FormSelectorControl} */
+  selector: FormSelectorControl;
+  /** Choice click event */
+  event: MouseEvent;
+  /** Accept changes */
+  accept: () => void;
+}
+
 /**
  * Handler to guard changes in selection state
+ *
+ * @param ctx - Guard function context
+ *
+ * @see {@link FormSelectorGuardContext}
  */
 export type FormSelectorGuard = (
-  item: FormSelectorItemControl,
-  selector: FormSelectorControl,
-  ev: MouseEvent,
+  ctx: FormSelectorGuardContext,
 ) => boolean | void | Promise<boolean | void>;
 
 export function createFormSelectorProps(
@@ -637,7 +651,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   }
 
   handleClickItem(item: FormSelectorItemControl, ev: MouseEvent) {
-    const next = () => {
+    const accept = () => {
       if (this.multiple) {
         item.toggle();
       } else {
@@ -652,23 +666,28 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     const { value: guard } = this._guard;
     if (!guard) {
-      return next();
+      return accept();
     }
 
-    const result = guard(item, this, ev);
+    const result = guard({
+      item,
+      selector: this,
+      event: ev,
+      accept,
+    });
     if (isPromise(result)) {
       this._guardingItem.value = () => item;
       result
         .then((result) => {
           this.clearGuard();
-          if (result !== false) next();
+          if (result !== false) accept();
         })
         .catch((err) => {
           this.clearGuard();
           throw err;
         });
     } else {
-      if (result !== false) next();
+      if (result !== false) accept();
     }
   }
 
