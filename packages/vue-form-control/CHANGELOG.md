@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.31
+
+### Patch Changes
+
+- Added an attribute to FormSelector for guarding selection state changes.
+
 ## 0.15.30
 
 ### Patch Changes

@@ -82,6 +82,10 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
     return this._parentSelector;
   }
 
+  get isGuardInProgress() {
+    return this.parentSelector?.guardingItem === this;
+  }
+
   get groupControl() {
     return this._groupControl;
   }
@@ -185,7 +189,8 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
     this._isDisabled = computed(() => {
       return (
         _isDisabled.value ||
-        (!!this.groupControl && this.groupControl.isDisabled)
+        !!this.groupControl?.isDisabled ||
+        !!this.parentSelector?.isGuardInProgress
       );
     });
 

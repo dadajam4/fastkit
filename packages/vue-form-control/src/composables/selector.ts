@@ -27,7 +27,7 @@ import {
 } from './node';
 import type { FormSelectorItemControl } from './selector-item';
 import { FormSelectorInjectionKey } from '../injections';
-import { IN_WINDOW } from '@fastkit/helpers';
+import { IN_WINDOW, isPromise } from '@fastkit/helpers';
 
 export const DEFAULT_FORM_SELECTOR_GROUP_ID = '__default__';
 
@@ -79,6 +79,15 @@ export type RawFormSelectorItems =
       selectorControl: FormSelectorControl,
     ) => Promise<FormSelectorItemOrGroups>);
 
+/**
+ * Handler to guard changes in selection state
+ */
+export type FormSelectorGuard = (
+  item: FormSelectorItemControl,
+  selector: FormSelectorControl,
+  ev: MouseEvent,
+) => boolean | void | Promise<boolean | void>;
+
 export function createFormSelectorProps(
   options: FormSelectorControlOptions = {},
 ) {
@@ -97,6 +106,16 @@ export function createFormSelectorProps(
         type: [Array, Function] as PropType<RawFormSelectorItems>,
         default: () => [],
       },
+      /**
+       * Handler to guard changes in selection state
+       *
+       * If `false` is returned, the operation will be canceled.
+       *
+       * When passing an asynchronous process, all options will remain inactive until the process is completed.
+       *
+       * @see {@link FormSelectorGuard}
+       */
+      guard: Function as PropType<FormSelectorGuard>,
     }),
   };
 }
@@ -147,6 +166,8 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   // protected _propItems: Ref<ResolvedFormSelectorItem[]> = ref([]);
   protected _selectedValues: ComputedRef<(string | number)[]>;
   protected _selectedItems: ComputedRef<FormSelectorItemControl[]>;
+  protected _guard: ComputedRef<FormSelectorGuard | undefined>;
+  protected _guardingItem: Ref<(() => FormSelectorItemControl) | undefined>;
   protected onSelectItem?: (
     item: FormSelectorItemControl,
     ev: MouseEvent,
@@ -158,6 +179,14 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
   get items() {
     return this._items.value;
+  }
+
+  get guardingItem() {
+    return this._guardingItem.value?.();
+  }
+
+  get isGuardInProgress() {
+    return !!this.guardingItem;
   }
 
   get notSelected() {
@@ -218,9 +247,11 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       modelValue,
     });
 
+    this._guard = computed(() => props.guard);
+    this._guardingItem = ref();
     this.onSelectItem = options.onSelectItem;
     this.onCancelSelect = options.onCancelSelect;
-    // this._syncValueForChoies = this._syncValueForChoies.bind(this);
+    // this._syncValueForChoices = this._syncValueForChoices.bind(this);
 
     this._items = computed(() => {
       return this._itemGetters.value.map((_get) => _get());
@@ -255,7 +286,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     (
       [
-        '_syncValueForChoies',
+        '_syncValueForChoices',
         'getItems',
         'getItemValues',
         'sortValues',
@@ -314,7 +345,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     watch(
       () => this._value.value,
       (value) => {
-        this._syncValueForChoies();
+        this._syncValueForChoices();
       },
       { immediate: true },
     );
@@ -323,6 +354,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       delete this.onSelectItem;
       delete this.onCancelSelect;
       this._propGroups.value = [];
+      this.clearGuard();
     });
 
     provide(FormSelectorInjectionKey, this);
@@ -391,7 +423,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       });
   }
 
-  protected _recalcValues(changedSelectorItem?: FormSelectorItemControl) {
+  protected _reCalcValues(changedSelectorItem?: FormSelectorItemControl) {
     if (this.multiple) {
       const values: (string | number)[] = [];
       const currentValues = this._safeMultipleValues();
@@ -452,7 +484,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     return value;
   }
 
-  protected _syncValueForChoies(exclude?: FormSelectorItemControl) {
+  protected _syncValueForChoices(exclude?: FormSelectorItemControl) {
     if (this.multiple) {
       const { selectedValues } = this;
 
@@ -600,16 +632,43 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     this.onSelectItem && this.onSelectItem(item, ev);
   }
 
+  clearGuard() {
+    this._guardingItem.value = undefined;
+  }
+
   handleClickItem(item: FormSelectorItemControl, ev: MouseEvent) {
-    if (this.multiple) {
-      item.toggle();
-    } else {
-      if (!item.selected) {
-        item.select();
-        this.handleSelectItem(item, ev);
+    const next = () => {
+      if (this.multiple) {
+        item.toggle();
       } else {
-        this.onCancelSelect?.(item, ev);
+        if (!item.selected) {
+          item.select();
+          this.handleSelectItem(item, ev);
+        } else {
+          this.onCancelSelect?.(item, ev);
+        }
       }
+    };
+
+    const { value: guard } = this._guard;
+    if (!guard) {
+      return next();
+    }
+
+    const result = guard(item, this, ev);
+    if (isPromise(result)) {
+      this._guardingItem.value = () => item;
+      result
+        .then((result) => {
+          this.clearGuard();
+          if (result !== false) next();
+        })
+        .catch((err) => {
+          this.clearGuard();
+          throw err;
+        });
+    } else {
+      if (result !== false) next();
     }
   }
 
@@ -647,7 +706,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     const itemGetters = this._itemGetters.value;
     if (!itemGetters.includes(fn)) {
       itemGetters.push(fn);
-      this._syncValueForChoies();
+      this._syncValueForChoices();
     }
   }
 
@@ -663,7 +722,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
   /** @private */
   _itemValueChangeHandler(changedSelectorItem: FormSelectorItemControl) {
-    this._recalcValues(changedSelectorItem);
+    this._reCalcValues(changedSelectorItem);
   }
 }
 
