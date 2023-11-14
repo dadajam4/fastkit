@@ -1,5 +1,11 @@
 # @fastkit/ts-tiny-meta
 
+## 0.1.7
+
+### Patch Changes
+
+- Resolved an issue where the Watcher process did not terminate properly in Vite's Production build, leading to build failures in tools like Storybook.
+
 ## 0.1.6
 
 ### Patch Changes

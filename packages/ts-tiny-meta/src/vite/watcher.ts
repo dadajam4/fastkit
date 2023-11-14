@@ -12,6 +12,10 @@ function getServer() {
 const entryMap = new Map<string, EntryWatcher>();
 
 export class EntryWatcher {
+  static get isAvailable() {
+    return !!_server;
+  }
+
   static setServer(server: ViteDevServer) {
     _server = server;
   }

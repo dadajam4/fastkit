@@ -66,7 +66,7 @@ export function ViteTSTinyMeta(): Plugin {
       // `;
       const footer = ``;
 
-      EntryWatcher.init(id, workspace);
+      EntryWatcher.isAvailable && EntryWatcher.init(id, workspace);
       // workspace.updateWatcherDependencies
       // entry.setDependencies(result.dependencies);
 
