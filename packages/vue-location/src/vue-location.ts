@@ -23,6 +23,7 @@ import {
   getQueryMergedLocation,
 } from '@fastkit/vue-utils';
 import { useTypedQuery, QueriesSchema, TypedQuery } from './composables';
+import { locationIsMatched } from './utils';
 
 type RawRouteComponent = NonNullable<RouteRecordRaw['component']>;
 
@@ -197,6 +198,16 @@ export class LocationService {
     router.onError(() => {
       this.state.transitioningTo = null;
     });
+  }
+
+  /**
+   * Checks whether the specified location matches the current route.
+   *
+   * @param target - The location to be checked for a match with the current route.
+   * @returns Returns true if the specified location matches the current route, otherwise returns false.
+   */
+  locationIsMatched(target: RouteLocationRaw): boolean {
+    return locationIsMatched(this.router, target);
   }
 
   /**

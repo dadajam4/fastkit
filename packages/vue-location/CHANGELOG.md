@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.1.18
+
+### Patch Changes
+
+- Added a method to check if the current route matches the specified location.
+
 ## 0.1.17
 
 ### Patch Changes
