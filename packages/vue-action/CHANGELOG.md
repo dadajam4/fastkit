@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.2.13
+
+### Patch Changes
+
+- Improved behavior: Empty strings passed to boolean LIKE attributes will now be normalized to `true`. This addresses previous issues where attribute values could unexpectedly deviate from the expected outcome, especially when creating custom components that wrap the `VAction` component.
+
 ## 0.2.12
 
 ### Patch Changes

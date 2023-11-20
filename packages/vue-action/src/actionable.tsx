@@ -42,6 +42,13 @@ const unWrapFn = (
   source: string | undefined | (() => string | undefined),
 ): string | undefined => (typeof source === 'function' ? source() : source);
 
+const normalizeBoolean = <T extends boolean | string | undefined>(
+  value: T,
+): T | boolean => {
+  if ((value as any) === '') return true;
+  return value;
+};
+
 export function useActionable(
   setupContext: SetupContext<any>,
   opts: UseActionableOptions = {},
@@ -79,7 +86,8 @@ export function useActionable(
     delete ctxAttrs.onClick;
     delete ctxAttrs.guard;
 
-    const { guard, onClick, disabled } = props;
+    const { guard, onClick } = props;
+    const disabled = normalizeBoolean(props.disabled);
 
     const linkFallbackTag = opts.linkFallbackTag || props.linkFallbackTag;
     const fallbackTag =
@@ -205,7 +213,7 @@ export function useActionable(
       Tag = tag || 'a';
       dynamicAttrs.href = href;
       dynamicAttrs.rel = props.rel;
-      dynamicAttrs.download = props.download;
+      dynamicAttrs.download = normalizeBoolean(props.download);
       dynamicAttrs.media = props.media;
       dynamicAttrs.ping = props.ping;
       dynamicAttrs.referrerpolicy = props.referrerpolicy;
