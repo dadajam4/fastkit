@@ -85,6 +85,7 @@ export type FormNodeStateExtension = (
 export interface FormNodeStateExtensions {
   disabled?: FormNodeStateExtension;
   readonly?: FormNodeStateExtension;
+  viewonly?: FormNodeStateExtension;
   canOperation?: FormNodeStateExtension;
 }
 
@@ -141,13 +142,14 @@ export function createFormNodeProps<T, D = T>(
       disabled: Boolean,
       /** read-only state */
       readonly: Boolean,
+      /** view-only state */
+      viewonly: Boolean,
       /**
        * Spell Check Settings
        *
        * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/spellcheck
        */
       spellcheck: Boolean,
-      viewonly: Boolean,
       /** required */
       required: Boolean,
       /** clearable */
@@ -280,6 +282,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _hasError: ComputedRef<boolean>;
   protected _isDisabled: ComputedRef<boolean>;
   protected _isReadonly: ComputedRef<boolean>;
+  protected _isViewonly: ComputedRef<boolean>;
   protected _canOperation: ComputedRef<boolean>;
   protected _validateTimingIsAlways: ComputedRef<boolean>;
   protected _validateTimingIsTouch: ComputedRef<boolean>;
@@ -412,6 +415,10 @@ export class FormNodeControl<T = any, D = T> {
 
   get isReadonly() {
     return this._isReadonly.value;
+  }
+
+  get isViewonly() {
+    return this._isViewonly.value;
   }
 
   get canOperation() {
@@ -611,8 +618,16 @@ export class FormNodeControl<T = any, D = T> {
       return readonlyFn ? readonlyFn(this, isReadonly) : isReadonly;
     });
 
+    this._isViewonly = computed(() => {
+      const isViewonly =
+        props.viewonly || (!!parentNode && parentNode.isViewonly);
+      const { viewonly: viewonlyFn } = this._stateExtensions;
+      return viewonlyFn ? viewonlyFn(this, isViewonly) : isViewonly;
+    });
+
     this._canOperation = computed(() => {
-      const canOperation = !this.isDisabled && !this.isReadonly;
+      const canOperation =
+        !this.isDisabled && !this.isReadonly && !this.isViewonly;
 
       const { canOperation: canOperationFn } = this._stateExtensions;
       return canOperationFn ? canOperationFn(this, canOperation) : canOperation;
@@ -787,7 +802,7 @@ export class FormNodeControl<T = any, D = T> {
   }
 
   renderFirstError() {
-    if (this.isDisabled || this.isReadonly) {
+    if (!this.canOperation) {
       return;
     }
     const { firstError } = this;
@@ -1126,6 +1141,7 @@ export class FormNodeControl<T = any, D = T> {
       hasError: this._hasError,
       isDisabled: this._isDisabled,
       isReadonly: this._isReadonly,
+      isViewonly: this.isViewonly,
       canOperation: this._canOperation,
       touched: computed(() => this.touched),
       untouched: computed(() => this.untouched),
