@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.36
+
+### Patch Changes
+
+- Add `viewonlyPlaceholder` Attribute.
+
 ## 0.15.35
 
 ### Patch Changes

@@ -145,6 +145,10 @@ export function createFormNodeProps<T, D = T>(
       /** view-only state */
       viewonly: Boolean,
       /**
+       * When the `viewonly` attribute is enabled and the value is not entered, display the placeholder.
+       */
+      viewonlyPlaceholder: String,
+      /**
        * Spell Check Settings
        *
        * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/spellcheck
