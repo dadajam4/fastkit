@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.35
+
+### Patch Changes
+
+- Added ViewOnly attribute for FormControl.
+
 ## 0.15.34
 
 ### Patch Changes

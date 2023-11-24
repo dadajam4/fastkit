@@ -81,6 +81,8 @@ export function createFormControlProps() {
       disabled: Boolean,
       /** read-only state */
       readonly: Boolean,
+      /** view-only state */
+      viewonly: Boolean,
       /** Already touched form */
       touched: Boolean,
       /** Not yet touching the form */
@@ -145,6 +147,7 @@ export class FormControl {
   protected _errors: ComputedRef<FormNodeError[]>;
   protected _disabled: ComputedRef<boolean>;
   protected _readonly: ComputedRef<boolean>;
+  protected _viewonly: ComputedRef<boolean>;
   protected _touched: ComputedRef<boolean>;
   protected _untouched: ComputedRef<boolean>;
   protected _required: ComputedRef<boolean>;
@@ -197,6 +200,10 @@ export class FormControl {
 
   get readonly() {
     return this._readonly.value;
+  }
+
+  get viewonly() {
+    return this._viewonly.value;
   }
 
   // get canOperation() {
@@ -324,6 +331,9 @@ export class FormControl {
     );
     this._readonly = computed(() =>
       getPropOrNodeControlValue('readonly', 'isReadonly'),
+    );
+    this._viewonly = computed(() =>
+      getPropOrNodeControlValue('viewonly', 'isViewonly'),
     );
     this._touched = computed(() =>
       getPropOrNodeControlValue('touched', 'touched'),
