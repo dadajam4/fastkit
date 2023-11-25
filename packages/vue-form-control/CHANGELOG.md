@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.37
+
+### Patch Changes
+
+- Added imask control reference for TextInputControl.
+
 ## 0.15.36
 
 ### Patch Changes

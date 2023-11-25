@@ -158,3 +158,5 @@ export function useIMaskControl(
     typed,
   };
 }
+
+export type IMaskControl = ReturnType<typeof useIMaskControl>;

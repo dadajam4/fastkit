@@ -24,7 +24,7 @@ import {
   IMaskEvent,
 } from '../schemes';
 import { createMaskControlProps, IMaskInstance } from './imask';
-import { useIMaskControl, type AnyMaskedOptions } from './imask';
+import { useIMaskControl, IMaskControl, type AnyMaskedOptions } from './imask';
 
 export type TextInputMaskModel = 'masked' | 'typed' | 'unmasked';
 
@@ -128,6 +128,7 @@ export class TextInputControl extends TextableControl {
   protected _inputElement = ref<HTMLInputElement | null>(null);
   protected readonly _getMaskInput: () => AnyMaskedOptions | undefined;
   protected readonly _getMask: () => IMaskInstance | null;
+  readonly imask: IMaskControl;
   readonly useUnmaskedValue: () => boolean;
   readonly useTypedValue: () => boolean;
   protected _passwordVisibility = ref(false);
@@ -165,34 +166,36 @@ export class TextInputControl extends TextableControl {
     this.useUnmaskedValue = () => props.maskModel === 'unmasked';
     this.useTypedValue = () => props.maskModel === 'typed';
 
-    const { maskInput, masked, unmasked, typed, inputMask } = useIMaskControl(
-      props,
-      {
-        el,
-        onAccept: (ev) => {
-          emit('acceptMask', ev);
-          const bucket = this.useUnmaskedValue()
-            ? unmasked
-            : this.useTypedValue()
-            ? typed
-            : masked;
+    const imask = useIMaskControl(props, {
+      el,
+      onAccept: (ev) => {
+        const { masked, unmasked, typed } = imask;
+        emit('acceptMask', ev);
+        const bucket = this.useUnmaskedValue()
+          ? unmasked
+          : this.useTypedValue()
+          ? typed
+          : masked;
 
-          const value = bucket.value;
+        const value = bucket.value;
 
-          if (this.setValue(value as any)) {
-            emit('update:masked', masked.value);
-            emit('update:unmasked', unmasked.value);
-            emit('update:typed', typed.value);
-          }
-        },
-        onAcceptDynamicMeta: (meta) => {
-          ctx.emit('acceptDynamicMaskMeta', meta);
-        },
-        onComplete: (ev) => {
-          emit('completeMask', ev);
-        },
+        if (this.setValue(value as any)) {
+          emit('update:masked', masked.value);
+          emit('update:unmasked', unmasked.value);
+          emit('update:typed', typed.value);
+        }
       },
-    );
+      onAcceptDynamicMeta: (meta) => {
+        ctx.emit('acceptDynamicMaskMeta', meta);
+      },
+      onComplete: (ev) => {
+        emit('completeMask', ev);
+      },
+    });
+
+    this.imask = imask;
+
+    const { maskInput, masked, unmasked, typed, inputMask } = imask;
 
     this._getMaskInput = () => maskInput.value;
     this._getMask = () => inputMask.value;
