@@ -41,6 +41,10 @@ export type IMaskControlProps = ExtractPropTypes<
   ReturnType<typeof createMaskControlProps>
 >;
 
+type IMaskPipeTypeMap = typeof IMask.PIPE_TYPE;
+export type IMaskPipeType = IMaskPipeTypeMap[keyof IMaskPipeTypeMap];
+type IMaskPipeValue = string | number | null | undefined;
+
 export function useIMaskControl(
   props: IMaskControlProps,
   opts: {
@@ -60,6 +64,20 @@ export function useIMaskControl(
   let $masked: string | undefined;
   let $unmasked: string | undefined;
   let $typed: string | number | Date | undefined;
+
+  const pipe = (
+    value: IMaskPipeValue,
+    from: IMaskPipeType = IMask.PIPE_TYPE.MASKED,
+  ): string => {
+    const _value =
+      value == null ? '' : typeof value === 'number' ? String(value) : value;
+    const masked = inputMask.value?.masked;
+    if (!masked) return _value;
+    return masked.runIsolated((m) => {
+      m[from] = _value;
+      return m[IMask.PIPE_TYPE.MASKED];
+    });
+  };
 
   function _onAccept() {
     const _inputMask = inputMask.value;
@@ -98,7 +116,6 @@ export function useIMaskControl(
     inputMask.value = toRaw(IMask($el, $props))
       .on('accept', _onAccept)
       .on('complete', _onComplete);
-
     _onAccept();
   }
 
@@ -156,6 +173,7 @@ export function useIMaskControl(
     masked,
     unmasked,
     typed,
+    pipe,
   };
 }
 

@@ -215,9 +215,7 @@ export class TextableControl extends FormNodeControl<string> {
     });
 
     this._pattern = computed(() => props.pattern);
-    this._placeholder = computed(() =>
-      this.isViewonly ? props.viewonlyPlaceholder : props.placeholder,
-    );
+    this._placeholder = computed(() => props.placeholder);
     this._autocapitalize = computed(() => props.autocapitalize);
     this._finishings = computed(() =>
       resolveRawTextableFinishingProp(props.finishings),

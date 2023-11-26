@@ -24,9 +24,20 @@ import {
   IMaskEvent,
 } from '../schemes';
 import { createMaskControlProps, IMaskInstance } from './imask';
-import { useIMaskControl, IMaskControl, type AnyMaskedOptions } from './imask';
+import {
+  useIMaskControl,
+  IMaskControl,
+  type AnyMaskedOptions,
+  type IMaskPipeType,
+} from './imask';
 
 export type TextInputMaskModel = 'masked' | 'typed' | 'unmasked';
+
+const IMASK_PIPE_TYPE_MAP: Record<TextInputMaskModel, IMaskPipeType> = {
+  masked: 'value',
+  typed: 'typedValue',
+  unmasked: 'unmaskedValue',
+};
 
 export function createTextInputProps() {
   return {
@@ -128,10 +139,11 @@ export class TextInputControl extends TextableControl {
   protected _inputElement = ref<HTMLInputElement | null>(null);
   protected readonly _getMaskInput: () => AnyMaskedOptions | undefined;
   protected readonly _getMask: () => IMaskInstance | null;
-  readonly imask: IMaskControl;
+  readonly mask: IMaskControl;
   readonly useUnmaskedValue: () => boolean;
   readonly useTypedValue: () => boolean;
   protected _passwordVisibility = ref(false);
+  protected _maskedValue: ComputedRef<string>;
 
   get type() {
     return this._type.value;
@@ -147,6 +159,10 @@ export class TextInputControl extends TextableControl {
 
   get isVisiblePassword() {
     return this._passwordVisibility.value;
+  }
+
+  get maskedValue() {
+    return this._maskedValue;
   }
 
   constructor(
@@ -193,10 +209,14 @@ export class TextInputControl extends TextableControl {
       },
     });
 
-    this.imask = imask;
+    this.mask = imask;
 
     const { maskInput, masked, unmasked, typed, inputMask } = imask;
 
+    this._maskedValue = computed(() => {
+      const from = IMASK_PIPE_TYPE_MAP[props.maskModel];
+      return imask.pipe(this.value, from);
+    });
     this._getMaskInput = () => maskInput.value;
     this._getMask = () => inputMask.value;
     this.focus = this.focus.bind(this);
