@@ -162,7 +162,7 @@ export class TextInputControl extends TextableControl {
   }
 
   get maskedValue() {
-    return this._maskedValue;
+    return this._maskedValue.value;
   }
 
   constructor(

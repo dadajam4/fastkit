@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.39
+
+### Patch Changes
+
+- Updated the return type of the `maskedValue` getter to string.
+
 ## 0.15.38
 
 ### Patch Changes
