@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.40
+
+### Patch Changes
+
+- Fixed an issue where imask would cease to function upon changing the target element.
+
 ## 0.15.39
 
 ### Patch Changes

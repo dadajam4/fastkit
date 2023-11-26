@@ -57,6 +57,7 @@ export function useIMaskControl(
   const { el, onAccept, onAcceptDynamicMeta, onComplete } = opts;
   const maskInput = computed(() => resolveIMaskInput(toRaw(props.mask)));
   const inputMask: Ref<IMaskInstance | null> = ref(null);
+  const staticMask: Ref<IMask.AnyMasked | null> = ref(null);
   const masked = ref<string>('');
   const unmasked = ref<string>('');
   const typed = ref<string | number | Date | undefined>();
@@ -71,7 +72,7 @@ export function useIMaskControl(
   ): string => {
     const _value =
       value == null ? '' : typeof value === 'number' ? String(value) : value;
-    const masked = inputMask.value?.masked;
+    const masked = staticMask.value;
     if (!masked) return _value;
     return masked.runIsolated((m) => {
       m[from] = _value;
@@ -105,6 +106,14 @@ export function useIMaskControl(
     if (onComplete) onComplete(ev);
   }
 
+  function _initStaticMask() {
+    const $props = maskInput.value;
+    if (!$props || !$props.mask) return;
+    staticMask.value = toRaw(IMask.createMask<any>($props));
+  }
+
+  _initStaticMask();
+
   function _initMask() {
     const _el = el.value;
     if (!_el) return;
@@ -123,6 +132,9 @@ export function useIMaskControl(
     if (inputMask.value) {
       inputMask.value.destroy();
       inputMask.value = null;
+    }
+    if (staticMask.value) {
+      staticMask.value = null;
     }
   }
 
@@ -156,8 +168,13 @@ export function useIMaskControl(
     const $props = maskInput.value;
     if (!$props || !$props.mask || $newEl !== $el) {
       _destroyMask();
+    }
+    if (!$props || !$props.mask) {
       return;
     }
+
+    _initStaticMask();
+
     if ($newEl) {
       if (!inputMask.value) {
         _initMask();
@@ -170,6 +187,7 @@ export function useIMaskControl(
   return {
     maskInput,
     inputMask,
+    staticMask,
     masked,
     unmasked,
     typed,
