@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.27
+
+### Patch Changes
+
+- Exposed CSS variables for coordinates to facilitate easier rendering of speech bubble-style UI.
+
 ## 0.15.26
 
 ### Patch Changes

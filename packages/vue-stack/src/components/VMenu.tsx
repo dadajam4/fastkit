@@ -150,6 +150,16 @@ export interface VMenuRectInfo extends VMenuRect {
     bottom: boolean;
     left: boolean;
     right: boolean;
+    xInner: boolean;
+    yInner: boolean;
+  };
+  bubble: {
+    styles: {
+      '--bubble-top'?: string;
+      '--bubble-bottom'?: string;
+      '--bubble-left'?: string;
+      '--bubble-right'?: string;
+    };
   };
 }
 
@@ -283,11 +293,22 @@ export function defineMenuComponent<
       const _maxHeight = computed(() => resolveMaxSize(props.maxHeight));
 
       const _positionFlags = computed(() => {
-        const { x = 'center', y = 'bottom' } = props;
-        // let { y } = props;
-        // if (!x && !y) {
-        //   y = 'bottom';
-        // }
+        let { x, y } = props;
+        if (!y && (!x || x === 'left-inner' || x === 'right-inner')) {
+          y = 'bottom';
+        }
+
+        if (!y) {
+          y = 'center';
+        }
+
+        if (!x) {
+          if (y === 'bottom-inner' || y === 'top-inner') {
+            x = 'left';
+          } else {
+            x = 'center';
+          }
+        }
 
         return {
           x,
@@ -513,16 +534,20 @@ export function defineMenuComponent<
         left += pageXOffset;
 
         if (!overlap) {
-          if (isBottom) {
-            top += distance;
-          } else if (isTop) {
-            top -= distance;
+          if (!yInner) {
+            if (isBottom) {
+              top += distance;
+            } else if (isTop) {
+              top -= distance;
+            }
           }
 
-          if (isRight) {
-            left += distance;
-          } else if (isLeft) {
-            left -= distance;
+          if (!xInner) {
+            if (isRight) {
+              left += distance;
+            } else if (isLeft) {
+              left -= distance;
+            }
           }
         }
 
@@ -566,6 +591,49 @@ export function defineMenuComponent<
           }
         }
 
+        const bubbleStyles: VMenuRectInfo['bubble']['styles'] = {};
+        if (isTop) {
+          if (yInner) {
+            bubbleStyles['--bubble-top'] = `${activatorHeight * 0.5}px`;
+          } else {
+            bubbleStyles['--bubble-top'] = '100%';
+          }
+        } else if (isBottom) {
+          if (yInner) {
+            bubbleStyles['--bubble-bottom'] = `${activatorHeight * 0.5}px`;
+          } else {
+            bubbleStyles['--bubble-bottom'] = '100%';
+          }
+        } else {
+          bubbleStyles['--bubble-top'] = `${
+            activatorHeight * 0.5 + (activatorTop - top)
+          }px`;
+        }
+
+        if (isLeft) {
+          if (xInner) {
+            bubbleStyles['--bubble-left'] = `${Math.min(
+              width * 0.5,
+              activatorWidth * 0.5,
+            )}px`;
+          } else {
+            bubbleStyles['--bubble-left'] = '100%';
+          }
+        } else if (isRight) {
+          if (xInner) {
+            bubbleStyles['--bubble-right'] = `${Math.min(
+              width * 0.5,
+              activatorWidth * 0.5,
+            )}px`;
+          } else {
+            bubbleStyles['--bubble-right'] = '100%';
+          }
+        } else {
+          bubbleStyles['--bubble-left'] = `${
+            activatorWidth * 0.5 + (activatorLeft - left)
+          }px`;
+        }
+
         return {
           left,
           right,
@@ -578,6 +646,11 @@ export function defineMenuComponent<
             bottom: isBottom,
             left: isLeft,
             right: isRight,
+            xInner,
+            yInner,
+          },
+          bubble: {
+            styles: bubbleStyles,
           },
         };
       });
@@ -592,6 +665,8 @@ export function defineMenuComponent<
           styles.top = rect.top + 'px';
           styles.width = rect.width + 'px';
           styles.height = rect.height + 'px';
+
+          Object.assign(styles, rect.bubble.styles);
         } else {
           styles.visibility = 'hidden';
         }
