@@ -56,6 +56,8 @@ type RawMenuMaxSize =
   | MenuMaxSize
   | ((window: UseWindowRef) => number | undefined);
 
+const RAW_MENU_SIZE_PROP = [Number, String] as PropType<number | 'fit'>;
+
 const RAW_MENU_MAX_SIZE_PROP = [
   Number,
   String,
@@ -73,8 +75,10 @@ export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
     x: String as PropType<VMenuXPosition>,
     y: String as PropType<VMenuYPosition>,
     allowOverflow: Boolean,
-    width: [Number, String] as PropType<number | 'fit'>,
-    height: [Number, String] as PropType<number | 'fit'>,
+    width: RAW_MENU_SIZE_PROP,
+    height: RAW_MENU_SIZE_PROP,
+    minWidth: RAW_MENU_SIZE_PROP,
+    minHeight: RAW_MENU_SIZE_PROP,
     maxWidth: RAW_MENU_MAX_SIZE_PROP,
     maxHeight: RAW_MENU_MAX_SIZE_PROP,
     distance: {
@@ -273,6 +277,8 @@ export function defineMenuComponent<
       };
       const _width = computed(() => props.width);
       const _height = computed(() => props.height);
+      const _minWidth = computed(() => props.minWidth);
+      const _minHeight = computed(() => props.minHeight);
       const _maxWidth = computed(() => resolveMaxSize(props.maxWidth));
       const _maxHeight = computed(() => resolveMaxSize(props.maxHeight));
 
@@ -331,6 +337,8 @@ export function defineMenuComponent<
 
         let computedWidth = _width.value;
         let computedHeight = _height.value;
+        let computedMinWidth = _minWidth.value;
+        const computedMinHeight = _minHeight.value;
         let computedMaxWidth = _maxWidth.value;
         let computedMaxHeight = _maxHeight.value;
 
@@ -357,6 +365,9 @@ export function defineMenuComponent<
         if (computedMaxWidth === 'fit') computedMaxWidth = activatorWidth;
         if (computedMaxHeight === 'fit') computedMaxHeight = activatorHeight;
 
+        if (computedMinWidth === 'fit') computedMinWidth = activatorWidth;
+        if (computedMinHeight === 'fit') computedMinWidth = activatorHeight;
+
         let {
           top: isTop,
           bottom: isBottom,
@@ -378,8 +389,17 @@ export function defineMenuComponent<
         const rightFree =
           $window.width - _edgeMargin.value - activatorRight + overlapWidth;
 
+        if (typeof computedMinWidth === 'number' && width < computedMinWidth) {
+          width = computedMinWidth;
+        }
         if (typeof computedMaxWidth === 'number' && width > computedMaxWidth) {
           width = computedMaxWidth;
+        }
+        if (
+          typeof computedMinHeight === 'number' &&
+          height < computedMinHeight
+        ) {
+          height = computedMinHeight;
         }
         if (
           typeof computedMaxHeight === 'number' &&

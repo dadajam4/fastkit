@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.26
+
+### Patch Changes
+
+- Implemented the ability to set minimum width and height for the Menu component.
+
 ## 0.15.25
 
 ### Patch Changes
