@@ -18,6 +18,7 @@ import { createStackableDefine, MergeStackBaseSlots } from '../schemes';
 import {
   DefineStackableSettings,
   setupStackableComponent,
+  StackableSetupContext,
   EmitsToPropOptions,
 } from '../composables';
 import {
@@ -139,6 +140,15 @@ export interface VMenuRect {
   height: number;
 }
 
+export interface VMenuRectInfo extends VMenuRect {
+  positions: {
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+  };
+}
+
 export interface VMenuState {
   pageXOffset: number;
   pageYOffset: number;
@@ -158,6 +168,7 @@ export interface MenuAPI {
   readonly minTop: number;
   readonly maxRight: number;
   readonly maxBottom: number;
+  readonly rect: VMenuRectInfo | null;
   readonly styles: CSSProperties;
   readonly scrollerRef: Ref<HTMLElement | null>;
   readonly bodyRef: Ref<HTMLElement | null>;
@@ -181,7 +192,11 @@ export interface DefineMenuSettings<
   props?: Props;
   emits?: Emits;
   slots?: Slots;
-  attrs?: Record<string, any>;
+  attrs?:
+    | Record<string, any>
+    | ((
+        ctx: StackableSetupContext<Props, Emits, Slots, MenuAPI>,
+      ) => Record<string, any>);
 }
 
 export function defineMenuComponent<
@@ -300,7 +315,7 @@ export function defineMenuComponent<
         return 'v-stack-scale';
       });
 
-      const _rect = computed<VMenuRect | null>(() => {
+      const _rect = computed<VMenuRectInfo | null>(() => {
         const { rect, activatorRect } = state;
         if (!rect) return null;
         if (!activatorRect) return null;
@@ -538,6 +553,12 @@ export function defineMenuComponent<
           bottom,
           width,
           height,
+          positions: {
+            top: isTop,
+            bottom: isBottom,
+            left: isLeft,
+            right: isRight,
+          },
         };
       });
 
@@ -666,18 +687,18 @@ export function defineMenuComponent<
           }
         | undefined;
       let _activatorResizeObserver: ResizeObserver | undefined;
-      let _activatorResizeRAFID: number | undefined;
+      let _activatorResizeRAF_ID: number | undefined;
 
       const _clearActivatorResizeRAF = () => {
-        if (_activatorResizeRAFID !== undefined) {
-          cancelAnimationFrame(_activatorResizeRAFID);
-          _activatorResizeRAFID = undefined;
+        if (_activatorResizeRAF_ID !== undefined) {
+          cancelAnimationFrame(_activatorResizeRAF_ID);
+          _activatorResizeRAF_ID = undefined;
         }
       };
 
       const _handleActivatorResize = () => {
         _clearActivatorResizeRAF();
-        _activatorResizeRAFID = requestAnimationFrame(() => {
+        _activatorResizeRAF_ID = requestAnimationFrame(() => {
           _clearActivatorResizeRAF();
           updateRects();
         });
@@ -762,6 +783,9 @@ export function defineMenuComponent<
         get maxBottom() {
           return _maxBottom.value;
         },
+        get rect() {
+          return _rect.value;
+        },
         get styles() {
           return _styles.value;
         },
@@ -784,17 +808,21 @@ export function defineMenuComponent<
         throw new VueStackError('render function is required.');
       }
 
-      const hostBaseAttrs = settings.attrs || {};
+      const hostAttrs = computed(() => {
+        const { attrs = {} } = settings;
+        const _attrs =
+          typeof attrs === 'function' ? attrs(stackMenuCtx as any) : attrs;
 
-      const hostAttrs = {
-        ...hostBaseAttrs,
-        class: ['v-stack-menu', hostBaseAttrs.class],
-      };
+        return {
+          ..._attrs,
+          class: ['v-stack-menu', _attrs.class],
+        };
+      });
 
       return () => {
         return control.render((children) => {
           return withDirectives(
-            <div {...hostAttrs} style={_styles.value} ref={_scrollerRef}>
+            <div {...hostAttrs.value} style={_styles.value} ref={_scrollerRef}>
               {withDirectives(render(children, stackMenuCtx as any), [
                 resizeDirectiveArgument(updateRects),
               ])}

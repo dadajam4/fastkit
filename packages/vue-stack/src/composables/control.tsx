@@ -54,6 +54,63 @@ const SUPPORTS_FOCUS_VISIBLE =
   typeof CSS.supports !== 'undefined' &&
   CSS.supports('selector(:focus-visible)');
 
+function StackMouseStates(acceptLeave: () => any) {
+  const delay = 100;
+  let activator = false;
+  let content = false;
+  let closeDelayTimerId: number | null = null;
+
+  const clearCloseDelayTimer = () => {
+    if (closeDelayTimerId !== null) {
+      clearTimeout(closeDelayTimerId);
+      closeDelayTimerId = null;
+    }
+  };
+
+  const startCloseDelayTimer = () => {
+    clearCloseDelayTimer();
+    closeDelayTimerId = window.setTimeout(() => {
+      clearCloseDelayTimer();
+      if (!activator && !content) {
+        acceptLeave();
+      }
+    }, delay);
+  };
+
+  const onEnterActivator = () => {
+    activator = true;
+    clearCloseDelayTimer();
+  };
+
+  const onLeaveActivator = () => {
+    activator = false;
+    startCloseDelayTimer();
+  };
+
+  const onEnterContent = () => {
+    content = true;
+    clearCloseDelayTimer();
+  };
+
+  const onLeaveContent = () => {
+    content = false;
+    startCloseDelayTimer();
+  };
+
+  onBeforeUnmount(clearCloseDelayTimer);
+
+  return {
+    get delay() {
+      return delay;
+    },
+    onEnterActivator,
+    onLeaveActivator,
+    onEnterContent,
+    onLeaveContent,
+    clear: clearCloseDelayTimer,
+  };
+}
+
 export function useStackControl(
   props: VStackProps,
   ctx: VStackSetupContext,
@@ -134,6 +191,7 @@ export function useStackControl(
   const backdropRef = ref<null | HTMLElement>(null);
   const focusTrap = computed(() => props.focusTrap);
   const focusRestorable = computed(() => props.focusRestorable);
+
   // const computedActivator = computed(() => props.activator);
 
   const openOnFocus = computed(
@@ -210,12 +268,32 @@ export function useStackControl(
       undefined) as HTMLElement;
   };
 
+  const mouseStates = StackMouseStates(() => {
+    if (!control.isActive) return;
+    const delay = closeDelay.value;
+    const normalizedDelay = Math.max(delay - mouseStates.delay, 0);
+    privateApi.runDelay(normalizedDelay, () => {
+      if (!control.isActive) return;
+      control.close();
+    });
+  });
+
+  const handleMouseenterContent = () => {
+    mouseStates.onEnterContent();
+  };
+
+  const handleMouseleaveContent = () => {
+    privateApi.clearDelay();
+    mouseStates.onLeaveContent();
+  };
+
   const availableEvents = {
     onClick: (ev: MouseEvent) => {
       setActivatorByEvent(ev);
       control.toggle();
     },
     onMouseenter: (ev: MouseEvent) => {
+      mouseStates.onEnterActivator();
       if (control.transitioning) return;
       privateApi.clearDelay();
       if (control.isActive) return;
@@ -226,27 +304,28 @@ export function useStackControl(
     },
     onMouseleave: (ev: MouseEvent) => {
       privateApi.clearDelay();
-      if (!control.isActive) return;
-      privateApi.runDelay('closeDelay', () => {
-        if (!control.isActive) return;
-        const $content = contentRef.value;
-        const relatedTarget = ev.relatedTarget as HTMLElement;
-        if (
-          $content &&
-          (relatedTarget === $content || $content.contains(relatedTarget))
-        ) {
-          return;
-        }
-        const { activator } = state;
+      // if (!control.isActive) return;
+      mouseStates.onLeaveActivator();
+      // privateApi.runDelay('closeDelay', () => {
+      //   if (!control.isActive) return;
+      //   const $content = contentRef.value;
+      //   const relatedTarget = ev.relatedTarget as HTMLElement;
+      //   if (
+      //     $content &&
+      //     (relatedTarget === $content || $content.contains(relatedTarget))
+      //   ) {
+      //     return;
+      //   }
+      //   const { activator } = state;
 
-        if (
-          activator &&
-          (relatedTarget === activator || activator.contains(relatedTarget))
-        ) {
-          return;
-        }
-        control.close();
-      });
+      //   if (
+      //     activator &&
+      //     (relatedTarget === activator || activator.contains(relatedTarget))
+      //   ) {
+      //     return;
+      //   }
+      //   control.close();
+      // });
     },
     onContextmenu: (ev: MouseEvent) => {
       if (ev.defaultPrevented) return;
@@ -417,9 +496,9 @@ export function useStackControl(
     },
     runDelay(prop, cb) {
       privateApi.clearDelay();
-      const ammount = typeof prop === 'number' ? prop : control[prop];
-      if (!ammount) return cb();
-      state.delayTimers.push(window.setTimeout(cb, toInt(ammount)));
+      const amount = typeof prop === 'number' ? prop : control[prop];
+      if (!amount) return cb();
+      state.delayTimers.push(window.setTimeout(cb, toInt(amount)));
     },
     trapFocus(ev) {
       const $content = contentRef.value;
@@ -686,11 +765,17 @@ export function useStackControl(
 
           $child = withDirectives(node, dirs);
 
-          $child = cloneVNode($child, {
+          const _props: Record<string, any> = {
             class: control.classes,
             style: control.styles,
             ref: contentRef,
-          });
+          };
+
+          if (props.openOnHover) {
+            _props.onMouseenter = handleMouseenterContent;
+            _props.onMouseleave = handleMouseleaveContent;
+          }
+          $child = cloneVNode($child, _props);
         }
 
         const { transition } = opts;

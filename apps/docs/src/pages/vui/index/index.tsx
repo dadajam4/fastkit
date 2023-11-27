@@ -6,6 +6,8 @@ import {
   VNumberField,
   createMaskedOptions,
   MaskedRange,
+  VTooltip,
+  VButton,
 } from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
 
@@ -170,6 +172,13 @@ export default defineComponent({
         <button type="button" onClick={randomInput}>
           RANDOM
         </button>
+
+        <VTooltip
+          v-slots={{
+            activator: ({ attrs }) => <VButton {...attrs}>hober me!</VButton>,
+          }}>
+          これはツールチップです
+        </VTooltip>
 
         <VTextField
           v-model={input.value}

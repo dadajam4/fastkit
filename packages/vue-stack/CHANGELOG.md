@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.25
+
+### Patch Changes
+
+- Added the ability to dynamically set an object to the `attrs` option in the Menu component using a function.
+
 ## 0.15.24
 
 ### Patch Changes
