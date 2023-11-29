@@ -1,5 +1,11 @@
 # @fastkit/catcher
 
+## 0.13.9
+
+### Patch Changes
+
+- Fixed an issue where referencing `resolvedData` within the resolver function caused a RangeError due to an infinite loop.
+
 ## 0.13.8
 
 ### Patch Changes

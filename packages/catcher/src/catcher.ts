@@ -113,19 +113,20 @@ export function build<
       } else {
         let resolved = false;
 
+        const { resolvedData } = this;
         const ctx: ResolverContext = {
           resolve: () => {
             resolved = true;
           },
           get resolvedData() {
-            return this.resolvedData;
+            return resolvedData;
           },
         };
 
         for (const resolver of resolvers) {
           const result = resolver(infoOrException, ctx);
           if (result) {
-            Object.assign(this.resolvedData, result);
+            Object.assign(resolvedData, result);
             if (resolved) {
               break;
             }
@@ -135,10 +136,10 @@ export function build<
         this.data = {
           $__catcher: true,
           name: defaultName,
-          ...normalizer(this.resolvedData as any)(infoOrException),
+          ...normalizer(resolvedData as any)(infoOrException),
         };
 
-        const { nativeError } = this.resolvedData;
+        const { nativeError } = resolvedData;
         if (nativeError) {
           NATIVE_ERROR_PROPS.forEach((nativeProp) => {
             if (this.data[nativeProp] == null && nativeError[nativeProp]) {
