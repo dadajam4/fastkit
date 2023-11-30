@@ -84,14 +84,18 @@ export function build<
     }
 
     static from(unknownException: unknown, overrides?: unknown) {
-      return new this(unknownException, overrides);
+      return new this(unknownException, overrides, true);
     }
 
     static create(exceptionInfo: unknown) {
       return new this(exceptionInfo);
     }
 
-    constructor(infoOrException: unknown, overrides?: unknown) {
+    constructor(
+      infoOrException: unknown,
+      overrides?: unknown,
+      isUnknown?: boolean,
+    ) {
       if (isCatcher(infoOrException) && overrides === undefined) {
         // If the error information is the Catcher instance itself, it will return itself
         return infoOrException;
@@ -136,7 +140,9 @@ export function build<
         this.data = {
           $__catcher: true,
           name: defaultName,
-          ...normalizer(resolvedData as any)(infoOrException),
+          ...normalizer(resolvedData as any)(
+            isUnknown ? undefined : infoOrException,
+          ),
         };
 
         const { nativeError } = resolvedData;

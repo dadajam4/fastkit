@@ -1,5 +1,11 @@
 # @fastkit/catcher
 
+## 0.13.10
+
+### Patch Changes
+
+- Fixed an issue where the `unknown` exception argument was not being passed to the normalizer function.
+
 ## 0.13.9
 
 ### Patch Changes
