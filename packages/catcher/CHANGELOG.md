@@ -1,5 +1,11 @@
 # @fastkit/catcher
 
+## 0.13.11
+
+### Patch Changes
+
+- Addressed an issue where specifying override data during exception generation would result in invalid values being passed to the normalization function.
+
 ## 0.13.10
 
 ### Patch Changes

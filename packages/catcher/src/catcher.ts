@@ -108,7 +108,7 @@ export function build<
         this.data = infoOrException;
       } else if (overrides !== undefined) {
         // In the case of standardization for the original exception
-        this.source = new BuildedCatcher(infoOrException);
+        this.source = new BuildedCatcher(infoOrException, undefined, true);
         this.resolvedData = this.source.resolvedData;
         this.data = {
           ...this.source.data,
