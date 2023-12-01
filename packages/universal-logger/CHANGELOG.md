@@ -1,5 +1,11 @@
 # @fastkit/universal-logger
 
+## 0.13.8
+
+### Patch Changes
+
+- Fixed missing information on sending errors to Datadog.
+
 ## 0.13.7
 
 ### Patch Changes

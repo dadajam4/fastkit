@@ -83,6 +83,7 @@ export function DDTransport(settings: DDTransportSettings): Transport {
       _payload.args = _payload.args.slice();
       delete _payload.error;
       if (error) {
+        (_payload as any).error = error.instance;
         _payload.args.splice(error.index, 1);
       }
       dd.logger[ddLevel](payload.message, _payload, error?.instance);
