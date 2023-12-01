@@ -81,6 +81,13 @@ export interface LoggerPayload<M extends Meta = Meta> {
   args: any[];
   /** Logger Meta Information */
   meta: M;
+  /** The first error detected from the arguments. */
+  error?: {
+    /** Index within argument */
+    index: number;
+    /** error instance */
+    instance: Error;
+  };
 }
 
 /**
@@ -246,6 +253,15 @@ function extractObjectMessage(source: any): string | undefined {
   }
 }
 
+function extractError(args: any[]): LoggerPayload['error'] {
+  const error = args.find((arg) => arg instanceof Error) as Error | undefined;
+  if (!error) return;
+  return {
+    instance: error,
+    index: args.indexOf(error),
+  };
+}
+
 /**
  * Create logger payload
  *
@@ -262,6 +278,7 @@ export function createPayload(
   let message = '';
   const { length } = args;
   const first = args[0];
+  const error = extractError(args);
 
   if (typeof first === 'string') {
     // >>> log('hello', 2, true, {}) のような時は一個目がメッセージで良い
@@ -289,6 +306,7 @@ export function createPayload(
     message,
     args,
     meta: {},
+    error,
   };
   return payload;
 }

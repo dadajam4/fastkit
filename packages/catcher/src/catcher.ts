@@ -155,6 +155,10 @@ export function build<
         }
       }
 
+      if (!this.data.stack) {
+        this.data.stack = this.stack;
+      }
+
       Object.keys(this.data).forEach((key) => {
         Object.defineProperty(this, key, {
           get: () => {
@@ -163,6 +167,7 @@ export function build<
           set: (value) => {
             this.data[key] = value;
           },
+          enumerable: true,
         });
       });
     }

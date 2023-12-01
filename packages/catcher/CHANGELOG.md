@@ -1,5 +1,14 @@
 # @fastkit/catcher
 
+## 0.13.12
+
+### Patch Changes
+
+- Fixed cases where information was missing for instance fields.
+
+  - Resolved an issue where custom fields in the application were missing when enumerating keys for Catcher instances.
+  - Addressed a situation where the stack of Catcher instances was missing when an empty stack was returned in the resolver.
+
 ## 0.13.11
 
 ### Patch Changes

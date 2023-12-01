@@ -1,5 +1,11 @@
 # @fastkit/universal-logger
 
+## 0.13.7
+
+### Patch Changes
+
+- Implemented a new feature in the Datadog transformer: now, when an Error instance is detected, it is sent as error information to the logger.
+
 ## 0.13.6
 
 ### Patch Changes

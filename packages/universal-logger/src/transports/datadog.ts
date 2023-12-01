@@ -4,7 +4,7 @@ import { CloneTransformer, CloneOptions } from '../transformers/clone';
 
 let dd: typeof datadogLogs | undefined;
 
-const DATADOG_LEVELS = ['error', 'warn', 'info', 'log', 'debug'] as const;
+const DATADOG_LEVELS = ['error', 'warn', 'info', 'debug'] as const;
 
 type DatadogLevel = (typeof DATADOG_LEVELS)[number];
 
@@ -77,7 +77,15 @@ export function DDTransport(settings: DDTransportSettings): Transport {
       const dd = getDD();
       const { level } = payload;
       const ddLevel = LEVEL_MAPPINGS[level];
-      dd.logger[ddLevel](payload.message, payload);
+
+      const _payload = { ...payload };
+      const { error } = _payload;
+      _payload.args = _payload.args.slice();
+      delete _payload.error;
+      if (error) {
+        _payload.args.splice(error.index, 1);
+      }
+      dd.logger[ddLevel](payload.message, _payload, error?.instance);
     },
   };
 }
