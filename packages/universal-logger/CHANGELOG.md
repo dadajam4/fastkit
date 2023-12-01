@@ -1,5 +1,11 @@
 # @fastkit/universal-logger
 
+## 0.13.9
+
+### Patch Changes
+
+- When sending error information to Datadog, duplicate error information in the argument list is removed.
+
 ## 0.13.8
 
 ### Patch Changes

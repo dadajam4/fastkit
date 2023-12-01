@@ -278,7 +278,6 @@ export function createPayload(
   let message = '';
   const { length } = args;
   const first = args[0];
-  const error = extractError(args);
 
   if (typeof first === 'string') {
     // >>> log('hello', 2, true, {}) のような時は一個目がメッセージで良い
@@ -297,6 +296,8 @@ export function createPayload(
   if (args[0] === message) {
     args.splice(0, 1);
   }
+
+  const error = extractError(args);
 
   const payload: LoggerPayload = {
     logger: {
