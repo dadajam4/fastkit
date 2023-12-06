@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.1.19
+
+### Patch Changes
+
+- Updated the conditional logic in the `locationIsMatched()` method to prioritize the matching conditions of the query and hash values only when those values are specified in the current route. Previously, the method prioritized the current route's values in all cases.
+
 ## 0.1.18
 
 ### Patch Changes

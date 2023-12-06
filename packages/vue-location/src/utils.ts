@@ -25,12 +25,13 @@ const normalizePath = (path: string) =>
 export function locationIsMatched(router: Router, target: RouteLocationRaw) {
   const currentRoute = router.currentRoute.value;
   const _target = router.resolve(target);
-  const { path, query, hash } = currentRoute;
+  const { path } = currentRoute;
   if (normalizePath(_target.path) !== normalizePath(path)) return false;
+  const { query, hash } = _target;
   const queryEntries = Object.entries(query);
-  if (queryEntries.some(([key, value]) => _target.query[key] !== value)) {
+  if (queryEntries.some(([key, value]) => currentRoute.query[key] !== value)) {
     return false;
   }
-  if (hash && _target.hash !== hash) return false;
+  if (hash && currentRoute.hash !== hash) return false;
   return true;
 }
