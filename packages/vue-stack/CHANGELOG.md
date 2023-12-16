@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.28
+
+### Patch Changes
+
+- Extended `overlap` attribute in the menu component, adding settings to prevent overlap with the activator.
+
 ## 0.15.27
 
 ### Patch Changes

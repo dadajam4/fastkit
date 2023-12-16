@@ -330,9 +330,9 @@
     "editor.formatOnPaste": false,
     "editor.formatOnType": false,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": false,
-      "source.fixAll.eslint": true,
-      "source.fixAll.stylelint": true
+      "source.organizeImports": "never",
+      "source.fixAll.eslint": "explicit",
+      "source.fixAll.stylelint": "explicit"
     },
 
     // Stylelint base settings

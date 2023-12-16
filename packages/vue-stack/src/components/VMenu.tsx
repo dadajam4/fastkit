@@ -36,6 +36,19 @@ const DEFAULT_DISTANCE = 10;
 const DEFAULT_RESIZE_WATCH_DEBOUNCE = 250;
 const DEFAULT_TRANSITION = 'v-menu-auto';
 
+/**
+ * Overlap settings with the activator
+ *
+ * - `allow` Allow overlapping if display space is insufficient
+ * - `disallow` Do not allow overlapping even when display space is insufficient.
+ * - `overlap` Overlap on the activator
+ *
+ * If internal position settings like (left, right, top, bottom)-inner are used, this configuration does not apply to that axis.
+ */
+export type MenuOverlapSettings = 'allow' | 'disallow' | 'overlap';
+
+type RawMenuOverlapSettings = MenuOverlapSettings | boolean;
+
 interface CreateMenuSchemeOptions {
   /**
    * @default "v-menu-auto"
@@ -48,6 +61,14 @@ interface CreateMenuSchemeOptions {
   defaultDistance?: number;
   defaultEdgeMargin?: number;
   defaultResizeWatchDebounce?: number;
+  /**
+   * @default false
+   */
+  defaultAllowOverflow?: boolean;
+  /**
+   * @default false
+   */
+  defaultOverlap?: RawMenuOverlapSettings;
 }
 
 type MenuMaxSize = number | 'fit' | 'free';
@@ -69,31 +90,121 @@ export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
     defaultDistance = DEFAULT_DISTANCE,
     defaultEdgeMargin = DEFAULT_EDGE_MARGIN,
     defaultResizeWatchDebounce = DEFAULT_RESIZE_WATCH_DEBOUNCE,
+    defaultAllowOverflow = false,
+    defaultOverlap = false,
   } = options;
 
   return {
+    /**
+     * Horizontal Axis Position
+     *
+     * - `left` To the left of the activator.
+     * - `left-inner` Align to the left edge of the activator.
+     * - `center` Align to the center of the activator.
+     * - `right` To the right of the activator.
+     * - `right-inner` Align to the right edge of the activator.
+     */
     x: String as PropType<VMenuXPosition>,
+    /**
+     * Vertical Axis Position
+     *
+     * - `top` To the top of the activator.
+     * - `top-inner` Align to the top edge of the activator.
+     * - `center` Align to the center of the activator.
+     * - `bottom` To the bottom of the activator.
+     * - `bottom-inner` Align to the bottom edge of the activator.
+     */
     y: String as PropType<VMenuYPosition>,
-    allowOverflow: Boolean,
+    /**
+     * Allow overflow from the screen.
+     *
+     * If this setting is not enabled, the element's size will be reduced when exceeding coordinates beyond the screen edge, subtracting the edge margin.
+     */
+    allowOverflow: {
+      type: Boolean,
+      default: defaultAllowOverflow,
+    },
+    /**
+     * width
+     *
+     * Either specify a pixel size or use "fit". When "fit" is chosen, the width will match that of the activator.
+     */
     width: RAW_MENU_SIZE_PROP,
+    /**
+     * height
+     *
+     * Either specify a pixel size or use "fit". When "fit" is chosen, the height will match that of the activator.
+     */
     height: RAW_MENU_SIZE_PROP,
+    /**
+     * Minimum width
+     *
+     * Either specify a pixel size or use "fit". When "fit" is chosen, the width will match that of the activator.
+     */
     minWidth: RAW_MENU_SIZE_PROP,
+    /**
+     * Minimum height
+     *
+     * Either specify a pixel size or use "fit". When "fit" is chosen, the width will match that of the activator.
+     */
     minHeight: RAW_MENU_SIZE_PROP,
+    /**
+     * Maximum width
+     *
+     * It is possible to set values that can be configured as CSS or dynamic sizes through callback functions.
+     *
+     * This setting is ignored if `allowOverflow` is enabled.
+     *
+     * @see {@link RAW_MENU_MAX_SIZE_PROP}
+     */
     maxWidth: RAW_MENU_MAX_SIZE_PROP,
+    /**
+     * Maximum height
+     *
+     * It is possible to set values that can be configured as CSS or dynamic sizes through callback functions.
+     *
+     * This setting is ignored if `allowOverflow` is enabled.
+     *
+     * @see {@link RAW_MENU_MAX_SIZE_PROP}
+     */
     maxHeight: RAW_MENU_MAX_SIZE_PROP,
+    /**
+     * Distance from the activator (in pixels).
+     *
+     * If a position setting, such as (left, right, top, bottom)-inner, is used, the distance is not applied to that axis.
+     */
     distance: {
       type: Number,
       default: defaultDistance,
     },
+    /**
+     * Margin from the screen edge
+     *
+     * By default, it is controlled to ensure that the coordinates, subtracted by this margin from the screen edge, do not overflow.
+     */
     edgeMargin: {
       type: Number,
       default: defaultEdgeMargin,
+    },
+    /**
+     * Overlap settings with the activator
+     *
+     * - `allow` | `false` Allow overlapping if display space is insufficient
+     * - `disallow` Do not allow overlapping even when display space is insufficient.
+     * - `overlap` | `true` Overlap on the activator
+     *
+     * If internal position settings like (left, right, top, bottom)-inner are used, this configuration does not apply to that axis.
+     *
+     * @see {@link MenuOverlapSettings}
+     */
+    overlap: {
+      type: [Boolean, String] as PropType<MenuOverlapSettings | boolean>,
+      default: defaultOverlap,
     },
     resizeWatchDebounce: {
       type: Number,
       default: defaultResizeWatchDebounce,
     },
-    overlap: Boolean,
   };
 }
 
@@ -176,7 +287,7 @@ export interface MenuAPI {
   readonly pageYOffset: number;
   readonly distance: number;
   readonly resizeWatchDebounce: number;
-  readonly overlap: boolean;
+  readonly overlap: MenuOverlapSettings;
   readonly edgeMargin: number;
   readonly minLeft: number;
   readonly minTop: number;
@@ -265,7 +376,13 @@ export function defineMenuComponent<
       const _resizeWatchDebounce = computed(() => props.resizeWatchDebounce);
       const $window = useWindow();
 
-      const _overlap = computed(() => props.overlap);
+      const _overlap = computed<MenuOverlapSettings>(() => {
+        const { overlap } = props;
+        if (typeof overlap === 'boolean') {
+          return overlap ? 'overlap' : 'allow';
+        }
+        return overlap;
+      });
       const _edgeMargin = computed(() => props.edgeMargin);
       const _minLeft = computed(() => _edgeMargin.value + state.pageXOffset);
       const _minTop = computed(() => _edgeMargin.value + state.pageYOffset);
@@ -354,7 +471,9 @@ export function defineMenuComponent<
         const maxRight = _maxRight.value;
         const maxBottom = _maxBottom.value;
         const distance = _distance.value;
-        const overlap = _overlap.value;
+        const overlapSettings = _overlap.value;
+        const isOverlap = overlapSettings === 'overlap';
+        const disallowOverlap = overlapSettings === 'disallow';
 
         let computedWidth = _width.value;
         let computedHeight = _height.value;
@@ -401,8 +520,8 @@ export function defineMenuComponent<
         width = typeof computedWidth === 'number' ? computedWidth : myWidth;
         height = typeof computedHeight === 'number' ? computedHeight : myHeight;
 
-        const overlapHeight = overlap ? activatorHeight : 0;
-        const overlapWidth = overlap ? activatorWidth : 0;
+        const overlapHeight = isOverlap ? activatorHeight : 0;
+        const overlapWidth = isOverlap ? activatorWidth : 0;
         const topFree = activatorTop - _edgeMargin.value + overlapHeight;
         const bottomFree =
           $window.height - _edgeMargin.value - activatorBottom + overlapHeight;
@@ -498,14 +617,14 @@ export function defineMenuComponent<
             top = activatorTop;
           } else {
             top = activatorTop - height;
-            if (overlap) top += activatorHeight;
+            if (isOverlap) top += activatorHeight;
           }
         } else if (isBottom) {
           if (yInner) {
             top = activatorBottom - height;
           } else {
             top = activatorBottom;
-            if (overlap) top -= activatorHeight;
+            if (isOverlap) top -= activatorHeight;
           }
         } else {
           top = activatorTop - (height - activatorHeight) / 2;
@@ -518,14 +637,14 @@ export function defineMenuComponent<
             left = activatorLeft;
           } else {
             left = activatorLeft - width;
-            if (overlap) left += activatorWidth;
+            if (isOverlap) left += activatorWidth;
           }
         } else if (isRight) {
           if (xInner) {
             left = activatorRight - width;
           } else {
             left = activatorRight;
-            if (overlap) left -= activatorWidth;
+            if (isOverlap) left -= activatorWidth;
           }
         } else {
           left = activatorLeft - (width - activatorWidth) / 2;
@@ -533,7 +652,7 @@ export function defineMenuComponent<
 
         left += pageXOffset;
 
-        if (!overlap) {
+        if (!isOverlap) {
           if (!yInner) {
             if (isBottom) {
               top += distance;
@@ -554,40 +673,85 @@ export function defineMenuComponent<
         let right = left + width;
         let bottom = top + height;
 
-        const rightDiff = right - maxRight;
-        if (rightDiff > 0) {
-          left -= rightDiff;
-          right -= rightDiff;
-        }
+        // ==================================================
+        // If it extends beyond the screen (plus edge margin), it will move towards the inside.
+        // ==================================================
 
-        const bottomDiff = bottom - maxBottom;
-        if (bottomDiff > 0) {
-          top -= bottomDiff;
-          bottom -= bottomDiff;
-        }
-
-        const leftDiff = minLeft - left;
-        if (leftDiff > 0) {
-          left += leftDiff;
-          right += leftDiff;
-        }
-
-        const topDiff = minTop - top;
-        if (topDiff > 0) {
-          top += topDiff;
-          bottom += topDiff;
-        }
-
-        if (!allowOverflow) {
-          const overflowX = right - maxRight;
-          if (overflowX > 0) {
-            width -= overflowX;
-            right -= overflowX;
+        const rightOverflow = right - maxRight;
+        if (rightOverflow > 0) {
+          left -= rightOverflow;
+          right -= rightOverflow;
+          if (disallowOverlap) {
+            const overlapSize = activatorRight - left;
+            if (overlapSize > 0) {
+              left += overlapSize;
+              right += overlapSize;
+            }
           }
-          const overflowY = bottom - maxBottom;
-          if (overflowY > 0) {
-            height -= overflowY;
-            bottom -= overflowY;
+        }
+
+        const bottomOverflow = bottom - maxBottom;
+        if (bottomOverflow > 0) {
+          top -= bottomOverflow;
+          bottom -= bottomOverflow;
+          if (disallowOverlap) {
+            const overlapSize = activatorBottom - top;
+            if (overlapSize > 0) {
+              top += overlapSize;
+              bottom += overlapSize;
+            }
+          }
+        }
+
+        const leftOverflow = minLeft - left;
+        if (leftOverflow > 0) {
+          left += leftOverflow;
+          right += leftOverflow;
+          if (disallowOverlap) {
+            const overlapSize = right - activatorLeft;
+            if (overlapSize > 0) {
+              left -= overlapSize;
+              right -= overlapSize;
+            }
+          }
+        }
+
+        const topOverflow = minTop - top;
+        if (topOverflow > 0) {
+          top += leftOverflow;
+          bottom += leftOverflow;
+          if (disallowOverlap) {
+            const overlapSize = bottom - activatorTop;
+            if (overlapSize > 0) {
+              top -= overlapSize;
+              bottom -= overlapSize;
+            }
+          }
+        }
+
+        // ==================================================
+        // If allowOverflow is disabled and it extends beyond the screen (plus edge margin), then reduce the size.
+        // ==================================================
+        if (!allowOverflow) {
+          const overflowRight = right - maxRight;
+          if (overflowRight > 0) {
+            width -= overflowRight;
+            right -= overflowRight;
+          }
+          const overflowBottom = bottom - maxBottom;
+          if (overflowBottom > 0) {
+            height -= overflowBottom;
+            bottom -= overflowBottom;
+          }
+          const overflowLeft = minLeft - left;
+          if (overflowLeft > 0) {
+            width -= overflowLeft;
+            left += overflowLeft;
+          }
+          const overflowTop = minTop - top;
+          if (overflowTop > 0) {
+            height -= overflowTop;
+            top += overflowTop;
           }
         }
 
