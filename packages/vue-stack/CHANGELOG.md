@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.29
+
+### Patch Changes
+
+- Fixed an issue where coordinate calculations were incorrect when specifying `disallow` for the `overlap` attribute.
+
 ## 0.15.28
 
 ### Patch Changes

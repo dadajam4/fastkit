@@ -384,14 +384,42 @@ export function defineMenuComponent<
         return overlap;
       });
       const _edgeMargin = computed(() => props.edgeMargin);
-      const _minLeft = computed(() => _edgeMargin.value + state.pageXOffset);
-      const _minTop = computed(() => _edgeMargin.value + state.pageYOffset);
-      const _maxRight = computed(
-        () => $window.width - _edgeMargin.value + state.pageXOffset,
-      );
-      const _maxBottom = computed(
-        () => $window.height - _edgeMargin.value + state.pageYOffset,
-      );
+
+      const calcMinEdge = (direction: 'left' | 'top') => {
+        const pageOffset =
+          direction === 'left' ? state.pageXOffset : state.pageYOffset;
+        const min = _edgeMargin.value + pageOffset;
+        const activatorEdge = state.activatorRect?.[direction];
+        if (activatorEdge === undefined) return min;
+        if (activatorEdge < 0) {
+          return pageOffset;
+        }
+        if (activatorEdge < min) {
+          return activatorEdge;
+        }
+        return min;
+      };
+
+      const calcMaxEdge = (direction: 'right' | 'bottom') => {
+        const isX = direction === 'right';
+        const pageOffset = isX ? state.pageXOffset : state.pageYOffset;
+        const windowSize = isX ? $window.width : $window.height;
+        const max = windowSize - _edgeMargin.value + pageOffset;
+        const activatorEdge = state.activatorRect?.[direction];
+        if (activatorEdge === undefined) return max;
+        if (activatorEdge > windowSize) {
+          return pageOffset + windowSize;
+        }
+        if (activatorEdge + pageOffset > max) {
+          return activatorEdge + pageOffset;
+        }
+        return max;
+      };
+
+      const _minLeft = computed(() => calcMinEdge('left'));
+      const _minTop = computed(() => calcMinEdge('top'));
+      const _maxRight = computed(() => calcMaxEdge('right'));
+      const _maxBottom = computed(() => calcMaxEdge('bottom'));
 
       const resolveMaxSize = (
         raw: RawMenuMaxSize | undefined,
@@ -681,8 +709,8 @@ export function defineMenuComponent<
         if (rightOverflow > 0) {
           left -= rightOverflow;
           right -= rightOverflow;
-          if (disallowOverlap) {
-            const overlapSize = activatorRight - left;
+          if (isRight && disallowOverlap) {
+            const overlapSize = activatorRight + distance + pageXOffset - left;
             if (overlapSize > 0) {
               left += overlapSize;
               right += overlapSize;
@@ -694,8 +722,8 @@ export function defineMenuComponent<
         if (bottomOverflow > 0) {
           top -= bottomOverflow;
           bottom -= bottomOverflow;
-          if (disallowOverlap) {
-            const overlapSize = activatorBottom - top;
+          if (isBottom && disallowOverlap) {
+            const overlapSize = activatorBottom + distance + pageYOffset - top;
             if (overlapSize > 0) {
               top += overlapSize;
               bottom += overlapSize;
@@ -707,8 +735,9 @@ export function defineMenuComponent<
         if (leftOverflow > 0) {
           left += leftOverflow;
           right += leftOverflow;
-          if (disallowOverlap) {
-            const overlapSize = right - activatorLeft;
+          if (isLeft && disallowOverlap) {
+            const overlapSize =
+              right - (activatorLeft - distance + pageXOffset);
             if (overlapSize > 0) {
               left -= overlapSize;
               right -= overlapSize;
@@ -718,10 +747,11 @@ export function defineMenuComponent<
 
         const topOverflow = minTop - top;
         if (topOverflow > 0) {
-          top += leftOverflow;
-          bottom += leftOverflow;
-          if (disallowOverlap) {
-            const overlapSize = bottom - activatorTop;
+          top += topOverflow;
+          bottom += topOverflow;
+          if (isTop && disallowOverlap) {
+            const overlapSize =
+              bottom - (activatorTop - distance + pageYOffset);
             if (overlapSize > 0) {
               top -= overlapSize;
               bottom -= overlapSize;
