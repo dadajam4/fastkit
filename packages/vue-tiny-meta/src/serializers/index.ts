@@ -1,4 +1,8 @@
-import { Node, CallExpression } from '@fastkit/ts-tiny-meta/ts-morph';
+import {
+  Node,
+  CallExpression,
+  Identifier,
+} from '@fastkit/ts-tiny-meta/ts-morph';
 import {
   _extractMetaDocs,
   SourceFileExporter,
@@ -16,7 +20,7 @@ import { serializeDefineComponent } from './component';
 
 export interface SerializeVueSource {
   exportName: string;
-  expression: CallExpression;
+  expression: CallExpression | Identifier;
 }
 
 export function extractSerializeVueSource(
@@ -25,7 +29,8 @@ export function extractSerializeVueSource(
   exportName?: string,
 ): SerializeVueSource | undefined {
   if (!exportName) return;
-  if (!Node.isCallExpression(declaration)) return;
+  if (!Node.isCallExpression(declaration) && !Node.isIdentifier(declaration))
+    return;
   const docs = _extractMetaDocs(exporter, declaration);
   if (
     docs.some((doc) => doc.tags.some((tag) => tag.name === SUPPORT_ANNOTATION))
@@ -35,6 +40,7 @@ export function extractSerializeVueSource(
       expression: declaration,
     };
   }
+  if (!Node.isCallExpression(declaration)) return;
   const expression = declaration.getExpression();
   const typeChecker = exporter.workspace.project.getTypeChecker();
   const symbol = typeChecker
@@ -104,7 +110,7 @@ export function extractAll(
       Node.isInitializerExpressionGetable(declaration) &&
       declaration.getInitializerOrThrow();
 
-    if (!initializer || !Node.isCallExpression(initializer)) continue;
+    if (!initializer) continue;
 
     const source = extractSerializeVueSource(exporter, initializer, name);
 

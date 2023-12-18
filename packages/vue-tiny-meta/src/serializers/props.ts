@@ -1,6 +1,8 @@
 import {
   Symbol as MorphSymbol,
+  Type as MorphType,
   CallExpression,
+  Identifier,
 } from '@fastkit/ts-tiny-meta/ts-morph';
 import {
   SourceFileExporter,
@@ -14,15 +16,14 @@ import {
   trimCommonSubstring,
 } from '../utils';
 
-export function serializeProps(
+export function serializePropsByType(
   exporter: SourceFileExporter,
-  defineExpression: CallExpression,
-  propsSymbol: MorphSymbol,
+  defineExpressionOrIdentifier: CallExpression | Identifier,
+  $propsType: MorphType,
   userFilter?: UserFilter,
 ): PropMeta[] {
   const filter = resolveUserFilter(userFilter);
-  const $propsDec = propsSymbol.getDeclarations()[0];
-  const $propsType = propsSymbol.getTypeAtLocation($propsDec);
+
   const filteredProperties = $propsType
     .getProperties()
     .filter((prop) => filter(prop.getName()));
@@ -36,7 +37,7 @@ export function serializeProps(
     );
 
     const propDeclaration = undefined;
-    const dec = prop.getDeclarations()[0] || defineExpression;
+    const dec = prop.getDeclarations()[0] || defineExpressionOrIdentifier;
     const type = prop.getTypeAtLocation(dec);
     const docs = getMetaDocsByNodeAndSymbol(exporter, propDeclaration, prop);
 
@@ -79,4 +80,21 @@ export function serializeProps(
       sourceFile,
     };
   });
+}
+
+export function serializeProps(
+  exporter: SourceFileExporter,
+  defineExpressionOrIdentifier: CallExpression | Identifier,
+  propsSymbol: MorphSymbol,
+  userFilter?: UserFilter,
+): PropMeta[] {
+  // const filter = resolveUserFilter(userFilter);
+  const $propsDec = propsSymbol.getDeclarations()[0];
+  const $propsType = propsSymbol.getTypeAtLocation($propsDec);
+  return serializePropsByType(
+    exporter,
+    defineExpressionOrIdentifier,
+    $propsType,
+    userFilter,
+  );
 }

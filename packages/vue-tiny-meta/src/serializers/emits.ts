@@ -17,7 +17,7 @@ const EMIT_PAYLOAD_REPLACE_RE = /(^\[|\]$)/g;
 
 export function serializeEmits(
   exporter: SourceFileExporter,
-  optionsType: Type,
+  optionsType: Type | undefined,
   emitSymbol: MorphSymbol,
   userFilter?: UserFilter,
 ): EventMeta[] {
@@ -49,7 +49,7 @@ export function serializeEmits(
     fns.push({ name, text, sourceFile });
   });
 
-  const emitsSymbol = optionsType.getProperty('emits');
+  const emitsSymbol = optionsType?.getProperty('emits');
   const emitsDec = emitsSymbol?.getDeclarations()[0];
   if (!emitsDec) return [];
   const optionsEmitsType = emitsDec.getType();
