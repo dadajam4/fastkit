@@ -27,6 +27,7 @@ import {
   resizeDirectiveArgument,
   ResizeDirectivePayload,
 } from '@fastkit/vue-resize';
+import { type ExtractPropInput } from '@fastkit/vue-utils';
 import { logger, VueStackError } from '../logger';
 import { IN_WINDOW } from '@fastkit/helpers';
 import { getScrollParents } from '../utils';
@@ -77,7 +78,10 @@ type RawMenuMaxSize =
   | MenuMaxSize
   | ((window: UseWindowRef) => number | undefined);
 
-const RAW_MENU_SIZE_PROP = [Number, String] as PropType<number | 'fit'>;
+const RAW_MENU_SIZE_PROP = {
+  type: [Number, String, Boolean] as PropType<false | number | 'fit'>,
+  default: undefined,
+};
 
 const RAW_MENU_MAX_SIZE_PROP = [
   Number,
@@ -228,9 +232,9 @@ function createMenuScheme(options: CreateMenuSchemeOptions = {}) {
 
 export type MenuPropsOptions = ReturnType<typeof createMenuProps>;
 
-export type MenuEmits = ReturnType<typeof createMenuScheme>['emits'];
+export type MenuInput = ExtractPropInput<MenuPropsOptions>;
 
-// export const stackMenuEmits = emits;
+export type MenuEmits = ReturnType<typeof createMenuScheme>['emits'];
 
 export type VMenuXPosition =
   | 'left'
@@ -430,10 +434,14 @@ export function defineMenuComponent<
         }
         return raw;
       };
-      const _width = computed(() => props.width);
-      const _height = computed(() => props.height);
-      const _minWidth = computed(() => props.minWidth);
-      const _minHeight = computed(() => props.minHeight);
+      const resolveSize = (size: false | number | 'fit' | undefined) => {
+        return size === false ? undefined : size;
+      };
+
+      const _width = computed(() => resolveSize(props.width));
+      const _height = computed(() => resolveSize(props.height));
+      const _minWidth = computed(() => resolveSize(props.minWidth));
+      const _minHeight = computed(() => resolveSize(props.minHeight));
       const _maxWidth = computed(() => resolveMaxSize(props.maxWidth));
       const _maxHeight = computed(() => resolveMaxSize(props.maxHeight));
 

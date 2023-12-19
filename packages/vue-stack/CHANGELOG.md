@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.30
+
+### Patch Changes
+
+- Added the capability to disable properties associated with the size of the Menu component by setting them to `false`.
+
 ## 0.15.29
 
 ### Patch Changes
