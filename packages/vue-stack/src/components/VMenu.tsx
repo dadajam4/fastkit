@@ -72,14 +72,14 @@ interface CreateMenuSchemeOptions {
   defaultOverlap?: RawMenuOverlapSettings;
 }
 
-type MenuMaxSize = number | 'fit' | 'free';
+type MenuSizeSpec = number | 'fit' | 'free';
 
 type RawMenuMaxSize =
-  | MenuMaxSize
+  | MenuSizeSpec
   | ((window: UseWindowRef) => number | undefined);
 
 const RAW_MENU_SIZE_PROP = {
-  type: [Number, String, Boolean] as PropType<false | number | 'fit'>,
+  type: [Number, String] as PropType<number | 'fit' | 'free'>,
   default: undefined,
 };
 
@@ -427,15 +427,15 @@ export function defineMenuComponent<
 
       const resolveMaxSize = (
         raw: RawMenuMaxSize | undefined,
-      ): MenuMaxSize | undefined => {
+      ): MenuSizeSpec | undefined => {
         if (raw == null) return raw;
         if (typeof raw === 'function') {
           return baseCtx.control.isActive ? raw($window) : undefined;
         }
         return raw;
       };
-      const resolveSize = (size: false | number | 'fit' | undefined) => {
-        return size === false ? undefined : size;
+      const resolveSize = (size: number | 'fit' | 'free' | undefined) => {
+        return size === 'free' ? undefined : size;
       };
 
       const _width = computed(() => resolveSize(props.width));

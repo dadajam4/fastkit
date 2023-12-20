@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.31
+
+### Patch Changes
+
+- Changed Menu component's free size specification from `false` to conform to maximum size specification, set to `"free"`.
+
 ## 0.15.30
 
 ### Patch Changes
