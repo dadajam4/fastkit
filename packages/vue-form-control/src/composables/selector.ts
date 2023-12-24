@@ -10,6 +10,7 @@ import {
   onBeforeUnmount,
   ref,
   Ref,
+  VNodeChild,
 } from 'vue';
 import {
   createPropsOptions,
@@ -176,6 +177,8 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   protected _itemsLoadState = ref<FormSelectorLoadState>('ready');
   protected _propGroups: Ref<ResolvedFormSelectorGroup[]> = ref([]);
   protected __propItems: ComputedRef<RawFormSelectorItems>;
+  protected _loadedItems: ComputedRef<ResolvedFormSelectorItem[]>;
+  protected _selectedPropItems: ComputedRef<ResolvedFormSelectorItem[]>;
   // protected _propItems: Ref<ResolvedFormSelectorItem[]> = ref([]);
   protected _selectedValues: ComputedRef<(string | number)[]>;
   protected _selectedItems: ComputedRef<FormSelectorItemControl[]>;
@@ -216,6 +219,14 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
   get propGroups() {
     return this._propGroups.value;
+  }
+
+  get loadedItems() {
+    return this._loadedItems.value;
+  }
+
+  get selectedPropItems() {
+    return this._selectedPropItems.value;
   }
 
   // get propItems() {
@@ -346,6 +357,16 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     //     });
     // };
     this.__propItems = computed(() => props.items);
+    this._loadedItems = computed(() =>
+      this.propGroups.map((group) => group.items).flat(),
+    );
+
+    this._selectedPropItems = computed(() => {
+      const { selectedValues, loadedItems } = this;
+      return loadedItems.filter(
+        ({ value }) => value != null && selectedValues.includes(value),
+      );
+    });
 
     watch(
       () => props.items,
@@ -412,6 +433,36 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     this._itemsLoadState.value = 'ready';
   }
 
+  renderSelectedPropItems(options?: {
+    loading?: () => VNodeChild;
+    empty?: () => VNodeChild;
+    separator?: VNodeChild | (() => VNodeChild);
+    item?: (item: ResolvedFormSelectorItem, index: number) => VNodeChild;
+  }): VNodeChild {
+    if (this.itemsLoading) {
+      return options?.loading ? options.loading() : [];
+    }
+    const { selectedPropItems } = this;
+    if (!selectedPropItems.length) {
+      return options?.empty ? options.empty() : [];
+    }
+
+    const children: VNodeChild[] = [];
+    const separator = options?.separator ?? ', ';
+    selectedPropItems.forEach((item, index) => {
+      if (index > 0) {
+        children.push(
+          typeof separator === 'function' ? separator() : separator,
+        );
+      }
+      const child = options?.item
+        ? options.item(item, index)
+        : item.label(this);
+      children.push(child);
+    });
+    return children;
+  }
+
   loadItems() {
     const items = this.__propItems.value;
 
@@ -444,7 +495,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       this.items.forEach((item) => {
         const { propValue } = item;
         propValue != null && usedValues.push(propValue);
-        if (item.selected && propValue != null) {
+        if (item.selected && propValue != null && !values.includes(propValue)) {
           values.push(propValue);
         }
       });

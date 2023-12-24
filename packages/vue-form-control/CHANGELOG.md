@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.41
+
+### Patch Changes
+
+- Added props-based selection state and corresponding conditional rendering logic to `FormSelector`.
+
 ## 0.15.40
 
 ### Patch Changes
