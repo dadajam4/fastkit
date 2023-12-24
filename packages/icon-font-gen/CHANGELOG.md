@@ -1,5 +1,11 @@
 # @fastkit/icon-font-gen
 
+## 0.13.13
+
+### Patch Changes
+
+- Added an option to customize `font-display`.
+
 ## 0.13.12
 
 ### Patch Changes

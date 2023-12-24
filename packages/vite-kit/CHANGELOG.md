@@ -1,5 +1,12 @@
 # @fastkit/vite-kit
 
+## 0.13.13
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/icon-font-gen@0.13.13
+
 ## 0.13.12
 
 ### Patch Changes

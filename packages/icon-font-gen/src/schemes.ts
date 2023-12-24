@@ -40,12 +40,20 @@ export interface IconFontEntry extends IconFontSettings {
   prefix: string;
   src: string;
   dest: string;
+  display: 'block' | 'swap';
 }
 
 export interface RawIconFontEntry
-  extends Omit<IconFontEntry, 'name' | 'fontName' | 'prefix' | 'dest'> {
+  extends Omit<
+    IconFontEntry,
+    'name' | 'fontName' | 'prefix' | 'dest' | 'display'
+  > {
   name?: string;
   fontName?: string;
+  /**
+   * @default block
+   */
+  display?: 'block' | 'swap';
 }
 
 // export type RawIconFontOptions = IconFontEntry | IconFontEntry[];
@@ -82,12 +90,14 @@ export async function resolveRawIconFontEntry(
   const fontName = entry.fontName || `${name}-icon`;
   const dest = path.join(rootDir, name);
   const prefix = entry.disablePrefix ? '' : `${name}-`;
+  const display = entry.display || 'block';
   return {
     ...entry,
     name,
     fontName,
     prefix,
     dest,
+    display,
   };
 }
 

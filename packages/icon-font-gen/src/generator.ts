@@ -158,7 +158,7 @@ export async function generateEntry(
   const cssCode = `/* stylelint-disable */
 @font-face {
   font-family: "${options.fontName}";
-  font-display: block;
+  font-display: ${options.display};
   font-style: normal;
   font-weight: 400;
   src: ${src};
