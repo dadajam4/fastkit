@@ -22,17 +22,25 @@ interface CreateDialogSchemeOptions {
    * @default true
    */
   defaultScrollLock?: boolean;
+  /**
+   * @default false
+   */
+  defaultBackdrop?: string | boolean;
 }
 
 function createDialogScheme(options: CreateDialogSchemeOptions = {}) {
-  const { defaultTransition = 'v-stack-slide-y', defaultScrollLock = true } =
-    options;
+  const {
+    defaultTransition = 'v-stack-slide-y',
+    defaultScrollLock = true,
+    defaultBackdrop = false,
+  } = options;
 
   const { props, emits } = createStackableDefine({
     defaultTransition,
     defaultFocusTrap: true,
     defaultFocusRestorable: true,
     defaultScrollLock,
+    defaultBackdrop,
   });
 
   return {

@@ -428,6 +428,8 @@ export interface CreateStackablePropsOptions {
   defaultFocusRestorable?: boolean;
   /** @default false */
   defaultScrollLock?: boolean;
+  /** @default false */
+  defaultBackdrop?: string | boolean;
   /** @default true */
   defaultCloseOnOutsideClick?: boolean;
   /** @default true */
@@ -465,6 +467,7 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
     defaultFocusTrap = false,
     defaultFocusRestorable = false,
     defaultScrollLock = false,
+    defaultBackdrop = false,
     defaultCloseOnOutsideClick = true,
     defaultCloseOnNavigation = true,
     defaultTimeout = 0,
@@ -505,7 +508,7 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
      */
     backdrop: {
       type: [Boolean, String] as PropType<boolean | string>,
-      default: false,
+      default: defaultBackdrop,
     },
     /**
      * Trap user focus

@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.34
+
+### Patch Changes
+
+- Added the ability to specify the initial value for `backdrop` during the initialization of `VDialog`.
+
 ## 0.15.33
 
 ### Patch Changes
