@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.33
+
+### Patch Changes
+
+- Added the ability to specify the initial value for `scrollLock` during the initialization of `VDialog`.
+
 ## 0.15.32
 
 ### Patch Changes
