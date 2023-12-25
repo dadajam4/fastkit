@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.32
+
+### Patch Changes
+
+- Added JSDoc to Stack-related implementation
+
 ## 0.15.31
 
 ### Patch Changes

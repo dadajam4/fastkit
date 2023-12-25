@@ -18,6 +18,13 @@ import { JavaScriptTransition } from '@fastkit/vue-transitions';
 
 type DelayTimerProps = 'openDelay' | 'closeDelay';
 
+/**
+ * Reason for becoming hidden
+ *
+ * - `indeterminate` Not determined reason
+ * - `resolved` - User performed an 'OK'-like action
+ * - `canceled` - User performed a 'Cancel'-like action
+ */
 export type StackableCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
 export type VStackNavigationGuard = (
@@ -25,38 +32,86 @@ export type VStackNavigationGuard = (
   from: RouteLocationNormalized,
 ) => boolean | Promise<boolean>;
 
+/**
+ * Attributes to apply to the stack element's activator
+ */
 export interface VStackActivatorAttributes {
+  /** VNode ref */
   ref: Ref;
+  /** Click handler */
   onClick?: (ev: MouseEvent) => void;
+  /** Context menu handler */
   onContextmenu?: (ev: MouseEvent) => void;
+  /** Mouse enter handler */
   onMouseenter?: (ev: MouseEvent) => void;
+  /** Mouse leave handler */
   onMouseleave?: (ev: MouseEvent) => void;
+  /** Focus handler */
   onFocus?: (ev: FocusEvent) => void;
 }
 
+/** State of the stack control */
 export interface VStackControlState {
+  /** Display state */
   isActive: boolean;
+  /** Activator element */
   readonly activator: HTMLElement | undefined;
+  /**
+   * Reason for becoming hidden
+   *
+   * @see {@link StackableCloseReason}
+   */
   closeReason: StackableCloseReason;
+  /** Initial value */
   initialValue: any;
+  /** Input value */
   inputValue: any;
+  /** During display animation */
   showing: boolean;
+  /** During hide animation */
   closing: boolean;
+  /** During guard animation */
   guardAnimating: boolean;
+  /** Guard animation timer ID */
   guardAnimateTimeId: number | null;
+  /** Activation order */
   activateOrder: number;
+  /** Auto-hide timer ID */
   timeoutId: number | null;
+  /** List of delay request timer IDs */
   delayTimers: number[];
+  /** Rendering required */
   needRender: boolean;
+  /** Component mounted */
   booted: boolean;
+  /** Component destroyed */
   isDestroyed: boolean;
 }
 
+/**
+ * Close option
+ */
 export interface VStackCloseOptions {
+  /**
+   * Force close
+   *
+   * When the `persistent` setting is enabled, the stack will not close unless this option is also activated.
+   */
   force?: boolean;
+  /**
+   * Reason for becoming hidden
+   *
+   * @see {@link StackableCloseReason}
+   */
   reason?: StackableCloseReason;
 }
 
+/**
+ * Check if the specified value is an instance of the stack control
+ *
+ * @param source - The value to check
+ * @returns - If it is a stack control, returns `true`
+ */
 export function isStackControl(source: unknown): source is VStackControl {
   return (
     !!source &&
@@ -65,43 +120,96 @@ export function isStackControl(source: unknown): source is VStackControl {
   );
 }
 
+/**
+ * Stack control
+ */
 export interface VStackControl {
   readonly __isStackControl: true;
+  /** Display state */
   readonly isActive: boolean;
+  /**
+   * The value entered into the stack
+   *
+   * This is always `undefined` if the `closeReason` is not `resolved`.
+   */
   value: any;
+  /**
+   * Stack service
+   *
+   * @see {@link VueStackService}
+   */
   readonly $service: VueStackService;
-  // readonly color: ColorClassesResult;
+  /** List of class attributes */
   readonly classes: any[];
+  /** List of style attributes */
   readonly styles: StyleValue[];
+  /** During animation */
   readonly transitioning: boolean;
+  /** Activation order */
   readonly activateOrder: number;
+  /** Timeout setting (milliseconds) */
   readonly timeout: number;
+  /**
+   * Persistently display
+   *
+   * If this setting is enabled, it will attempt to block hide requests or page transitions
+   */
   readonly persistent: boolean;
+  /** The user has performed a confirmation action, such as 'OK,' for the stack display */
   readonly isResolved: boolean;
+  /** The user has performed a negative action, such as 'Cancel,' for the stack display */
   readonly isCanceled: boolean;
+  /** z index */
   readonly zIndex: number;
+  /** Restore focus after hiding */
   readonly focusRestorable: boolean;
+  /** Close when the ESC key is pressed */
   readonly closeOnEsc: boolean;
+  /** Close on navigation occurrence */
   readonly closeOnNavigation: boolean;
+  /** Close when clicking outside the stack area */
   readonly closeOnOutsideClick: boolean;
+  /** Delay time for display (in milliseconds) */
   readonly openDelay: number;
+  /** Delay time for hiding (in milliseconds) */
   readonly closeDelay: number;
+  /** Component destroyed */
   readonly isDestroyed: boolean;
+  /** Stack content element */
   readonly contentRef: Ref<HTMLElement | null>;
+  /** Activator element */
   readonly activator: HTMLElement | undefined;
+  /** Backdrop element */
   readonly backdropRef: Ref<HTMLElement | null>;
+  /** Stack type */
   readonly stackType?: string | symbol;
 
   /** @private */
   readonly _: {
+    /**
+     * State of the stack control
+     *
+     * @see {@link VStackControlState}
+     */
     readonly state: VStackControlState;
+    /**
+     * Attributes to apply to the stack element's activator
+     *
+     * @see {@link VStackActivatorAttributes}
+     */
     readonly activatorAttrs: VStackActivatorAttributes;
+    /** Transition settings */
     readonly Transition: {
       readonly Ctor: typeof Transition;
       readonly props: any;
-      // readonly name: string | undefined;
     };
+    /**
+     * Keyboard composable
+     *
+     * @see {@link UseKeyboardRef}
+     */
     readonly keyboard: UseKeyboardRef;
+    /** Listener object related to transitions */
     readonly transitionListeners: {
       onBeforeEnter: (el: HTMLElement) => void;
       onAfterEnter: (el: HTMLElement) => void;
@@ -110,26 +218,75 @@ export interface VStackControl {
       onAfterLeave: (el: HTMLElement) => void;
       onLeaveCancelled: (el: HTMLElement) => void;
     };
+    /** Handler to trap focus */
     focusTrapper?: (ev: FocusEvent) => void;
+    /**
+     * Set the active state
+     * @param isActive - active state
+     * @param withEmit - Notify of changes
+     */
     setIsActive(isActive: boolean, withEmit?: boolean): void;
+    /** Clear the auto-hide timer */
     clearTimeoutId(): void;
+    /** Perform delayed processing */
     runDelay(prop: number | DelayTimerProps, cb: () => any): void;
+    /** Clear the delayed processing queue */
     clearDelay(): void;
+    /** Trap focus */
     trapFocus(ev?: FocusEvent): boolean | void;
+    /** Prepare handler for focus trapping */
     setupFocusTrapper(): void;
+    /** Remove handler for focus trapping */
     removeFocusTrapper(): void;
+    /** Update focus trap settings */
     checkFocusTrap(): void;
+    /** Set rendering request */
     setNeedRender(needRender: boolean): void;
+    /** Process for determining hide on outside-click */
     outsideClickCloseConditional(ev: MouseEvent, pre?: boolean): boolean;
+    /** Clear guard effect */
     clearGuardEffect(): void;
   };
-
+  /**
+   * Set the activator
+   *
+   * @param query - Specifying the activator element or its query
+   *
+   * @see {@link VStackActivatorQuery}
+   */
   setActivator(query: VStackActivatorQuery): this;
+  /** Show the stack */
   show(): Promise<void>;
+  /** Toggle the display state */
   toggle(): Promise<void>;
+  /**
+   * Close the stack
+   *
+   * @param opts - Close option
+   *
+   * @see {@link VStackCloseOptions}
+   */
   close(opts?: VStackCloseOptions): Promise<void>;
+  /**
+   * Confirm the stack input
+   *
+   * The stack will close with the `force` option.
+   *
+   * @param payload - The confirmed value (if any)
+   */
   resolve(payload?: any): Promise<void>;
+  /**
+   * Cancel the stack input
+   *
+   * @param force - Forcefully close
+   */
   cancel(force?: boolean): Promise<void>;
+  /**
+   * Render the stack
+   *
+   * @param fn - Renderer
+   * @param opts - Rendering options
+   */
   render(
     fn: (
       children: VNodeChild | undefined,
@@ -141,35 +298,112 @@ export interface VStackControl {
       transition?: (child?: VNode) => VNode;
     },
   ): VNode;
+  /** Bring the stack to the forefront */
   toFront(): void;
+  /** Reset the stack input */
   resetValue(): void;
+  /**
+   * Check if the stack is in the foreground
+   * @param filter - Exclude filter for specific stacks
+   */
   isFront(filter?: (control: VStackControl) => boolean): boolean;
+  /** Execute guard effect */
   guardEffect(): void;
 }
 
 export const stackableEmits = {
+  /**
+   * Update display state
+   * @param modelValue - display state
+   */
   'update:modelValue': (modelValue: boolean) => true,
+  /**
+   * When updating the display state
+   * @param modelValue - display state
+   */
   change: (modelValue: boolean) => true,
+  /**
+   * When updating the stack input
+   * @param value - Stack input
+   */
   payload: (value: any) => true,
+  /**
+   * When the stack is displayed
+   * @param control - Stack control
+   */
   show: (control: VStackControl) => true,
+  /**
+   * When the stack is closed
+   * @param control - Stack control
+   */
   close: (control: VStackControl) => true,
+  /**
+   * Before the enter transition starts
+   * @param el - Element
+   * @param control - Stack control
+   */
   beforeEnter: (el: HTMLElement, control: VStackControl) => true,
+  /**
+   * After the enter transition starts
+   * @param el - Element
+   * @param control - Stack control
+   */
   afterEnter: (el: HTMLElement, control: VStackControl) => true,
+  /**
+   * When the enter transition start is canceled
+   * @param el - Element
+   * @param control - Stack control
+   */
   enterCancelled: (el: HTMLElement, control: VStackControl) => true,
+  /**
+   * Before the leave transition starts
+   * @param el - Element
+   * @param control - Stack control
+   */
   beforeLeave: (el: HTMLElement, control: VStackControl) => true,
+  /**
+   * After the leave transition starts
+   * @param el - Element
+   * @param control - Stack control
+   */
   afterLeave: (el: HTMLElement, control: VStackControl) => true,
+  /**
+   * When the leave transition start is canceled
+   * @param el - Element
+   * @param control - Stack control
+   */
   leaveCancelled: (el: HTMLElement, control: VStackControl) => true,
 };
 
 export type StackableEmits = typeof stackableEmits;
 
+/**
+ * Payload for the activator slot
+ */
 export interface VStackActivatorPayload {
-  attrs: VStackActivatorAttributes;
-  control: VStackControl;
+  /**
+   * Attributes to apply to the stack element's activator
+   *
+   * @see {@link VStackActivatorAttributes}
+   */
+  get attrs(): VStackActivatorAttributes;
+  /**
+   * Stack control
+   *
+   * @see {@link VStackControl}
+   */
+  get control(): VStackControl;
 }
 
 export type VStackSlots = {
   default?: (control: VStackControl) => VNodeChild;
+  /**
+   * Activator rendering slot
+   *
+   * @param payload - Payload for the activator slot
+   *
+   * @see {@link VStackActivatorPayload}
+   */
   activator?: (payload: VStackActivatorPayload) => VNodeChild;
 };
 
@@ -213,6 +447,9 @@ export type RawVStackObjectTransitionProp<
   T extends string | JavaScriptTransition,
 > = string | VStackObjectTransitionProp<T>;
 
+/**
+ * Specifying the activator element or its query
+ */
 export type VStackActivatorQuery =
   | string
   | Event
@@ -234,66 +471,136 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
   } = opts;
 
   return {
-    // ...colorSchemeProps(),
+    /** Display state */
     modelValue: Boolean,
+    /** Do not display until the component is mounted */
     lazyBoot: Boolean,
+    /** Stack input */
     value: null,
+    /** Class attributes */
     class: null,
+    /** Style attributes */
     style: null as unknown as PropType<StyleValue>,
+    /**
+     * Transition settings
+     *
+     * @see {@link RawVStackObjectTransitionProp}
+     */
     transition: {
       type: [String, Object, Function] as PropType<
         RawVStackObjectTransitionProp<T>
       >,
       default: defaultTransition,
     },
+    /**
+     * Always draw the stack even when it is invisible
+     *
+     * If your application relies on drawing small elements in the stack, try this setting
+     */
     alwaysRender: Boolean,
+    /**
+     * Display a backdrop behind the stack
+     *
+     * If string is specified, it will be displayed in that color
+     */
     backdrop: {
       type: [Boolean, String] as PropType<boolean | string>,
       default: false,
     },
+    /**
+     * Trap user focus
+     */
     focusTrap: {
       type: Boolean,
       default: defaultFocusTrap,
     },
+    /**
+     * Restore focus when stack is hidden
+     */
     focusRestorable: {
       type: Boolean,
       default: defaultFocusRestorable,
     },
+    /**
+     * Lock document scrolling
+     */
     scrollLock: {
       type: Boolean,
       default: defaultScrollLock,
     },
+    /**
+     * Show stack on activator click
+     */
     openOnClick: {
       type: Boolean,
       default: undefined,
     },
+    /**
+     * Show stack when hovering over activator
+     */
     openOnHover: Boolean,
+    /**
+     * Display stack when opening context menu on activator
+     */
     openOnContextmenu: Boolean,
+    /**
+     * Show stack when focus is on activator
+     */
     openOnFocus: {
       type: Boolean,
       default: undefined,
     },
+    /**
+     * Time to delay display (in milliseconds)
+     */
     openDelay: rawNumberProp(0),
+    /**
+     * Time to delay hiding (in milliseconds)
+     */
     closeDelay: rawNumberProp(200),
+    /**
+     * Close stack when clicking outside the stack
+     */
     closeOnOutsideClick: {
       type: Boolean,
       default: defaultCloseOnOutsideClick,
     },
+    /**
+     * Close stack when ECS key is pressed
+     */
     closeOnEsc: {
       type: Boolean,
       default: true,
     },
+    /**
+     * Close stack when navigation occurs
+     */
     closeOnNavigation: {
       type: Boolean,
       default: defaultCloseOnNavigation,
     },
+    /**
+     * Persistently display
+     *
+     * If this setting is enabled, it will attempt to block hide requests or page transitions
+     */
     persistent: Boolean,
+    /** z index */
     zIndex: rawNumberProp(0),
+    /** Timeout setting (milliseconds) */
     timeout: rawNumberProp(defaultTimeout),
+    /**
+     * Guard navigation while viewing stacks
+     *
+     * @see {@link VStackNavigationGuard}
+     */
     navigationGuard: {
       type: [Boolean, Function] as PropType<boolean | VStackNavigationGuard>,
       default: false,
     },
+    /**
+     * Show hidden guard effects
+     */
     guardEffect: {
       type: [Boolean, String],
       default: true,
@@ -304,9 +611,13 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
      * By specifying this, it is possible to skip the hiding process when clicking outside the stack elements.
      */
     includeElements: Function as PropType<() => Element[]>,
+    /**
+     * Specifying the activator element or its query
+     *
+     * @see {@link VStackActivatorQuery}
+     */
     activator: {} as PropType<VStackActivatorQuery>,
     ...V_STACK_SLOTS(),
-    // activator: [String, Object] as PropType<() => any>,
   };
 }
 

@@ -21,6 +21,9 @@ import { VueStackError } from '../logger';
 
 type SnackbarPropsOptions = SnackbarTransitionPropsOptions;
 
+/**
+ * Snackbar position
+ */
 interface SnackPosition {
   top: boolean;
   bottom: boolean;
@@ -29,6 +32,11 @@ interface SnackPosition {
 }
 
 interface SnackbarAPI {
+  /**
+   * Snackbar position
+   *
+   * @see {@link SnackPosition}
+   */
   readonly position: SnackPosition;
   readonly attrs: Record<string, any>;
 }

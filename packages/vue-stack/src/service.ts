@@ -18,20 +18,35 @@ export interface VueStackServiceOptions {
   snackbarDefaultPosition?: 'top' | 'bottom';
 }
 
+/**
+ * Stack service
+ */
 export class VueStackService {
   private readonly _controls: Ref<(() => VStackControl)[]> = ref([]);
   private readonly __controls: ComputedRef<VStackControl[]>;
+  /** z-index as a reference for all stacks */
   readonly zIndex: number;
+  /** Snackbar default position */
   readonly snackbarDefaultPosition: 'top' | 'bottom';
   private _increment = 0;
   private readonly _dynamicSettings: Ref<DynamicStackInternalSetting[]> = ref(
     [],
   );
 
+  /**
+   * List of mounted stack control instances
+   *
+   * @see {@link VStackControl}
+   */
   get controls() {
     return this.__controls.value;
   }
 
+  /**
+   * List of dynamic stack display settings
+   *
+   * @see {@link DynamicStackInternalSetting}
+   */
   get dynamicSettings() {
     return this._dynamicSettings.value;
   }
@@ -44,10 +59,17 @@ export class VueStackService {
     this.__controls = computed(() => this._controls.value.map((c) => c()));
   }
 
+  /** Generate a new stack ID */
   genId() {
     return ++this._increment;
   }
 
+  /**
+   * Add a stack control
+   *
+   * @param control - Stack control
+   * @returns If added, its index within the list. -1 if it already exists
+   */
   add(control: VStackControl): number {
     let index = -1;
     if (!this.__controls.value.includes(control)) {
@@ -56,19 +78,41 @@ export class VueStackService {
     return index;
   }
 
+  /**
+   * Remove stack
+   *
+   * @param control - Stack control
+   * @returns If removed, its index. -1 if it doesn't exist
+   */
   remove(control: VStackControl): VStackControl[] {
     const index = this.__controls.value.indexOf(control);
     return this._controls.value.splice(index, 1).map((c) => c());
   }
 
+  /**
+   * Check if any stack is animated
+   *
+   * @returns - `true` if animation is in progress
+   */
   someTransitioning() {
     return this.controls.some((control) => control.transitioning);
   }
 
+  /**
+   * Get all displayed stacks
+   *
+   * @returns All displayed stacks
+   */
   getActiveStacks() {
     return this.controls.filter((control) => control.isActive);
   }
 
+  /**
+   * Retrieve the stack currently displayed in the foreground.
+   *
+   * @param filter - Filter to exclude stacks
+   * @returns Stack currently displayed in the foreground
+   */
   getFront(filter?: (control: VStackControl) => boolean) {
     const controls = this.controls.filter((control) => control.isActive);
     if (controls.length === 0) return;
@@ -85,6 +129,13 @@ export class VueStackService {
     return maxControl;
   }
 
+  /**
+   * Check if the specified stack is currently displayed in the foreground
+   *
+   * @param control - The stack to check
+   * @returns Stack currently displayed in the foreground
+   * @returns `true` if it is currently displayed in the foreground
+   */
   isFront(
     control: VStackControl,
     filter?: (control: VStackControl) => boolean,
