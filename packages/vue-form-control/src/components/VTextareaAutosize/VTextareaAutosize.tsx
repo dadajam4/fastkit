@@ -16,12 +16,12 @@ import { ownerWindow } from '@fastkit/dom';
 import { debounce } from '@fastkit/debounce';
 import { logger } from '../../logger';
 
-function getStyleValue(
-  computedStyle: CSSStyleDeclaration,
-  property: keyof CSSStyleDeclaration,
-) {
-  return parseInt(computedStyle[property] as any, 10) || 0;
-}
+// function getStyleValue(
+//   computedStyle: CSSStyleDeclaration,
+//   property: keyof CSSStyleDeclaration,
+// ) {
+//   return parseInt(computedStyle[property] as any, 10) || 0;
+// }
 
 export interface VTextareaAutosizeRef {
   value: string;
@@ -105,13 +105,15 @@ export const VTextareaAutosize = defineComponent({
         // is empty. Make it non-empty to avoid this issue.
         inputShallow.value += ' ';
       }
-      const boxSizing = computedStyle.boxSizing;
-      const padding =
-        getStyleValue(computedStyle, 'paddingBottom') +
-        getStyleValue(computedStyle, 'paddingTop');
-      const border =
-        getStyleValue(computedStyle, 'borderBottomWidth') +
-        getStyleValue(computedStyle, 'borderTopWidth');
+
+      // ↓ (*1) This value validation seems unnecessary
+      // const boxSizing = computedStyle.boxSizing;
+      // const padding =
+      //   getStyleValue(computedStyle, 'paddingBottom') +
+      //   getStyleValue(computedStyle, 'paddingTop');
+      // const border =
+      //   getStyleValue(computedStyle, 'borderBottomWidth') +
+      //   getStyleValue(computedStyle, 'borderTopWidth');
 
       // The height of the inner content
       const innerHeight = inputShallow.scrollHeight;
@@ -137,9 +139,10 @@ export const VTextareaAutosize = defineComponent({
       }
       outerHeight = Math.max(outerHeight, singleRowHeight);
 
-      // Take the box sizing into account for applying this value as a style.
-      const outerHeightStyle =
-        outerHeight + (boxSizing === 'border-box' ? padding + border : 0);
+      // // Take the box sizing into account for applying this value as a style.
+      // const outerHeightStyle =
+      //   outerHeight + (boxSizing === 'border-box' ? padding + border : 0);
+      const outerHeightStyle = outerHeight; // ↑ (*1) I think this logic is wrong
       const overflow = Math.abs(outerHeight - innerHeight) <= 1;
 
       if (
@@ -267,7 +270,7 @@ export const VTextareaAutosize = defineComponent({
           ref={this.shadowRef()}
           tabindex={-1}
           style={{
-            padding: '0',
+            // padding: '0', // ← (*1) It seems okay not to reset the padding.
             // Visibility needed to hide the extra text area on iPads
             visibility: 'hidden',
             // Remove from the content flow

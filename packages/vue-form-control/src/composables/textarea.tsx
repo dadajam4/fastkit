@@ -172,6 +172,7 @@ export class TextareaControl extends TextableControl {
         <VTextareaAutosize
           {...attrs}
           {...autosizeSettings}
+          modelValue={attrs.value as string}
           ref={this._inputElement}
         />
       );

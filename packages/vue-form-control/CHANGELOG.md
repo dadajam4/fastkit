@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.42
+
+### Patch Changes
+
+- Fixed an issue where calculations would be offset when using `VTextareaAutosize` with a `textarea` containing padding.
+
 ## 0.15.41
 
 ### Patch Changes
