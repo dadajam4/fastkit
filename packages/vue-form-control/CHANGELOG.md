@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.43
+
+### Patch Changes
+
+- Fixed an issue where size detection would not be correctly performed when specifying `minRows` and `maxRows` for `VTextareaAutosize`.
+
 ## 0.15.42
 
 ### Patch Changes

@@ -16,12 +16,12 @@ import { ownerWindow } from '@fastkit/dom';
 import { debounce } from '@fastkit/debounce';
 import { logger } from '../../logger';
 
-// function getStyleValue(
-//   computedStyle: CSSStyleDeclaration,
-//   property: keyof CSSStyleDeclaration,
-// ) {
-//   return parseInt(computedStyle[property] as any, 10) || 0;
-// }
+function getStyleValue(
+  computedStyle: CSSStyleDeclaration,
+  property: keyof CSSStyleDeclaration,
+) {
+  return parseInt(computedStyle[property] as any, 10) || 0;
+}
 
 export interface VTextareaAutosizeRef {
   value: string;
@@ -106,34 +106,34 @@ export const VTextareaAutosize = defineComponent({
         inputShallow.value += ' ';
       }
 
-      // ↓ (*1) This value validation seems unnecessary
       // const boxSizing = computedStyle.boxSizing;
-      // const padding =
-      //   getStyleValue(computedStyle, 'paddingBottom') +
-      //   getStyleValue(computedStyle, 'paddingTop');
-      // const border =
-      //   getStyleValue(computedStyle, 'borderBottomWidth') +
-      //   getStyleValue(computedStyle, 'borderTopWidth');
+      const padding =
+        getStyleValue(computedStyle, 'paddingBottom') +
+        getStyleValue(computedStyle, 'paddingTop');
+      const border =
+        getStyleValue(computedStyle, 'borderBottomWidth') +
+        getStyleValue(computedStyle, 'borderTopWidth');
+      const verticalPadding = padding + border;
 
       // The height of the inner content
       const innerHeight = inputShallow.scrollHeight;
 
       // Measure height of a textarea with a single row
       inputShallow.value = 'x';
-      const singleRowHeight = inputShallow.scrollHeight;
+      const singleRowHeight = inputShallow.scrollHeight - verticalPadding;
 
       // The height of the outer content
       let outerHeight = innerHeight;
 
       if (minRows.value) {
         outerHeight = Math.max(
-          Number(minRows.value) * singleRowHeight,
+          Number(minRows.value) * singleRowHeight + verticalPadding,
           outerHeight,
         );
       }
       if (maxRows.value) {
         outerHeight = Math.min(
-          Number(maxRows.value) * singleRowHeight,
+          Number(maxRows.value) * singleRowHeight + verticalPadding,
           outerHeight,
         );
       }
