@@ -1,5 +1,15 @@
 # @fastkit/vue-page
 
+## 0.14.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.6
+  - @fastkit/cookies@0.13.6
+  - @fastkit/tiny-logger@0.13.6
+  - @fastkit/vue-utils@0.14.11
+
 ## 0.14.10
 
 ### Patch Changes

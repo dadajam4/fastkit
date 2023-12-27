@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-app-layout",
-  "version": "0.14.15",
+  "version": "0.14.16",
   "description": "Component implementation to control the overall layout of the Vue application.",
   "keywords": [
     "fastkit",

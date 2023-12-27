@@ -1,5 +1,18 @@
 # @fastkit/vue-form-control
 
+## 0.15.45
+
+### Patch Changes
+
+- Fixed an issue where only the final processing was performed when multiple operations were specified in `finishings`.
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.6
+  - @fastkit/dom@0.1.6
+  - @fastkit/rules@0.13.7
+  - @fastkit/tiny-logger@0.13.6
+  - @fastkit/vue-utils@0.14.11
+
 ## 0.15.44
 
 ### Patch Changes

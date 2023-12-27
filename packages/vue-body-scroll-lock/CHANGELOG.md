@@ -1,5 +1,15 @@
 # @fastkit/vue-body-scroll-lock
 
+## 0.1.13
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.6
+  - @fastkit/body-scroll-lock@0.13.6
+  - @fastkit/dom@0.1.6
+  - @fastkit/vue-utils@0.14.11
+
 ## 0.1.12
 
 ### Patch Changes

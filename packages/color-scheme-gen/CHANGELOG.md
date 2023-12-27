@@ -1,5 +1,15 @@
 # @fastkit/color-scheme-gen
 
+## 0.13.13
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.13.6
+  - @fastkit/color@0.13.6
+  - @fastkit/color-scheme@1.0.13
+  - @fastkit/node-util@0.13.7
+
 ## 0.13.12
 
 ### Patch Changes

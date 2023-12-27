@@ -1,5 +1,33 @@
 # @fastkit/vui
 
+## 0.16.79
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-form-control@0.15.45
+  - @fastkit/helpers@0.13.6
+  - @fastkit/dom@0.1.6
+  - @fastkit/rules@0.13.7
+  - @fastkit/tiny-logger@0.13.6
+  - @fastkit/vue-app-layout@0.14.16
+  - @fastkit/vue-body-scroll-lock@0.1.13
+  - @fastkit/vue-loading@0.14.14
+  - @fastkit/vue-media-match@0.13.13
+  - @fastkit/vue-resize@0.1.13
+  - @fastkit/vue-stack@0.15.35
+  - @fastkit/vue-transitions@0.1.14
+  - @fastkit/vue-utils@0.14.11
+  - @fastkit/vue-keyboard@0.1.6
+  - @fastkit/vue-scroller@0.14.15
+  - @fastkit/color-scheme@1.0.13
+  - @fastkit/color-scheme-gen@0.13.13
+  - @fastkit/media-match-gen@0.13.13
+  - @fastkit/vue-color-scheme@0.14.13
+  - @fastkit/vue-action@0.2.14
+  - @fastkit/vue-click-outside@0.1.14
+  - @fastkit/vue-location@0.1.20
+
 ## 0.16.78
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @fastkit/helpers
 
+## 0.13.6
+
+### Patch Changes
+
+- Implemented conversion of full-width whitespace to half-width in `toHalfWidth`.
+
 ## 0.13.5
 
 ### Patch Changes

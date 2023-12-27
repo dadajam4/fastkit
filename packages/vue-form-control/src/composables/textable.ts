@@ -53,7 +53,7 @@ async function finishingValue(
 ) {
   let result: string = nilToEmptyString(value);
   for (const finishing of finishings) {
-    result = await finishing(value);
+    result = await finishing(result);
   }
   return result;
 }

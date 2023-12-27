@@ -1,5 +1,12 @@
 # @fastkit/vue-visibility
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/visibility@0.13.6
+
 ## 0.1.5
 
 ### Patch Changes

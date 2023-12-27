@@ -8,15 +8,25 @@ export function nilToEmptyString(source?: string | null): string {
   return source == null ? '' : source;
 }
 
+const FULL_WIDTH_SYMBOL_RE = /[！-～]/g;
+
+// eslint-disable-next-line no-irregular-whitespace
+const FULL_WIDTH_SPACE_RE = /　/g;
+
 /**
  * Convert string to lowercase
+ *
+ * The target includes full-width alphanumeric characters, symbols, and whitespace characters.
+ *
  * @param source - String to be converted
  * @returns Converted string
  */
 export function toHalfWidth(source?: string | null) {
-  return nilToEmptyString(source).replace(/[！-～]/g, (source) => {
-    return String.fromCharCode(source.charCodeAt(0) - 0xfee0);
-  });
+  return nilToEmptyString(source)
+    .replace(FULL_WIDTH_SYMBOL_RE, (source) => {
+      return String.fromCharCode(source.charCodeAt(0) - 0xfee0);
+    })
+    .replace(FULL_WIDTH_SPACE_RE, ' ');
 }
 
 /**

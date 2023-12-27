@@ -1,5 +1,14 @@
 # @fastkit/vue-transitions
 
+## 0.1.14
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.6
+  - @fastkit/dom@0.1.6
+  - @fastkit/vue-utils@0.14.11
+
 ## 0.1.13
 
 ### Patch Changes
