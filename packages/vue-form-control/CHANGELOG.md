@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.15.44
+
+### Patch Changes
+
+- Fixed a bug where validation was not triggered upon detecting changes in FormNode rules.
+
 ## 0.15.43
 
 ### Patch Changes

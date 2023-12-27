@@ -768,7 +768,7 @@ export class FormNodeControl<T = any, D = T> {
       () => this.rules,
       () => {
         if (this.shouldValidate) {
-          this.validateSelf();
+          this.validateSelf(true);
         }
       },
     );
