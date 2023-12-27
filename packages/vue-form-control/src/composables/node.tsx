@@ -263,7 +263,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _initialValue = ref<T | D>(null as unknown as T | D);
   protected _children: FormNodeControl[] = [];
   protected _invalidChildren = ref<(() => FormNodeControl)[]>([]);
-  protected _finshingPromise: Ref<(() => Promise<void>) | null> = ref(null);
+  protected _finalizePromise: Ref<(() => Promise<void>) | null> = ref(null);
   protected _validationErrors = ref<ValidationError[]>([]);
   protected _validateResolvers: ValidateResolver[] = [];
   protected _lastValidateValueChanged = true;
@@ -322,8 +322,8 @@ export class FormNodeControl<T = any, D = T> {
     return this._booted.value;
   }
 
-  get isFinishing() {
-    return !!this._finshingPromise.value;
+  get isFinalizing() {
+    return !!this._finalizePromise.value;
   }
 
   get validating() {
@@ -780,7 +780,7 @@ export class FormNodeControl<T = any, D = T> {
     onBeforeUnmount(() => {
       this.clearValidateResolvers();
       parentNode && parentNode._leaveFromNode(this);
-      this._finshingPromise.value = null;
+      this._finalizePromise.value = null;
       this.resetSelfValidates();
       this._parentNode = null;
       this._parentForm = null;
@@ -819,17 +819,17 @@ export class FormNodeControl<T = any, D = T> {
     return errorMessage;
   }
 
-  protected _finishing(): Promise<void> {
+  protected _finalize(): Promise<void> {
     return Promise.resolve();
   }
 
-  finishing(): Promise<void> {
-    const getter = this._finshingPromise.value;
+  finalize(): Promise<void> {
+    const getter = this._finalizePromise.value;
     if (getter) return getter();
-    const promise = this._finishing().finally(() => {
-      this._finshingPromise.value = null;
+    const promise = this._finalize().finally(() => {
+      this._finalizePromise.value = null;
     });
-    this._finshingPromise.value = () => promise;
+    this._finalizePromise.value = () => promise;
     return promise;
   }
 
@@ -1002,7 +1002,7 @@ export class FormNodeControl<T = any, D = T> {
       const { rules } = this;
 
       if (!this.focused) {
-        await this.finishing();
+        await this.finalize();
       }
 
       const result = (await validate(this.validationValue, rules)) || [];

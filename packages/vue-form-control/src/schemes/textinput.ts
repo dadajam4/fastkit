@@ -30,17 +30,15 @@ export const TEXT_INPUT_MODES = [
 
 export type TextInputMode = (typeof TEXT_INPUT_MODES)[number];
 
-export type TextFinishingFn = (
-  value?: string | null,
-) => string | Promise<string>;
+export type TextFinalizer = (value?: string | null) => string | Promise<string>;
 
-function defineFinishings<T extends string>(
-  finishings: Record<T, TextFinishingFn>,
+function defineFinalizers<T extends string>(
+  finalizers: Record<T, TextFinalizer>,
 ) {
-  return finishings;
+  return finalizers;
 }
 
-export const BUILTIN_TEXT_FINISHINGS = defineFinishings({
+export const BUILTIN_TEXT_FINALIZERS = defineFinalizers({
   trim: (v) => nilToEmptyString(v).trim(),
   removeSpace: (v) => nilToEmptyString(v).replace(/\s/g, ''),
   upper: (v) => nilToEmptyString(v).toUpperCase(),
@@ -50,4 +48,4 @@ export const BUILTIN_TEXT_FINISHINGS = defineFinishings({
   // kana: xxx,
 });
 
-export type BuiltinTextFinishingFnName = keyof typeof BUILTIN_TEXT_FINISHINGS;
+export type BuiltinTextFinalizerName = keyof typeof BUILTIN_TEXT_FINALIZERS;

@@ -26,34 +26,34 @@ import {
 } from './autocompleteable';
 import {
   FormAutoCapitalize,
-  TextFinishingFn,
-  BuiltinTextFinishingFnName,
-  BUILTIN_TEXT_FINISHINGS,
+  TextFinalizer,
+  BuiltinTextFinalizerName,
+  BUILTIN_TEXT_FINALIZERS,
 } from '../schemes';
 import { logger } from '../logger';
 
-export type RawTextableFinishingProp =
-  | TextFinishingFn
-  | BuiltinTextFinishingFnName
-  | (TextFinishingFn | BuiltinTextFinishingFnName)[];
+export type TextableFinalizerSpec =
+  | TextFinalizer
+  | BuiltinTextFinalizerName
+  | (TextFinalizer | BuiltinTextFinalizerName)[];
 
-function resolveRawTextableFinishingProp(
-  raw?: RawTextableFinishingProp,
-): TextFinishingFn[] | undefined {
+function resolveTextableFinalizerSpec(
+  raw?: TextableFinalizerSpec,
+): TextFinalizer[] | undefined {
   if (!raw) return;
   if (!Array.isArray(raw)) raw = [raw];
   return raw.map((row) =>
-    typeof row === 'string' ? BUILTIN_TEXT_FINISHINGS[row] : row,
+    typeof row === 'string' ? BUILTIN_TEXT_FINALIZERS[row] : row,
   );
 }
 
-async function finishingValue(
+async function finalizeValue(
   value: string | null | undefined,
-  finishings: TextFinishingFn[],
+  finalizers: TextFinalizer[],
 ) {
   let result: string = nilToEmptyString(value);
-  for (const finishing of finishings) {
-    result = await finishing(result);
+  for (const finalizer of finalizers) {
+    result = await finalizer(result);
   }
   return result;
 }
@@ -86,11 +86,7 @@ export function createTextableProps() {
       /**
        * Text correction settings.
        */
-      finishings: [
-        String,
-        Array,
-        Function,
-      ] as PropType<RawTextableFinishingProp>,
+      finalizers: [String, Array, Function] as PropType<TextableFinalizerSpec>,
       /**
        * Character counter.
        */
@@ -147,7 +143,7 @@ export class TextableControl extends FormNodeControl<string> {
   protected _placeholder: ComputedRef<string | undefined>;
   protected _autocompleteable: AutocompleteableInputControl;
   protected _autocapitalize: ComputedRef<FormAutoCapitalize | undefined>;
-  protected _finishings: ComputedRef<TextFinishingFn[] | undefined>;
+  protected _finalizers: ComputedRef<TextFinalizer[] | undefined>;
   protected _counterSettings: ComputedRef<TextableCounterSettings | undefined>;
   protected _counterResult: ComputedRef<TextableCounterResult | undefined>;
   protected _maxlengthLimit: ComputedRef<number | undefined>;
@@ -176,8 +172,8 @@ export class TextableControl extends FormNodeControl<string> {
     return this._autocapitalize.value;
   }
 
-  get finishings() {
-    return this._finishings?.value;
+  get finalizers() {
+    return this._finalizers?.value;
   }
 
   get counterSettings() {
@@ -217,8 +213,8 @@ export class TextableControl extends FormNodeControl<string> {
     this._pattern = computed(() => props.pattern);
     this._placeholder = computed(() => props.placeholder);
     this._autocapitalize = computed(() => props.autocapitalize);
-    this._finishings = computed(() =>
-      resolveRawTextableFinishingProp(props.finishings),
+    this._finalizers = computed(() =>
+      resolveTextableFinalizerSpec(props.finalizers),
     );
     this._counterSettings = computed(() => {
       let { counter } = props;
@@ -270,14 +266,14 @@ export class TextableControl extends FormNodeControl<string> {
    * @override
    */
   blurHandler(ev: FocusEvent) {
-    this.finishing();
+    this.finalize();
     super.blurHandler(ev);
   }
 
-  protected async _finishing() {
-    const { finishings } = this;
-    if (!finishings) return;
-    this.value = await finishingValue(this.value, finishings);
+  protected async _finalize() {
+    const { finalizers } = this;
+    if (!finalizers) return;
+    this.value = await finalizeValue(this.value, finalizers);
   }
 
   protected _resolveRules() {

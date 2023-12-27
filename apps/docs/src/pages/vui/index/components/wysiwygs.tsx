@@ -145,7 +145,7 @@ export default defineComponent({
             counter={100}
             // maxlength="100"
             variant="filled"
-            // finishings={async (value) => {
+            // finalizers={async (value) => {
             //   if (!(await this.$vui.confirm('Ary you realy ?'))) {
             //     return value || '';
             //   }

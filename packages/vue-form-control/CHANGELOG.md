@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.16.0
+
+### Minor Changes
+
+- Renamed `finishings` to `finalizers`.
+
 ## 0.15.45
 
 ### Patch Changes

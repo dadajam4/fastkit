@@ -1,5 +1,5 @@
 import { I18nSpaceDefine } from '@@/i18n';
-import { VNodeChild } from 'vue';
+// import { VNodeChild } from 'vue';
 
 export type Translations = {
   // why: {
