@@ -1,5 +1,5 @@
 import './VRadio.scss';
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
@@ -23,33 +23,30 @@ export const VRadio = defineComponent({
       parentNodeType: VUI_RADIO_GROUP_SYMBOL,
     });
     const control = useControl(props);
-    return {
-      ...nodeControl.expose(),
-      ...control,
+    const classes = computed(() => [
+      'v-radio',
+      {
+        'v-radio--selected': nodeControl.selected,
+      },
+      control.classes.value,
+    ]);
+    const slots = {
+      input: () => nodeControl.createInputElement({ type: 'radio' }),
+      faux: () => <span class="v-radio__faux"></span>,
+      label: () => ctx.slots.default?.(),
     };
-  },
-  render() {
-    const { selectorItemControl } = this;
-    return (
-      <VCheckable
-        class={[
-          'v-radio',
-          {
-            'v-radio--selected': selectorItemControl.selected,
-          },
-          this.classes,
-        ]}
-        checked={this.selected}
-        invalid={this.invalid}
-        disabled={this.isDisabled}
-        readonly={this.isReadonly}
-        v-slots={{
-          input: () =>
-            selectorItemControl.createInputElement({ type: 'radio' }),
-          faux: () => <span class="v-radio__faux"></span>,
-          label: () => this.$slots.default?.(),
-        }}
-      />
-    );
+
+    return () => {
+      return (
+        <VCheckable
+          class={classes.value}
+          checked={nodeControl.selected}
+          invalid={nodeControl.invalid}
+          disabled={nodeControl.isDisabled}
+          readonly={nodeControl.isReadonly}
+          v-slots={slots}
+        />
+      );
+    };
   },
 });

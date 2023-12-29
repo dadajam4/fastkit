@@ -37,6 +37,7 @@ import {
 import { VUI_SELECT_SYMBOL, useVui } from '../../injections';
 import { VIcon } from '../VIcon';
 import { VMenu } from '../VMenu';
+import { VStackActivatorPayload } from '@fastkit/vue-stack';
 import { VOptionGroup } from '../VOptionGroup';
 import { VOption } from '../VOption';
 import { VButton } from '../VButton';
@@ -46,12 +47,14 @@ export const ARROW_KEY_TYPES = useKeyboard.Key(['ArrowUp', 'ArrowDown']);
 
 export const CHOICE_KEY_TYPES = useKeyboard.Key(['Enter', ' ']);
 
-export const KEYBORD_EVENT_TYPES = useKeyboard.Key([
+export const KEYBOARD_EVENT_TYPES = useKeyboard.Key([
   ...ARROW_KEY_TYPES,
   ...CHOICE_KEY_TYPES,
 ]);
 
-const { props, emits } = createFormSelectorSettings();
+const { props, emits } = createFormSelectorSettings({
+  defaultValidateTiming: 'blur',
+});
 
 const slots = defineSlots<
   FormControlSlots &
@@ -265,189 +268,197 @@ export const VSelect = defineComponent({
     useKeyboard(
       [
         {
-          key: KEYBORD_EVENT_TYPES,
+          key: KEYBOARD_EVENT_TYPES,
           handler: keyboardEventHandler,
         },
       ],
       { autorun: true },
     );
 
-    return {
-      ...inputControl.expose(),
-      ...control,
-      iconName,
-      menuOpened,
-      fieldRef: () => fieldRef,
+    ctx.expose({
+      control: inputControl,
       focus,
       showMenu,
       closeMenu,
-      renderSelections,
-      menuRef: () => menuRef,
-      clearKeyFocused,
-    };
-  },
-  render() {
-    const { nodeControl, selectorControl, selectorItems, selectedItems } = this;
-    const children = this.$slots.default?.() || [];
-    const propGroups = this.propGroups.map((group) => {
-      return (
-        <VOptionGroup
-          key={group.id}
-          groupId={group.id}
-          label={group.label(selectorControl)}
-          disabled={group.disabled}>
-          {group.items.map((item) => (
-            <VOption
-              disabled={item.disabled}
-              value={item.value}
-              key={item.value}>
-              {{
-                default: () => item.label(selectorControl),
-              }}
-            </VOption>
-          ))}
-        </VOptionGroup>
-      );
     });
 
-    return (
-      <VFormControl
-        nodeControl={nodeControl}
-        // focused={this.nodeControl.focused}
-        class={[
-          'v-select',
-          this.classes,
-          {
-            'v-select--multiple': this.multiple,
-          },
-        ]}
-        label={this.label}
-        hint={this.hint}
-        hinttip={this.hinttip}
-        hiddenInfo={this.hiddenInfo}
-        requiredChip={this.requiredChip}
-        onClickLabel={(ev) => {
-          this.focus();
-        }}
-        v-slots={{
-          ...this.$slots,
-          default: () => (
-            <VMenu
-              width="fit"
-              maxWidth="fit"
-              closeOnNavigation={this.closeOnNavigation}
-              distance={0}
-              alwaysRender
-              v-model={this.menuOpened}
-              ref={this.menuRef()}
-              onClose={this.clearKeyFocused}
-              v-slots={{
-                activator: ({ attrs, control }) => [
-                  <VControlField
-                    class="v-select__input"
-                    ref={this.fieldRef()}
-                    loading={selectorControl.itemsLoading}
-                    error={selectorControl.itemsLoadFailed}
-                    startAdornment={this.startAdornment}
-                    endAdornment={this.endAdornment}
-                    // tabindex={this.computedTabindex}
-                    size={this.size}
-                    focused={this.menuOpened}
-                    autoHeight={this.multiple}
-                    onClick={(ev) => {
-                      if (this.canOperation && !control.isActive) {
-                        let t = ev.target as HTMLElement;
-                        const count = 0;
-                        let hit = false;
-                        while (count < 5) {
-                          if (t.classList.contains('v-select__input')) {
-                            hit = true;
-                            break;
-                          }
-                          t = t.parentElement as HTMLElement;
-                        }
-                        control.setActivator(hit ? t : ev).show();
-                      }
-                    }}
-                    v-slots={{
-                      ...this.$slots,
-                      default: () => [
-                        <select
-                          class="v-select__input__element"
-                          name={this.name}
-                          tabindex={this.computedTabindex}
-                          disabled={this.isDisabled}
-                          multiple={this.multiple}
-                          onFocus={nodeControl.focusHandler}
-                          onBlur={nodeControl.blurHandler}
-                          v-model={this.currentValue}
-                          // value={nodeControl.value}
-                        >
-                          {selectorItems.map((item) => {
-                            return (
-                              <option
-                                value={item.propValue}
-                                key={item.propValue}>
-                                {item.renderDefaultSlot()}
-                              </option>
-                            );
-                          })}
-                        </select>,
-                        <div class="v-select__selections">
-                          <div class="v-select__selections__inner">
-                            {this.renderSelections(selectedItems)}
-                          </div>
-                        </div>,
-                      ],
-                      endAdornment: () => {
-                        if (selectorControl.itemsLoadFailed) {
-                          return (
-                            <VButton
-                              key="reload"
-                              icon={this.$vui.icon('reload')}
-                              rounded
-                              onClick={(ev) => {
-                                ev.stopPropagation();
-                                selectorControl.loadItems();
-                              }}
-                            />
-                          );
-                        }
+    const handleClickLabel = (ev: MouseEvent) => {
+      focus();
+    };
 
-                        if (this.clearable && this.nodeControl.value != null) {
-                          return (
-                            <VButton
-                              key="clear"
-                              icon={this.$vui.icon('clear')}
-                              rounded
-                              onClick={(ev) => {
-                                ev.stopPropagation();
-                                this.nodeControl.clear();
-                              }}
-                            />
-                          );
-                        }
+    return () => {
+      const children = ctx.slots.default?.() || [];
+      const propGroups = inputControl.propGroups.map((group) => {
+        return (
+          <VOptionGroup
+            key={group.id}
+            groupId={group.id}
+            label={group.label(inputControl)}
+            disabled={group.disabled}>
+            {group.items.map((item) => (
+              <VOption
+                disabled={item.disabled}
+                value={item.value}
+                key={item.value}>
+                {item.label(inputControl)}
+              </VOption>
+            ))}
+          </VOptionGroup>
+        );
+      });
 
-                        return (
-                          <VIcon
-                            key="icon"
-                            name={this.iconName}
-                            rotate={this.menuOpened ? 180 : 0}
-                          />
-                        );
-                      },
-                    }}
-                  />,
-                ],
-              }}>
-              <div class={['v-select__body', this.classes]}>
-                {children}
-                {propGroups}
-              </div>
-            </VMenu>
-          ),
-        }}
-      />
-    );
+      const classes = computed(() => [
+        'v-select',
+        control.classes.value,
+        {
+          'v-select--multiple': inputControl.multiple,
+        },
+      ]);
+
+      const controlDefaultSlot = () => {
+        return [
+          <select
+            class="v-select__input__element"
+            name={inputControl.name}
+            tabindex={inputControl.tabindex}
+            disabled={inputControl.isDisabled}
+            multiple={inputControl.multiple}
+            onFocus={inputControl.focusHandler}
+            onBlur={inputControl.blurHandler}
+            v-model={inputControl.value}>
+            {inputControl.items.map((item) => {
+              return (
+                <option value={item.propValue} key={item.propValue}>
+                  {item.renderDefaultSlot()}
+                </option>
+              );
+            })}
+          </select>,
+          <div class="v-select__selections">
+            <div class="v-select__selections__inner">
+              {renderSelections(inputControl.selectedItems)}
+            </div>
+          </div>,
+        ];
+      };
+
+      const endAdornmentSlot = () => {
+        if (inputControl.itemsLoadFailed) {
+          return (
+            <VButton
+              key="reload"
+              icon={vui.icon('reload')}
+              rounded
+              onClick={(ev) => {
+                ev.stopPropagation();
+                inputControl.loadItems();
+              }}
+            />
+          );
+        }
+
+        if (props.clearable && inputControl.value != null) {
+          return (
+            <VButton
+              key="clear"
+              icon={vui.icon('clear')}
+              rounded
+              onClick={(ev) => {
+                ev.stopPropagation();
+                inputControl.clear();
+              }}
+            />
+          );
+        }
+
+        return (
+          <VIcon
+            key="icon"
+            name={iconName}
+            rotate={menuOpened.value ? 180 : 0}
+          />
+        );
+      };
+
+      const menuActivatorSlot = ({ control: menu }: VStackActivatorPayload) => {
+        return (
+          <VControlField
+            class="v-select__input"
+            ref={fieldRef}
+            loading={inputControl.itemsLoading}
+            error={inputControl.itemsLoadFailed}
+            startAdornment={props.startAdornment}
+            endAdornment={props.endAdornment}
+            size={control.size.value}
+            focused={menuOpened.value}
+            autoHeight={inputControl.multiple}
+            onClick={(ev) => {
+              if (inputControl.canOperation && !menu.isActive) {
+                let t = ev.target as HTMLElement;
+                const count = 0;
+                let hit = false;
+                while (count < 5) {
+                  if (t.classList.contains('v-select__input')) {
+                    hit = true;
+                    break;
+                  }
+                  t = t.parentElement as HTMLElement;
+                }
+                menu.setActivator(hit ? t : ev).show();
+              }
+            }}
+            v-slots={{
+              ...ctx.slots,
+              default: controlDefaultSlot,
+              endAdornment: endAdornmentSlot,
+            }}
+          />
+        );
+      };
+
+      const menuSlots = {
+        activator: menuActivatorSlot,
+        default: () => (
+          <div class={['v-select__body', control.classes.value]}>
+            {children}
+            {propGroups}
+          </div>
+        ),
+      };
+
+      const defaultSlot = () => {
+        return (
+          <VMenu
+            width="fit"
+            maxWidth="fit"
+            closeOnNavigation={props.closeOnNavigation}
+            distance={0}
+            alwaysRender
+            v-model={menuOpened.value}
+            ref={menuRef}
+            onClose={clearKeyFocused}
+            v-slots={menuSlots}
+          />
+        );
+      };
+
+      return (
+        <VFormControl
+          nodeControl={inputControl}
+          // focused={this.nodeControl.focused}
+          class={classes.value}
+          label={props.label}
+          hint={props.hint}
+          hinttip={props.hinttip}
+          hiddenInfo={props.hiddenInfo}
+          requiredChip={props.requiredChip}
+          onClickLabel={handleClickLabel}
+          v-slots={{
+            ...ctx.slots,
+            default: defaultSlot,
+          }}
+        />
+      );
+    };
   },
 });

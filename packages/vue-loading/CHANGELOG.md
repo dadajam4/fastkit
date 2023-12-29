@@ -1,5 +1,16 @@
 # @fastkit/vue-loading
 
+## 0.14.15
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.7
+  - @fastkit/tiny-logger@0.13.7
+  - @fastkit/vue-utils@0.14.12
+  - @fastkit/color-scheme@1.0.14
+  - @fastkit/vue-color-scheme@0.14.14
+
 ## 0.14.14
 
 ### Patch Changes

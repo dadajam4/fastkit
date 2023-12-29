@@ -134,14 +134,13 @@ export type TextInputContext = SetupContext<TextInputEmitOptions>;
 export interface TextInputControlOptions extends TextableControlOptions {}
 
 export class TextInputControl extends TextableControl {
+  readonly _props: TextInputProps;
   protected _type: ComputedRef<TextInputType>;
   protected _inputmode: ComputedRef<TextInputMode | undefined>;
   protected _inputElement = ref<HTMLInputElement | null>(null);
   protected readonly _getMaskInput: () => AnyMaskedOptions | undefined;
   protected readonly _getMask: () => IMaskInstance | null;
   readonly mask: IMaskControl;
-  readonly useUnmaskedValue: () => boolean;
-  readonly useTypedValue: () => boolean;
   protected _passwordVisibility = ref(false);
   protected _maskedValue: ComputedRef<string>;
 
@@ -165,6 +164,14 @@ export class TextInputControl extends TextableControl {
     return this._maskedValue.value;
   }
 
+  useUnmaskedValue() {
+    return this._props.maskModel === 'unmasked';
+  }
+
+  useTypedValue() {
+    return this._props.maskModel === 'typed';
+  }
+
   constructor(
     props: TextInputProps,
     ctx: TextInputContext,
@@ -173,14 +180,13 @@ export class TextInputControl extends TextableControl {
     super(props, ctx as unknown as TextableContext, {
       ...options,
     });
+    this._props = props;
 
     const { emit } = ctx;
     const el = ref<null | HTMLInputElement>(null);
     this._inputElement = el;
 
     this._handleNodeInput = this._handleNodeInput.bind(this);
-    this.useUnmaskedValue = () => props.maskModel === 'unmasked';
-    this.useTypedValue = () => props.maskModel === 'typed';
 
     const imask = useIMaskControl(props, {
       el,
@@ -252,20 +258,6 @@ export class TextInputControl extends TextableControl {
 
   emptyValue() {
     return '';
-  }
-
-  expose() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const _self = this;
-    const publicInterface = super.expose();
-
-    return {
-      ...publicInterface,
-      textInputControl: this as TextInputControl,
-      inputElementRef: _self._inputElement,
-      focus: _self.focus,
-      blur: _self.blur,
-    };
   }
 
   setPasswordVisibility(visibility: boolean) {

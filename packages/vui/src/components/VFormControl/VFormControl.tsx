@@ -78,11 +78,14 @@ export const VFormControl = defineComponent({
       return hinttipDelay;
     });
 
-    ctx.expose(control.expose());
+    ctx.expose({
+      control,
+    });
 
     const colorProvider = useVuiColorProvider();
 
     const classes = computed(() => [
+      'v-form-control',
       {
         'v-form-control--validating': control.validating,
         'v-form-control--pending': control.pending,
@@ -121,7 +124,7 @@ export const VFormControl = defineComponent({
       const _hinttipDelay = hinttipDelay.value;
 
       return (
-        <div class={['v-form-control', classes.value]}>
+        <div class={classes.value}>
           {label && (
             <label class="v-form-control__label" onClick={handleClick}>
               {label}
@@ -136,11 +139,11 @@ export const VFormControl = defineComponent({
                       : undefined
                   }
                   v-slots={{
-                    activator: (ctx) => (
+                    activator: (tooltip) => (
                       <a
                         class="v-form-control__label__hinttip"
                         href="javascript:void(0)"
-                        {...ctx.attrs}>
+                        {...tooltip.attrs}>
                         {hinttip.tip}
                       </a>
                     ),

@@ -137,7 +137,7 @@ export class DateInputControl<
   Min extends DateInputValue | null = null,
   Max extends DateInputValue | null = null,
 > extends BoundableInputControl<DateInputValue, MV, SV, EV, Min, Max> {
-  protected _omitEndYearFormat: ComputedRef<boolean>;
+  readonly _props: DateInputProps<MV, SV, EV, Min, Max>;
   protected _formatLocales: ComputedRef<string | string[] | undefined>;
   protected _formatOptions: ComputedRef<Intl.DateTimeFormatOptions>;
   protected _omitYearFormatOptions: ComputedRef<Intl.DateTimeFormatOptions>;
@@ -185,7 +185,7 @@ export class DateInputControl<
   }
 
   get omitEndYearFormat() {
-    return this._omitEndYearFormat.value;
+    return this._props.omitEndYearFormat;
   }
 
   constructor(
@@ -194,6 +194,8 @@ export class DateInputControl<
     options: DateInputControlOptions<MV, SV, EV, Min, Max>,
   ) {
     super(props, ctx, options);
+
+    this._props = props;
 
     this._formatLocales = computed(() => {
       const locales = props.formatLocales || options.formatLocales;
@@ -220,8 +222,6 @@ export class DateInputControl<
       () =>
         new Intl.DateTimeFormat(this.formatLocales, this.omitYearFormatOptions),
     );
-
-    this._omitEndYearFormat = computed(() => props.omitEndYearFormat);
 
     this._formattedValue = computed(() => {
       const { value } = this;

@@ -168,6 +168,7 @@ export interface FormSelectorControlOptions extends FormNodeControlBaseOptions {
 export type FormSelectorLoadState = 'ready' | 'loading' | 'error';
 
 export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
+  readonly _props: FormSelectorProps;
   readonly parentNodeType?: FormNodeType;
   protected _itemGetters = ref<FormSelectorItemControl['_get'][]>([]);
   protected _items: ComputedRef<FormSelectorItemControl[]>;
@@ -176,13 +177,10 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   protected _indeterminate: ComputedRef<boolean>;
   protected _itemsLoadState = ref<FormSelectorLoadState>('ready');
   protected _propGroups: Ref<ResolvedFormSelectorGroup[]> = ref([]);
-  protected __propItems: ComputedRef<RawFormSelectorItems>;
   protected _loadedItems: ComputedRef<ResolvedFormSelectorItem[]>;
   protected _selectedPropItems: ComputedRef<ResolvedFormSelectorItem[]>;
-  // protected _propItems: Ref<ResolvedFormSelectorItem[]> = ref([]);
   protected _selectedValues: ComputedRef<(string | number)[]>;
   protected _selectedItems: ComputedRef<FormSelectorItemControl[]>;
-  protected _onClickItem: ComputedRef<FormSelectorGuard | undefined>;
   protected _guardingItem: Ref<(() => FormSelectorItemControl) | undefined>;
   protected onSelectItem?: (
     item: FormSelectorItemControl,
@@ -229,10 +227,6 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     return this._selectedPropItems.value;
   }
 
-  // get propItems() {
-  //   return this._propItems.value;
-  // }
-
   get selectedValues() {
     return this._selectedValues.value;
   }
@@ -270,8 +264,8 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       ...options,
       modelValue,
     });
+    this._props = props;
 
-    this._onClickItem = computed(() => props.onClickItem);
     this._guardingItem = ref();
     this.onSelectItem = options.onSelectItem;
     this.onCancelSelect = options.onCancelSelect;
@@ -356,7 +350,6 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     //       this._itemsLoadState.value = 'error';
     //     });
     // };
-    this.__propItems = computed(() => props.items);
     this._loadedItems = computed(() =>
       this.propGroups.map((group) => group.items).flat(),
     );
@@ -378,7 +371,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     watch(
       () => this._value.value,
-      (value) => {
+      (_value) => {
         this._syncValueForChoices();
       },
       { immediate: true },
@@ -464,7 +457,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   }
 
   loadItems() {
-    const items = this.__propItems.value;
+    const { items } = this._props;
 
     if (typeof items !== 'function') {
       this._setPropItems(items);
@@ -478,11 +471,11 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     items(this)
       .then((result) => {
-        if (this.__propItems.value !== items) return;
+        if (this._props.items !== items) return;
         this._setPropItems(result);
       })
       .catch((_err) => {
-        if (this.__propItems.value !== items) return;
+        if (this._props.items !== items) return;
         this._itemsLoadState.value = 'error';
       });
   }
@@ -717,7 +710,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       }
     };
 
-    const { value: onClickItem } = this._onClickItem;
+    const { onClickItem } = this._props;
     if (!onClickItem) {
       return accept();
     }
@@ -746,30 +739,6 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
   isSelected(value: string | number) {
     return this.selectedValues.includes(value);
-  }
-
-  expose() {
-    const publicInterface = super.expose();
-    return {
-      ...publicInterface,
-      selectorControl: this as FormSelectorControl,
-      notSelected: this._notSelected,
-      allSelected: this._allSelected,
-      indeterminate: this._indeterminate,
-      getItems: this.getItems,
-      getItemValues: this.getItemValues,
-      sortValues: this.sortValues,
-      selectAll: this.selectAll,
-      unselectAll: this.unselectAll,
-      isNotSelected: this.isNotSelected,
-      isAllSelected: this.isAllSelected,
-      isIndeterminate: this.isIndeterminate,
-      toggle: this.toggle,
-      selectorItems: this._items,
-      selectedValues: this._selectedValues,
-      selectedItems: this._selectedItems,
-      propGroups: this._propGroups,
-    };
   }
 
   /** @private */

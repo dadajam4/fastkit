@@ -41,20 +41,19 @@ export const VOptionGroup = defineComponent({
         },
       ];
     });
-    return {
-      ...groupControl.expose(),
-      classes,
-      labelSlot,
+
+    ctx.expose({
+      control: groupControl,
+    });
+
+    return () => {
+      const label = labelSlot.value?.(groupControl);
+      return (
+        <div class={classes}>
+          {!!label && <div class="v-option-group__label">{label}</div>}
+          {ctx.slots.default?.()}
+        </div>
+      );
     };
-  },
-  render() {
-    const { labelSlot, classes, groupControl } = this;
-    const label = labelSlot ? labelSlot(groupControl) : undefined;
-    return (
-      <div class={classes}>
-        {!!label && <div class="v-option-group__label">{label}</div>}
-        {this.$slots.default?.()}
-      </div>
-    );
   },
 });

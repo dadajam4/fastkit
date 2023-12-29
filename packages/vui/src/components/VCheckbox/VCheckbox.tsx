@@ -26,37 +26,44 @@ export const VCheckbox = defineComponent({
       nodeType: VUI_CHECKBOX_SYMBOL,
       parentNodeType: VUI_CHECKBOX_GROUP_SYMBOL,
     });
+
     const control = useControl(props);
     const isIndeterminate = computed(() => props.indeterminate);
-    return {
-      ...nodeControl.expose(),
-      ...control,
-      isIndeterminate,
+    const classes = computed(() => [
+      'v-checkbox',
+      {
+        'v-checkbox--selected': nodeControl.selected,
+        'v-checkbox--indeterminate': isIndeterminate.value,
+      },
+      control.classes.value,
+    ]);
+    const api = nodeControl.extend({
+      get isIndeterminate() {
+        return isIndeterminate.value;
+      },
+    });
+
+    ctx.expose({
+      control: api,
+    });
+
+    const slots = {
+      input: () => nodeControl.createInputElement({ type: 'checkbox' }),
+      faux: () => <span class="v-checkbox__faux"></span>,
+      label: () => ctx.slots.default?.(),
     };
-  },
-  render() {
-    const { selectorItemControl, isIndeterminate } = this;
-    return (
-      <VCheckable
-        class={[
-          'v-checkbox',
-          {
-            'v-checkbox--selected': selectorItemControl.selected,
-            'v-checkbox--indeterminate': isIndeterminate,
-          },
-          this.classes,
-        ]}
-        checked={this.selected || isIndeterminate}
-        invalid={this.invalid}
-        disabled={this.isDisabled}
-        readonly={this.isReadonly}
-        v-slots={{
-          input: () =>
-            selectorItemControl.createInputElement({ type: 'checkbox' }),
-          faux: () => <span class="v-checkbox__faux"></span>,
-          label: () => this.$slots.default?.(),
-        }}
-      />
-    );
+
+    return () => {
+      return (
+        <VCheckable
+          class={classes.value}
+          checked={nodeControl.selected || isIndeterminate.value}
+          invalid={nodeControl.invalid}
+          disabled={nodeControl.isDisabled}
+          readonly={nodeControl.isReadonly}
+          v-slots={slots}
+        />
+      );
+    };
   },
 });

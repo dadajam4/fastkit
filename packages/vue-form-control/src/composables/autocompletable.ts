@@ -3,7 +3,7 @@ import { createPropsOptions } from '@fastkit/vue-utils';
 import { FormNodeControlBaseOptions } from './node';
 import { FormAutoComplete } from '../schemes';
 
-export function createAutocompleteableInputProps() {
+export function createAutocompletableInputProps() {
   return {
     ...createPropsOptions({
       /**
@@ -15,16 +15,16 @@ export function createAutocompleteableInputProps() {
     }),
   };
 }
-export type AutocompleteableInputProps = ExtractPropTypes<
-  ReturnType<typeof createAutocompleteableInputProps>
+export type AutocompletableInputProps = ExtractPropTypes<
+  ReturnType<typeof createAutocompletableInputProps>
 >;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface AutocompleteableInputControlOptions
+export interface AutocompletableInputControlOptions
   extends FormNodeControlBaseOptions {}
 
-export function createAutocompleteableInputControl(
-  props: AutocompleteableInputProps,
+export function createAutocompletableInputControl(
+  props: AutocompletableInputProps,
 ) {
   const computedAutocomplete = computed(() => {
     let result: FormAutoComplete | undefined;
@@ -41,6 +41,6 @@ export function createAutocompleteableInputControl(
   };
 }
 
-export type AutocompleteableInputControl = ReturnType<
-  typeof createAutocompleteableInputControl
+export type AutocompletableInputControl = ReturnType<
+  typeof createAutocompletableInputControl
 >;

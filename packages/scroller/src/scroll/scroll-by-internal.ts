@@ -1,5 +1,6 @@
 import BezierEasing, { EasingFunction } from 'bezier-easing';
 import easings, { EasingValues } from './easings';
+import { removeUndef } from '@fastkit/helpers';
 import {
   ScrollResult,
   ScrollCallbackValues,
@@ -45,7 +46,7 @@ export function scroll(
   let targetX: number;
   let targetY: number;
 
-  const _options = Object.assign({}, defaultSettings, options);
+  const _options = Object.assign({}, defaultSettings, removeUndef(options));
   const {
     container,
     duration,

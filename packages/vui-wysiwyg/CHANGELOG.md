@@ -1,5 +1,14 @@
 # @fastkit/vui-wysiwyg
 
+## 4.0.81
+
+### Patch Changes
+
+- Upgraded `vue-form-control` for improved performance.
+
+- Updated dependencies []:
+  - @fastkit/vui@0.16.81
+
 ## 4.0.80
 
 ### Patch Changes

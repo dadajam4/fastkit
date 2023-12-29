@@ -1,5 +1,14 @@
 # @fastkit/vot-i18n
 
+## 3.0.12
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/accept-language@0.13.7
+  - @fastkit/vot@0.15.12
+  - @fastkit/vue-i18n@0.13.14
+
 ## 3.0.11
 
 ### Patch Changes

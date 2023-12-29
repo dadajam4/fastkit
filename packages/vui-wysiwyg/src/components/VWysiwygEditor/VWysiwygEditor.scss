@@ -58,11 +58,11 @@
       }
     }
 
-    &--disabled-min-heihgt &__input__prose {
+    &--disabled-min-height &__input__prose {
       min-height: 0;
     }
 
-    &--disabled-max-heihgt &__body {
+    &--disabled-max-height &__body {
       max-height: none;
     }
   }

@@ -1,5 +1,5 @@
 import './VTextField.scss';
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import {
   createTextInputSettings,
   useTextInputControl,
@@ -58,49 +58,59 @@ export const VTextField = defineComponent({
     const control = useControl(props);
     useControlField(props);
 
-    return {
-      ...inputControl.expose(),
-      ...control,
+    const classes = computed(() => ['v-text-field', control.classes.value]);
+
+    const handleClickLabel = (ev: MouseEvent) => {
+      inputControl.focus();
     };
-  },
-  render() {
-    return (
-      <VFormControl
-        nodeControl={this.nodeControl}
-        focused={this.nodeControl.focused}
-        hiddenInfo={this.hiddenInfo}
-        class={['v-text-field', this.classes]}
-        label={this.label}
-        hint={this.hint}
-        hinttip={this.hinttip}
-        requiredChip={this.requiredChip}
-        onClickLabel={(ev) => {
-          this.focus();
-        }}
-        v-slots={{
-          ...this.$slots,
-          default: () => (
-            <VControlField
-              class="v-text-field__input"
-              startAdornment={this.startAdornment}
-              endAdornment={this.endAdornment}
-              size={this.size}
-              v-slots={{
-                ...this.$slots,
-                default: () =>
-                  this.textInputControl.createInputElement({
-                    class: 'v-text-field__input__element',
-                  }),
-              }}
-            />
-          ),
-          infoAppends: () => {
-            const { counterResult } = this;
-            if (!counterResult) return;
-            return <VTextCounter {...counterResult} />;
-          },
-        }}
-      />
-    );
+
+    const defaultSlot = () => {
+      return (
+        <VControlField
+          class="v-text-field__input"
+          startAdornment={props.startAdornment}
+          endAdornment={props.endAdornment}
+          size={control.size.value}
+          v-slots={{
+            ...ctx.slots,
+            default: () =>
+              inputControl.createInputElement({
+                class: 'v-text-field__input__element',
+              }),
+          }}
+        />
+      );
+    };
+
+    const infoAppendsSlot = () => {
+      const { counterResult } = inputControl;
+      if (!counterResult) return;
+      return <VTextCounter {...counterResult} />;
+    };
+
+    ctx.expose({
+      control: inputControl,
+    });
+
+    return () => {
+      return (
+        <VFormControl
+          nodeControl={inputControl}
+          focused={inputControl.focused}
+          hiddenInfo={props.hiddenInfo}
+          class={classes.value}
+          label={props.label}
+          hint={props.hint}
+          hinttip={props.hinttip}
+          requiredChip={props.requiredChip}
+          onClickLabel={handleClickLabel}
+          v-slots={{
+            ...ctx.slots,
+            default: defaultSlot,
+            infoAppends: infoAppendsSlot,
+          }}
+        />
+      );
+    };
   },
 });

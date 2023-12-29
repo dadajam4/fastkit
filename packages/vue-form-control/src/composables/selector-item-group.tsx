@@ -38,6 +38,7 @@ export interface FormSelectorItemGroupControlOptions
 }
 
 export class FormSelectorItemGroupControl {
+  readonly _props: FormSelectorItemGroupProps;
   readonly parentNodeType?: FormNodeType;
   protected _parentSelector: FormSelectorControl | null = null;
   readonly groupId!: string | number;
@@ -79,6 +80,7 @@ export class FormSelectorItemGroupControl {
     ctx: FormSelectorItemGroupContext,
     options: FormSelectorItemGroupControlOptions = {},
   ) {
+    this._props = props;
     this.parentNodeType = options.parentNodeType;
     this.groupId = props.groupId;
 
@@ -110,6 +112,7 @@ export class FormSelectorItemGroupControl {
 
     onBeforeUnmount(() => {
       this._parentSelector = null;
+      delete (this as any)._props;
     });
 
     provide(FormSelectorItemGroupInjectionKey, this);
@@ -125,16 +128,6 @@ export class FormSelectorItemGroupControl {
 
   unselectAll() {
     return this.parentSelector.unselectAll(this.groupId);
-  }
-
-  expose() {
-    return {
-      groupControl: this as FormSelectorItemGroupControl,
-      isDisabled: this._disabled,
-      isNotSelected: this._notSelected,
-      isAllSelected: this._allSelected,
-      isIndeterminate: this._indeterminate,
-    };
   }
 }
 

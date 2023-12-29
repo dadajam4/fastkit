@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cache-control",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "description": "Helper implementation for plugging cache controls into a JavaScript implementation.",
   "keywords": [
     "fastkit",

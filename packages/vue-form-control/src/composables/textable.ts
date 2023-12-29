@@ -20,10 +20,11 @@ import {
   pattern as patternFactory,
 } from '@fastkit/rules';
 import {
-  createAutocompleteableInputProps,
-  createAutocompleteableInputControl,
-  AutocompleteableInputControl,
-} from './autocompleteable';
+  createAutocompletableInputProps,
+  createAutocompletableInputControl,
+  AutocompletableInputControl,
+} from './autocompletable';
+
 import {
   FormAutoCapitalize,
   TextFinalizer,
@@ -67,7 +68,7 @@ export function createTextableProps() {
       },
       defaultValidateTiming: 'blur',
     }),
-    ...createAutocompleteableInputProps(),
+    ...createAutocompletableInputProps(),
     ...createPropsOptions({
       /** Minimum number of characters */
       minlength: [String, Number],
@@ -137,12 +138,10 @@ export type TextableContext = SetupContext<TextableEmitOptions>;
 export interface TextableControlOptions extends FormNodeControlBaseOptions {}
 
 export class TextableControl extends FormNodeControl<string> {
+  readonly _props: TextableProps;
   protected _minlength: ComputedRef<number | undefined>;
   protected _maxlength: ComputedRef<number | undefined>;
-  protected _pattern: ComputedRef<string | RegExp | undefined>;
-  protected _placeholder: ComputedRef<string | undefined>;
-  protected _autocompleteable: AutocompleteableInputControl;
-  protected _autocapitalize: ComputedRef<FormAutoCapitalize | undefined>;
+  protected _autocompletable: AutocompletableInputControl;
   protected _finalizers: ComputedRef<TextFinalizer[] | undefined>;
   protected _counterSettings: ComputedRef<TextableCounterSettings | undefined>;
   protected _counterResult: ComputedRef<TextableCounterResult | undefined>;
@@ -157,19 +156,19 @@ export class TextableControl extends FormNodeControl<string> {
   }
 
   get pattern() {
-    return this._pattern.value;
+    return this._props.pattern;
   }
 
   get placeholder() {
-    return this._placeholder.value;
+    return this._props.placeholder;
   }
 
   get autocomplete() {
-    return this._autocompleteable.computedAutocomplete.value;
+    return this._autocompletable.computedAutocomplete.value;
   }
 
   get autocapitalize() {
-    return this._autocapitalize.value;
+    return this._props.autocapitalize;
   }
 
   get finalizers() {
@@ -197,8 +196,9 @@ export class TextableControl extends FormNodeControl<string> {
       ...options,
       modelValue: String,
     });
+    this._props = props;
 
-    this._autocompleteable = createAutocompleteableInputControl(props);
+    this._autocompletable = createAutocompletableInputControl(props);
 
     this._minlength = computed(() => {
       const { minlength } = props;
@@ -210,9 +210,6 @@ export class TextableControl extends FormNodeControl<string> {
       return maxlength == null ? undefined : toInt(maxlength);
     });
 
-    this._pattern = computed(() => props.pattern);
-    this._placeholder = computed(() => props.placeholder);
-    this._autocapitalize = computed(() => props.autocapitalize);
     this._finalizers = computed(() =>
       resolveTextableFinalizerSpec(props.finalizers),
     );
@@ -298,23 +295,6 @@ export class TextableControl extends FormNodeControl<string> {
       value = value.slice(0, maxlengthLimit);
     }
     this.value = value;
-  }
-
-  expose() {
-    const _self = this as TextableControl;
-    const publicInterface = super.expose();
-
-    return {
-      ...publicInterface,
-      ..._self._autocompleteable,
-      computedMinlength: _self._minlength,
-      computedMaxlength: _self._maxlength,
-      computedPattern: _self._pattern,
-      computedPlaceholder: _self._placeholder,
-      computedAutocapitalize: _self._autocapitalize,
-      counterSettings: _self._counterSettings,
-      counterResult: _self._counterResult,
-    };
   }
 }
 

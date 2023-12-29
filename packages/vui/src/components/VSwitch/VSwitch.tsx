@@ -1,5 +1,5 @@
 import './VSwitch.scss';
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
@@ -27,38 +27,41 @@ export const VSwitch = defineComponent({
       (window as any).yy = {};
       (window as any).yy[String(Date.now())] = nodeControl;
     }
-    return {
-      ...nodeControl.expose(),
-      ...control,
+
+    const classes = computed(() => [
+      'v-switch',
+      {
+        'v-switch--selected': nodeControl.selected,
+        'v-switch--disabled': nodeControl.isDisabled,
+      },
+      control.classes.value,
+    ]);
+
+    const slots = {
+      input: () => nodeControl.createInputElement({ type: 'checkbox' }),
+      icon: () => (
+        <span class="v-switch__faux">
+          <span class="v-switch__faux__pin"></span>
+        </span>
+      ),
+      label: () => ctx.slots.default?.(),
     };
-  },
-  render() {
-    const { selectorItemControl } = this;
-    return (
-      <VCheckable
-        class={[
-          'v-switch',
-          {
-            'v-switch--selected': selectorItemControl.selected,
-            'v-switch--disabled': selectorItemControl.isDisabled,
-          },
-          this.classes,
-        ]}
-        checked={this.selected}
-        invalid={this.invalid}
-        disabled={this.isDisabled}
-        readonly={this.isReadonly}
-        v-slots={{
-          input: () =>
-            selectorItemControl.createInputElement({ type: 'checkbox' }),
-          icon: () => (
-            <span class="v-switch__faux">
-              <span class="v-switch__faux__pin"></span>
-            </span>
-          ),
-          label: () => this.$slots.default?.(),
-        }}
-      />
-    );
+
+    ctx.expose({
+      control: nodeControl,
+    });
+
+    return () => {
+      return (
+        <VCheckable
+          class={classes.value}
+          checked={nodeControl.selected}
+          invalid={nodeControl.invalid}
+          disabled={nodeControl.isDisabled}
+          readonly={nodeControl.isReadonly}
+          v-slots={slots}
+        />
+      );
+    };
   },
 });

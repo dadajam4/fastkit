@@ -69,6 +69,7 @@ export interface FormSelectorItemControlOptions
 }
 
 export class FormSelectorItemControl extends FormNodeControl<boolean> {
+  readonly _props: FormSelectorItemProps;
   readonly parentNodeType?: FormNodeType;
   protected _parentSelector: FormSelectorControl | null = null;
   protected _groupControl: FormSelectorItemGroupControl | null = null;
@@ -138,6 +139,7 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
       ...options,
       modelValue: Boolean,
     });
+    this._props = props;
 
     (
       [
@@ -155,11 +157,13 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
     this.parentNodeType = options.parentNodeType;
     this.propValue = props.value;
     // this.group = props.group;
+
     this._name = computed(() => {
       if (props.name) return props.name;
       if (this.parentSelector) return this.parentSelector.name;
       return undefined;
     });
+
     this._multiple = computed(() => {
       if (this._parentSelector) {
         return this._parentSelector.multiple;
@@ -250,18 +254,6 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
 
   toggle() {
     this.value = !this.value;
-  }
-
-  expose() {
-    const publicInterface = super.expose();
-    return {
-      ...publicInterface,
-      selectorItemControl: this as FormSelectorItemControl,
-      selected: this._currentValue,
-      computedMultiple: this._multiple,
-      propValue: this.propValue,
-      hasValue: this._hasValue,
-    };
   }
 
   /** @private */

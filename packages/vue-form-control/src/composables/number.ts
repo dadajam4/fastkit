@@ -61,10 +61,10 @@ export type NumberInputContext = SetupContext<NumberInputEmitOptions>;
 export interface NumberInputControlOptions extends FormNodeControlBaseOptions {}
 
 export class NumberInputControl extends FormNodeControl<number, undefined> {
+  readonly _props: NumberInputProps;
   protected _min: ComputedRef<number | undefined>;
   protected _max: ComputedRef<number | undefined>;
   protected _step: ComputedRef<number>;
-  protected _placeholder: ComputedRef<string | undefined>;
 
   get min() {
     return this._min.value;
@@ -79,7 +79,7 @@ export class NumberInputControl extends FormNodeControl<number, undefined> {
   }
 
   get placeholder() {
-    return this._placeholder.value;
+    return this._props.placeholder;
   }
 
   constructor(
@@ -91,6 +91,7 @@ export class NumberInputControl extends FormNodeControl<number, undefined> {
       ...options,
       modelValue: Number,
     });
+    this._props = props;
 
     this._min = computed(() => {
       const { min } = props;
@@ -103,8 +104,6 @@ export class NumberInputControl extends FormNodeControl<number, undefined> {
     });
 
     this._step = computed(() => toNumber(props.step));
-
-    this._placeholder = computed(() => props.placeholder);
   }
 
   emptyValue() {
@@ -122,18 +121,6 @@ export class NumberInputControl extends FormNodeControl<number, undefined> {
     }
     rules.push(stepValue(step));
     return rules;
-  }
-
-  expose() {
-    const _self = this as NumberInputControl;
-    const publicInterface = super.expose();
-
-    return {
-      ...publicInterface,
-      computedMin: _self._min,
-      computedMax: _self._max,
-      computedPlaceholder: _self._placeholder,
-    };
   }
 }
 

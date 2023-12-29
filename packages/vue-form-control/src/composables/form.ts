@@ -11,12 +11,11 @@ import {
 } from 'vue';
 import { createPropsOptions } from '@fastkit/vue-utils';
 import {
-  createFormNodeProps,
-  FormNodeControl,
-  createFormNodeEmits,
-  FormNodeContext,
-  FormNodeControlBaseOptions,
-} from './node';
+  createFormGroupProps,
+  createFormGroupEmits,
+  FormGroupOptions,
+  FormGroupControl,
+} from './group';
 import { FormInjectionKey } from '../injections';
 import { isPromise } from '@fastkit/helpers';
 
@@ -27,13 +26,38 @@ export interface FormActionContext {
   event: Event;
 }
 
-export type FormFunctionableAction = (ctx: FormActionContext) => any;
+export type FormActionHandler = (ctx: FormActionContext) => any;
 
-export type FormAction = string | FormFunctionableAction;
+export type FormAction = string | FormActionHandler;
+
+export interface FormInvalidSubmissionAcceptorContext {
+  /** Form control */
+  readonly form: VueForm;
+  /**
+   * Accepted
+   */
+  get accepted(): boolean;
+  /**
+   * Accept submission
+   */
+  accept(): void;
+}
+
+export type FormInvalidSubmissionAcceptor = (
+  payload: FormInvalidSubmissionAcceptorContext,
+) => void;
+
+export type FormAcceptInvalidSubmissionSpec =
+  | boolean
+  | FormInvalidSubmissionAcceptor;
+
+export interface FormOptions extends FormGroupOptions {
+  // onAutoValidateError?: VueFormHook;
+}
 
 export function createFormProps(options: FormOptions = {}) {
   return {
-    ...createFormNodeProps(),
+    ...createFormGroupProps(),
     ...createPropsOptions({
       /**
        * Action settings for form submission
@@ -57,9 +81,18 @@ export function createFormProps(options: FormOptions = {}) {
        */
       sending: Boolean,
       /**
-       * Autoscroll to the location of the form when invalid input is detected in the validation on submission
+       * Auto scroll to the location of the form when invalid input is detected in the validation on submission
        */
       disableAutoScroll: Boolean,
+      /**
+       * Accept invalid values during form submission
+       *
+       * @default false
+       */
+      acceptInvalidSubmission: {
+        type: [Boolean, Function] as PropType<FormAcceptInvalidSubmissionSpec>,
+        default: false,
+      },
     }),
   };
 }
@@ -68,7 +101,7 @@ export type FormProps = ExtractPropTypes<ReturnType<typeof createFormProps>>;
 
 export function createFormEmits() {
   return {
-    ...createFormNodeEmits(),
+    ...createFormGroupEmits(),
     /**
      * Form Submission
      *
@@ -99,47 +132,50 @@ export interface FormEmitOptions extends ReturnType<typeof createFormEmits> {}
 
 export type FormContext = SetupContext<FormEmitOptions>;
 
-export type VueFormHook = (form: VueForm) => any;
-export interface FormOptions extends FormNodeControlBaseOptions {
-  onAutoValidateError?: VueFormHook;
-  scrollToElement?: (element: HTMLElement) => any;
-}
-
-export class VueForm extends FormNodeControl {
+export class VueForm extends FormGroupControl {
+  readonly _props: FormProps;
   protected _formContext: FormContext;
-  protected _autoValidate: ComputedRef<boolean>;
   protected _nativeAction: ComputedRef<string | undefined>;
-  protected _disableAutoScroll: ComputedRef<boolean>;
-  protected _fnAction: ComputedRef<FormFunctionableAction | undefined>;
+  protected _fnAction: ComputedRef<FormActionHandler | undefined>;
   protected _formRef = ref<HTMLFormElement | null>(null);
   protected _actionPromise = ref<Promise<any> | null>(null);
   protected _sending: ComputedRef<boolean>;
-  protected _onAutoValidateError?: VueFormHook;
-  protected _scrollToElement?: (element: HTMLElement) => any;
 
   get nativeAction() {
     return this._nativeAction.value;
   }
 
+  /**
+   * Executing asynchronous submission action
+   */
   get sending() {
     return this._sending.value;
   }
 
+  /**
+   * Automatic validation on transmission
+   *
+   * If this setting is enabled, all validation will be done before transmission and the transmission process will be canceled if there are invalid entries
+   *
+   * @default true
+   */
   get autoValidate() {
-    return this._autoValidate.value;
+    return this._props.autoValidate;
   }
 
+  /**
+   * Auto scroll to the location of the form when invalid input is detected in the validation on submission
+   */
   get disableAutoScroll() {
-    return this._disableAutoScroll.value;
+    return this._props.disableAutoScroll;
   }
 
   constructor(props: FormProps, ctx: FormContext, options: FormOptions = {}) {
-    super(props, ctx as unknown as FormNodeContext<{}>, {
+    super(props, ctx, {
       ...options,
     });
+    this._props = props;
     this._formContext = ctx;
-    this._autoValidate = computed(() => props.autoValidate);
-    this._disableAutoScroll = computed(() => props.disableAutoScroll);
     this._nativeAction = computed(() => {
       if (typeof props.action === 'string') return props.action;
       return undefined;
@@ -151,13 +187,9 @@ export class VueForm extends FormNodeControl {
     this._sending = computed(
       () => props.sending || this._actionPromise.value !== null,
     );
-    this._onAutoValidateError = options.onAutoValidateError;
-    this._scrollToElement = options.scrollToElement;
 
     onBeforeUnmount(() => {
       this._actionPromise.value = null;
-      delete this._onAutoValidateError;
-      delete this._scrollToElement;
       delete (this as any)._formContext;
     });
 
@@ -193,9 +225,21 @@ export class VueForm extends FormNodeControl {
     }
   }
 
-  protected _doAction(event: Event) {
+  /**
+   * Dispatch the specified action function
+   *
+   * @param event - Event object
+   */
+  dispatchAction(event?: Event): Promise<void> {
+    if (!event) {
+      event = new SubmitEvent('submit', {
+        cancelable: true,
+        bubbles: true,
+      });
+    }
     const fn = this._fnAction.value;
-    if (!fn) return;
+    if (!fn) return Promise.resolve();
+
     const ctx: FormActionContext = {
       form: this,
       canceled: false,
@@ -205,23 +249,17 @@ export class VueForm extends FormNodeControl {
       event,
     };
     const result = fn(ctx);
-    if (ctx.canceled || !isPromise(result)) return;
+    if (ctx.canceled || !isPromise(result)) return Promise.resolve();
     this._actionPromise.value = result;
-    result.finally(() => {
+    return result.finally(() => {
       this._actionPromise.value = null;
     });
-  }
-
-  scrollToFirstInvalidElement() {
-    const { firstInvalidEl, _scrollToElement } = this;
-    if (!_scrollToElement || !firstInvalidEl) return;
-    return _scrollToElement(firstInvalidEl);
   }
 
   async validateAndScroll(): Promise<boolean> {
     const valid = await this.validate();
     if (!valid) {
-      !this.disableAutoScroll && this.scrollToFirstInvalidElement();
+      !this.disableAutoScroll && this.scrollToFirstInvalidNode();
     }
     return valid;
   }
@@ -230,29 +268,36 @@ export class VueForm extends FormNodeControl {
     ev.preventDefault();
     if (this.sending || this.isDisabled || this.isReadonly) return;
     if (this.autoValidate) {
-      const valid = await this.validateAndScroll();
+      const valid = await this.validate();
       if (!valid) {
-        this._onAutoValidateError && this._onAutoValidateError(this);
-        return;
+        let { acceptInvalidSubmission } = this._props;
+        if (typeof acceptInvalidSubmission === 'function') {
+          let accepted = false;
+
+          const ctx: FormInvalidSubmissionAcceptorContext = {
+            form: this,
+            get accepted() {
+              return accepted;
+            },
+            accept() {
+              accepted = false;
+            },
+          };
+          acceptInvalidSubmission(ctx);
+          acceptInvalidSubmission = accepted;
+        }
+        if (!acceptInvalidSubmission) {
+          !this.disableAutoScroll && this.scrollToFirstInvalidNode();
+          return;
+        }
       }
     }
     this._formContext.emit('submit', this, ev);
-    this._doAction(ev);
+    this.dispatchAction(ev);
   }
 
   formRef() {
     return this._formRef;
-  }
-
-  expose() {
-    const publicInterface = super.expose();
-    return {
-      ...publicInterface,
-      form: this as VueForm,
-      formRef: this.formRef,
-      nativeAction: this._nativeAction,
-      disableAutoScroll: this._disableAutoScroll,
-    };
   }
 }
 

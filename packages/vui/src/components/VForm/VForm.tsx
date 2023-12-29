@@ -5,9 +5,8 @@ import {
   useForm,
 } from '@fastkit/vue-form-control';
 import { DefineSlotsType, defineSlots } from '@fastkit/vue-utils';
-import { getDocumentScroller } from '@fastkit/vue-scroller';
 import { createControlProps, useControl } from '../../composables';
-import { VUI_FORM_SYMBOL, useVui } from '../../injections';
+import { VUI_FORM_SYMBOL } from '../../injections';
 
 const { props, emits } = createFormSettings({
   nodeType: VUI_FORM_SYMBOL,
@@ -24,7 +23,6 @@ export function createVFormProps() {
     ...props,
     ...createControlProps(),
     ...formSlots(),
-    // disableAutoScroll: Boolean,
   };
 }
 
@@ -34,15 +32,8 @@ export const VForm = defineComponent({
   emits,
   slots: formSlots,
   setup(props, ctx) {
-    const vui = useVui();
     const nodeControl = useForm(props, ctx as any, {
       nodeType: VUI_FORM_SYMBOL,
-      scrollToElement: (el) => {
-        const scroller = getDocumentScroller();
-        return scroller.toElement(el, {
-          offset: vui.getAutoScrollToElementOffsetTop(),
-        });
-      },
     });
     const classes = computed(() => {
       return [
@@ -59,21 +50,18 @@ export const VForm = defineComponent({
     });
     useControl(props);
 
-    return {
-      ...nodeControl.expose(),
-      classes,
-    };
-  },
-  render() {
-    const { form } = this;
-    return (
+    ctx.expose({
+      control: nodeControl,
+    });
+
+    return () => (
       <form
-        ref={this.formRef()}
-        class={this.classes}
-        action={this.nativeAction}
-        spellcheck={this.spellcheck}
-        onSubmit={form.handleSubmit}>
-        {this.$slots.default?.(form)}
+        ref={nodeControl.formRef()}
+        class={classes.value}
+        action={nodeControl.nativeAction}
+        spellcheck={nodeControl.spellcheck}
+        onSubmit={nodeControl.handleSubmit}>
+        {ctx.slots.default?.(nodeControl)}
       </form>
     );
   },

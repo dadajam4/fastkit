@@ -20,6 +20,9 @@ import { installResizeDirective } from '@fastkit/vue-resize';
 import { VueColorSchemePlugin } from '@fastkit/vue-color-scheme';
 import { installVueAppLayout } from '@fastkit/vue-app-layout';
 import { onAppUnmount } from '@fastkit/vue-utils';
+import { getDocumentScroller } from '@fastkit/vue-scroller';
+
+const scroller = getDocumentScroller();
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VuiPluginStackOptions extends VueStackServiceOptions {}
@@ -70,7 +73,21 @@ export class VuiPlugin {
     app.use(vueColorSchemePlugin);
 
     installVueStackPlugin(app, stack);
-    installVueFormPlugin(app, form);
+    installVueFormPlugin(app, {
+      scroll: {
+        options: {
+          behavior: 'smooth',
+        },
+        fn: (el, opts) => {
+          const duration = opts?.behavior === 'smooth' ? undefined : 0;
+          return scroller.toElement(el, {
+            offset: $vui.getAutoScrollToElementOffsetTop(),
+            duration,
+          });
+        },
+      },
+      ...form,
+    });
     installVueAppLayout(app);
     installBodyScrollLockDirective(app);
     installClickOutsideDirective(app);

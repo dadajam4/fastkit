@@ -1,5 +1,12 @@
 # @fastkit/dom
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.7
+
 ## 0.1.6
 
 ### Patch Changes

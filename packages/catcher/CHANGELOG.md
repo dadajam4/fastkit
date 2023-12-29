@@ -1,5 +1,12 @@
 # @fastkit/catcher
 
+## 0.13.14
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.7
+
 ## 0.13.13
 
 ### Patch Changes

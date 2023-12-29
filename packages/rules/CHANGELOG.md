@@ -1,5 +1,15 @@
 # @fastkit/rules
 
+## 0.13.8
+
+### Patch Changes
+
+- Corrected the improper English notation 'ValidatableRule' to 'VerifiableRule'.
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.7
+  - @fastkit/tiny-logger@0.13.7
+
 ## 0.13.7
 
 ### Patch Changes

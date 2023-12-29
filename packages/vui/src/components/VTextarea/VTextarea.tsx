@@ -46,53 +46,59 @@ export const VTextarea = defineComponent({
     const control = useControl(props);
     useControlField(props);
 
-    return {
-      ...inputControl.expose(),
-      ...control,
+    ctx.expose({
+      control: inputControl,
+    });
+
+    const defaultSlot = () => {
+      return (
+        <VControlField
+          class="v-textarea__input"
+          size={control.size.value}
+          autoHeight
+          startAdornment={props.startAdornment}
+          endAdornment={props.endAdornment}
+          // onClickHost={(ev) => {
+          //   this.focus();
+          // }}
+          v-slots={{
+            ...ctx.slots,
+            default: () =>
+              inputControl.createInputElement({
+                class: 'v-textarea__input__element',
+              }),
+          }}
+        />
+      );
     };
-  },
-  render() {
-    return (
-      <VFormControl
-        nodeControl={this.nodeControl}
-        focused={this.nodeControl.focused}
-        class={['v-textarea', this.classes]}
-        label={this.label}
-        hint={this.hint}
-        hinttip={this.hinttip}
-        hiddenInfo={this.hiddenInfo}
-        requiredChip={this.requiredChip}
-        onClickLabel={(ev) => {
-          this.focus();
-        }}
-        v-slots={{
-          ...this.$slots,
-          default: () => (
-            <VControlField
-              class="v-textarea__input"
-              size={this.size}
-              autoHeight
-              startAdornment={this.startAdornment}
-              endAdornment={this.endAdornment}
-              // onClickHost={(ev) => {
-              //   this.focus();
-              // }}
-              v-slots={{
-                ...this.$slots,
-                default: () =>
-                  this.textareaControl.createInputElement({
-                    class: 'v-textarea__input__element',
-                  }),
-              }}
-            />
-          ),
-          infoAppends: () => {
-            const { counterResult } = this;
-            if (!counterResult) return;
-            return <VTextCounter {...counterResult} />;
-          },
-        }}
-      />
-    );
+
+    const infoAppendsSlot = () => {
+      const { counterResult } = inputControl;
+      if (!counterResult) return;
+      return <VTextCounter {...counterResult} />;
+    };
+
+    return () => {
+      return (
+        <VFormControl
+          nodeControl={inputControl}
+          focused={inputControl.focused}
+          class={['v-textarea', control.classes.value]}
+          label={props.label}
+          hint={props.hint}
+          hinttip={props.hinttip}
+          hiddenInfo={props.hiddenInfo}
+          requiredChip={props.requiredChip}
+          onClickLabel={(ev) => {
+            inputControl.focus();
+          }}
+          v-slots={{
+            ...ctx.slots,
+            default: defaultSlot,
+            infoAppends: infoAppendsSlot,
+          }}
+        />
+      );
+    };
   },
 });

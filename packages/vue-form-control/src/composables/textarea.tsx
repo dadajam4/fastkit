@@ -84,6 +84,7 @@ export interface TextareaControlOptions extends TextableControlOptions {
 }
 
 export class TextareaControl extends TextableControl {
+  readonly _props: TextareaProps;
   protected _inputElement = ref<
     HTMLTextAreaElement | VTextareaAutosizeRef | null
   >(null);
@@ -110,6 +111,7 @@ export class TextareaControl extends TextableControl {
     super(props, ctx as unknown as TextableContext, {
       ...options,
     });
+    this._props = props;
 
     const el = ref<null | HTMLTextAreaElement | VTextareaAutosizeRef>(null);
     this._inputElement = el;
@@ -128,21 +130,6 @@ export class TextareaControl extends TextableControl {
 
   emptyValue() {
     return '';
-  }
-
-  expose() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const _self = this;
-    const publicInterface = super.expose();
-
-    return {
-      ...publicInterface,
-      textareaControl: this as TextareaControl,
-      inputElementRef: _self._inputElement,
-      autosizeSettings: this._autosize,
-      focus: _self.focus,
-      blur: _self.blur,
-    };
   }
 
   createInputElement(override: Pick<TextareaHTMLAttributes, 'class'> = {}) {

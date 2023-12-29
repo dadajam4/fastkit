@@ -1,3 +1,5 @@
+import { arrayUnique } from './array';
+
 /**
  * Checks if the specified variable is a not Nullable.
  *
@@ -278,4 +280,38 @@ export function omitProperties<
     delete (results as any)[prop];
   }
   return excludeUndefined ? removeUndef(results) : results;
+}
+
+export type Mixin<T extends object, U extends object> = Omit<T, keyof U> & U;
+
+/**
+ * Returns a Proxy instance that mixes in the specified trait object for the given base object
+ *
+ * @param base - Base object
+ * @param trait - trait object
+ * @returns Mixed-in Proxy
+ */
+export function mixin<T extends object, U extends object>(
+  base: T,
+  trait: U,
+): Mixin<T, U> {
+  Reflect.getPrototypeOf;
+  const proxy = new Proxy(base, {
+    get: (_target, propertyKey, receiver) => {
+      const target = Reflect.has(trait, propertyKey) ? trait : _target;
+      return Reflect.get(target, propertyKey, receiver);
+    },
+    has: (target, propertyKey) => {
+      return (
+        Reflect.has(trait, propertyKey) || Reflect.has(target, propertyKey)
+      );
+    },
+    ownKeys: (target) => {
+      return arrayUnique([
+        ...Reflect.ownKeys(target),
+        ...Reflect.ownKeys(trait),
+      ]);
+    },
+  }) as any;
+  return proxy;
 }

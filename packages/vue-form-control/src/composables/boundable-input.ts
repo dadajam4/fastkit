@@ -251,6 +251,7 @@ export class BoundableInputControl<
   Min extends T | null = null,
   Max extends T | null = null,
 > extends FormNodeControl<MV, MV> {
+  readonly _props: BoundableInputProps<T, MV, SV, EV, Min, Max>;
   protected _boundableOptions: BoundableInputControlOptions<
     T,
     MV,
@@ -339,6 +340,7 @@ export class BoundableInputControl<
   ) {
     super(props, ctx, options);
 
+    this._props = props;
     this._boundableOptions = options;
     this._isRange = ref(props.range);
     this._startName = computed(() => props.startName);

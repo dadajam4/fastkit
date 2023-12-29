@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/rules",
-  "version": "0.13.7",
+  "version": "0.13.8",
   "description": "Universal validation library that works in server/browser.",
   "keywords": [
     "fastkit",

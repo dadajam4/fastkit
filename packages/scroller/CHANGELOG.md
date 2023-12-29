@@ -1,5 +1,16 @@
 # @fastkit/scroller
 
+## 0.13.8
+
+### Patch Changes
+
+- Fixed edge case where the default value for scroll options was being overwritten by 'undefined'.
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.7
+  - @fastkit/tiny-logger@0.13.7
+  - @fastkit/visibility@0.13.7
+
 ## 0.13.7
 
 ### Patch Changes

@@ -1,5 +1,31 @@
 # @fastkit/vue-form-control
 
+## 0.17.0
+
+### Minor Changes
+
+- This release includes various feature additions, improvements, and breaking changes.
+
+  - The scroll helper configuration is now global and optional. By default, the [scrollIntoView](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView) method is utilized.
+  - All nodes now internally hold the props passed to the component, eliminating unnecessary computed instances and improving performance.
+  - The `isRequired` getter now takes into account mandatory conditions registered in the `rules`.
+  - The type name 'FormFunctionableAction' has been changed to 'FormActionHandler'.
+  - Added the `acceptInvalidSubmission` option to allow submission even in case of validation failure.
+  - Added the `dispatchAction` method to manually invoke the submission action of `VueForm`.
+  - Added `FormGroupControl` for grouping form nodes, facilitating the collection of validation messages. This allows displaying error messages in any location as needed.
+  - Fixed Vue warning when setting a single object in the `rules` property.
+  - Deprecated the `expose()` method across all nodes due to low usage demand.
+  - Added the `extends` method to all FormNode-related instances, providing the ability to create objects that inherit the API of each node on the application side.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.7
+  - @fastkit/rules@0.13.8
+  - @fastkit/dom@0.1.7
+  - @fastkit/tiny-logger@0.13.7
+  - @fastkit/vue-utils@0.14.12
+
 ## 0.16.0
 
 ### Minor Changes

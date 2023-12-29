@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "description": "Value object implementation for controlling \"color\".",
   "keywords": [
     "fastkit",

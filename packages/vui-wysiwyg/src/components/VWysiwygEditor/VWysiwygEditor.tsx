@@ -87,6 +87,16 @@ export const VWysiwygEditor = defineComponent({
     const control = useControl(props);
     useControlField(props);
 
+    const classes = computed(() => [
+      'v-wysiwyg-editor',
+      control.classes.value,
+      `v-wysiwyg-editor--${control.size.value}`,
+      {
+        'v-wysiwyg-editor--disabled-min-height': props.disabledMinHeight,
+        'v-wysiwyg-editor--disabled-max-height': props.disabledMaxHeight,
+      },
+    ]);
+
     const inputControl = new TextableControl(props, ctx as any, {
       nodeType: VUI_WYSIWYG_EDITOR_SYMBOL,
       validationValue: () => textRef.value,
@@ -170,14 +180,13 @@ export const VWysiwygEditor = defineComponent({
         scrollIntoView?: boolean | undefined;
       },
     ) => {
-      if (!editor.value) return;
-      return editor.value.chain().focus(position, options);
+      return editor.value?.chain().focus(position, options);
     };
 
-    const blur = () => {
-      if (!editor.value) return;
-      return editor.value.chain().blur();
-    };
+    // const blur = () => {
+    //   if (!editor.value) return;
+    //   return editor.value.chain().blur();
+    // };
 
     const wysiwygContext = computed<WysiwygEditorContext>(() => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -213,10 +222,10 @@ export const VWysiwygEditor = defineComponent({
           variant={variant}>
           {tools.map(({ key, icon, onClick, disabled, active }) => {
             const isActive =
-              !!_editor && resolveContextableValue(context, active);
+              !!_editor && resolveContextualValue(context, active);
             const isDisabled =
               !inputControl.canOperation ||
-              (!!_editor && resolveContextableValue(context, disabled));
+              (!!_editor && resolveContextualValue(context, disabled));
             let iconName: IconName | undefined;
             let child: VNodeChild;
 
@@ -255,96 +264,86 @@ export const VWysiwygEditor = defineComponent({
       editor.value && editor.value.destroy();
     });
 
-    return {
+    ctx.expose({
       editor,
-      ...inputControl.expose(),
-      ...control,
-      focus,
-      blur,
-      createTools,
-    };
-  },
-  render() {
-    return (
-      <VFormControl
-        nodeControl={this.nodeControl}
-        focused={this.nodeControl.focused}
-        class={[
-          'v-wysiwyg-editor',
-          this.classes,
-          `v-wysiwyg-editor--${this.size}`,
-          {
-            'v-wysiwyg-editor--disabled-min-heihgt': this.disabledMinHeight,
-            'v-wysiwyg-editor--disabled-max-heihgt': this.disabledMaxHeight,
-          },
-        ]}
-        label={this.label}
-        hint={this.hint}
-        hinttip={this.hinttip}
-        hiddenInfo={this.hiddenInfo}
-        requiredChip={this.requiredChip}
-        onClickLabel={(ev) => {
-          this.focus('start', { scrollIntoView: true });
-        }}
-        v-slots={{
-          ...this.$slots,
-          default: () => {
-            const { editor } = this;
+      control: inputControl,
+    });
 
-            return (
-              <div class="v-wysiwyg-editor__wrapper">
-                {!this.isReadonly && this.createTools()}
-                <VControlField
-                  class="v-wysiwyg-editor__input"
-                  autoHeight
-                  startAdornment={this.startAdornment}
-                  endAdornment={this.endAdornment}
-                  size={this.size}
-                  // onClickHost={(ev) => {
-                  //   this.focus();
-                  // }}
-                  v-slots={{
-                    ...this.$slots,
-                    default: () => {
-                      return (
-                        <div class="v-wysiwyg-editor__body">
-                          <EditorContent
-                            {...({
-                              class: 'v-wysiwyg-editor__input__element wysiwyg',
-                            } as any)}
-                            editor={editor}
-                          />
-                          {!this.floatingToolbar &&
-                            !!editor &&
-                            !this.isReadonly && (
-                              <BubbleMenu
-                                {...({
-                                  class: 'v-wysiwyg-editor__bubble-menu',
-                                } as any)}
-                                editor={editor}>
-                                {this.createTools(true)}
-                              </BubbleMenu>
-                            )}
-                        </div>
-                      );
-                    },
-                  }}
-                />
-              </div>
-            );
-          },
-          infoAppends: () => {
-            const { counterResult } = this;
-            if (!counterResult) return;
-            return <VTextCounter {...counterResult} />;
-          },
-        }}
-      />
-    );
+    const handleClickLabel = (ev: MouseEvent) => {
+      focus('start', { scrollIntoView: true });
+    };
+
+    const formControlDefaultSlot = () => {
+      return (
+        <div class="v-wysiwyg-editor__wrapper">
+          {!inputControl.isReadonly && createTools()}
+          <VControlField
+            class="v-wysiwyg-editor__input"
+            autoHeight
+            startAdornment={props.startAdornment}
+            endAdornment={props.endAdornment}
+            size={control.size.value}
+            v-slots={{
+              ...ctx.slots,
+              default: () => {
+                return (
+                  <div class="v-wysiwyg-editor__body">
+                    <EditorContent
+                      {...({
+                        class: 'v-wysiwyg-editor__input__element wysiwyg',
+                      } as any)}
+                      editor={editor.value}
+                    />
+                    {!props.floatingToolbar &&
+                      !!editor.value &&
+                      !inputControl.isReadonly && (
+                        <BubbleMenu
+                          {...({
+                            class: 'v-wysiwyg-editor__bubble-menu',
+                          } as any)}
+                          editor={editor.value}>
+                          {createTools(true)}
+                        </BubbleMenu>
+                      )}
+                  </div>
+                );
+              },
+            }}
+          />
+        </div>
+      );
+    };
+
+    const infoAppendsSlot = () => {
+      const { counterResult } = inputControl;
+      if (!counterResult) return;
+      return <VTextCounter {...counterResult} />;
+    };
+
+    return () => {
+      return (
+        <VFormControl
+          nodeControl={inputControl}
+          focused={inputControl.focused}
+          class={classes.value}
+          label={props.label}
+          hint={props.hint}
+          hinttip={props.hinttip}
+          hiddenInfo={props.hiddenInfo}
+          requiredChip={props.requiredChip}
+          onClickLabel={handleClickLabel}
+          v-slots={{
+            ...ctx.slots,
+            default: formControlDefaultSlot,
+            infoAppends: infoAppendsSlot,
+          }}
+        />
+      );
+    };
   },
 });
 
-function resolveContextableValue(
+function resolveContextualValue(
   ctx: WysiwygEditorContext,
   source?: boolean | ((ctx: WysiwygEditorContext) => boolean),
 ) {

@@ -1,5 +1,14 @@
 # @fastkit/vue-scroller
 
+## 0.14.16
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/scroller@0.13.8
+  - @fastkit/tiny-logger@0.13.7
+  - @fastkit/vue-utils@0.14.12
+
 ## 0.14.15
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @fastkit/helpers
 
+## 0.13.7
+
+### Patch Changes
+
+- Added a helper for mixing in additional interfaces to objects.
+
 ## 0.13.6
 
 ### Patch Changes

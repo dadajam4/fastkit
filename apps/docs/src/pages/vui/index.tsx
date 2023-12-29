@@ -194,6 +194,11 @@ export default defineComponent({
                             to: '/vui/components/switches',
                           },
                           {
+                            key: 'form-groups',
+                            label: 'Form Groups',
+                            to: '/vui/components/form-groups',
+                          },
+                          {
                             key: 'forms',
                             label: 'Forms',
                             to: '/vui/components/forms',

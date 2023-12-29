@@ -5,17 +5,25 @@ export type FormErrorMessageResolver = (
   node?: FormNodeControl,
 ) => string | void;
 
+export interface VueFormScrollOptions {
+  options?: ScrollIntoViewOptions;
+  fn?: (element: HTMLElement, options?: ScrollIntoViewOptions) => void;
+}
+
 export interface VueFormServiceOptions {
   errorMessageResolvers?: FormErrorMessageResolver[];
+  scroll?: VueFormScrollOptions;
 }
 
 export class VueFormService {
   readonly errorMessageResolvers: FormErrorMessageResolver[] = [];
+  readonly scroll?: VueFormScrollOptions;
 
   constructor(options: VueFormServiceOptions = {}) {
-    const { errorMessageResolvers } = options;
+    const { errorMessageResolvers, scroll } = options;
     errorMessageResolvers &&
       this.errorMessageResolvers.push(...errorMessageResolvers);
+    this.scroll = scroll;
   }
 
   addMessageResolver(
@@ -32,6 +40,22 @@ export class VueFormService {
     for (const resolver of this.errorMessageResolvers) {
       const result = resolver(error, node);
       if (result) return result;
+    }
+  }
+
+  scrollToElement(element: HTMLElement, options?: ScrollIntoViewOptions) {
+    const { scroll } = this;
+    const _options: ScrollIntoViewOptions = {
+      behavior: 'smooth',
+      ...scroll?.options,
+      ...options,
+    };
+    const fn = scroll?.fn;
+
+    if (fn) {
+      return fn(element, _options);
+    } else {
+      return element.scrollIntoView(_options);
     }
   }
 }

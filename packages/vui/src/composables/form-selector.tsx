@@ -77,6 +77,14 @@ export function defineFormSelectorComponent(
         defaultMultiple,
       });
       const control = useControl(props);
+      const classes = computed(() => [
+        'v-form-selector',
+        className,
+        {
+          ...control.classes.value,
+          'v-form-selector--stacked': props.stacked,
+        },
+      ]);
       const vui = useVui();
       const loadingMessageRef = computed<VNodeChild | undefined>(() => {
         const slot = resolveVNodeChildOrSlots(
@@ -94,85 +102,80 @@ export function defineFormSelectorComponent(
         );
         return slot && slot(vui);
       });
-      return {
-        ...selectorControl.expose(),
-        ...control,
-        loadingMessageRef,
-        failedToLoadItemsMessageRef,
-      };
-    },
-    render() {
-      const { selectorControl } = this;
-      return (
-        <VFormControl
-          nodeControl={this.nodeControl}
-          focused={this.nodeControl.focused}
-          hiddenInfo={this.hiddenInfo}
-          class={[
-            'v-form-selector',
-            className,
-            {
-              ...this.classes,
-              'v-form-selector--stacked': this.stacked,
-            },
-          ]}
-          label={this.label}
-          hint={this.hint}
-          hinttip={this.hinttip}
-          requiredChip={this.requiredChip}
-          error={selectorControl.itemsLoadFailed}
-          v-slots={{
-            ...this.$slots,
-            default: () => (
-              <div class="v-form-selector__body">
-                {selectorControl.itemsLoadFailed && (
-                  <div
-                    key="failed"
-                    class="v-form-selector__placeholder v-form-selector__placeholder--error">
-                    {this.failedToLoadItemsMessageRef}
-                  </div>
-                )}
-                {selectorControl.itemsLoading && (
-                  <div key="loading" class="v-form-selector__placeholder">
-                    <VProgressCircular
-                      indeterminate
-                      class="mr-1"
-                      size={CONTROL_LOADING_SPINNER_SIZES[this.size || 'md']}
-                    />
 
-                    {this.loadingMessageRef}
-                  </div>
-                )}
-                {this.propGroups.map((group) => {
-                  const { items } = group;
-                  return (
-                    <>
-                      {items.map((attrs) => {
-                        const selected = selectorControl.isSelected(
-                          attrs.value,
-                        );
-                        return itemRenderer({
-                          selected,
-                          control: selectorControl,
-                          attrs: {
-                            ...attrs,
-                            modelValue: selected,
-                            key: attrs.value,
-                          },
-                          slots: {
-                            default: () => attrs.label(this.selectorControl),
-                          },
-                        });
-                      })}
-                    </>
-                  );
-                })}
-                {this.$slots.default?.()}
+      const defaultSlot = () => {
+        return (
+          <div class="v-form-selector__body">
+            {selectorControl.itemsLoadFailed && (
+              <div
+                key="failed"
+                class="v-form-selector__placeholder v-form-selector__placeholder--error">
+                {failedToLoadItemsMessageRef.value}
               </div>
-            ),
-          }}
-        />
-      );
+            )}
+            {selectorControl.itemsLoading && (
+              <div key="loading" class="v-form-selector__placeholder">
+                <VProgressCircular
+                  indeterminate
+                  class="mr-1"
+                  size={
+                    CONTROL_LOADING_SPINNER_SIZES[control.size.value || 'md']
+                  }
+                />
+
+                {loadingMessageRef.value}
+              </div>
+            )}
+            {selectorControl.propGroups.map((group) => {
+              const { items } = group;
+              return (
+                <>
+                  {items.map((attrs) => {
+                    const selected = selectorControl.isSelected(attrs.value);
+                    return itemRenderer({
+                      selected,
+                      control: selectorControl,
+                      attrs: {
+                        ...attrs,
+                        modelValue: selected,
+                        key: attrs.value,
+                      },
+                      slots: {
+                        default: () => attrs.label(selectorControl),
+                      },
+                    });
+                  })}
+                </>
+              );
+            })}
+            {ctx.slots.default?.()}
+          </div>
+        );
+      };
+
+      ctx.expose({
+        control: selectorControl,
+      });
+
+      return () => {
+        return (
+          <VFormControl
+            nodeControl={selectorControl}
+            focused={selectorControl.focused}
+            hiddenInfo={props.hiddenInfo}
+            class={classes.value}
+            label={props.label}
+            hint={props.hint}
+            hinttip={props.hinttip}
+            requiredChip={props.requiredChip}
+            error={selectorControl.itemsLoadFailed}
+            v-slots={{
+              ...ctx.slots,
+              default: defaultSlot,
+            }}
+          />
+        );
+      };
     },
   });
 }

@@ -129,6 +129,7 @@ export interface FormControlOptions {
 }
 
 export class FormControl {
+  readonly _props: FormControlProps;
   readonly _service: VueFormService;
   protected _ctx: FormControlContext | undefined;
   protected _nodeControl: ComputedRef<FormNodeControl | undefined>;
@@ -251,6 +252,7 @@ export class FormControl {
     ctx: FormControlContext,
     options: FormControlOptions = {},
   ) {
+    this._props = props;
     this._service = useVueForm();
     const { slots } = ctx;
 
@@ -341,10 +343,8 @@ export class FormControl {
     this._untouched = computed(() =>
       getPropOrNodeControlValue('untouched', 'untouched'),
     );
-    this._required = computed(
-      () =>
-        getPropOrNodeControlValue('required', 'isRequired') ||
-        (!!nc.value && nc.value.hasRequired),
+    this._required = computed(() =>
+      getPropOrNodeControlValue('required', 'isRequired'),
     );
     this._invalid = computed(() =>
       getPropOrNodeControlValue('invalid', 'invalid'),
@@ -353,6 +353,7 @@ export class FormControl {
 
     onBeforeUnmount(() => {
       delete this._ctx;
+      delete (this as any)._props;
       delete (this as any)._service;
     });
   }
@@ -424,16 +425,6 @@ export class FormControl {
     return {
       tip: hinttip,
       hint,
-    };
-  }
-
-  expose() {
-    return {
-      labelSlot: this._labelSlot,
-      hintSlot: this._hintSlot,
-      hinttip: this._hinttip,
-      hinttipDelay: this._hinttipDelay,
-      infoAppendsSlot: this._infoAppendsSlot,
     };
   }
 }

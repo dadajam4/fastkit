@@ -33,24 +33,18 @@ export const VOption = defineComponent({
         control.classes.value,
       ];
     });
-    return {
-      ...nodeControl.expose(),
-      classes,
+
+    return () => {
+      return (
+        <label
+          class={classes.value}
+          onClick={nodeControl.handleClickElement}
+          tabindex={nodeControl.tabindex}
+          data-value={nodeControl.propValue}
+          aria-disabled={nodeControl.isDisabled}>
+          <span class="v-option__label">{ctx.slots.default?.()}</span>
+        </label>
+      );
     };
-  },
-  render() {
-    const { selectorItemControl, classes } = this;
-    return (
-      <label
-        class={classes}
-        onClick={selectorItemControl.handleClickElement}
-        tabindex={selectorItemControl.tabindex}
-        data-value={selectorItemControl.propValue}
-        {...({
-          'aria-disabled': selectorItemControl.isDisabled,
-        } as any)}>
-        <span class="v-option__label">{this.$slots.default?.()}</span>
-      </label>
-    );
   },
 });

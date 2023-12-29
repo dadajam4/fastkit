@@ -1,5 +1,15 @@
 # @fastkit/vite-plugin-vui
 
+## 1.1.85
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vui@0.16.81
+  - @fastkit/icon-font-gen@0.13.15
+  - @fastkit/tiny-logger@0.13.7
+  - @fastkit/vite-kit@0.13.15
+
 ## 1.1.84
 
 ### Patch Changes
