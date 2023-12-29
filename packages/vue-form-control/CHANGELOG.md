@@ -1,5 +1,13 @@
 # @fastkit/vue-form-control
 
+## 0.17.1
+
+### Patch Changes
+
+- Changed specification to allow flexible configuration of `required` setting, now accepting not only boolean values but also based on components.
+
+  - `BoundableInputControl` now allows detailed configuration of `required` conditions for start and end values.
+
 ## 0.17.0
 
 ### Minor Changes

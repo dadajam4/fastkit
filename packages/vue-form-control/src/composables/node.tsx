@@ -25,7 +25,8 @@ import {
   VerifiableRule,
   ValidationError,
   validate,
-  required as requiredFactory,
+  required as requiredRule,
+  type Rule,
 } from '@fastkit/rules';
 import {
   FormNodeInjectionKey,
@@ -107,14 +108,19 @@ export interface FormNodeStateExtensions {
 
 export interface FormNodeControlBaseOptions {
   nodeType?: FormNodeType;
+  requiredFactory?: () => Rule<any> | undefined;
   defaultValidateTiming?: ValidateTiming;
   validationValue?: () => any;
   stateExtensions?: FormNodeStateExtensions;
 }
 
-export interface FormNodeControlOptions<T = any, D = T>
-  extends FormNodeControlBaseOptions {
+export interface FormNodeControlOptions<
+  T = any,
+  D = T,
+  Required extends Prop<any> = BooleanConstructor,
+> extends FormNodeControlBaseOptions {
   modelValue?: Prop<T, D>;
+  required?: Required;
 }
 
 export type FormNodeErrorSlots = DefineSlotsType<
@@ -127,10 +133,12 @@ export type FormNodeErrorSlots = DefineSlotsType<
   }
 >;
 
-export function createFormNodeProps<T, D = T>(
-  options: FormNodeControlOptions<T, D> = {},
-) {
-  const { modelValue, defaultValidateTiming } = options;
+export function createFormNodeProps<
+  T,
+  D = T,
+  Required extends Prop<any> = PropType<boolean>,
+>(options: FormNodeControlOptions<T, D, Required> = {}) {
+  const { modelValue, defaultValidateTiming, required = Boolean } = options;
   return {
     ...createPropsOptions({
       /**
@@ -171,7 +179,7 @@ export function createFormNodeProps<T, D = T>(
        */
       spellcheck: Boolean,
       /** required */
-      required: Boolean,
+      required,
       /** clearable */
       clearable: Boolean,
       /**
@@ -284,7 +292,11 @@ export function createFormNodeSettings<T, D = T>(
 
 export type FormNodeContext<T, D = T> = SetupContext<FormNodeEmitOptions<T, D>>;
 
-export class FormNodeControl<T = any, D = T> {
+export class FormNodeControl<
+  T = any,
+  D = T,
+  Required extends Prop<any> = BooleanConstructor,
+> {
   readonly _props: FormNodeProps;
   readonly _service: VueFormService;
   readonly nodeType?: FormNodeType;
@@ -325,6 +337,7 @@ export class FormNodeControl<T = any, D = T> {
   protected _validationValueGetter?: () => any;
   protected _validationSkip = false;
   protected _stateExtensions: FormNodeStateExtensions;
+  protected _requiredFactory: () => Rule<any> | undefined;
 
   /**
    * Form Service
@@ -741,7 +754,7 @@ export class FormNodeControl<T = any, D = T> {
   constructor(
     props: FormNodeProps,
     ctx: FormNodeContext<T, D>,
-    options: FormNodeControlOptions<T, D>,
+    options: FormNodeControlOptions<T, D, Required>,
   ) {
     this._props = props;
     this._service = useVueForm();
@@ -752,6 +765,7 @@ export class FormNodeControl<T = any, D = T> {
     this.__multiple = (props as any).multiple || false;
     this._name = computed(() => props.name);
     this.nodeType = nodeType;
+    this._requiredFactory = options.requiredFactory || (() => requiredRule);
     this._validationValueGetter = options.validationValue;
     this._stateExtensions = stateExtensions || {};
 
@@ -833,7 +847,7 @@ export class FormNodeControl<T = any, D = T> {
     });
 
     this._hasRequired = computed(() => {
-      return this._props.required || !!this.findRule('required');
+      return !!this._props.required || !!this.hasRequiredRule();
     });
 
     this._tabindex = computed(() => {
@@ -970,11 +984,16 @@ export class FormNodeControl<T = any, D = T> {
       delete (this as any)._props;
       delete (this as any)._ctx;
       delete (this as any)._service;
+      delete (this as any)._requiredFactory;
     });
 
     (['focusHandler', 'blurHandler'] as const).forEach((fn) => {
       this[fn] = this[fn].bind(this);
     });
+  }
+
+  protected hasRequiredRule() {
+    return this.findRule('required');
   }
 
   /**
@@ -1150,7 +1169,8 @@ export class FormNodeControl<T = any, D = T> {
     const rules = flattenRecursiveArray(propRules);
 
     if (required) {
-      rules.unshift(requiredFactory);
+      const requiredRule = this._requiredFactory();
+      requiredRule && rules.unshift(requiredRule);
     }
 
     rules.sort((a, b) => {

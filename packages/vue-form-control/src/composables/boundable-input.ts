@@ -16,9 +16,71 @@ import {
   createFormNodeEmits,
   FormNodeControlBaseOptions,
 } from './node';
-import { createRule } from '@fastkit/rules';
+import { createRule, isEmpty } from '@fastkit/rules';
 
 export type BoundableValue = number | string;
+
+/**
+ * Required criteria for Boundable inputs
+ *
+ * - `start` Input of start value is mandatory
+ * - `end` Input of end value is mandatory
+ * - `any` At least one input is required
+ * - `both` Both inputs are mandatory
+ */
+export type BoundableRequiredConstraints = 'start' | 'end' | 'any' | 'both';
+
+/**
+ * Specify of Required criteria for Boundable inputs
+ */
+export type BoundableRequiredConstraintsSpec =
+  | boolean
+  | BoundableRequiredConstraints;
+
+export const boundableRequired = createRule<BoundableRequiredConstraints>({
+  name: 'boundableRequired',
+  validate: (value, type) => {
+    if (value == null) return false;
+    if (Array.isArray(value)) {
+      const [start, end] = value;
+      const startIsEmpty = isEmpty(start);
+      const endIsEmpty = isEmpty(end);
+      if ((type === 'start' || type === 'both') && startIsEmpty) {
+        return false;
+      }
+      if ((type === 'end' || type === 'both') && endIsEmpty) {
+        return false;
+      }
+      if (type === 'any' && (startIsEmpty || endIsEmpty)) {
+        return false;
+      }
+      return true;
+    } else {
+      return !isEmpty(value);
+    }
+  },
+  message: (value, { constraints: type }) => {
+    if (!Array.isArray(value)) {
+      return 'The input is required.';
+    }
+    if (type === 'start') {
+      return 'The input of the start value is required.';
+    }
+    if (type === 'end') {
+      return 'The input of the end value is required.';
+    }
+    if (type === 'any') {
+      return 'Either input is required.';
+    }
+    const [start] = value;
+    if (isEmpty(start)) {
+      return 'The start value is not entered.';
+    } else {
+      return 'The end value is not entered.';
+    }
+  },
+  constraints: 'any',
+});
 
 export const boundableMin = createRule<BoundableValue>({
   name: 'boundableMin',
@@ -75,6 +137,11 @@ export interface BoundableInputControlPropsOptions<
   range?: boolean;
 }
 
+const REQUIRED_PROP_OPTIONS = {
+  type: [Boolean, String] as PropType<boolean | BoundableRequiredConstraints>,
+  default: false,
+} as const;
+
 export function createBoundableInputProps<
   T extends BoundableValue = BoundableValue,
   D extends T | null = null,
@@ -94,7 +161,10 @@ export function createBoundableInputProps<
   } = options;
 
   return {
-    ...createFormNodeProps(options),
+    ...createFormNodeProps({
+      ...options,
+      required: REQUIRED_PROP_OPTIONS,
+    }),
     ...createPropsOptions({
       modelValue: {
         type,
@@ -103,6 +173,14 @@ export function createBoundableInputProps<
         type: PropType<T | D>;
         default: null;
       },
+      /**
+       * Required condition
+       *
+       * @default false
+       *
+       * @see {@link BoundableRequiredConstraints}
+       */
+      required: undefined as unknown as typeof REQUIRED_PROP_OPTIONS,
       startValue: {
         type,
         default: defaultStartValue,
@@ -178,6 +256,7 @@ interface ResolvedProps<
   Max extends T | null = null,
 > {
   readonly modelValue: MV;
+  readonly required: BoundableRequiredConstraintsSpec;
   readonly startValue: SV;
   readonly endValue: EV;
   readonly min: Min;
@@ -195,7 +274,7 @@ export type BoundableInputProps<
   Min extends T | null = null,
   Max extends T | null = null,
 > = ExtractPropTypes<
-  Omit<ReturnType<typeof createFormNodeProps>, 'modelValue'>
+  Omit<ReturnType<typeof createFormNodeProps>, 'modelValue' | 'required'>
 > &
   ResolvedProps<T, MV, SV, EV, Min, Max>;
 
@@ -250,7 +329,7 @@ export class BoundableInputControl<
   EV extends T | null = T | null,
   Min extends T | null = null,
   Max extends T | null = null,
-> extends FormNodeControl<MV, MV> {
+> extends FormNodeControl<MV, MV, typeof REQUIRED_PROP_OPTIONS> {
   readonly _props: BoundableInputProps<T, MV, SV, EV, Min, Max>;
   protected _boundableOptions: BoundableInputControlOptions<
     T,
@@ -338,7 +417,14 @@ export class BoundableInputControl<
     ctx: BoundableInputContext<T, MV, SV, EV>,
     options: BoundableInputControlOptions<T, MV, SV, EV, Min, Max>,
   ) {
-    super(props, ctx, options);
+    super(props, ctx, {
+      ...options,
+      requiredFactory: () => {
+        const { required } = props;
+        if (!required) return undefined;
+        boundableRequired(required === true ? 'any' : required);
+      },
+    });
 
     this._props = props;
     this._boundableOptions = options;
@@ -399,6 +485,10 @@ export class BoundableInputControl<
     );
   }
 
+  protected hasRequiredRule() {
+    return this.findRule(boundableRequired.$name);
+  }
+
   commitSelfValue() {
     super.commitSelfValue();
     this._initialStartValue.value = this.startValue;
@@ -431,6 +521,15 @@ export class BoundableInputControl<
     const { min, max } = this;
     min && rules.push(boundableMin(min));
     max && rules.push(boundableMax(max));
+
+    rules.sort((a, b) => {
+      const { $name: an } = a;
+      const { $name: bn } = b;
+      if (an === boundableRequired.$name) return -1;
+      if (bn === boundableRequired.$name) return 1;
+      return 0;
+    });
+
     return rules;
   }
 }
