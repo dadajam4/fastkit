@@ -14,7 +14,11 @@ import {
   watch,
   onBeforeUnmount,
 } from 'vue';
-import { createStackableDefine, MergeStackBaseSlots } from '../schemes';
+import {
+  createStackableDefine,
+  MergeStackBaseSlots,
+  StackableTabCloseSpec,
+} from '../schemes';
 import {
   DefineStackableSettings,
   setupStackableComponent,
@@ -70,6 +74,10 @@ interface CreateMenuSchemeOptions {
    * @default false
    */
   defaultOverlap?: RawMenuOverlapSettings;
+  /** @default true */
+  defaultCloseOnEsc?: boolean;
+  /** @default true */
+  defaultCloseOnTab?: StackableTabCloseSpec;
 }
 
 type MenuSizeSpec = number | 'fit' | 'free';
@@ -213,12 +221,18 @@ export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
 }
 
 function createMenuScheme(options: CreateMenuSchemeOptions = {}) {
-  const { defaultTransition = DEFAULT_TRANSITION, defaultScrollLock = false } =
-    options;
+  const {
+    defaultTransition = DEFAULT_TRANSITION,
+    defaultScrollLock = false,
+    defaultCloseOnEsc = true,
+    defaultCloseOnTab = true,
+  } = options;
 
   const { props, emits } = createStackableDefine({
     defaultTransition,
     defaultScrollLock,
+    defaultCloseOnEsc,
+    defaultCloseOnTab,
   });
 
   return {

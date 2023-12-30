@@ -27,6 +27,23 @@ type DelayTimerProps = 'openDelay' | 'closeDelay';
  */
 export type StackableCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
+/**
+ * Configuration for closing the stack with the Tab key
+ *
+ * - `always` Always close.
+ * - `not-focused` When the Tab key is pressed and the active element of the document is outside the stack and its activator.
+ */
+export type StackableTabCloseSetting = 'always' | 'not-focused';
+
+/**
+ * Configuration for closing the stack with the Tab key
+ *
+ * If `true` is specified, it is treated as `always`.
+ *
+ * @see {@link StackableTabCloseSetting}
+ */
+export type StackableTabCloseSpec = boolean | StackableTabCloseSetting;
+
 export type VStackNavigationGuard = (
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
@@ -165,6 +182,12 @@ export interface VStackControl {
   readonly focusRestorable: boolean;
   /** Close when the ESC key is pressed */
   readonly closeOnEsc: boolean;
+  /**
+   * Close when the ESC key is pressed
+   *
+   * @see {@link StackableTabCloseSetting}
+   */
+  readonly closeOnTab: false | StackableTabCloseSetting;
   /** Close on navigation occurrence */
   readonly closeOnNavigation: boolean;
   /** Close when clicking outside the stack area */
@@ -307,6 +330,27 @@ export interface VStackControl {
    * @param filter - Exclude filter for specific stacks
    */
   isFront(filter?: (control: VStackControl) => boolean): boolean;
+
+  /**
+   * If the specified element is a comprehensive descendant of this stack or is the same, it returns the included element.
+   *
+   * @param other - The element to be checked.
+   * @param includingActivator - Check if it might be included in the activator element.
+   */
+  getContainsOrSameElement(
+    other: Node | Event | EventTarget | null | undefined,
+    includingActivator?: boolean,
+  ): HTMLElement | undefined;
+  /**
+   * If the specified element is a comprehensive descendant of this stack or is the same, it returns `true`.
+   *
+   * @param other - The element to be checked.
+   * @param includingActivator - Check if it might be included in the activator element.
+   */
+  containsOrSameElement(
+    other: Node | Event | EventTarget | null | undefined,
+    includingActivator?: boolean,
+  ): boolean;
   /** Execute guard effect */
   guardEffect(): void;
 }
@@ -434,6 +478,10 @@ export interface CreateStackablePropsOptions {
   defaultCloseOnOutsideClick?: boolean;
   /** @default true */
   defaultCloseOnNavigation?: boolean;
+  /** @default true */
+  defaultCloseOnEsc?: boolean;
+  /** @default false */
+  defaultCloseOnTab?: StackableTabCloseSpec;
   /** @default 0 */
   defaultTimeout?: number;
 }
@@ -470,6 +518,8 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
     defaultBackdrop = false,
     defaultCloseOnOutsideClick = true,
     defaultCloseOnNavigation = true,
+    defaultCloseOnEsc = true,
+    defaultCloseOnTab = false,
     defaultTimeout = 0,
   } = opts;
 
@@ -573,7 +623,16 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
      */
     closeOnEsc: {
       type: Boolean,
-      default: true,
+      default: defaultCloseOnEsc,
+    },
+    /**
+     * Close when the ESC key is pressed
+     *
+     * @see {@link StackableTabCloseSpec}
+     */
+    closeOnTab: {
+      type: [Boolean, String] as PropType<StackableTabCloseSpec>,
+      default: defaultCloseOnTab,
     },
     /**
      * Close stack when navigation occurs

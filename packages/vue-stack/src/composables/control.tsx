@@ -32,6 +32,7 @@ import {
   VStackActivatorAttributes,
   VStackNavigationGuard,
   VStackActivatorQuery,
+  StackableTabCloseSetting,
 } from '../schemes';
 import { useVueStack } from './service';
 import { useTeleport } from './teleport';
@@ -179,6 +180,10 @@ export function useStackControl(
   const transitioning = computed(() => state.showing || state.closing);
   const persistent = computed(() => props.persistent);
   const closeOnEsc = computed(() => props.closeOnEsc);
+  const closeOnTab = computed<StackableTabCloseSetting | false>(() => {
+    const { closeOnTab } = props;
+    return closeOnTab === true ? 'always' : closeOnTab;
+  });
   const closeOnNavigation = computed(() => props.closeOnNavigation);
   const closeOnOutsideClick = computed(() => props.closeOnOutsideClick);
   const alwaysRender = computed(() => props.alwaysRender);
@@ -248,17 +253,38 @@ export function useStackControl(
   });
 
   const keyboard = useKeyboard(
-    {
-      key: 'Escape',
-      handler: (_ev) => {
-        if (!closeOnEsc.value || !control.isFront()) return;
-        if (persistent.value) {
-          control.guardEffect();
-          return;
-        }
-        control.cancel(false);
+    [
+      {
+        key: 'Escape',
+        handler: (_ev) => {
+          if (!closeOnEsc.value || !control.isFront()) return;
+          if (persistent.value) {
+            control.guardEffect();
+            return;
+          }
+          control.cancel(false);
+        },
       },
-    },
+      {
+        key: 'Tab',
+        handler: (_ev) => {
+          const setting = closeOnTab.value;
+          if (!setting || !control.isFront()) return;
+          if (persistent.value) {
+            control.guardEffect();
+            return;
+          }
+          if (setting === 'always') {
+            control.cancel(false);
+          }
+
+          // @NOTE May need to be delayed.
+          if (!containsOrSameElement(document.activeElement)) {
+            control.cancel(false);
+          }
+        },
+      },
+    ],
     { autorun: true },
   );
 
@@ -571,6 +597,31 @@ export function useStackControl(
     },
   };
 
+  const getContainsOrSameElement: VStackControl['getContainsOrSameElement'] = (
+    other,
+    includingActivator,
+  ) => {
+    if (other instanceof Event) {
+      other = other.target;
+    }
+    if (!other || !(other instanceof Node)) return;
+    const content = contentRef.value;
+    if (!content) return;
+    if (content && (content === other || content.contains(other)))
+      return content;
+    if (!includingActivator) return;
+    const activator = activatorEl.value;
+    if (activator && (activator === other || activator.contains(other)))
+      return activator;
+  };
+
+  const containsOrSameElement: VStackControl['containsOrSameElement'] = (
+    other,
+    includingActivator,
+  ) => {
+    return !!getContainsOrSameElement(other, includingActivator);
+  };
+
   const control: VStackControl = {
     __isStackControl: true,
     _: privateApi,
@@ -588,6 +639,9 @@ export function useStackControl(
     },
     get closeOnEsc() {
       return closeOnEsc.value;
+    },
+    get closeOnTab() {
+      return closeOnTab.value;
     },
     get closeOnNavigation() {
       return closeOnNavigation.value;
@@ -718,6 +772,8 @@ export function useStackControl(
         );
       });
     },
+    getContainsOrSameElement,
+    containsOrSameElement,
     render(fn, opts = {}) {
       const { booted, needRender } = state;
       const { default: defaultSlot, activator: activatorSlot } =

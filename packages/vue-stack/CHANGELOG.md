@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.37
+
+### Patch Changes
+
+- Added an option for automatically closing the stack with the Tab key.
+
 ## 0.15.36
 
 ### Patch Changes
