@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.17.2
+
+### Patch Changes
+
+- Fixed the issue of `required` rule initialization not occurring correctly in `BoundableInputControl`.
+
 ## 0.17.1
 
 ### Patch Changes

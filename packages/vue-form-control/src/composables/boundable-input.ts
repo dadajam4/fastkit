@@ -51,7 +51,7 @@ export const boundableRequired = createRule<BoundableRequiredConstraints>({
       if ((type === 'end' || type === 'both') && endIsEmpty) {
         return false;
       }
-      if (type === 'any' && (startIsEmpty || endIsEmpty)) {
+      if (type === 'any' && startIsEmpty && endIsEmpty) {
         return false;
       }
       return true;
@@ -173,14 +173,16 @@ export function createBoundableInputProps<
         type: PropType<T | D>;
         default: null;
       },
-      /**
-       * Required condition
-       *
-       * @default false
-       *
-       * @see {@link BoundableRequiredConstraints}
-       */
-      required: undefined as unknown as typeof REQUIRED_PROP_OPTIONS,
+      ...(undefined as unknown as {
+        /**
+         * Required condition
+         *
+         * @default false
+         *
+         * @see {@link BoundableRequiredConstraints}
+         */
+        required: typeof REQUIRED_PROP_OPTIONS;
+      }),
       startValue: {
         type,
         default: defaultStartValue,
@@ -421,8 +423,9 @@ export class BoundableInputControl<
       ...options,
       requiredFactory: () => {
         const { required } = props;
-        if (!required) return undefined;
-        boundableRequired(required === true ? 'any' : required);
+        return required
+          ? boundableRequired(required === true ? 'any' : required)
+          : undefined;
       },
     });
 
