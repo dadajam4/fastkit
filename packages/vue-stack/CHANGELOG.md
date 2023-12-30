@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.38
+
+### Patch Changes
+
+- Fixed an issue in the Tab key-based closing process where the `not-focused` evaluation was not functioning correctly.
+
 ## 0.15.37
 
 ### Patch Changes

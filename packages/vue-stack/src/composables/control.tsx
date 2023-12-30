@@ -257,7 +257,8 @@ export function useStackControl(
       {
         key: 'Escape',
         handler: (_ev) => {
-          if (!closeOnEsc.value || !control.isFront()) return;
+          if (!state.isActive || !closeOnEsc.value || !control.isFront())
+            return;
           if (persistent.value) {
             control.guardEffect();
             return;
@@ -269,7 +270,7 @@ export function useStackControl(
         key: 'Tab',
         handler: (_ev) => {
           const setting = closeOnTab.value;
-          if (!setting || !control.isFront()) return;
+          if (!state.isActive || !setting || !control.isFront()) return;
           if (persistent.value) {
             control.guardEffect();
             return;
@@ -278,10 +279,12 @@ export function useStackControl(
             control.cancel(false);
           }
 
-          // @NOTE May need to be delayed.
-          if (!containsOrSameElement(document.activeElement)) {
-            control.cancel(false);
-          }
+          // @NOTE Not sure if this delay duration is sufficient.
+          setTimeout(() => {
+            if (!containsOrSameElement(document.activeElement, true)) {
+              control.cancel(false);
+            }
+          });
         },
       },
     ],

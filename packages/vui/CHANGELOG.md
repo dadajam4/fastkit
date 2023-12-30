@@ -1,5 +1,12 @@
 # @fastkit/vui
 
+## 0.18.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-stack@0.15.38
+
 ## 0.18.1
 
 ### Patch Changes
