@@ -14,7 +14,7 @@ const minValue = notLessThan.fork({ name: 'min' });
 const maxValue = notGreaterThan.fork({ name: 'max' });
 const stepValue = multipleOf.fork({ name: 'step' });
 
-export function createNumberInputProps() {
+export function createNumberInputNodeProps() {
   return {
     ...createFormNodeProps({
       modelValue: Number,
@@ -35,33 +35,34 @@ export function createNumberInputProps() {
     }),
   };
 }
-export type NumberInputProps = ExtractPropTypes<
-  ReturnType<typeof createNumberInputProps>
+export type NumberInputNodeProps = ExtractPropTypes<
+  ReturnType<typeof createNumberInputNodeProps>
 >;
 
-export function createNumberInputEmits() {
+export function createNumberInputNodeEmits() {
   return {
     ...createFormNodeEmits({ modelValue: Number }),
   };
 }
 
-export function createNumberInputSettings() {
-  const props = createNumberInputProps();
-  const emits = createNumberInputEmits();
+export function createNumberInputNodeSettings() {
+  const props = createNumberInputNodeProps();
+  const emits = createNumberInputNodeEmits();
   return { props, emits };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface NumberInputEmitOptions
-  extends ReturnType<typeof createNumberInputEmits> {}
+export interface NumberInputNodeEmitOptions
+  extends ReturnType<typeof createNumberInputNodeEmits> {}
 
-export type NumberInputContext = SetupContext<NumberInputEmitOptions>;
+export type NumberInputNodeContext = SetupContext<NumberInputNodeEmitOptions>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface NumberInputControlOptions extends FormNodeControlBaseOptions {}
+export interface NumberInputNodeControlOptions
+  extends FormNodeControlBaseOptions {}
 
-export class NumberInputControl extends FormNodeControl<number, undefined> {
-  readonly _props: NumberInputProps;
+export class NumberInputNodeControl extends FormNodeControl<number, undefined> {
+  readonly _props: NumberInputNodeProps;
   protected _min: ComputedRef<number | undefined>;
   protected _max: ComputedRef<number | undefined>;
   protected _step: ComputedRef<number>;
@@ -83,9 +84,9 @@ export class NumberInputControl extends FormNodeControl<number, undefined> {
   }
 
   constructor(
-    props: NumberInputProps,
-    ctx: NumberInputContext,
-    options: NumberInputControlOptions = {},
+    props: NumberInputNodeProps,
+    ctx: NumberInputNodeContext,
+    options: NumberInputNodeControlOptions = {},
   ) {
     super(props, ctx as unknown as FormNodeContext<number, undefined>, {
       ...options,
@@ -124,11 +125,11 @@ export class NumberInputControl extends FormNodeControl<number, undefined> {
   }
 }
 
-export function useNumberInputControl(
-  props: NumberInputProps,
-  ctx: NumberInputContext,
-  options?: NumberInputControlOptions,
+export function useNumberInputNodeControl(
+  props: NumberInputNodeProps,
+  ctx: NumberInputNodeContext,
+  options?: NumberInputNodeControlOptions,
 ) {
-  const control = new NumberInputControl(props, ctx, options);
+  const control = new NumberInputNodeControl(props, ctx, options);
   return control;
 }

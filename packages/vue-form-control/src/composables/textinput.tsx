@@ -39,7 +39,7 @@ const IMASK_PIPE_TYPE_MAP: Record<TextInputMaskModel, IMaskPipeType> = {
   unmasked: 'unmaskedValue',
 };
 
-export function createTextInputProps() {
+export function createTextInputNodeProps() {
   return {
     ...createTextableProps(),
     ...createMaskControlProps(),
@@ -72,11 +72,11 @@ export function createTextInputProps() {
   };
 }
 
-export type TextInputProps = ExtractPropTypes<
-  ReturnType<typeof createTextInputProps>
+export type TextInputNodeProps = ExtractPropTypes<
+  ReturnType<typeof createTextInputNodeProps>
 >;
 
-export function createTextInputEmits() {
+export function createTextInputNodeEmits() {
   return {
     ...createTextableEmits(),
     /**
@@ -116,25 +116,25 @@ export function createTextInputEmits() {
   };
 }
 
-export type TextInputEmits = ReturnType<typeof createTextInputEmits>;
+export type TextInputNodeEmits = ReturnType<typeof createTextInputNodeEmits>;
 
-export function createTextInputSettings() {
-  const props = createTextInputProps();
-  const emits = createTextInputEmits();
+export function createTextInputNodeSettings() {
+  const props = createTextInputNodeProps();
+  const emits = createTextInputNodeEmits();
   return { props, emits };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TextInputEmitOptions
-  extends ReturnType<typeof createTextInputEmits> {}
+export interface TextInputNodeEmitOptions
+  extends ReturnType<typeof createTextInputNodeEmits> {}
 
-export type TextInputContext = SetupContext<TextInputEmitOptions>;
+export type TextInputNodeContext = SetupContext<TextInputNodeEmitOptions>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TextInputControlOptions extends TextableControlOptions {}
+export interface TextInputNodeControlOptions extends TextableControlOptions {}
 
-export class TextInputControl extends TextableControl {
-  readonly _props: TextInputProps;
+export class TextInputNodeControl extends TextableControl {
+  readonly _props: TextInputNodeProps;
   protected _type: ComputedRef<TextInputType>;
   protected _inputmode: ComputedRef<TextInputMode | undefined>;
   protected _inputElement = ref<HTMLInputElement | null>(null);
@@ -173,9 +173,9 @@ export class TextInputControl extends TextableControl {
   }
 
   constructor(
-    props: TextInputProps,
-    ctx: TextInputContext,
-    options: TextInputControlOptions = {},
+    props: TextInputNodeProps,
+    ctx: TextInputNodeContext,
+    options: TextInputNodeControlOptions = {},
   ) {
     super(props, ctx as unknown as TextableContext, {
       ...options,
@@ -326,11 +326,11 @@ export class TextInputControl extends TextableControl {
   }
 }
 
-export function useTextInputControl(
-  props: TextInputProps,
-  ctx: TextInputContext,
-  options?: TextInputControlOptions,
+export function useTextInputNodeControl(
+  props: TextInputNodeProps,
+  ctx: TextInputNodeContext,
+  options?: TextInputNodeControlOptions,
 ) {
-  const control = new TextInputControl(props, ctx, options);
+  const control = new TextInputNodeControl(props, ctx, options);
   return control;
 }

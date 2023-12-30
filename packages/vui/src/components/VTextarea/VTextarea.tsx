@@ -1,8 +1,8 @@
 import './VTextarea.scss';
 import { defineComponent } from 'vue';
 import {
-  createTextareaSettings,
-  useTextareaControl,
+  createTextareaNodeSettings,
+  useTextareaNodeControl,
   createFormControlProps,
   FormControlSlots,
 } from '@fastkit/vue-form-control';
@@ -22,7 +22,7 @@ import {
 import { VTextCounter } from '../VTextCounter';
 import { VUI_TEXTAREA_SYMBOL, useVui } from '../../injections';
 
-const { props, emits } = createTextareaSettings();
+const { props, emits } = createTextareaNodeSettings();
 
 const slots = defineSlots<FormControlSlots & InputBoxSlots>();
 
@@ -39,7 +39,7 @@ export const VTextarea = defineComponent({
   emits,
   setup(props, ctx) {
     const vui = useVui();
-    const inputControl = useTextareaControl(props, ctx, {
+    const inputControl = useTextareaNodeControl(props, ctx, {
       nodeType: VUI_TEXTAREA_SYMBOL,
       defaultRows: vui.textareaRows,
     });

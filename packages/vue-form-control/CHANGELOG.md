@@ -1,5 +1,43 @@
 # @fastkit/vue-form-control
 
+## 0.18.0
+
+### Minor Changes
+
+- Added `Node` representation to types prone to collisions in the application, introducing breaking changes in this release.
+
+  - DateInputControlPropsOptions → DateInputNodeControlPropsOptions
+  - createDateInputProps → createDateInputNodeProps
+  - createDateInputEmits → createDateInputNodeEmits
+  - createDateInputSettings → createDateInputNodeSettings
+  - DateInputControlOptions → DateInputNodeControlOptions
+  - DateInputProps → DateInputNodeProps
+  - DateInputContext → DateInputNodeControl
+  - useDateInputControl → useDateInputNodeControl
+  - createNumberInputProps → createNumberInputNodeProps
+  - NumberInputProps → NumberInputNodeProps
+  - createNumberInputEmits → createNumberInputNodeEmits
+  - createNumberInputSettings → createNumberInputNodeSettings
+  - createTextareaProps → createTextareaNodeProps
+  - TextareaProps → TextareaNodeProps
+  - createTextareaEmits → createTextareaNodeEmits
+  - createTextareaSettings → createTextareaNodeSettings
+  - TextareaEmitOptions → TextareaNodeEmitOptions
+  - TextareaContext → TextareaNodeContext
+  - TextareaControlOptions → TextareaNodeControlOptions
+  - TextareaControl → TextareaNodeControl
+  - useTextareaControl → useTextareaNodeControl
+  - createTextInputProps → createTextInputNodeProps
+  - TextInputProps → TextInputNodeProps
+  - createTextInputEmits → createTextInputNodeEmits
+  - TextInputEmits → TextInputNodeEmits
+  - createTextInputSettings → createTextInputNodeSettings
+  - TextInputEmitOptions → TextInputNodeEmitOptions
+  - TextInputContext → TextInputNodeContext
+  - TextInputControlOptions → TextInputNodeControlOptions
+  - TextInputControl → TextInputNodeControl
+  - useTextInputControl → useTextInputNodeControl
+
 ## 0.17.4
 
 ### Patch Changes

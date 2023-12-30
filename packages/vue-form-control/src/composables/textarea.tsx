@@ -40,7 +40,9 @@ function resolveRawTextareaAutosizeSettings(
   return typeof raw === 'boolean' ? {} : raw;
 }
 
-export function createTextareaProps(options: TextareaControlOptions = {}) {
+export function createTextareaNodeProps(
+  options: TextareaNodeControlOptions = {},
+) {
   return {
     ...createTextableProps(),
     ...createMaskControlProps(),
@@ -56,35 +58,37 @@ export function createTextareaProps(options: TextareaControlOptions = {}) {
   };
 }
 
-export type TextareaProps = ExtractPropTypes<
-  ReturnType<typeof createTextareaProps>
+export type TextareaNodeProps = ExtractPropTypes<
+  ReturnType<typeof createTextareaNodeProps>
 >;
 
-export function createTextareaEmits() {
+export function createTextareaNodeEmits() {
   return {
     ...createTextableEmits(),
   };
 }
 
-export function createTextareaSettings(options?: TextareaControlOptions) {
-  const props = createTextareaProps(options);
-  const emits = createTextareaEmits();
+export function createTextareaNodeSettings(
+  options?: TextareaNodeControlOptions,
+) {
+  const props = createTextareaNodeProps(options);
+  const emits = createTextareaNodeEmits();
   return { props, emits };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TextareaEmitOptions
-  extends ReturnType<typeof createTextareaEmits> {}
+export interface TextareaNodeEmitOptions
+  extends ReturnType<typeof createTextareaNodeEmits> {}
 
-export type TextareaContext = SetupContext<TextareaEmitOptions>;
+export type TextareaNodeContext = SetupContext<TextareaNodeEmitOptions>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TextareaControlOptions extends TextableControlOptions {
+export interface TextareaNodeControlOptions extends TextableControlOptions {
   defaultRows?: number;
 }
 
-export class TextareaControl extends TextableControl {
-  readonly _props: TextareaProps;
+export class TextareaNodeControl extends TextableControl {
+  readonly _props: TextareaNodeProps;
   protected _inputElement = ref<
     HTMLTextAreaElement | VTextareaAutosizeRef | null
   >(null);
@@ -104,9 +108,9 @@ export class TextareaControl extends TextableControl {
   }
 
   constructor(
-    props: TextareaProps,
-    ctx: TextareaContext,
-    options: TextareaControlOptions = {},
+    props: TextareaNodeProps,
+    ctx: TextareaNodeContext,
+    options: TextareaNodeControlOptions = {},
   ) {
     super(props, ctx as unknown as TextableContext, {
       ...options,
@@ -182,11 +186,11 @@ export class TextareaControl extends TextableControl {
   }
 }
 
-export function useTextareaControl(
-  props: TextareaProps,
-  ctx: TextareaContext,
-  options?: TextareaControlOptions,
+export function useTextareaNodeControl(
+  props: TextareaNodeProps,
+  ctx: TextareaNodeContext,
+  options?: TextareaNodeControlOptions,
 ) {
-  const control = new TextareaControl(props, ctx, options);
+  const control = new TextareaNodeControl(props, ctx, options);
   return control;
 }

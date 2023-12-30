@@ -28,6 +28,12 @@ export interface FormActionContext {
 
 export type FormActionHandler = (ctx: FormActionContext) => any;
 
+/**
+ * @deprecated
+ * This type has been changed to {@link FormActionHandler}. It will be deprecated in future releases.
+ */
+export type FormFunctionableAction = FormActionHandler;
+
 export type FormAction = string | FormActionHandler;
 
 export interface FormInvalidSubmissionAcceptorContext {
@@ -51,9 +57,7 @@ export type FormAcceptInvalidSubmissionSpec =
   | boolean
   | FormInvalidSubmissionAcceptor;
 
-export interface FormOptions extends FormGroupOptions {
-  // onAutoValidateError?: VueFormHook;
-}
+export interface FormOptions extends FormGroupOptions {}
 
 export function createFormProps(options: FormOptions = {}) {
   return {

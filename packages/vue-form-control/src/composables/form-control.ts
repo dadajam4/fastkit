@@ -121,9 +121,6 @@ export function createFormControlSettings() {
 
 export type FormControlContext = SetupContext<FormControlEmitOptions>;
 
-// FormNodeError
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormControlOptions {
   hinttipPrepend?: () => VNodeChild;
 }

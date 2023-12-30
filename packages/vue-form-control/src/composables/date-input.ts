@@ -18,7 +18,7 @@ const DEFAULT_FORMAT: Intl.DateTimeFormatOptions = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface DateInputControlPropsOptions<
+export interface DateInputNodeControlPropsOptions<
   D extends DateInputValue | null = null,
   DS extends DateInputValue | null = null,
   DE extends DateInputValue | null = null,
@@ -37,13 +37,13 @@ export type DateInputFormat =
 
 type FormatLocales = string | string[];
 
-export function createDateInputProps<
+export function createDateInputNodeProps<
   D extends DateInputValue | null = null,
   DS extends DateInputValue | null = null,
   DE extends DateInputValue | null = null,
   Min extends DateInputValue | null = null,
   Max extends DateInputValue | null = null,
->(options: DateInputControlPropsOptions<D, DS, DE, Min, Max> = {}) {
+>(options: DateInputNodeControlPropsOptions<D, DS, DE, Min, Max> = {}) {
   const { omitEndYearFormat = true } = options;
   return {
     ...createBoundableInputProps({ type: String, ...options }),
@@ -67,33 +67,33 @@ export function createDateInputProps<
   };
 }
 
-export function createDateInputEmits<
+export function createDateInputNodeEmits<
   D extends DateInputValue | null = null,
   DS extends DateInputValue | null = null,
   DE extends DateInputValue | null = null,
   Min extends DateInputValue | null = null,
   Max extends DateInputValue | null = null,
->(options?: DateInputControlPropsOptions<D, DS, DE, Min, Max>) {
+>(options?: DateInputNodeControlPropsOptions<D, DS, DE, Min, Max>) {
   return createBoundableInputEmits({
     type: String,
     ...options,
   });
 }
 
-export function createDateInputSettings<
+export function createDateInputNodeSettings<
   D extends DateInputValue | null = null,
   DS extends DateInputValue | null = null,
   DE extends DateInputValue | null = null,
   Min extends DateInputValue | null = null,
   Max extends DateInputValue | null = null,
->(options: DateInputControlPropsOptions<D, DS, DE, Min, Max>) {
-  const props = createDateInputProps(options);
-  const emits = createDateInputEmits(options);
+>(options: DateInputNodeControlPropsOptions<D, DS, DE, Min, Max>) {
+  const props = createDateInputNodeProps(options);
+  const emits = createDateInputNodeEmits(options);
   return { props, emits };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface DateInputControlOptions<
+export interface DateInputNodeControlOptions<
   MV extends DateInputValue | null = DateInputValue | null,
   SV extends DateInputValue | null = DateInputValue | null,
   EV extends DateInputValue | null = DateInputValue | null,
@@ -112,7 +112,7 @@ export interface DateInputControlOptions<
   formatLocales?: FormatLocales | (() => FormatLocales);
 }
 
-export type DateInputProps<
+export type DateInputNodeProps<
   MV extends DateInputValue | null = DateInputValue | null,
   SV extends DateInputValue | null = DateInputValue | null,
   EV extends DateInputValue | null = DateInputValue | null,
@@ -124,20 +124,20 @@ export type DateInputProps<
   readonly formatLocales?: FormatLocales | (() => FormatLocales);
 };
 
-export type DateInputContext<
+export type DateInputNodeContext<
   MV extends DateInputValue | null = DateInputValue | null,
   SV extends DateInputValue | null = DateInputValue | null,
   EV extends DateInputValue | null = DateInputValue | null,
 > = BoundableInputContext<DateInputValue, MV, SV, EV>;
 
-export class DateInputControl<
+export class DateInputNodeControl<
   MV extends DateInputValue | null = DateInputValue | null,
   SV extends DateInputValue | null = DateInputValue | null,
   EV extends DateInputValue | null = DateInputValue | null,
   Min extends DateInputValue | null = null,
   Max extends DateInputValue | null = null,
 > extends BoundableInputControl<DateInputValue, MV, SV, EV, Min, Max> {
-  readonly _props: DateInputProps<MV, SV, EV, Min, Max>;
+  readonly _props: DateInputNodeProps<MV, SV, EV, Min, Max>;
   protected _formatLocales: ComputedRef<string | string[] | undefined>;
   protected _formatOptions: ComputedRef<Intl.DateTimeFormatOptions>;
   protected _omitYearFormatOptions: ComputedRef<Intl.DateTimeFormatOptions>;
@@ -189,9 +189,9 @@ export class DateInputControl<
   }
 
   constructor(
-    props: DateInputProps<MV, SV, EV, Min, Max>,
-    ctx: DateInputContext<MV, SV, EV>,
-    options: DateInputControlOptions<MV, SV, EV, Min, Max>,
+    props: DateInputNodeProps<MV, SV, EV, Min, Max>,
+    ctx: DateInputNodeContext<MV, SV, EV>,
+    options: DateInputNodeControlOptions<MV, SV, EV, Min, Max>,
   ) {
     super(props, ctx, options);
 
@@ -271,18 +271,18 @@ export class DateInputControl<
   }
 }
 
-export function useDateInputControl<
+export function useDateInputNodeControl<
   MV extends DateInputValue | null = DateInputValue | null,
   SV extends DateInputValue | null = DateInputValue | null,
   EV extends DateInputValue | null = DateInputValue | null,
   Min extends DateInputValue | null = null,
   Max extends DateInputValue | null = null,
 >(
-  props: DateInputProps<MV, SV, EV, Min, Max>,
-  ctx: DateInputContext<MV, SV, EV>,
-  options: DateInputControlOptions<MV, SV, EV, Min, Max>,
+  props: DateInputNodeProps<MV, SV, EV, Min, Max>,
+  ctx: DateInputNodeContext<MV, SV, EV>,
+  options: DateInputNodeControlOptions<MV, SV, EV, Min, Max>,
 ) {
-  const control = new DateInputControl<MV, SV, EV, Min, Max>(
+  const control = new DateInputNodeControl<MV, SV, EV, Min, Max>(
     props,
     ctx,
     options,
