@@ -76,6 +76,8 @@ export type ValidationResult = ValidationError[] | null;
 
 type ValidateResolver = (result: ValidationResult) => void;
 
+const HAS_REQUIRED_RULE_RE = /(^|:)required($|:)/;
+
 function cheepDeepEqual(a: any, b: any) {
   return toCompareValue(a) === toCompareValue(b);
 }
@@ -993,7 +995,7 @@ export class FormNodeControl<
   }
 
   protected hasRequiredRule() {
-    return this.findRule('required');
+    return this.findRule(HAS_REQUIRED_RULE_RE);
   }
 
   /**
@@ -1208,8 +1210,13 @@ export class FormNodeControl<
     return value;
   }
 
-  findRule(ruleName: string) {
-    return this.rules.find((r) => r.$name === ruleName);
+  findRule(ruleName: string | RegExp) {
+    return this.rules.find((r) => {
+      const { $name } = r;
+      return typeof ruleName === 'string'
+        ? ruleName === $name
+        : ruleName.test($name);
+    });
   }
 
   /**

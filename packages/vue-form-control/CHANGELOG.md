@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.17.3
+
+### Patch Changes
+
+- When checking for the presence of a required condition in a form node, it previously checked rules with the name `required`. Now, it searches for both `required:*` and `*:required`, making it easier to create custom rules in applications, such as rules resembling required conditions.
+
 ## 0.17.2
 
 ### Patch Changes

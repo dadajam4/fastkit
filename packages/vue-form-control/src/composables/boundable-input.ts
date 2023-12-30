@@ -38,7 +38,7 @@ export type BoundableRequiredConstraintsSpec =
   | BoundableRequiredConstraints;
 
 export const boundableRequired = createRule<BoundableRequiredConstraints>({
-  name: 'boundableRequired',
+  name: 'boundable:required',
   validate: (value, type) => {
     if (value == null) return false;
     if (Array.isArray(value)) {
@@ -486,10 +486,6 @@ export class BoundableInputControl<
         this._max.value = max;
       },
     );
-  }
-
-  protected hasRequiredRule() {
-    return this.findRule(boundableRequired.$name);
   }
 
   commitSelfValue() {
