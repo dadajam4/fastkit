@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.17.4
+
+### Patch Changes
+
+- Updated rendering of error messages in form groups and form nodes that inherit from them. Now, prioritizes applying its own slot to render messages for descendant nodes.
+
 ## 0.17.3
 
 ### Patch Changes

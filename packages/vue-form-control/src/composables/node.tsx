@@ -125,15 +125,15 @@ export interface FormNodeControlOptions<
   required?: Required;
 }
 
-export type FormNodeErrorSlots = DefineSlotsType<
-  {
-    /** Error message */
-    error?: (error: FormNodeError) => any;
-  } & {
-    /** Error messages per validation rule */
-    [K in `error:${string}`]: (error: FormNodeError) => any;
-  }
->;
+export type FormNodeErrorSlotsSource = {
+  /** Error message */
+  error?: (error: FormNodeError) => any;
+} & {
+  /** Error messages per validation rule */
+  [K in `error:${string}`]: (error: FormNodeError) => any;
+};
+
+export type FormNodeErrorSlots = DefineSlotsType<FormNodeErrorSlotsSource>;
 
 export function createFormNodeProps<
   T,
@@ -1060,29 +1060,39 @@ export class FormNodeControl<
    */
   renderErrorSource(
     errorSource: string | FormNodeError,
+    slotsOverrides?: FormNodeErrorSlotsSource,
   ): VNodeArrayChildren | undefined {
     const { slots } = this._getContextOrDie();
     const error =
       typeof errorSource === 'string'
         ? toFormNodeError(errorSource)
         : errorSource;
-    const slot = slots[`error:${error.name}`] || slots.error;
-    if (!slot) {
-      return cleanupEmptyVNodeChild(
-        this.service.resolveErrorMessage(error, this) || error.message,
-      );
+    if (slotsOverrides) {
+      const slot =
+        slotsOverrides[`error:${error.name}`] || slotsOverrides.error;
+      const message = cleanupEmptyVNodeChild(slot?.(error));
+      if (message) return message;
     }
-    return cleanupEmptyVNodeChild(slot(error));
+    const slot = slots[`error:${error.name}`] || slots.error;
+    if (slot) {
+      const message = cleanupEmptyVNodeChild(slot?.(error));
+      if (message) return message;
+    }
+    return cleanupEmptyVNodeChild(
+      this.service.resolveErrorMessage(error, this) || error.message,
+    );
   }
 
   /** @internal */
-  _renderFirstError(): VNodeArrayChildren | undefined {
+  _renderFirstError(
+    slotsOverrides?: FormNodeErrorSlotsSource,
+  ): VNodeArrayChildren | undefined {
     if (!this.canOperation) {
       return;
     }
     const { firstError } = this;
     if (!firstError) return;
-    return this.renderErrorSource(firstError);
+    return this.renderErrorSource(firstError, slotsOverrides);
   }
 
   /**
@@ -1095,22 +1105,26 @@ export class FormNodeControl<
    * @see {@link FormNodeControl.canOperation canOperation}
    * @see {@link FormNodeControl.showOwnErrors showOwnErrors}
    */
-  renderFirstError(): VNodeArrayChildren | undefined {
+  renderFirstError(
+    slotsOverrides?: FormNodeErrorSlotsSource,
+  ): VNodeArrayChildren | undefined {
     if (this.showOwnErrors) {
-      return this._renderFirstError();
+      return this._renderFirstError(slotsOverrides);
     }
   }
 
   /**
    * @internal
    */
-  _renderAllErrors(): VNodeArrayChildren[] {
+  _renderAllErrors(
+    slotsOverrides?: FormNodeErrorSlotsSource,
+  ): VNodeArrayChildren[] {
     if (!this.canOperation) {
       return [];
     }
     const results: VNodeArrayChildren[] = [];
     this.errors.map((error) => {
-      const result = this.renderErrorSource(error);
+      const result = this.renderErrorSource(error, slotsOverrides);
       result && results.push(result);
     });
     return results;
@@ -1126,8 +1140,10 @@ export class FormNodeControl<
    * @see {@link FormNodeControl.canOperation canOperation}
    * @see {@link FormNodeControl.showOwnErrors showOwnErrors}
    */
-  renderAllErrors(): VNodeArrayChildren[] {
-    return this.showOwnErrors ? this._renderAllErrors() : [];
+  renderAllErrors(
+    slotsOverrides?: FormNodeErrorSlotsSource,
+  ): VNodeArrayChildren[] {
+    return this.showOwnErrors ? this._renderAllErrors(slotsOverrides) : [];
   }
 
   protected _finalize(): Promise<void> {

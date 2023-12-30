@@ -155,7 +155,7 @@ export class FormGroupControl extends FormNodeControl {
     for (const getNode of this._allInvalidNodes.value) {
       const node = getNode();
       if (node.showOwnErrors) continue;
-      const nodeError = node._renderFirstError();
+      const nodeError = node._renderFirstError(this._ctx?.slots as any);
       if (nodeError) return nodeError;
     }
   }
@@ -178,7 +178,7 @@ export class FormGroupControl extends FormNodeControl {
     const { allInvalidNodes } = this;
     for (const node of allInvalidNodes) {
       if (!node.showOwnErrors) {
-        errors.push(...node._renderAllErrors());
+        errors.push(...node._renderAllErrors(this._ctx?.slots as any));
       }
     }
     return errors;
