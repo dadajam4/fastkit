@@ -1,9 +1,9 @@
 import './form-selector.scss';
 import { VNodeChild, defineComponent, PropType, computed } from 'vue';
 import {
-  createFormControlProps,
+  createFormNodeWrapperProps,
   createFormSelectorSettings,
-  FormControlSlots,
+  FormNodeWrapperSlots,
   useFormSelectorControl,
   FormSelectorControl,
   ResolvedFormSelectorItem,
@@ -40,7 +40,7 @@ export interface DefineFormSelectorComponentOptions {
 }
 
 const slots = defineSlots<
-  FormControlSlots & {
+  FormNodeWrapperSlots & {
     default?: () => any;
   }
 >();
@@ -57,7 +57,7 @@ export function defineFormSelectorComponent(
     name: opts.name,
     props: {
       ...props,
-      ...createFormControlProps(),
+      ...createFormNodeWrapperProps(),
       ...createControlProps(),
       stacked: {
         type: Boolean,

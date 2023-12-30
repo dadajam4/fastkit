@@ -3,8 +3,8 @@ import { defineComponent, computed } from 'vue';
 import {
   createTextInputNodeSettings,
   useTextInputNodeControl,
-  createFormControlProps,
-  FormControlSlots,
+  createFormNodeWrapperProps,
+  FormNodeWrapperSlots,
   TextInputNodeEmits,
 } from '@fastkit/vue-form-control';
 import { defineSlots, ExtractPropInput } from '@fastkit/vue-utils';
@@ -25,12 +25,12 @@ import { VUI_TEXT_FIELD_SYMBOL } from '../../injections';
 
 const { props, emits } = createTextInputNodeSettings();
 
-const slots = defineSlots<FormControlSlots & InputBoxSlots>();
+const slots = defineSlots<FormNodeWrapperSlots & InputBoxSlots>();
 
 function createTextFieldProps() {
   return {
     ...props,
-    ...createFormControlProps(),
+    ...createFormNodeWrapperProps(),
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),

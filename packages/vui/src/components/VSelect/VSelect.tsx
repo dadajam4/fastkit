@@ -11,8 +11,8 @@ import {
 import {
   createFormSelectorSettings,
   useFormSelectorControl,
-  createFormControlProps,
-  FormControlSlots,
+  createFormNodeWrapperProps,
+  FormNodeWrapperSlots,
   FormSelectorItemControl,
 } from '@fastkit/vue-form-control';
 import {
@@ -57,7 +57,7 @@ const { props, emits } = createFormSelectorSettings({
 });
 
 const slots = defineSlots<
-  FormControlSlots &
+  FormNodeWrapperSlots &
     InputBoxSlots & {
       selection?: (ctx: {
         item: FormSelectorItemControl;
@@ -70,7 +70,7 @@ export const VSelect = defineComponent({
   name: 'VSelect',
   props: {
     ...props,
-    ...createFormControlProps(),
+    ...createFormNodeWrapperProps(),
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),

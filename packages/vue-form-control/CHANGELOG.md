@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.0
+
+### Minor Changes
+
+- Changed the name representation from `FormControl` to `FormNodeWrapper`. This release includes breaking changes.
+
 ## 0.18.0
 
 ### Minor Changes

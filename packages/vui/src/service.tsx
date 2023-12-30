@@ -20,7 +20,10 @@ import { setDefaultRouterLink } from '@fastkit/vue-action';
 import { LocationService } from '@fastkit/vue-location';
 import { VForm } from './components/VForm';
 import { VTextField, TextFieldInput } from './components/VTextField';
-import { VueForm, FormControlHinttipDelay } from '@fastkit/vue-form-control';
+import {
+  VueForm,
+  FormNodeWrapperHinttipDelay,
+} from '@fastkit/vue-form-control';
 import { getDocumentScroller, UseScroller } from '@fastkit/vue-scroller';
 import { ControlSize } from './schemes';
 import { VButton } from './components/VButton';
@@ -74,7 +77,7 @@ export interface VuiServiceUISettings {
     color?: ScopeName;
     variant?: ColorVariant;
   };
-  hinttipDelay?: FormControlHinttipDelay;
+  hinttipDelay?: FormNodeWrapperHinttipDelay;
   noDataMessage?: VNodeChildOrSlot;
   noResultsMessage?: VNodeChildOrSlot;
   loadingMessage?: VNodeChildOrSlot;

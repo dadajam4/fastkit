@@ -28,22 +28,22 @@ const EMPTY_MESSAGE = '\xa0'; // for keep height
 
 export type RequiredChipSource = (() => VNodeChild) | string | boolean;
 
-export type FormControlHinttip = boolean | string | (() => VNodeChild);
+export type FormNodeWrapperHinttip = boolean | string | (() => VNodeChild);
 
-export type FormControlHinttipDelay = 'click' | number;
+export type FormNodeWrapperHinttipDelay = 'click' | number;
 
-export type FormControlSlots = DefineSlotsType<
+export type FormNodeWrapperSlots = DefineSlotsType<
   {
     /** label */
-    label?: (form: FormControl) => any;
+    label?: (wrapper: FormNodeWrapper) => any;
     /** hint message */
-    hint?: (form: FormControl) => any;
+    hint?: (wrapper: FormNodeWrapper) => any;
     /** Elements to be added to the information message */
-    infoAppends?: (form: FormControl) => any;
+    infoAppends?: (wrapper: FormNodeWrapper) => any;
   } & FormNodeErrorSlots
 >;
 
-export function createFormControlProps() {
+export function createFormNodeWrapperProps() {
   return {
     ...createPropsOptions({
       /**
@@ -55,9 +55,9 @@ export function createFormControlProps() {
       /** hint message */
       hint: {} as PropType<VNodeChildOrSlot>,
       /** Settings for displaying hint as tips */
-      hinttip: [Boolean, String, Function] as PropType<FormControlHinttip>,
+      hinttip: [Boolean, String, Function] as PropType<FormNodeWrapperHinttip>,
       /** hint tip Display Delay */
-      hinttipDelay: [String, Number] as PropType<FormControlHinttipDelay>,
+      hinttipDelay: [String, Number] as PropType<FormNodeWrapperHinttipDelay>,
       /** Elements to be added to the information message */
       infoAppends: {} as PropType<VNodeChildOrSlot>,
       /** Under validation */
@@ -101,41 +101,45 @@ export function createFormControlProps() {
   };
 }
 
-export type FormControlProps = ExtractPropTypes<
-  ReturnType<typeof createFormControlProps>
+export type FormNodeWrapperProps = ExtractPropTypes<
+  ReturnType<typeof createFormNodeWrapperProps>
 >;
 
-export function createFormControlEmits() {
+export function createFormNodeWrapperEmits() {
   return {
-    clickLabel: (ev: MouseEvent, formControl: FormControl) => true,
+    clickLabel: (ev: MouseEvent, wrapper: FormNodeWrapper) => true,
   };
 }
 
-export type FormControlEmitOptions = ReturnType<typeof createFormControlEmits>;
+export type FormNodeWrapperEmitOptions = ReturnType<
+  typeof createFormNodeWrapperEmits
+>;
 
-export function createFormControlSettings() {
-  const props = createFormControlProps();
-  const emits = createFormControlEmits();
+export function createFormNodeWrapperSettings() {
+  const props = createFormNodeWrapperProps();
+  const emits = createFormNodeWrapperEmits();
   return { props, emits };
 }
 
-export type FormControlContext = SetupContext<FormControlEmitOptions>;
+export type FormNodeWrapperContext = SetupContext<FormNodeWrapperEmitOptions>;
 
-export interface FormControlOptions {
+export interface FormNodeWrapperOptions {
   hinttipPrepend?: () => VNodeChild;
 }
 
-export class FormControl {
-  readonly _props: FormControlProps;
+export class FormNodeWrapper {
+  readonly _props: FormNodeWrapperProps;
   readonly _service: VueFormService;
-  protected _ctx: FormControlContext | undefined;
+  protected _ctx: FormNodeWrapperContext | undefined;
   protected _nodeControl: ComputedRef<FormNodeControl | undefined>;
-  protected _labelSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
-  protected _hintSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
+  protected _labelSlot: ComputedRef<TypedSlot<FormNodeWrapper> | undefined>;
+  protected _hintSlot: ComputedRef<TypedSlot<FormNodeWrapper> | undefined>;
   protected _hinttip: ComputedRef<VNodeChild>;
-  protected _hinttipDelay: ComputedRef<FormControlHinttipDelay | undefined>;
+  protected _hinttipDelay: ComputedRef<FormNodeWrapperHinttipDelay | undefined>;
   protected _hinttipPrepend?: () => VNodeChild;
-  protected _infoAppendsSlot: ComputedRef<TypedSlot<FormControl> | undefined>;
+  protected _infoAppendsSlot: ComputedRef<
+    TypedSlot<FormNodeWrapper> | undefined
+  >;
   protected _validating: ComputedRef<boolean>;
   protected _pending: ComputedRef<boolean>;
   protected _focused: ComputedRef<boolean>;
@@ -245,9 +249,9 @@ export class FormControl {
   }
 
   constructor(
-    props: FormControlProps,
-    ctx: FormControlContext,
-    options: FormControlOptions = {},
+    props: FormNodeWrapperProps,
+    ctx: FormNodeWrapperContext,
+    options: FormNodeWrapperOptions = {},
   ) {
     this._props = props;
     this._service = useVueForm();
@@ -373,7 +377,7 @@ export class FormControl {
 
   protected _getContextOrDie() {
     const { _ctx } = this;
-    if (!_ctx) throw new Error('missing form control context');
+    if (!_ctx) throw new Error('missing form wrapper context');
     return _ctx;
   }
 
@@ -426,11 +430,11 @@ export class FormControl {
   }
 }
 
-export function useFormControl(
-  props: FormControlProps,
-  ctx: FormControlContext,
-  options?: FormControlOptions,
+export function useFormNodeWrapper(
+  props: FormNodeWrapperProps,
+  ctx: FormNodeWrapperContext,
+  options?: FormNodeWrapperOptions,
 ) {
-  const control = new FormControl(props, ctx, options);
+  const control = new FormNodeWrapper(props, ctx, options);
   return control;
 }

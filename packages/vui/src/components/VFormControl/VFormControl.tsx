@@ -1,10 +1,10 @@
 import './VFormControl.scss';
 import { computed, defineComponent, VNodeChild } from 'vue';
 import {
-  createFormControlSettings,
-  useFormControl,
-  FormControlSlots,
-  FormControl,
+  createFormNodeWrapperSettings,
+  useFormNodeWrapper,
+  FormNodeWrapperSlots,
+  FormNodeWrapper,
   RequiredChipSource,
 } from '@fastkit/vue-form-control';
 import { defineSlots } from '@fastkit/vue-utils';
@@ -13,7 +13,7 @@ import type { VuiService } from '../../service';
 import { VIcon } from '../VIcon';
 import { VTooltip } from '../VTooltip';
 
-const { props, emits } = createFormControlSettings();
+const { props, emits } = createFormNodeWrapperSettings();
 
 export function createRequiredChipRenderer(
   required: () => boolean,
@@ -42,8 +42,8 @@ export function createRequiredChipRenderer(
 }
 
 const slots = defineSlots<
-  FormControlSlots & {
-    default?: (form: FormControl) => any;
+  FormNodeWrapperSlots & {
+    default?: (formNodeWrapper: FormNodeWrapper) => any;
   }
 >();
 
@@ -58,7 +58,7 @@ export const VFormControl = defineComponent({
   emits,
   setup(props, ctx) {
     const vui = useVui();
-    const control = useFormControl(props, ctx, {
+    const control = useFormNodeWrapper(props, ctx, {
       hinttipPrepend: () => (
         <VIcon
           class="v-form-control__label__hinttip__icon"

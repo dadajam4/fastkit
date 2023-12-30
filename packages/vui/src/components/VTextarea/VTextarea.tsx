@@ -3,8 +3,8 @@ import { defineComponent } from 'vue';
 import {
   createTextareaNodeSettings,
   useTextareaNodeControl,
-  createFormControlProps,
-  FormControlSlots,
+  createFormNodeWrapperProps,
+  FormNodeWrapperSlots,
 } from '@fastkit/vue-form-control';
 import { defineSlots } from '@fastkit/vue-utils';
 import { VFormControl } from '../VFormControl';
@@ -24,13 +24,13 @@ import { VUI_TEXTAREA_SYMBOL, useVui } from '../../injections';
 
 const { props, emits } = createTextareaNodeSettings();
 
-const slots = defineSlots<FormControlSlots & InputBoxSlots>();
+const slots = defineSlots<FormNodeWrapperSlots & InputBoxSlots>();
 
 export const VTextarea = defineComponent({
   name: 'VTextarea',
   props: {
     ...props,
-    ...createFormControlProps(),
+    ...createFormNodeWrapperProps(),
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),

@@ -9,6 +9,6 @@ export * from './selector';
 export * from './boundable-input';
 export * from './date-input';
 export * from './imask';
-export * from './form-control';
+export * from './wrapper';
 export * from './group';
 export * from './form';

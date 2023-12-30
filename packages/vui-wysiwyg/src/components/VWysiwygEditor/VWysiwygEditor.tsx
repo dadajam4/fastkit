@@ -9,8 +9,8 @@ import {
   VNodeChild,
 } from 'vue';
 import {
-  createFormControlProps,
-  FormControlSlots,
+  createFormNodeWrapperProps,
+  FormNodeWrapperSlots,
   VFormControl,
   VControlField,
   createControlFieldProps,
@@ -47,13 +47,13 @@ import {
   WysiwygEditorInitializeContext,
 } from '../../schemes';
 
-const slots = defineSlots<FormControlSlots & InputBoxSlots>();
+const slots = defineSlots<FormNodeWrapperSlots & InputBoxSlots>();
 
 export const VWysiwygEditor = defineComponent({
   name: 'VWysiwygEditor',
   props: {
     ...createTextableProps(),
-    ...createFormControlProps(),
+    ...createFormNodeWrapperProps(),
     ...createControlFieldProps(),
     ...createControlFieldProviderProps(),
     ...createControlProps(),
