@@ -300,6 +300,7 @@ export interface RenderFormNodeErrorOptions {
   wrapper?: (
     children: VNodeArrayChildren,
     error: FormNodeError,
+    node: FormNodeControl,
     index: number,
   ) => VNodeChild;
 }
@@ -1135,7 +1136,7 @@ export class FormNodeControl<
       const result = this.renderErrorSource(error, options?.slotsOverrides);
       if (result) {
         const wrapped = wrapper
-          ? cleanupEmptyVNodeChild(wrapper(result, error, index))
+          ? cleanupEmptyVNodeChild(wrapper(result, error, this, index))
           : result;
         wrapped && results.push(wrapped);
       }

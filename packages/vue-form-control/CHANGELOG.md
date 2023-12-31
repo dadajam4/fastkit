@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.4
+
+### Patch Changes
+
+- Modified the wrapper function for rendering errors to pass the instance of the form node to which the error belongs.
+
 ## 0.19.3
 
 ### Patch Changes
