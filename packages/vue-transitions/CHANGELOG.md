@@ -1,5 +1,11 @@
 # @fastkit/vue-transitions
 
+## 0.1.18
+
+### Patch Changes
+
+- Adjusted `VExpandTransition` to also consider margins in the rendering.
+
 ## 0.1.17
 
 ### Patch Changes

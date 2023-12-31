@@ -40,7 +40,7 @@ interface HTMLExpandElement extends HTMLElement {
  *
  * <style>
  * .target {
- *   transition: height .2s;
+ *   transition: height .2s, margin .2s;
  * }
  * </style>
  * ```
@@ -63,6 +63,9 @@ export const VExpandTransition = generateJavaScriptTransition({
   setup(props) {
     const { expand: sizeProperty } = props;
     const offsetProperty = `offset${capitalize(sizeProperty)}` as const;
+    const isVertical = sizeProperty === 'height';
+    const marginStartProperty = isVertical ? 'marginTop' : 'marginLeft';
+    const marginEndProperty = isVertical ? 'marginBottom' : 'marginRight';
 
     /**
      * Reset Style
@@ -90,6 +93,8 @@ export const VExpandTransition = generateJavaScriptTransition({
           visibility: el.style.visibility,
           overflow: el.style.overflow,
           [sizeProperty]: el.style[sizeProperty],
+          [marginStartProperty]: el.style[marginStartProperty],
+          [marginEndProperty]: el.style[marginEndProperty],
         };
         if (props.fade) el._initialStyle.opacity = el.style.opacity;
       },
@@ -99,12 +104,17 @@ export const VExpandTransition = generateJavaScriptTransition({
         const initialStyle = el._initialStyle;
         if (!initialStyle) return;
         const offset = `${el[offsetProperty]}px`;
+        const style = window.getComputedStyle(el);
+        const marginStart = style[marginStartProperty];
+        const marginEnd = style[marginEndProperty];
 
         el.style.setProperty('transition', 'none', 'important');
         el.style.visibility = 'hidden';
         el.style.visibility = initialStyle.visibility || '';
         el.style.overflow = 'hidden';
         el.style[sizeProperty] = '0';
+        el.style[marginStartProperty] = '0';
+        el.style[marginEndProperty] = '0';
         if (props.fade) el.style.opacity = '0';
 
         // eslint-disable-next-line no-void
@@ -118,6 +128,8 @@ export const VExpandTransition = generateJavaScriptTransition({
             properties: sizeProperty,
           });
           el.style[sizeProperty] = offset;
+          el.style[marginStartProperty] = marginStart;
+          el.style[marginEndProperty] = marginEnd;
           if (props.fade) el.style.opacity = '1';
         });
       },
@@ -130,11 +142,19 @@ export const VExpandTransition = generateJavaScriptTransition({
           visibility: '',
           overflow: el.style.overflow,
           [sizeProperty]: el.style[sizeProperty],
+          [marginStartProperty]: el.style[marginStartProperty],
+          [marginEndProperty]: el.style[marginEndProperty],
         };
         if (props.fade) el._initialStyle.opacity = el.style.opacity;
 
+        const style = window.getComputedStyle(el);
+        const marginStart = style[marginStartProperty];
+        const marginEnd = style[marginEndProperty];
+
         el.style.overflow = 'hidden';
         el.style[sizeProperty] = `${el[offsetProperty]}px`;
+        el.style[marginStartProperty] = marginStart;
+        el.style[marginEndProperty] = marginEnd;
 
         // eslint-disable-next-line no-void
         void el.offsetHeight; // Force reflow
@@ -145,6 +165,8 @@ export const VExpandTransition = generateJavaScriptTransition({
             properties: sizeProperty,
           });
           el.style[sizeProperty] = '0';
+          el.style[marginStartProperty] = '0';
+          el.style[marginEndProperty] = '0';
           if (props.fade) el.style.opacity = '0';
         });
       },

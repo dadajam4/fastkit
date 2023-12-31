@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui",
-  "version": "0.18.4",
+  "version": "0.18.5",
   "description": "A simple, extensible UI kit for Vue applications.",
   "keywords": [
     "fastkit",
