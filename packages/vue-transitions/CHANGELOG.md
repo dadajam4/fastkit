@@ -1,5 +1,11 @@
 # @fastkit/vue-transitions
 
+## 0.1.20
+
+### Patch Changes
+
+- Fixed the case where the restoration of margins in `VExpandTransition` was not done correctly.
+
 ## 0.1.19
 
 ### Patch Changes

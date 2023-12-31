@@ -111,11 +111,13 @@ export const VExpandTransition = generateJavaScriptTransition({
         const initialStyle = el._initialStyle;
         if (!initialStyle) return;
         const offset = `${el[offsetProperty]}px`;
+
+        el.style.setProperty('transition', 'none', 'important');
+
         const style = window.getComputedStyle(el);
         const marginStart = style[marginStartProperty];
         const marginEnd = style[marginEndProperty];
 
-        el.style.setProperty('transition', 'none', 'important');
         el.style.visibility = 'hidden';
         el.style.visibility = initialStyle.visibility || '';
         el.style.overflow = 'hidden';
