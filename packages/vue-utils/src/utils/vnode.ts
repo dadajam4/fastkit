@@ -88,9 +88,9 @@ export function renderVNodeChildOrSlotsOrEmpty<Prop>(
   raws: VNodeChildOrSlot<Prop>[],
   prop?: Prop,
 ): VNodeArrayChildren | undefined {
-  const rows = raws.map((raw) =>
-    typeof raw === 'function' ? raw(prop as Prop) : raw,
-  );
+  const rows = raws
+    .map((raw) => (typeof raw === 'function' ? raw(prop as Prop) : raw))
+    .flat();
   return cleanupEmptyVNodeChild(rows);
 }
 

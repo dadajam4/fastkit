@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.14
+
+### Patch Changes
+
+- Fixed an issue when using the `renderVNodeChildOrSlotsOrEmpty` method where empty content was not being cleaned up completely.
+
 ## 0.14.13
 
 ### Patch Changes
