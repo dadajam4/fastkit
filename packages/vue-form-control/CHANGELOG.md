@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.3
+
+### Patch Changes
+
+- Added an option for wrapping errors when rendering them using `renderAllErrors` in `FormNode`.
+
 ## 0.19.2
 
 ### Patch Changes

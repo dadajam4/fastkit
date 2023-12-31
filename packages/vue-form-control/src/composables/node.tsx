@@ -19,6 +19,7 @@ import {
   ComponentInternalInstance,
   VNodeArrayChildren,
   nextTick,
+  VNodeChild,
 } from 'vue';
 
 import {
@@ -294,6 +295,14 @@ export function createFormNodeSettings<T, D = T>(
 
 export type FormNodeContext<T, D = T> = SetupContext<FormNodeEmitOptions<T, D>>;
 
+export interface RenderFormNodeErrorOptions {
+  slotsOverrides?: FormNodeErrorSlotsSource;
+  wrapper?: (
+    children: VNodeArrayChildren,
+    error: FormNodeError,
+    index: number,
+  ) => VNodeChild;
+}
 export class FormNodeControl<
   T = any,
   D = T,
@@ -1116,16 +1125,20 @@ export class FormNodeControl<
   /**
    * @internal
    */
-  _renderAllErrors(
-    slotsOverrides?: FormNodeErrorSlotsSource,
-  ): VNodeArrayChildren[] {
+  _renderAllErrors(options?: RenderFormNodeErrorOptions): VNodeArrayChildren[] {
     if (!this.canOperation) {
       return [];
     }
     const results: VNodeArrayChildren[] = [];
-    this.errors.map((error) => {
-      const result = this.renderErrorSource(error, slotsOverrides);
-      result && results.push(result);
+    const wrapper = options?.wrapper;
+    this.errors.map((error, index) => {
+      const result = this.renderErrorSource(error, options?.slotsOverrides);
+      if (result) {
+        const wrapped = wrapper
+          ? cleanupEmptyVNodeChild(wrapper(result, error, index))
+          : result;
+        wrapped && results.push(wrapped);
+      }
     });
     return results;
   }
@@ -1140,10 +1153,8 @@ export class FormNodeControl<
    * @see {@link FormNodeControl.canOperation canOperation}
    * @see {@link FormNodeControl.showOwnErrors showOwnErrors}
    */
-  renderAllErrors(
-    slotsOverrides?: FormNodeErrorSlotsSource,
-  ): VNodeArrayChildren[] {
-    return this.showOwnErrors ? this._renderAllErrors(slotsOverrides) : [];
+  renderAllErrors(options?: RenderFormNodeErrorOptions): VNodeArrayChildren[] {
+    return this.showOwnErrors ? this._renderAllErrors(options) : [];
   }
 
   protected _finalize(): Promise<void> {

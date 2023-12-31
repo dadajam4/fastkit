@@ -11,6 +11,7 @@ import {
   createFormNodeEmits,
   FormNodeContext,
   FormNodeControlBaseOptions,
+  RenderFormNodeErrorOptions,
 } from './node';
 import { FormGroupInjectionKey } from '../injections';
 import { createPropsOptions } from '@fastkit/vue-utils';
@@ -170,15 +171,23 @@ export class FormGroupControl extends FormNodeControl {
    * @see {@link FormNodeControl.canOperation canOperation}
    * @see {@link FormNodeControl.showOwnErrors showOwnErrors}
    */
-  _renderAllErrors() {
+  _renderAllErrors(options?: RenderFormNodeErrorOptions) {
     if (!this.canOperation) {
       return [];
     }
-    const errors = super._renderAllErrors();
+    const errors = super._renderAllErrors(options);
     const { allInvalidNodes } = this;
     for (const node of allInvalidNodes) {
       if (!node.showOwnErrors) {
-        errors.push(...node._renderAllErrors(this._ctx?.slots as any));
+        errors.push(
+          ...node._renderAllErrors({
+            ...options,
+            slotsOverrides: {
+              ...options?.slotsOverrides,
+              ...(this._ctx?.slots as any),
+            },
+          }),
+        );
       }
     }
     return errors;
