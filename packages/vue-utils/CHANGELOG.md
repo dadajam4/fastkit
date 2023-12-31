@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.13
+
+### Patch Changes
+
+- Added the method `renderVNodeChildOrSlotsOrEmpty` for rendering a list of `VNodeChildOrSlots` while performing cleanup.
+
 ## 0.14.12
 
 ### Patch Changes

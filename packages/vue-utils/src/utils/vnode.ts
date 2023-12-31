@@ -1,4 +1,10 @@
-import type { VNode, VNodeTypes, VNodeChild, Slots } from 'vue';
+import type {
+  VNode,
+  VNodeTypes,
+  VNodeChild,
+  Slots,
+  VNodeArrayChildren,
+} from 'vue';
 import { Comment, Text, Fragment, isVNode } from 'vue';
 
 export function findVNodeChild(
@@ -67,6 +73,25 @@ export function cleanupEmptyVNodeChild(child: VNodeChild) {
     return;
   }
   return child;
+}
+
+export function renderVNodeChildOrSlotsOrEmpty(
+  raws: VNodeChildOrSlot<void>[],
+  prop?: undefined | null,
+): VNodeArrayChildren | undefined;
+export function renderVNodeChildOrSlotsOrEmpty<Prop>(
+  raws: VNodeChildOrSlot<Prop>[],
+  prop: Prop,
+): VNodeArrayChildren | undefined;
+
+export function renderVNodeChildOrSlotsOrEmpty<Prop>(
+  raws: VNodeChildOrSlot<Prop>[],
+  prop?: Prop,
+): VNodeArrayChildren | undefined {
+  const rows = raws.map((raw) =>
+    typeof raw === 'function' ? raw(prop as Prop) : raw,
+  );
+  return cleanupEmptyVNodeChild(rows);
 }
 
 export function renderSlotOrEmpty(
