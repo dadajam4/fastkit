@@ -15,6 +15,10 @@ interface HTMLExpandElement extends HTMLElement {
     height?: string | null;
     width?: string | null;
     opacity?: string | null;
+    marginTop?: string | null;
+    marginBottom?: string | null;
+    marginLeft?: string | null;
+    marginRight?: string | null;
   };
 }
 
@@ -76,11 +80,14 @@ export const VExpandTransition = generateJavaScriptTransition({
       const el = _el as HTMLExpandElement;
       const { _initialStyle } = el;
       if (!_initialStyle) return;
-      const size = _initialStyle[sizeProperty];
       el.style.overflow = _initialStyle.overflow || '';
+
+      const size = _initialStyle[sizeProperty];
       if (size != null) {
         el.style[sizeProperty] = size;
       }
+      el.style[marginStartProperty] = _initialStyle[marginStartProperty] || '';
+      el.style[marginEndProperty] = _initialStyle[marginEndProperty] || '';
       el.style.opacity = _initialStyle.opacity || '';
       delete (el as any)._initialStyle;
     };

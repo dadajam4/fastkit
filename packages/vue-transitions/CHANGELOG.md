@@ -1,5 +1,11 @@
 # @fastkit/vue-transitions
 
+## 0.1.19
+
+### Patch Changes
+
+- Fixed the issue where margins were not being reset at the end of the transition in `VExpandTransition`.
+
 ## 0.1.18
 
 ### Patch Changes
