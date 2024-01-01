@@ -3,6 +3,7 @@ import type { FormNodeControl } from './composables/node';
 import type { FormSelectorControl } from './composables/selector';
 import type { FormSelectorItemGroupControl } from './composables/selector-item-group';
 import type { FormGroupControl } from './composables/group';
+import type { FormSetControl } from './composables/set';
 import type { VueForm } from './composables/form';
 import type { VueFormService } from './service';
 import { VueFormControlError } from './logger';
@@ -22,6 +23,9 @@ export const FormGroupInjectionKey: InjectionKey<FormGroupControl | null> =
 export function useParentFormGroup() {
   return inject(FormGroupInjectionKey, null);
 }
+
+export const FormSetInjectionKey: InjectionKey<FormSetControl | null> =
+  Symbol('FormSetControl');
 
 export const FormInjectionKey: InjectionKey<VueForm | null> = Symbol('VueForm');
 

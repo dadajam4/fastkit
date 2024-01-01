@@ -296,14 +296,32 @@ export function createFormNodeSettings<T, D = T>(
 
 export type FormNodeContext<T, D = T> = SetupContext<FormNodeEmitOptions<T, D>>;
 
+export interface RenderFormNodeErrorContext {
+  /** Rendered error messages */
+  children: VNodeArrayChildren;
+  /**
+   * Error object
+   *
+   * @see {@link FormNodeError}
+   */
+  error: FormNodeError;
+  /**
+   * Node holding the error
+   *
+   * @see {@link FormNodeControl}
+   */
+  node: FormNodeControl;
+  /**
+   * Automatically generated key
+   *
+   * Can be safely used as the key for the vnode when rendering in lists, etc.
+   */
+  key: string;
+}
+
 export interface RenderFormNodeErrorOptions {
   slotsOverrides?: FormNodeErrorSlotsSource;
-  wrapper?: (
-    children: VNodeArrayChildren,
-    error: FormNodeError,
-    node: FormNodeControl,
-    index: number,
-  ) => VNodeChild;
+  wrapper?: (ctx: RenderFormNodeErrorContext) => VNodeChild;
 }
 
 export class FormNodeControl<
@@ -334,6 +352,7 @@ export class FormNodeControl<
   protected _validating = ref(false);
   protected _validateRequestId = 0;
   protected _isDestroyed = false;
+  protected _dirty: ComputedRef<boolean>;
   protected _touched = ref(false);
   protected _shouldValidate = ref(false);
   protected _currentValue: WritableComputedRef<UnwrapRef<T> | UnwrapRef<D>>;
@@ -482,7 +501,7 @@ export class FormNodeControl<
    * @see {@link FormNodeControl.initialValue initialValue}
    */
   get dirty() {
-    return !cheepDeepEqual(this.value, this.initialValue);
+    return this._dirty.value;
   }
 
   /**
@@ -792,6 +811,10 @@ export class FormNodeControl<
     this._parentFormGroup = parentFormGroup;
     this._parentForm = parentForm;
 
+    this._dirty = computed(
+      () => !cheepDeepEqual(this.value, this.initialValue),
+    );
+
     onMounted(() => {
       this._isMounted.value = true;
       this._cii = getCurrentInstance();
@@ -955,19 +978,19 @@ export class FormNodeControl<
     );
 
     if (!this.detached) {
-      parentFormGroup && parentFormGroup.__joinFromNode(this);
-      parentNode && parentNode._joinFromNode(this);
+      parentFormGroup?.__joinFromNode(this);
+      parentNode?._joinFromNode(this);
     }
 
     watch(
       () => props.detach,
       (detached) => {
         if (detached) {
-          parentFormGroup && parentFormGroup.__leaveFromNode(this);
-          parentNode && parentNode._leaveFromNode(this);
+          parentFormGroup?.__leaveFromNode(this);
+          parentNode?._leaveFromNode(this);
         } else {
-          parentFormGroup && parentFormGroup.__joinFromNode(this);
-          parentNode && parentNode._joinFromNode(this);
+          parentFormGroup?.__joinFromNode(this);
+          parentNode?._joinFromNode(this);
         }
       },
     );
@@ -1136,11 +1159,20 @@ export class FormNodeControl<
     const results: VNodeArrayChildren[] = [];
     const wrapper = options?.wrapper;
     this.errors.map((error, index) => {
-      const result = this.renderErrorSource(error, options?.slotsOverrides);
-      if (result) {
+      const children = this.renderErrorSource(error, options?.slotsOverrides);
+      if (children) {
         const wrapped = wrapper
-          ? cleanupEmptyVNodeChild(wrapper(result, error, this, index))
-          : result;
+          ? cleanupEmptyVNodeChild(
+              wrapper({
+                children,
+                error,
+                node: this,
+                key: `${String(this.nodeType)}:${this.name}:${this.tag}:${
+                  error.name
+                }:${index}`,
+              }),
+            )
+          : children;
         wrapped && results.push(wrapped);
       }
     });

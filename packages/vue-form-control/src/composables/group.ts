@@ -3,6 +3,8 @@ import {
   SetupContext,
   provide,
   ref,
+  Ref,
+  markRaw,
   VNodeArrayChildren,
 } from 'vue';
 import {
@@ -27,6 +29,10 @@ export function createFormGroupProps() {
        * If you want to exclude a specific node from this configuration, enable the `showOwnErrors` setting for that node.
        */
       collectErrorMessages: Boolean,
+      /**
+       * Auto scroll to the location of the form when invalid input is detected in the validation on submission
+       */
+      disableAutoScroll: Boolean,
     }),
   };
 }
@@ -55,15 +61,14 @@ export interface FormGroupOptions extends FormNodeControlBaseOptions {}
 
 export class FormGroupControl extends FormNodeControl {
   readonly _props: FormGroupProps;
-  protected _allNodes: FormNodeControl[] = [];
-  protected _allInvalidNodes = ref<(() => FormNodeControl)[]>([]);
-  // protected _allErrors: ComputedRef<FormNodeError[]>;
+  protected _allNodes: Ref<FormNodeControl[]> = ref([]);
+  protected _allInvalidNodes: Ref<FormNodeControl[]> = ref([]);
 
   /**
    * All nodes in an error state belonging recursively to this group
    */
   get allInvalidNodes() {
-    return this._allInvalidNodes.value.map((g) => g());
+    return this._allInvalidNodes.value;
   }
 
   /**
@@ -71,6 +76,23 @@ export class FormGroupControl extends FormNodeControl {
    */
   get collectErrorMessages() {
     return this._props.collectErrorMessages;
+  }
+
+  /**
+   * Auto scroll to the location of the form when invalid input is detected in the validation on submission
+   */
+  get disableAutoScroll() {
+    return this._props.disableAutoScroll;
+  }
+
+  /**
+   * List of all nodes belonging to this group
+   *
+   * This list is a reactive list, and depending on usage, it may contain a large number of nodes.
+   * Please be aware that complex operations using this list can lead to performance issues.
+   */
+  get allNodes() {
+    return this._allNodes.value;
   }
 
   constructor(
@@ -88,18 +110,18 @@ export class FormGroupControl extends FormNodeControl {
 
   /** @internal */
   __joinFromNode(node: FormNodeControl) {
-    const { _allNodes } = this;
-    if (!_allNodes.includes(node)) {
-      _allNodes.push(node);
+    const { allNodes } = this;
+    if (!allNodes.includes(node)) {
+      allNodes.push(markRaw(node));
     }
   }
 
   /** @internal */
   __leaveFromNode(node: FormNodeControl) {
-    const { _allNodes } = this;
-    const index = _allNodes.indexOf(node);
+    const { allNodes } = this;
+    const index = allNodes.indexOf(node);
     if (index !== -1) {
-      _allNodes.splice(index, 1);
+      allNodes.splice(index, 1);
     }
     this.__removeInvalidChild(node);
   }
@@ -108,7 +130,7 @@ export class FormGroupControl extends FormNodeControl {
   private __pushInvalidChild(node: FormNodeControl) {
     const { allInvalidNodes } = this;
     if (!allInvalidNodes.includes(node)) {
-      this._allInvalidNodes.value.push(() => node);
+      this._allInvalidNodes.value.push(markRaw(node));
     }
   }
 
@@ -144,6 +166,23 @@ export class FormGroupControl extends FormNodeControl {
     this.findFirstInvalidNode()?.scrollIntoView();
   }
 
+  protected dispatchAutoScroll() {
+    !this.disableAutoScroll && this.scrollToFirstInvalidNode();
+  }
+
+  /**
+   * Validate the values of this group and all descendant nodes. If there is one or more errors, scroll to the top error node
+   *
+   * If `disableAutoScroll` is set, scrolling will not be performed.
+   */
+  async validateAndScroll(): Promise<boolean> {
+    const valid = await this.validate();
+    if (!valid) {
+      this.dispatchAutoScroll();
+    }
+    return valid;
+  }
+
   /** @internal */
   _renderFirstError(): VNodeArrayChildren | undefined {
     if (!this.canOperation) {
@@ -152,8 +191,7 @@ export class FormGroupControl extends FormNodeControl {
     const myError = super._renderFirstError();
     if (myError) return myError;
 
-    for (const getNode of this._allInvalidNodes.value) {
-      const node = getNode();
+    for (const node of this._allInvalidNodes.value) {
       if (node.showOwnErrors) continue;
       const nodeError = node._renderFirstError(this._ctx?.slots as any);
       if (nodeError) return nodeError;

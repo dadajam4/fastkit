@@ -55,12 +55,7 @@ export const VForm = defineComponent({
     });
 
     return () => (
-      <form
-        ref={nodeControl.formRef()}
-        class={classes.value}
-        action={nodeControl.nativeAction}
-        spellcheck={nodeControl.spellcheck}
-        onSubmit={nodeControl.handleSubmit}>
+      <form class={classes.value} {...nodeControl.formAttrs}>
         {ctx.slots.default?.(nodeControl)}
       </form>
     );

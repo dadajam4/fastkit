@@ -206,11 +206,16 @@ export default defineComponent({
                 disabled={this.form2Sending || this.disabled}
                 size={this.size}
                 readonly={this.readonly}
+                collectErrorMessages
                 v-slots={{
                   default: (group) => (
                     <>
                       {(() => {
-                        const errors = group.renderAllErrors();
+                        const errors = group.renderAllErrors({
+                          wrapper: ({ children, key }) => (
+                            <li key={key}>{children}</li>
+                          ),
+                        });
                         if (!errors.length) return;
 
                         return (
@@ -218,16 +223,16 @@ export default defineComponent({
                             key="errors"
                             style={{
                               border: 'dashed 2px red',
+                              fontSize: '12px',
                             }}>
-                            {errors.map((err) => (
-                              <div>{err}</div>
-                            ))}
+                            <ul>{errors}</ul>
                           </div>
                         );
                       })()}
                       <VTextField
                         label="氏名"
                         required
+                        showOwnErrors={false}
                         hint="これは入力ヒントテキストです。"
                         counter
                         maxlength="10"
@@ -291,9 +296,14 @@ export default defineComponent({
                       <VButton
                         color="accent"
                         endIcon="mdi-send"
-                        type="submit"
+                        type="button"
                         loading={this.form2Sending}
-                        disabled={this.form2Sending || this.disabled}>
+                        onClick={() => {
+                          group.validateAndScroll();
+                        }}
+                        disabled={
+                          this.form2Sending || this.disabled || group.invalid
+                        }>
                         Send
                       </VButton>
                     </>

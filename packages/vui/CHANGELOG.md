@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.18.11
+
+### Patch Changes
+
+- Added `FormSetControl` for associating multiple form nodes to collect state collectively.
+
+- Updated dependencies []:
+  - @fastkit/vue-form-control@0.19.6
+
 ## 0.18.10
 
 ### Patch Changes

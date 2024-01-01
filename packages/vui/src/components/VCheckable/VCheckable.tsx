@@ -2,13 +2,16 @@ import './VCheckable.scss';
 import { computed, defineComponent } from 'vue';
 import { defineSlots } from '@fastkit/vue-utils';
 import { useVuiColorProvider } from '../../injections';
+import { FormNodeErrorSlotsSource } from '@fastkit/vue-form-control';
 
-const slots = defineSlots<{
-  input?: () => any;
-  faux?: () => any;
-  icon?: () => any;
-  label?: () => any;
-}>();
+export const CHECKABLE_SLOTS = defineSlots<
+  {
+    input?: () => any;
+    faux?: () => any;
+    icon?: () => any;
+    label?: () => any;
+  } & FormNodeErrorSlotsSource
+>();
 
 export const VCheckable = defineComponent({
   name: 'VCheckable',
@@ -17,10 +20,10 @@ export const VCheckable = defineComponent({
     disabled: Boolean,
     readonly: Boolean,
     checked: Boolean,
-    ...slots(),
+    ...CHECKABLE_SLOTS(),
     // autoWidth: Boolean,
   },
-  slots,
+  slots: CHECKABLE_SLOTS,
   setup(props, ctx) {
     const colorProvider = useVuiColorProvider();
     const invalid = computed(() => props.invalid);

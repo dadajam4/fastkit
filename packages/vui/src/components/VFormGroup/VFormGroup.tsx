@@ -3,6 +3,7 @@ import {
   FormGroupControl,
   createFormGroupSettings,
   useFormGroup,
+  FormNodeErrorSlotsSource,
 } from '@fastkit/vue-form-control';
 import { DefineSlotsType, defineSlots } from '@fastkit/vue-utils';
 import { createControlProps, useControl } from '../../composables';
@@ -14,7 +15,9 @@ export type VFormGroupSlots = DefineSlotsType<{
   default?: (form: FormGroupControl) => any;
 }>;
 
-export const formGroupSlots = defineSlots<VFormGroupSlots>();
+export const formGroupSlots = defineSlots<
+  VFormGroupSlots & FormNodeErrorSlotsSource
+>();
 
 export function createVFormGroupProps() {
   return {

@@ -210,59 +210,66 @@ export default defineComponent({
                 readonly={this.readonly}
                 onSubmit={(form) => {
                   this.submit2();
-                }}>
-                <VTextField
-                  label="氏名"
-                  required
-                  hint="これは入力ヒントテキストです。"
-                  counter
-                  maxlength="10"
-                />
+                }}
+                v-slots={{
+                  default: (form) => (
+                    <>
+                      <VTextField
+                        label="氏名"
+                        required
+                        hint="これは入力ヒントテキストです。"
+                        counter
+                        maxlength="10"
+                      />
 
-                <VTextarea
-                  label="ひとことコメント"
-                  required
-                  hint="これは入力ヒントテキストです。"
-                  counter
-                  maxlength="100"
-                />
+                      <VTextarea
+                        label="ひとことコメント"
+                        required
+                        hint="これは入力ヒントテキストです。"
+                        counter
+                        maxlength="100"
+                      />
 
-                <VSelect
-                  label="居住地"
-                  items={items}
-                  required
-                  hint="これは入力ヒントテキストです。"
-                />
+                      <VSelect
+                        label="居住地"
+                        items={items}
+                        required
+                        hint="これは入力ヒントテキストです。"
+                      />
 
-                <VCheckboxGroup
-                  label="趣味"
-                  required
-                  hint="これは入力ヒントテキストです。"
-                  stacked={false}
-                  items={items}
-                />
+                      <VCheckboxGroup
+                        label="趣味"
+                        required
+                        hint="これは入力ヒントテキストです。"
+                        stacked={false}
+                        items={items}
+                      />
 
-                <VSwitchGroup
-                  label="持ち物"
-                  required
-                  hint="これは入力ヒントテキストです。"
-                  stacked={false}
-                  items={items}
-                />
+                      <VSwitchGroup
+                        label="持ち物"
+                        required
+                        hint="これは入力ヒントテキストです。"
+                        stacked={false}
+                        items={items}
+                      />
 
-                <div style={{ margin: '20px 0' }}>
-                  <VCheckbox required>利用規約に同意する</VCheckbox>
-                </div>
+                      <div style={{ margin: '20px 0' }}>
+                        <VCheckbox required>利用規約に同意する</VCheckbox>
+                      </div>
 
-                <VButton
-                  color="accent"
-                  endIcon="mdi-send"
-                  type="submit"
-                  loading={this.form2Sending}
-                  disabled={this.form2Sending || this.disabled}>
-                  Send
-                </VButton>
-              </VForm>
+                      <VButton
+                        color="accent"
+                        endIcon="mdi-send"
+                        type="submit"
+                        loading={this.form2Sending}
+                        disabled={
+                          this.form2Sending || this.disabled || form.invalid
+                        }>
+                        Send
+                      </VButton>
+                    </>
+                  ),
+                }}></VForm>
             </div>
             <div class="pg-columns__sub">
               <VSelect

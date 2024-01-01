@@ -20,6 +20,7 @@ import {
   FormNodeError,
   toFormNodeError,
   FormNodeErrorSlots,
+  FormNodeErrorSlotsSource,
 } from './node';
 import type { VueFormService } from '../service';
 import { useVueForm } from '../injections';
@@ -208,9 +209,10 @@ export class FormNodeWrapper {
     return this._viewonly.value;
   }
 
-  // get canOperation() {
-  //   return !!this.nodeControl && this.nodeControl.canOperation;
-  // }
+  get canOperation() {
+    return !this.disabled && !this.readonly && !this.viewonly;
+    // return !!this.nodeControl && this.nodeControl.canOperation;
+  }
 
   get touched() {
     return this._touched.value;
@@ -381,13 +383,20 @@ export class FormNodeWrapper {
     return _ctx;
   }
 
-  renderFirstError() {
-    if (this.disabled || this.readonly) {
+  renderFirstError(slotsOverrides?: FormNodeErrorSlotsSource) {
+    if (!this.canOperation) {
       return;
     }
+    const { slots } = this._getContextOrDie();
+    const nc = this._nodeControl.value;
+    if (nc)
+      return nc.renderFirstError({
+        ...(slots as any),
+        ...slotsOverrides,
+      });
+
     const { firstError } = this;
     if (!firstError) return;
-    const { slots } = this._getContextOrDie();
     const slot = slots[`error:${firstError.name}`] || slots.error;
     if (!slot) {
       return (
@@ -401,7 +410,7 @@ export class FormNodeWrapper {
   }
 
   renderMessage(allowNotFocused?: boolean) {
-    if (this.disabled || this.readonly) return EMPTY_MESSAGE;
+    if (!this.canOperation) return EMPTY_MESSAGE;
     const error = this.renderFirstError();
     if (error) return error;
     return (

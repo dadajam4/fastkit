@@ -6,6 +6,7 @@ import {
   ComputedRef,
   computed,
   ref,
+  Ref,
   onBeforeUnmount,
   watch,
 } from 'vue';
@@ -19,11 +20,23 @@ import {
 import { FormInjectionKey } from '../injections';
 import { isPromise } from '@fastkit/helpers';
 
+/**
+ * Form action context
+ */
 export interface FormActionContext {
+  /** Control for form element */
   form: VueForm;
-  canceled: boolean;
+  /** Action has been canceled */
+  get canceled(): boolean;
+  /** Submit event object */
+  get event(): Event;
+  /**
+   * Cancel the action
+   *
+   * Currently, this method simply sets the `canceled` property of the context to `false`.
+   * This specification is subject to change in the future.
+   */
   cancel: () => void;
-  event: Event;
 }
 
 export type FormActionHandler = (ctx: FormActionContext) => any;
@@ -64,6 +77,15 @@ export function createFormProps(options: FormOptions = {}) {
     ...createFormGroupProps(),
     ...createPropsOptions({
       /**
+       * Do not perform default HTML validation when submitting the form
+       *
+       * @default true
+       */
+      novalidate: {
+        type: Boolean,
+        default: true,
+      },
+      /**
        * Action settings for form submission
        *
        * Set the destination URL or callback handler
@@ -84,10 +106,6 @@ export function createFormProps(options: FormOptions = {}) {
        * Form is sending
        */
       sending: Boolean,
-      /**
-       * Auto scroll to the location of the form when invalid input is detected in the validation on submission
-       */
-      disableAutoScroll: Boolean,
       /**
        * Accept invalid values during form submission
        *
@@ -136,6 +154,39 @@ export interface FormEmitOptions extends ReturnType<typeof createFormEmits> {}
 
 export type FormContext = SetupContext<FormEmitOptions>;
 
+/**
+ * Option to check the submittability of the form
+ */
+export interface PrepareFormSubmissionOptions {
+  /** Skip operability check */
+  skipOperationCheck?: boolean;
+  /** Skip in-progress check during submission */
+  skipSendingCheck?: boolean;
+  /** Skip validation */
+  skipValidation?: boolean;
+}
+
+/**
+ * Dispatch option for form action
+ */
+export interface DispatchFormActionOptions
+  extends PrepareFormSubmissionOptions {
+  /** Submit event object */
+  event?: Event;
+}
+
+interface ComputedFormAttributes {
+  ref: Ref<HTMLFormElement | null>;
+  action: string | undefined;
+  spellcheck: boolean;
+  onSubmit: (ev: Event) => void;
+  novalidate: boolean;
+  'aria-disabled': boolean;
+}
+
+/**
+ * Control for form element
+ */
 export class VueForm extends FormGroupControl {
   readonly _props: FormProps;
   protected _formContext: FormContext;
@@ -144,6 +195,14 @@ export class VueForm extends FormGroupControl {
   protected _formRef = ref<HTMLFormElement | null>(null);
   protected _actionPromise = ref<Promise<any> | null>(null);
   protected _sending: ComputedRef<boolean>;
+  protected _formAttrs: ComputedRef<ComputedFormAttributes>;
+
+  /**
+   * Do not perform default HTML validation when submitting the form
+   */
+  get novalidate() {
+    return this._props.novalidate;
+  }
 
   get nativeAction() {
     return this._nativeAction.value;
@@ -168,10 +227,10 @@ export class VueForm extends FormGroupControl {
   }
 
   /**
-   * Auto scroll to the location of the form when invalid input is detected in the validation on submission
+   * Attributes to apply to the form element
    */
-  get disableAutoScroll() {
-    return this._props.disableAutoScroll;
+  get formAttrs() {
+    return this._formAttrs.value;
   }
 
   constructor(props: FormProps, ctx: FormContext, options: FormOptions = {}) {
@@ -191,13 +250,21 @@ export class VueForm extends FormGroupControl {
     this._sending = computed(
       () => props.sending || this._actionPromise.value !== null,
     );
+    this._formAttrs = computed(() => ({
+      ref: this._formRef,
+      action: this.nativeAction,
+      spellcheck: this.spellcheck,
+      onSubmit: this.handleSubmit,
+      novalidate: this._props.novalidate,
+      'aria-disabled': this.isDisabled,
+    }));
 
     onBeforeUnmount(() => {
       this._actionPromise.value = null;
       delete (this as any)._formContext;
     });
 
-    (['submit', 'handleSubmit', 'formRef'] as const).forEach((fn) => {
+    (['submit', 'handleSubmit'] as const).forEach((fn) => {
       const _fn = this[fn];
       this[fn] = _fn.bind(this) as any;
     });
@@ -230,48 +297,24 @@ export class VueForm extends FormGroupControl {
   }
 
   /**
-   * Dispatch the specified action function
+   * Returns `true` if the form is in a submittable state after performing state checks and validation
    *
-   * @param event - Event object
+   * @param options - PrepareFormSubmissionOptions
+   * @returns `true` if submission is possible
    */
-  dispatchAction(event?: Event): Promise<void> {
-    if (!event) {
-      event = new SubmitEvent('submit', {
-        cancelable: true,
-        bubbles: true,
-      });
+  async prepareFormSubmission(
+    options: PrepareFormSubmissionOptions = {},
+  ): Promise<boolean> {
+    const { skipSendingCheck, skipOperationCheck, skipValidation } = options;
+
+    if (
+      (!skipSendingCheck && this.sending) ||
+      (!skipOperationCheck && !this.canOperation)
+    ) {
+      return false;
     }
-    const fn = this._fnAction.value;
-    if (!fn) return Promise.resolve();
 
-    const ctx: FormActionContext = {
-      form: this,
-      canceled: false,
-      cancel: () => {
-        ctx.canceled = true;
-      },
-      event,
-    };
-    const result = fn(ctx);
-    if (ctx.canceled || !isPromise(result)) return Promise.resolve();
-    this._actionPromise.value = result;
-    return result.finally(() => {
-      this._actionPromise.value = null;
-    });
-  }
-
-  async validateAndScroll(): Promise<boolean> {
-    const valid = await this.validate();
-    if (!valid) {
-      !this.disableAutoScroll && this.scrollToFirstInvalidNode();
-    }
-    return valid;
-  }
-
-  async handleSubmit(ev: Event) {
-    ev.preventDefault();
-    if (this.sending || this.isDisabled || this.isReadonly) return;
-    if (this.autoValidate) {
+    if (!skipValidation && this.autoValidate) {
       const valid = await this.validate();
       if (!valid) {
         let { acceptInvalidSubmission } = this._props;
@@ -291,17 +334,76 @@ export class VueForm extends FormGroupControl {
           acceptInvalidSubmission = accepted;
         }
         if (!acceptInvalidSubmission) {
-          !this.disableAutoScroll && this.scrollToFirstInvalidNode();
-          return;
+          this.dispatchAutoScroll();
+          return false;
         }
       }
     }
-    this._formContext.emit('submit', this, ev);
-    this.dispatchAction(ev);
+
+    return true;
   }
 
-  formRef() {
-    return this._formRef;
+  protected _dispatchAction(
+    options: DispatchFormActionOptions = {},
+  ): Promise<void> {
+    const fn = this._fnAction.value;
+    if (!fn) return Promise.resolve();
+
+    const {
+      event = new SubmitEvent('submit', {
+        cancelable: true,
+        bubbles: true,
+      }),
+    } = options;
+
+    let canceled = false;
+
+    const ctx: FormActionContext = {
+      form: this,
+      get canceled() {
+        return canceled;
+      },
+      get event() {
+        return event;
+      },
+      cancel: () => {
+        canceled = true;
+      },
+    };
+
+    const result = fn(ctx);
+    if (ctx.canceled || !isPromise(result)) return Promise.resolve();
+    this._actionPromise.value = result;
+    return result.finally(() => {
+      this._actionPromise.value = null;
+    });
+  }
+
+  /**
+   * Dispatch the specified action function
+   *
+   * @param options - Dispatch option for form action
+   */
+  async dispatchAction(options: DispatchFormActionOptions = {}): Promise<void> {
+    const submittable = await this.prepareFormSubmission(options);
+    if (!submittable) return;
+    return this._dispatchAction(options);
+  }
+
+  /**
+   * Handler for form element submission
+   *
+   * @param ev - Submit event object
+   */
+  handleSubmit(ev: Event) {
+    ev.preventDefault();
+    this.prepareFormSubmission().then((submittable) => {
+      if (!submittable) return;
+      this._formContext.emit('submit', this, ev);
+      this._dispatchAction({
+        event: ev,
+      });
+    });
   }
 }
 
