@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.5
+
+### Patch Changes
+
+- Fixed an issue where specifying `false` for `showOwnErrors` would still collect error messages at the group level, even when `collectErrorMessages` was not configured for the group.
+
 ## 0.19.4
 
 ### Patch Changes

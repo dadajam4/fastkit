@@ -151,7 +151,6 @@ export class FormGroupControl extends FormNodeControl {
     }
     const myError = super._renderFirstError();
     if (myError) return myError;
-    if (!this.collectErrorMessages) return;
 
     for (const getNode of this._allInvalidNodes.value) {
       const node = getNode();

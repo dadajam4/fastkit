@@ -223,8 +223,9 @@ export function createFormNodeProps<
       /**
        * Display error messages on this node itself
        *
-       * If the node is within a group and the `collectErrorMessages` setting for that group is enabled, the display of error messages is delegated to the parent group.
-       * If you want to exclude a specific node within the group from this association, enabling this setting allows the node to handle the display of error messages on its own.
+       * If `true`, attempts to render errors for this node itself; if `false`, delegates error message display to the associated form group.
+       *
+       * @default `false` if a parent group exists and the `collectErrorMessages` setting is enabled; otherwise, `true`.
        */
       showOwnErrors: {
         type: Boolean,
@@ -304,6 +305,7 @@ export interface RenderFormNodeErrorOptions {
     index: number,
   ) => VNodeChild;
 }
+
 export class FormNodeControl<
   T = any,
   D = T,
@@ -758,9 +760,10 @@ export class FormNodeControl<
    * Display error messages on this node itself
    */
   get showOwnErrors() {
-    return (
-      this._props.showOwnErrors || !this.parentFormGroup?.collectErrorMessages
-    );
+    const { showOwnErrors } = this._props;
+    if (showOwnErrors === false) return false;
+
+    return showOwnErrors || !this.parentFormGroup?.collectErrorMessages;
   }
 
   constructor(
