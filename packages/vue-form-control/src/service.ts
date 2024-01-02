@@ -15,6 +15,9 @@ export interface VueFormServiceOptions {
   scroll?: VueFormScrollOptions;
 }
 
+/**
+ * Root service of `vue-form-control`
+ */
 export class VueFormService {
   readonly errorMessageResolvers: FormErrorMessageResolver[] = [];
   readonly scroll?: VueFormScrollOptions;

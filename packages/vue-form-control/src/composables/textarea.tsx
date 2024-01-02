@@ -95,15 +95,24 @@ export class TextareaNodeControl extends TextableControl {
   protected _autosize: ComputedRef<TextareaAutosizeSettings | undefined>;
   protected _rows: ComputedRef<number | undefined>;
 
-  get inputElement() {
+  /**
+   * `<textarea />` element or `<VTextareaAutosizeRef />`
+   */
+  get inputElement(): HTMLTextAreaElement | VTextareaAutosizeRef | null {
     return this._inputElement.value;
   }
 
-  get autosizeSettings() {
+  /**
+   * Auto-sizing setting
+   *
+   * @see {@link TextareaAutosizeSettings}
+   */
+  get autosizeSettings(): TextareaAutosizeSettings | undefined {
     return this._autosize.value;
   }
 
-  get rows() {
+  /** Size (number of lines) of the input box. */
+  get rows(): number | undefined {
     return this._rows.value;
   }
 

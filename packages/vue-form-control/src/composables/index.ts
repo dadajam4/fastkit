@@ -11,5 +11,4 @@ export * from './date-input';
 export * from './imask';
 export * from './wrapper';
 export * from './group';
-export * from './set';
 export * from './form';

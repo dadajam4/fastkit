@@ -135,8 +135,6 @@ export interface TextInputNodeControlOptions extends TextableControlOptions {}
 
 export class TextInputNodeControl extends TextableControl {
   readonly _props: TextInputNodeProps;
-  protected _type: ComputedRef<TextInputType>;
-  protected _inputmode: ComputedRef<TextInputMode | undefined>;
   protected _inputElement = ref<HTMLInputElement | null>(null);
   protected readonly _getMaskInput: () => AnyMaskedOptions | undefined;
   protected readonly _getMask: () => IMaskInstance | null;
@@ -144,31 +142,56 @@ export class TextInputNodeControl extends TextableControl {
   protected _passwordVisibility = ref(false);
   protected _maskedValue: ComputedRef<string>;
 
-  get type() {
-    return this._type.value;
+  /**
+   * Input type
+   *
+   * @see {@link TextInputType}
+   */
+  get type(): TextInputType {
+    return this._props.type;
   }
 
-  get inputmode() {
-    return this._inputmode.value;
+  /**
+   * Enumerated attribute that hints at the type of data that might be entered by the user while editing the element or its contents.
+   *
+   * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/inputmode
+   */
+  get inputmode(): TextInputMode | undefined {
+    return this._props.inputmode;
   }
 
-  get inputElement() {
+  /**
+   * `<input />` Element
+   */
+  get inputElement(): HTMLInputElement | null {
     return this._inputElement.value;
   }
 
-  get isVisiblePassword() {
+  /**
+   * Show password
+   */
+  get isVisiblePassword(): boolean {
     return this._passwordVisibility.value;
   }
 
-  get maskedValue() {
+  /**
+   * Masked text
+   */
+  get maskedValue(): string {
     return this._maskedValue.value;
   }
 
-  useUnmaskedValue() {
+  /**
+   * Use the unmasked value
+   */
+  get useUnmaskedValue(): boolean {
     return this._props.maskModel === 'unmasked';
   }
 
-  useTypedValue() {
+  /**
+   * Use the type-corrected value
+   */
+  get useTypedValue(): boolean {
     return this._props.maskModel === 'typed';
   }
 
@@ -193,9 +216,9 @@ export class TextInputNodeControl extends TextableControl {
       onAccept: (ev) => {
         const { masked, unmasked, typed } = imask;
         emit('acceptMask', ev);
-        const bucket = this.useUnmaskedValue()
+        const bucket = this.useUnmaskedValue
           ? unmasked
-          : this.useTypedValue()
+          : this.useTypedValue
           ? typed
           : masked;
 
@@ -230,17 +253,14 @@ export class TextInputNodeControl extends TextableControl {
 
     watch(this._value, (v) => {
       if (!this._getMaskInput()) return;
-      const bucket = this.useUnmaskedValue()
+      const bucket = this.useUnmaskedValue
         ? unmasked
-        : this.useTypedValue()
+        : this.useTypedValue
         ? typed
         : masked;
 
       bucket.value = v || '';
     });
-
-    this._type = computed(() => props.type);
-    this._inputmode = computed(() => props.inputmode);
 
     /**
      * @TODO ちゃんとする
@@ -260,11 +280,19 @@ export class TextInputNodeControl extends TextableControl {
     return '';
   }
 
-  setPasswordVisibility(visibility: boolean) {
+  /**
+   * Set the visibility state of the password
+   *
+   * @param visibility - Password visibility state
+   */
+  setPasswordVisibility(visibility: boolean): void {
     this._passwordVisibility.value = visibility;
   }
 
-  togglePasswordVisibility() {
+  /**
+   * Toggle the visibility state of the password
+   */
+  togglePasswordVisibility(): void {
     this.setPasswordVisibility(!this.isVisiblePassword);
   }
 

@@ -210,25 +210,13 @@ export default defineComponent({
                 v-slots={{
                   default: (group) => (
                     <>
-                      {(() => {
-                        const errors = group.renderAllErrors({
-                          wrapper: ({ children, key }) => (
-                            <li key={key}>{children}</li>
-                          ),
-                        });
-                        if (!errors.length) return;
-
-                        return (
-                          <div
-                            key="errors"
-                            style={{
-                              border: 'dashed 2px red',
-                              fontSize: '12px',
-                            }}>
-                            <ul>{errors}</ul>
-                          </div>
-                        );
-                      })()}
+                      {group.errorMessages.length > 0 && (
+                        <ul>
+                          {group.errorMessages.map((message) => (
+                            <li key={message.key}>{message.render()}</li>
+                          ))}
+                        </ul>
+                      )}
                       <VTextField
                         label="氏名"
                         required

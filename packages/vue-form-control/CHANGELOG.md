@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.7
+
+### Patch Changes
+
+- Removed unnecessary computed instances from the internal implementation of `vue-form-control`, improving performance.
+
 ## 0.19.6
 
 ### Patch Changes

@@ -161,7 +161,7 @@ export function defineFormSelectorComponent(
         return (
           <VFormControl
             nodeControl={selectorControl}
-            focused={selectorControl.focused}
+            // focused={selectorControl.focused}
             hiddenInfo={props.hiddenInfo}
             class={classes.value}
             label={props.label}

@@ -14,12 +14,11 @@ import {
   onBeforeMount,
   onMounted,
   onBeforeUnmount,
-  UnwrapRef,
   getCurrentInstance,
   ComponentInternalInstance,
   VNodeArrayChildren,
   nextTick,
-  VNodeChild,
+  markRaw,
 } from 'vue';
 
 import {
@@ -33,15 +32,19 @@ import {
   FormNodeInjectionKey,
   useParentForm,
   useParentFormGroup,
+  useParentFormNodeWrapper,
   useVueForm,
 } from '../injections';
 import type { VueForm } from './form';
 import type { FormGroupControl } from './group';
+import type { FormNodeWrapper } from './wrapper';
 import {
   RecursiveArray,
   flattenRecursiveArray,
   toInt,
   mixin,
+  Mixin,
+  arrayRemove,
 } from '@fastkit/helpers';
 import {
   createPropsOptions,
@@ -71,6 +74,16 @@ export function toFormNodeError(
   return source;
 }
 
+/**
+ * Validation Timing
+ *
+ * - `always` Always validate
+ * - `touch` Once touched, always validated thereafter.
+ * - `blur` Once the focus is removed from the element at least once, subsequent validations will always be performed.
+ * - `change` Once the value is changed at least once, subsequent validations will always be performed.
+ * - `manual` Validation is not performed automatically. Only manual validation through programming is possible.
+ *
+ */
 export type ValidateTiming = 'always' | 'touch' | 'blur' | 'change' | 'manual';
 
 export type ValidationResult = ValidationError[] | null;
@@ -223,9 +236,9 @@ export function createFormNodeProps<
       /**
        * Display error messages on this node itself
        *
-       * If `true`, attempts to render errors for this node itself; if `false`, delegates error message display to the associated form group.
+       * If `true`, attempts to render errors for this node itself; if `false`, delegates error message display to the associated form group or wrapper.
        *
-       * @default `false` if a parent group exists and the `collectErrorMessages` setting is enabled; otherwise, `true`.
+       * @default `false` if a parent group or wrapper exists and the `collectErrorMessages` setting is enabled; otherwise, `true`.
        */
       showOwnErrors: {
         type: Boolean,
@@ -296,9 +309,12 @@ export function createFormNodeSettings<T, D = T>(
 
 export type FormNodeContext<T, D = T> = SetupContext<FormNodeEmitOptions<T, D>>;
 
-export interface RenderFormNodeErrorContext {
-  /** Rendered error messages */
-  children: VNodeArrayChildren;
+/**
+ * Source code for rendering error messages of form nodes
+ */
+export interface FormNodeErrorMessageSource {
+  /** Render error message */
+  render: (slotsOverrides?: FormNodeErrorSlotsSource) => VNodeArrayChildren;
   /**
    * Error object
    *
@@ -319,11 +335,9 @@ export interface RenderFormNodeErrorContext {
   key: string;
 }
 
-export interface RenderFormNodeErrorOptions {
-  slotsOverrides?: FormNodeErrorSlotsSource;
-  wrapper?: (ctx: RenderFormNodeErrorContext) => VNodeChild;
-}
-
+/**
+ * Base class for all form nodes
+ */
 export class FormNodeControl<
   T = any,
   D = T,
@@ -338,15 +352,16 @@ export class FormNodeControl<
   protected _parentNode: FormNodeControl | null;
   protected _parentForm: VueForm | null;
   protected _parentFormGroup: FormGroupControl | null;
+  protected _parentFormNodeWrapper: FormNodeWrapper | null;
   protected _booted = ref(false);
   protected _name: ComputedRef<string | undefined>;
-  protected _value = ref<T | D>(null as unknown as T | D);
+  protected _value: Ref<T | D> = ref(null as any);
+  protected _initialValue: Ref<T | D> = ref(null as any);
   protected _focused = ref(false);
-  protected _initialValue = ref<T | D>(null as unknown as T | D);
-  protected _children: FormNodeControl[] = [];
-  protected _invalidChildren = ref<(() => FormNodeControl)[]>([]);
+  protected _children: Ref<FormNodeControl[]> = ref([]);
+  protected _invalidChildren: ComputedRef<FormNodeControl[]>;
   protected _finalizePromise: Ref<(() => Promise<void>) | null> = ref(null);
-  protected _validationErrors = ref<ValidationError[]>([]);
+  protected _validationErrors: Ref<ValidationError[]> = ref([]);
   protected _validateResolvers: ValidateResolver[] = [];
   protected _lastValidateValueChanged = true;
   protected _validating = ref(false);
@@ -355,9 +370,10 @@ export class FormNodeControl<
   protected _dirty: ComputedRef<boolean>;
   protected _touched = ref(false);
   protected _shouldValidate = ref(false);
-  protected _currentValue: WritableComputedRef<UnwrapRef<T> | UnwrapRef<D>>;
+  protected _currentValue: WritableComputedRef<T | D>;
   protected _errorMessages: ComputedRef<string[]>;
   protected _errors: ComputedRef<FormNodeError[]>;
+  protected _resolvedErrorMessages: ComputedRef<FormNodeErrorMessageSource[]>;
   protected _errorCount: ComputedRef<number>;
   protected _isDisabled: ComputedRef<boolean>;
   protected _isReadonly: ComputedRef<boolean>;
@@ -373,7 +389,7 @@ export class FormNodeControl<
   protected _requiredFactory: () => Rule<any> | undefined;
 
   /**
-   * Form Service
+   * Root service of `vue-form-control`
    *
    * @see {@link VueFormService}
    */
@@ -386,41 +402,46 @@ export class FormNodeControl<
    *
    * This is set as is for input elements.
    */
-  get name() {
+  get name(): string | undefined {
     return this._name.value;
   }
 
   /**
    * Tag string for node searching
    */
-  get tag() {
+  get tag(): string | undefined {
     return this._props.tag;
   }
 
   /** Parent node */
-  get parentNode() {
+  get parentNode(): FormNodeControl | null {
     return this._parentNode;
   }
 
   /** Parent form group */
-  get parentFormGroup() {
+  get parentFormGroup(): FormGroupControl | null {
     return this._parentFormGroup;
   }
 
+  /** Parent form node wrapper */
+  get parentFormNodeWrapper(): FormNodeWrapper | null {
+    return this._parentFormNodeWrapper;
+  }
+
   /** Parent form */
-  get parentForm() {
+  get parentForm(): VueForm | null {
     return this._parentForm;
   }
 
   /** Automatic focus */
-  get autofocus() {
+  get autofocus(): boolean {
     return this._props.autofocus;
   }
 
   /**
    * Detached and independent from the parent node
    */
-  get detached() {
+  get detached(): boolean {
     return this._props.detach;
   }
 
@@ -430,22 +451,22 @@ export class FormNodeControl<
    * @remarks
    * Please be aware that it may not have been mounted yet.
    */
-  get booted() {
+  get booted(): boolean {
     return this._booted.value;
   }
 
   /** Component mounted */
-  get isMounted() {
+  get isMounted(): boolean {
     return this._isMounted.value;
   }
 
   /** Finalizing the value adjustment process */
-  get isFinalizing() {
+  get isFinalizing(): boolean {
     return !!this._finalizePromise.value;
   }
 
   /** Validating the value */
-  get validating() {
+  get validating(): boolean {
     return this._validating.value;
   }
 
@@ -454,12 +475,12 @@ export class FormNodeControl<
    *
    * This is marked as `true` during the validation and finalization process of the value
    */
-  get pending() {
+  get pending(): boolean {
     return this.validating || this.isFinalizing;
   }
 
   /** Current input value */
-  get value() {
+  get value(): T | D {
     return this._currentValue.value;
   }
 
@@ -468,7 +489,7 @@ export class FormNodeControl<
   }
 
   /** Value used for validation */
-  get validationValue() {
+  get validationValue(): any {
     if (this._validationValueGetter) {
       return this._validationValueGetter();
     }
@@ -476,7 +497,7 @@ export class FormNodeControl<
   }
 
   /** In focus */
-  get focused() {
+  get focused(): boolean {
     return this._focused.value;
   }
 
@@ -491,7 +512,7 @@ export class FormNodeControl<
    * @see {@link FormNodeControl.commitSelf commitSelf}
    * @see {@link FormNodeControl.commit commit}
    */
-  get initialValue() {
+  get initialValue(): T | D {
     return this._initialValue.value;
   }
 
@@ -500,21 +521,21 @@ export class FormNodeControl<
    *
    * @see {@link FormNodeControl.initialValue initialValue}
    */
-  get dirty() {
+  get dirty(): boolean {
     return this._dirty.value;
   }
 
   /**
    * The input value has not been changed from its initial value
    */
-  get pristine() {
+  get pristine(): boolean {
     return !this.dirty;
   }
 
   /**
    * Touched the elements of this node at least once
    */
-  get touched() {
+  get touched(): boolean {
     return this._touched.value;
   }
 
@@ -533,28 +554,28 @@ export class FormNodeControl<
   /**
    * Not touched the elements of this node yet.
    */
-  get untouched() {
+  get untouched(): boolean {
     return !this.touched;
   }
 
   /**
    * The list of FormNode instances directly belonging to this node as children
    */
-  get children() {
-    return this._children;
+  get children(): FormNodeControl[] {
+    return this._children.value;
   }
 
   /**
    * The list of FormNode instances directly belonging to itself, and possessing one or more errors
    */
   get invalidChildren(): FormNodeControl[] {
-    return this._invalidChildren.value.map((g) => g());
+    return this._invalidChildren.value;
   }
 
   /**
    * The list of validation errors for the value within itself
    */
-  get validationErrors() {
+  get validationErrors(): ValidationError[] {
     return this._validationErrors.value;
   }
 
@@ -566,15 +587,30 @@ export class FormNodeControl<
    * @remarks
    * This list does not include error information specified with the `error` attribute.
    */
-  get errors() {
+  get errors(): FormNodeError[] {
     return this._errors.value;
   }
 
   /**
-   * The first error within itself
+   * Source code for all collected error messages
+   *
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   *
+   * @see {@link FormNodeErrorMessageSource}
    */
-  get firstError() {
-    return this.errors[0];
+  get errorMessages(): FormNodeErrorMessageSource[] {
+    return this._resolvedErrorMessages.value;
+  }
+
+  /**
+   * Source code for the first error message among all collected messages
+   *
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   *
+   * @see {@link FormNodeErrorMessageSource}
+   */
+  get firstErrorMessage(): FormNodeErrorMessageSource | undefined {
+    return this.errorMessages[0];
   }
 
   /**
@@ -583,95 +619,100 @@ export class FormNodeControl<
    * @remarks
    * This also takes into consideration the configuration of the `error` property.
    */
-  get hasMyError() {
+  get hasMyError(): boolean {
     return this.errorCount > 0;
   }
 
   /**
    * The number of errors it possesses
    */
-  get errorCount() {
+  get errorCount(): number {
     return this._errorCount.value;
   }
 
   /**
    * Either itself or the parent node has one or more errors.
    */
-  get hasError() {
+  get hasError(): boolean {
     return this.hasMyError || (!this.detached && !!this.parentNode?.hasMyError);
   }
 
   /**
    * Either itself or the parent node is in a disabled state.
    */
-  get isDisabled() {
+  get isDisabled(): boolean {
     return this._isDisabled.value;
   }
 
   /**
    * Either itself or the parent node is in a read-only state.
    */
-  get isReadonly() {
+  get isReadonly(): boolean {
     return this._isReadonly.value;
   }
 
   /**
    * Either itself or the parent node is in a view-only state.
    */
-  get isViewonly() {
+  get isViewonly(): boolean {
     return this._isViewonly.value;
   }
 
   /**
    * Operable
    */
-  get canOperation() {
+  get canOperation(): boolean {
     return this._canOperation.value;
   }
 
-  get validateTiming() {
+  /**
+   * Validation Timing
+   *
+   *@see {@link ValidateTiming}
+   */
+  get validateTiming(): ValidateTiming {
     return this._props.validateTiming;
   }
 
   /**
    * Always perform value validation.
    */
-  get validateTimingIsAlways() {
+  get validateTimingIsAlways(): boolean {
     return this.validateTiming === 'always';
   }
 
   /**
    * Perform value validation only when the elements of this node have been touched at least once.
    */
-  get validateTimingIsTouch() {
+  get validateTimingIsTouch(): boolean {
     return this.validateTiming === 'touch';
   }
 
   /**
    * Perform value validation when focus is removed from the elements of this node.
    */
-  get validateTimingIsBlur() {
+  get validateTimingIsBlur(): boolean {
     return this.validateTiming === 'blur';
   }
 
   /**
    * Perform value validation when the input value changes.
    */
-  get validateTimingIsChange() {
+  get validateTimingIsChange(): boolean {
     return this.validateTiming === 'change';
   }
 
   /**
    * Value validation is manually performed on the application side.
    */
-  get validateTimingIsManual() {
+  get validateTimingIsManual(): boolean {
     return this.validateTiming === 'manual';
   }
 
   /**
    * The list of all rules, including those specified in the properties under 'rules' and others calculated from values related to rule logic.
    */
-  get rules() {
+  get rules(): VerifiableRule[] {
     return this._rules.value;
   }
 
@@ -681,35 +722,35 @@ export class FormNodeControl<
    * @remarks
    * This checks whether there is at least one 'required' rule in the 'required' setting or within the specified 'rules'.
    */
-  get isRequired() {
+  get isRequired(): boolean {
     return this._hasRequired.value;
   }
 
   /**
    * The component has been destroyed
    */
-  get isDestroyed() {
+  get isDestroyed(): boolean {
     return this._isDestroyed;
   }
 
   /**
    * There is at least one node in an error state among the nodes directly under this node
    */
-  get hasInvalidChild() {
+  get hasInvalidChild(): boolean {
     return this.invalidChildren.length > 0;
   }
 
   /**
    * Either this node or one of its descendants has an error
    */
-  get invalid() {
+  get invalid(): boolean {
     return this.hasMyError || this.hasInvalidChild;
   }
 
   /**
    * This node and none of its descendants have an error
    */
-  get valid() {
+  get valid(): boolean {
     return !this.invalid;
   }
 
@@ -718,7 +759,7 @@ export class FormNodeControl<
    *
    * When the node is disabled, it is forcibly set to `-1`.
    */
-  get tabindex() {
+  get tabindex(): number {
     return this._tabindex.value;
   }
 
@@ -727,7 +768,7 @@ export class FormNodeControl<
    *
    * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/spellcheck
    */
-  get spellcheck() {
+  get spellcheck(): boolean {
     return this._props.spellcheck;
   }
 
@@ -736,7 +777,7 @@ export class FormNodeControl<
    *
    * This varies based on the specified `validateTiming` and the user's interaction status.
    */
-  get shouldValidate() {
+  get shouldValidate(): boolean {
     return this._shouldValidate.value;
   }
 
@@ -746,7 +787,7 @@ export class FormNodeControl<
    * @remarks
    * If the `detach` option is set, this will always be `false`.
    */
-  get sending() {
+  get sending(): boolean {
     return (
       (!this.detached && !!this._parentForm && this._parentForm.sending) ||
       false
@@ -756,14 +797,14 @@ export class FormNodeControl<
   /**
    * The current Vue instance initializing this node
    */
-  get currentInstance() {
+  get currentInstance(): ComponentInternalInstance | null {
     return this._cii;
   }
 
   /**
    * The host element of the current Vue instance initializing this node
    */
-  get currentEl() {
+  get currentEl(): HTMLElement | null {
     const { currentInstance } = this;
     return currentInstance && (currentInstance.vnode.el as HTMLElement | null);
   }
@@ -771,18 +812,21 @@ export class FormNodeControl<
   /**
    * Multiple input mode
    */
-  get multiple() {
+  get multiple(): boolean {
     return this.__multiple;
   }
 
   /**
    * Display error messages on this node itself
    */
-  get showOwnErrors() {
+  get showOwnErrors(): boolean {
     const { showOwnErrors } = this._props;
     if (showOwnErrors === false) return false;
-
-    return showOwnErrors || !this.parentFormGroup?.collectErrorMessages;
+    if (showOwnErrors) return true;
+    if (this.parentFormGroup?.collectErrorMessages) {
+      return false;
+    }
+    return !this.parentFormNodeWrapper?.collectErrorMessages;
   }
 
   constructor(
@@ -790,6 +834,8 @@ export class FormNodeControl<
     ctx: FormNodeContext<T, D>,
     options: FormNodeControlOptions<T, D, Required>,
   ) {
+    markRaw(this);
+
     this._props = props;
     this._service = useVueForm();
     this._ctx = ctx;
@@ -804,10 +850,12 @@ export class FormNodeControl<
     this._stateExtensions = stateExtensions || {};
 
     const parentNode = useParentFormNode();
+    const parentFormNodeWrapper = useParentFormNodeWrapper();
     const parentFormGroup = useParentFormGroup();
     const parentForm = useParentForm();
 
     this._parentNode = parentNode;
+    this._parentFormNodeWrapper = parentFormNodeWrapper;
     this._parentFormGroup = parentFormGroup;
     this._parentForm = parentForm;
 
@@ -822,7 +870,7 @@ export class FormNodeControl<
 
     provide(FormNodeInjectionKey, this);
 
-    this._currentValue = computed({
+    this._currentValue = computed<T | D>({
       get: () => this._value.value,
       set: (value) => {
         this.setValue(value as T | D);
@@ -840,6 +888,18 @@ export class FormNodeControl<
         ...this.validationErrors,
       ];
     });
+
+    this._resolvedErrorMessages = computed(() => {
+      return this.showOwnErrors
+        ? this.errors.map((error, index) =>
+            this._createFormNodeErrorMessageSource(error, index),
+          )
+        : [];
+    });
+
+    this._invalidChildren = computed(() =>
+      this.children.filter((node) => node.hasMyError),
+    );
 
     this._errorCount = computed(() => {
       const baseCount = props.error ? 1 : 0;
@@ -910,7 +970,7 @@ export class FormNodeControl<
     watch(() => props.modelValue, this._syncValueFromProps, {
       immediate: true,
     });
-    this._initialValue.value = cheepClone(props.modelValue) as any;
+    this._initialValue.value = cheepClone(this._value.value) as any;
 
     watch(
       () => props.validateTiming,
@@ -959,23 +1019,14 @@ export class FormNodeControl<
     );
 
     watch(
-      () => this.hasMyError,
-      (_hasMyError) => {
-        if (!this.detached) {
-          parentFormGroup && parentFormGroup.__updateInvalidNodesByNode(this);
-          parentNode && parentNode._updateInvalidNodesByNode(this);
-        }
-      },
-      { immediate: true },
-    );
-
-    watch(
       () => this.errors,
       (errors) => {
         ctx.emit('update:errors', errors);
       },
       { immediate: true },
     );
+
+    parentFormNodeWrapper?.__joinFromNode(this);
 
     if (!this.detached) {
       parentFormGroup?.__joinFromNode(this);
@@ -1010,11 +1061,13 @@ export class FormNodeControl<
 
     onBeforeUnmount(() => {
       this.clearValidateResolvers();
-      parentNode && parentNode._leaveFromNode(this);
-      parentFormGroup && parentFormGroup.__leaveFromNode(this);
+      parentNode?._leaveFromNode(this);
+      parentFormGroup?.__leaveFromNode(this);
+      parentFormNodeWrapper?.__leaveFromNode(this);
       this._finalizePromise.value = null;
       this.resetSelfValidates();
       this._parentNode = null;
+      this._parentFormNodeWrapper = null;
       this._parentFormGroup = null;
       this._parentForm = null;
       this._cii = null;
@@ -1028,6 +1081,26 @@ export class FormNodeControl<
     (['focusHandler', 'blurHandler'] as const).forEach((fn) => {
       this[fn] = this[fn].bind(this);
     });
+  }
+
+  /** @internal */
+  _createFormNodeErrorMessageSource(
+    error: FormNodeError,
+    index: number,
+    slotsOverrides?: FormNodeErrorSlotsSource,
+  ): FormNodeErrorMessageSource {
+    return {
+      render: (_slotsOverrides) =>
+        this.renderErrorSource(error, {
+          ...slotsOverrides,
+          ..._slotsOverrides,
+        }),
+      error,
+      node: this,
+      key: `${String(this.nodeType)}:${this.name}:${this.tag}:${
+        error.name
+      }:${index}`,
+    };
   }
 
   protected hasRequiredRule() {
@@ -1070,7 +1143,7 @@ export class FormNodeControl<
    *
    * @param name Node name
    */
-  findNodeByName(name: string) {
+  findNodeByName(name: string): FormNodeControl | undefined {
     return this.findNodeRecursive((node) => node.name === name);
   }
 
@@ -1079,7 +1152,7 @@ export class FormNodeControl<
    *
    * @param tag Tag string
    */
-  findNodeByTag(tag: string) {
+  findNodeByTag(tag: string): FormNodeControl | undefined {
     return this.findNodeRecursive((node) => node.tag === tag);
   }
 
@@ -1097,7 +1170,7 @@ export class FormNodeControl<
   renderErrorSource(
     errorSource: string | FormNodeError,
     slotsOverrides?: FormNodeErrorSlotsSource,
-  ): VNodeArrayChildren | undefined {
+  ): VNodeArrayChildren {
     const { slots } = this._getContextOrDie();
     const error =
       typeof errorSource === 'string'
@@ -1114,83 +1187,11 @@ export class FormNodeControl<
       const message = cleanupEmptyVNodeChild(slot?.(error));
       if (message) return message;
     }
-    return cleanupEmptyVNodeChild(
-      this.service.resolveErrorMessage(error, this) || error.message,
+    return (
+      cleanupEmptyVNodeChild(this.service.resolveErrorMessage(error, this)) || [
+        error.message,
+      ]
     );
-  }
-
-  /** @internal */
-  _renderFirstError(
-    slotsOverrides?: FormNodeErrorSlotsSource,
-  ): VNodeArrayChildren | undefined {
-    if (!this.canOperation) {
-      return;
-    }
-    const { firstError } = this;
-    if (!firstError) return;
-    return this.renderErrorSource(firstError, slotsOverrides);
-  }
-
-  /**
-   * Render the first error of this node itself as a `VNodeArrayChildren`
-   *
-   * @remarks
-   * Please note that nothing will be returned if the node is inoperable.
-   * Also, if the parent group is configured to collect errors for this node and `showOwnErrors` for this node is disabled, this method will return nothing.
-   *
-   * @see {@link FormNodeControl.canOperation canOperation}
-   * @see {@link FormNodeControl.showOwnErrors showOwnErrors}
-   */
-  renderFirstError(
-    slotsOverrides?: FormNodeErrorSlotsSource,
-  ): VNodeArrayChildren | undefined {
-    if (this.showOwnErrors) {
-      return this._renderFirstError(slotsOverrides);
-    }
-  }
-
-  /**
-   * @internal
-   */
-  _renderAllErrors(options?: RenderFormNodeErrorOptions): VNodeArrayChildren[] {
-    if (!this.canOperation) {
-      return [];
-    }
-    const results: VNodeArrayChildren[] = [];
-    const wrapper = options?.wrapper;
-    this.errors.map((error, index) => {
-      const children = this.renderErrorSource(error, options?.slotsOverrides);
-      if (children) {
-        const wrapped = wrapper
-          ? cleanupEmptyVNodeChild(
-              wrapper({
-                children,
-                error,
-                node: this,
-                key: `${String(this.nodeType)}:${this.name}:${this.tag}:${
-                  error.name
-                }:${index}`,
-              }),
-            )
-          : children;
-        wrapped && results.push(wrapped);
-      }
-    });
-    return results;
-  }
-
-  /**
-   * Render all errors held by this node as an array of `VNodeArrayChildren`
-   *
-   * @remarks
-   * Please note that nothing will be returned if the node is inoperable.
-   * Also, if the parent group is configured to collect errors for this node and `showOwnErrors` for this node is disabled, this method will return nothing.
-   *
-   * @see {@link FormNodeControl.canOperation canOperation}
-   * @see {@link FormNodeControl.showOwnErrors showOwnErrors}
-   */
-  renderAllErrors(options?: RenderFormNodeErrorOptions): VNodeArrayChildren[] {
-    return this.showOwnErrors ? this._renderAllErrors(options) : [];
   }
 
   protected _finalize(): Promise<void> {
@@ -1215,7 +1216,7 @@ export class FormNodeControl<
    *
    * @param value - value
    */
-  setValue(value: T | D) {
+  setValue(value: T | D): boolean {
     if (!cheepDeepEqual(this._value.value, value)) {
       const v = cheepClone(value);
       this._value.value = v as any;
@@ -1253,7 +1254,7 @@ export class FormNodeControl<
    *
    * @param shouldValidate - The input value should be validated
    */
-  setShouldValidate(shouldValidate: boolean) {
+  setShouldValidate(shouldValidate: boolean): void {
     if (this.shouldValidate !== shouldValidate) {
       this._shouldValidate.value = shouldValidate;
     }
@@ -1266,6 +1267,11 @@ export class FormNodeControl<
     return null as unknown as T | D;
   }
 
+  /**
+   * If the specified value is nullable, return `emptyValue`; otherwise, return the specified value as is
+   *
+   * @param value - Any value
+   */
   safeModelValue(value: any): T | D {
     if (value == null) {
       return this.emptyValue();
@@ -1273,7 +1279,12 @@ export class FormNodeControl<
     return value;
   }
 
-  findRule(ruleName: string | RegExp) {
+  /**
+   * Find and retrieve a rule corresponding to the specified name or a name matching the regular expression
+   *
+   * @param ruleName - Name or regular expression
+   */
+  findRule(ruleName: string | RegExp): VerifiableRule | undefined {
     return this.rules.find((r) => {
       const { $name } = r;
       return typeof ruleName === 'string'
@@ -1290,7 +1301,7 @@ export class FormNodeControl<
    * @remarks
    * This method does not reset the validation state. Typically, consider using {@link FormNodeControl.resetSelf resetSelf}.
    */
-  resetSelfValue() {
+  resetSelfValue(): void {
     this.value = cheepClone(this.initialValue);
   }
 
@@ -1302,7 +1313,7 @@ export class FormNodeControl<
    * @remarks
    * This method does not reset the validation state. Typically, consider using {@link FormNodeControl.resetSelf reset}.
    */
-  resetValue() {
+  resetValue(): void {
     this.resetSelfValue();
     this.children.forEach((child) => child.resetValue());
   }
@@ -1313,7 +1324,7 @@ export class FormNodeControl<
    * @remarks
    * This method does not reset the validation state. Typically, consider using {@link FormNodeControl.commitSelf commitSelf}.
    */
-  commitSelfValue() {
+  commitSelfValue(): void {
     this._initialValue.value = cheepClone(this.value);
   }
 
@@ -1323,7 +1334,7 @@ export class FormNodeControl<
    * @remarks
    * This method does not reset the validation state. Typically, consider using {@link FormNodeControl.commit commit}.
    */
-  commitValue() {
+  commitValue(): void {
     this.commitSelfValue();
     this.children.forEach((child) => child.commitValue());
   }
@@ -1334,7 +1345,7 @@ export class FormNodeControl<
    * @remarks
    * This method does not perform a reset on descendant nodes. Typically, consider using {@link FormNodeControl.resetValidates resetValidates}.
    */
-  resetSelfValidates() {
+  resetSelfValidates(): void {
     this._validationErrors.value = [];
     this._lastValidateValueChanged = true;
     this.touched = false;
@@ -1344,7 +1355,7 @@ export class FormNodeControl<
   /**
    * Reset the validation state of this node and all its descendant nodes
    */
-  resetValidates() {
+  resetValidates(): void {
     this.resetSelfValidates();
     this.children.forEach((child) => child.resetValidates());
   }
@@ -1355,7 +1366,7 @@ export class FormNodeControl<
    * @remarks
    * This method does not reset the state of descendant nodes. Typically, consider using {@link FormNodeControl.reset reset}.
    */
-  resetSelf() {
+  resetSelf(): void {
     this.resetSelfValue();
     this.resetSelfValidates();
   }
@@ -1365,7 +1376,7 @@ export class FormNodeControl<
    *
    * @param fn - The function to be executed
    */
-  skipValidation(fn: (...args: any) => any) {
+  skipValidation(fn: (...args: any) => any): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       try {
         this._validationSkip = true;
@@ -1386,7 +1397,7 @@ export class FormNodeControl<
   /**
    * Reset the input value of this node and all its descendant nodes to the initial value and reset the validation state
    */
-  reset() {
+  reset(): Promise<void> {
     return this.skipValidation(() => this.resetValue()).then(() => {
       this.resetValidates();
     });
@@ -1395,14 +1406,14 @@ export class FormNodeControl<
   /**
    * Clear the input value of this node
    */
-  clearSelf() {
+  clearSelf(): void {
     this.value = this.emptyValue() as any;
   }
 
   /**
    * Clear the input value of this node and all its descendant nodes
    */
-  clear() {
+  clear(): void {
     this.clearSelf();
     this.children.forEach((child) => child.clear());
   }
@@ -1413,7 +1424,7 @@ export class FormNodeControl<
    * @remarks
    * This method does not reset the state of descendant nodes. Typically, consider using {@link FormNodeControl.commit commit}.
    */
-  commitSelf() {
+  commitSelf(): void {
     this.commitSelfValue();
     this.resetSelfValidates();
   }
@@ -1421,7 +1432,7 @@ export class FormNodeControl<
   /**
    * Set the current input value as the initial value for this node and all its descendant nodes, and reset the validation state
    */
-  commit() {
+  commit(): void {
     this.commitValue();
     this.resetValidates();
   }
@@ -1437,7 +1448,7 @@ export class FormNodeControl<
    *
    * @returns If validation is successful, return `true`.
    */
-  async validate() {
+  async validate(): Promise<boolean> {
     await Promise.all([this.validateSelf(), this.validateChildren()]);
     return this.valid;
   }
@@ -1448,7 +1459,7 @@ export class FormNodeControl<
    * @remarks
    * Typically, consider using {@link FormNodeControl.validate validate}.
    */
-  validateChildren() {
+  validateChildren(): Promise<boolean[]> {
     return Promise.all(this.children.map((node) => node.validate()));
   }
 
@@ -1510,60 +1521,31 @@ export class FormNodeControl<
     });
   }
 
-  private resolveValidateResolvers() {
+  private resolveValidateResolvers(): void {
     this._validateResolvers.forEach((resolver) =>
       resolver(this.validationErrors),
     );
     this.clearValidateResolvers();
   }
 
-  private clearValidateResolvers() {
+  private clearValidateResolvers(): void {
     this._validateResolvers = [];
   }
 
   /** @internal */
-  _joinFromNode(node: FormNodeControl) {
-    const { _children } = this;
-    if (!_children.includes(node)) {
-      _children.push(node);
+  _joinFromNode(node: FormNodeControl): void {
+    const { children } = this;
+    if (!children.includes(node)) {
+      children.push(node);
     }
   }
 
   /** @internal */
-  _leaveFromNode(node: FormNodeControl) {
-    const { _children } = this;
-    const index = _children.indexOf(node);
-    if (index !== -1) {
-      _children.splice(index, 1);
-    }
-    this.removeInvalidChild(node);
+  _leaveFromNode(node: FormNodeControl): void {
+    arrayRemove(this.children, node);
   }
 
-  private pushInvalidChild(node: FormNodeControl) {
-    const { invalidChildren } = this;
-    if (!invalidChildren.includes(node)) {
-      this._invalidChildren.value.push(() => node);
-    }
-  }
-
-  private removeInvalidChild(node: FormNodeControl) {
-    const { invalidChildren } = this;
-    const index = invalidChildren.indexOf(node);
-    if (index !== -1) {
-      this._invalidChildren.value.splice(index, 1);
-    }
-  }
-
-  /** @internal */
-  _updateInvalidNodesByNode(node: FormNodeControl) {
-    if (node.hasMyError && !this.invalidChildren.includes(node)) {
-      this.pushInvalidChild(node);
-    } else {
-      this.removeInvalidChild(node);
-    }
-  }
-
-  focusHandler(ev: FocusEvent) {
+  focusHandler(ev: FocusEvent): void {
     const before = this.focused;
     this._focused.value = true;
     this._touched.value = true;
@@ -1577,7 +1559,7 @@ export class FormNodeControl<
     this._ctx.emit('focus', ev);
   }
 
-  blurHandler(ev: FocusEvent) {
+  blurHandler(ev: FocusEvent): void {
     if (!this._ctx) return;
     const before = this.focused;
     this._focused.value = false;
@@ -1592,7 +1574,7 @@ export class FormNodeControl<
    *
    * @param options - options
    */
-  scrollIntoView(options?: ScrollIntoViewOptions) {
+  scrollIntoView(options?: ScrollIntoViewOptions): void {
     const { currentEl } = this;
     currentEl && this.service.scrollToElement(currentEl, options);
   }
@@ -1603,7 +1585,7 @@ export class FormNodeControl<
    * @param trait - trait object
    * @returns Mixed-in Proxy
    */
-  extend<U extends object>(trait: U) {
+  extend<U extends object>(trait: U): Mixin<this, U> {
     return mixin(this, trait);
   }
 }

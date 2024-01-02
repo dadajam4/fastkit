@@ -1,5 +1,14 @@
 # @fastkit/vui-wysiwyg
 
+## 6.0.12
+
+### Patch Changes
+
+- Removed unnecessary computed instances from the internal implementation of `vue-form-control`, improving performance.
+
+- Updated dependencies []:
+  - @fastkit/vui@0.18.12
+
 ## 6.0.11
 
 ### Patch Changes

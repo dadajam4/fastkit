@@ -92,8 +92,8 @@ export const VFormControl = defineComponent({
         'v-form-control--focused': control.focused,
         'v-form-control--dirty': control.dirty,
         'v-form-control--pristine': control.pristine,
-        'v-form-control--disabled': control.disabled,
-        'v-form-control--readonly': control.readonly,
+        'v-form-control--disabled': control.isDisabled,
+        'v-form-control--readonly': control.isReadonly,
         'v-form-control--touched': control.touched,
         'v-form-control--untouched': control.untouched,
         'v-form-control--invalid': control.invalid,
@@ -102,14 +102,14 @@ export const VFormControl = defineComponent({
       colorProvider.className(
         props.error
           ? 'error'
-          : control.invalid && !control.readonly
+          : control.invalid && !control.isReadonly
           ? 'error'
           : 'primary',
       ),
     ]);
 
     const getRequiredChip = createRequiredChipRenderer(
-      () => control.required,
+      () => control.isRequired,
       props,
       vui,
     );

@@ -28,7 +28,7 @@ import {
 } from './node';
 import type { FormSelectorItemControl } from './selector-item';
 import { FormSelectorInjectionKey } from '../injections';
-import { IN_WINDOW, isPromise } from '@fastkit/helpers';
+import { IN_WINDOW, isPromise, arrayRemove } from '@fastkit/helpers';
 
 export const DEFAULT_FORM_SELECTOR_GROUP_ID = '__default__';
 
@@ -113,10 +113,18 @@ export function createFormSelectorProps(
       modelValue,
     }),
     ...createPropsOptions({
+      /**
+       * Multiple selection mode
+       */
       multiple: {
         type: Boolean,
         default: defaultMultiple,
       },
+      /**
+       * List of selection items, group list, or asynchronous loader
+       *
+       * @see {@link RawFormSelectorItems}
+       */
       items: {
         type: [Array, Function] as PropType<RawFormSelectorItems>,
         default: () => [],
@@ -170,11 +178,7 @@ export type FormSelectorLoadState = 'ready' | 'loading' | 'error';
 export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   readonly _props: FormSelectorProps;
   readonly parentNodeType?: FormNodeType;
-  protected _itemGetters = ref<FormSelectorItemControl['_get'][]>([]);
-  protected _items: ComputedRef<FormSelectorItemControl[]>;
-  protected _notSelected: ComputedRef<boolean>;
-  protected _allSelected: ComputedRef<boolean>;
-  protected _indeterminate: ComputedRef<boolean>;
+  protected _items: Ref<FormSelectorItemControl[]> = ref([]);
   protected _itemsLoadState = ref<FormSelectorLoadState>('ready');
   protected _propGroups: Ref<ResolvedFormSelectorGroup[]> = ref([]);
   protected _loadedItems: ComputedRef<ResolvedFormSelectorItem[]>;
@@ -191,67 +195,124 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     ev: MouseEvent,
   ) => any;
 
-  get items() {
+  /**
+   * List of selection item nodes
+   *
+   * @see {@link FormSelectorItemControl}
+   */
+  get items(): FormSelectorItemControl[] {
     return this._items.value;
   }
 
-  get guardingItem() {
+  /**
+   * Item currently undergoing selection guard process
+   *
+   * @see {@link FormSelectorItemControl}
+   */
+  get guardingItem(): FormSelectorItemControl | undefined {
     return this._guardingItem.value?.();
   }
 
-  get isGuardInProgress() {
+  /**
+   * In the process of selection guard
+   */
+  get isGuardInProgress(): boolean {
     return !!this.guardingItem;
   }
 
-  get notSelected() {
-    return this._allSelected.value;
+  /**
+   * Not selected any
+   */
+  get notSelected(): boolean {
+    return this.selectedValues.length === 0;
   }
 
-  get allSelected() {
-    return this._allSelected.value;
+  /**
+   * Selected all items, including those in a disabled state
+   */
+  get allSelected(): boolean {
+    return this.selectedValues.length === this.items.length;
   }
 
-  get indeterminate() {
-    return this._indeterminate.value;
+  /**
+   * One or more items, including those in a disabled state, are selected, but not all of them
+   */
+  get indeterminate(): boolean {
+    return !this.notSelected && !this.allSelected;
   }
 
-  get propGroups() {
+  /**
+   * List of selection groups resolved from properties
+   *
+   * @see {@link ResolvedFormSelectorGroup}
+   */
+  get propGroups(): ResolvedFormSelectorGroup[] {
     return this._propGroups.value;
   }
 
-  get loadedItems() {
+  /**
+   * List of loaded items
+   *
+   * @see {@link ResolvedFormSelectorItem}
+   */
+  get loadedItems(): ResolvedFormSelectorItem[] {
     return this._loadedItems.value;
   }
 
-  get selectedPropItems() {
+  /**
+   * List of selected property-specified items
+   *
+   * @see {@link ResolvedFormSelectorItem}
+   */
+  get selectedPropItems(): ResolvedFormSelectorItem[] {
     return this._selectedPropItems.value;
   }
 
-  get selectedValues() {
+  /**
+   * List of selected values
+   */
+  get selectedValues(): (string | number)[] {
     return this._selectedValues.value;
   }
 
-  get selectedItems() {
+  /**
+   * List of selected item nodes
+   */
+  get selectedItems(): FormSelectorItemControl[] {
     return this._selectedItems.value;
   }
 
-  get itemsLoadState() {
+  /**
+   * Loading state of selection items
+   *
+   * @see {@link FormSelectorLoadState}
+   */
+  get itemsLoadState(): FormSelectorLoadState {
     return this._itemsLoadState.value;
   }
 
-  get itemsLoading() {
+  /**
+   * Loading items
+   */
+  get itemsLoading(): boolean {
     return this.itemsLoadState === 'loading';
   }
 
-  get itemsReady() {
+  /**
+   * Items loaded
+   */
+  get itemsReady(): boolean {
     return this.itemsLoadState === 'ready';
   }
 
-  get itemsLoadFailed() {
+  /**
+   * Failed to load items
+   */
+  get itemsLoadFailed(): boolean {
     return this.itemsLoadState === 'error';
   }
 
-  get isDisabled() {
+  get isDisabled(): boolean {
     return super.isDisabled || this.itemsLoading;
   }
 
@@ -269,27 +330,8 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     this._guardingItem = ref();
     this.onSelectItem = options.onSelectItem;
     this.onCancelSelect = options.onCancelSelect;
-    // this._syncValueForChoices = this._syncValueForChoices.bind(this);
 
-    this._items = computed(() => {
-      return this._itemGetters.value.map((_get) => _get());
-    });
-
-    this._notSelected = computed(() => {
-      return this.selectedValues.length === 0;
-    });
-
-    this._allSelected = computed(() => {
-      return this.selectedValues.length === this.items.length;
-    });
-
-    this._indeterminate = computed(() => {
-      return !this.notSelected && !this.allSelected;
-    });
-
-    this._selectedValues = computed(() => {
-      return this._safeMultipleValues();
-    });
+    this._selectedValues = computed(() => this._safeMultipleValues());
 
     this._selectedItems = computed(() => {
       const { selectedValues } = this;
@@ -319,37 +361,6 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       this[fn] = (this[fn] as any).bind(this);
     });
 
-    // const setPropItems = (items: FormSelectorItems) => {
-    //   this._propItems.value = items.map((item) => ({
-    //     ...item,
-    //     label: resolveVNodeChildOrSlot(item.label),
-    //   }));
-    //   this._itemsLoadState.value = 'ready';
-    // };
-
-    // const loadItems = () => {
-    //   const { items } = props;
-
-    //   if (typeof items !== 'function') {
-    //     setPropItems(items);
-    //     return;
-    //   }
-
-    //   setPropItems([]);
-    //   this._itemsLoadState.value = 'loading';
-
-    //   if (!IN_WINDOW) return;
-
-    //   items(this)
-    //     .then((result) => {
-    //       if (props.items !== items) return;
-    //       setPropItems(result);
-    //     })
-    //     .catch((_err) => {
-    //       if (props.items !== items) return;
-    //       this._itemsLoadState.value = 'error';
-    //     });
-    // };
     this._loadedItems = computed(() =>
       this.propGroups.map((group) => group.items).flat(),
     );
@@ -426,10 +437,29 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     this._itemsLoadState.value = 'ready';
   }
 
+  /**
+   * Render selected property-specified items
+   *
+   * @param options - Options
+   */
   renderSelectedPropItems(options?: {
+    /**
+     * Fallback specification for loading.
+     */
     loading?: () => VNodeChild;
+    /**
+     * Fallback specification when nothing is selected
+     */
     empty?: () => VNodeChild;
+    /**
+     * Separator for items when multiple selections are allowed
+     */
     separator?: VNodeChild | (() => VNodeChild);
+    /**
+     * Renderer for customizing item rendering
+     * @param item - Item
+     * @param index - Index
+     */
     item?: (item: ResolvedFormSelectorItem, index: number) => VNodeChild;
   }): VNodeChild {
     if (this.itemsLoading) {
@@ -456,7 +486,10 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     return children;
   }
 
-  loadItems() {
+  /**
+   * Load items
+   */
+  loadItems(): void {
     const { items } = this._props;
 
     if (typeof items !== 'function') {
@@ -471,11 +504,11 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     items(this)
       .then((result) => {
-        if (this._props.items !== items) return;
+        if (this._props?.items !== items) return;
         this._setPropItems(result);
       })
       .catch((_err) => {
-        if (this._props.items !== items) return;
+        if (this._props?.items !== items) return;
         this._itemsLoadState.value = 'error';
       });
   }
@@ -567,10 +600,18 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     }
   }
 
+  /**
+   * Get the list of mounted selection nodes
+   *
+   * @param groupId - Group ID (for filtering)
+   * @param ignoreDisabled - Ignore disabled items
+   *
+   * @see {@link FormSelectorItemControl}
+   */
   getItems(
     groupId?: string | number | (string | number)[],
     ignoreDisabled?: boolean,
-  ) {
+  ): FormSelectorItemControl[] {
     let { items } = this;
     if (groupId) {
       const filter = Array.isArray(groupId) ? groupId : [groupId];
@@ -582,11 +623,17 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     return ignoreDisabled ? items.filter((item) => !item.isDisabled) : items;
   }
 
+  /**
+   * Get the list of values of mounted selection nodes
+   *
+   * @param groupId - Group ID (for filtering)
+   * @param ignoreDisabled - Ignore disabled items
+   */
   getItemValues(
-    group?: string | number | (string | number)[],
+    groupId?: string | number | (string | number)[],
     ignoreDisabled?: boolean,
   ): (string | number)[] {
-    const items = this.getItems(group, ignoreDisabled);
+    const items = this.getItems(groupId, ignoreDisabled);
     const values: (string | number)[] = [];
     items.forEach((item) => {
       if (item.propValue != null) {
@@ -596,7 +643,12 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     return values;
   }
 
-  sortValues(values: (string | number)[]) {
+  /**
+   * Sort the list of values in the order of currently mounted items
+   * @param values - List of values to be sorted
+   * @returns Sorted list of values
+   */
+  sortValues(values: (string | number)[]): (string | number)[] {
     const itemValues = this.getItemValues();
     return values.sort((a, b) => {
       const ai = itemValues.indexOf(a);
@@ -607,17 +659,23 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     });
   }
 
+  /**
+   * Select all items
+   *
+   * @param groupId - Group ID (for filtering)
+   * @param deselectOtherGroups - Deselect items other than those in the specified group
+   */
   selectAll(
-    group?: string | number | (string | number)[],
-    onlyGroup?: boolean,
-  ) {
+    groupId?: string | number | (string | number)[],
+    deselectOtherGroups?: boolean,
+  ): void {
     if (!this.multiple) return;
-    if (group == null || onlyGroup) {
-      this.value = this.getItemValues(group, true);
+    if (groupId == null || deselectOtherGroups) {
+      this.value = this.getItemValues(groupId, true);
       return;
     }
     const values = [...this.selectedValues];
-    const itemValues = this.getItemValues(group, true);
+    const itemValues = this.getItemValues(groupId, true);
     itemValues.forEach((value) => {
       if (!values.includes(value)) {
         values.push(value);
@@ -626,49 +684,78 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     this.value = this.sortValues(values);
   }
 
-  unselectAll(group?: string | number | (string | number)[]) {
+  /**
+   * Deselect items
+   *
+   * @param groupId - Group ID (for filtering)
+   */
+  unselectAll(groupId?: string | number | (string | number)[]): void {
     if (!this.multiple) return;
-    if (group == null) {
+    if (groupId == null) {
       this.value = [];
       return;
     }
-    const itemValues = this.getItemValues(group);
+    const itemValues = this.getItemValues(groupId);
     this.value = this.selectedValues.filter(
       (value) => !itemValues.includes(value),
     );
   }
 
-  isNotSelected(group?: string | number | (string | number)[]) {
-    if (group == null) {
+  /**
+   * Check if it is not selected
+   *
+   * @param groupId - Group ID (for filtering)
+   */
+  isNotSelected(groupId?: string | number | (string | number)[]): boolean {
+    if (groupId == null) {
       return this.notSelected;
     }
     const { selectedValues } = this;
-    const itemValues = this.getItemValues(group);
+    const itemValues = this.getItemValues(groupId);
     return itemValues.every((value) => !selectedValues.includes(value));
   }
 
-  isAllSelected(group?: string | number | (string | number)[]) {
-    if (group == null) {
+  /**
+   * Check if all are selected
+   *
+   * @param groupId - Group ID (for filtering)
+   */
+  isAllSelected(groupId?: string | number | (string | number)[]): boolean {
+    if (groupId == null) {
       return this.allSelected;
     }
     const { selectedValues } = this;
-    const itemValues = this.getItemValues(group, true);
+    const itemValues = this.getItemValues(groupId, true);
     return itemValues.every((value) => selectedValues.includes(value));
   }
 
-  isIndeterminate(group?: string | number | (string | number)[]) {
-    if (group == null) {
+  /**
+   * Check if the selection is in a partial state
+   *
+   * @param groupId - Group ID (for filtering)
+   */
+  isIndeterminate(groupId?: string | number | (string | number)[]): boolean {
+    if (groupId == null) {
       return this.indeterminate;
     }
     const values = this.selectedValues;
-    const itemValues = this.getItemValues(group, true);
+    const itemValues = this.getItemValues(groupId, true);
     const selectedValues = values.filter((value) => itemValues.includes(value));
     const { length: selectedLength } = selectedValues;
     return selectedLength > 0 && selectedLength < itemValues.length;
   }
 
-  toggle(group?: string | number | (string | number)[]) {
-    if (group == null || !this.multiple) {
+  /**
+   * Toggle the selection state
+   *
+   * - If there is at least one unselected item, select all.
+   * - If all are selected, deselect all.
+   *
+   * @param groupId - Group ID (for filtering)
+   *
+   */
+  toggle(groupId?: string | number | (string | number)[]): void {
+    if (groupId == null || !this.multiple) {
       if (this.allSelected) {
         this.value = this.multiple ? [] : undefined;
       } else {
@@ -678,10 +765,10 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       return;
     }
 
-    if (this.isAllSelected(group)) {
-      this.unselectAll(group);
+    if (this.isAllSelected(groupId)) {
+      this.unselectAll(groupId);
     } else {
-      this.selectAll(group);
+      this.selectAll(groupId);
     }
   }
 
@@ -737,28 +824,27 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     }
   }
 
-  isSelected(value: string | number) {
+  /**
+   * Check if the specified value is selected
+   *
+   * @param value - Value to check
+   */
+  isSelected(value: string | number): boolean {
     return this.selectedValues.includes(value);
   }
 
   /** @private */
   _joinFromSelectorItem(item: FormSelectorItemControl) {
-    const fn = item._get;
-    const itemGetters = this._itemGetters.value;
-    if (!itemGetters.includes(fn)) {
-      itemGetters.push(fn);
+    const { items } = this;
+    if (!items.includes(item)) {
+      items.push(item);
       this._syncValueForChoices();
     }
   }
 
   /** @private */
   _leaveFromSelectorItem(item: FormSelectorItemControl) {
-    const fn = item._get;
-    const itemGetters = this._itemGetters.value;
-    const index = itemGetters.indexOf(fn);
-    if (index !== -1) {
-      itemGetters.splice(index, 1);
-    }
+    arrayRemove(this.items, item);
   }
 
   /** @private */

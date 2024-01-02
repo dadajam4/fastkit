@@ -37,17 +37,24 @@ export interface FormSelectorItemGroupControlOptions
   parentNodeType?: FormNodeType;
 }
 
+/**
+ * Selection group node
+ */
 export class FormSelectorItemGroupControl {
   readonly _props: FormSelectorItemGroupProps;
   readonly parentNodeType?: FormNodeType;
   protected _parentSelector: FormSelectorControl | null = null;
   readonly groupId!: string | number;
-  protected _disabled: ComputedRef<boolean>;
   protected _notSelected: ComputedRef<boolean>;
   protected _allSelected: ComputedRef<boolean>;
   protected _indeterminate: ComputedRef<boolean>;
 
-  get parentSelector() {
+  /**
+   * Selector node
+   *
+   * @see {@link FormSelectorControl}
+   */
+  get parentSelector(): FormSelectorControl {
     const { _parentSelector } = this;
     if (!_parentSelector) {
       throw new Error('missing parent selector.');
@@ -55,23 +62,38 @@ export class FormSelectorItemGroupControl {
     return _parentSelector;
   }
 
-  get isDisabled() {
-    return this._disabled.value;
+  /**
+   * Disabled state
+   */
+  get isDisabled(): boolean {
+    return this.parentSelector.isDisabled || this._props.disabled;
   }
 
-  get isNotSelected() {
+  /**
+   * No items in this group are selected
+   */
+  get isNotSelected(): boolean {
     return this._notSelected.value;
   }
 
-  get isAllSelected() {
+  /**
+   * All items in this group are selected
+   */
+  get isAllSelected(): boolean {
     return this._allSelected.value;
   }
 
-  get isIndeterminate() {
+  /**
+   * One or more items in this group are selected, but not all of them
+   */
+  get isIndeterminate(): boolean {
     return this._indeterminate.value;
   }
 
-  get multiple() {
+  /**
+   * The parent selector is in multiple selection mode
+   */
+  get multiple(): boolean {
     return this.parentSelector.multiple;
   }
 
@@ -94,10 +116,6 @@ export class FormSelectorItemGroupControl {
 
     this._parentSelector = parentSelector;
 
-    this._disabled = computed(() => {
-      return parentSelector.isDisabled || props.disabled;
-    });
-
     this._notSelected = computed(() => {
       return parentSelector.isNotSelected(this.groupId);
     });
@@ -118,15 +136,27 @@ export class FormSelectorItemGroupControl {
     provide(FormSelectorItemGroupInjectionKey, this);
   }
 
-  toggle() {
+  /**
+   * Toggle the selection state of this group
+   *
+   * - If there is at least one unselected item, select all.
+   * - If all are selected, deselect all.
+   */
+  toggle(): void {
     return this.parentSelector.toggle(this.groupId);
   }
 
-  selectAll() {
+  /**
+   * Select all items in this group
+   */
+  selectAll(): void {
     return this.parentSelector.selectAll(this.groupId);
   }
 
-  unselectAll() {
+  /**
+   * Deselect all items in this group
+   */
+  unselectAll(): void {
     return this.parentSelector.unselectAll(this.groupId);
   }
 }

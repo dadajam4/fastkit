@@ -4,8 +4,8 @@ import {
   provide,
   ref,
   Ref,
-  markRaw,
-  VNodeArrayChildren,
+  computed,
+  ComputedRef,
 } from 'vue';
 import {
   createFormNodeProps,
@@ -13,8 +13,8 @@ import {
   createFormNodeEmits,
   FormNodeContext,
   FormNodeControlBaseOptions,
-  RenderFormNodeErrorOptions,
 } from './node';
+import { arrayRemove } from '@fastkit/helpers';
 import { FormGroupInjectionKey } from '../injections';
 import { createPropsOptions } from '@fastkit/vue-utils';
 
@@ -62,7 +62,7 @@ export interface FormGroupOptions extends FormNodeControlBaseOptions {}
 export class FormGroupControl extends FormNodeControl {
   readonly _props: FormGroupProps;
   protected _allNodes: Ref<FormNodeControl[]> = ref([]);
-  protected _allInvalidNodes: Ref<FormNodeControl[]> = ref([]);
+  protected _allInvalidNodes: ComputedRef<FormNodeControl[]>;
 
   /**
    * All nodes in an error state belonging recursively to this group
@@ -105,6 +105,32 @@ export class FormGroupControl extends FormNodeControl {
     });
     this._props = props;
 
+    this._allInvalidNodes = computed(() =>
+      this.allNodes.filter((node) => node.hasMyError),
+    );
+
+    const { _resolvedErrorMessages } = this;
+
+    this._resolvedErrorMessages = computed(() => {
+      if (!this.showOwnErrors) return [];
+      const messages = _resolvedErrorMessages.value.slice();
+      const { allInvalidNodes } = this;
+      for (const node of allInvalidNodes) {
+        if (!node.showOwnErrors) {
+          node.errors.forEach((error) => {
+            messages.push(
+              node._createFormNodeErrorMessageSource(
+                error,
+                messages.length + 1,
+                ctx.slots as any,
+              ),
+            );
+          });
+        }
+      }
+      return messages;
+    });
+
     provide(FormGroupInjectionKey, this);
   }
 
@@ -112,44 +138,13 @@ export class FormGroupControl extends FormNodeControl {
   __joinFromNode(node: FormNodeControl) {
     const { allNodes } = this;
     if (!allNodes.includes(node)) {
-      allNodes.push(markRaw(node));
+      allNodes.push(node);
     }
   }
 
   /** @internal */
   __leaveFromNode(node: FormNodeControl) {
-    const { allNodes } = this;
-    const index = allNodes.indexOf(node);
-    if (index !== -1) {
-      allNodes.splice(index, 1);
-    }
-    this.__removeInvalidChild(node);
-  }
-
-  /** @internal */
-  private __pushInvalidChild(node: FormNodeControl) {
-    const { allInvalidNodes } = this;
-    if (!allInvalidNodes.includes(node)) {
-      this._allInvalidNodes.value.push(markRaw(node));
-    }
-  }
-
-  /** @internal */
-  private __removeInvalidChild(node: FormNodeControl) {
-    const { allInvalidNodes } = this;
-    const index = allInvalidNodes.indexOf(node);
-    if (index !== -1) {
-      this._allInvalidNodes.value.splice(index, 1);
-    }
-  }
-
-  /** @internal */
-  __updateInvalidNodesByNode(node: FormNodeControl) {
-    if (node.hasMyError && !this.allInvalidNodes.includes(node)) {
-      this.__pushInvalidChild(node);
-    } else {
-      this.__removeInvalidChild(node);
-    }
+    arrayRemove(this.allNodes, node);
   }
 
   /**
@@ -181,53 +176,6 @@ export class FormGroupControl extends FormNodeControl {
       this.dispatchAutoScroll();
     }
     return valid;
-  }
-
-  /** @internal */
-  _renderFirstError(): VNodeArrayChildren | undefined {
-    if (!this.canOperation) {
-      return;
-    }
-    const myError = super._renderFirstError();
-    if (myError) return myError;
-
-    for (const node of this._allInvalidNodes.value) {
-      if (node.showOwnErrors) continue;
-      const nodeError = node._renderFirstError(this._ctx?.slots as any);
-      if (nodeError) return nodeError;
-    }
-  }
-
-  /**
-   * Render all errors held by this node as an array of `VNodeArrayChildren`
-   *
-   * @remarks
-   * Please note that nothing will be returned if the node is inoperable.
-   * Also, if the parent group is configured to collect errors for this node and `showOwnErrors` for this node is disabled, this method will return nothing.
-   *
-   * @see {@link FormNodeControl.canOperation canOperation}
-   * @see {@link FormNodeControl.showOwnErrors showOwnErrors}
-   */
-  _renderAllErrors(options?: RenderFormNodeErrorOptions) {
-    if (!this.canOperation) {
-      return [];
-    }
-    const errors = super._renderAllErrors(options);
-    const { allInvalidNodes } = this;
-    for (const node of allInvalidNodes) {
-      if (!node.showOwnErrors) {
-        errors.push(
-          ...node._renderAllErrors({
-            ...options,
-            slotsOverrides: {
-              ...options?.slotsOverrides,
-              ...(this._ctx?.slots as any),
-            },
-          }),
-        );
-      }
-    }
-    return errors;
   }
 }
 

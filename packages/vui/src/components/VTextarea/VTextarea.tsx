@@ -82,7 +82,7 @@ export const VTextarea = defineComponent({
       return (
         <VFormControl
           nodeControl={inputControl}
-          focused={inputControl.focused}
+          // focused={inputControl.focused}
           class={['v-textarea', control.classes.value]}
           label={props.label}
           hint={props.hint}

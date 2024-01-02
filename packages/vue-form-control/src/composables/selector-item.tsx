@@ -79,24 +79,43 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
   protected _hasValue: ComputedRef<boolean>;
   protected _defaultSlot: ComputedRef<Slot>;
 
-  get parentSelector() {
+  /**
+   * Selector node
+   *
+   * @see {@link FormSelectorControl}
+   */
+  get parentSelector(): FormSelectorControl | null {
     return this._parentSelector;
   }
 
-  get isGuardInProgress() {
+  /**
+   * The parent selector is currently executing the selection guard process for this item
+   */
+  get isGuardInProgress(): boolean {
     return this.parentSelector?.guardingItem === this;
   }
 
-  get groupControl() {
+  /**
+   * Selection group node
+   *
+   * @see {@link FormSelectorItemGroupControl}
+   */
+  get groupControl(): FormSelectorItemGroupControl | null {
     return this._groupControl;
   }
 
-  get groupId() {
+  /**
+   * Selection group ID
+   */
+  get groupId(): string | number | null {
     const { groupControl } = this;
     if (!groupControl) return null;
     return groupControl.groupId;
   }
 
+  /**
+   * Selection state
+   */
   get selected() {
     return this._currentValue.value;
   }
@@ -110,20 +129,25 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
     }
   }
 
+  /**
+   * The parent selector is in multiple selection mode
+   */
   get multiple() {
     return this._multiple.value;
   }
 
+  /**
+   * Input type
+   *
+   * @see {@link FormSelectorItemInputType}
+   */
   get inputType(): FormSelectorItemInputType {
     return this.multiple ? 'checkbox' : 'radio';
   }
 
+  /** Has a value */
   get hasValue() {
     return this._hasValue.value;
-  }
-
-  _get() {
-    return this;
   }
 
   renderDefaultSlot() {
@@ -143,7 +167,6 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
 
     (
       [
-        '_get',
         '_valueChangeHandler',
         'handleChange',
         'handleClickInputElement',
@@ -244,20 +267,23 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
     }
   }
 
-  select() {
+  /** Select */
+  select(): void {
     this.value = true;
   }
 
-  unselect() {
+  /** Deselect */
+  unselect(): void {
     this.value = false;
   }
 
-  toggle() {
+  /** Toggle selection state */
+  toggle(): void {
     this.value = !this.value;
   }
 
-  /** @private */
-  _setValueSilent(value: boolean) {
+  /** @internal */
+  _setValueSilent(value: boolean): void {
     this._value.value = value;
   }
 
@@ -285,17 +311,17 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
     );
   }
 
-  handleChange(ev: Event) {
+  handleChange(ev: Event): void {
     this.selected = (ev.target as HTMLInputElement).checked;
   }
 
-  handleClickInputElement(ev: MouseEvent) {
+  handleClickInputElement(ev: MouseEvent): void {
     if (this.canOperation && this.selected) {
       this.parentSelector && this.parentSelector.handleSelectItem(this, ev);
     }
   }
 
-  handleClickElement(ev: MouseEvent) {
+  handleClickElement(ev: MouseEvent): void {
     if (this.canOperation) {
       this.parentSelector && this.parentSelector.handleClickItem(this, ev);
     }
@@ -304,7 +330,7 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
   /**
    * @override
    */
-  focusHandler(ev: FocusEvent) {
+  focusHandler(ev: FocusEvent): void {
     super.focusHandler(ev);
     const { parentSelector } = this;
     parentSelector && parentSelector.focusHandler(ev);

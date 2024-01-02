@@ -96,7 +96,7 @@ export const VTextField = defineComponent({
       return (
         <VFormControl
           nodeControl={inputControl}
-          focused={inputControl.focused}
+          // focused={inputControl.focused}
           hiddenInfo={props.hiddenInfo}
           class={classes.value}
           label={props.label}

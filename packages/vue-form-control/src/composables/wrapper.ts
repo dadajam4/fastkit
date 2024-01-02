@@ -6,6 +6,10 @@ import {
   ComputedRef,
   onBeforeUnmount,
   VNodeChild,
+  Ref,
+  ref,
+  provide,
+  markRaw,
 } from 'vue';
 import {
   createPropsOptions,
@@ -17,13 +21,13 @@ import {
 } from '@fastkit/vue-utils';
 import {
   FormNodeControl,
-  FormNodeError,
-  toFormNodeError,
   FormNodeErrorSlots,
   FormNodeErrorSlotsSource,
+  FormNodeErrorMessageSource,
 } from './node';
 import type { VueFormService } from '../service';
-import { useVueForm } from '../injections';
+import { useVueForm, FormNodeWrapperInjectionKey } from '../injections';
+import { arrayRemove } from '@fastkit/helpers';
 
 const EMPTY_MESSAGE = '\xa0'; // for keep height
 
@@ -49,6 +53,8 @@ export function createFormNodeWrapperProps() {
     ...createPropsOptions({
       /**
        * Instance of FormNodeControl
+       *
+       * When this setting is applied, the state and error messages will always refer to the state of this node. If not set, it will attempt to compute them from descendant nodes.
        */
       nodeControl: {} as PropType<FormNodeControl>,
       /** label */
@@ -61,43 +67,22 @@ export function createFormNodeWrapperProps() {
       hinttipDelay: [String, Number] as PropType<FormNodeWrapperHinttipDelay>,
       /** Elements to be added to the information message */
       infoAppends: {} as PropType<VNodeChildOrSlot>,
-      /** Under validation */
-      validating: Boolean,
-      /** pending */
-      pending: Boolean,
-      /** In Focus */
-      focused: Boolean,
-      /** Already value changed */
-      dirty: Boolean,
-      /** Not yet value changed */
-      pristine: Boolean,
-      /** List of errors */
-      errors: {
-        type: Array as PropType<FormNodeError[]>,
-        default: () => [] as FormNodeError[],
-      },
-      /** List of error messages. */
-      errorMessages: [String, Array] as PropType<string | string[]>,
-      /** disabled state */
-      disabled: Boolean,
-      /** read-only state */
-      readonly: Boolean,
-      /** view-only state */
-      viewonly: Boolean,
-      /** Already touched form */
-      touched: Boolean,
-      /** Not yet touching the form */
-      untouched: Boolean,
-      /** required */
-      required: Boolean,
-      /** There is an incorrect entry. */
-      invalid: Boolean,
-      /** Input is correct. */
-      valid: Boolean,
       /** Hide information */
       hiddenInfo: Boolean,
       /** Chip(required) display settings */
       requiredChip: {} as PropType<RequiredChipSource>,
+      /**
+       * Collect the error messages of all nodes belonging to this node
+       *
+       * By default, a node attempts to render error messages on its own, but enabling this setting allows the parent wrapper to manage the rendering of error messages.
+       * If you want to exclude a specific node from this configuration, enable the `showOwnErrors` setting for that node.
+       *
+       * @default true
+       */
+      collectErrorMessages: {
+        type: Boolean,
+        default: true,
+      },
     }),
   };
 }
@@ -128,11 +113,14 @@ export interface FormNodeWrapperOptions {
   hinttipPrepend?: () => VNodeChild;
 }
 
+/**
+ * Form node wrapper
+ */
 export class FormNodeWrapper {
   readonly _props: FormNodeWrapperProps;
   readonly _service: VueFormService;
   protected _ctx: FormNodeWrapperContext | undefined;
-  protected _nodeControl: ComputedRef<FormNodeControl | undefined>;
+  protected _allNodes: Ref<FormNodeControl[]> = ref([]);
   protected _labelSlot: ComputedRef<TypedSlot<FormNodeWrapper> | undefined>;
   protected _hintSlot: ComputedRef<TypedSlot<FormNodeWrapper> | undefined>;
   protected _hinttip: ComputedRef<VNodeChild>;
@@ -145,93 +133,171 @@ export class FormNodeWrapper {
   protected _pending: ComputedRef<boolean>;
   protected _focused: ComputedRef<boolean>;
   protected _dirty: ComputedRef<boolean>;
-  protected _pristine: ComputedRef<boolean>;
-  protected _errorMessages: ComputedRef<string[]>;
-  protected _errors: ComputedRef<FormNodeError[]>;
   protected _disabled: ComputedRef<boolean>;
   protected _readonly: ComputedRef<boolean>;
   protected _viewonly: ComputedRef<boolean>;
   protected _touched: ComputedRef<boolean>;
-  protected _untouched: ComputedRef<boolean>;
   protected _required: ComputedRef<boolean>;
   protected _invalid: ComputedRef<boolean>;
-  protected _valid: ComputedRef<boolean>;
+  protected _resolvedErrorMessages: ComputedRef<FormNodeErrorMessageSource[]>;
 
-  get service() {
+  /**
+   * Root service of `vue-form-control`
+   *
+   * @see {@link VueFormService}
+   */
+  get service(): VueFormService {
     return this._service;
   }
 
-  get nodeControl() {
-    return this._nodeControl.value;
+  /**
+   * Instance of FormNodeControl
+   *
+   * When this setting is applied, the state and error messages will always refer to the state of this node. If not set, it will attempt to compute them from descendant nodes.
+   */
+  get nodeControl(): FormNodeControl | undefined {
+    return this._props.nodeControl;
   }
 
+  /**
+   * List of all nodes belonging to this wrapper
+   *
+   * This list is a reactive list, and depending on usage, it may contain a large number of nodes.
+   * Please be aware that complex operations using this list can lead to performance issues.
+   */
+  get allNodes() {
+    return this._allNodes.value;
+  }
+
+  /**
+   * At least one of the associated nodes is validating the value
+   */
   get validating() {
     return this._validating.value;
   }
 
+  /**
+   * Pending processing
+   *
+   * This is marked as `true` during the validation and finalization process of the value
+   */
   get pending() {
     return this._pending.value;
   }
 
+  /**
+   * One of the associated nodes is currently focused
+   */
   get focused() {
     return this._focused.value;
   }
 
+  /**
+   * The changes to the input value have not been committed yet
+   *
+   * @see {@link FormNodeControl.initialValue initialValue}
+   */
   get dirty() {
     return this._dirty.value;
   }
 
+  /**
+   * The input value has not been changed from its initial value
+   */
   get pristine() {
-    return this._pristine.value;
+    return !this.dirty;
   }
 
-  get errorMessages() {
-    return this._errorMessages.value;
-  }
-
-  get errors() {
-    return this._errors.value;
-  }
-
-  get firstError(): FormNodeError | undefined {
-    return this.errors[0];
-  }
-
-  get disabled() {
+  /**
+   * All associated nodes are disabled
+   */
+  get isDisabled() {
     return this._disabled.value;
   }
 
-  get readonly() {
+  /**
+   * All associated nodes are read-only
+   */
+  get isReadonly() {
     return this._readonly.value;
   }
 
-  get viewonly() {
+  /**
+   * All associated nodes are view-only
+   */
+  get isViewonly() {
     return this._viewonly.value;
   }
 
+  /**
+   * All associated nodes are operable
+   */
   get canOperation() {
-    return !this.disabled && !this.readonly && !this.viewonly;
-    // return !!this.nodeControl && this.nodeControl.canOperation;
+    return !this.isDisabled && !this.isReadonly && !this.isViewonly;
   }
 
+  /**
+   * One of the associated nodes has already been touched
+   */
   get touched() {
     return this._touched.value;
   }
 
+  /**
+   * None of the associated nodes has been touched yet
+   */
   get untouched() {
-    return this._untouched.value;
+    return !this.touched;
   }
 
-  get required() {
+  /**
+   * One of the associated nodes requires input
+   */
+  get isRequired() {
     return this._required.value;
   }
 
+  /**
+   * There is an error in the input value of one of the associated nodes
+   */
   get invalid() {
     return this._invalid.value;
   }
 
+  /**
+   * No errors in the input values of all associated nodes
+   */
   get valid() {
-    return this._valid.value;
+    return !this.invalid;
+  }
+
+  /**
+   * Collect the error messages of all nodes belonging to this node
+   */
+  get collectErrorMessages() {
+    return this._props.collectErrorMessages;
+  }
+
+  /**
+   * Source code for all collected error messages
+   *
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   *
+   * @see {@link FormNodeErrorMessageSource}
+   */
+  get errorMessages(): FormNodeErrorMessageSource[] {
+    return this._resolvedErrorMessages.value;
+  }
+
+  /**
+   * Source code for the first error message among all collected messages
+   *
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   *
+   * @see {@link FormNodeErrorMessageSource}
+   */
+  get firstErrorMessage(): FormNodeErrorMessageSource | undefined {
+    return this.errorMessages[0];
   }
 
   get labelSlot() {
@@ -255,14 +321,13 @@ export class FormNodeWrapper {
     ctx: FormNodeWrapperContext,
     options: FormNodeWrapperOptions = {},
   ) {
+    markRaw(this);
+
     this._props = props;
     this._service = useVueForm();
     const { slots } = ctx;
 
     this._ctx = ctx;
-
-    this._nodeControl = computed(() => props.nodeControl);
-    const nc = this._nodeControl;
 
     this._labelSlot = computed(() =>
       resolveVNodeChildOrSlots(props.label, slots.label),
@@ -297,68 +362,84 @@ export class FormNodeWrapper {
       resolveVNodeChildOrSlots(props.infoAppends, slots.infoAppends),
     );
 
-    const getPropOrNodeControlValue = <
-      PK extends keyof typeof props,
-      NK extends keyof FormNodeControl,
+    const hasTrueFromControlOrChildren = <
+      P extends
+        | 'validating'
+        | 'pending'
+        | 'focused'
+        | 'dirty'
+        | 'touched'
+        | 'isRequired'
+        | 'invalid',
     >(
-      propKey: PK,
-      nodeControlKey: NK,
-    ) => {
-      return nc.value ? nc.value[nodeControlKey] : props[propKey];
+      prop: P,
+    ): boolean => {
+      const nc = props.nodeControl;
+      if (nc) return nc[prop];
+      return this.allNodes.some((node) => node[prop]);
+    };
+
+    const everyTrueFromControlOrChildren = <
+      P extends 'isDisabled' | 'isReadonly' | 'isViewonly',
+    >(
+      prop: P,
+    ): boolean => {
+      const nc = props.nodeControl;
+      if (nc) return nc[prop];
+      return this.allNodes.every((node) => node[prop]);
     };
 
     this._validating = computed(() =>
-      getPropOrNodeControlValue('validating', 'validating'),
+      hasTrueFromControlOrChildren('validating'),
     );
-    this._pending = computed(() =>
-      getPropOrNodeControlValue('pending', 'pending'),
-    );
-    this._focused = computed(() =>
-      getPropOrNodeControlValue('focused', 'focused'),
-    );
-    this._dirty = computed(() => getPropOrNodeControlValue('dirty', 'dirty'));
-    this._pristine = computed(() =>
-      getPropOrNodeControlValue('pristine', 'pristine'),
-    );
-    this._errorMessages = computed(() => {
-      const { errorMessages = [] } = props;
-      return Array.isArray(errorMessages) ? errorMessages : [errorMessages];
-    });
-    this._errors = computed(() => {
-      const { errorMessages } = this;
-      const errors = [...errorMessages.map(toFormNodeError), ...props.errors];
-      const ncErrors = nc.value?.errors;
-      if (ncErrors) errors.push(...ncErrors);
-      return errors;
-    });
+    this._pending = computed(() => hasTrueFromControlOrChildren('pending'));
+    this._focused = computed(() => hasTrueFromControlOrChildren('focused'));
+    this._dirty = computed(() => hasTrueFromControlOrChildren('dirty'));
+    this._touched = computed(() => hasTrueFromControlOrChildren('touched'));
+
     this._disabled = computed(() =>
-      getPropOrNodeControlValue('disabled', 'isDisabled'),
+      everyTrueFromControlOrChildren('isDisabled'),
     );
     this._readonly = computed(() =>
-      getPropOrNodeControlValue('readonly', 'isReadonly'),
+      everyTrueFromControlOrChildren('isReadonly'),
     );
     this._viewonly = computed(() =>
-      getPropOrNodeControlValue('viewonly', 'isViewonly'),
+      everyTrueFromControlOrChildren('isViewonly'),
     );
-    this._touched = computed(() =>
-      getPropOrNodeControlValue('touched', 'touched'),
-    );
-    this._untouched = computed(() =>
-      getPropOrNodeControlValue('untouched', 'untouched'),
-    );
-    this._required = computed(() =>
-      getPropOrNodeControlValue('required', 'isRequired'),
-    );
-    this._invalid = computed(() =>
-      getPropOrNodeControlValue('invalid', 'invalid'),
-    );
-    this._valid = computed(() => getPropOrNodeControlValue('valid', 'valid'));
+    this._required = computed(() => hasTrueFromControlOrChildren('isRequired'));
+    this._invalid = computed(() => hasTrueFromControlOrChildren('invalid'));
+
+    this._resolvedErrorMessages = computed(() => {
+      const nc = props.nodeControl;
+      if (nc) return nc.errorMessages;
+
+      const messages: FormNodeErrorMessageSource[] = [];
+      for (const node of this.allNodes) {
+        if (
+          !node.showOwnErrors &&
+          !node.parentFormGroup?.collectErrorMessages
+        ) {
+          node.errors.forEach((error) => {
+            messages.push(
+              node._createFormNodeErrorMessageSource(
+                error,
+                messages.length + 1,
+                ctx.slots as any,
+              ),
+            );
+          });
+        }
+      }
+      return messages;
+    });
 
     onBeforeUnmount(() => {
       delete this._ctx;
       delete (this as any)._props;
       delete (this as any)._service;
     });
+
+    provide(FormNodeWrapperInjectionKey, this);
   }
 
   renderLabel() {
@@ -387,26 +468,7 @@ export class FormNodeWrapper {
     if (!this.canOperation) {
       return;
     }
-    const { slots } = this._getContextOrDie();
-    const nc = this._nodeControl.value;
-    if (nc)
-      return nc.renderFirstError({
-        ...(slots as any),
-        ...slotsOverrides,
-      });
-
-    const { firstError } = this;
-    if (!firstError) return;
-    const slot = slots[`error:${firstError.name}`] || slots.error;
-    if (!slot) {
-      return (
-        this.service.resolveErrorMessage(firstError, this.nodeControl) ||
-        firstError.message
-      );
-    }
-    const errorMessage = slot(firstError);
-    if (!errorMessage.length) return;
-    return errorMessage;
+    return this.firstErrorMessage?.render(slotsOverrides);
   }
 
   renderMessage(allowNotFocused?: boolean) {
@@ -436,6 +498,19 @@ export class FormNodeWrapper {
       tip: hinttip,
       hint,
     };
+  }
+
+  /** @internal */
+  __joinFromNode(node: FormNodeControl) {
+    const { allNodes } = this;
+    if (!allNodes.includes(node)) {
+      allNodes.push(node);
+    }
+  }
+
+  /** @internal */
+  __leaveFromNode(node: FormNodeControl) {
+    arrayRemove(this.allNodes, node);
   }
 }
 

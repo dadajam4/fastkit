@@ -324,7 +324,7 @@ export const VWysiwygEditor = defineComponent({
       return (
         <VFormControl
           nodeControl={inputControl}
-          focused={inputControl.focused}
+          // focused={inputControl.focused}
           class={classes.value}
           label={props.label}
           hint={props.hint}

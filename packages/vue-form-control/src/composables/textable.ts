@@ -30,6 +30,7 @@ import {
   TextFinalizer,
   BuiltinTextFinalizerName,
   BUILTIN_TEXT_FINALIZERS,
+  FormAutoComplete,
 } from '../schemes';
 import { logger } from '../logger';
 
@@ -147,43 +148,75 @@ export class TextableControl extends FormNodeControl<string> {
   protected _counterResult: ComputedRef<TextableCounterResult | undefined>;
   protected _maxlengthLimit: ComputedRef<number | undefined>;
 
-  get minlength() {
+  /** Minimum number of characters */
+  get minlength(): number | undefined {
     return this._minlength.value;
   }
 
-  get maxlength() {
+  /** maximum number of characters */
+  get maxlength(): number | undefined {
     return this._maxlength.value;
   }
 
-  get pattern() {
+  /** input pattern */
+  get pattern(): string | RegExp | undefined {
     return this._props.pattern;
   }
 
-  get placeholder() {
+  /** placeholder */
+  get placeholder(): string | undefined {
     return this._props.placeholder;
   }
 
-  get autocomplete() {
+  /**
+   * The HTML autocomplete attribute lets web developers specify what if any permission the [user agent](https://developer.mozilla.org/docs/Glossary/User_agent) has to provide automated assistance in filling out form field values, as well as guidance to the browser as to the type of information expected in the field.
+   *
+   * @see https://developer.mozilla.org/docs/Web/HTML/Attributes/autocomplete
+   */
+  get autocomplete(): FormAutoComplete | undefined {
     return this._autocompletable.computedAutocomplete.value;
   }
 
-  get autocapitalize() {
+  /**
+   * Perform capitalization of the input string's first letter when it is entered/edited by the user.
+   *
+   * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/autocapitalize
+   */
+  get autocapitalize(): FormAutoCapitalize | undefined {
     return this._props.autocapitalize;
   }
 
-  get finalizers() {
+  /**
+   * Text correction settings.
+   *
+   * @see {@link TextFinalizer}
+   */
+  get finalizers(): TextFinalizer[] | undefined {
     return this._finalizers?.value;
   }
 
-  get counterSettings() {
+  /**
+   * Character count setting
+   *
+   * @see {@link TextableCounterSettings}
+   */
+  get counterSettings(): TextableCounterSettings | undefined {
     return this._counterSettings.value;
   }
 
-  get counterResult() {
+  /**
+   * Character count result
+   *
+   * @see {@link TextableCounterResult}
+   */
+  get counterResult(): TextableCounterResult | undefined {
     return this._counterResult.value;
   }
 
-  get maxlengthLimit() {
+  /**
+   * The maximum number of characters derived from `maxlength` and `counterSettings`
+   */
+  get maxlengthLimit(): number | undefined {
     return this._maxlengthLimit.value;
   }
 
