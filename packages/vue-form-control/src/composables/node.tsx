@@ -884,6 +884,10 @@ export class FormNodeControl<
       const messages = Array.isArray(errorMessages)
         ? errorMessages
         : [errorMessages];
+
+      // @NOTE "Without delay, the form node's state cannot be referenced by the options user."
+      if (!this.booted) return messages;
+
       const moreMessages = options.errorMessages?.();
       if (moreMessages) {
         if (Array.isArray(moreMessages)) {

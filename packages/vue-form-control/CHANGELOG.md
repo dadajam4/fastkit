@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.11
+
+### Patch Changes
+
+- Adjusted the initialization of `errorMessage` customization in `FormNodeControl` to delay the execution of options, allowing reference to the form node instance.
+
 ## 0.19.10
 
 ### Patch Changes
