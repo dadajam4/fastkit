@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.10
+
+### Patch Changes
+
+- Allowed empty message types when registering custom error messages during the initialization of `FormNodeControl`.
+
 ## 0.19.9
 
 ### Patch Changes

@@ -129,7 +129,7 @@ export interface FormNodeControlBaseOptions {
   validationValue?: () => any;
   stateExtensions?: FormNodeStateExtensions;
   /** Add a custom error message */
-  errorMessages?: () => string | string[];
+  errorMessages?: () => string | string[] | undefined;
 }
 
 export interface FormNodeControlOptions<
