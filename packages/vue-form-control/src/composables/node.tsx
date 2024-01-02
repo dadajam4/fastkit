@@ -137,6 +137,7 @@ export interface FormNodeControlOptions<
 > extends FormNodeControlBaseOptions {
   modelValue?: Prop<T, D>;
   required?: Required;
+  errorMessages?: () => string | string[];
 }
 
 export type FormNodeErrorSlotsSource = {
@@ -879,7 +880,18 @@ export class FormNodeControl<
 
     this._errorMessages = computed(() => {
       const { errorMessages = [] } = props;
-      return Array.isArray(errorMessages) ? errorMessages : [errorMessages];
+      const messages = Array.isArray(errorMessages)
+        ? errorMessages
+        : [errorMessages];
+      const moreMessages = options.errorMessages?.();
+      if (moreMessages) {
+        if (Array.isArray(moreMessages)) {
+          messages.push(...moreMessages);
+        } else {
+          messages.push(moreMessages);
+        }
+      }
+      return messages;
     });
 
     this._errors = computed(() => {

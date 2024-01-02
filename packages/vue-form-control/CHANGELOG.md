@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.8
+
+### Patch Changes
+
+- Added initialization option for `FormNodeControl` to include error messages.
+
 ## 0.19.7
 
 ### Patch Changes
