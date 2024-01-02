@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.12
+
+### Patch Changes
+
+- Fixed the issue where the required validation in `BoundableInputControl` was not functioning correctly.
+
 ## 0.19.11
 
 ### Patch Changes

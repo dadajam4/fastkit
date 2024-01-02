@@ -390,11 +390,7 @@ export class BoundableInputControl<
       return this._validationValueGetter();
     }
     if (this.isRange) {
-      const values: T[] = [];
-      const { startValue, endValue } = this;
-      startValue && values.push(startValue);
-      endValue && values.push(endValue);
-      return values;
+      return [this.startValue, this.endValue];
     }
     return this.value;
   }
