@@ -128,6 +128,7 @@ export interface FormNodeControlBaseOptions {
   defaultValidateTiming?: ValidateTiming;
   validationValue?: () => any;
   stateExtensions?: FormNodeStateExtensions;
+  /** Add a custom error message */
   errorMessages?: () => string | string[];
 }
 
