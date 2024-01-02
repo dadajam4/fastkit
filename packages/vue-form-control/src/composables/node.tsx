@@ -128,6 +128,7 @@ export interface FormNodeControlBaseOptions {
   defaultValidateTiming?: ValidateTiming;
   validationValue?: () => any;
   stateExtensions?: FormNodeStateExtensions;
+  errorMessages?: () => string | string[];
 }
 
 export interface FormNodeControlOptions<
@@ -137,7 +138,6 @@ export interface FormNodeControlOptions<
 > extends FormNodeControlBaseOptions {
   modelValue?: Prop<T, D>;
   required?: Required;
-  errorMessages?: () => string | string[];
 }
 
 export type FormNodeErrorSlotsSource = {
