@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.9
+
+### Patch Changes
+
+- [`a7dc035`](https://github.com/dadajam4/fastkit/commit/a7dc035b699840483d728f5ae9e0a797db06cb64) Thanks [@dadajam4](https://github.com/dadajam4)! - Fixed the issue where the option type for extending `errorMessages` in `FormNodeControl` was not exposed.
+
 ## 0.19.8
 
 ### Patch Changes
