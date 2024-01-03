@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.14
+
+### Patch Changes
+
+- Implemented event notification for errors in automatic validation of `VueForm`.
+
 ## 0.19.13
 
 ### Patch Changes

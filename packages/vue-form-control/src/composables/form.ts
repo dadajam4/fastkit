@@ -146,6 +146,12 @@ export function createFormEmits() {
      * @param actionContext - Form action context
      */
     finishAction: (actionContext: FormActionContext) => true,
+    /**
+     * Failed automatic validation
+     *
+     * @param form - VueForm instance
+     */
+    autoValidationFailed: (form: VueForm) => true,
   };
 }
 
@@ -342,6 +348,7 @@ export class VueForm extends FormGroupControl {
           acceptInvalidSubmission = accepted;
         }
         if (!acceptInvalidSubmission) {
+          this._formContext?.emit('autoValidationFailed', this);
           this.dispatchAutoScroll();
           return false;
         }
