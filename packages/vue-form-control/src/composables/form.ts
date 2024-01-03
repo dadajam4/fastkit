@@ -140,8 +140,16 @@ export function createFormEmits() {
      * @param form - VueForm instance
      */
     'update:sending': (sending: boolean, form: VueForm) => true,
+    /**
+     * The form action has been finished
+     *
+     * @param actionContext - Form action context
+     */
+    finishAction: (actionContext: FormActionContext) => true,
   };
 }
+
+export type FormEmits = ReturnType<typeof createFormEmits>;
 
 export function createFormSettings(options?: FormOptions) {
   const props = createFormProps(options);
@@ -372,10 +380,14 @@ export class VueForm extends FormGroupControl {
     };
 
     const result = fn(ctx);
-    if (ctx.canceled || !isPromise(result)) return Promise.resolve();
+    if (ctx.canceled || !isPromise(result)) {
+      this._formContext?.emit('finishAction', ctx);
+      return Promise.resolve();
+    }
     this._actionPromise.value = result;
     return result.finally(() => {
       this._actionPromise.value = null;
+      this._formContext?.emit('finishAction', ctx);
     });
   }
 

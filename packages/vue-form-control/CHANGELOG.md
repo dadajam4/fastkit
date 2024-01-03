@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.13
+
+### Patch Changes
+
+- Implemented event notification upon completion of actions in `VueForm`.
+
 ## 0.19.12
 
 ### Patch Changes
