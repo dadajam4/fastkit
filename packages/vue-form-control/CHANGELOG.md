@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.19.16
+
+### Patch Changes
+
+- Added an `extend` method for extending instances of FormNodeWrapper.
+
 ## 0.19.15
 
 ### Patch Changes

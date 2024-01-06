@@ -27,7 +27,7 @@ import {
 } from './node';
 import type { VueFormService } from '../service';
 import { useVueForm, FormNodeWrapperInjectionKey } from '../injections';
-import { arrayRemove } from '@fastkit/helpers';
+import { arrayRemove, mixin, Mixin } from '@fastkit/helpers';
 
 const EMPTY_MESSAGE = '\xa0'; // for keep height
 
@@ -511,6 +511,16 @@ export class FormNodeWrapper {
   /** @internal */
   __leaveFromNode(node: FormNodeControl) {
     arrayRemove(this.allNodes, node);
+  }
+
+  /**
+   * Generate a Proxy instance that extends the interface for this wrapper.
+   *
+   * @param trait - trait object
+   * @returns Mixed-in Proxy
+   */
+  extend<U extends object>(trait: U): Mixin<this, U> {
+    return mixin(this, trait);
   }
 }
 
