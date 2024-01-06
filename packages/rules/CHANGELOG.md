@@ -1,5 +1,14 @@
 # @fastkit/rules
 
+## 0.13.9
+
+### Patch Changes
+
+- Added specifications and documentation updates.
+
+  - Added functional validation IF and its normalization utility.
+  - Added JSDoc to various interfaces.
+
 ## 0.13.8
 
 ### Patch Changes

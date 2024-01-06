@@ -1,5 +1,14 @@
 # @fastkit/vue-form-control
 
+## 0.19.15
+
+### Patch Changes
+
+- Updated `@fastkit/rules` to allow configuration of functional validation rules.
+
+- Updated dependencies []:
+  - @fastkit/rules@0.13.9
+
 ## 0.19.14
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @fastkit/vite-plugin-vui
 
+## 1.1.111
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vui@0.18.20
+
 ## 1.1.110
 
 ### Patch Changes

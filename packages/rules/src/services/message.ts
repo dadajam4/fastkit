@@ -1,5 +1,6 @@
 import { RuleValidateContext } from '../';
 import { RulesError } from '../logger';
+import { RULE_DEFAULT_MESSAGE } from '../constants';
 
 export type RuleMessageResolver = (ctx: RuleValidateContext) => string | void;
 
@@ -12,7 +13,7 @@ export interface RuleMessageServiceDefault {
 
 export class RuleMessageService {
   static defaults: RuleMessageServiceDefault = {
-    validate: 'The input value is incorrect.',
+    validate: RULE_DEFAULT_MESSAGE,
     exception: (ctx) => {
       const exception = ctx.exception;
       const message =

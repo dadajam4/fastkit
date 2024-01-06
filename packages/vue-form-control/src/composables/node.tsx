@@ -23,6 +23,8 @@ import {
 
 import {
   VerifiableRule,
+  VerifiableRuleOrFn,
+  resolveVerifiableRule,
   ValidationError,
   validate,
   required as requiredRule,
@@ -53,7 +55,7 @@ import {
 } from '@fastkit/vue-utils';
 import type { VueFormService } from '../service';
 
-export type RecursiveVerifiableRule = RecursiveArray<VerifiableRule>;
+export type RecursiveVerifiableRuleOrFn = RecursiveArray<VerifiableRuleOrFn>;
 
 export type FormNodeType = string | number | symbol;
 
@@ -219,7 +221,7 @@ export function createFormNodeProps<
        * List of validation rules
        */
       rules: {
-        type: [Array, Object] as PropType<RecursiveVerifiableRule>,
+        type: [Array, Object] as PropType<RecursiveVerifiableRuleOrFn>,
         default: () => [],
       },
       /**
@@ -1249,7 +1251,7 @@ export class FormNodeControl<
 
   protected _resolveRules(): VerifiableRule[] {
     const { rules: propRules, required } = this._props;
-    const rules = flattenRecursiveArray(propRules);
+    const rules = flattenRecursiveArray(propRules).map(resolveVerifiableRule);
 
     if (required) {
       const requiredRule = this._requiredFactory();

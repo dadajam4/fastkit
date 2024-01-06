@@ -1,21 +1,38 @@
 import { ValidationError } from '../schemes';
 import { objectPathJoin } from '../utils';
 import { validate } from '../services';
-import { Rule, createRule, RuleSettingsMessage } from './rule';
+import { Rule, createRule, RuleBasicSettings } from './rule';
 import { RecursiveArray } from '@fastkit/helpers';
 
+/**
+ * Constraints for the rule enumerating array or object elements.
+ */
 export interface EachRuleConstraints {
+  /**
+   * Skip validation if the array or object is nullable.
+   */
   skipIfEmpty?: boolean;
+  /**
+   * Rule to apply to each element or its recursive array.
+   */
   rules: RecursiveArray<Rule>;
 }
 
-export interface EachRuleSettings {
-  name?: string;
-  message?: RuleSettingsMessage<EachRuleConstraints>;
-  skipIfEmpty?: boolean;
-  rules: RecursiveArray<Rule>;
-}
+/**
+ * Settings for the rule enumerating array or object elements.
+ */
+export interface EachRuleSettings
+  extends Partial<RuleBasicSettings<EachRuleConstraints>>,
+    EachRuleConstraints {}
 
+/**
+ * Create a rule for enumerating array or object elements.
+ *
+ * @param settings - Settings for the rule enumerating array or object elements.
+ * @returns Rule for enumerating array or object elements.
+ *
+ * @see {@link EachRuleSettings}
+ */
 export function createEachRule(
   settings: EachRuleSettings,
 ): Rule<EachRuleConstraints> {
@@ -42,7 +59,7 @@ export function createEachRule(
       if (!obj || (typeof obj !== 'object' && !isArray)) return false;
       const errors: ValidationError[] = [];
       const { eachPrefix: parentEachPrefix, path: parentPath } =
-        rule._lastValidateOptions;
+        rule._lastValidationOptions;
       const parentFullPath = objectPathJoin(parentEachPrefix, parentPath);
       const paths = Object.keys(obj);
       await Promise.all(

@@ -1,22 +1,46 @@
 import {
-  ValidateCancelSymbol,
+  VALIDATE_CANCEL_SYMBOL,
   ValidationError,
-  ValidationErrorSymbol,
+  VALIDATION_ERROR_SYMBOL,
 } from '../schemes';
 import { objectPathJoin } from '../utils';
 import { RuleMessageService } from '../services';
 import { isPromise } from '@fastkit/helpers';
+import { RULE_DEFAULT_NAME, RULE_DEFAULT_MESSAGE } from '../constants';
 
+/**
+ * Execution result of the rule.
+ */
 export type RuleResult = Promise<
-  void | typeof ValidateCancelSymbol | ValidationError
+  void | typeof VALIDATE_CANCEL_SYMBOL | ValidationError
 >;
 
-export interface RuleValidateOptions {
+/**
+ * Validation options for the rule.
+ */
+export interface RuleValidationOptions {
+  /**
+   * Property name during object enumeration.
+   *
+   * This is typically not specified from the application and is intended for internal use.
+   *
+   * @internal
+   */
   path?: string | number;
+  /**
+   * Prefix for the path during object enumeration.
+   *
+   * This is typically not specified from the application and is intended for internal use.
+   *
+   * @internal
+   */
   eachPrefix?: string;
 }
 
-export type RuleSettingsValidateSource =
+/**
+ * Result of rule validation.
+ */
+export type RuleValidationResultValue =
   /** When it passes verification */
   | true
 
@@ -24,68 +48,181 @@ export type RuleSettingsValidateSource =
   | false
 
   /** When the verification is considered successful and the subsequent verifications are skipped */
-  | typeof ValidateCancelSymbol
+  | typeof VALIDATE_CANCEL_SYMBOL
 
   /** When there is a nested validation result object */
   | ValidationError[];
 
-export type RuleSettingsValidatePayload =
-  | RuleSettingsValidateSource
-  | Promise<RuleSettingsValidateSource>;
+/**
+ * Result of rule validation or its Promise instance.
+ */
+export type RuleValidationResult =
+  | RuleValidationResultValue
+  | Promise<RuleValidationResultValue>;
 
-export type RuleSettingsMessage<C = any> =
+/**
+ * Message specification for the rule.
+ */
+export type RuleMessageSpec<C = any> =
   | string
   | ((value: any, ctx: RuleValidateContext<C>) => string);
 
-export type RuleSettings<C = any> =
-  | {
-      name: string;
-      validate: (value: any, constraints: C) => RuleSettingsValidatePayload;
-      message?: RuleSettingsMessage<C>;
-      constraints: C;
-    }
-  | {
-      name: string;
-      validate: (value: any) => RuleSettingsValidatePayload;
-      message?: RuleSettingsMessage<C>;
-      constraints?: any;
-    };
-
-export interface RuleValidateContext<C = any> {
+/** Basic settings for the rule. */
+export interface RuleBasicSettings<C = any> {
+  /** Rule name. */
   name: string;
+  /**
+   * Message specification for the rule.
+   *
+   * @see {@link RuleMessageSpec}
+   */
+  message?: RuleMessageSpec<C>;
+}
+
+/**
+ * Rule settings.
+ */
+export type RuleSettings<C = any> =
+  | (RuleBasicSettings<C> & {
+      /**
+       * Validation function.
+       *
+       * @param value - Value to be validated.
+       * @param constraints - Constraints.
+       * @returns Result of rule validation or its Promise instance.
+       */
+      validate: (value: any, constraints: C) => RuleValidationResult;
+      /**
+       * Constraints.
+       *
+       * Passed as the second argument to the validation function, this value can be customized through rule forking.
+       */
+      constraints: C;
+    })
+  | (RuleBasicSettings<C> & {
+      /**
+       * Validation function.
+       *
+       * @param value - Value to be validated.
+       * @returns Result of rule validation or its Promise instance.
+       */
+      validate: (value: any) => RuleValidationResult;
+      constraints?: any;
+    });
+
+/**
+ * Context object for rule validation.
+ */
+export interface RuleValidateContext<C = any> {
+  /** Rule name. */
+  name: string;
+  /** Value to be validated. */
   value: any;
+  /** Constraints. */
   constraints: C;
+  /** Prefix for the path during object enumeration. */
   eachPrefix?: string;
+  /** Property name during object enumeration. */
   path?: string | number;
+  /** Full path to the property during object enumeration. */
   fullPath?: string;
-  message?: RuleSettingsMessage<C>;
+  /**
+   * Message specification for the rule.
+   *
+   * @see {@link RuleMessageSpec}
+   */
+  message?: RuleMessageSpec<C>;
+  /** Exception that occurred during rule validation. */
   exception?: any;
 }
 
+/**
+ * Fork settings for the rule.
+ */
+export interface RuleForkSettings<C = any> {
+  /** New rule name. */
+  name?: string;
+  /** New constraints. */
+  constraints?: C;
+  /**
+   * New message specification.
+   *
+   * @see {@link RuleMessageSpec}
+   */
+  message?: RuleMessageSpec<C>;
+}
+
+/**
+ * Rule interface.
+ */
 export interface Rule<C = any> {
   <EC extends C = C>(
     constraints: Partial<EC>,
     overRides?: string | Partial<RuleSettings<EC>>,
   ): Rule<EC>;
+  /** Rule name. */
   $name: string;
-  validate: (value: any, options?: RuleValidateOptions) => RuleResult;
-  message: string | ((value: any, ctx: RuleValidateContext<C>) => string);
+  /**
+   * Validate the specified value.
+   *
+   * @param value - Value to be validated.
+   * @param options Validation options for the rule.
+   * @returns Execution result of the rule.
+   */
+  validate: (value: any, options?: RuleValidationOptions) => RuleResult;
+  /**
+   * Message specification for the rule.
+   *
+   * @see {@link RuleMessageSpec}
+   */
+  message: RuleMessageSpec<C>;
+  /**
+   * Constraints.
+   *
+   * Passed as the second argument to the validation function, this value can be customized through rule forking.
+   */
   constraints: C;
-  fork(settings: {
-    name?: string;
-    constraints?: C;
-    message?: RuleSettingsMessage<C>;
-  }): Rule<C>;
+  /**
+   * Fork this rule to create a new rule.
+   *
+   * Used when creating a new rule with customized name, constraints, and message specifications.
+   *
+   * @param settings - RuleForkSettings
+   */
+  fork(settings: RuleForkSettings): Rule<C>;
+  /**
+   * Validation function.
+   *
+   * @internal
+   */
   _validate:
-    | ((value: any, constraints: C) => RuleSettingsValidatePayload)
-    | ((value: any) => RuleSettingsValidatePayload);
-  _lastValidateOptions: RuleValidateOptions;
+    | ((value: any, constraints: C) => RuleValidationResult)
+    | ((value: any) => RuleValidationResult);
+  /**
+   * Options used in the most recent validation.
+   *
+   * @see {@link RuleValidationOptions}
+   */
+  _lastValidationOptions: RuleValidationOptions;
+  /**
+   * Retrieve the rule as JSON.
+   */
   toJSON(): {
+    /** Rule name. */
     name: string;
+    /** Constraints. */
     constraints: C;
   };
 }
 
+/**
+ * Create a rule.
+ *
+ * @param settings - Rule settings.
+ * @returns Rule interface.
+ *
+ * @see {@link RuleSettings}
+ */
 export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
   const { name, validate, message, constraints } = settings;
 
@@ -120,14 +257,14 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
     });
   }
 
-  rule.$name = name;
+  rule.$name = name || RULE_DEFAULT_NAME;
   rule.message = message || '';
   rule.constraints = constraints;
-  rule._lastValidateOptions = {} as RuleValidateOptions;
+  rule._lastValidationOptions = {} as RuleValidationOptions;
   rule._validate = validate;
 
-  rule.validate = async (value: any, options: RuleValidateOptions = {}) => {
-    rule._lastValidateOptions = options;
+  rule.validate = async (value: any, options: RuleValidationOptions = {}) => {
+    rule._lastValidationOptions = options;
     const { path, eachPrefix } = options;
     const fullPath = objectPathJoin(eachPrefix, path);
 
@@ -144,7 +281,7 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
     };
 
     const baseError: Omit<ValidationError, 'message'> = {
-      $$symbol: ValidationErrorSymbol,
+      $$symbol: VALIDATION_ERROR_SYMBOL,
       name,
       eachPrefix,
       path,
@@ -159,11 +296,10 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
 
       const children = Array.isArray(result) ? result : undefined;
 
-      if (result === ValidateCancelSymbol) return ValidateCancelSymbol;
+      if (result === VALIDATE_CANCEL_SYMBOL) return VALIDATE_CANCEL_SYMBOL;
       if (!result || children) {
         const message =
-          RuleMessageService.resolve(context()) ||
-          'The input value is incorrect.';
+          RuleMessageService.resolve(context()) || RULE_DEFAULT_MESSAGE;
 
         return {
           ...baseError,

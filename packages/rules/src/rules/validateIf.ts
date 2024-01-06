@@ -1,5 +1,5 @@
 import { createRule, Rule } from '../factories';
-import { ValidateCancelSymbol } from '../schemes';
+import { VALIDATE_CANCEL_SYMBOL } from '../schemes';
 import { REQUIRED_SYMBOL } from './required';
 import { isRequired } from '../validators/general';
 
@@ -10,7 +10,7 @@ export const VALIDATE_IF_SYMBOL = 'validateIf';
 export const validateIf = createRule<ValidateIfChecker>({
   name: VALIDATE_IF_SYMBOL,
   validate: (value, checker) => {
-    return checker(value) ? true : ValidateCancelSymbol;
+    return checker(value) ? true : VALIDATE_CANCEL_SYMBOL;
   },
   constraints: (value) => {
     return isRequired(value);

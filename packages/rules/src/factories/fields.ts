@@ -1,28 +1,53 @@
 import { ValidationError } from '../schemes';
 import { objectPathJoin } from '../utils';
 import { validate } from '../services';
-import { Rule, createRule, RuleSettingsMessage } from './rule';
+import { Rule, createRule, RuleBasicSettings } from './rule';
 import { RecursiveArray } from '@fastkit/helpers';
 
 interface Fields {
   [key: string]: any;
 }
 
+/**
+ * Constraints for the rule that executes validation for each field of the object.
+ */
 export interface FieldsRuleConstraints<T extends Fields = Fields> {
+  /**
+   * Skip validation if the array or object is nullable.
+   */
   skipIfEmpty?: boolean;
+  /**
+   * Rule to apply to the field or its recursive array.
+   *
+   * @see {@link Rule}
+   * @see {@link FieldsRuleSettingsRule}
+   */
   rules: Partial<{
     [K in keyof T]: RecursiveArray<Rule> | FieldsRuleSettingsRule<T>;
   }>;
 }
 
+/**
+ * Settings for the rule that executes validation for each field of the object.
+ */
 export interface FieldsRuleSettings<T extends Fields = Fields>
-  extends FieldsRuleConstraints<T> {
-  name?: string;
-  message?: RuleSettingsMessage<FieldsRuleConstraints<T>>;
-}
+  extends Partial<RuleBasicSettings<FieldsRuleConstraints<T>>>,
+    FieldsRuleConstraints<T> {}
 
+/**
+ * Field rule settings for the rule that executes validation for each field of the object.
+ */
 export interface FieldsRuleSettingsRule<T extends Fields = Fields> {
+  /** Rule to apply to the field or its recursive array. */
   rules: RecursiveArray<Rule>;
+  /**
+   * Getter for passing values to the field validation rule.
+   *
+   * Usually, the object value for the field name is used. Set this if you want to customize it.
+   *
+   * @param obj - Object
+   * @returns Value to be validated.
+   */
   value?: (obj: T) => any;
 }
 
@@ -31,6 +56,14 @@ interface FieldsRuleSettingsRow<T extends Fields = Fields>
   path: string;
 }
 
+/**
+ * Create a rule to execute validation for each field of the object.
+ *
+ * @param settings - Settings for the rule that executes validation for each field of the object.
+ * @returns Rule to execute validation for each field of the object.
+ *
+ * @see {@link FieldsRuleSettings}
+ */
 export function createFieldsRule<T extends Fields = Fields>(
   settings: FieldsRuleSettings<T>,
 ): Rule<FieldsRuleConstraints<T>> {
@@ -74,7 +107,7 @@ export function createFieldsRule<T extends Fields = Fields>(
 
       const errors: ValidationError[] = [];
       const { eachPrefix: parentEachPrefix, path: parentPath } =
-        rule._lastValidateOptions;
+        rule._lastValidationOptions;
       const parentFullPath = objectPathJoin(parentEachPrefix, parentPath);
       await Promise.all(
         ruleSettings.map(async (row) => {
