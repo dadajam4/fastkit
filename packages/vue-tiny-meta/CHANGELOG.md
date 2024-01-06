@@ -1,5 +1,11 @@
 # @fastkit/vue-tiny-meta
 
+## 0.1.11
+
+### Patch Changes
+
+- Added a helper for generating resolvers filtered by package or component scope.
+
 ## 0.1.10
 
 ### Patch Changes
