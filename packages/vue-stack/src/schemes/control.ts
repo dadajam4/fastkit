@@ -484,6 +484,8 @@ export interface CreateStackablePropsOptions {
   defaultCloseOnTab?: StackableTabCloseSpec;
   /** @default 0 */
   defaultTimeout?: number;
+  /** @default false */
+  defaultPersistent?: boolean;
 }
 
 export interface VStackObjectTransitionProp<
@@ -521,6 +523,7 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
     defaultCloseOnEsc = true,
     defaultCloseOnTab = false,
     defaultTimeout = 0,
+    defaultPersistent = false,
   } = opts;
 
   return {
@@ -646,7 +649,10 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
      *
      * If this setting is enabled, it will attempt to block hide requests or page transitions
      */
-    persistent: Boolean,
+    persistent: {
+      type: Boolean,
+      default: defaultPersistent,
+    },
     /** z index */
     zIndex: rawNumberProp(0),
     /** Timeout setting (milliseconds) */

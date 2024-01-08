@@ -26,6 +26,10 @@ interface CreateDialogSchemeOptions {
    * @default false
    */
   defaultBackdrop?: string | boolean;
+  /** @default true */
+  defaultCloseOnOutsideClick?: boolean;
+  /** @default false */
+  defaultPersistent?: boolean;
 }
 
 function createDialogScheme(options: CreateDialogSchemeOptions = {}) {
@@ -33,6 +37,8 @@ function createDialogScheme(options: CreateDialogSchemeOptions = {}) {
     defaultTransition = 'v-stack-slide-y',
     defaultScrollLock = true,
     defaultBackdrop = false,
+    defaultCloseOnOutsideClick = true,
+    defaultPersistent = false,
   } = options;
 
   const { props, emits } = createStackableDefine({
@@ -41,6 +47,8 @@ function createDialogScheme(options: CreateDialogSchemeOptions = {}) {
     defaultFocusRestorable: true,
     defaultScrollLock,
     defaultBackdrop,
+    defaultCloseOnOutsideClick,
+    defaultPersistent,
   });
 
   return {

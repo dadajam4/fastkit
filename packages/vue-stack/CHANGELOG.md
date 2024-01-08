@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.45
+
+### Patch Changes
+
+- Added the ability to specify options for `closeOnOutsideClick` and `persistent` when initializing the stack.
+
 ## 0.15.44
 
 ### Patch Changes
