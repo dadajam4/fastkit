@@ -246,7 +246,7 @@ export function useStackControl(
   });
 
   const inheritedAttrs = computed(() => {
-    if (!manualAttrs) return;
+    if (manualAttrs) return;
     const { class: classes, style: styles } = props;
     return {
       classes: classes as any,

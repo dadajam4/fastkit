@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.47
+
+### Patch Changes
+
+- Fixed an issue with the incorrect placement of class and style attributes when `manualAttrs` is set to `true`.
+
 ## 0.15.46
 
 ### Patch Changes
