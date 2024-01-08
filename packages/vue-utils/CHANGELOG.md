@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.16
+
+### Patch Changes
+
+- Improved performance by immediately returning when the argument value is `null`, `""`, or `false` during the execution of `cleanupEmptyVNodeChild`.
+
 ## 0.14.15
 
 ### Patch Changes

@@ -53,7 +53,10 @@ export function resolveVNodeChildOrSlots<Prop = any>(
   }
 }
 
-export function cleanupEmptyVNodeChild(child: VNodeChild) {
+export function cleanupEmptyVNodeChild(
+  child: VNodeChild,
+): VNodeArrayChildren | undefined {
+  if (child == null || child === '' || child === false) return;
   if (!Array.isArray(child)) {
     child = [child];
   }
