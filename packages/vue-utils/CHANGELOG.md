@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.14.15
+
+### Patch Changes
+
+- Now supports shorthand `emits` options with `EmitFn` and `EmitsToProps` types.
+
 ## 0.14.14
 
 ### Patch Changes
