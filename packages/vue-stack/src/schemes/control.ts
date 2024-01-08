@@ -209,6 +209,7 @@ export interface VStackControl {
 
   /** @private */
   readonly _: {
+    readonly attrs: Record<string, unknown>;
     /**
      * State of the stack control
      *

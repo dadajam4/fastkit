@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.46
+
+### Patch Changes
+
+- Added options for manually rendering the class and style attributes of Stack elements.
+
 ## 0.15.45
 
 ### Patch Changes

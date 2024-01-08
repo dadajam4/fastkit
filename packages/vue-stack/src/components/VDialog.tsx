@@ -67,6 +67,7 @@ export interface DefineDialogSettings<
   emits?: Emits;
   slots?: Slots;
   attrs?: Record<string, any>;
+  manualAttrs?: boolean;
 }
 
 export function defineDialogComponent<
@@ -75,7 +76,7 @@ export function defineDialogComponent<
   Slots extends SlotsType = SlotsType<{}>,
 >(settings: DefineDialogSettings<Props, Emits, Slots>) {
   const baseScheme = createDialogScheme(settings);
-  const { name, props, emits } = settings;
+  const { name, props, emits, manualAttrs } = settings;
 
   const Component = defineComponent({
     name,
@@ -95,6 +96,9 @@ export function defineDialogComponent<
       const dialogCtx = setupStackableComponent<typeof baseScheme.props>(
         _props,
         _ctx,
+        {
+          manualAttrs,
+        },
       );
       const { control } = dialogCtx;
       const render = settings.setup?.(dialogCtx as any) || settings.render;

@@ -44,6 +44,7 @@ export interface UseStackControlOptions {
   onContentDetached?: () => any;
   transitionResolver?: () => string;
   stackType?: string | symbol;
+  manualAttrs?: boolean;
 }
 
 const outsideClickControlFilter = (control: VStackControl) =>
@@ -117,7 +118,12 @@ export function useStackControl(
   ctx: VStackSetupContext,
   opts: UseStackControlOptions = {},
 ) {
-  const { onContentMounted, onContentDetached, transitionResolver } = opts;
+  const {
+    onContentMounted,
+    onContentDetached,
+    transitionResolver,
+    manualAttrs,
+  } = opts;
 
   const router = useRouter();
   const teleportTarget = useTeleport();
@@ -240,6 +246,7 @@ export function useStackControl(
   });
 
   const inheritedAttrs = computed(() => {
+    if (!manualAttrs) return;
     const { class: classes, style: styles } = props;
     return {
       classes: classes as any,
@@ -438,7 +445,26 @@ export function useStackControl(
     }
   });
 
+  const attrs = computed(() => {
+    const attrs = {
+      ...ctx.attrs,
+    };
+    if (manualAttrs) {
+      const { class: classes, style } = props;
+      if (classes) {
+        attrs.class = classes;
+      }
+      if (style) {
+        attrs.style = style;
+      }
+    }
+    return attrs;
+  });
+
   const privateApi: VStackControl['_'] = {
+    get attrs() {
+      return attrs.value;
+    },
     get state() {
       return state;
     },
@@ -662,19 +688,21 @@ export function useStackControl(
       return timeout.value;
     },
     get classes() {
-      const classes = ['v-stack', inheritedAttrs.value.classes];
+      const classes = ['v-stack', inheritedAttrs.value?.classes];
       if (state.guardAnimating) {
         classes.push('v-stack-guard-effect');
       }
       return classes;
     },
     get styles() {
-      return [
-        ...inheritedAttrs.value.styles,
+      const styles: StyleValue[] = [
         {
           zIndex: zIndex.value,
         },
       ];
+      const inheritedStyle = inheritedAttrs.value?.styles;
+      inheritedStyle && styles.unshift(inheritedStyle);
+      return styles;
     },
     get activateOrder() {
       return state.activateOrder;
