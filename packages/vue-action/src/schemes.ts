@@ -7,7 +7,7 @@ import type {
   UnwrapRef,
   VNodeChild,
 } from 'vue';
-import type { RouterLinkProps, useLink } from 'vue-router';
+import type { RouterLinkProps, useLink, Router } from 'vue-router';
 import type {
   PointableAttributesProps,
   FocusableAttributesProps,
@@ -185,6 +185,12 @@ export interface ActionableRouterLinkSettings {
 
 /** Actionable interface */
 export interface Actionable {
+  /**
+   * Router instance.
+   *
+   * @see {@link Router}
+   */
+  readonly router: Router;
   /** Actionable Tags */
   readonly Tag: ActionableTag;
   /** attributes */

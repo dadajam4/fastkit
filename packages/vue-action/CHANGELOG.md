@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.2.20
+
+### Patch Changes
+
+- Fixed cases where referencing the Vue Router instance on click was not possible. This was caused by timing issues with the internal invocation of `useRouter`.
+
 ## 0.2.19
 
 ### Patch Changes
