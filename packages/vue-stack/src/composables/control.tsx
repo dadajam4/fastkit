@@ -22,7 +22,7 @@ import { StyleValue } from '@fastkit/vue-utils';
 import { clickOutsideDirectiveArgument } from '@fastkit/vue-click-outside';
 import { bodyScrollLockDirectiveArgument } from '@fastkit/vue-body-scroll-lock';
 import { useKeyboard } from '@fastkit/vue-keyboard';
-import { useRouter } from 'vue-router';
+import { useRouter, isNavigationFailure } from 'vue-router';
 import {
   VStackControlState,
   VStackControl,
@@ -137,8 +137,8 @@ export function useStackControl(
     return result;
   });
 
-  const afterEachHookRemover = router.afterEach(() => {
-    if (control.closeOnNavigation) {
+  const afterEachHookRemover = router.afterEach((_to, _from, failure) => {
+    if (!isNavigationFailure(failure) && control.closeOnNavigation) {
       control.close({ force: true });
     }
   });
@@ -180,6 +180,7 @@ export function useStackControl(
     guardAnimating: false,
     guardAnimateTimeId: null,
     booted: false,
+    guardInProgress: false,
     isDestroyed: false,
   });
 
@@ -240,7 +241,8 @@ export function useStackControl(
       return navigationGuard;
     }
     return function guard() {
-      if (navigationGuard || persistent.value) return false;
+      if (navigationGuard || persistent.value || state.guardInProgress)
+        return false;
       return true;
     };
   });
@@ -264,7 +266,12 @@ export function useStackControl(
       {
         key: 'Escape',
         handler: (_ev) => {
-          if (!state.isActive || !closeOnEsc.value || !control.isFront())
+          if (
+            !state.isActive ||
+            !closeOnEsc.value ||
+            !control.isFront() ||
+            state.guardInProgress
+          )
             return;
           if (persistent.value) {
             control.guardEffect();
@@ -277,7 +284,13 @@ export function useStackControl(
         key: 'Tab',
         handler: (_ev) => {
           const setting = closeOnTab.value;
-          if (!state.isActive || !setting || !control.isFront()) return;
+          if (
+            !state.isActive ||
+            !setting ||
+            !control.isFront() ||
+            state.guardInProgress
+          )
+            return;
           if (persistent.value) {
             control.guardEffect();
             return;
@@ -603,6 +616,7 @@ export function useStackControl(
     },
     outsideClickCloseConditional(ev, pre) {
       if (
+        state.guardInProgress ||
         !closeOnOutsideClick.value ||
         state.showing ||
         !control.isFront(outsideClickControlFilter) ||
@@ -649,6 +663,20 @@ export function useStackControl(
     includingActivator,
   ) => {
     return !!getContainsOrSameElement(other, includingActivator);
+  };
+
+  const dispatchResolveHandler = async () => {
+    const { resolveHandler } = props;
+    if (!resolveHandler) return;
+    try {
+      state.guardInProgress = true;
+      const result = await resolveHandler(control);
+      state.guardInProgress = false;
+      return result;
+    } catch (err) {
+      state.guardInProgress = false;
+      throw err;
+    }
   };
 
   const control: VStackControl = {
@@ -743,6 +771,9 @@ export function useStackControl(
     get backdropRef() {
       return backdropRef;
     },
+    get guardInProgress() {
+      return state.guardInProgress;
+    },
     setActivator(query) {
       activatorEl.value = getActivator(query);
       return this;
@@ -761,7 +792,8 @@ export function useStackControl(
     },
     close(opts = {}) {
       const { force = false, reason = 'indeterminate' } = opts;
-      if (persistent.value && !force) return Promise.resolve();
+      if ((state.guardInProgress || persistent.value) && !force)
+        return Promise.resolve();
       state.closeReason = reason;
       privateApi.setIsActive(false);
       return Promise.resolve();
@@ -769,7 +801,11 @@ export function useStackControl(
     resetValue() {
       control.value = state.initialValue;
     },
-    resolve(value) {
+    async resolve(value) {
+      if (state.guardInProgress) return;
+      if (value && (await dispatchResolveHandler()) === false) {
+        return false;
+      }
       if (value !== undefined) {
         control.value = value;
       }

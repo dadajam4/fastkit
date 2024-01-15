@@ -1,5 +1,16 @@
 # @fastkit/vui
 
+## 0.18.28
+
+### Patch Changes
+
+- Added the `resolveHandler` option for performing custom validation and asynchronous processing in the stack's resolve process, along with the `guardInProgress` getter to determine if asynchronous processing is in progress.
+
+  Additionally, fixed an issue where the stack was hidden even on failed navigation when `closeOnNavigation` was set to `true`.
+
+- Updated dependencies []:
+  - @fastkit/vue-stack@0.15.49
+
 ## 0.18.27
 
 ### Patch Changes

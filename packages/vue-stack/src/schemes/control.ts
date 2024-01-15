@@ -50,6 +50,18 @@ export type VStackNavigationGuard = (
 ) => boolean | Promise<boolean>;
 
 /**
+ * Handler function for resolving the stack.
+ *
+ * Handler function for resolving the stack, which may include validation processes or asynchronous submission tasks.
+ *
+ * @returns A boolean or undefined value or a Promise that resolves to a boolean or undefined value.
+ *   - If `false`, the stack resolution is canceled.
+ */
+export type StackableResolveHandler = (
+  ctx: VStackControl,
+) => boolean | void | undefined | Promise<boolean | void | undefined>;
+
+/**
  * Attributes to apply to the stack element's activator
  */
 export interface VStackActivatorAttributes {
@@ -83,6 +95,12 @@ export interface VStackControlState {
   initialValue: any;
   /** Input value */
   inputValue: any;
+  /**
+   * Boolean flag indicating whether the asynchronous resolve handler is currently in progress.
+   *
+   * When true, it signifies that the handler is actively executing.
+   */
+  guardInProgress: boolean;
   /** During display animation */
   showing: boolean;
   /** During hide animation */
@@ -206,6 +224,11 @@ export interface VStackControl {
   readonly backdropRef: Ref<HTMLElement | null>;
   /** Stack type */
   readonly stackType?: string | symbol;
+  /**
+   * A boolean flag indicating whether the guard process is currently in progress.
+   * When true, it signifies that the guard is actively executing.
+   */
+  readonly guardInProgress: boolean;
 
   /** @private */
   readonly _: {
@@ -298,7 +321,7 @@ export interface VStackControl {
    *
    * @param payload - The confirmed value (if any)
    */
-  resolve(payload?: any): Promise<void>;
+  resolve(payload?: any): Promise<void | undefined | false>;
   /**
    * Cancel the stack input
    *
@@ -686,6 +709,19 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
      * @see {@link VStackActivatorQuery}
      */
     activator: {} as PropType<VStackActivatorQuery>,
+    /**
+     * Handler function for resolving the stack.
+     *
+     * Handler function for resolving the stack, which may include validation processes or asynchronous submission tasks.
+     *
+     * This handler is not executed when the resolution request is a negative value, such as false.
+     *
+     * @returns A boolean or undefined value or a Promise that resolves to a boolean or undefined value.
+     *   - If `false`, the stack resolution is canceled.
+     *
+     * @see {@link StackableResolveHandler}
+     */
+    resolveHandler: Function as PropType<StackableResolveHandler>,
     ...V_STACK_SLOTS(),
   };
 }

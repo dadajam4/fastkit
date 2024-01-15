@@ -20,11 +20,10 @@ export function useStackAction(
     const { actions: _actions } = props;
     return resolver ? resolver(_actions) : _actions;
   });
-  const $actions = computed(() => {
-    return actions.value.map((action) => {
-      const onClick = (control: VStackControl, ev: MouseEvent) => {
-        action.onClick && action.onClick(control, ev);
-      };
+  const $actions = computed(() =>
+    actions.value.map((action) => {
+      const onClick = (control: VStackControl, ev: MouseEvent) =>
+        action.onClick?.(control, ev);
 
       const content = action.content({
         control,
@@ -32,8 +31,8 @@ export function useStackAction(
         onClick,
       });
       return content;
-    });
-  });
+    }),
+  );
 
   const actionControl: VStackActionControl = {
     get control() {

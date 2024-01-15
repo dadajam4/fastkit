@@ -426,11 +426,22 @@ export class VuiService {
       key,
       content: ({ control, key }) => {
         const onClick = (ev: MouseEvent) => _onClick(control, ev);
+        control.guardInProgress;
+
+        const _attrs: any = {
+          disabled: control.guardInProgress,
+          ...attrs,
+        };
+
+        if (key === 'ok' && control.guardInProgress) {
+          _attrs.loading = true;
+        }
+
         return factory({
           service: this.stack,
           control,
           key,
-          bindings: { onClick, ...attrs },
+          bindings: { onClick, ..._attrs },
         });
       },
       ...override,

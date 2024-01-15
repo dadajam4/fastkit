@@ -34,9 +34,14 @@ export default defineComponent({
             dense
             length="32"
             beforeChange={async (page) => {
-              const result = await this.$vui.confirm(
-                `${page}ページへ変更して良いですか？`,
-              );
+              const result = await this.$vui.confirm({
+                content: `${page}ページへ変更して良いですか？`,
+                resolveHandler: async () => {
+                  await new Promise<void>((resolve) =>
+                    setTimeout(resolve, 5000),
+                  );
+                },
+              });
               if (!result) {
                 this.$vui.alert('キャンセルしました');
                 return false;
