@@ -821,7 +821,11 @@ export function useStackControl(
         reason: 'resolved',
       });
     },
-    cancel(force) {
+    async cancel(force) {
+      if (!control.isActive) return;
+      if (!force && (await dispatchResolveHandler('cancel')) === false) {
+        return;
+      }
       return control.close({
         force,
         reason: 'canceled',

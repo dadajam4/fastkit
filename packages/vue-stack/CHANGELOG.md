@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.52
+
+### Patch Changes
+
+- Fixed cases where `cancelHandler` was not being dispatched, such as when the ESC key was pressed.
+
 ## 0.15.51
 
 ### Patch Changes
