@@ -96,11 +96,9 @@ export interface VStackControlState {
   /** Input value */
   inputValue: any;
   /**
-   * Boolean flag indicating whether the asynchronous resolve handler is currently in progress.
-   *
-   * When true, it signifies that the handler is actively executing.
+   * If the asynchronous resolution handler is in progress, its type.
    */
-  guardInProgress: boolean;
+  guardInProgressType: null | 'cancel' | 'resolve';
   /** During display animation */
   showing: boolean;
   /** During hide animation */
@@ -224,6 +222,10 @@ export interface VStackControl {
   readonly backdropRef: Ref<HTMLElement | null>;
   /** Stack type */
   readonly stackType?: string | symbol;
+  /**
+   * If the asynchronous resolution handler is in progress, its type.
+   */
+  readonly guardInProgressType: null | 'cancel' | 'resolve';
   /**
    * A boolean flag indicating whether the guard process is currently in progress.
    * When true, it signifies that the guard is actively executing.

@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.51
+
+### Patch Changes
+
+- Added the `guardInProgressType` getter to check the type of the stack resolution handler currently in progress.
+
 ## 0.15.50
 
 ### Patch Changes

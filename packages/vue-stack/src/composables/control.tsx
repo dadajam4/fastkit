@@ -180,7 +180,7 @@ export function useStackControl(
     guardAnimating: false,
     guardAnimateTimeId: null,
     booted: false,
-    guardInProgress: false,
+    guardInProgressType: null,
     isDestroyed: false,
   });
 
@@ -241,7 +241,7 @@ export function useStackControl(
       return navigationGuard;
     }
     return function guard() {
-      if (navigationGuard || persistent.value || state.guardInProgress)
+      if (navigationGuard || persistent.value || control.guardInProgress)
         return false;
       return true;
     };
@@ -270,7 +270,7 @@ export function useStackControl(
             !state.isActive ||
             !closeOnEsc.value ||
             !control.isFront() ||
-            state.guardInProgress
+            control.guardInProgress
           )
             return;
           if (persistent.value) {
@@ -288,7 +288,7 @@ export function useStackControl(
             !state.isActive ||
             !setting ||
             !control.isFront() ||
-            state.guardInProgress
+            control.guardInProgress
           )
             return;
           if (persistent.value) {
@@ -616,7 +616,7 @@ export function useStackControl(
     },
     outsideClickCloseConditional(ev, pre) {
       if (
-        state.guardInProgress ||
+        control.guardInProgress ||
         !closeOnOutsideClick.value ||
         state.showing ||
         !control.isFront(outsideClickControlFilter) ||
@@ -670,12 +670,12 @@ export function useStackControl(
       type === 'resolve' ? props.resolveHandler : props.cancelHandler;
     if (!handler) return;
     try {
-      state.guardInProgress = true;
+      state.guardInProgressType = type;
       const result = await handler(control);
-      state.guardInProgress = false;
+      state.guardInProgressType = null;
       return result;
     } catch (err) {
-      state.guardInProgress = false;
+      state.guardInProgressType = null;
       throw err;
     }
   };
@@ -772,8 +772,11 @@ export function useStackControl(
     get backdropRef() {
       return backdropRef;
     },
+    get guardInProgressType() {
+      return state.guardInProgressType;
+    },
     get guardInProgress() {
-      return state.guardInProgress;
+      return !!state.guardInProgressType;
     },
     setActivator(query) {
       activatorEl.value = getActivator(query);
@@ -793,7 +796,7 @@ export function useStackControl(
     },
     close(opts = {}) {
       const { force = false, reason = 'indeterminate' } = opts;
-      if ((state.guardInProgress || persistent.value) && !force)
+      if ((control.guardInProgress || persistent.value) && !force)
         return Promise.resolve();
       state.closeReason = reason;
       privateApi.setIsActive(false);
@@ -803,7 +806,7 @@ export function useStackControl(
       control.value = state.initialValue;
     },
     async resolve(value) {
-      if (state.guardInProgress) return;
+      if (control.guardInProgress) return;
 
       if (
         (await dispatchResolveHandler(value ? 'resolve' : 'cancel')) === false
