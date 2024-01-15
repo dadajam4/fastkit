@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.15.50
+
+### Patch Changes
+
+- Added `cancelHandler` to handle stack resolution with negative values, allowing for asynchronous handling when resolving the stack with negative values.
+
 ## 0.15.49
 
 ### Patch Changes

@@ -710,11 +710,9 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
      */
     activator: {} as PropType<VStackActivatorQuery>,
     /**
-     * Handler function for resolving the stack.
+     * Handler function for when the stack is resolved with a positive value.
      *
-     * Handler function for resolving the stack, which may include validation processes or asynchronous submission tasks.
-     *
-     * This handler is not executed when the resolution request is a negative value, such as false.
+     * Which may include validation processes or asynchronous submission tasks.
      *
      * @returns A boolean or undefined value or a Promise that resolves to a boolean or undefined value.
      *   - If `false`, the stack resolution is canceled.
@@ -722,6 +720,17 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
      * @see {@link StackableResolveHandler}
      */
     resolveHandler: Function as PropType<StackableResolveHandler>,
+    /**
+     * Handler function for when the stack is resolved with a negative value.
+     *
+     * Which may include validation processes or asynchronous submission tasks.
+     *
+     * @returns A boolean or undefined value or a Promise that resolves to a boolean or undefined value.
+     *   - If `false`, the stack resolution is canceled.
+     *
+     * @see {@link StackableResolveHandler}
+     */
+    cancelHandler: Function as PropType<StackableResolveHandler>,
     ...V_STACK_SLOTS(),
   };
 }

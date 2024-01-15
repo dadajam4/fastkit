@@ -665,12 +665,13 @@ export function useStackControl(
     return !!getContainsOrSameElement(other, includingActivator);
   };
 
-  const dispatchResolveHandler = async () => {
-    const { resolveHandler } = props;
-    if (!resolveHandler) return;
+  const dispatchResolveHandler = async (type: 'resolve' | 'cancel') => {
+    const handler =
+      type === 'resolve' ? props.resolveHandler : props.cancelHandler;
+    if (!handler) return;
     try {
       state.guardInProgress = true;
-      const result = await resolveHandler(control);
+      const result = await handler(control);
       state.guardInProgress = false;
       return result;
     } catch (err) {
@@ -803,7 +804,10 @@ export function useStackControl(
     },
     async resolve(value) {
       if (state.guardInProgress) return;
-      if (value && (await dispatchResolveHandler()) === false) {
+
+      if (
+        (await dispatchResolveHandler(value ? 'resolve' : 'cancel')) === false
+      ) {
         return false;
       }
       if (value !== undefined) {
