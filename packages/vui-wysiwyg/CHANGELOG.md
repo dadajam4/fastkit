@@ -1,5 +1,11 @@
 # @fastkit/vui-wysiwyg
 
+## 6.0.32
+
+### Patch Changes
+
+- Exposed the API interface types that `VWysiwygEditor` exposes.
+
 ## 6.0.31
 
 ### Patch Changes

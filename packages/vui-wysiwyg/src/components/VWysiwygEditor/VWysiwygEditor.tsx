@@ -35,6 +35,7 @@ import {
   useEditor,
   BubbleMenu,
   FocusPosition,
+  type Editor,
 } from '@tiptap/vue-3';
 import { StarterKit } from '@tiptap/starter-kit';
 import {
@@ -48,6 +49,11 @@ import {
 } from '../../schemes';
 
 const slots = defineSlots<FormNodeWrapperSlots & InputBoxSlots>();
+
+export interface VWysiwygEditorAPI {
+  readonly editor: Editor | undefined;
+  readonly control: TextableControl;
+}
 
 export const VWysiwygEditor = defineComponent({
   name: 'VWysiwygEditor',
@@ -264,10 +270,14 @@ export const VWysiwygEditor = defineComponent({
       editor.value && editor.value.destroy();
     });
 
-    ctx.expose({
-      editor,
+    const api: VWysiwygEditorAPI = {
+      get editor() {
+        return editor.value;
+      },
       control: inputControl,
-    });
+    };
+
+    ctx.expose(api);
 
     const handleClickLabel = (ev: MouseEvent) => {
       focus('start', { scrollIntoView: true });
@@ -324,7 +334,6 @@ export const VWysiwygEditor = defineComponent({
       return (
         <VFormControl
           nodeControl={inputControl}
-          // focused={inputControl.focused}
           class={classes.value}
           label={props.label}
           hint={props.hint}
