@@ -1,25 +1,28 @@
-import { isNonNullObject } from './object';
 import { WritableKeysOf } from '@fastkit/ts-type-utils';
+import { isNonNullObject } from './object';
 
 interface AnyObject {
   [key: string | number | symbol]: any;
 }
 
-export type DefaultsSchemeSource<V> = V extends Array<infer U>
-  ? U extends AnyObject
-    ?
-        | [DefaultsScheme<U>]
-        | [DefaultsScheme<U>, (notObject: unknown) => Partial<U> | void]
-    : [() => U[]]
-  : V extends AnyObject
-  ? DefaultsScheme<V>
-  : () => V;
+export type DefaultsSchemeSource<V> =
+  V extends Array<infer U>
+    ? U extends AnyObject
+      ?
+          | [DefaultsScheme<U>]
+          | [DefaultsScheme<U>, (notObject: unknown) => Partial<U> | void]
+      : [() => U[]]
+    : V extends AnyObject
+      ? DefaultsScheme<V>
+      : () => V;
 
 export type DefaultsScheme<T> = {
   [K in WritableKeysOf<T>]?: DefaultsSchemeSource<T[K]>;
 };
 
-export const MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL = Symbol();
+export const MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL = Symbol(
+  'MERGE_DEFAULTS_INDEX_SIGNATURE',
+);
 
 function getIndexSignatureScheme(
   scheme: unknown,

@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { resolveConfig, ResolvedConfig, Plugin } from 'vite';
-import { VotPluginOptions } from '../vot';
 import type { RouteRecord } from 'vue-router';
+import { VotPluginOptions } from '../vot';
 import type { VotExtractedPage } from '../schemes/page';
 import {
   resolveRawVotGenerateOptions,
@@ -54,6 +54,7 @@ export async function getEntryPoint(
   return path.join(config.root, entryFile);
 }
 
+// eslint-disable-next-line no-shadow
 function extractDynamicParams(path: string): string[] | undefined {
   const dynamicParams: string[] = [];
   const chunks = path.split('/');
@@ -69,6 +70,7 @@ function resolveExtractedPage(
   route: RouteRecord,
 ): VotExtractedPage | undefined {
   if (route.redirect) return;
+  // eslint-disable-next-line no-shadow
   const { path, name } = route;
   const resolved: VotExtractedPage = {
     name,

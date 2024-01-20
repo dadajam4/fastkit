@@ -3,7 +3,7 @@ import type { VuePageControl, UseVuePageControlOptions } from './composables';
 import { VuePageError } from './logger';
 
 export const VuePageControlInjectionKey: InjectionKey<VuePageControl> =
-  Symbol();
+  Symbol('VuePageControl');
 
 export function useVuePageControl(opts: UseVuePageControlOptions = {}) {
   const pageControl = inject(VuePageControlInjectionKey, null);

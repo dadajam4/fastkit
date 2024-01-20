@@ -17,7 +17,7 @@ export function SerializeVueHook(
     return {
       kind: 'custom',
       name: 'vue',
-      details: details,
+      details,
       docs: details.docs,
     };
   };

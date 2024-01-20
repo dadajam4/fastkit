@@ -1,15 +1,15 @@
 import {
   ColorScheme,
   TemplateScope,
-  BULTIN_COLOR_VARIANTS,
-  BultinColorVariant,
+  BUILTIN_COLOR_VARIANTS,
+  BuiltinColorVariant,
 } from '@fastkit/color-scheme';
-import { toScssValues } from './to-scss-values';
 import fs from 'fs-extra';
 import path from 'node:path';
 import { render } from 'eta';
 import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
 import { EV } from '@fastkit/ev';
+import { toScssValues } from './to-scss-values';
 import { logger, ColorSchemeGenError } from './logger';
 
 const TEMPLATES_DIR = __plugboyPublicDir('templates');
@@ -49,6 +49,7 @@ export interface LoadColorSchemeRunnerEventMap {
 
 export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
   private runner: ESbuildRunner<LoadColorSchemeRunnerLoadResult>;
+
   readonly dest: string;
 
   constructor(opts: LoadColorSchemeRunnerOptions) {
@@ -89,8 +90,8 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
         if (!selector) {
           selector = variant;
         }
-        const result = await render(tmpl, { selector }, { async: true });
-        return result || '';
+        const _result = await render(tmpl, { selector }, { async: true });
+        return _result || '';
       },
       async variantScss(variant) {
         const variantSource = scheme.variantSources.find(
@@ -107,11 +108,11 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
         }
         if (scss) return scss;
 
-        if (from && !BULTIN_COLOR_VARIANTS.includes(from)) {
+        if (from && !BUILTIN_COLOR_VARIANTS.includes(from)) {
           throw new ColorSchemeGenError(`missing builtin variant "${from}"`);
         }
         const _from = from || variant;
-        if (BULTIN_COLOR_VARIANTS.includes(_from as any)) {
+        if (BUILTIN_COLOR_VARIANTS.includes(_from as any)) {
           return templateScope.builtinVariantScss(_from as any, variant);
         }
         return '';
@@ -127,7 +128,7 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
     await fs.ensureDir(this.dest);
 
     async function generateScssCache() {
-      const fileName = entryName + '.scss';
+      const fileName = `${entryName}.scss`;
       const cachePath = path.join(dest, fileName);
       const content = await renderTemplate('scss', templateScope);
       await fs.writeFile(cachePath, content);
@@ -138,7 +139,7 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
     }
 
     async function generateInfoCache() {
-      const fileName = entryName + '.info.ts';
+      const fileName = `${entryName}.info.ts`;
       const cachePath = path.join(dest, fileName);
       const content = await renderTemplate('info', templateScope);
       await fs.writeFile(cachePath, content);
@@ -149,7 +150,7 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
     }
 
     async function generateJSONCache() {
-      const fileName = entryName + '.json';
+      const fileName = `${entryName}.json`;
       const cachePath = path.join(dest, fileName);
       const content = `export default ${JSON.stringify(json)};`;
       return {
@@ -186,7 +187,7 @@ async function getTemplate(name: TemplateName) {
   return fs.readFile(filePath, 'utf-8');
 }
 
-async function getVariantTemplate(name: BultinColorVariant) {
+async function getVariantTemplate(name: BuiltinColorVariant) {
   const filePath = path.join(TEMPLATES_DIR, `variant.${name}.tmpl`);
   return fs.readFile(filePath, 'utf-8');
 }

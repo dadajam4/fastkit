@@ -1,3 +1,9 @@
+import { Symbol as MorphSymbol, Node } from '@fastkit/ts-tiny-meta/ts-morph';
+import {
+  SourceFileExporter,
+  _extractMetaDocs,
+  getMetaDocsBySymbol,
+} from '@fastkit/ts-tiny-meta/ts';
 import {
   IgnoreRule,
   Filter,
@@ -11,12 +17,6 @@ import {
   SortOption,
   SortFn,
 } from './types';
-import { Symbol as MorphSymbol, Node } from '@fastkit/ts-tiny-meta/ts-morph';
-import {
-  SourceFileExporter,
-  _extractMetaDocs,
-  getMetaDocsBySymbol,
-} from '@fastkit/ts-tiny-meta/ts';
 import { VUE_BUILTIN_PROPS } from './constants';
 
 export function filterByRules(name: string, rules: IgnoreRule[]) {
@@ -26,9 +26,7 @@ export function filterByRules(name: string, rules: IgnoreRule[]) {
       if (name === rule) return false;
     } else if (rule instanceof RegExp) {
       if (rule.test(name)) return false;
-    } else {
-      if (rule(name) === false) return false;
-    }
+    } else if (rule(name) === false) return false;
   }
   return true;
 }

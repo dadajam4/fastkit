@@ -117,9 +117,9 @@ export function isLibType(type: Type, declarations?: Node[]): boolean {
   const merged: Node[] = [];
   declarations && merged.push(...declarations);
   typeDeclarations && merged.push(...typeDeclarations);
-  return merged.some((declaration) => {
-    return LIB_TYPE_RE.test(declaration.getSourceFile().getFilePath());
-  });
+  return merged.some((declaration) =>
+    LIB_TYPE_RE.test(declaration.getSourceFile().getFilePath()),
+  );
 }
 
 const TYPE_TEXT_IMPORTS_MATCH_RE = /(^|\s|<)import\(.+?\)\./g;
@@ -133,6 +133,7 @@ export const TYPE_TEXT_MAPPING: Record<string, string> = {
 
 export const TYPE_TEXT_REPLACE_MAP: [RegExp, string][] = [
   [
+    // eslint-disable-next-line prefer-regex-literals
     new RegExp(
       'VNode<RendererNode, RendererElement, \\{ \\[key: string\\]: any; \\}>',
       'g',
@@ -217,7 +218,7 @@ export function extractBasicMetaBody(
 
   let text: string;
   if (type.isUnion()) {
-    text = types.map((type) => getTypeText(type, docNode)).join(' | ');
+    text = types.map((_type) => getTypeText(_type, docNode)).join(' | ');
     text = TYPE_TEXT_MAPPING[text] || text;
   } else {
     text = getTypeText(type, docNode);
@@ -226,18 +227,18 @@ export function extractBasicMetaBody(
   return {
     text,
     docs: _extractMetaDocs(exporter, docNode || type),
-    types: types.map((type) => {
-      const typeRef = exporter.getRefByItem(type);
+    types: types.map((_type) => {
+      const typeRef = exporter.getRefByItem(_type);
       if (typeRef) {
         return typeRef as AnyMeta;
       }
 
-      const declaration = type.getSymbol()?.getDeclarations()?.[0];
-      if (!declaration || isLibType(type)) {
+      const declaration = _type.getSymbol()?.getDeclarations()?.[0];
+      if (!declaration || isLibType(_type)) {
         return {
           kind: 'single',
-          text: getTypeText(type, docNode),
-          literal: type.getLiteralValue(),
+          text: getTypeText(_type, docNode),
+          literal: _type.getLiteralValue(),
         };
       }
 
@@ -318,12 +319,14 @@ export function extractFunctionMetaBody(
     if (Node.isNode(declaration)) {
       const overloads =
         (Node.isOverloadable(declaration) && declaration.getOverloads()) || [];
+      // eslint-disable-next-line no-shadow
       const declarations = [...overloads, declaration];
       return {
         declarations,
         declarationKind: declaration.getKindName(),
       };
     }
+    // eslint-disable-next-line no-shadow
     const declarationKind = declaration
       .getSignature()
       .getDeclaration()
@@ -333,6 +336,7 @@ export function extractFunctionMetaBody(
       declarationKind,
     };
   })();
+  // eslint-disable-next-line no-shadow
   const signatures = declarations.map((declaration) => {
     const signature = declaration.getSignature();
     return serializeSignature(exporter, signature);
@@ -507,9 +511,7 @@ export function serializeObjectMembers(
       continue;
     }
   }
-  return metaArray.filter((meta) => {
-    return !hasPrivateLikeTag(meta.docs);
-  });
+  return metaArray.filter((meta) => !hasPrivateLikeTag(meta.docs));
 }
 
 function metaArrayToMap(
@@ -568,24 +570,25 @@ export function extractObjectMeta(
   exporter: SourceFileExporter,
   declaration: InterfaceDeclaration | TypeLiteralNode,
 ): ObjectMeta {
-  const members = declaration.getMembers().filter((member) => {
-    return (
-      !Node.isConstructSignatureDeclaration(member) &&
-      !Node.isCallSignatureDeclaration(member)
+  const members = declaration
+    .getMembers()
+    .filter(
+      (member) =>
+        !Node.isConstructSignatureDeclaration(member) &&
+        !Node.isCallSignatureDeclaration(member),
     );
-  });
   const signatures = declaration.getCallSignatures();
   const constructors = declaration.getConstructSignatures();
 
   return {
     kind: 'object',
     text: getTypeText(declaration.getType(), declaration),
-    signatures: signatures.map((dec) => {
-      return serializeSignature(exporter, dec.getSignature());
-    }),
-    constructors: constructors.map((dec) => {
-      return serializeSignature(exporter, dec.getSignature());
-    }),
+    signatures: signatures.map((dec) =>
+      serializeSignature(exporter, dec.getSignature()),
+    ),
+    constructors: constructors.map((dec) =>
+      serializeSignature(exporter, dec.getSignature()),
+    ),
     properties: serializeObjectMembersToMap(exporter, members),
     docs: _extractMetaDocs(exporter, declaration),
   };

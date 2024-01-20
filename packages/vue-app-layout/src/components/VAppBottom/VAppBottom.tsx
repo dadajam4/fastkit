@@ -1,7 +1,7 @@
-import * as styles from './VAppBottom.css';
 import { defineComponent, Teleport } from 'vue';
-import { VAL_BOTTOM_ID } from '../../constants';
 import { ClientOnly } from '@fastkit/vue-utils';
+import * as styles from './VAppBottom.css';
+import { VAL_BOTTOM_ID } from '../../constants';
 
 export const VAppBottom = defineComponent({
   name: 'VAppBottom',

@@ -30,37 +30,37 @@ export function rawNumberProp<
 type InferPropType<T> = [T] extends [null]
   ? any
   : [T] extends [
-      {
-        type: null | true;
-      },
-    ]
-  ? any
-  : [T] extends [
-      | ObjectConstructor
-      | {
-          type: ObjectConstructor;
+        {
+          type: null | true;
         },
-    ]
-  ? Record<string, any>
-  : [T] extends [
-      | BooleanConstructor
-      | {
-          type: BooleanConstructor;
-        },
-    ]
-  ? boolean
-  : [T] extends [
-      | DateConstructor
-      | {
-          type: DateConstructor;
-        },
-    ]
-  ? Date
-  : [T] extends [Prop<infer V, infer D>]
-  ? unknown extends V
-    ? D
-    : V
-  : T;
+      ]
+    ? any
+    : [T] extends [
+          | ObjectConstructor
+          | {
+              type: ObjectConstructor;
+            },
+        ]
+      ? Record<string, any>
+      : [T] extends [
+            | BooleanConstructor
+            | {
+                type: BooleanConstructor;
+              },
+          ]
+        ? boolean
+        : [T] extends [
+              | DateConstructor
+              | {
+                  type: DateConstructor;
+                },
+            ]
+          ? Date
+          : [T] extends [Prop<infer V, infer D>]
+            ? unknown extends V
+              ? D
+              : V
+            : T;
 
 type RequiredKeys<T> = {
   [K in keyof T]: T[K] extends {
@@ -118,8 +118,8 @@ export function resolveNumberish<
 ): D extends number
   ? number
   : T extends undefined
-  ? number | undefined
-  : number {
+    ? number | undefined
+    : number {
   if (source == null) return defaultValue as any;
   return typeof source === 'number' ? source : Number(source);
 }

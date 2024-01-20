@@ -1,5 +1,5 @@
-import { HIDDEN, VISIBILITY_CHANGE } from './constants';
 import { IN_WINDOW } from '@fastkit/helpers';
+import { HIDDEN, VISIBILITY_CHANGE } from './constants';
 
 export type VisibilityTypedCallback = (event: Event) => any;
 export type VisibilityStateListener = (
@@ -23,7 +23,9 @@ function getVisibilityState(): VisibilityState {
 
 export class VisibilityManager {
   private _state: VisibilityState = getVisibilityState();
+
   private _stateListeners: VisibilityStateListener[] = [];
+
   private _typedCallbacks: VisibilityTypedCallbacks = {
     visible: [],
     hidden: [],
@@ -36,6 +38,7 @@ export class VisibilityManager {
   get isVisible(): boolean {
     return this._state === 'visible';
   }
+
   get isHidden(): boolean {
     return this._state === 'hidden';
   }

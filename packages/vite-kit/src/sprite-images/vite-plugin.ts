@@ -20,7 +20,7 @@ export function spriteImagesVitePlugin(
       const { onBooted, onBootError } = opts;
       try {
         if (!runner) {
-          const runner = new SpriteImagesRunner(opts);
+          runner = new SpriteImagesRunner(opts);
           await runner.run();
         }
 

@@ -1,7 +1,7 @@
+import type { OutputFile } from 'esbuild';
 import type { Listable } from '../utils';
 import { WorkspaceSetupContext, WorkspacePackageJson } from './workspace';
 import type { PlugboyWorkspace, Builder } from '../workspace';
-import type { OutputFile } from 'esbuild';
 
 /** plugboy hook definition */
 export interface HookTypes {

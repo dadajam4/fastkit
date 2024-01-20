@@ -4,6 +4,7 @@ import { isFileNotFoundException } from './utils';
 
 export class Path {
   private _value: string;
+
   private _stats?: fs.Stats;
 
   get value() {
@@ -75,16 +76,14 @@ export class Path {
   }
 
   private _join(...paths: (string | undefined)[]) {
-    const _paths = paths.filter((path): path is string => !!path);
+    const _paths = paths.filter((_path): _path is string => !!_path);
     return _paths.length ? path.join(this.value, ..._paths) : this.value;
   }
 
   async readdir(...paths: string[]): Promise<Path[]> {
     const dir = this._join(...paths);
     const files = await fs.promises.readdir(dir);
-    return files.map((file) => {
-      return new Path(path.join(dir, file));
-    });
+    return files.map((file) => new Path(path.join(dir, file)));
   }
 
   readFile<D = undefined>(

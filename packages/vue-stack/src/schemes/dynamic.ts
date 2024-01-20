@@ -72,9 +72,8 @@ export interface DynamicStackSettings<T extends StackableComponent> {
   slots: any;
 }
 
-const isObject = (source: unknown): source is Record<keyof any, any> => {
-  return !!source && typeof source === 'object' && !Array.isArray(source);
-};
+const isObject = (source: unknown): source is Record<keyof any, any> =>
+  !!source && typeof source === 'object' && !Array.isArray(source);
 
 const normalizeSlot = (source: unknown) => {
   if (typeof source === 'function') return source;

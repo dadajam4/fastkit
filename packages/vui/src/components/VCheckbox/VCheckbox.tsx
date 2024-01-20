@@ -21,6 +21,7 @@ export const VCheckbox = defineComponent({
     indeterminate: Boolean,
   },
   emits,
+  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const nodeControl = useFormSelectorItemControl(props, ctx, {
       nodeType: VUI_CHECKBOX_SYMBOL,
@@ -53,17 +54,15 @@ export const VCheckbox = defineComponent({
       label: () => ctx.slots.default?.(),
     };
 
-    return () => {
-      return (
-        <VCheckable
-          class={classes.value}
-          checked={nodeControl.selected || isIndeterminate.value}
-          invalid={nodeControl.invalid}
-          disabled={nodeControl.isDisabled}
-          readonly={nodeControl.isReadonly}
-          v-slots={slots}
-        />
-      );
-    };
+    return () => (
+      <VCheckable
+        class={classes.value}
+        checked={nodeControl.selected || isIndeterminate.value}
+        invalid={nodeControl.invalid}
+        disabled={nodeControl.isDisabled}
+        readonly={nodeControl.isReadonly}
+        v-slots={slots}
+      />
+    );
   },
 });

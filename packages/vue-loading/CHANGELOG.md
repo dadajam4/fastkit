@@ -1,5 +1,18 @@
 # @fastkit/vue-loading
 
+## 0.14.20
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/vue-color-scheme@0.14.19
+  - @fastkit/color-scheme@1.0.15
+  - @fastkit/vue-utils@0.14.17
+  - @fastkit/helpers@0.13.8
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.14.19
 
 ### Patch Changes

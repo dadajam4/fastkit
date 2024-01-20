@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { maxLength, required } from '../../rules';
 import { fields, ValidationError } from '../..';
-import { createFieldsRule } from '../';
+import { createFieldsRule } from '..';
 
 interface UserType {
   type: string;
@@ -17,17 +17,14 @@ interface User {
 function createMessage(value: any) {
   if (value == null || typeof value !== 'object') {
     return `I meets value ${JSON.stringify(value)}`;
-  } else {
-    return `The user object does not meet the constraints.`;
   }
+  return `The user object does not meet the constraints.`;
 }
 
 function createUserRule() {
   return createFieldsRule<User>({
     name: 'user',
-    message: (value) => {
-      return createMessage(value);
-    },
+    message: (value) => createMessage(value),
     rules: {
       name: required,
       email: [required, maxLength(10)],
@@ -180,6 +177,7 @@ describe('factories/fields', () => {
             path: 'user',
           })) as ValidationError;
           const cloned = JSON.parse(JSON.stringify(expectValueSnapShot));
+          // eslint-disable-next-line no-shadow
           cloned.children.forEach((row: any, i: number) => {
             const same = (result as any).children[i];
             row.children = expectValueSnapShot.children[i].children;

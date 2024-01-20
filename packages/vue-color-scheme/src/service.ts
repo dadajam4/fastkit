@@ -1,5 +1,6 @@
 import { App, computed, inject, ref, Ref } from 'vue';
 import { useHead } from '@unhead/vue';
+import { ThemeName } from '@fastkit/color-scheme';
 import {
   PropKey,
   ColorSchemeProps,
@@ -9,13 +10,12 @@ import {
   VueColorSchemeServiceSettings,
 } from './types';
 import { ColorSchemeError } from './logger';
-import { ThemeName } from '@fastkit/color-scheme';
 import { VueColorSchemeServiceInjectionKey } from './injections';
 
 export function useColorVariantClasses(props: ColorSchemeHooksProps) {
   const result = computed(() => {
     const value = resolveFnValue(props.variant);
-    const className = value ? value : undefined;
+    const className = value || undefined;
     return {
       value,
       className,
@@ -176,6 +176,7 @@ export function colorSchemeProps<
 
 export class VueColorSchemeService {
   readonly _scheme: VueColorSchemeServiceSettings;
+
   private _rootTheme: Ref<ThemeName>;
 
   get scheme() {

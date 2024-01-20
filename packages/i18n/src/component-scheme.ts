@@ -267,7 +267,7 @@ export interface I18nComponentScheme<
     ListFormats
   > {
   /** Translation object validators */
-  readonly isAvailablTranslations: (translations: Translations) => boolean;
+  readonly isAvailableTranslations: (translations: Translations) => boolean;
 
   /** space definition */
   readonly Space: I18nSpaceStatic<LocaleName, BaseLocale, LocaleMeta>;
@@ -393,10 +393,12 @@ export function defineI18nComponentScheme<
     NumberFormats,
     ListFormats,
     Dependencies
+    // eslint-disable-next-line no-shadow
   > = function defineTranslations(translations) {
     return translations;
   };
 
+  // eslint-disable-next-line no-shadow
   defineTranslations.strict = function defineStrictTranslations(translations) {
     return translations;
   };
@@ -432,7 +434,7 @@ export function defineI18nComponentScheme<
   > = {
     Space,
     dependencies,
-    isAvailablTranslations: translations,
+    isAvailableTranslations: translations,
     dateTimeFormats: dateTimeFormats as I18nNormalizedFormats<
       'dateTime',
       DateTimeFormats

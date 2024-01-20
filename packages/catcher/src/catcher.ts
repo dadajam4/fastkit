@@ -1,3 +1,4 @@
+import { isObject } from '@fastkit/helpers';
 import {
   AnyResolvers,
   AnyNormalizer,
@@ -8,7 +9,6 @@ import {
   ResolverContext,
 } from './schemes';
 import { nativeErrorResolver } from './resolvers/native';
-import { isObject } from '@fastkit/helpers';
 
 /**
  * Checks if the value of the specified argument is a catcher instance
@@ -55,8 +55,11 @@ export function build<
 
   class BuildedCatcher extends Error implements Catcher {
     readonly isCatcher = true;
+
     readonly data!: Catcher['data'];
+
     readonly resolvedData: Catcher['resolvedData'] = {} as any;
+
     readonly source?: any;
 
     get histories() {
@@ -98,6 +101,7 @@ export function build<
     ) {
       if (isCatcher(infoOrException) && overrides === undefined) {
         // If the error information is the Catcher instance itself, it will return itself
+        // eslint-disable-next-line no-constructor-return
         return infoOrException;
       }
 
@@ -161,9 +165,7 @@ export function build<
 
       Object.keys(this.data).forEach((key) => {
         Object.defineProperty(this, key, {
-          get: () => {
-            return this.data[key];
-          },
+          get: () => this.data[key],
           set: (value) => {
             this.data[key] = value;
           },

@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { AsyncHandler } from '../handler';
-import { AsyncHandle } from '../decorator';
 import { delay } from '@fastkit/helpers';
 import { MemoryCacheStorage } from '@fastkit/cache-control';
+import { AsyncHandler } from '../handler';
+import { AsyncHandle } from '../decorator';
 
 class MockClass {
   called = 0;

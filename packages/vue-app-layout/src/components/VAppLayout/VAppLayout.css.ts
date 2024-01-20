@@ -1,9 +1,9 @@
+import { objectFromArray } from '@fastkit/helpers';
 import { component } from '~/styles/layers.css';
 import { computedTokens, extractTokenName, tokens } from '../../styles';
 import { verticals, bars } from '../../helpers';
 import * as drawerStyles from '../VAppDrawer/VAppDrawer.css';
 import { VAL_X_POSITIONS, VAL_POSITIONS } from '../../schemes';
-import { objectFromArray } from '@fastkit/helpers';
 import * as bodyStyles from '../VAppBody/VAppBody.css';
 
 const transitions = [

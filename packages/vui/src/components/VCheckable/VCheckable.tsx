@@ -1,8 +1,8 @@
 import './VCheckable.scss';
 import { computed, defineComponent } from 'vue';
 import { defineSlots } from '@fastkit/vue-utils';
-import { useVuiColorProvider } from '../../injections';
 import { FormNodeErrorSlotsSource } from '@fastkit/vue-form-control';
+import { useVuiColorProvider } from '../../injections';
 
 export const CHECKABLE_SLOTS = defineSlots<
   {
@@ -31,19 +31,17 @@ export const VCheckable = defineComponent({
     const readonly = computed(() => props.readonly);
     const checked = computed(() => props.checked);
     // const autoWidth = computed(() => props.autoWidth);
-    const classes = computed(() => {
-      return [
-        {
-          'v-checkable--invalid': invalid.value,
-          'v-checkable--disabled': disabled.value,
-          'v-checkable--readonly': readonly.value,
-          'v-checkable--checked': checked.value,
-          'v-checkable--custom-icon': !!ctx.slots.icon,
-          disabled: disabled.value,
-        },
-        colorProvider.className(invalid.value ? 'error' : 'primary'),
-      ];
-    });
+    const classes = computed(() => [
+      {
+        'v-checkable--invalid': invalid.value,
+        'v-checkable--disabled': disabled.value,
+        'v-checkable--readonly': readonly.value,
+        'v-checkable--checked': checked.value,
+        'v-checkable--custom-icon': !!ctx.slots.icon,
+        disabled: disabled.value,
+      },
+      colorProvider.className(invalid.value ? 'error' : 'primary'),
+    ]);
 
     return () => (
       <label class={['v-checkable', classes.value]}>

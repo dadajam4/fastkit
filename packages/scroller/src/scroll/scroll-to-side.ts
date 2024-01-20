@@ -58,7 +58,7 @@ export function scrollToSide(
     const container =
       (options && options.container) || defaultSettings.container;
     const $container = $(container) as HTMLElement;
-    if (!$container) throw error('missing container ' + container);
+    if (!$container) throw error(`missing container ${container}`);
 
     if (hasRight) position.x = $container.scrollWidth;
     if (hasBottom) position.y = $container.scrollHeight;

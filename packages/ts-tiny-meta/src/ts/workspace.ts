@@ -1,11 +1,11 @@
 import path from 'node:path';
 import { Project, SourceFile } from 'ts-morph';
+import JoyCon from 'joycon';
+import chokidar, { FSWatcher } from 'chokidar';
 import {
   SourceFileExporter,
   ExportorSerializeHook,
 } from './source-file-exporter';
-import JoyCon from 'joycon';
-import chokidar, { FSWatcher } from 'chokidar';
 
 export type WorkspaceInstanceCache = Record<string, Workspace>;
 
@@ -48,16 +48,20 @@ export class Workspace {
     });
     const loadResult = loader.loadSync(['tsconfig.json']);
     if (!loadResult.path) {
-      throw new Error('missing tsconfig.json >>> ' + sourceFilePath);
+      throw new Error(`missing tsconfig.json >>> ${sourceFilePath}`);
     }
     const workspacePath = path.dirname(loadResult.path);
     return this.get(workspacePath, options);
   }
 
   readonly dirPath: string;
+
   readonly tsConfigFilePath: string;
+
   readonly project: Project;
+
   readonly plugins: WorkspacePlugin[];
+
   private _sourceFilePaths: string[] = [];
 
   get sourceFilePaths() {
@@ -216,7 +220,9 @@ export type WorkspaceWatchHandler = (watcher: WorkspaceWatcher) => any;
 
 export class WorkspaceWatcher {
   readonly workspace: Workspace;
+
   readonly watcher: FSWatcher;
+
   readonly handlers: WorkspaceWatchHandler[] = [];
   // private _dependencies: string[] = [];
 
@@ -250,8 +256,8 @@ export class WorkspaceWatcher {
   }
 
   private emit() {
-    for (const hanlder of this.handlers) {
-      hanlder(this);
+    for (const handler of this.handlers) {
+      handler(this);
     }
   }
 
@@ -268,17 +274,6 @@ export class WorkspaceWatcher {
   close() {
     this.watcher.close();
   }
-
-  // updateFiles(adds: string[], removes: string[]) {
-  //   // const { _dependencies } = this;
-
-  //   // const adds = dependencies.filter((dep) => !_dependencies.includes(dep));
-  //   // const removes = _dependencies.filter((dep) => !dependencies.includes(dep));
-
-  //   this.watcher.add(adds);
-  //   this.watcher.unwatch(removes);
-  //   // this._dependencies = dependencies;
-  // }
 
   add(paths: string | string[]) {
     this.watcher.add(paths);

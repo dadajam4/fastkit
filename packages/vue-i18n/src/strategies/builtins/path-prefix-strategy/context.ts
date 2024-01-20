@@ -1,5 +1,5 @@
-import { VueI18nContext } from '../../../context';
 import type { Router, RouteRecordRaw, RouterOptions } from 'vue-router';
+import { VueI18nContext } from '../../../context';
 import { VueI18nClient } from '../../../client';
 
 /**
@@ -69,9 +69,7 @@ const ROUTER_EXTENDED_SYMBOL = Symbol('v18n-extended');
  */
 const isExtended = (
   routerOrOptionsOrRoutes: Router | RouterOptions | RouterOptions['routes'],
-): boolean => {
-  return (routerOrOptionsOrRoutes as any)[ROUTER_EXTENDED_SYMBOL] === true;
-};
+): boolean => (routerOrOptionsOrRoutes as any)[ROUTER_EXTENDED_SYMBOL] === true;
 
 /**
  * Set the extended flag for the route
@@ -110,7 +108,7 @@ export interface PathPrefixContextSettings {
    * @see {@link SetLocaleBehavior}
    * @see {@link DEFAULT_SET_LOCALE_BEHAVIOR}
    */
-  setLocaleBehavire?: SetLocaleBehavior;
+  setLocaleBehavior?: SetLocaleBehavior;
 
   /**
    * Storage key corresponding to the locale value of the last redirection result
@@ -144,7 +142,7 @@ export class PathPrefixContext {
    * How to manipulate the route when calling `setLocale()`.
    * @see {@link SetLocaleBehavior}
    */
-  readonly setLocaleBehavire: SetLocaleBehavior;
+  readonly setLocaleBehavior: SetLocaleBehavior;
 
   /**
    * Do you want to exclude route generation for veil locales defined in space
@@ -195,13 +193,13 @@ export class PathPrefixContext {
     this.pathMatchRe = new RegExp(`^/(${this.availableLocales.join('|')})`);
 
     const {
-      setLocaleBehavire = DEFAULT_SET_LOCALE_BEHAVIOR,
+      setLocaleBehavior = DEFAULT_SET_LOCALE_BEHAVIOR,
       excludes = [],
       ignoreBaseLocale = false,
       redirectedStorageKey = DEFAULT_REDIRECTED_STORAGE_KEY,
       forceClientLocale = false,
     } = settings;
-    this.setLocaleBehavire = setLocaleBehavire;
+    this.setLocaleBehavior = setLocaleBehavior;
     this.ignoreBaseLocale = ignoreBaseLocale;
     this.redirectedStorageKey = redirectedStorageKey;
     this.forceClientLocale = forceClientLocale;

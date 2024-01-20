@@ -1,12 +1,12 @@
 import './VCard.scss';
 import { defineComponent, computed } from 'vue';
-import { VPaper, createPaperProps } from '../VPaper';
 import { actionableInheritProps, VAction } from '@fastkit/vue-action';
 
 // @TODO Unable to resolve dts for `actionableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { RouteLocationRaw } from 'vue-router';
+import { VPaper, createPaperProps } from '../VPaper';
 
 export function createCardProps() {
   return {
@@ -45,17 +45,6 @@ export const VCard = defineComponent({
       return { attrs };
     });
 
-    return () => {
-      return (
-        <VPaper
-          {...data.value.attrs}
-          // {..._props.value}
-          // {...ctx.attrs}
-          // class="v-card"
-          // tag={VLink}
-          v-slots={ctx.slots}
-        />
-      );
-    };
+    return () => <VPaper {...data.value.attrs} v-slots={ctx.slots} />;
   },
 });

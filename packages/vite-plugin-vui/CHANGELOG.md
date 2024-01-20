@@ -1,5 +1,17 @@
 # @fastkit/vite-plugin-vui
 
+## 1.1.123
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/icon-font-gen@0.13.16
+  - @fastkit/vite-kit@0.13.16
+  - @fastkit/vui@0.18.32
+  - @fastkit/tiny-logger@0.13.8
+
 ## 1.1.122
 
 ### Patch Changes

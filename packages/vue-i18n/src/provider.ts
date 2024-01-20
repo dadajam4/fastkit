@@ -12,11 +12,11 @@ import {
   flattenRecursiveArray,
   arrayUnique,
 } from '@fastkit/helpers';
-import { VueI18nError } from './logger';
 import {
   extractRouteMatchedItems,
   isComponentCustomOptions,
 } from '@fastkit/vue-utils';
+import { VueI18nError } from './logger';
 
 /**
  * Subspace Providers
@@ -76,7 +76,7 @@ export class VueI18nSubSpaceProvider<
       SubComponents,
       StrategyCustomInterface
     >
-  > = Symbol();
+  > = Symbol('I18nSubSpace');
 
   /**
    * Mapping of component definitions in subspace

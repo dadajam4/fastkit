@@ -14,15 +14,17 @@ export function extractRawGridValueClasses<
 >(
   value: NonNullable<RawGridValue<T>>,
   prefix: string,
+  // eslint-disable-next-line no-shadow
   getter?: (value: T) => string,
 ): string | string[] {
   if (typeof value !== 'object')
     return `${prefix}${getter ? getter(value) : value}`;
-  return Object.entries(value).map(([breakpoint, breakpointValue]) => {
-    return `${prefix}${
-      getter ? getter(breakpointValue) : breakpointValue
-    }--${breakpoint}`;
-  });
+  return Object.entries(value).map(
+    ([breakpoint, breakpointValue]) =>
+      `${prefix}${
+        getter ? getter(breakpointValue) : breakpointValue
+      }--${breakpoint}`,
+  );
 }
 
 // export const DEFAULT_MEDIA_MATCH_KEY = MEDIA_MATCH_CONDITIONS[0].key;

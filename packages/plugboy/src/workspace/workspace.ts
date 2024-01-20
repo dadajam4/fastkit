@@ -1,3 +1,6 @@
+import sortPackageJson from 'sort-package-json';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import {
   rmrf,
   loadWorkspaceConfig,
@@ -21,14 +24,10 @@ import {
   resolveOptimizeCSSOptions,
 } from '../types';
 import { Path } from '../path';
-import { WORKSPACE_SPEC_PREFIX } from '../constants';
+import { WORKSPACE_SPEC_PREFIX, PACKAGE_JSON_FILENAME } from '../constants';
 import { PlugboyProject, getProject } from '../project';
-import sortPackageJson from 'sort-package-json';
-import fs from 'node:fs/promises';
-import path from 'node:path';
 import { Builder } from './builder';
 import { getWorkspacePackageJson } from '../package';
-import { PACKAGE_JSON_FILENAME } from '../constants';
 
 export type WorkspaceStubLink =
   | {
@@ -90,21 +89,37 @@ const BUILD_TARGET_SRC_MATCH_RE = /\.(tsx?|s?css)$/;
 
 export class PlugboyWorkspace {
   readonly name: string;
+
   readonly dir: Path;
+
   readonly config: ResolvedWorkspaceConfig;
+
   readonly project: PlugboyProject | null;
+
   readonly dirs: WorkspaceDirs;
+
   readonly dependencies: string[];
+
   readonly projectDependencies: string[];
+
   readonly meta: WorkspaceMeta;
+
   readonly entry: Record<string, string>;
+
   readonly exports: WorkspaceExport[];
+
   readonly builder: Builder;
+
   readonly plugins: Plugin[];
+
   readonly hooks: BuildedHooks;
+
   readonly dtsFiles: string[] = [];
+
   readonly dts: NormalizedDTSSettings;
+
   readonly optimizeCSSOptions: ResolvedOptimizeCSSOptions | false;
+
   private _json: WorkspacePackageJson;
 
   get json() {
@@ -228,8 +243,8 @@ export class PlugboyWorkspace {
       _exports[id] = _at;
       if (typeof _at !== 'object') return;
       const isMainExport = id === '.';
-      const trimedId = isMainExport ? id : id.replace(/^\.\//, '');
-      typesVersions[trimedId] = [_at.types];
+      const trimmedId = isMainExport ? id : id.replace(/^\.\//, '');
+      typesVersions[trimmedId] = [_at.types];
 
       if (isMainExport) {
         main = _at.import.default;
@@ -344,6 +359,7 @@ export class PlugboyWorkspace {
       if (!esbuildPlugins) continue;
       for (const chunk of esbuildPlugins) {
         const esbuildPlugin =
+          // eslint-disable-next-line no-await-in-loop
           typeof chunk === 'function' ? await chunk(this) : await chunk;
         if (esbuildPlugin) {
           results.push(esbuildPlugin);

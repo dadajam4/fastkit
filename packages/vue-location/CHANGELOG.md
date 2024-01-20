@@ -1,5 +1,14 @@
 # @fastkit/vue-location
 
+## 0.1.26
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.14.17
+
 ## 0.1.25
 
 ### Patch Changes

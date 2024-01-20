@@ -5,9 +5,8 @@ import {
   createStackActionProps,
   useStackAction,
 } from '@fastkit/vue-stack';
-import { colorSchemeProps } from '@fastkit/vue-color-scheme';
+import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
 import { useVui } from '../../injections';
-import { useColorClasses } from '@fastkit/vue-color-scheme';
 
 const colorProps = colorSchemeProps();
 
@@ -24,9 +23,8 @@ export const VSnackbar = defineSnackbarComponent({
       resolver: (actions) => {
         if (actions.length === 0) {
           return [vui.stackAction('close')];
-        } else {
-          return actions;
         }
+        return actions;
       },
     });
     const color = useColorClasses(props, { useRootThemeDefault: true });

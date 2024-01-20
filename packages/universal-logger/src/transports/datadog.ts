@@ -74,7 +74,7 @@ export function DDTransport(settings: DDTransportSettings): Transport {
     transport(payload) {
       if (!settings.config.clientToken) return;
 
-      const dd = getDD();
+      const _dd = getDD();
       const { level } = payload;
       const ddLevel = LEVEL_MAPPINGS[level];
 
@@ -86,7 +86,7 @@ export function DDTransport(settings: DDTransportSettings): Transport {
         (_payload as any).error = error.instance;
         _payload.args.splice(error.index, 1);
       }
-      dd.logger[ddLevel](payload.message, _payload, error?.instance);
+      _dd.logger[ddLevel](payload.message, _payload, error?.instance);
     },
   };
 }

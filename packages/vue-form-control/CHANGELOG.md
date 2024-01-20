@@ -1,5 +1,19 @@
 # @fastkit/vue-form-control
 
+## 0.19.19
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.14.17
+  - @fastkit/debounce@0.1.2
+  - @fastkit/helpers@0.13.8
+  - @fastkit/rules@0.13.10
+  - @fastkit/dom@0.1.8
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.19.18
 
 ### Patch Changes

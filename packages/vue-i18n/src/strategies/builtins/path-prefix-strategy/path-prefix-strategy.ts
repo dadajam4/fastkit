@@ -1,5 +1,5 @@
-import { VueI18nStrategyFactory, defineStrategy } from '../../schemes';
 import type { RouteLocationRaw } from 'vue-router';
+import { VueI18nStrategyFactory, defineStrategy } from '../../schemes';
 import { PathPrefixContext, PathPrefixContextSettings } from './context';
 import {
   ResolvedLocation,
@@ -82,7 +82,7 @@ export function createPathPrefixStrategy(
           if (!nextPath) {
             return client.setSpaceLocale(localeName);
           }
-          return router[redirect ? 'replace' : ctx.setLocaleBehavire](
+          return router[redirect ? 'replace' : ctx.setLocaleBehavior](
             nextPath,
           ).then((navigationFailure) => {
             if (navigationFailure) {
@@ -95,9 +95,8 @@ export function createPathPrefixStrategy(
           return _setLocale(localeName);
         }
 
-        const getRedirectedLocale = (): string | undefined => {
-          return client.getStorageValue(ctx.redirectedStorageKey);
-        };
+        const getRedirectedLocale = (): string | undefined =>
+          client.getStorageValue(ctx.redirectedStorageKey);
 
         /**
          * Detect the need for redirects

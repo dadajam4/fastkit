@@ -1,5 +1,5 @@
-import { component } from '~/styles/layers.css';
 import { calc } from '@vanilla-extract/css-utils';
+import { component } from '~/styles/layers.css';
 import { tokens, computedTokens, extractTokenName } from '../../styles';
 import { verticals, horizontals } from '../../helpers';
 import { createSimpleVueTransition } from '../../styles/transition';

@@ -188,12 +188,10 @@ export {};
   ];
 
   if (iconFontDefaults) {
-    iconFontEntries = iconFontEntries.map((entry) => {
-      return {
-        ...iconFontDefaults,
-        ...entry,
-      };
-    });
+    iconFontEntries = iconFontEntries.map((entry) => ({
+      ...iconFontDefaults,
+      ...entry,
+    }));
   }
 
   plugins.push(

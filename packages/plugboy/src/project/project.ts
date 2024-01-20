@@ -1,13 +1,13 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import glob from 'glob';
+import { Path } from '../path';
 import {
   ProjectSetupContext,
   ProjectPackageJson,
   ResolvedProjectConfig,
   UserHooks,
 } from '../types';
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { Path } from '../path';
-import glob from 'glob';
 import { getProjectPackageJson } from '../package';
 import {
   isWorkspacePackageJson,
@@ -24,15 +24,19 @@ import { PACKAGE_JSON_FILENAME } from '../constants';
 export class PlugboyProject {
   /** Path instance of the project directory */
   readonly dir: Path;
+
   /** package.json */
   readonly json: ProjectPackageJson;
+
   /**
    * Project Configuration
    * @see {@link ResolvedProjectConfig}
    */
   readonly config: ResolvedProjectConfig;
+
   /** Names of all packages on which the project depends */
   readonly dependencies: string[];
+
   /** Directory names of all workspaces owned by the project */
   readonly resolvedWorkspaces: string[];
 
@@ -96,12 +100,13 @@ export async function getProject<
     (workspace) => dir.join(workspace, PACKAGE_JSON_FILENAME).value,
   );
   const workspaceHits = await glob(workspacesPattern);
-  for (const hit of workspaceHits) {
-    const json = JSON.parse(await fs.readFile(hit, 'utf-8'));
-    if (!isWorkspacePackageJson(json)) {
+  for (const _hit of workspaceHits) {
+    // eslint-disable-next-line no-await-in-loop
+    const _json = JSON.parse(await fs.readFile(_hit, 'utf-8'));
+    if (!isWorkspacePackageJson(_json)) {
       continue;
     }
-    resolvedWorkspaces.push(path.dirname(hit));
+    resolvedWorkspaces.push(path.dirname(_hit));
   }
   resolvedWorkspaces.sort((a, b) => {
     if (a < b) return -1;

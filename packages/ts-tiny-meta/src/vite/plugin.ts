@@ -51,24 +51,12 @@ export function ViteTSTinyMeta(): Plugin {
         _id = _id.replace(RESOLVED_VIRTUAL_MODULE_ID_PREFIX, '');
       }
 
-      const sourceFilePath = _id.endsWith('.ts') ? _id : _id + '.ts';
+      const sourceFilePath = _id.endsWith('.ts') ? _id : `${_id}.ts`;
       const workspace = Workspace.getBySourceFilePath(sourceFilePath);
       const result = workspace.createSourceFileExports(sourceFilePath);
-
-      // const footer = `
-      //   if (import.meta.hot) {
-      //     import.meta.hot.accept((newModule) => {});
-
-      //     import.meta.hot.dispose((data) => {});
-
-      //     import.meta.hot.prune((data) => {});
-      //   }
-      // `;
       const footer = ``;
 
       EntryWatcher.isAvailable && EntryWatcher.init(id, workspace);
-      // workspace.updateWatcherDependencies
-      // entry.setDependencies(result.dependencies);
 
       return {
         code: isJSON

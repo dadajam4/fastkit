@@ -83,6 +83,7 @@ function createSetting(rawKBSettings: RawKBSettings): ComputedKBSetting[] {
 
 export class KeyboardService {
   readonly settings: ComputedKBSetting[];
+
   private _running = false;
 
   get running() {

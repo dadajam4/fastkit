@@ -55,7 +55,7 @@ export function resolveLocale<
       break;
     }
     const tmp: string[] = localeLikeString.split('-');
-    tmp.length = tmp.length - 1;
+    tmp.length -= 1;
     if (!tmp.length) {
       break;
     }
@@ -79,7 +79,7 @@ export function resolveLocale<
 /**
  * Recursively retrieves the key value of the specified object and returns a new array with the key flattened.
  *
- * @exmaple
+ * @example
  *
  * ```
  * class Custom {

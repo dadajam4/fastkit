@@ -16,13 +16,12 @@ function resolveFilter(
   if (!spec) return () => defaults;
   if (typeof spec === 'function') return spec;
   const conditions = Array.isArray(spec) ? spec : [spec];
-  return (layerName) => {
-    return conditions.some((condition) => {
-      return typeof condition === 'string'
+  return (layerName) =>
+    conditions.some((condition) =>
+      typeof condition === 'string'
         ? layerName.includes(condition)
-        : condition.test(layerName);
-    });
-  };
+        : condition.test(layerName),
+    );
 }
 
 interface Layer {
@@ -46,7 +45,7 @@ export function optimizeLayer(
     atFirst: boolean;
   } => {
     const name = layerRule.params;
-    const layer = layers.find((layer) => layer.name === name);
+    const layer = layers.find((_layer) => _layer.name === name);
     if (layer)
       return {
         layer,

@@ -1,6 +1,7 @@
 import { ComputedRef } from 'vue';
-export type { VuiService } from '../service';
 import { ScopeName } from '@fastkit/color-scheme';
+
+export type { VuiService } from '../service';
 
 export interface VuiColorProvider {
   primary: ComputedRef<ScopeName>;

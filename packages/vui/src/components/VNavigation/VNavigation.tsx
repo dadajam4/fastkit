@@ -7,12 +7,12 @@ import {
   onBeforeUpdate,
   ref,
 } from 'vue';
+import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
+import { createPropsOptions, ExtractPropInput } from '@fastkit/vue-utils';
 import {
   NavigationItemInput,
   renderNavigationItemInput,
 } from './VNavigationItem';
-import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
-import { createPropsOptions, ExtractPropInput } from '@fastkit/vue-utils';
 
 export function createNavigationProps() {
   return createPropsOptions({
@@ -56,6 +56,7 @@ export const VNavigation = defineComponent({
     }
 
     function onItemActivated(item: NavigationItemInput) {
+      // eslint-disable-next-line no-shadow
       itemsRef.value.forEach(({ key, ref }) => {
         if (key === item.key) return;
         ref.close();
@@ -71,11 +72,12 @@ export const VNavigation = defineComponent({
             renderNavigationItemInput(item, {
               class: 'v-navigation__item',
               startIconEmptySpace: startIconEmptySpace.value,
+              // eslint-disable-next-line no-shadow
               ref: (ref: any) => {
                 setItemRef(item, ref);
               },
               onChangeActive: (isActive: boolean) => {
-                if (isActive /* && item.children && item.children.length*/) {
+                if (isActive /* && item.children && item.children.length */) {
                   onItemActivated(item);
                 }
               },

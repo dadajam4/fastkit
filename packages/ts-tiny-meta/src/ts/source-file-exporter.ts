@@ -1,4 +1,3 @@
-import type { Workspace } from './workspace';
 import {
   SourceFile,
   Symbol as MorphSymbol,
@@ -9,11 +8,13 @@ import {
   Identifier,
   CallExpression,
 } from 'ts-morph';
+import type { Workspace } from './workspace';
 import { serializeDeclaration } from './serializers';
 import { NodeLocation, getNodeLocationInSourceFile } from './location';
 import { AnyMeta, SourceFileExports, RefQuery } from '../types';
 import { hasPrivateLikeTag } from './serializers/doc';
 
+// eslint-disable-next-line no-shadow
 enum ExtractMethod {
   Single = 'extractMeta',
   Module = 'extractModule',
@@ -161,11 +162,11 @@ function toRef<Meta extends AnyMeta = AnyMeta>(
     _refId: id,
   };
   const proxy = new Proxy(target, {
-    get(target, prop) {
+    get(_target, prop) {
       if (prop === REF_SYMBOL) return bucket;
       if (prop === 'toJSON') return toJSON;
       if (prop === 'setMeta') return setMeta;
-      return (target as any)[prop];
+      return (_target as any)[prop];
     },
   }) as MetaRef<Meta>;
   return proxy;
@@ -200,9 +201,13 @@ export function defineSerializeHook<Meta extends AnyMeta = AnyMeta>(
 
 export class SourceFileExporter {
   readonly deps: string[] = [];
+
   readonly workspace: Workspace;
+
   readonly sourceFile: SourceFile;
+
   private _lastItemCacheId = -1;
+
   private _refCache = new Map<CacheableItem, MetaRef>();
 
   constructor(workspace: Workspace, sourceFile: SourceFile) {
@@ -271,9 +276,7 @@ export class SourceFileExporter {
     );
 
     const _exports = Object.fromEntries(
-      exports.map(({ item, meta }) => {
-        return [item.name, meta];
-      }),
+      exports.map(({ item, meta }) => [item.name, meta]),
     );
 
     return {

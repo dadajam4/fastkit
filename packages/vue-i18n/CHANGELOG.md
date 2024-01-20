@@ -1,5 +1,17 @@
 # @fastkit/vue-i18n
 
+## 0.13.19
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.14.17
+  - @fastkit/helpers@0.13.8
+  - @fastkit/i18n@0.13.8
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.13.18
 
 ### Patch Changes

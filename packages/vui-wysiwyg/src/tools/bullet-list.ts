@@ -1,5 +1,5 @@
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 import { BulletList, BulletListOptions } from '@tiptap/extension-bullet-list';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 
 export const WysiwygBulletListTool: WysiwygEditorToolFactory<
   BulletListOptions

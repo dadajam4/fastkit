@@ -40,7 +40,8 @@ describe('services/message', () => {
       const resolver: RuleMessageResolver = (ctx) => {
         if (ctx.name === 'each') {
           return `each error ${JSON.stringify(value)}`;
-        } else if (ctx.name === 'length') {
+        }
+        if (ctx.name === 'length') {
           return `length error catch ${ctx.constraints} length`;
         }
       };

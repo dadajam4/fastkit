@@ -118,44 +118,44 @@ export type QueriesSchema<P = Data> = {
 export type InferQueryType<T> = [T] extends [null] | [true]
   ? string
   : [T] extends [
-      {
-        type: null | true;
-      },
-    ]
-  ? InferMultipleAndDefault<T, string>
-  : [T] extends [
-      | StringConstructor
-      | {
-          type: StringConstructor;
+        {
+          type: null | true;
         },
-    ]
-  ? InferMultipleAndDefault<T, string>
-  : [T] extends [
-      | NumberConstructor
-      | {
-          type: NumberConstructor;
-        },
-    ]
-  ? InferMultipleAndDefault<T, number>
-  : [T] extends [
-      | BooleanConstructor
-      | {
-          type: BooleanConstructor;
-        },
-    ]
-  ? boolean
-  : [T] extends [
-      | (infer U)[]
-      | readonly (infer U)[]
-      | {
-          type: (infer U)[];
-        }
-      | {
-          type: readonly (infer U)[];
-        },
-    ]
-  ? InferMultipleAndDefault<T, NormalizeConstructor<U>>
-  : never;
+      ]
+    ? InferMultipleAndDefault<T, string>
+    : [T] extends [
+          | StringConstructor
+          | {
+              type: StringConstructor;
+            },
+        ]
+      ? InferMultipleAndDefault<T, string>
+      : [T] extends [
+            | NumberConstructor
+            | {
+                type: NumberConstructor;
+              },
+          ]
+        ? InferMultipleAndDefault<T, number>
+        : [T] extends [
+              | BooleanConstructor
+              | {
+                  type: BooleanConstructor;
+                },
+            ]
+          ? boolean
+          : [T] extends [
+                | (infer U)[]
+                | readonly (infer U)[]
+                | {
+                    type: (infer U)[];
+                  }
+                | {
+                    type: readonly (infer U)[];
+                  },
+              ]
+            ? InferMultipleAndDefault<T, NormalizeConstructor<U>>
+            : never;
 
 export type ExtractQueryTypes<O> = {
   [K in keyof Pick<O, RequiredKeys<O>>]: InferQueryType<O[K]>;

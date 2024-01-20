@@ -19,6 +19,7 @@ if (IN_WINDOW) {
 
 class Stacks {
   readonly els: HTMLElement[] = [];
+
   active = false;
 
   private check() {

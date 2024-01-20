@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { extractAll } from '../';
 import path from 'node:path';
+import { extractAll } from '..';
 
 describe('extract', () => {
   it('BasicSpec', () => {

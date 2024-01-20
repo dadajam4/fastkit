@@ -22,6 +22,7 @@ import {
   resolveVNodeChildOrSlots,
 } from '@fastkit/vue-utils';
 import { useKeyboard } from '@fastkit/vue-keyboard';
+import { VStackActivatorPayload, MenuAPI } from '@fastkit/vue-stack';
 import { VFormControl } from '../VFormControl';
 import {
   VControlField,
@@ -37,11 +38,9 @@ import {
 import { VUI_SELECT_SYMBOL, useVui } from '../../injections';
 import { VIcon } from '../VIcon';
 import { VMenu } from '../VMenu';
-import { VStackActivatorPayload } from '@fastkit/vue-stack';
 import { VOptionGroup } from '../VOptionGroup';
 import { VOption } from '../VOption';
 import { VButton } from '../VButton';
-import { MenuAPI } from '@fastkit/vue-stack';
 
 export const ARROW_KEY_TYPES = useKeyboard.Key(['ArrowUp', 'ArrowDown']);
 
@@ -84,6 +83,7 @@ export const VSelect = defineComponent({
   },
   slots,
   emits,
+  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const menuRef: Ref<{ menu: MenuAPI } | null> = ref(null);
     const menuOpened = ref(false);
@@ -247,6 +247,7 @@ export const VSelect = defineComponent({
       );
 
       if (currentEl) {
+        // eslint-disable-next-line no-shadow
         const ev = new MouseEvent('click', {
           view: window,
           bubbles: true,
@@ -288,24 +289,22 @@ export const VSelect = defineComponent({
 
     return () => {
       const children = ctx.slots.default?.() || [];
-      const propGroups = inputControl.propGroups.map((group) => {
-        return (
-          <VOptionGroup
-            key={group.id}
-            groupId={group.id}
-            label={group.label(inputControl)}
-            disabled={group.disabled}>
-            {group.items.map((item) => (
-              <VOption
-                disabled={item.disabled}
-                value={item.value}
-                key={item.value}>
-                {item.label(inputControl)}
-              </VOption>
-            ))}
-          </VOptionGroup>
-        );
-      });
+      const propGroups = inputControl.propGroups.map((group) => (
+        <VOptionGroup
+          key={group.id}
+          groupId={group.id}
+          label={group.label(inputControl)}
+          disabled={group.disabled}>
+          {group.items.map((item) => (
+            <VOption
+              disabled={item.disabled}
+              value={item.value}
+              key={item.value}>
+              {item.label(inputControl)}
+            </VOption>
+          ))}
+        </VOptionGroup>
+      ));
 
       const classes = computed(() => [
         'v-select',
@@ -315,32 +314,28 @@ export const VSelect = defineComponent({
         },
       ]);
 
-      const controlDefaultSlot = () => {
-        return [
-          <select
-            class="v-select__input__element"
-            name={inputControl.name}
-            tabindex={inputControl.tabindex}
-            disabled={inputControl.isDisabled}
-            multiple={inputControl.multiple}
-            onFocus={inputControl.focusHandler}
-            onBlur={inputControl.blurHandler}
-            v-model={inputControl.value}>
-            {inputControl.items.map((item) => {
-              return (
-                <option value={item.propValue} key={item.propValue}>
-                  {item.renderDefaultSlot()}
-                </option>
-              );
-            })}
-          </select>,
-          <div class="v-select__selections">
-            <div class="v-select__selections__inner">
-              {renderSelections(inputControl.selectedItems)}
-            </div>
-          </div>,
-        ];
-      };
+      const controlDefaultSlot = () => [
+        <select
+          class="v-select__input__element"
+          name={inputControl.name}
+          tabindex={inputControl.tabindex}
+          disabled={inputControl.isDisabled}
+          multiple={inputControl.multiple}
+          onFocus={inputControl.focusHandler}
+          onBlur={inputControl.blurHandler}
+          v-model={inputControl.value}>
+          {inputControl.items.map((item) => (
+            <option value={item.propValue} key={item.propValue}>
+              {item.renderDefaultSlot()}
+            </option>
+          ))}
+        </select>,
+        <div class="v-select__selections">
+          <div class="v-select__selections__inner">
+            {renderSelections(inputControl.selectedItems)}
+          </div>
+        </div>,
+      ];
 
       const endAdornmentSlot = () => {
         if (inputControl.itemsLoadFailed) {
@@ -380,41 +375,39 @@ export const VSelect = defineComponent({
         );
       };
 
-      const menuActivatorSlot = ({ control: menu }: VStackActivatorPayload) => {
-        return (
-          <VControlField
-            class="v-select__input"
-            ref={fieldRef}
-            loading={inputControl.itemsLoading}
-            error={inputControl.itemsLoadFailed}
-            startAdornment={props.startAdornment}
-            endAdornment={props.endAdornment}
-            size={control.size.value}
-            focused={menuOpened.value}
-            autoHeight={inputControl.multiple}
-            onClick={(ev) => {
-              if (inputControl.canOperation && !menu.isActive) {
-                let t = ev.target as HTMLElement;
-                const count = 0;
-                let hit = false;
-                while (count < 5) {
-                  if (t.classList.contains('v-select__input')) {
-                    hit = true;
-                    break;
-                  }
-                  t = t.parentElement as HTMLElement;
+      const menuActivatorSlot = ({ control: menu }: VStackActivatorPayload) => (
+        <VControlField
+          class="v-select__input"
+          ref={fieldRef}
+          loading={inputControl.itemsLoading}
+          error={inputControl.itemsLoadFailed}
+          startAdornment={props.startAdornment}
+          endAdornment={props.endAdornment}
+          size={control.size.value}
+          focused={menuOpened.value}
+          autoHeight={inputControl.multiple}
+          onClick={(ev) => {
+            if (inputControl.canOperation && !menu.isActive) {
+              let t = ev.target as HTMLElement;
+              const count = 0;
+              let hit = false;
+              while (count < 5) {
+                if (t.classList.contains('v-select__input')) {
+                  hit = true;
+                  break;
                 }
-                menu.setActivator(hit ? t : ev).show();
+                t = t.parentElement as HTMLElement;
               }
-            }}
-            v-slots={{
-              ...ctx.slots,
-              default: controlDefaultSlot,
-              endAdornment: endAdornmentSlot,
-            }}
-          />
-        );
-      };
+              menu.setActivator(hit ? t : ev).show();
+            }
+          }}
+          v-slots={{
+            ...ctx.slots,
+            default: controlDefaultSlot,
+            endAdornment: endAdornmentSlot,
+          }}
+        />
+      );
 
       const menuSlots = {
         activator: menuActivatorSlot,
@@ -426,26 +419,23 @@ export const VSelect = defineComponent({
         ),
       };
 
-      const defaultSlot = () => {
-        return (
-          <VMenu
-            width="fit"
-            maxWidth="fit"
-            closeOnNavigation={props.closeOnNavigation}
-            distance={0}
-            alwaysRender
-            v-model={menuOpened.value}
-            ref={menuRef}
-            onClose={clearKeyFocused}
-            v-slots={menuSlots}
-          />
-        );
-      };
+      const defaultSlot = () => (
+        <VMenu
+          width="fit"
+          maxWidth="fit"
+          closeOnNavigation={props.closeOnNavigation}
+          distance={0}
+          alwaysRender
+          v-model={menuOpened.value}
+          ref={menuRef}
+          onClose={clearKeyFocused}
+          v-slots={menuSlots}
+        />
+      );
 
       return (
         <VFormControl
           nodeControl={inputControl}
-          // focused={this.nodeControl.focused}
           class={classes.value}
           label={props.label}
           hint={props.hint}

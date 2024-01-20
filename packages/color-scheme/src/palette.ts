@@ -69,6 +69,7 @@ export function createColorPaletteBucket<
   VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
+  // eslint-disable-next-line default-param-last
   sources: ColorPaletteItemSource<TN, PN, SN, VN, OK>[] = [],
   ctx: ColorPaletteContext<TN, PN, SN, VN, OK>,
 ) {
@@ -92,12 +93,8 @@ export function createColorPaletteBucket<
       );
     },
     ctx,
-    (value) => {
-      return value.value;
-    },
-    (values) => {
-      return values.map((theme) => theme.toJSON());
-    },
+    (value) => value.value,
+    (values) => values.map((theme) => theme.toJSON()),
   );
   return palette;
 }

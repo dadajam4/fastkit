@@ -6,13 +6,13 @@ import {
   provide,
   inject,
 } from 'vue';
+import { createPropsOptions } from '@fastkit/vue-utils';
 import {
   ControlSize,
   CONTROL_SIZES,
   ControlFieldVariant,
   CONTROL_FIELD_VARIANTS,
 } from '../schemes';
-import { createPropsOptions } from '@fastkit/vue-utils';
 import {
   VuiControlInjectionKey,
   VuiControlFieldInjectionKey,
@@ -52,16 +52,10 @@ export function useControl(
   const { defaultSize = 'md' } = opts;
   const parentControl = inject(VuiControlInjectionKey, null);
   const size = computed(() => {
-    const psize = props.size;
-    return psize
-      ? psize
-      : parentControl
-      ? parentControl.size.value
-      : defaultSize;
+    const propSize = props.size;
+    return propSize || (parentControl ? parentControl.size.value : defaultSize);
   });
-  const classes = computed(() => {
-    return ['v-control', `v-control--${size.value}`];
-  });
+  const classes = computed(() => ['v-control', `v-control--${size.value}`]);
   const provider: ControlProvider = {
     parentControl,
     size,
@@ -103,12 +97,11 @@ export function useControlField(
   const { defaultVariant = 'flat' } = opts;
   const parentControlField = inject(VuiControlFieldInjectionKey, null);
   const variant = computed(() => {
-    const pvariant = props.variant;
-    return pvariant
-      ? pvariant
-      : parentControlField
-      ? parentControlField.variant.value
-      : defaultVariant;
+    const propVariant = props.variant;
+    return (
+      propVariant ||
+      (parentControlField ? parentControlField.variant.value : defaultVariant)
+    );
   });
   const provider: ControlFieldProvider = {
     parentControlField,

@@ -2,11 +2,11 @@ import { ESBuildPlugin } from '@fastkit/plugboy';
 import fs from 'node:fs/promises';
 import { transform } from '@babel/core';
 import vue3Jsx from '@vue/babel-plugin-jsx';
-import { JSXOptions, PLUGIN_NAME } from './types';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import TS from '@babel/plugin-transform-typescript';
 import type { TransformOptions } from '@babel/core';
+import { JSXOptions, PLUGIN_NAME } from './types';
 
 const TS_MATCH_RE = /\.tsx?$/;
 

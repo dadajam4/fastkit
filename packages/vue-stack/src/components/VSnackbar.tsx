@@ -108,6 +108,7 @@ export function defineSnackbarComponent<
         SnackbarAPI
       >(_props, _ctx);
 
+      // eslint-disable-next-line no-shadow
       const { control, props } = baseCtx;
 
       const { snackbarDefaultPosition } = control.$service;
@@ -167,20 +168,14 @@ export function defineSnackbarComponent<
         throw new VueStackError('render function is required.');
       }
 
-      return () => {
-        return control.render(
-          (children) => render(children, snackbarContext as any),
-          {
-            transition: (child) => {
-              return (
-                <VSnackbarTransition {...snackPosition.value}>
-                  {child}
-                </VSnackbarTransition>
-              );
-            },
-          },
-        );
-      };
+      return () =>
+        control.render((children) => render(children, snackbarContext as any), {
+          transition: (child) => (
+            <VSnackbarTransition {...snackPosition.value}>
+              {child}
+            </VSnackbarTransition>
+          ),
+        });
     },
   });
 

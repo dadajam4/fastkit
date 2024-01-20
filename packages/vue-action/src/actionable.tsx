@@ -191,25 +191,20 @@ export function useActionable(
           handleClick(ev);
         };
 
-        const slots: ActionableRouterLinkSettings['slots'] = (children) => {
-          return {
-            default: ({ href, isActive, isExactActive }) => {
-              const classes = [
-                isActive && activeClass,
-                isExactActive && exactActiveClass,
-              ];
-              return (
-                <a
-                  {...attrs}
-                  class={classes}
-                  href={href}
-                  onClick={_handleClick}>
-                  {children}
-                </a>
-              );
-            },
-          };
-        };
+        const slots: ActionableRouterLinkSettings['slots'] = (children) => ({
+          // eslint-disable-next-line no-shadow
+          default: ({ href, isActive, isExactActive }) => {
+            const classes = [
+              isActive && activeClass,
+              isExactActive && exactActiveClass,
+            ];
+            return (
+              <a {...attrs} class={classes} href={href} onClick={_handleClick}>
+                {children}
+              </a>
+            );
+          },
+        });
 
         routerLink = {
           props: routerLinkProps,

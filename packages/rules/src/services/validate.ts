@@ -1,10 +1,10 @@
+import { RecursiveArray, flattenRecursiveArray } from '@fastkit/helpers';
 import {
   ValidationError,
   isValidateCancelSymbol,
   VALIDATION_ERROR_SYMBOL,
 } from '../schemes';
 import { Rule, RuleValidationOptions } from '../factories';
-import { RecursiveArray, flattenRecursiveArray } from '@fastkit/helpers';
 import { FN_RULE_DEFAULT_NAME, RULE_DEFAULT_MESSAGE } from '../constants';
 
 /**
@@ -75,6 +75,7 @@ export function verifiableFnToRule(fn: VerifiableFn): VerifiableRule {
 
   let _lastMessage: string | undefined;
 
+  // eslint-disable-next-line no-shadow
   const validate: Rule['validate'] = async (value) => {
     _lastMessage = undefined;
     const result = await fn(value);
@@ -90,9 +91,7 @@ export function verifiableFnToRule(fn: VerifiableFn): VerifiableRule {
     }
   };
 
-  const message: Rule['message'] = () => {
-    return _lastMessage || 'error';
-  };
+  const message: Rule['message'] = () => _lastMessage || 'error';
 
   return {
     $name,
@@ -141,6 +140,7 @@ export async function validate(
 
   try {
     for (const rule of _rules) {
+      // eslint-disable-next-line no-await-in-loop
       const error = await rule.validate(value, opts);
       if (!error) continue;
       if (isValidateCancelSymbol(error)) break;

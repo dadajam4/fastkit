@@ -1,4 +1,6 @@
-// eslint-disable-next-line no-undef
+const prettier = require('eslint-config-prettier');
+const { fastkitRules } = require('./shared.cjs');
+
 module.exports = {
   extends: ['prettier'],
   overrides: [
@@ -26,13 +28,14 @@ module.exports = {
         '*.mjs',
       ],
       extends: [
-        'eslint:recommended',
+        'airbnb-base',
         'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+        'prettier',
       ],
       parser: '@typescript-eslint/parser',
       parserOptions: {
         parser: '@typescript-eslint/parser', // Specifies the ESLint parser
-        ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features
+        ecmaVersion: 'latest', // Allows for the parsing of modern ECMAScript features
         sourceType: 'module', // Allows for the use of imports
         ecmaFeatures: {
           // tsx: true, // Allows for the parsing of JSX
@@ -40,29 +43,40 @@ module.exports = {
         },
       },
       rules: {
-        'no-console': 'warn',
-        // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
-        // e.g. "@typescript-eslint/explicit-function-return-type": "off",
-        '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/no-unused-vars': 'off',
+        ...fastkitRules,
+        ...prettier.rules,
+      },
+    },
+    {
+      env: {
+        node: true,
+      },
+      files: [
+        '.eslintrc.{js,cjs}',
+        '.stylelintrc.{js,cjs}',
+        '.prettierrc.{js,cjs}',
+      ],
+      parserOptions: {
+        sourceType: 'script',
+      },
+    },
+    {
+      files: ['*.cjs'],
+      rules: {
         '@typescript-eslint/no-var-requires': 'off',
-        '@typescript-eslint/ban-types': [
-          'error',
-          {
-            extendDefaults: true,
-            types: {
-              '{}': false,
-            },
-          },
-        ],
-        '@typescript-eslint/explicit-module-boundary-types': 'off',
-        'prettier/prettier': [
-          'error',
-          {
-            semi: true,
-            endOfLine: 'auto',
-          },
-        ],
+      },
+    },
+    {
+      env: {
+        node: true,
+      },
+      files: [
+        '**/.eslintrc.{js,cjs}',
+        '**/.stylelintrc.{js,cjs}',
+        '**/.prettierrc.{js,cjs}',
+      ],
+      parserOptions: {
+        sourceType: 'script',
       },
     },
   ],
@@ -76,5 +90,5 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: ['/node_modules/', '**/node_modules/', '/dist/', '**/dist/'],
+  ignorePatterns: ['**/dist/', '**/coverage/'],
 };

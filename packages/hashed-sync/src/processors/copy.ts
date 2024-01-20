@@ -12,11 +12,11 @@ export const copy = createProcessor({
   async proc(updates: UpdateInfo[]) {
     logger.info(`[copy]: start -> ${updates.length} files`);
     await Promise.all(
-      updates.map((update) => {
-        return fs.copy(update.src, update.dest, {
+      updates.map((update) =>
+        fs.copy(update.src, update.dest, {
           preserveTimestamps: true,
-        });
-      }),
+        }),
+      ),
     );
     logger.success(`  suceeded`);
   },

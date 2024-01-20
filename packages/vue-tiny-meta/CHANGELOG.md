@@ -1,5 +1,14 @@
 # @fastkit/vue-tiny-meta
 
+## 0.1.12
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/ts-tiny-meta@0.1.8
+
 ## 0.1.11
 
 ### Patch Changes

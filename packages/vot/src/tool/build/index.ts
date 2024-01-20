@@ -8,6 +8,12 @@ import replace from '@rollup/plugin-replace';
 import { promises } from 'node:fs';
 import fs from 'fs-extra';
 import path from 'node:path';
+import type {
+  RollupOutput,
+  RollupWatcher,
+  OutputAsset,
+  OutputOptions,
+} from 'rollup';
 import {
   getEntryPoint,
   getPluginOptions,
@@ -16,12 +22,6 @@ import {
   findVotPlugin,
 } from '../utils';
 import { BuildOptions } from '../../vot';
-import type {
-  RollupOutput,
-  RollupWatcher,
-  OutputAsset,
-  OutputOptions,
-} from 'rollup';
 import { generate } from '../generate';
 
 export async function build(inlineBuildOptions: BuildOptions = {}) {
@@ -142,7 +142,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
           // Re-read the index.html in case it changed.
           // This content is not included in the virtual bundle.
           indexHtmlTemplate = await promises.readFile(
-            (clientBuildOptions.build?.outDir as string) + `/${INDEX_HTML}`,
+            `${clientBuildOptions.build?.outDir as string}/${INDEX_HTML}`,
             'utf-8',
           );
 
@@ -218,7 +218,7 @@ async function generatePackageJson(
   );
 
   const packageJson = {
-    exports: outputFile ? ssrOutput.base : ssrOutput.name + '.js', // Vite 3.0 default
+    exports: outputFile ? ssrOutput.base : `${ssrOutput.name}.js`, // Vite 3.0 default
     type: 'module', // Vite 3.0 default
     ssr: {
       // This can be used later to serve static assets

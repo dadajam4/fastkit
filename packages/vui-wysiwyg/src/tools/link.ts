@@ -1,6 +1,6 @@
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 import { Link, LinkOptions } from '@tiptap/extension-link';
 import { validateIf, url } from '@fastkit/vui';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 
 export const WysiwygLinkTool: WysiwygEditorToolFactory<LinkOptions> = (
   vui,
@@ -8,15 +8,9 @@ export const WysiwygLinkTool: WysiwygEditorToolFactory<LinkOptions> = (
 ) => {
   const tool: WysiwygEditorTool = {
     key: 'link',
-    // icon: ({ editor }) => {
-    //   return vui.icon(editor.isActive('link') ? 'editorLinkOff' : 'editorLink');
-    // },
     icon: vui.icon('editorLink'),
     active: ({ editor }) => editor.isActive('link'),
-    // disabled: ({ editor }) => {
-    //   const { $from, $to } = editor.view.state.selection;
-    //   return $to.pos - $from.pos === 0;
-    // },
+    // eslint-disable-next-line no-shadow
     onClick: async ({ vui, editor }) => {
       const { href = '' } = editor.getAttributes('link');
       const result = await vui.prompt({

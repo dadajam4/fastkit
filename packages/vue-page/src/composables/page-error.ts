@@ -14,6 +14,7 @@ export function isVuePageControlError(
 
 export class VuePageControlError extends Error {
   readonly name = name;
+
   readonly statusCode: number;
 
   constructor(
@@ -35,16 +36,17 @@ export class VuePageControlError extends Error {
       }
     } else {
       settings =
+        // eslint-disable-next-line no-nested-ternary
         typeof rawSettings === 'string'
           ? { message: rawSettings }
           : rawSettings && typeof rawSettings === 'object'
-          ? {
-              statusCode: (rawSettings as VuePageControlErrorSettings)
-                .statusCode,
-              message: (rawSettings as VuePageControlErrorSettings).message,
-              stack: (rawSettings as VuePageControlErrorSettings).stack,
-            }
-          : {};
+            ? {
+                statusCode: (rawSettings as VuePageControlErrorSettings)
+                  .statusCode,
+                message: (rawSettings as VuePageControlErrorSettings).message,
+                stack: (rawSettings as VuePageControlErrorSettings).stack,
+              }
+            : {};
     }
 
     const {

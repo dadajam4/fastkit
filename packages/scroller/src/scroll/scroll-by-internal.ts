@@ -1,6 +1,6 @@
 import BezierEasing, { EasingFunction } from 'bezier-easing';
-import easings, { EasingValues } from './easings';
 import { removeUndef } from '@fastkit/helpers';
+import easings, { EasingValues } from './easings';
 import {
   ScrollResult,
   ScrollCallbackValues,
@@ -37,6 +37,7 @@ const abortEvents: HTMLElementEventMapKey[] = [
 export function scroll(
   diffX: number,
   diffY: number,
+  // eslint-disable-next-line default-param-last
   options: ScrollOptions = {},
   _computedValues?: ComputedValues,
 ): ScrollResult {
@@ -46,7 +47,7 @@ export function scroll(
   let targetX: number;
   let targetY: number;
 
-  const _options = Object.assign({}, defaultSettings, removeUndef(options));
+  const _options = { ...defaultSettings, ...removeUndef(options) };
   const {
     container,
     duration,
@@ -68,7 +69,7 @@ export function scroll(
     targetY = _computedValues.targetY;
   } else {
     $container = $(container) as HTMLElement;
-    if (!$container) throw error('missing container ' + container);
+    if (!$container) throw error(`missing container ${container}`);
     initialX = $container.scrollLeft;
     initialY = $container.scrollTop;
     targetX = initialX + diffX;

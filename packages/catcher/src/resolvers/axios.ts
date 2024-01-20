@@ -116,7 +116,7 @@ export function toAxiosErrorInfo(source: AxiosError): AxiosErrorInfo {
  * Resolver to resolve [axios](https://github.com/axios/axios) exceptions
  */
 export const axiosErrorResolver = createCatcherResolver(
-  function axiosErrorResolver(source, ctx): AxiosErrorOverrides | undefined {
+  (source, ctx): AxiosErrorOverrides | undefined => {
     if (!isAxiosError(source)) return;
 
     const axiosError = toAxiosErrorInfo(source);

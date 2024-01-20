@@ -1,6 +1,6 @@
+import type { PseudoBigInt } from 'typescript';
 import { Callable, ObjectLike, ExtractMembers, ClassType } from './general';
 import { ParameterDoc, MetaDoc } from './docs';
-import type { PseudoBigInt } from 'typescript';
 
 /**
  * Simple meta information with no properties or union information
@@ -237,7 +237,7 @@ export type AnyMeta =
 export type InferMeta<T> = T extends ClassType
   ? ClassMeta<T>
   : T extends Callable
-  ? FunctionMata
-  : T extends ObjectLike
-  ? ObjectMeta<T>
-  : BasicMeta;
+    ? FunctionMata
+    : T extends ObjectLike
+      ? ObjectMeta<T>
+      : BasicMeta;

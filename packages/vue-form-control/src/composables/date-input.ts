@@ -1,3 +1,4 @@
+import { PropType, ComputedRef, computed } from 'vue';
 import {
   BoundableInputControlPropsOptions,
   createBoundableInputProps,
@@ -7,7 +8,6 @@ import {
   BoundableInputContext,
   BoundableInputControl,
 } from './boundable-input';
-import { PropType, ComputedRef, computed } from 'vue';
 
 type DateInputValue = string;
 
@@ -138,14 +138,23 @@ export class DateInputNodeControl<
   Max extends DateInputValue | null = null,
 > extends BoundableInputControl<DateInputValue, MV, SV, EV, Min, Max> {
   readonly _props: DateInputNodeProps<MV, SV, EV, Min, Max>;
+
   protected _formatLocales: ComputedRef<string | string[] | undefined>;
+
   protected _formatOptions: ComputedRef<Intl.DateTimeFormatOptions>;
+
   protected _omitYearFormatOptions: ComputedRef<Intl.DateTimeFormatOptions>;
+
   protected _formatter: ComputedRef<Intl.DateTimeFormat>;
+
   protected _omitYearFormatter: ComputedRef<Intl.DateTimeFormat>;
+
   protected _formattedValue: ComputedRef<string>;
+
   protected _formattedStartValue: ComputedRef<string>;
+
   protected _formattedEndValue: ComputedRef<string>;
+
   protected _isAnySelected: ComputedRef<boolean>;
 
   get formatLocales() {
@@ -202,16 +211,16 @@ export class DateInputNodeControl<
       return typeof locales === 'function' ? locales() : locales;
     });
 
-    this._formatOptions = computed(() => {
-      return props.format || options.format || DEFAULT_FORMAT;
-    });
+    this._formatOptions = computed(
+      () => props.format || options.format || DEFAULT_FORMAT,
+    );
 
     this._omitYearFormatOptions = computed(() => {
-      const options: Intl.DateTimeFormatOptions = {
+      const _options: Intl.DateTimeFormatOptions = {
         ...this.formatOptions,
       };
-      delete options.year;
-      return options;
+      delete _options.year;
+      return _options;
     });
 
     this._formatter = computed(
@@ -245,9 +254,9 @@ export class DateInputNodeControl<
         : this.formatValue(endDt);
     });
 
-    this._isAnySelected = computed(() => {
-      return this.isRange ? !!this.startValue && !!this.endValue : !!this.value;
-    });
+    this._isAnySelected = computed(() =>
+      this.isRange ? !!this.startValue && !!this.endValue : !!this.value,
+    );
   }
 
   formatValue(value: DateInputValue | Date) {

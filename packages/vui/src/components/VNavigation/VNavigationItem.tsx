@@ -9,17 +9,17 @@ import {
   ref,
   watch,
 } from 'vue';
-import { createListTileProps, listTileEmits, VListTile } from '../VListTile';
 import { ExtractPropInput } from '@fastkit/vue-utils';
 import { VExpandTransition } from '@fastkit/vue-transitions';
-import { useVui } from '../../injections';
-import { useRoute } from 'vue-router';
 import { ScopeName } from '@fastkit/color-scheme';
 
 // @TODO Unable to resolve dts for `actionableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { RouteLocationRaw } from 'vue-router';
+// eslint-disable-next-line import/no-duplicates
+import { useRoute, RouteLocationRaw } from 'vue-router';
+import { useVui } from '../../injections';
+import { createListTileProps, listTileEmits, VListTile } from '../VListTile';
 
 export function createNavigationItemProps() {
   return {
@@ -31,10 +31,6 @@ export function createNavigationItemProps() {
     },
     nested: Boolean,
     color: String as PropType<ScopeName>,
-    // key: {
-    //   type: [String, Number],
-    //   required: true,
-    // },
   };
 }
 
@@ -47,7 +43,7 @@ export interface NavigationItemInput
 }
 
 export function resolveNavigationItemInput(input: NavigationItemInput) {
-  let label = input.label;
+  let { label } = input;
   const props: NavigationItemInput = {
     ...input,
   };
@@ -76,8 +72,8 @@ export function renderNavigationItemInput(
 
 const TRIM_END_SLASH_RE = /\/$/;
 
-function trimEndSlash<T extends string | undefined>(sorce: T) {
-  return sorce ? sorce.replace(TRIM_END_SLASH_RE, '') : sorce;
+function trimEndSlash<T extends string | undefined>(source: T) {
+  return source ? source.replace(TRIM_END_SLASH_RE, '') : source;
 }
 
 export const VNavigationItem = defineComponent({
@@ -102,7 +98,9 @@ export const VNavigationItem = defineComponent({
     const to = computed(() => ctx.attrs.to);
 
     const match = computed<string[] | undefined>(() => {
+      // eslint-disable-next-line no-shadow
       const { match } = props;
+      // eslint-disable-next-line no-shadow
       const { to } = ctx.attrs;
       if (match) {
         return (Array.isArray(match) ? match : [match]).map(trimEndSlash);
@@ -122,12 +120,6 @@ export const VNavigationItem = defineComponent({
 
     const route = useRoute();
 
-    // const classes = computed(() => [
-    //   // {
-    //   //   'v-navigation-item--matched': matched.value,
-    //   // },
-    // ]);
-
     watch(
       () => route.path,
       (newPath) => {
@@ -135,31 +127,18 @@ export const VNavigationItem = defineComponent({
         const m = match.value;
 
         if (!c || !m || !m.length) {
-          // matched.value = false;
           return;
         }
 
-        const trimedNewPath = trimEndSlash(newPath);
-        if (m.some((_) => trimedNewPath.match(_))) {
+        const trimmedNewPath = trimEndSlash(newPath);
+        if (m.some((_) => trimmedNewPath.match(_))) {
           open();
-          // matched.value = true;
         } else {
           close();
-          // matched.value = false;
         }
-
-        // if (trimEndSlash(newPath).match(m)) {
-        //   open();
-        //   // matched.value = true;
-        // } else {
-        //   close();
-        //   // matched.value = false;
-        // }
       },
       { immediate: true },
     );
-
-    // const iconPayload = () => opened.value;
 
     const _props = computed(() => {
       const c = children.value;
@@ -168,12 +147,11 @@ export const VNavigationItem = defineComponent({
         endIcon = vui.icon('navigationExpand');
         if (typeof endIcon === 'string') {
           const name = endIcon;
-          endIcon = (gen) => {
-            return gen({
+          endIcon = (gen) =>
+            gen({
               name,
               rotate: opened.value ? 180 : 0,
             });
-          };
         }
       }
 
@@ -184,16 +162,8 @@ export const VNavigationItem = defineComponent({
 
       delete __props.children;
 
-      // const _activeClass = props.activeClass;
-      // const activeClass = `v-navigation-item--active${
-      //   _activeClass ? ` ${_activeClass}` : ''
-      // }`;
-
       return {
         ...__props,
-        // activeClass,
-        // startIcon: toRawIconProp(__props.startIcon, iconPayload),
-        // endIcon: toRawIconProp(__props.endIcon, iconPayload),
       };
     });
 
@@ -214,30 +184,9 @@ export const VNavigationItem = defineComponent({
       if (!to.value) {
         return toggle();
       }
-      // console.log('★');
-      // open();
-      // if (!to.value) {
-      //   toggle();
-      // }
-      // ctx.emit('click', ev);
     };
 
     const onChangeActive = (isActive: boolean) => {
-      // if (isActive) {
-      //   // open();
-      //   // if (typeof window !== 'undefined') {
-      //   //   // open();
-      //   //   // console.log('hoge', window);
-      //   //   setTimeout(() => {
-      //   //     open();
-      //   //   }, 1000);
-      //   // }
-      //   // open();
-      //   // console.log(props);
-      //   // setTimeout(() => {
-      //   //   open();
-      //   // }, 500);
-      // }
       ctx.emit('changeActive', isActive);
     };
 
@@ -273,8 +222,6 @@ export const VNavigationItem = defineComponent({
                     {
                       startIconEmptySpace: _props.value.startIconEmptySpace,
                       depth: props.nested ? props.depth + 1 : props.depth,
-                      // onClick,
-                      // onChangeActive,
                     },
                   ),
                 )}

@@ -1,5 +1,5 @@
-import { Tokens, ThemeVars, Contract, MapLeafNodes } from './types';
 import { createThemeContract, globalStyle } from '@vanilla-extract/css';
+import { Tokens, ThemeVars, Contract, MapLeafNodes } from './types';
 import { assignVars } from './utils';
 
 export function createGlobalTheme<ThemeTokens extends Tokens>(

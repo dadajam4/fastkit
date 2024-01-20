@@ -44,24 +44,23 @@ export const VSnackbarTransition = generateJavaScriptTransition({
     const setOffset = (
       el: HTMLElement,
       disableTransition = false,
-    ): Promise<void> => {
-      return new Promise((resolve) => {
+    ): Promise<void> =>
+      new Promise((resolve) => {
         getHeight(el).then((height) => {
           let offset = -height;
           if (hasHorizontal) offset -= HORIZONTAL_MARGIN;
           if (!disableTransition) {
-            el.style[marginProp] = offset + 'px';
+            el.style[marginProp] = `${offset}px`;
             return resolve();
           }
           el.style.transition = 'none';
-          el.style[marginProp] = offset + 'px';
+          el.style[marginProp] = `${offset}px`;
           setTimeout(() => {
             el.style.transition = '';
             setTimeout(resolve, 0);
           }, 30);
         });
       });
-    };
 
     const removeOffset = (
       el: HTMLElement,

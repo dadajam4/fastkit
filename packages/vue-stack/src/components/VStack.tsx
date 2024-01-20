@@ -11,8 +11,8 @@ export const VStack = defineComponent({
   props,
   emits,
   slots: V_STACK_SLOTS,
-  setup(props, ctx) {
-    const stackControl = useStackControl(props, ctx);
+  setup(_props, ctx) {
+    const stackControl = useStackControl(_props, ctx);
     return () => stackControl.render((children) => <div>{children}</div>);
   },
 });

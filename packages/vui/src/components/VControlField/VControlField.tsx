@@ -83,7 +83,7 @@ export const VControlField = defineComponent({
     const colorProvider = useVuiColorProvider();
 
     const classes = computed(() => {
-      const classes = [
+      const _classes = [
         'v-control-field',
         `v-control-field--${inputBox.variant.value}`,
         {
@@ -95,23 +95,24 @@ export const VControlField = defineComponent({
         },
         control.classes.value,
         colorProvider.className(
+          // eslint-disable-next-line no-nested-ternary
           props.error
             ? 'error'
             : invalid.value && !readonly.value
-            ? 'error'
-            : 'primary',
+              ? 'error'
+              : 'primary',
         ),
       ];
-      return classes;
+      return _classes;
     });
 
     const resolvedSlots = computed(() => {
-      const slots: ResolvedSlots = {};
+      const _slots: ResolvedSlots = {};
       ADORNMENT_POSITIONS.forEach((position) => {
         const key = `${position}Adornment` as const;
-        slots[position] = resolveVNodeChildOrSlots(props[key], ctx.slots[key]);
+        _slots[position] = resolveVNodeChildOrSlots(props[key], ctx.slots[key]);
       });
-      return slots;
+      return _slots;
     });
 
     const renderAdornment = (position: AdornmentPosition) => {
@@ -140,18 +141,16 @@ export const VControlField = defineComponent({
 
     const handleClick = (ev: MouseEvent) => ctx.emit('click', ev);
 
-    return () => {
-      return (
-        <div
-          class={classes.value}
-          onClick={handleClick}
-          // tabindex={this.computedTabindex}
-          ref={hostElRef}>
-          {renderAdornment('start')}
-          <div class="v-control-field__body">{ctx.slots.default?.()}</div>
-          {renderAdornment('end')}
-        </div>
-      );
-    };
+    return () => (
+      <div
+        class={classes.value}
+        onClick={handleClick}
+        // tabindex={this.computedTabindex}
+        ref={hostElRef}>
+        {renderAdornment('start')}
+        <div class="v-control-field__body">{ctx.slots.default?.()}</div>
+        {renderAdornment('end')}
+      </div>
+    );
   },
 });

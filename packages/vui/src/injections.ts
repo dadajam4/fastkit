@@ -6,19 +6,19 @@ import type {
   VuiColorProvider,
 } from './composables';
 
-export const VuiInjectionKey: InjectionKey<VuiService> = Symbol();
+export const VuiInjectionKey: InjectionKey<VuiService> = Symbol('Vui');
 
-export const VuiControlInjectionKey: InjectionKey<ControlProvider> = Symbol();
+export const VuiControlInjectionKey: InjectionKey<ControlProvider> =
+  Symbol('VuiControl');
 
 export const VuiControlFieldInjectionKey: InjectionKey<ControlFieldProvider> =
-  Symbol();
+  Symbol('VuiControlField');
 
 export const VuiColorProviderInjectionKey: InjectionKey<VuiColorProvider> =
-  Symbol();
+  Symbol('VuiColorProvider');
 
 export const VUI_TEXT_FIELD_SYMBOL = 'vui-text-field';
 export const VUI_TEXTAREA_SYMBOL = 'vui-textarea';
-// export const VUI_WYSIWYG_EDITOR_SYMBOL = 'vui-wysiwyg-editor';
 export const VUI_SELECT_SYMBOL = 'vui-select';
 export const VUI_OPTION_SYMBOL = 'vui-option';
 export const VUI_CHECKBOX_GROUP_SYMBOL = 'vui-checkbox-group';

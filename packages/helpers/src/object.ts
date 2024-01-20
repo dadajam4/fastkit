@@ -110,23 +110,29 @@ export function objectIncludes(b: any, a: any): boolean {
   let i: number;
 
   if (arrA && arrB) {
+    // eslint-disable-next-line eqeqeq
     if (a.length != b.length) return false;
     for (i = 0; i < a.length; i++)
       if (!objectIncludes(a[i], b[i])) return false;
     return true;
   }
 
+  // eslint-disable-next-line eqeqeq
   if (arrA != arrB) return false;
 
   if (a && b && typeof a === 'object' && typeof b === 'object') {
-    const dateA = a instanceof Date,
-      dateB = b instanceof Date;
+    const dateA = a instanceof Date;
+    const dateB = b instanceof Date;
+    // eslint-disable-next-line eqeqeq
     if (dateA && dateB) return a.getTime() == b.getTime();
+    // eslint-disable-next-line eqeqeq
     if (dateA != dateB) return false;
 
-    const regexpA = a instanceof RegExp,
-      regexpB = b instanceof RegExp;
+    const regexpA = a instanceof RegExp;
+    const regexpB = b instanceof RegExp;
+    // eslint-disable-next-line eqeqeq
     if (regexpA && regexpB) return a.toString() == b.toString();
+    // eslint-disable-next-line eqeqeq
     if (regexpA != regexpB) return false;
 
     const keys = Object.keys(a);
@@ -139,7 +145,8 @@ export function objectIncludes(b: any, a: any): boolean {
       if (!objectIncludes(b[keys[i]], a[keys[i]])) return false;
 
     return true;
-  } else if (a && b && typeof a === 'function' && typeof b === 'function') {
+  }
+  if (a && b && typeof a === 'function' && typeof b === 'function') {
     return a.toString() === b.toString();
   }
 
@@ -148,7 +155,7 @@ export function objectIncludes(b: any, a: any): boolean {
 
 /**
  * Returns `true` if it is a iterable object
- **/
+ * */
 export function isIterableObject<T = any>(source?: any): source is Iterable<T> {
   return (
     Array.isArray(source) ||
@@ -162,6 +169,7 @@ export function isIterableObject<T = any>(source?: any): source is Iterable<T> {
 /**
  * @see https://github.com/vuejs/vue-router/blob/c69ff7bd60228fb79acd764c3fdae91015a49103/src/util/route.js#L96
  */
+// eslint-disable-next-line default-param-last
 export function isObjectEqual<T>(a: T = {} as T, b: unknown): b is T {
   // handle null value #1566
   if (!a || !b) return a === b;
@@ -188,16 +196,13 @@ export function objectFromArray<R, K extends string | number | symbol, T>(
   rows: R[] | readonly R[],
   cb: (row: R, index: number) => [K, T],
 ): Record<K, T> {
-  const entries = new Map(
-    rows.map((row, index) => {
-      return cb(row, index);
-    }),
-  );
+  const entries = new Map(rows.map((row, index) => cb(row, index)));
   return Object.fromEntries(entries) as Record<K, T>;
 }
 
 objectFromArray.build =
   <R, T>(rows: R[] | readonly R[]) =>
+  // eslint-disable-next-line no-shadow
   <K extends string | number | symbol, T>(
     cb: (row: R, index: number) => [K, T],
   ) =>
@@ -295,23 +300,15 @@ export function mixin<T extends object, U extends object>(
   base: T,
   trait: U,
 ): Mixin<T, U> {
-  Reflect.getPrototypeOf;
   const proxy = new Proxy(base, {
     get: (_target, propertyKey, receiver) => {
       const target = Reflect.has(trait, propertyKey) ? trait : _target;
       return Reflect.get(target, propertyKey, receiver);
     },
-    has: (target, propertyKey) => {
-      return (
-        Reflect.has(trait, propertyKey) || Reflect.has(target, propertyKey)
-      );
-    },
-    ownKeys: (target) => {
-      return arrayUnique([
-        ...Reflect.ownKeys(target),
-        ...Reflect.ownKeys(trait),
-      ]);
-    },
+    has: (target, propertyKey) =>
+      Reflect.has(trait, propertyKey) || Reflect.has(target, propertyKey),
+    ownKeys: (target) =>
+      arrayUnique([...Reflect.ownKeys(target), ...Reflect.ownKeys(trait)]),
   }) as any;
   return proxy;
 }

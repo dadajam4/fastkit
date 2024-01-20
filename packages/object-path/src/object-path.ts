@@ -10,8 +10,8 @@ type Join<
     ? `${L}.${R}`
     : L
   : R extends string | number
-  ? R
-  : undefined;
+    ? R
+    : undefined;
 
 type Union<
   L extends unknown | undefined,
@@ -22,10 +22,10 @@ type Union<
     ? undefined
     : R
   : R extends undefined
-  ? L
-  : Leaf extends true
-  ? R
-  : L | R;
+    ? L
+    : Leaf extends true
+      ? R
+      : L | R;
 
 /**
  * NestedPaths
@@ -63,10 +63,10 @@ export type TypeFromObjectPath<
   [K in Path]: K extends keyof T
     ? T[K]
     : K extends `${infer P}.${infer S}`
-    ? T[P] extends GenericObject
-      ? TypeFromObjectPath<T[P], S>
-      : never
-    : never;
+      ? T[P] extends GenericObject
+        ? TypeFromObjectPath<T[P], S>
+        : never
+      : never;
 }[Path];
 
 // export function valueFromObjectPath<

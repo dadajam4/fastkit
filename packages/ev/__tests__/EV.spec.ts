@@ -16,11 +16,7 @@ describe('constract', () => {
   });
 
   it('should can extend', () => {
-    class TestClass extends EV {
-      constructor() {
-        super();
-      }
-    }
+    class TestClass extends EV {}
     const DDEVKeys = Object.keys(EV.prototype);
     for (const key of DDEVKeys) {
       expect((TestClass as any).prototype[key]).toStrictEqual(
@@ -42,16 +38,16 @@ describe('on', () => {
   it('should can multiple on', () => {
     const ev = new EV();
     const listeners = getListeners(ev);
-    const listenr1 = ev.on('test', () => {});
-    const listenr2 = ev.on({ type: 'test3', handler: () => {} });
-    const listenr3 = ev.on('test4', () => {}, { tag: 'fuga' });
+    const listener1 = ev.on('test', () => {});
+    const listener2 = ev.on({ type: 'test3', handler: () => {} });
+    const listener3 = ev.on('test4', () => {}, { tag: 'fuga' });
     expect(listeners.length).toStrictEqual(3);
-    expect(listeners[0]).toStrictEqual(listenr1);
-    expect(listeners[1]).toStrictEqual(listenr2);
-    expect(listeners[2]).toStrictEqual(listenr3);
-    expect(listenr1.type).toStrictEqual('test');
-    expect(listenr3.type).toStrictEqual('test4');
-    expect(listenr3.tag).toStrictEqual('fuga');
+    expect(listeners[0]).toStrictEqual(listener1);
+    expect(listeners[1]).toStrictEqual(listener2);
+    expect(listeners[2]).toStrictEqual(listener3);
+    expect(listener1.type).toStrictEqual('test');
+    expect(listener3.type).toStrictEqual('test4');
+    expect(listener3.tag).toStrictEqual('fuga');
   });
 
   it('should can emit', () => {
@@ -81,6 +77,7 @@ describe('on', () => {
       tag: 'tag2',
     });
 
+    // eslint-disable-next-line no-void
     ev.emit('e1', void 0);
     ev.emit('e2', 'str');
     ev.emit('e3', true);

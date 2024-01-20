@@ -48,8 +48,6 @@ function booleanExtractor(
     if (FALSE_LIKE_RE.test(queryValue)) return false;
     if (TRUE_LIKE_RE.test(queryValue)) return true;
   }
-
-  return;
 }
 
 function typedExtractor<T>(
@@ -74,8 +72,8 @@ type ExtractorReturnValue<
 > = R extends true
   ? Exclude<T, undefined>
   : D extends undefined
-  ? T
-  : Exclude<T | D, undefined>;
+    ? T
+    : Exclude<T | D, undefined>;
 
 /**
  * The state of the query extraction result
@@ -237,19 +235,16 @@ export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
   };
 
   const extractValue = (queryValue: LocationQueryValue | undefined) => {
-    // if (queryValue !== undefined && validator?.(queryValue) === false) {
-    //   return;
-    // }
-    for (const type of types) {
+    for (const _type of types) {
       let extracted: any;
-      if (type === String) {
+      if (_type === String) {
         extracted = stringExtractor(queryValue);
-      } else if (type === Number) {
+      } else if (_type === Number) {
         extracted = numberExtractor(queryValue);
-      } else if (type === Boolean) {
+      } else if (_type === Boolean) {
         extracted = booleanExtractor(queryValue, booleanSchema);
       } else {
-        extracted = typedExtractor(queryValue, type);
+        extracted = typedExtractor(queryValue, _type);
       }
       if (extracted !== undefined) {
         return extracted;
@@ -277,6 +272,7 @@ export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
   };
 
   if (multiple) {
+    // eslint-disable-next-line default-param-last
     extractor = ((queryValues, defaultValue = baseDefaultValue, required) => {
       const prepared = prepareValues(queryValues);
       const matchedValues: LocationQueryValue[] = [];
@@ -342,6 +338,7 @@ export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
       if (values.length) return values;
     };
   } else {
+    // eslint-disable-next-line default-param-last
     extractor = ((queryValues, defaultValue = baseDefaultValue, required) => {
       const prepared = prepareValues(queryValues);
       const matchedValues: LocationQueryValue[] = [];

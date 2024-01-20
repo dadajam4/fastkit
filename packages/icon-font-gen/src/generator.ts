@@ -2,6 +2,10 @@ import fs from 'fs-extra';
 import path from 'node:path';
 import chokidar, { FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
+import { HashComparator } from '@fastkit/node-util';
+import { UnPromisify } from '@fastkit/helpers';
+import type webfont from 'webfont';
+import { logger } from './logger';
 import {
   IconFontOptions,
   IconFontEntry,
@@ -11,10 +15,6 @@ import {
   IconFontFormat,
   ICON_FONT_FORMAT_MAP,
 } from './schemes';
-import { HashComparator } from '@fastkit/node-util';
-import { UnPromisify } from '@fastkit/helpers';
-import { logger } from './logger';
-import type webfont from 'webfont';
 
 export type IconFontEntryResult = {
   entry: IconFontEntry;
@@ -82,12 +82,13 @@ export async function generateEntry(
   const hash = new HashComparator(options.src, options.dest);
   const srcHash = await hash.hasChanged();
   if (!srcHash) {
-    logger.info(`Has not chaged files. Skip process. >>> ${options.src}`);
+    logger.info(`Has not changed files. Skip process. >>> ${options.src}`);
     return { entry };
   }
 
   await fs.ensureDir(options.dest);
 
+  // eslint-disable-next-line no-shadow
   const { webfont } = await import('webfont');
 
   // const { startUnicode = 0xea01 } = options;
@@ -124,12 +125,9 @@ export async function generateEntry(
   });
 
   await Promise.all(
-    buildedFormats.map(({ format, code }) => {
-      return fs.writeFile(
-        path.join(options.dest, `${options.name}.${format}`),
-        code,
-      );
-    }),
+    buildedFormats.map(({ format, code }) =>
+      fs.writeFile(path.join(options.dest, `${options.name}.${format}`), code),
+    ),
   );
 
   const glyphs: { name: string; code: string }[] = [];
@@ -148,11 +146,11 @@ export async function generateEntry(
 
   const urlPath = options.absolutePath ? options.dest : '.';
   const hashSuffix = options.addHashInFontUrl ? `?${Date.now()}` : '';
-  ICON_FONT_FORMAT_MAP;
   const src = buildedFormats
-    .map(({ format }) => {
-      return `url("${urlPath}/${options.name}.${format}${hashSuffix}") format("${ICON_FONT_FORMAT_MAP[format]}")`;
-    })
+    .map(
+      ({ format }) =>
+        `url("${urlPath}/${options.name}.${format}${hashSuffix}") format("${ICON_FONT_FORMAT_MAP[format]}")`,
+    )
     .join(',');
 
   const cssCode = `/* stylelint-disable */
@@ -176,11 +174,11 @@ i[class^="${cssPrefix}"]:before, i[class*=" ${cssPrefix}"]:before {
   -moz-osx-font-smoothing: grayscale;
 }
 ${glyphs
-  .map(({ name, code }) => {
-    return `
+  .map(
+    ({ name, code }) => `
 .${cssPrefix}${name}:before { content: "\\${code}"; }
-  `;
-  })
+  `,
+  )
   .join('\n')}
   `;
   await fs.writeFile(path.join(options.dest, `${options.name}.css`), cssCode);
@@ -228,8 +226,8 @@ export async function generate(opts: IconFontOptions) {
   await fs.emptyDir(opts.dest);
   const results = await Promise.all(
     opts.entries.map((entry) =>
-      resolveRawIconFontEntry(opts.dest, entry).then((entry) =>
-        generateEntry(entry),
+      resolveRawIconFontEntry(opts.dest, entry).then((_entry) =>
+        generateEntry(_entry),
       ),
     ),
   );
@@ -241,9 +239,13 @@ export class IconFontRunnerItem extends EV<{
   build: IconFontEntryResult;
 }> {
   readonly entry: RawIconFontEntry;
+
   readonly ctx: IconFontRunner;
+
   private _resolveEntryPromise?: Promise<IconFontEntry>;
+
   private _watcher: FSWatcher | null = null;
+
   watchMode: boolean;
 
   // get name() {
@@ -304,18 +306,13 @@ export class IconFontRunner extends EV<{
   };
 }> {
   readonly items: IconFontRunnerItem[] = [];
+
   readonly dest: string;
-  // private _opts: IconFontOptions;
-  // private entries: IconFontEntry[] = [];
 
   constructor(opts: IconFontOptions, watch?: boolean) {
     super();
 
-    // this._opts = opts;
     this.dest = opts.dest;
-    // this.entries = opts.entries.map((entry) =>
-    //   resolveRawIconFontEntry(this.outputDir, entry),
-    // );
 
     opts.entries.forEach((entry) => {
       const item = new IconFontRunnerItem(this, entry, watch);

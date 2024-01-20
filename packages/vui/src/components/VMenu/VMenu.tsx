@@ -20,12 +20,10 @@ export const VMenu = defineMenuComponent({
       menu: ctx,
     });
 
-    return (children) => {
-      return (
-        <div class={['v-menu__body', color.colorClasses.value]} {...ctx.attrs}>
-          {children}
-        </div>
-      );
-    };
+    return (children) => (
+      <div class={['v-menu__body', color.colorClasses.value]} {...ctx.attrs}>
+        {children}
+      </div>
+    );
   },
 });

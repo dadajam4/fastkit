@@ -9,8 +9,6 @@ import { logger } from './logger';
 
 import { enableScroll, disableScroll } from './prevent-scroll';
 
-export * from './prevent-scroll';
-
 import {
   ScrollPosition,
   ScrollOptions,
@@ -37,6 +35,8 @@ import {
 } from './scroll';
 
 import { defaultBaseSettings } from './scroll/schemes';
+
+export * from './prevent-scroll';
 
 export * from './scroll';
 
@@ -233,6 +233,7 @@ export interface ScrollerEventMap extends ScrollerScrollEventMap {
 /**
  * Scrollerの状態を示します。
  */
+// eslint-disable-next-line no-shadow
 export enum ScrollerState {
   /**
    * Scrollerが初期化されていない（Elementが設定されていない）状態を示します。
@@ -562,41 +563,76 @@ export class Scroller extends EV<ScrollerEventMap> {
   }
 
   private _el!: Element | null;
+
   private _eventTarget!: ScrollerEventTarget;
+
   private _isDocumentElement = false;
+
   private _isBodyElement = false;
+
   private _isRootElement = false;
+
   private _state: ScrollerState = ScrollerState.Pending;
+
   private _containerWidth = 0;
+
   private _containerHeight = 0;
+
   private _scrollWidth = 0;
+
   private _scrollHeight = 0;
+
   private _scrollTop = 0;
+
   private _scrollRight = 0;
+
   private _scrollBottom = 0;
+
   private _scrollLeft = 0;
+
   private _lastAxis: ScrollAxis;
+
   private _lastDirection: ScrollDirection;
+
   private _lastYDirection: ScrollYDirection = 'top';
+
   private _lastXDirection: ScrollXDirection = 'left';
+
   private _nowScrolling = false;
+
   // eslint-disable-next-line @typescript-eslint/ban-types
   private _readyResolvers: Function[] = [];
+
   private _scrollingJudgeTimerId: number | null = null;
+
   private _startX = 0;
+
   private _startY = 0;
+
   private _tickedX = 0;
+
   private _tickedY = 0;
+
   private _lastTotalX = 0;
+
   private _lastTotalY = 0;
+
   private _scrollListener?: EventListener;
+
   private _resizeListener?: EventListener;
+
   private _resizeObserver?: ResizeObserver;
+
   private _scrollToResult: ScrollResult | null = null;
+
   private _observers: ScrollerObserver[] = [];
+
   private _scrollStoppers: ScrollStopper[] = [];
+
   private _scrollSizeObserverPollingId: number | null = null;
+
   private _scrollSizeObserverSuspended = false;
+
   private _visibilityListener: VisibilityStateListener;
 
   /**
@@ -1460,6 +1496,7 @@ export class Scroller extends EV<ScrollerEventMap> {
       this._scrollDisable();
     }
   }
+
   private _scrollEnable() {
     enableScroll(this._checkElement());
   }

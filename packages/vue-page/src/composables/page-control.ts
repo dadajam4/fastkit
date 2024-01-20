@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-shadow */
 /* eslint-disable @typescript-eslint/ban-types */
 import {
   App,
@@ -19,7 +21,7 @@ import type {
   LocationAsRelativeRaw,
 } from 'vue-router';
 import { stringifyQuery, useLink, RouterLink } from 'vue-router';
-import { IN_WINDOW } from '@fastkit/helpers';
+import { IN_WINDOW, isPromise } from '@fastkit/helpers';
 import {
   extractRouteMatchedItems,
   RouteMatchedItem,
@@ -27,26 +29,21 @@ import {
   RouteQueryType,
   isComponentCustomOptions,
 } from '@fastkit/vue-utils';
+import { EV } from '@fastkit/ev';
+import type { ServerResponse, IncomingMessage } from 'node:http';
+import { Cookies, CookiesContext } from '@fastkit/cookies';
 import { ResolvedRouteLocation, WatchQueryOption } from '../schemes';
 import {
   routeKeyWithWatchQueryByRouteItem,
   setForcePrefetchStates,
 } from '../utils';
-import { isPromise } from '@fastkit/helpers';
-import { EV } from '@fastkit/ev';
 import { useVuePageControl } from '../injections';
 import { VuePageControlError } from './page-error';
 import { VErrorPage } from '../components/VErrorPage';
-import type { ServerResponse, IncomingMessage } from 'node:http';
 import { StateInjectionKey } from './state';
-import { Cookies, CookiesContext } from '@fastkit/cookies';
-// import { JSONMapValue, JSONData } from '@fastkit/helpers';
 
-// type JSONData = Record<string, unknown>;
 type InitialState = Record<string, unknown>;
-// type InitialState = JSONMapValue;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VuePageInjectionKey<T> extends String {}
 
 export type VuePagePrefetchFn = (
@@ -197,15 +194,6 @@ export function extractRouteMatchedItemsWithPrefetch(
   };
 }
 
-// export interface VuePageLoadingOptions {
-//   color?: string;
-//   failedColor?: string;
-//   height?: number;
-//   throttle?: number;
-//   duration?: number;
-//   continuous?: boolean;
-// }
-
 export type VuePageControlMiddlewareFn = (
   ctx: VuePageControl,
 ) => void | Promise<void>;
@@ -272,7 +260,7 @@ export interface VuePageControlSettings {
 
 type RawProvided<T> = T | ((queue: VuePagePrefetchQueue) => T | Promise<T>);
 
-export interface VuePagePreftechProgress {
+export interface VuePagePrefetchProgress {
   resolved: number;
   total: number;
   per: number;
@@ -280,8 +268,8 @@ export interface VuePagePreftechProgress {
 }
 
 export interface VuePageControlEventMap {
-  start: VuePagePreftechProgress;
-  finish: VuePagePreftechProgress;
+  start: VuePagePrefetchProgress;
+  finish: VuePagePrefetchProgress;
   error: VuePageControlError;
 }
 
@@ -289,32 +277,59 @@ const ERROR_STATE_NAME = '__vpe__';
 
 export class VuePageControl extends EV<VuePageControlEventMap> {
   readonly app: App;
+
   readonly router: Router;
+
   readonly cookies: Cookies;
+
   readonly RouterLink: typeof RouterLink;
+
   readonly useLink: typeof useLink;
+
   private _from: Ref<RouteLocationNormalized | null> = ref(null);
+
   private _to: Ref<RouteLocationNormalized | null> = ref(null);
+
   private _initialState: InitialState;
+
   private _beforeRoute: Ref<ResolvedRouteLocation | null> = ref(null);
+
   private _route: Ref<ResolvedRouteLocation>;
+
   private _stopFn?: () => void;
+
   private _prefetchQueues: Ref<(() => VuePagePrefetchQueue)[]> = ref([]);
+
   private _initialStateConsumed = false;
+
   private _runningQueues: ComputedRef<VuePagePrefetchQueue[]>;
-  private _preftechProgress: ComputedRef<VuePagePreftechProgress>;
+
+  private _preftechProgress: ComputedRef<VuePagePrefetchProgress>;
+
   private _suspenseComponents: Ref<(() => VNode)[]> = ref([]);
+
   private _err: Ref<(() => VuePageControlError) | null> = ref(null);
+
   private _ErrorComponent: Component;
+
   readonly request?: IncomingMessage;
+
   readonly response?: ServerResponse;
+
   private readonly _serverRedirect?: RedirectFn;
+
   private readonly _writeResponse?: WriteResponseFn;
+
   readonly isClient: boolean;
+
   readonly middleware: VuePageControlMiddlewareFn[];
+
   private _redirectSpec?: VuePageControlRedirectSpec;
+
   private _providedMap: Map<string | InjectionKey<any>, any> = new Map();
+
   private _transitioning = ref(false);
+
   private _serverRedirected = ref(false);
 
   get isServer() {
@@ -498,7 +513,9 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   }
 
   useState<T  extends object>(key: StateInjectionKey<T>): T | undefined; // eslint-disable-line prettier/prettier
+
   useState<T extends object>(key: StateInjectionKey<T>, defaultValue: T | (() => T)): T; // eslint-disable-line prettier/prettier
+
   useState<T extends object>(
     key: StateInjectionKey<T>,
     defaultValue?: T | (() => T),
@@ -520,8 +537,11 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   }
 
   inject<T>(key: InjectionKey<T> | string): T | undefined;
+
   inject<T>(key: InjectionKey<T> | string, defaultValue: T, treatDefaultAsFactory?: false): T; // eslint-disable-line prettier/prettier
+
   inject<T>(key: InjectionKey<T> | string, defaultValue: T | (() => T), treatDefaultAsFactory: true): T; // eslint-disable-line prettier/prettier
+
   inject<T>(
     key: InjectionKey<T> | string,
     defaultValue?: T | (() => T),
@@ -650,6 +670,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       hash = tmp.hash;
     }
     const queryStr = query ? stringifyQuery(query) : query;
+    // eslint-disable-next-line no-nested-ternary
     const queryAppends = queryStr
       ? path.includes('?')
         ? `&${queryStr}`
@@ -820,11 +841,17 @@ export interface VuePagePrefetchQueueEventMap {
 
 export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
   readonly control: VuePageControl;
+
   readonly item: RouteMatchedItemWithPrefetch;
+
   readonly route: RouteLocationNormalized;
+
   private readonly _resolved = ref(false);
+
   private readonly _canceled = ref(false);
+
   private readonly _running: ComputedRef<boolean>;
+
   private _resolvedData?: any;
 
   /** @private */
@@ -881,9 +908,7 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
       const _fn = this[fn];
       this[fn] = _fn.bind(this) as any;
     });
-    this._running = computed(() => {
-      return !this.resolved && !this.canceled;
-    });
+    this._running = computed(() => !this.resolved && !this.canceled);
 
     const prefetchFn =
       typeof item.prefetch === 'function'
@@ -894,27 +919,36 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
   }
 
   getQuery(key: string): string | undefined;
+
   // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: undefined, defaultValue: string): string;
+
   // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: StringConstructor): string | undefined;
+
   // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: StringConstructor, defaultValue: string): string;
+
   // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: NumberConstructor): number | undefined;
+
   // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: NumberConstructor, defaultValue: number): number;
+
   // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: BooleanConstructor): boolean;
+
   // eslint-disable-next-line no-dupe-class-members
   getQuery(
     key: string,
     type: BooleanConstructor,
     defaultValue: boolean,
   ): boolean;
+
   // eslint-disable-next-line no-dupe-class-members
   getQuery(
     key: string,
+    // eslint-disable-next-line default-param-last
     type: RouteQueryType = String,
     defaultValue?: string | number | boolean,
   ): string | number | boolean | undefined {
@@ -948,13 +982,11 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
     if (IN_WINDOW && !this.control.initialStateConsumed) {
       const consumed = this.control.consumeInitialState(key as string);
       promise = Promise.resolve(consumed);
+    } else if (typeof data !== 'function') {
+      promise = Promise.resolve(data);
     } else {
-      if (typeof data !== 'function') {
-        promise = Promise.resolve(data);
-      } else {
-        const payload = (data as any)(this);
-        promise = isPromise(payload) ? payload : Promise.resolve(payload);
-      }
+      const payload = (data as any)(this);
+      promise = isPromise(payload) ? payload : Promise.resolve(payload);
     }
 
     this._providePromise = promise.then((v) => {
@@ -986,8 +1018,8 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
 }
 
 export interface UseVuePageControlOptions {
-  onStart?: (progress: VuePagePreftechProgress) => any;
-  onFinish?: (progress: VuePagePreftechProgress) => any;
+  onStart?: (progress: VuePagePrefetchProgress) => any;
+  onFinish?: (progress: VuePagePrefetchProgress) => any;
   onError?: (error: VuePageControlError) => any;
 }
 

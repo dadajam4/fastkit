@@ -31,23 +31,22 @@ export const VForm = defineComponent({
   props: createVFormProps(),
   emits,
   slots: formSlots,
+  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const nodeControl = useForm(props, ctx as any, {
       nodeType: VUI_FORM_SYMBOL,
     });
-    const classes = computed(() => {
-      return [
-        'v-form',
-        {
-          'v-form--valid': nodeControl.valid,
-          'v-form--invalid': nodeControl.invalid,
-          'v-form--disabled': nodeControl.isDisabled,
-          'v-form--validating': nodeControl.validating,
-          'v-form--pending': nodeControl.pending,
-          'v-form--sending': nodeControl.sending,
-        },
-      ];
-    });
+    const classes = computed(() => [
+      'v-form',
+      {
+        'v-form--valid': nodeControl.valid,
+        'v-form--invalid': nodeControl.invalid,
+        'v-form--disabled': nodeControl.isDisabled,
+        'v-form--validating': nodeControl.validating,
+        'v-form--pending': nodeControl.pending,
+        'v-form--sending': nodeControl.sending,
+      },
+    ]);
     useControl(props);
 
     ctx.expose({

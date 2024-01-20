@@ -1,13 +1,13 @@
 import esbuild, { Plugin } from 'esbuild';
 import path from 'node:path';
 import fs from 'node:fs';
-import { resolveEntryPoint, pathExists } from './path';
-import { findPackageDir } from './package';
-import { NodeUtilError } from './logger';
 import chokidar from 'chokidar';
 import { EV } from '@fastkit/ev';
 import module from 'node:module';
 import url from 'node:url';
+import { NodeUtilError } from './logger';
+import { findPackageDir } from './package';
+import { resolveEntryPoint, pathExists } from './path';
 
 const require = module.createRequire(import.meta.url);
 
@@ -29,7 +29,7 @@ const importMetaUrlPlugin: Plugin = {
       const jsxSuffix = ext.includes('sx') ? 'x' : '';
       const loader = `${jsType}${jsxSuffix}` as const;
 
-      return { contents: code, loader: loader };
+      return { contents: code, loader };
     });
   },
 };
@@ -128,10 +128,11 @@ export async function esbuildRequire<T = any>(
 
   const { metafile } = buildResult;
 
-  let m: T | undefined = undefined;
+  let m: T | undefined;
 
   // eslint-disable-next-line no-useless-catch
   try {
+    // eslint-disable-next-line import/no-dynamic-require
     m = require(outfile);
   } catch (err) {
     throw err;
@@ -170,12 +171,19 @@ export interface ESbuildRunnerEventMap<T = any> {
 
 export class ESbuildRunner<T = any> extends EV<ESbuildRunnerEventMap<T>> {
   readonly rawEntry: string;
+
   readonly entry?: string;
+
   readonly filename?: string;
+
   private watcher: chokidar.FSWatcher | null = null;
+
   private _dependencies: string[] = [];
+
   private _filteredDependencies: string[] = [];
+
   private _watch: boolean;
+
   private _resolver?: (result: ESbuildRequireResult<any>) => T | Promise<T>;
 
   get watch() {
@@ -245,7 +253,7 @@ export class ESbuildRunner<T = any> extends EV<ESbuildRunnerEventMap<T>> {
     }
   }
 
-  private handleChangeDependencies(path: string, stats?: fs.Stats) {
+  private handleChangeDependencies(_path: string, _stats?: fs.Stats) {
     this.build();
   }
 

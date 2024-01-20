@@ -49,6 +49,7 @@ export async function compare(
   const removeFiles: SyncItem[] = [];
 
   current.forEach((item) => {
+    // eslint-disable-next-line no-shadow
     const { src, hash } = item;
     const same = before.find((i) => i.src === src);
     if (!same) {

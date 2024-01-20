@@ -34,7 +34,7 @@ export const VProgressLinear = defineComponent({
     const indeterminate = computed(() => props.indeterminate);
     const query = computed(() => props.query);
 
-    const normalizedBufer = computed(() => {
+    const normalizedBuffer = computed(() => {
       const _bufferValue = bufferValue.value;
       if (_bufferValue < 0) {
         return 0;
@@ -54,7 +54,7 @@ export const VProgressLinear = defineComponent({
       return {
         height: active.value ? convertToUnit(height.value) : 0,
         opacity: _backgroundOpacity,
-        width: `${normalizedBufer.value}%`,
+        width: `${normalizedBuffer.value}%`,
       };
     });
 
@@ -72,35 +72,35 @@ export const VProgressLinear = defineComponent({
     });
 
     const effectiveWidth = computed(() => {
-      const _normalizedBufer = normalizedBufer.value;
-      if (!_normalizedBufer) {
+      const _normalizedBuffer = normalizedBuffer.value;
+      if (!_normalizedBuffer) {
         return 0;
       }
 
-      return (+normalizedValue.value * 100) / +_normalizedBufer;
+      return (+normalizedValue.value * 100) / +_normalizedBuffer;
     });
 
     const styles = computed(() => {
-      const styles: CSSProperties = {};
+      const _styles: CSSProperties = {};
 
       if (!active.value) {
-        styles.height = 0;
+        _styles.height = 0;
       }
 
-      const _normalizedBufer = normalizedBufer.value;
+      const _normalizedBuffer = normalizedBuffer.value;
 
-      if (!indeterminate.value && _normalizedBufer !== 100) {
-        styles.width = `${_normalizedBufer}%`;
+      if (!indeterminate.value && _normalizedBuffer !== 100) {
+        _styles.width = `${_normalizedBuffer}%`;
       }
 
-      return styles;
+      return _styles;
     });
 
     function genDeterminate() {
       return (
         <div
           class={[
-            'v-progress-linear__bar__determinate' /*, colorClasses.value*/,
+            'v-progress-linear__bar__determinate' /* , colorClasses.value */,
           ]}
           style={{
             width: `${effectiveWidth.value}%`,
@@ -168,12 +168,8 @@ export const VProgressLinear = defineComponent({
 
       const background = (
         <div
-          class={['v-progress-linear__background' /*, colorClasses.value*/]}
-          // class={this.colorClasses}
-          style={{
-            ...backgroundStyle.value,
-            // backgroundColor: this.backgroundColor || this.color,
-          }}
+          class={['v-progress-linear__background']}
+          style={backgroundStyle.value}
         />
       );
 
@@ -198,7 +194,7 @@ export const VProgressLinear = defineComponent({
           }}
           role="progressbar"
           aria-valuemin={0}
-          aria-valuemax={normalizedBufer.value}
+          aria-valuemax={normalizedBuffer.value}
           aria-valuenow={_indeterminate ? undefined : normalizedValue.value}
           // on={this.$listeners}
         >
@@ -215,10 +211,9 @@ function convertToUnit(
 ): string | undefined {
   if (str == null || str === '') {
     return undefined;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  } else if (isNaN(+str!)) {
-    return String(str);
-  } else {
-    return `${Number(str)}${unit}`;
   }
+  if (isNaN(+str!)) {
+    return String(str);
+  }
+  return `${Number(str)}${unit}`;
 }

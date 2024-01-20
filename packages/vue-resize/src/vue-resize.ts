@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { DirectiveHook, VNode, ObjectDirective, App } from 'vue';
 import { debounce, Debounced } from '@fastkit/debounce';
 import { installDirective } from '@fastkit/vue-utils';
@@ -36,11 +37,9 @@ interface ResizableElement extends HTMLElement {
   __resize_dir?: ResizeDirectiveContext;
 }
 
-const getDefaults = () => {
-  return {
-    debounce: 0,
-  };
-};
+const getDefaults = () => ({
+  debounce: 0,
+});
 
 function resolveValue(
   value: ResizeDirectiveHandler | ResizeDirectiveBindingValue,

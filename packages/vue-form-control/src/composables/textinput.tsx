@@ -135,11 +135,17 @@ export interface TextInputNodeControlOptions extends TextableControlOptions {}
 
 export class TextInputNodeControl extends TextableControl {
   readonly _props: TextInputNodeProps;
+
   protected _inputElement = ref<HTMLInputElement | null>(null);
+
   protected readonly _getMaskInput: () => AnyMaskedOptions | undefined;
+
   protected readonly _getMask: () => IMaskInstance | null;
+
   readonly mask: IMaskControl;
+
   protected _passwordVisibility = ref(false);
+
   protected _maskedValue: ComputedRef<string>;
 
   /**
@@ -216,13 +222,14 @@ export class TextInputNodeControl extends TextableControl {
       onAccept: (ev) => {
         const { masked, unmasked, typed } = imask;
         emit('acceptMask', ev);
+        // eslint-disable-next-line no-nested-ternary
         const bucket = this.useUnmaskedValue
           ? unmasked
           : this.useTypedValue
-          ? typed
-          : masked;
+            ? typed
+            : masked;
 
-        const value = bucket.value;
+        const { value } = bucket;
 
         if (this.setValue(value as any)) {
           emit('update:masked', masked.value);
@@ -253,11 +260,12 @@ export class TextInputNodeControl extends TextableControl {
 
     watch(this._value, (v) => {
       if (!this._getMaskInput()) return;
+      // eslint-disable-next-line no-nested-ternary
       const bucket = this.useUnmaskedValue
         ? unmasked
         : this.useTypedValue
-        ? typed
-        : masked;
+          ? typed
+          : masked;
 
       bucket.value = v || '';
     });
@@ -330,13 +338,11 @@ export class TextInputNodeControl extends TextableControl {
     if (!maskInput) {
       attrs.value = this.value;
       attrs.onInput = this._handleNodeInput;
+    } else if (!this.isMounted) {
+      attrs.value = this.value;
     } else {
-      if (!this.isMounted) {
-        attrs.value = this.value;
-      } else {
-        const mask = this._getMask();
-        attrs.value = mask?.masked?.value;
-      }
+      const mask = this._getMask();
+      attrs.value = mask?.masked?.value;
     }
     const el = <input {...attrs} ref={this._inputElement} />;
     return el;

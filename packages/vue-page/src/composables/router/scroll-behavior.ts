@@ -6,6 +6,7 @@ import { getSuspenseRouteBucket } from './suspense-route-bucket';
 export type RawRouterScrollBehavior = 'top' | RouterScrollBehavior;
 
 declare module 'vue' {
+  // eslint-disable-next-line no-shadow
   export interface ComponentCustomOptions {
     scrollBehavior?: RawRouterScrollBehavior;
   }
@@ -39,9 +40,7 @@ function resolveRawRouterScrollBehavior(
   source: RawRouterScrollBehavior,
 ): RouterScrollBehavior {
   if (source === 'top') {
-    source = (to, from, savedPosition) => {
-      return savedPosition || { top: 0, left: 0 };
-    };
+    source = (to, from, savedPosition) => savedPosition || { top: 0, left: 0 };
   }
   return source;
 }
@@ -89,13 +88,13 @@ export function createScrollBehavior(): RouterScrollBehavior {
         // coords will be used if no selector is provided,
         // or if the selector didn't match any element.
         if (to.hash) {
-          let hash = to.hash;
+          let { hash } = to;
           // CSS.escape() is not supported with IE and Edge.
           if (
             typeof window.CSS !== 'undefined' &&
             typeof window.CSS.escape !== 'undefined'
           ) {
-            hash = '#' + window.CSS.escape(hash.substr(1));
+            hash = `#${window.CSS.escape(hash.substr(1))}`;
           }
           try {
             const el = document.querySelector(hash);

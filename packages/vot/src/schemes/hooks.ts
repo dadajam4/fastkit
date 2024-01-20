@@ -75,6 +75,7 @@ export class VotHooks {
     const payloads: UnPromisify<ReturnType<VotHookFn<Name>>>[] = [];
     const fns = this._hooks[name];
     for (const fn of fns) {
+      // eslint-disable-next-line no-await-in-loop
       payloads.push(await (fn as any)(...args));
     }
     return payloads;

@@ -14,9 +14,7 @@ export function createStorageStrategy(
 
     return {
       initClient: (client) => {
-        const getSavedLocale = () => {
-          return client.getStorageValue(localeStorageKey);
-        };
+        const getSavedLocale = () => client.getStorageValue(localeStorageKey);
         const savedLocale = (localeName: string) => {
           client.setStorageValue(localeStorageKey, localeName);
         };

@@ -1,8 +1,8 @@
+import { RecursiveArray } from '@fastkit/helpers';
 import { ValidationError } from '../schemes';
 import { objectPathJoin } from '../utils';
 import { validate } from '../services';
 import { Rule, createRule, RuleBasicSettings } from './rule';
-import { RecursiveArray } from '@fastkit/helpers';
 
 interface Fields {
   [key: string]: any;
@@ -83,7 +83,9 @@ export function createFieldsRule<T extends Fields = Fields>(
     name,
     message,
     constraints,
+    // eslint-disable-next-line no-shadow
     validate: async (obj: T, constraints) => {
+      // eslint-disable-next-line no-shadow
       const { skipIfEmpty, rules } = constraints;
       if (skipIfEmpty && obj == null) return true;
       if (!obj || typeof obj !== 'object') return false;
@@ -111,6 +113,7 @@ export function createFieldsRule<T extends Fields = Fields>(
       const parentFullPath = objectPathJoin(parentEachPrefix, parentPath);
       await Promise.all(
         ruleSettings.map(async (row) => {
+          // eslint-disable-next-line no-shadow
           const { path, rules, value: valueGetter } = row;
           const opts = { eachPrefix: parentFullPath, path };
           const value = valueGetter ? valueGetter(obj) : obj[path];

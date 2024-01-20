@@ -8,7 +8,11 @@ import {
   computed,
   VNode,
 } from 'vue';
-import { createPropsOptions } from '@fastkit/vue-utils';
+import {
+  createPropsOptions,
+  NumberishPropOption,
+  resolveNumberish,
+} from '@fastkit/vue-utils';
 import {
   createTextableProps,
   createTextableEmits,
@@ -21,7 +25,6 @@ import {
   VTextareaAutosize,
   VTextareaAutosizeRef,
 } from '../components/VTextareaAutosize';
-import { NumberishPropOption, resolveNumberish } from '@fastkit/vue-utils';
 
 export interface TextareaAutosizeSettings {
   minRows?: number;
@@ -89,10 +92,13 @@ export interface TextareaNodeControlOptions extends TextableControlOptions {
 
 export class TextareaNodeControl extends TextableControl {
   readonly _props: TextareaNodeProps;
+
   protected _inputElement = ref<
     HTMLTextAreaElement | VTextareaAutosizeRef | null
   >(null);
+
   protected _autosize: ComputedRef<TextareaAutosizeSettings | undefined>;
+
   protected _rows: ComputedRef<number | undefined>;
 
   /**

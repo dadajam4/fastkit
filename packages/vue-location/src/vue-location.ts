@@ -75,6 +75,7 @@ export class LocationService {
    * @see {@link LocationServiceState}
    */
   readonly state: LocationServiceState;
+
   /**
    * Router instance.
    *
@@ -266,6 +267,7 @@ export class LocationService {
    * @returns An array of matching components
    */
   getMatchedComponents(raw: RouteLocationRaw): RawRouteComponent[];
+
   getMatchedComponents(raw?: RouteLocationRaw): RawRouteComponent[] {
     const route = raw
       ? this.router.resolve(raw)
@@ -281,6 +283,7 @@ export class LocationService {
    * This checks if there are one or more matching components.
    */
   isAvailable(): boolean;
+
   /**
    * Check if the specified route object is a valid route
    * @param raw - The route object to check
@@ -310,19 +313,28 @@ export class LocationService {
   }
 
   getQuery(key: string): string | undefined;
+
   getQuery(key: string, type: undefined, defaultValue: string): string;
+
   getQuery(key: string, type: StringConstructor): string | undefined;
+
   getQuery(key: string, type: StringConstructor, defaultValue: string): string;
+
   getQuery(key: string, type: NumberConstructor): number | undefined;
+
   getQuery(key: string, type: NumberConstructor, defaultValue: number): number;
+
   getQuery(key: string, type: BooleanConstructor): boolean;
+
   getQuery(
     key: string,
     type: BooleanConstructor,
     defaultValue: boolean,
   ): boolean;
+
   getQuery(
     key: string,
+    // eslint-disable-next-line default-param-last
     type: RouteQueryType = String,
     defaultValue?: string | number | boolean,
   ): string | number | boolean | undefined {

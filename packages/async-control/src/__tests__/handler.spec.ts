@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { AsyncHandler } from '../handler';
 import { delay } from '@fastkit/helpers';
 import { MemoryCacheStorage } from '@fastkit/cache-control';
+import { AsyncHandler } from '../handler';
 
 function createFn(delayAmount = 100) {
   async function fn(...args: any[]) {
@@ -126,9 +126,7 @@ describe(AsyncHandler.name, () => {
     it('Can intervene in hash functions.', async () => {
       const fn = createFn();
       const handler = new AsyncHandler(fn, {
-        hashArgs: (a) => {
-          return { a };
-        },
+        hashArgs: (a) => ({ a }),
       });
 
       const result1 = await handler.handler(1, '2', false);

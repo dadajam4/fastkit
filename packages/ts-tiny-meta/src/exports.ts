@@ -32,7 +32,7 @@ function createMetaGetter(refs: RefQueries) {
   }
 
   function wrapArray<T extends AnyArray = AnyArray>(array: T): T {
-    const wraped = array.map((row) => {
+    const wrapped = array.map((row) => {
       const refId = getRefQueryId(row);
       if (refId) return getMeta(refId);
       if (isAnyObject(row)) {
@@ -40,13 +40,13 @@ function createMetaGetter(refs: RefQueries) {
       }
       return row;
     }) as T;
-    return wraped;
+    return wrapped;
   }
 
   function wrapObject<T extends AnyObject>(obj: T): T {
-    const wraped = {} as T;
+    const wrapped = {} as T;
     Object.entries(obj).forEach(([key, value]) => {
-      Object.defineProperty(wraped, key, {
+      Object.defineProperty(wrapped, key, {
         enumerable: true,
         get() {
           if (Array.isArray(value)) {
@@ -59,7 +59,7 @@ function createMetaGetter(refs: RefQueries) {
         },
       });
     });
-    return wraped;
+    return wrapped;
   }
 
   return getMeta;
@@ -96,9 +96,8 @@ export function generateModuleCode(source: SourceFileExports): string {
     '',
   ];
 
-  const toDef = (metaOrQuery: AnyMeta | RefQuery) => {
-    return `${META_GETTER_FN_NAME}(${JSON.stringify(metaOrQuery)})`;
-  };
+  const toDef = (metaOrQuery: AnyMeta | RefQuery) =>
+    `${META_GETTER_FN_NAME}(${JSON.stringify(metaOrQuery)})`;
 
   Object.entries(source.exports).forEach(([exportName, value]) => {
     const def = Array.isArray(value)
@@ -107,5 +106,5 @@ export function generateModuleCode(source: SourceFileExports): string {
     codes.push(`export const ${exportName} = ${def};`);
   });
 
-  return codes.join('\n') + '\n';
+  return `${codes.join('\n')}\n`;
 }

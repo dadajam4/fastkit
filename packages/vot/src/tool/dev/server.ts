@@ -9,9 +9,9 @@ import {
   ViteDevServer,
 } from 'vite';
 import chalk from 'chalk';
+import module from 'node:module';
 import { getPluginOptions, getEntryPoint } from '../utils';
 import type { WrittenResponse, SsrOptions } from '../../vot';
-import module from 'node:module';
 
 const require = module.createRequire(import.meta.url);
 
@@ -120,7 +120,7 @@ export const createSSRDevHandler = (
         (request.headers.referer || '').split(':')[0] ||
         'http';
 
-      const url = protocol + '://' + request.headers.host + request.originalUrl;
+      const url = `${protocol}://${request.headers.host}${request.originalUrl}`;
 
       // This context might contain initialState provided by other plugins
       const { getRenderContext } = options;
@@ -216,7 +216,7 @@ export async function createSsrServer(options: CreateSsrServerOptions = {}) {
 }
 
 export async function printServerInfo(server: ViteDevServer) {
-  const info = server.config.logger.info;
+  const { info } = server.config.logger;
 
   let ssrReadyMessage = '\n -- SSR mode';
 
@@ -230,13 +230,13 @@ export async function printServerInfo(server: ViteDevServer) {
 
     server.printUrls();
 
-    const ssr_start_time = (globalThis as any).__ssr_start_time;
-    if (ssr_start_time) {
+    const ssrStartTime = (globalThis as any).__ssr_start_time;
+    if (ssrStartTime) {
       ssrReadyMessage += chalk.cyan(
-        ` ready in ${Math.round(performance.now() - ssr_start_time)}ms.`,
+        ` ready in ${Math.round(performance.now() - ssrStartTime)}ms.`,
       );
     }
   }
 
-  info(ssrReadyMessage + '\n');
+  info(`${ssrReadyMessage}\n`);
 }

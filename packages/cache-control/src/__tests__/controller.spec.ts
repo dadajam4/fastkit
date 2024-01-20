@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
+import { delay } from '@fastkit/helpers';
+import { Duration } from '@fastkit/duration';
 import { CacheController } from '../controller';
 import { MemoryCacheStorage } from '../storages';
 import { CacheStorage } from '../schemes';
-import { delay } from '@fastkit/helpers';
-import { Duration } from '@fastkit/duration';
 
 function runControllerTests(createStorage: () => CacheStorage<any>) {
   describe(CacheController.name, () => {

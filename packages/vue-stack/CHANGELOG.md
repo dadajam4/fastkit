@@ -1,5 +1,22 @@
 # @fastkit/vue-stack
 
+## 0.15.53
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.1.19
+  - @fastkit/vue-click-outside@0.1.20
+  - @fastkit/vue-resize@0.1.19
+  - @fastkit/vue-utils@0.14.17
+  - @fastkit/helpers@0.13.8
+  - @fastkit/dom@0.1.8
+  - @fastkit/vue-transitions@0.1.23
+  - @fastkit/vue-keyboard@0.1.8
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.15.52
 
 ### Patch Changes

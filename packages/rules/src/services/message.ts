@@ -1,4 +1,4 @@
-import { RuleValidateContext } from '../';
+import { RuleValidateContext } from '..';
 import { RulesError } from '../logger';
 import { RULE_DEFAULT_MESSAGE } from '../constants';
 
@@ -15,7 +15,7 @@ export class RuleMessageService {
   static defaults: RuleMessageServiceDefault = {
     validate: RULE_DEFAULT_MESSAGE,
     exception: (ctx) => {
-      const exception = ctx.exception;
+      const { exception } = ctx;
       const message =
         (exception && typeof exception === 'object' && exception.message) ||
         'An error has occurred.';

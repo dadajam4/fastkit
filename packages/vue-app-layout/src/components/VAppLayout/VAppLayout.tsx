@@ -1,17 +1,17 @@
-import * as styles from './VAppLayout.css';
 import { defineComponent, onBeforeUnmount } from 'vue';
 import { defineSlots } from '@fastkit/vue-utils';
+import { ResizeDirectivePayload } from '@fastkit/vue-resize';
+import { objectFromArray } from '@fastkit/helpers';
+import { useRouter } from 'vue-router';
+import * as styles from './VAppLayout.css';
 import { VueAppLayout } from '../../controls';
 import {
   VAL_POSITIONS,
   VueAppLayoutPositionY,
   VAL_BAR_TYPES,
 } from '../../schemes';
-import { ResizeDirectivePayload } from '@fastkit/vue-resize';
-import { objectFromArray } from '@fastkit/helpers';
 import { hasParentLayout, provideLayout } from './injections';
 import { VAL_BOTTOM_ID } from '../../constants';
-import { useRouter } from 'vue-router';
 
 const slots = defineSlots<{
   default?: (layout: VueAppLayout) => any;
@@ -27,9 +27,7 @@ export const VAppLayout = defineComponent({
     const layout = VueAppLayout.use();
 
     if (hasParentLayout()) {
-      return () => {
-        return <div>{ctx.slots.default?.(layout)}</div>;
-      };
+      return () => <div>{ctx.slots.default?.(layout)}</div>;
     }
 
     provideLayout();
@@ -58,25 +56,23 @@ export const VAppLayout = defineComponent({
       ));
     };
 
-    return () => {
-      return (
-        <div class={['VAppLayout', styles.host]}>
-          {renderBarSpacers('top')}
-          <div class={styles.inner}>
-            <div class={styles.viewport}>{ctx.slots.default?.(layout)}</div>
-            <div id={VAL_BOTTOM_ID} style={styles.viewportFooter} />
-          </div>
-          {renderBarSpacers('bottom')}
-          <div class={sideDetect.wrapper}>
-            {VAL_POSITIONS.map((position) => (
-              <div
-                class={sideDetect[position]}
-                v-resize={sizeDetectHandlers[position]}
-              />
-            ))}
-          </div>
+    return () => (
+      <div class={['VAppLayout', styles.host]}>
+        {renderBarSpacers('top')}
+        <div class={styles.inner}>
+          <div class={styles.viewport}>{ctx.slots.default?.(layout)}</div>
+          <div id={VAL_BOTTOM_ID} style={styles.viewportFooter} />
         </div>
-      );
-    };
+        {renderBarSpacers('bottom')}
+        <div class={sideDetect.wrapper}>
+          {VAL_POSITIONS.map((position) => (
+            <div
+              class={sideDetect[position]}
+              v-resize={sizeDetectHandlers[position]}
+            />
+          ))}
+        </div>
+      </div>
+    );
   },
 });

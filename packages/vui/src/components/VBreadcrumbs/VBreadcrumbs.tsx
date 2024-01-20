@@ -33,13 +33,13 @@ export const VBreadcrumbs = defineComponent({
     const vui = useVui();
 
     const computedItemsRef = computed(() => {
-      const items: BreadcrumbsItem[] = props.items.map((rawItem) => {
-        return typeof rawItem === 'string'
+      const items: BreadcrumbsItem[] = props.items.map((rawItem) =>
+        typeof rawItem === 'string'
           ? {
               text: rawItem,
             }
-          : rawItem;
-      });
+          : rawItem,
+      );
 
       return items.map((item) => {
         const { to, text } = item;
@@ -56,12 +56,13 @@ export const VBreadcrumbs = defineComponent({
 
     const lengthRef = computed(() => computedItemsRef.value.length);
 
-    const defaultDividerSlot = () => {
-      return [<i class="v-breadcrumbs__divider__icon" />];
-    };
+    const defaultDividerSlot = () => [
+      <i class="v-breadcrumbs__divider__icon" />,
+    ];
 
     return () => {
       if (lengthRef.value < 1) return;
+      // eslint-disable-next-line no-shadow
       let dividerSlot: (vui: VuiService) => VNodeChild;
       const propDivider = props.divider;
       if (propDivider) {

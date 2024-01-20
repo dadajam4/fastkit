@@ -1,8 +1,8 @@
+import { RecursiveArray } from '@fastkit/helpers';
 import { ValidationError } from '../schemes';
 import { objectPathJoin } from '../utils';
 import { validate } from '../services';
 import { Rule, createRule, RuleBasicSettings } from './rule';
-import { RecursiveArray } from '@fastkit/helpers';
 
 /**
  * Constraints for the rule enumerating array or object elements.
@@ -52,7 +52,9 @@ export function createEachRule(
     name,
     message,
     constraints,
+    // eslint-disable-next-line no-shadow
     validate: async (obj: any, constraints) => {
+      // eslint-disable-next-line no-shadow
       const { skipIfEmpty, rules } = constraints;
       if (skipIfEmpty && obj == null) return true;
       const isArray = Array.isArray(obj);

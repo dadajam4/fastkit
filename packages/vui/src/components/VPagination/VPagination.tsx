@@ -15,9 +15,9 @@ import {
 } from '@fastkit/vue-utils';
 import { isPromise } from '@fastkit/helpers';
 import { useRouter, RouterLink } from 'vue-router';
-import { resolveRawIconProp } from '../VIcon';
 import { resizeDirectiveArgument } from '@fastkit/vue-resize';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
+import { resolveRawIconProp } from '../VIcon';
 import { useVui } from '../../injections';
 
 export type VPaginationGuard = (
@@ -142,15 +142,16 @@ export const VPagination = defineComponent({
         const end = pageValue + left - 2 - even;
 
         return [1, 'truncate', ..._range(start, end), 'truncate', length];
-      } else if (pageValue === left) {
+      }
+      if (pageValue === left) {
         const end = pageValue + left - 1 - even;
         return [..._range(1, end), 'truncate', length];
-      } else if (pageValue === right) {
+      }
+      if (pageValue === right) {
         const start = pageValue - left + 1;
         return [1, 'truncate', ..._range(start, length)];
-      } else {
-        return [..._range(1, left), 'truncate', ..._range(right, length)];
       }
+      return [..._range(1, left), 'truncate', ..._range(right, length)];
     });
 
     const isActive = computed(() => computedLength.value > 1);
@@ -190,11 +191,10 @@ export const VPagination = defineComponent({
         return router.push(to).then((failure) => {
           !failure && ctx.emit('change', newPage);
         });
-      } else {
-        internalValue.value = newPage;
-        (ctx as any).emit('update:modelValue', newPage);
-        ctx.emit('change', newPage);
       }
+      internalValue.value = newPage;
+      (ctx as any).emit('update:modelValue', newPage);
+      ctx.emit('change', newPage);
     }
 
     function createPageInfo(source: ItemSource): {
@@ -245,6 +245,7 @@ export const VPagination = defineComponent({
     function genItem(source: ItemSource, index: number) {
       const { number, page, active, disabled } = createPageInfo(source);
       const type = number ? 'num' : source;
+      // eslint-disable-next-line no-shadow
       const classes = [
         'v-pagination__item',
         {
@@ -296,18 +297,17 @@ export const VPagination = defineComponent({
             {children}
           </RouterLink>
         );
-      } else {
-        return (
-          <button
-            class={classes}
-            type="button"
-            value={page}
-            onClick={onClick}
-            key={key}>
-            {children}
-          </button>
-        );
       }
+      return (
+        <button
+          class={classes}
+          type="button"
+          value={page}
+          onClick={onClick}
+          key={key}>
+          {children}
+        </button>
+      );
     }
 
     watch(
@@ -335,6 +335,7 @@ export const VPagination = defineComponent({
             const el = elRef.value;
             if (el) {
               const style = window.getComputedStyle(el, 'before');
+              // eslint-disable-next-line no-shadow
               const width = style.getPropertyValue('width');
               const margin = style.getPropertyValue('margin');
               const size = parseFloat(width) + parseFloat(margin) * 0.5;

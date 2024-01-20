@@ -1,6 +1,6 @@
 import { createColorScheme } from '@fastkit/color-scheme';
-import { COLOR_SCOPE_OPTIONAL_KEYS, scopeResolvers } from '../resolvers';
 import { ColorSource, Color } from '@fastkit/color';
+import { COLOR_SCOPE_OPTIONAL_KEYS, scopeResolvers } from '../resolvers';
 
 export interface SimpleColorSchemeOptions {
   background?: ColorSource;

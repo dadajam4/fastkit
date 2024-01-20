@@ -1,5 +1,6 @@
-import * as styles from './VAppDrawer.css';
 import { defineComponent, PropType, onBeforeUnmount, computed } from 'vue';
+import { defineSlots } from '@fastkit/vue-utils';
+import * as styles from './VAppDrawer.css';
 import {
   VueAppLayoutPositionX,
   VAL_Y_POSITIONS,
@@ -14,7 +15,6 @@ import {
   VueAppDrawerStickedSettings,
   VueAppStackTransitionSettings,
 } from '../../controls';
-import { defineSlots } from '@fastkit/vue-utils';
 import { VAppStack, VAppStackVerticalPositionProps } from '../VAppStack';
 import { useBooting } from '../../composables/booting';
 

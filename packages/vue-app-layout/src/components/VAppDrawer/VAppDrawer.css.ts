@@ -1,10 +1,10 @@
-import { component } from '~/styles/layers.css';
 import { calc } from '@vanilla-extract/css-utils';
+import { objectFromArray } from '@fastkit/helpers';
+import { component } from '~/styles/layers.css';
 import { tokens, computedTokens, extractTokenName } from '../../styles';
 import { horizontals, verticals } from '../../helpers';
 import { createSimpleVueTransition } from '../../styles/transition';
 import { VAL_Y_POSITIONS, VAL_STICK_Y_POSITIONS } from '../../schemes';
-import { objectFromArray } from '@fastkit/helpers';
 import { booting } from '../../composables/booting.css';
 
 const stickes = objectFromArray.build(VAL_STICK_Y_POSITIONS);
@@ -24,6 +24,7 @@ export const positions = horizontals((x) => {
   const computed = computedTokens.drawer[x];
   const { width } = computed;
 
+  // eslint-disable-next-line no-shadow
   const host = component.style({});
 
   /**
@@ -50,12 +51,10 @@ export const positions = horizontals((x) => {
     }),
     isRale: component.style({}),
     hasBackdrop: component.style({}),
-    stickedTo: verticals((y) => {
-      return [
-        y,
-        stickes((stickPosition) => [stickPosition, component.style({})]),
-      ];
-    }),
+    stickedTo: verticals((y) => [
+      y,
+      stickes((stickPosition) => [stickPosition, component.style({})]),
+    ]),
   };
 
   const leaveTo = calc.multiply(width, x === 'left' ? -1 : 1);

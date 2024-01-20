@@ -104,9 +104,7 @@ export function extractHeadAssets(html: string) {
   const assets =
     head
       .match(ASSET_MATCH_RE)
-      ?.map((code) => {
-        return code.match(HREF_MATCH_RE)?.[1];
-      })
+      ?.map((code) => code.match(HREF_MATCH_RE)?.[1])
       .filter((asset): asset is string => !!asset) || [];
   return assets;
 }

@@ -6,6 +6,7 @@ import { useVui } from '../../injections';
 // @TODO Unable to resolve dts for `navigationableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+// eslint-disable-next-line import/order
 import { RouteLocationRaw } from 'vue-router';
 
 export type VToolbarMenuEdge = 'start' | 'end';

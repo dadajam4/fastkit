@@ -1,5 +1,5 @@
-import * as styles from './booting.css';
 import { onMounted, ref, nextTick } from 'vue';
+import * as styles from './booting.css';
 import { tokens, extractTokenName } from '../styles';
 
 const DURATION_TOKEN_NAME = extractTokenName(tokens.transition.duration);

@@ -2,8 +2,8 @@ import './VButtonGroup.scss';
 
 import { defineComponent, isVNode, cloneVNode, VNodeChild, VNode } from 'vue';
 import { colorSchemeProps } from '@fastkit/vue-color-scheme';
-import { createControlProps } from '../../composables';
 import { renderSlotOrEmpty, isFragment } from '@fastkit/vue-utils';
+import { createControlProps } from '../../composables';
 import { VButton } from './VButton';
 
 type VButtonGroupChild =
@@ -68,7 +68,7 @@ export const VButtonGroup = defineComponent({
           return cloneVNode(child.node, {
             ...props,
             ...childProps,
-            rouded: false,
+            rounded: false,
             class: [
               'v-button-group__item',
               {

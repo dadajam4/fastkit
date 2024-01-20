@@ -20,7 +20,7 @@ export type ComparatorConditionalValue =
   | null
   | Date;
 
-const allowdPrimitiveValueTypes = ['string', 'number', 'boolean', 'undefined'];
+const allowedPrimitiveValueTypes = ['string', 'number', 'boolean', 'undefined'];
 
 /**
  * If the passed value matches {@link ComparatorConditionalValue}, it returns `true`.
@@ -29,7 +29,7 @@ export function isComparatorConditionalValue(
   value?: any,
 ): value is ComparatorConditionalValue {
   const type = typeof value;
-  if (allowdPrimitiveValueTypes.includes(type)) return true;
+  if (allowedPrimitiveValueTypes.includes(type)) return true;
   if (value === null) return true;
   if (value instanceof Date) return true;
   return false;
@@ -75,7 +75,7 @@ export function traverseAndFlattenComparatorCondition(
     if (flattenedKey === undefined) {
       newKey = key;
     } else {
-      newKey = flattenedKey + '.' + key;
+      newKey = `${flattenedKey}.${key}`;
     }
 
     if (isIterableObject(value)) {
@@ -118,8 +118,8 @@ export function isSameFlattendComparatorCondition(
   a: FlattenedComparatorCondition,
   b: FlattenedComparatorCondition,
 ) {
-  const akeys = Object.keys(a);
-  const bkeys = Object.keys(b);
-  if (akeys.length !== bkeys.length) return false;
-  return akeys.every((key) => a[key] === b[key]);
+  const aKeys = Object.keys(a);
+  const bKeys = Object.keys(b);
+  if (aKeys.length !== bKeys.length) return false;
+  return aKeys.every((key) => a[key] === b[key]);
 }

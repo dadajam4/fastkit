@@ -1,5 +1,21 @@
 # @fastkit/vite-kit
 
+## 0.13.16
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/color-scheme-gen@0.13.15
+  - @fastkit/media-match-gen@0.13.15
+  - @fastkit/icon-font-gen@0.13.16
+  - @fastkit/sprite-images@0.13.8
+  - @fastkit/hashed-sync@0.13.8
+  - @fastkit/node-util@0.13.9
+  - @fastkit/helpers@0.13.8
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.13.15
 
 ### Patch Changes

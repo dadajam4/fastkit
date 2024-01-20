@@ -450,13 +450,12 @@ function createStaticImpl<
   const resolveLocale = (<D extends boolean | undefined>(
     localeLikeString: LocaleName | string,
     withoutDefault?: D,
-  ): D extends true ? LocaleName | undefined : LocaleName => {
-    return _resolveLocale<LocaleName, D extends true ? undefined : LocaleName>(
+  ): D extends true ? LocaleName | undefined : LocaleName =>
+    _resolveLocale<LocaleName, D extends true ? undefined : LocaleName>(
       localeLikeString,
       availableLocales,
       withoutDefault ? undefined : (defaultLocale as any),
-    );
-  }) as I18nSpaceStaticImpl<
+    )) as I18nSpaceStaticImpl<
     LocaleName,
     BaseLocale,
     LocaleMeta
@@ -592,6 +591,7 @@ export class I18nSubSpace<
       SpaceCustomInterface
     >,
     storage: I18nSpaceStorage<LocaleName, BaseLocale, LocaleMeta>,
+    // eslint-disable-next-line no-shadow
     Components: SubComponents,
     bucket: any = {},
   ) {
@@ -669,10 +669,10 @@ export function defineI18nSpace<
   const impl = createStaticImpl(settings);
   const Space: I18nSpaceStatic<LocaleName, BaseLocale, LocaleMeta> = {
     ...impl,
-    defineScheme(settings) {
+    defineScheme(_settings) {
       return defineI18nComponentScheme({
         Space,
-        ...settings,
+        ..._settings,
       });
     },
     create<
@@ -711,11 +711,10 @@ export function defineI18nSpace<
         any,
         any,
         any
-      >[] => {
-        return Array.from(
+      >[] =>
+        Array.from(
           new Set(internalStorage.componentsRequests.map((req) => req().Ctor)),
         );
-      };
 
       const initResolvers: {
         resolve: (
@@ -737,6 +736,7 @@ export function defineI18nSpace<
       };
 
       const loadComponents = (
+        // eslint-disable-next-line no-shadow
         Components: I18nComponentStatic<
           LocaleName,
           BaseLocale,
@@ -787,6 +787,7 @@ export function defineI18nSpace<
                 instance && instance._setupLocales(localeDependencies);
                 onComponentResolve();
               })
+              // eslint-disable-next-line no-loop-func
               .catch((err) => {
                 rejected = true;
                 releaseRequest();

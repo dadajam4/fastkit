@@ -4,8 +4,6 @@ import { defineComponent } from 'vue';
 export const VCardContent = defineComponent({
   name: 'VCardContent',
   setup(_props, ctx) {
-    return () => {
-      return <div class="v-card-content">{ctx.slots.default?.()}</div>;
-    };
+    return () => <div class="v-card-content">{ctx.slots.default?.()}</div>;
   },
 });

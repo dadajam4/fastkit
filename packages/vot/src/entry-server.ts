@@ -1,10 +1,10 @@
 import { createApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { createRouter, createMemoryHistory, RouteRecordRaw } from 'vue-router';
-import { getFullPath, withoutSuffix } from './utils/route';
 import { renderSSRHead } from '@unhead/ssr';
+import { createMockPathRoute } from '@fastkit/vue-utils';
+import { getFullPath, withoutSuffix, createUrl } from './utils/route';
 import { serializeState } from './utils/serialize-state';
-import { createUrl } from './utils/route';
 import { useSsrResponse } from './utils/response';
 import {
   buildHtmlDocument,
@@ -12,7 +12,6 @@ import {
   renderPreloadLinks,
   extractHeadAssets,
 } from './utils/html';
-import { createMockPathRoute } from '@fastkit/vue-utils';
 import { setupVotPluginsAndHooks } from './schemes';
 import type {
   SsrHandler,

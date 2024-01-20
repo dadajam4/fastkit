@@ -1,7 +1,7 @@
-import { PLUGIN_NAME, VanillaExtractPlugin } from './types';
 import { findProjectPlugin } from '@fastkit/plugboy';
 import { Plugin as VitePlugin } from 'vite';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+import { PLUGIN_NAME, VanillaExtractPlugin } from './types';
 import { mergeExternal } from './utils';
 
 type VanillaExtractVitePluginOptions = NonNullable<

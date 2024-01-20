@@ -1,5 +1,5 @@
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 import { History, HistoryOptions } from '@tiptap/extension-history';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 
 export const WysiwygHistoryTool: WysiwygEditorToolFactory<HistoryOptions> = (
   vui,

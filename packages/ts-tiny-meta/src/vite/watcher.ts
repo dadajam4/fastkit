@@ -1,5 +1,5 @@
-import { Workspace } from '../ts';
 import { ViteDevServer } from 'vite';
+import { Workspace } from '../ts';
 import { reloadModules } from './utils';
 
 let _server: ViteDevServer | undefined;
@@ -30,7 +30,9 @@ export class EntryWatcher {
   }
 
   readonly id: string;
+
   private _workspace: Workspace;
+
   private _close: () => any;
 
   get workspace() {

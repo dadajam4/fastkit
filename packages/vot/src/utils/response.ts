@@ -34,10 +34,9 @@ export function useClientRedirect(spaRedirect = externalRedirect) {
   return {
     writeResponse: () =>
       console.warn('[SSR] Do not call writeResponse in browser'),
-    redirect: (location: string, status?: number) => {
-      return location.startsWith('/')
+    redirect: (location: string, status?: number) =>
+      location.startsWith('/')
         ? spaRedirect(location)
-        : externalRedirect(location);
-    },
+        : externalRedirect(location),
   };
 }

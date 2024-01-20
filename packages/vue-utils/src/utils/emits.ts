@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import { ObjectEmitsOptions, EmitsOptions } from 'vue';
 
 import { UnionToIntersection } from '@fastkit/ts-type-utils';
@@ -45,21 +46,22 @@ export function defineEmitsOptions<
 export type EmitFn<
   Options = ObjectEmitsOptions,
   Event extends keyof Options = keyof Options,
-> = Options extends Array<infer V>
-  ? (event: V, ...args: any[]) => void
-  : {} extends Options
-  ? (event: string, ...args: any[]) => void
-  : Options extends (...args: any[]) => any
-  ? Options
-  : UnionToIntersection<
-      {
-        [key in Event]: Options[key] extends (...args: infer Args) => any
-          ? (event: key, ...args: Args) => void
-          : Options[key] extends any[]
-          ? (event: key, ...args: Options[key]) => void
-          : (event: key, ...args: any[]) => void;
-      }[Event]
-    >;
+> =
+  Options extends Array<infer V>
+    ? (event: V, ...args: any[]) => void
+    : {} extends Options
+      ? (event: string, ...args: any[]) => void
+      : Options extends (...args: any[]) => any
+        ? Options
+        : UnionToIntersection<
+            {
+              [key in Event]: Options[key] extends (...args: infer Args) => any
+                ? (event: key, ...args: Args) => void
+                : Options[key] extends any[]
+                  ? (event: key, ...args: Options[key]) => void
+                  : (event: key, ...args: any[]) => void;
+            }[Event]
+          >;
 
 type ShortEmitsToProps<E extends Record<string, any[]>> = {
   [K in `on${Capitalize<string & keyof E>}`]?: K extends `on${infer C}`
@@ -78,18 +80,18 @@ export type EmitsToProps<T extends EmitsOptions | Record<string, any[]>> =
         [K in string & `on${Capitalize<T[number]>}`]?: (...args: any[]) => any;
       }
     : T extends ObjectEmitsOptions
-    ? {
-        [K in string &
-          `on${Capitalize<string & keyof T>}`]?: K extends `on${infer C}`
-          ? T[Uncapitalize<C>] extends null
-            ? (...args: any[]) => any
-            : (
-                ...args: T[Uncapitalize<C>] extends (..._args: infer P) => any
-                  ? P
-                  : never
-              ) => any
-          : never;
-      }
-    : T extends Record<string, any[]>
-    ? ShortEmitsToProps<T>
-    : {};
+      ? {
+          [K in string &
+            `on${Capitalize<string & keyof T>}`]?: K extends `on${infer C}`
+            ? T[Uncapitalize<C>] extends null
+              ? (...args: any[]) => any
+              : (
+                  ...args: T[Uncapitalize<C>] extends (..._args: infer P) => any
+                    ? P
+                    : never
+                ) => any
+            : never;
+        }
+      : T extends Record<string, any[]>
+        ? ShortEmitsToProps<T>
+        : {};

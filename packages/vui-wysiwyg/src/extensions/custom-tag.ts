@@ -52,6 +52,7 @@ export function createWysiwygCustomTagMark(
 ) {
   const { tag = 'span', attrs } = settings;
   const attrEntries = attrs && Object.entries(attrs);
+  // eslint-disable-next-line no-shadow
   const attrNames = attrEntries && attrEntries.map(([name]) => name);
 
   const getElementAttrs = (
@@ -59,13 +60,17 @@ export function createWysiwygCustomTagMark(
   ): Record<any, string> | undefined => {
     if (!attrNames) return;
 
-    return el.getAttributeNames().reduce((acc, name) => {
-      return { ...acc, [name]: el.getAttribute(name) };
-    }, {});
+    return (
+      el
+        .getAttributeNames()
+        // eslint-disable-next-line no-shadow
+        .reduce((acc, name) => ({ ...acc, [name]: el.getAttribute(name) }), {})
+    );
   };
 
   const isMatchedElementAttrs = (elAttrs: Record<any, string>): boolean => {
     if (!attrEntries) return true;
+    // eslint-disable-next-line no-shadow
     return attrEntries.every(([name, value]) => elAttrs[name] === value);
   };
 
@@ -101,26 +106,23 @@ export function createWysiwygCustomTagMark(
   });
 }
 
-export const WysiwygCustomTagExtenstion =
+export const WysiwygCustomTagExtension =
   Extension.create<WysiwygCustomTagSettings>({
     name: 'custom-tag',
     addCommands() {
       return {
         setCustomTag:
           (markName) =>
-          ({ chain }) => {
-            return chain().setMark(markName).run();
-          },
+          ({ chain }) =>
+            chain().setMark(markName).run(),
         unsetCustomTag:
           (markName) =>
-          ({ chain }) => {
-            return chain().unsetMark(markName).run();
-          },
+          ({ chain }) =>
+            chain().unsetMark(markName).run(),
         toggleCustomTag:
           (markName) =>
-          ({ chain }) => {
-            return chain().toggleMark(markName).run();
-          },
+          ({ chain }) =>
+            chain().toggleMark(markName).run(),
       };
     },
   });

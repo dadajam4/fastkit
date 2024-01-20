@@ -1,5 +1,16 @@
 # @fastkit/color-scheme
 
+## 1.0.15
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/plugboy@0.1.10
+  - @fastkit/color@0.13.8
+  - @fastkit/tiny-logger@0.13.8
+
 ## 1.0.14
 
 ### Patch Changes

@@ -27,8 +27,6 @@ export const LocaleLink = defineComponent({
     const space = useI18nSpace<PathPrefixStrategyCustomInterface>();
     const location = computed(() => space.location((props as any).to));
 
-    return () => {
-      return h(RouterLink as any, { ...props, to: location }, ctx.slots);
-    };
+    return () => h(RouterLink as any, { ...props, to: location }, ctx.slots);
   },
 });

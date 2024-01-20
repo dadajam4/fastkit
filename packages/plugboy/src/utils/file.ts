@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -162,18 +163,19 @@ export async function findConfig<
   };
 
   const result = await (async () => {
+    // eslint-disable-next-line no-shadow
     for (const fileName of fileNames) {
       try {
         const _path = path.join(dir, fileName);
         const code = await fs.promises.readFile(_path, 'utf-8');
-        const result: FindConfigResult = {
+        const _result: FindConfigResult = {
           fileName,
           dir,
           path: _path,
           code,
         };
-        if (!test || test(result)) {
-          return result;
+        if (!test || test(_result)) {
+          return _result;
         }
       } catch (err) {
         if (!isFileNotFoundException(err)) {
@@ -190,9 +192,9 @@ export async function findConfig<
   return result;
 }
 
-function _rmrf(path: string): Promise<void> {
+function _rmrf(_path: string): Promise<void> {
   return fs.promises
-    .rm(path, {
+    .rm(_path, {
       recursive: true,
       force: true,
     })
@@ -203,7 +205,7 @@ function _rmrf(path: string): Promise<void> {
 }
 
 export async function rmrf(...paths: string[]): Promise<void> {
-  await Promise.all(paths.map((path) => _rmrf(path)));
+  await Promise.all(paths.map((_path) => _rmrf(_path)));
 }
 
 export function copyDirSync(srcDir: string, destDir: string): void {

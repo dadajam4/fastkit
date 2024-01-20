@@ -11,11 +11,10 @@ export const Sub1 = sub1Scheme.defineComponent({
     en,
     // @see https://jestjs.io/docs/ecmascript-modules
     // 'zh-cn': () => import('./zh-cn'),
-    'zh-cn': () => {
-      return new Promise((resolve) =>
+    'zh-cn': () =>
+      new Promise((resolve) =>
         setTimeout(() => resolve({ default: zhcn }), 500),
-      );
-    },
+      ),
     'zh-tw': zhtw,
   },
 });

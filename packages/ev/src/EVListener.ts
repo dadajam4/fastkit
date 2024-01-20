@@ -11,10 +11,14 @@ type EVStackRemover = (stack: EVListener) => void;
 
 export class EVListener {
   readonly context: EV;
+
   readonly type: string | null | undefined;
+
   readonly tag?: EVListenerTag;
+
   // eslint-disable-next-line @typescript-eslint/ban-types
   readonly handler: Function;
+
   readonly once: boolean;
 
   constructor({

@@ -1,5 +1,14 @@
 # @fastkit/helpers
 
+## 0.13.8
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/ts-type-utils@0.1.2
+
 ## 0.13.7
 
 ### Patch Changes

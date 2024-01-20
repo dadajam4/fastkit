@@ -22,7 +22,9 @@ export interface SuspenseRouteBucketProgress {
 
 class SuspenseRouteBucket extends EV<SuspenseRouteBucketEventMap> {
   private readonly _sources = ref<SuspenseRouteSource[]>([]);
+
   private readonly _total = ref(0);
+
   private readonly _progress: ComputedRef<SuspenseRouteBucketProgress>;
 
   get sources() {

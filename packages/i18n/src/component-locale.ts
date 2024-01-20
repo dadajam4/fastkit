@@ -1,3 +1,4 @@
+import { DeepPartial } from '@fastkit/helpers';
 import {
   I18nLocaleMeta,
   I18nTranslations,
@@ -9,7 +10,6 @@ import {
   I18nNormalizedFormats,
 } from './schemes';
 import { I18nComponent } from './component';
-import { DeepPartial } from '@fastkit/helpers';
 
 /**
  * translation object

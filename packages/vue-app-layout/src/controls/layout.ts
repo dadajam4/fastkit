@@ -7,6 +7,10 @@ import {
   reactive,
   UnwrapNestedRefs,
 } from 'vue';
+import { installResizeDirective, useWindow } from '@fastkit/vue-resize';
+import { installBodyScrollLockDirective } from '@fastkit/vue-body-scroll-lock';
+import { getDocumentScroller, UseScroller } from '@fastkit/vue-scroller';
+import { IN_WINDOW } from '@fastkit/helpers';
 import { VueAppLayoutPositionX, VueAppDrawerId } from '../schemes';
 import { VAL_INJECTION_KEY } from './injections';
 import { VueAppLayoutError } from '../logger';
@@ -17,10 +21,6 @@ import {
   VueAppDrawerControl,
 } from './drawer';
 import { VueAppBar, VueAppBarSettings } from './bar';
-import { installResizeDirective, useWindow } from '@fastkit/vue-resize';
-import { installBodyScrollLockDirective } from '@fastkit/vue-body-scroll-lock';
-import { getDocumentScroller, UseScroller } from '@fastkit/vue-scroller';
-import { IN_WINDOW } from '@fastkit/helpers';
 
 export function useVueAppLayout(): VueAppLayout {
   const layout = inject(VAL_INJECTION_KEY);
@@ -60,7 +60,9 @@ export class VueAppLayout {
   }
 
   private _drawers: Ref<VueAppDrawer[]> = ref([]);
+
   readonly window = useWindow();
+
   readonly scroller: UseScroller = getDocumentScroller();
 
   readonly offset: UnwrapNestedRefs<VueAppLayoutViewportOffsets> = reactive({

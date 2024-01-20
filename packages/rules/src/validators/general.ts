@@ -1,5 +1,6 @@
-import * as alphaHelper from './alphaHelper';
 import { isEmpty } from '@fastkit/helpers';
+import * as alphaHelper from './alphaHelper';
+
 export { isEmpty } from '@fastkit/helpers';
 
 export function isRequired(value: any): boolean {
@@ -57,9 +58,8 @@ export function isLength(value: any, condition: number | LengthCondition) {
     if (l < min) return false;
     if (max !== undefined && l > max) return false;
     return true;
-  } else {
-    return l === condition;
   }
+  return l === condition;
 }
 
 /**

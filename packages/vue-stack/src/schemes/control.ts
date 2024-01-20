@@ -9,12 +9,11 @@ import {
   SlotsType,
   ComponentPublicInstance,
 } from 'vue';
-import type { VueStackService } from '../service';
 import { RouteLocationNormalized } from 'vue-router';
-import { StyleValue, defineSlots } from '@fastkit/vue-utils';
+import { StyleValue, defineSlots, rawNumberProp } from '@fastkit/vue-utils';
 import { UseKeyboardRef } from '@fastkit/vue-keyboard';
-import { rawNumberProp } from '@fastkit/vue-utils';
 import { JavaScriptTransition } from '@fastkit/vue-transitions';
+import type { VueStackService } from '../service';
 
 type DelayTimerProps = 'openDelay' | 'closeDelay';
 
@@ -489,7 +488,7 @@ export type MergeStackBaseSlots<Slots extends SlotsType> = MergeSlots<
 >;
 
 export interface CreateStackablePropsOptions {
-  /*extends ColorSchemePropsStaticOptions*/
+  /* extends ColorSchemePropsStaticOptions */
   /** @default "v-stack-fade" */
   defaultTransition?: string;
   /** @default false */

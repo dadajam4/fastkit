@@ -139,7 +139,7 @@ export class EV<EventMap extends EVEventMap = EVEventMap> {
   ): EVListener {
     let _type: K;
     let _handler: (ev: EventMap[K]) => any;
-    let _tag: EVListenerTag | undefined = undefined;
+    let _tag: EVListenerTag | undefined;
     let _once = false;
     if (typeof typeOrOption === 'object') {
       _type = typeOrOption.type;
@@ -163,8 +163,8 @@ export class EV<EventMap extends EVEventMap = EVEventMap> {
 
     const listener = new EVListener({
       context: this,
-      remover: (listener) => {
-        this.__ev_listener_remover__(listener);
+      remover: (_listener) => {
+        this.__ev_listener_remover__(_listener);
       },
       type: _type as any,
       tag: _tag,
@@ -326,9 +326,9 @@ export class EV<EventMap extends EVEventMap = EVEventMap> {
           tag?: EVListenerTag;
         },
   ): void {
-    let _type: K | undefined = undefined;
+    let _type: K | undefined;
     let _handler: ((ev: EventMap[K]) => any) | undefined;
-    let _tag: EVListenerTag | undefined = undefined;
+    let _tag: EVListenerTag | undefined;
 
     if (typeof typeOrHandlerOrOption === 'object') {
       _type = typeOrHandlerOrOption.type;

@@ -1,5 +1,3 @@
-import * as styles from './VAppContainer.css';
-
 import {
   defineComponent,
   computed,
@@ -8,13 +6,14 @@ import {
   inject,
   ComputedRef,
 } from 'vue';
+import * as styles from './VAppContainer.css';
 
 type VAppContainerState = 'padded' | 'pulled';
 
 type VAppContainerProvideValue = ComputedRef<VAppContainerState>;
 
 const VAppContainerInjectionKey: InjectionKey<VAppContainerProvideValue> =
-  Symbol();
+  Symbol('VAppContainer');
 
 export const VAppContainer = defineComponent({
   name: 'VAppContainer',
@@ -51,22 +50,20 @@ export const VAppContainer = defineComponent({
     const provideState = computed(() => state.value.inject);
 
     const classes = computed(() => {
-      const classes = ['VAppContainer', styles.container];
+      const _classes = ['VAppContainer', styles.container];
       const myState = state.value.self;
-      myState && classes.push(styles.states[myState]);
-      return classes;
+      myState && _classes.push(styles.states[myState]);
+      return _classes;
     });
 
     provide(VAppContainerInjectionKey, provideState);
 
-    return () => {
-      return (
-        <div class={classes.value}>
-          <div class={styles.inner}>
-            {ctx.slots.default && ctx.slots.default()}
-          </div>
+    return () => (
+      <div class={classes.value}>
+        <div class={styles.inner}>
+          {ctx.slots.default && ctx.slots.default()}
         </div>
-      );
-    };
+      </div>
+    );
   },
 });

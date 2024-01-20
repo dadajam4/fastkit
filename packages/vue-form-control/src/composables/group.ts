@@ -7,6 +7,8 @@ import {
   computed,
   ComputedRef,
 } from 'vue';
+import { arrayRemove } from '@fastkit/helpers';
+import { createPropsOptions } from '@fastkit/vue-utils';
 import {
   createFormNodeProps,
   FormNodeControl,
@@ -14,9 +16,7 @@ import {
   FormNodeContext,
   FormNodeControlBaseOptions,
 } from './node';
-import { arrayRemove } from '@fastkit/helpers';
 import { FormGroupInjectionKey } from '../injections';
-import { createPropsOptions } from '@fastkit/vue-utils';
 
 export function createFormGroupProps() {
   return {
@@ -61,7 +61,9 @@ export interface FormGroupOptions extends FormNodeControlBaseOptions {}
 
 export class FormGroupControl extends FormNodeControl {
   readonly _props: FormGroupProps;
+
   protected _allNodes: Ref<FormNodeControl[]> = ref([]);
+
   protected _allInvalidNodes: ComputedRef<FormNodeControl[]>;
 
   /**

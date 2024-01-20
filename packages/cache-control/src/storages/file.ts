@@ -1,12 +1,12 @@
+import { Duration } from '@fastkit/duration';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   CacheDetails,
   CacheStorage,
   DeleteCacheRequest,
   GetCacheRequest,
 } from '../schemes';
-import { Duration } from '@fastkit/duration';
-import fs from 'node:fs';
-import path from 'node:path';
 
 /**
  * @see https://developer.mozilla.org/docs/Web/API/setTimeout#maximum_delay_value

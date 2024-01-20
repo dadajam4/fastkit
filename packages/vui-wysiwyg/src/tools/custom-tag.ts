@@ -2,7 +2,7 @@ import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 import {
   createWysiwygCustomTagMark,
   WysiwygCustomTagSettings,
-  WysiwygCustomTagExtenstion,
+  WysiwygCustomTagExtension,
 } from '../extensions/custom-tag';
 
 export interface WysiwygCustomTagToolSettings
@@ -32,7 +32,7 @@ export function createWysiwygCustomTagTool(
       onClick: ({ editor }) => {
         editor.chain().focus().toggleCustomTag(markName).run();
       },
-      extensions: [WysiwygCustomTagExtenstion, Mark.configure(settings)],
+      extensions: [WysiwygCustomTagExtension, Mark.configure(settings)],
     };
     return tool;
   };

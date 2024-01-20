@@ -10,15 +10,15 @@ import {
   onBeforeUpdate,
   onMounted,
 } from 'vue';
-import { RawIconProp } from '../VIcon';
-import { VuiService } from '../../service';
-import { useVui } from '../../injections';
 import { defineSlots } from '@fastkit/vue-utils';
 import { RouteLocationRaw, RouteLocation } from 'vue-router';
-import { VTab, VTabRef } from './VTab';
 import { VScroller, ScrollResult } from '@fastkit/vue-scroller';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
 import { isPromise } from '@fastkit/helpers';
+import { VTab, VTabRef } from './VTab';
+import { useVui } from '../../injections';
+import { VuiService } from '../../service';
+import { RawIconProp } from '../VIcon';
 
 export interface VTabsItemLabelSlotCtx {
   value: string;
@@ -53,9 +53,6 @@ export const VTabs = defineComponent({
     items: {
       type: Array as PropType<VTabsItem[]>,
       required: true,
-      // validator: (value: VTabsItem[]) => {
-      //   return Array.isArray(value) && value.length > 0;
-      // },
     },
 
     /**
@@ -127,6 +124,7 @@ export const VTabs = defineComponent({
           | undefined;
 
         if (router) {
+          // eslint-disable-next-line no-shadow
           const to = router(value);
           const route = vui.router.resolve(to);
           location = { to, route };
@@ -140,11 +138,10 @@ export const VTabs = defineComponent({
       });
     });
 
+    // eslint-disable-next-line no-shadow
     const setTabRef = (ref: VTabRef) => {
       tabRefs.value.push(ref);
     };
-
-    // const isMountedRef = ref(false);
 
     function setupInternalValue(routable?: boolean) {
       let value = props.modelValue;
@@ -165,6 +162,7 @@ export const VTabs = defineComponent({
           if (!hit) return;
           const { location } = hit;
           if (!location) return;
+          // eslint-disable-next-line no-shadow
           const { to, route } = location;
           if (route.fullPath === vui.location.currentRoute.fullPath) return;
           vui.router[to.replace ? 'replace' : 'push'](to);
@@ -200,9 +198,7 @@ export const VTabs = defineComponent({
       }
     }
 
-    const findTab = (tab: string) => {
-      return tabRefs.value.find((t) => t.value === tab);
-    };
+    const findTab = (tab: string) => tabRefs.value.find((t) => t.value === tab);
 
     function scrollToTab(tabValue: string) {
       const tab = findTab(tabValue);
@@ -267,9 +263,9 @@ export const VTabs = defineComponent({
       (route) => {
         if (!props.router) return;
         const path = props.withQuery ? route.fullPath : route.path;
-        const hit = computedItemsRef.value.find(({ location }) => {
-          return location && location.route.fullPath === path;
-        });
+        const hit = computedItemsRef.value.find(
+          ({ location }) => location && location.route.fullPath === path,
+        );
         if (hit) {
           currentRef.value = hit.value;
         }
@@ -299,6 +295,7 @@ export const VTabs = defineComponent({
           label = itemSlot;
         }
 
+        // eslint-disable-next-line no-shadow
         const children =
           typeof label === 'function' ? label({ value, active, vui }) : label;
 

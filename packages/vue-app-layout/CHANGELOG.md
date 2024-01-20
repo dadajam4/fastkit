@@ -1,5 +1,19 @@
 # @fastkit/vue-app-layout
 
+## 0.14.22
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.1.19
+  - @fastkit/vue-scroller@0.14.21
+  - @fastkit/vue-resize@0.1.19
+  - @fastkit/vue-utils@0.14.17
+  - @fastkit/helpers@0.13.8
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.14.21
 
 ### Patch Changes

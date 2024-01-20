@@ -8,6 +8,7 @@ export class WysiwygLinterPunctuation extends WysiwygLinterPlugin {
   public regex = / ([,.!?:]) ?/g;
 
   fix(replacement: any) {
+    // eslint-disable-next-line func-names
     return function ({ state, dispatch }: EditorView, issue: Issue) {
       dispatch(
         state.tr.replaceWith(

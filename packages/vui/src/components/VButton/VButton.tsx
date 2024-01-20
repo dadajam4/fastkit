@@ -19,6 +19,7 @@ import type { IconName } from '../VIcon';
 // @TODO Unable to resolve dts for `navigationableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+// eslint-disable-next-line import/order
 import { RouteLocationRaw } from 'vue-router';
 
 export type VButtonSpacer = 'left' | 'right';
@@ -129,33 +130,31 @@ export const VButton = defineComponent({
       },
     ]);
 
-    return () => {
-      return (
-        <VAction
-          {...ctx.attrs}
-          class={['v-button', classes.value]}
-          guardInProgressClass="v-button--guard-in-progress"
-          v-slots={{
-            default: () => (
-              <>
-                <span class="v-button__content">
-                  {startIcon.value}
-                  {ctx.slots.default?.()}
-                  {icon.value}
-                  {endIcon.value}
-                </span>
-                {isLoading.value && (
-                  <VProgressCircular
-                    class="v-button__loading"
-                    indeterminate
-                    size={LOADING_SIZE_MAP[control.size.value]}
-                  />
-                )}
-              </>
-            ),
-          }}
-        />
-      );
-    };
+    return () => (
+      <VAction
+        {...ctx.attrs}
+        class={['v-button', classes.value]}
+        guardInProgressClass="v-button--guard-in-progress"
+        v-slots={{
+          default: () => (
+            <>
+              <span class="v-button__content">
+                {startIcon.value}
+                {ctx.slots.default?.()}
+                {icon.value}
+                {endIcon.value}
+              </span>
+              {isLoading.value && (
+                <VProgressCircular
+                  class="v-button__loading"
+                  indeterminate
+                  size={LOADING_SIZE_MAP[control.size.value]}
+                />
+              )}
+            </>
+          ),
+        }}
+      />
+    );
   },
 });

@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 import {
   ColorModelInfo,
   AngleType,
@@ -32,7 +33,7 @@ export function rgbLimitation(r: number, g: number, b: number) {
 }
 
 export function hslLimitation(h: number, s: number, l: number) {
-  h = h % 360;
+  h %= 360;
   s = perValueLimiter(s);
   l = perValueLimiter(l);
   return [h, s, l];
@@ -47,9 +48,13 @@ export function hsl2rgb(
   s: number,
   l: number,
 ): [number, number, number] {
-  let r: number, g: number, b: number, max: number, min: number;
+  let r: number;
+  let g: number;
+  let b: number;
+  let max: number;
+  let min: number;
 
-  h = h % 360;
+  h %= 360;
 
   if (l < 0.5) {
     max = l + l * s;
@@ -95,9 +100,9 @@ export function rgb2hsl(
   g: number,
   b: number,
 ): [number, number, number] {
-  r = r / 255;
-  g = g / 255;
-  b = b / 255;
+  r /= 255;
+  g /= 255;
+  b /= 255;
 
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
@@ -108,6 +113,7 @@ export function rgb2hsl(
   const tmp = 1 - Math.abs(max + min - 1);
   const s = tmp === 0 ? 0 : diff / tmp;
 
+  // eslint-disable-next-line default-case
   switch (min) {
     case max:
       h = 0;
@@ -207,7 +213,7 @@ export function parseHue2deg(hue: string | number) {
   } else if (_u === 'turn') {
     h = turn2degree(h);
   }
-  h = h % 360;
+  h %= 360;
   return h;
 }
 
@@ -219,14 +225,11 @@ export function parseHue2deg(hue: string | number) {
 function createRoundedHex(hex: string): string {
   hex = hex.toLowerCase();
   if (hex.length > 5) return hex;
-  return (
-    '#' +
-    hex
-      .replace('#', '')
-      .split('')
-      .map((s) => s.repeat(2))
-      .join('')
-  );
+  return `#${hex
+    .replace('#', '')
+    .split('')
+    .map((s) => s.repeat(2))
+    .join('')}`;
 }
 
 function resolveString(source: string, max: number) {
@@ -297,6 +300,7 @@ export function parseColorString(
     }
   }
   if (hex) {
+    // eslint-disable-next-line no-shadow
     const hex = createRoundedHex(_source);
     const rgba = hex2rgba(hex);
     return {
@@ -500,7 +504,8 @@ export function mixColorSource(
   const { per, model } = resolveMixOptions(options);
   if (per === 0) {
     return parseColorSource(baseSource);
-  } else if (per === 1) {
+  }
+  if (per === 1) {
     return parseColorSource(mixSource);
   }
 
@@ -513,8 +518,8 @@ export function mixColorSource(
 
     const baseIsLarge = baseValue > mixValue;
     const diff = baseIsLarge ? baseValue - mixValue : mixValue - baseValue;
-    const ammount = diff * per * (baseIsLarge ? -1 : 1);
-    const mixedValue = baseValue + ammount;
+    const amount = diff * per * (baseIsLarge ? -1 : 1);
+    const mixedValue = baseValue + amount;
     return mixedValue;
   }) as [number, number, number, number];
   return parseColorSource({

@@ -9,9 +9,8 @@ export const length = createRule<number | LengthCondition>({
     if (typeof constraints === 'object') {
       const { min, max } = constraints;
       return `Please enter ${min}-${max} ${type}.`;
-    } else {
-      return `Please enter ${constraints} ${type}.`;
     }
+    return `Please enter ${constraints} ${type}.`;
   },
   constraints: { min: 0, max: 0 },
 });

@@ -41,9 +41,9 @@ function runAllLinterPlugins(
   const decorations: [any?] = [];
 
   const issues = plugins
-    .map((RegisteredLinterPlugin) => {
-      return new RegisteredLinterPlugin(doc).scan().getResults();
-    })
+    .map((RegisteredLinterPlugin) =>
+      new RegisteredLinterPlugin(doc).scan().getResults(),
+    )
     .flat();
 
   issues.forEach((issue) => {

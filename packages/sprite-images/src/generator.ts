@@ -2,9 +2,10 @@ import fs from 'fs-extra';
 import path from 'node:path';
 import chokidar, { FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
+import module from 'node:module';
 import { SpriteImagesOptions, SpriteImagesSettings } from './schemes';
 import { logger } from './logger';
-import module from 'node:module';
+
 const require = module.createRequire(import.meta.url);
 
 const Spritesmith = require('spritesmith');
@@ -32,13 +33,11 @@ export async function generate(opts: SpriteImagesOptions) {
     await Promise.all(
       files.map((name) => {
         const fullPath = path.join(src, name);
-        return fs.stat(fullPath).then((stat) => {
-          return {
-            stat,
-            name,
-            fullPath,
-          };
-        });
+        return fs.stat(fullPath).then((stat) => ({
+          stat,
+          name,
+          fullPath,
+        }));
       }),
     )
   ).filter((dir) => dir.stat.isDirectory());
@@ -48,21 +47,19 @@ export async function generate(opts: SpriteImagesOptions) {
   await Promise.all(
     dirs.map(async (dir) => {
       let settingsPath;
-      const files = (await fs.readdir(dir.fullPath))
+      const _files = (await fs.readdir(dir.fullPath))
         .filter((name) => {
           if (name === SETTINGS_FILENAME) {
             settingsPath = path.join(dir.fullPath, name);
           }
           return /\.png$/.test(name);
         })
-        .map((name) => {
-          return {
-            name,
-            fullPath: path.join(dir.fullPath, name),
-          };
-        });
+        .map((name) => ({
+          name,
+          fullPath: path.join(dir.fullPath, name),
+        }));
 
-      const sprites = files.map((file) => file.fullPath);
+      const sprites = _files.map((file) => file.fullPath);
       const _settings: SpriteImagesSettings = settingsPath
         ? await fs.readJson(settingsPath)
         : {};
@@ -70,7 +67,7 @@ export async function generate(opts: SpriteImagesOptions) {
       await new Promise<void>((resolve, reject) => {
         Spritesmith.run(
           { src: sprites, ..._settings },
-          async function handleResult(err: any, result: any) {
+          async (err: any, result: any) => {
             if (err) return reject(err);
 
             try {
@@ -109,8 +106,8 @@ export async function generate(opts: SpriteImagesOptions) {
                   ...info,
                 });
 
-                function px(ammount: number, vec = 1) {
-                  return ammount ? `${ammount * vec}px` : '0';
+                function px(amount: number, vec = 1) {
+                  return amount ? `${amount * vec}px` : '0';
                 }
 
                 const width = `${px(info.width)}`;
@@ -177,9 +174,9 @@ export async function generate(opts: SpriteImagesOptions) {
     }),
   );
 
-  const rows = dirs.map((dir) => {
-    return `@use './${dir.name}/${dir.name}-sprites.scss' as *;`;
-  });
+  const rows = dirs.map(
+    (dir) => `@use './${dir.name}/${dir.name}-sprites.scss' as *;`,
+  );
 
   const DEST = path.join(dest, 'sprites.scss');
   const scss = `${BANNER}\n\n${rows.join('\n')}`;
@@ -193,6 +190,7 @@ export class SpriteImagesRunner extends EV<{
   build: void;
 }> {
   readonly entry: SpriteImagesOptions;
+
   private _watcher: FSWatcher | null = null;
 
   constructor(entry: SpriteImagesOptions) {

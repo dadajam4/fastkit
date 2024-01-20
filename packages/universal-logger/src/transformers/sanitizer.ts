@@ -1,6 +1,7 @@
-import { Transformer } from '../schemes';
 import { Cloner } from '@fastkit/cloner';
 import type { ClonerValueProcessor } from '@fastkit/cloner';
+import { Transformer } from '../schemes';
+
 export type { ClonerValueProcessor as SanitizeValueProcessor } from '@fastkit/cloner';
 
 /**

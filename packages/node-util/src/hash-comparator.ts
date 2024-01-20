@@ -12,8 +12,11 @@ export interface HashComparatorOptions {
 
 export class HashComparator {
   readonly src: string;
+
   readonly dest: string;
+
   readonly metaFile: string;
+
   private _lastSrcHash?: HashElementNode;
 
   constructor(src: string, dest: string, opts: HashComparatorOptions = {}) {

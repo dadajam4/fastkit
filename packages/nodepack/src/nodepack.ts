@@ -2,10 +2,10 @@ import * as esbuild from 'esbuild';
 import type { BuildOptions, Message, Plugin } from 'esbuild';
 import path from 'node:path';
 import nodemon from 'nodemon';
+import { inferPackageFormat } from '@fastkit/node-util';
 import { logger } from './logger';
 import { nodeExternalPlugin } from './esbuild-plugin';
 import { NodepackOptions } from './schemes';
-import { inferPackageFormat } from '@fastkit/node-util';
 
 function log(type: 'warn' | 'error', messages: Message[]) {
   messages.forEach(({ text, detail, location }) => {

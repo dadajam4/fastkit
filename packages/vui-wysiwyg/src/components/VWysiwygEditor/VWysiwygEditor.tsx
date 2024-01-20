@@ -29,7 +29,6 @@ import {
   VButton,
   VButtonGroup,
 } from '@fastkit/vui';
-import { VUI_WYSIWYG_EDITOR_SYMBOL } from '../../injections';
 import {
   EditorContent,
   useEditor,
@@ -38,6 +37,7 @@ import {
   type Editor,
 } from '@tiptap/vue-3';
 import { StarterKit } from '@tiptap/starter-kit';
+import { VUI_WYSIWYG_EDITOR_SYMBOL } from '../../injections';
 import {
   RawWysiwygExtension,
   resolveRawWysiwygExtensions,
@@ -185,9 +185,7 @@ export const VWysiwygEditor = defineComponent({
       options?: {
         scrollIntoView?: boolean | undefined;
       },
-    ) => {
-      return editor.value?.chain().focus(position, options);
-    };
+    ) => editor.value?.chain().focus(position, options);
 
     // const blur = () => {
     //   if (!editor.value) return;
@@ -283,46 +281,42 @@ export const VWysiwygEditor = defineComponent({
       focus('start', { scrollIntoView: true });
     };
 
-    const formControlDefaultSlot = () => {
-      return (
-        <div class="v-wysiwyg-editor__wrapper">
-          {!inputControl.isReadonly && createTools()}
-          <VControlField
-            class="v-wysiwyg-editor__input"
-            autoHeight
-            startAdornment={props.startAdornment}
-            endAdornment={props.endAdornment}
-            size={control.size.value}
-            v-slots={{
-              ...ctx.slots,
-              default: () => {
-                return (
-                  <div class="v-wysiwyg-editor__body">
-                    <EditorContent
+    const formControlDefaultSlot = () => (
+      <div class="v-wysiwyg-editor__wrapper">
+        {!inputControl.isReadonly && createTools()}
+        <VControlField
+          class="v-wysiwyg-editor__input"
+          autoHeight
+          startAdornment={props.startAdornment}
+          endAdornment={props.endAdornment}
+          size={control.size.value}
+          v-slots={{
+            ...ctx.slots,
+            default: () => (
+              <div class="v-wysiwyg-editor__body">
+                <EditorContent
+                  {...({
+                    class: 'v-wysiwyg-editor__input__element wysiwyg',
+                  } as any)}
+                  editor={editor.value}
+                />
+                {!props.floatingToolbar &&
+                  !!editor.value &&
+                  !inputControl.isReadonly && (
+                    <BubbleMenu
                       {...({
-                        class: 'v-wysiwyg-editor__input__element wysiwyg',
+                        class: 'v-wysiwyg-editor__bubble-menu',
                       } as any)}
-                      editor={editor.value}
-                    />
-                    {!props.floatingToolbar &&
-                      !!editor.value &&
-                      !inputControl.isReadonly && (
-                        <BubbleMenu
-                          {...({
-                            class: 'v-wysiwyg-editor__bubble-menu',
-                          } as any)}
-                          editor={editor.value}>
-                          {createTools(true)}
-                        </BubbleMenu>
-                      )}
-                  </div>
-                );
-              },
-            }}
-          />
-        </div>
-      );
-    };
+                      editor={editor.value}>
+                      {createTools(true)}
+                    </BubbleMenu>
+                  )}
+              </div>
+            ),
+          }}
+        />
+      </div>
+    );
 
     const infoAppendsSlot = () => {
       const { counterResult } = inputControl;
@@ -330,30 +324,29 @@ export const VWysiwygEditor = defineComponent({
       return <VTextCounter {...counterResult} />;
     };
 
-    return () => {
-      return (
-        <VFormControl
-          nodeControl={inputControl}
-          class={classes.value}
-          label={props.label}
-          hint={props.hint}
-          hinttip={props.hinttip}
-          hiddenInfo={props.hiddenInfo}
-          requiredChip={props.requiredChip}
-          onClickLabel={handleClickLabel}
-          v-slots={{
-            ...ctx.slots,
-            default: formControlDefaultSlot,
-            infoAppends: infoAppendsSlot,
-          }}
-        />
-      );
-    };
+    return () => (
+      <VFormControl
+        nodeControl={inputControl}
+        class={classes.value}
+        label={props.label}
+        hint={props.hint}
+        hinttip={props.hinttip}
+        hiddenInfo={props.hiddenInfo}
+        requiredChip={props.requiredChip}
+        onClickLabel={handleClickLabel}
+        v-slots={{
+          ...ctx.slots,
+          default: formControlDefaultSlot,
+          infoAppends: infoAppendsSlot,
+        }}
+      />
+    );
   },
 });
 
 function resolveContextualValue(
   ctx: WysiwygEditorContext,
+  // eslint-disable-next-line no-shadow
   source?: boolean | ((ctx: WysiwygEditorContext) => boolean),
 ) {
   return typeof source === 'function' ? source(ctx) : source;

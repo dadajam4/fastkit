@@ -1,7 +1,7 @@
 import { AsyncHandler } from './handler';
 import { AsyncFn, AsyncHandlerOptions } from './schemes';
 
-export const ASYNC_HANDLER_SYMBOL = Symbol();
+export const ASYNC_HANDLER_SYMBOL = Symbol('ASYNC_HANDLER');
 
 /**
  * A function that wraps the original function.

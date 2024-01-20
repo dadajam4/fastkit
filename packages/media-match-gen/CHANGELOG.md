@@ -1,5 +1,17 @@
 # @fastkit/media-match-gen
 
+## 0.13.15
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/media-match@1.0.10
+  - @fastkit/node-util@0.13.9
+  - @fastkit/ev@0.13.2
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.13.14
 
 ### Patch Changes

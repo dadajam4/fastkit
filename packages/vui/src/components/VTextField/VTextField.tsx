@@ -51,6 +51,7 @@ export const VTextField = defineComponent({
   props: createTextFieldProps(),
   emits,
   slots,
+  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const inputControl = useTextInputNodeControl(props, ctx, {
       nodeType: VUI_TEXT_FIELD_SYMBOL,
@@ -64,23 +65,21 @@ export const VTextField = defineComponent({
       inputControl.focus();
     };
 
-    const defaultSlot = () => {
-      return (
-        <VControlField
-          class="v-text-field__input"
-          startAdornment={props.startAdornment}
-          endAdornment={props.endAdornment}
-          size={control.size.value}
-          v-slots={{
-            ...ctx.slots,
-            default: () =>
-              inputControl.createInputElement({
-                class: 'v-text-field__input__element',
-              }),
-          }}
-        />
-      );
-    };
+    const defaultSlot = () => (
+      <VControlField
+        class="v-text-field__input"
+        startAdornment={props.startAdornment}
+        endAdornment={props.endAdornment}
+        size={control.size.value}
+        v-slots={{
+          ...ctx.slots,
+          default: () =>
+            inputControl.createInputElement({
+              class: 'v-text-field__input__element',
+            }),
+        }}
+      />
+    );
 
     const infoAppendsSlot = () => {
       const { counterResult } = inputControl;
@@ -92,25 +91,23 @@ export const VTextField = defineComponent({
       control: inputControl,
     });
 
-    return () => {
-      return (
-        <VFormControl
-          nodeControl={inputControl}
-          // focused={inputControl.focused}
-          hiddenInfo={props.hiddenInfo}
-          class={classes.value}
-          label={props.label}
-          hint={props.hint}
-          hinttip={props.hinttip}
-          requiredChip={props.requiredChip}
-          onClickLabel={handleClickLabel}
-          v-slots={{
-            ...ctx.slots,
-            default: defaultSlot,
-            infoAppends: infoAppendsSlot,
-          }}
-        />
-      );
-    };
+    return () => (
+      <VFormControl
+        nodeControl={inputControl}
+        // focused={inputControl.focused}
+        hiddenInfo={props.hiddenInfo}
+        class={classes.value}
+        label={props.label}
+        hint={props.hint}
+        hinttip={props.hinttip}
+        requiredChip={props.requiredChip}
+        onClickLabel={handleClickLabel}
+        v-slots={{
+          ...ctx.slots,
+          default: defaultSlot,
+          infoAppends: infoAppendsSlot,
+        }}
+      />
+    );
   },
 });

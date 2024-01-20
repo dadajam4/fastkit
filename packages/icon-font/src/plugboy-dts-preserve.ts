@@ -3,12 +3,10 @@ import {
   DTSPreserveTypeSettings,
 } from '@fastkit/plugboy';
 
-const toDTSPreserveTypeTarget = (typeName: string): DTSPreserveTypeTarget => {
-  return {
-    from: new RegExp(`"__${typeName}__"`, 'g'),
-    typeName,
-  };
-};
+const toDTSPreserveTypeTarget = (typeName: string): DTSPreserveTypeTarget => ({
+  from: new RegExp(`"__${typeName}__"`, 'g'),
+  typeName,
+});
 
 const toDTSPreserveTypeTargets = (
   typeNames: string[],

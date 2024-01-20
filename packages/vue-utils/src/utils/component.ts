@@ -88,8 +88,8 @@ export function componentRef<
   const _ReferencedComponent: ReferencedComponent<ComponentConstructor> = ((
     props: any,
     ctx: any,
-  ) => {
-    return h(
+  ) =>
+    h(
       Ctor,
       {
         ...props,
@@ -98,8 +98,7 @@ export function componentRef<
         },
       },
       ctx.slots,
-    );
-  }) as any;
+    )) as any;
 
   Object.defineProperty(_ReferencedComponent, 'instance', {
     get: () => _ref.value,

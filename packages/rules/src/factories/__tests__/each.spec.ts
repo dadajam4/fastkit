@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { maxLength, required } from '../../rules';
-import { createEachRule } from '../';
+import { createEachRule } from '..';
 
 describe('factories/each', () => {
   describe('construct', () => {

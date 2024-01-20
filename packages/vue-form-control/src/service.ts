@@ -20,6 +20,7 @@ export interface VueFormServiceOptions {
  */
 export class VueFormService {
   readonly errorMessageResolvers: FormErrorMessageResolver[] = [];
+
   readonly scroll?: VueFormScrollOptions;
 
   constructor(options: VueFormServiceOptions = {}) {
@@ -57,8 +58,7 @@ export class VueFormService {
 
     if (fn) {
       return fn(element, _options);
-    } else {
-      return element.scrollIntoView(_options);
     }
+    return element.scrollIntoView(_options);
   }
 }

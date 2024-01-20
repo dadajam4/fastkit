@@ -1,5 +1,5 @@
-import { getVueMediaMatchService } from './service';
 import { onMounted } from 'vue';
+import { getVueMediaMatchService } from './service';
 
 export function useMediaMatch() {
   const service = getVueMediaMatchService();

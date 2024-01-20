@@ -1,3 +1,4 @@
+/* eslint-disable import/no-dynamic-require */
 /* eslint-disable no-console */
 import path from 'node:path';
 import express, { Express } from 'express';
@@ -7,12 +8,12 @@ import {
   resolveConfig,
   ResolvedServerUrls,
 } from 'vite';
-import { proxyMiddleware } from './proxy';
 import module from 'node:module';
 import type { Server } from 'node:http';
-import { resolveServerUrls } from '../utils/host';
 import chalk from 'chalk';
 import { capitalize } from '@fastkit/helpers';
+import { resolveServerUrls } from '../utils/host';
+import { proxyMiddleware } from './proxy';
 
 const require = module.createRequire(import.meta.url);
 
@@ -122,13 +123,12 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
   // Serve every static asset route
   for (const asset of ssr.assets || []) {
     const staticHandler = express.static(path.join(dist, 'client', asset)); // @TODO Express internal bug??
-    router.use('/' + asset, staticHandler);
+    router.use(`/${asset}`, staticHandler);
   }
 
   // Everything else is treated as a "rendering request"
   router.get('*', async (request, response) => {
-    const url =
-      request.protocol + '://' + request.get('host') + request.originalUrl;
+    const url = `${request.protocol}://${request.get('host')}${request.originalUrl}`;
 
     const { html, status, statusText, headers } = await renderPage(url, {
       manifest,
@@ -153,11 +153,12 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
     resolvedUrls: ResolvedServerUrls;
   }>((resolve, reject) => {
     try {
+      // eslint-disable-next-line no-shadow
       const launched = server.listen(port, host, async () => {
-        const { server: serverOptioins } = resolvedConfig;
+        const { server: serverOptions } = resolvedConfig;
         const resolvedUrls = await resolveServerUrls(
           launched,
-          serverOptioins,
+          serverOptions,
           resolvedConfig,
         );
 

@@ -1,5 +1,5 @@
-import type { nativeErrorResolver } from './resolvers/native';
 import type { UnionToIntersection } from '@fastkit/helpers';
+import type { nativeErrorResolver } from './resolvers/native';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import type { build } from './catcher';

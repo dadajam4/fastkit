@@ -16,35 +16,32 @@ export const VOption = defineComponent({
     ...createControlProps(),
   },
   emits,
+  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const nodeControl = useFormSelectorItemControl(props, ctx, {
       nodeType: VUI_OPTION_SYMBOL,
       parentNodeType: VUI_SELECT_SYMBOL,
     });
     const control = useControl(props);
-    const classes = computed(() => {
-      return [
-        'v-option',
-        {
-          'v-option--selected': nodeControl.selected,
-          'v-option--has-not-value': !nodeControl.hasValue,
-          'v-option--disabled': nodeControl.isDisabled,
-        },
-        control.classes.value,
-      ];
-    });
+    const classes = computed(() => [
+      'v-option',
+      {
+        'v-option--selected': nodeControl.selected,
+        'v-option--has-not-value': !nodeControl.hasValue,
+        'v-option--disabled': nodeControl.isDisabled,
+      },
+      control.classes.value,
+    ]);
 
-    return () => {
-      return (
-        <label
-          class={classes.value}
-          onClick={nodeControl.handleClickElement}
-          tabindex={nodeControl.tabindex}
-          data-value={nodeControl.propValue}
-          aria-disabled={nodeControl.isDisabled}>
-          <span class="v-option__label">{ctx.slots.default?.()}</span>
-        </label>
-      );
-    };
+    return () => (
+      <label
+        class={classes.value}
+        onClick={nodeControl.handleClickElement}
+        tabindex={nodeControl.tabindex}
+        data-value={nodeControl.propValue}
+        aria-disabled={nodeControl.isDisabled}>
+        <span class="v-option__label">{ctx.slots.default?.()}</span>
+      </label>
+    );
   },
 });

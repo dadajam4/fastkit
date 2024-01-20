@@ -1,6 +1,6 @@
 import type { ComponentPublicInstance } from 'vue';
 import type {
-  /*RouterScrollBehavior, */ RouteLocationNormalized,
+  RouteLocationNormalized,
   RouteComponent,
   RouteRecordNormalized,
   LocationQueryRaw,
@@ -23,12 +23,12 @@ export function getRouteMatchedComponents<
   matches: false | number[] = false,
   prop: P = 'components' as P,
 ) {
-  const values = route.matched.map((m, index) => {
-    return Object.values(m[prop] || {}).map((v) => {
+  const values = route.matched.map((m, index) =>
+    Object.values(m[prop] || {}).map((v) => {
       matches && matches.push(index);
       return v;
-    });
-  });
+    }),
+  );
   return [...values].flat();
 }
 
@@ -43,6 +43,7 @@ export interface RouteMatchedItem {
 export function extractRouteMatchedItems(route: RouteLocationNormalized) {
   const results: RouteMatchedItem[] = [];
 
+  // eslint-disable-next-line no-shadow
   route.matched.forEach((route, index) => {
     const { components, instances } = route;
     if (!components) return;
@@ -104,6 +105,7 @@ export function getRouteQuery(bucket: LocationQuery, key: string, type: BooleanC
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
+  // eslint-disable-next-line default-param-last
   type: RouteQueryType = String,
   defaultValue?: string | number | boolean,
 ): string | number | boolean | undefined {
@@ -111,13 +113,15 @@ export function getRouteQuery(
   const value = Array.isArray(_value) ? _value[0] : _value;
   if (type === String) {
     return value != null ? value : defaultValue;
-  } else if (type === Number) {
+  }
+  if (type === Number) {
     if (value != null) {
       const parsed = Number(value);
       return isNaN(parsed) ? defaultValue : parsed;
     }
     return defaultValue;
-  } else if (type === Boolean) {
+  }
+  if (type === Boolean) {
     if (value != null) {
       const lower = String(value).toLowerCase().trim();
       if (['1', 'true', 'on'].includes(lower)) return true;
@@ -153,22 +157,23 @@ export function isSameRoute(
 
   if (!b) {
     return false;
-  } else if (a.path && b.path) {
+  }
+  if (a.path && b.path) {
     return (
       removeTrailingSlash(a.path) === removeTrailingSlash(b.path) &&
       (!includeHash || a.hash === b.hash) &&
       (!includeQuery || isObjectEqual(a.query, b.query))
     );
-  } else if (a.name && b.name) {
+  }
+  if (a.name && b.name) {
     return (
       a.name === b.name &&
       (!includeHash || a.hash === b.hash) &&
       (!includeQuery || isObjectEqual(a.query, b.query)) &&
       (!includeParams || isObjectEqual(a.params, b.params))
     );
-  } else {
-    return false;
   }
+  return false;
 }
 
 const MOCK_REDIRECT_FN = () => ({ name: '' });

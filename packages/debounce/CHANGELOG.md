@@ -1,5 +1,11 @@
 # @fastkit/debounce
 
+## 0.1.2
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
 ## 0.1.1
 
 ### Patch Changes

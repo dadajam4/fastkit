@@ -24,9 +24,8 @@ export const VDialog = defineDialogComponent({
       resolver: (actions) => {
         if (actions.length === 0) {
           return [vui.stackAction('close')];
-        } else {
-          return actions;
         }
+        return actions;
       },
     });
     const color = useColorClasses(props, { useRootThemeDefault: true });

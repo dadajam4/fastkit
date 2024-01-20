@@ -12,9 +12,7 @@ export interface NativeErrorOverrides {
  * Resolver to Native exceptions
  */
 export const nativeErrorResolver = createCatcherResolver(
-  function nativeErrorResolver(
-    source: unknown,
-  ): NativeErrorOverrides | undefined {
+  (source: unknown): NativeErrorOverrides | undefined => {
     if (source && source instanceof Error) {
       return {
         nativeError: source,

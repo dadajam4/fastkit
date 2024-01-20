@@ -30,9 +30,8 @@ export type RawVotGenerateOptions =
   | VotGenerateHandler
   | Partial<VotGenerateOptions>;
 
-const DEFAULT_GENERATE_HANDLER: VotGenerateHandler = (page) => {
-  return !page.dynamicParams;
-};
+const DEFAULT_GENERATE_HANDLER: VotGenerateHandler = (page) =>
+  !page.dynamicParams;
 
 export function resolveRawVotGenerateOptions(
   source: RawVotGenerateOptions | undefined,

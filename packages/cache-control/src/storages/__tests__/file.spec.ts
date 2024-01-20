@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { FileCacheStorage } from '../file';
-import { CacheDetails } from '../../schemes';
 import path from 'node:path';
 import fs from 'fs-extra';
+import { FileCacheStorage } from '../file';
+import { CacheDetails } from '../../schemes';
 
 function delay(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));

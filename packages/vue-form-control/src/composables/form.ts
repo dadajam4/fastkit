@@ -11,6 +11,7 @@ import {
   watch,
 } from 'vue';
 import { createPropsOptions } from '@fastkit/vue-utils';
+import { isPromise } from '@fastkit/helpers';
 import {
   createFormGroupProps,
   createFormGroupEmits,
@@ -18,7 +19,6 @@ import {
   FormGroupControl,
 } from './group';
 import { FormInjectionKey } from '../injections';
-import { isPromise } from '@fastkit/helpers';
 
 /**
  * Form action context
@@ -203,12 +203,19 @@ interface ComputedFormAttributes {
  */
 export class VueForm extends FormGroupControl {
   readonly _props: FormProps;
+
   protected _formContext: FormContext;
+
   protected _nativeAction: ComputedRef<string | undefined>;
+
   protected _fnAction: ComputedRef<FormActionHandler | undefined>;
+
   protected _formRef = ref<HTMLFormElement | null>(null);
+
   protected _actionPromise = ref<Promise<any> | null>(null);
+
   protected _sending: ComputedRef<boolean>;
+
   protected _formAttrs: ComputedRef<ComputedFormAttributes>;
 
   /**

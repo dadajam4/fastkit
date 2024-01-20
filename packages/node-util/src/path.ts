@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import path from 'node:path';
 import fs from 'fs-extra';
 import { fileURLToPath } from 'node:url';

@@ -58,7 +58,7 @@ export function scrollToElement(
   // Setup Options
   //
 
-  const _options = Object.assign({}, scrollToElementSettingsDefaults, options);
+  const _options = { ...scrollToElementSettingsDefaults, ...options };
 
   const { x, y } = _options;
 
@@ -74,11 +74,11 @@ export function scrollToElement(
   //
 
   const $target = $(target) as HTMLElement;
-  if (!$target) throw error('missing element ' + target);
+  if (!$target) throw error(`missing element ${target}`);
 
   const container = _options.container || defaultSettings.container;
   const $container = $(container) as HTMLElement;
-  if (!$container) throw error('missing container ' + container);
+  if (!$container) throw error(`missing container ${container}`);
 
   const cumulativeOffsetContainer = cumulativeOffset($container);
   const cumulativeOffsetTarget = cumulativeOffset($target);

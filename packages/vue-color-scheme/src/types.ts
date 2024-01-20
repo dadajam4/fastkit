@@ -6,6 +6,7 @@ import {
   ColorVariant,
   ColorSchemeInfo,
 } from '@fastkit/color-scheme';
+
 export type {
   ThemeName,
   PaletteName,
@@ -14,11 +15,6 @@ export type {
 } from '@fastkit/color-scheme';
 
 export type PropKey = string | null | false | undefined;
-
-// type ColorSchemeValueProp<T> = {
-//   type: PropType<T>;
-//   default: undefined;
-// };
 
 export type ColorSchemeProps<
   ThemeProp extends PropKey = 'theme',
@@ -58,7 +54,7 @@ export interface ColorSchemePropsOptions<
   ScopeProp extends PropKey = 'color',
   TextColorProp extends PropKey = 'textColor',
   BorderColorProp extends PropKey = 'borderColor',
-> /*extends ColorSchemePropsStaticOptions*/ {
+> /* extends ColorSchemePropsStaticOptions */ {
   theme?: ThemeProp;
   color?: ScopeProp;
   textColor?: TextColorProp;

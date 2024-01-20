@@ -1,12 +1,5 @@
 import { App } from 'vue';
 import {
-  VuiService,
-  VuiServiceOptions,
-  RawVuiServiceOptions,
-  mergeVuiServiceOptions,
-  VuiInjectionKey,
-} from './service';
-import {
   installVueStackPlugin,
   VueStackServiceOptions,
 } from '@fastkit/vue-stack';
@@ -21,6 +14,13 @@ import { VueColorSchemePlugin } from '@fastkit/vue-color-scheme';
 import { installVueAppLayout } from '@fastkit/vue-app-layout';
 import { onAppUnmount } from '@fastkit/vue-utils';
 import { getDocumentScroller } from '@fastkit/vue-scroller';
+import {
+  VuiService,
+  VuiServiceOptions,
+  RawVuiServiceOptions,
+  mergeVuiServiceOptions,
+  VuiInjectionKey,
+} from './service';
 
 const scroller = getDocumentScroller();
 
@@ -78,6 +78,7 @@ export class VuiPlugin {
         options: {
           behavior: 'smooth',
         },
+        // eslint-disable-next-line no-shadow
         fn: (el, opts) => {
           const duration = opts?.behavior === 'smooth' ? undefined : 0;
           return scroller.toElement(el, {

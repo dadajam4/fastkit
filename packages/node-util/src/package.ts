@@ -1,9 +1,11 @@
+/* eslint-disable import/no-dynamic-require */
 import path from 'node:path';
 import fs from 'fs-extra';
-import { pathExists, pathExistsSync } from './path';
 import { execa } from 'execa';
-import { NodeUtilError } from './logger';
 import module from 'node:module';
+import { pathExists, pathExistsSync } from './path';
+import { NodeUtilError } from './logger';
+
 const require = module.createRequire(import.meta.url);
 
 const DEV_RE = /\/fastkit\/packages\//;
@@ -59,6 +61,7 @@ export async function findPackage(
       if (pkg) {
         if (
           !requireModuleDirectory ||
+          // eslint-disable-next-line no-await-in-loop
           (await isAvailableModuleDir(path.join(from, 'node_modules')))
         ) {
           result = {
@@ -164,9 +167,7 @@ function hasGlobalPackageManagerInstallation(
   }
 
   return execa(pm, ['--version'])
-    .then((res) => {
-      return /^\d+.\d+.\d+$/.test(res.stdout);
-    })
+    .then((res) => /^\d+.\d+.\d+$/.test(res.stdout))
     .then((value) => {
       detectPMCache.set(key, value);
       return value;

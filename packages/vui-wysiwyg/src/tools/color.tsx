@@ -1,10 +1,10 @@
 import './color.scss';
 
 import { VNodeChild } from 'vue';
-import { WysiwygColorExtension } from '../extensions';
 import { type VuiService, VIcon } from '@fastkit/vui';
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 import TextStyle from '@tiptap/extension-text-style';
+import { WysiwygColorExtension } from '../extensions';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 
 export interface WysiwygColorItem {
   key?: string | number;
@@ -25,8 +25,7 @@ export function createWysiwygColorTool(opts: CreateWysiwygColorToolOptions) {
       icon:
         ({ editor }) =>
         () => {
-          const color: string | undefined =
-            editor.getAttributes('textStyle').color;
+          const { color } = editor.getAttributes('textStyle');
           const style = { color };
           return (
             <span class="v-wysiwyg-color-tool__button">

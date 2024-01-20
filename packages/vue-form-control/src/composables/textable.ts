@@ -6,6 +6,12 @@ import {
   PropType,
 } from 'vue';
 import { createPropsOptions } from '@fastkit/vue-utils';
+import { toInt, nilToEmptyString } from '@fastkit/helpers';
+import {
+  minLength as minLengthFactory,
+  maxLength as maxLengthFactory,
+  pattern as patternFactory,
+} from '@fastkit/rules';
 import {
   createFormNodeProps,
   FormNodeControl,
@@ -13,12 +19,6 @@ import {
   FormNodeContext,
   FormNodeControlBaseOptions,
 } from './node';
-import { toInt, nilToEmptyString } from '@fastkit/helpers';
-import {
-  minLength as minLengthFactory,
-  maxLength as maxLengthFactory,
-  pattern as patternFactory,
-} from '@fastkit/rules';
 import {
   createAutocompletableInputProps,
   createAutocompletableInputControl,
@@ -55,6 +55,7 @@ async function finalizeValue(
 ) {
   let result: string = nilToEmptyString(value);
   for (const finalizer of finalizers) {
+    // eslint-disable-next-line no-await-in-loop
     result = await finalizer(result);
   }
   return result;
@@ -140,12 +141,19 @@ export interface TextableControlOptions extends FormNodeControlBaseOptions {}
 
 export class TextableControl extends FormNodeControl<string> {
   readonly _props: TextableProps;
+
   protected _minlength: ComputedRef<number | undefined>;
+
   protected _maxlength: ComputedRef<number | undefined>;
+
   protected _autocompletable: AutocompletableInputControl;
+
   protected _finalizers: ComputedRef<TextFinalizer[] | undefined>;
+
   protected _counterSettings: ComputedRef<TextableCounterSettings | undefined>;
+
   protected _counterResult: ComputedRef<TextableCounterResult | undefined>;
+
   protected _maxlengthLimit: ComputedRef<number | undefined>;
 
   /** Minimum number of characters */

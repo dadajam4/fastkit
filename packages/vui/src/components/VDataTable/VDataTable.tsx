@@ -15,6 +15,10 @@ import {
   isVNode,
   HTMLAttributes,
 } from 'vue';
+import { VNodeChildOrSlot } from '@fastkit/vue-utils';
+import { resizeDirectiveArgument } from '@fastkit/vue-resize';
+import { VueAppLayout } from '@fastkit/vue-app-layout';
+import { ScopeName, toScopeColorClass } from '@fastkit/vue-color-scheme';
 import { useVui } from '../../injections';
 import type { VuiService } from '../../service';
 import { VSelect } from '../VSelect';
@@ -22,10 +26,6 @@ import { VPagination } from '../VPagination';
 import { VCheckbox } from '../VCheckbox';
 import { VIcon, resolveRawIconProp } from '../VIcon';
 import { VProgressCircular } from '../loading';
-import { VNodeChildOrSlot } from '@fastkit/vue-utils';
-import { resizeDirectiveArgument } from '@fastkit/vue-resize';
-import { VueAppLayout } from '@fastkit/vue-app-layout';
-import { ScopeName, toScopeColorClass } from '@fastkit/vue-color-scheme';
 import { VPaper } from '../VPaper';
 
 export type DataTableHeaderAlign = 'left' | 'center' | 'right';
@@ -213,6 +213,7 @@ export const VDataTable = defineComponent({
     const footerHeightRef = ref(0);
     const internalValues = ref<string[]>(props.modelValue.slice());
     const rowSettings = computed<DataTableRowSettingsFn>(() => {
+      // eslint-disable-next-line no-shadow
       const { rowSettings } = props;
       if (!rowSettings) return () => ({});
       return typeof rowSettings === 'function'
@@ -314,14 +315,14 @@ export const VDataTable = defineComponent({
         : props.descQueryValue,
     );
 
-    const isTransitioningRef = computed(() => {
-      return vui.location.isQueryOnlyTransitioning([
+    const isTransitioningRef = computed(() =>
+      vui.location.isQueryOnlyTransitioning([
         props.pageQuery,
         props.sortQuery,
         props.orderQuery,
         props.limitQuery,
-      ]);
-    });
+      ]),
+    );
 
     const pageRef = computed(() =>
       vui.location.getQuery(props.pageQuery, Number, 1),
@@ -332,9 +333,7 @@ export const VDataTable = defineComponent({
     );
 
     const sortByRef = computed({
-      get: () => {
-        return vui.location.getQuery(props.sortQuery);
-      },
+      get: () => vui.location.getQuery(props.sortQuery),
       set(value) {
         vui.location.pushQuery({
           [props.sortQuery]: value || null,
@@ -395,12 +394,11 @@ export const VDataTable = defineComponent({
       let icon = vui.icon('sort');
       if (typeof icon === 'string') {
         const name = icon;
-        icon = (gen) => {
-          return gen({
+        icon = (gen) =>
+          gen({
             name,
             rotate: isASCRef.value ? 180 : 0,
           });
-        };
       }
       return icon;
     });
@@ -544,12 +542,10 @@ export const VDataTable = defineComponent({
               size="sm"
               hiddenInfo
               disabled={isTransitioningRef.value}
-              items={props.limits.map((limit) => {
-                return {
-                  label: `${limit}件`,
-                  value: limit,
-                };
-              })}
+              items={props.limits.map((limit) => ({
+                label: `${limit}件`,
+                value: limit,
+              }))}
               v-model={limitRef.value}
             />
           </div>
@@ -693,6 +689,7 @@ export const VDataTable = defineComponent({
         }
 
         if (!cellChildren) {
+          // eslint-disable-next-line default-case
           switch (headerKey) {
             case SELECTABLE_HEADER_SYMBOL: {
               cellChildren = [
@@ -766,9 +763,9 @@ export const VDataTable = defineComponent({
     watch(
       () => props.items,
       (items) => {
-        internalValues.value = internalValues.value.filter((key) => {
-          return sortedItemKeysRef.value.includes(key);
-        });
+        internalValues.value = internalValues.value.filter((key) =>
+          sortedItemKeysRef.value.includes(key),
+        );
       },
     );
 

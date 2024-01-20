@@ -81,7 +81,7 @@ function pointerHook(
   const elements = (include && include()) || [];
   elements.push(el);
 
-  !elements.some((el) => el.contains(ev.target as Node)) &&
+  !elements.some((_el) => _el.contains(ev.target as Node)) &&
     setTimeout(() => {
       if (conditional && !conditional(ev)) return;
       handler(ev);

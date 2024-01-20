@@ -1,9 +1,9 @@
+import type { Options } from 'cssnano';
 import {
   OptimizeLayerOptions,
   OptimizeMediaOptions,
   CombineRulesOptions,
 } from '../postcss';
-import type { Options } from 'cssnano';
 
 /**
  * CSS optimization options

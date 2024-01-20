@@ -35,6 +35,7 @@ type AnyStyleRule<CustomRules extends CustomStyleRules | null = null> =
 type LayerStyleHooks<CustomRules extends CustomStyleRules | null = null> = {
   style?: (rule: ComplexLayerStyleRule<CustomRules>, debugId?: string) => void;
   global?: (selector: string, rule: LayerGlobalStyleRules<CustomRules>) => void;
+  // eslint-disable-next-line no-shadow
   anyStyle?: (style: AnyStyleRule<CustomRules>) => void;
 };
 
@@ -150,18 +151,18 @@ export function defineLayerStyle<
 
   const layerStyle = function layerStyle(rule, debugId) {
     const rules = Array.isArray(rule) ? rule : [rule];
-    const layerAppliedRules = rules.map((rule) => {
-      if (typeof rule === 'string' || Array.isArray(rule)) return rule;
+    const layerAppliedRules = rules.map((_rule) => {
+      if (typeof _rule === 'string' || Array.isArray(_rule)) return _rule;
       return {
         '@layer': {
-          [layerName]: rule,
+          [layerName]: _rule,
         },
       };
     });
     if (hooks.anyStyle) {
-      for (const rule of rules) {
-        if (typeof rule === 'string' || Array.isArray(rule)) continue;
-        hooks.anyStyle(rule);
+      for (const _rule of rules) {
+        if (typeof _rule === 'string' || Array.isArray(_rule)) continue;
+        hooks.anyStyle(_rule);
       }
     }
     hooks.style && hooks.style(rule, debugId);
@@ -216,11 +217,11 @@ export function defineLayerStyle<
   layerStyle.defineNestedLayer = function defineNestedLayer(
     globalNameOrNestedOptions?: string | DefineLayerOptions<CustomRules>,
   ) {
-    const options = normalizeToObject(globalNameOrNestedOptions);
-    const nestedHooks = options.hooks;
+    const _options = normalizeToObject(globalNameOrNestedOptions);
+    const nestedHooks = _options.hooks;
 
     return defineLayerStyle({
-      ...options,
+      ..._options,
       hooks: {
         ...hooks,
         ...nestedHooks,

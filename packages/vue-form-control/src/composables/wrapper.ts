@@ -19,6 +19,7 @@ import {
   cleanupEmptyVNodeChild,
   DefineSlotsType,
 } from '@fastkit/vue-utils';
+import { arrayRemove, mixin, Mixin } from '@fastkit/helpers';
 import {
   FormNodeControl,
   FormNodeErrorSlots,
@@ -27,7 +28,6 @@ import {
 } from './node';
 import type { VueFormService } from '../service';
 import { useVueForm, FormNodeWrapperInjectionKey } from '../injections';
-import { arrayRemove, mixin, Mixin } from '@fastkit/helpers';
 
 const EMPTY_MESSAGE = '\xa0'; // for keep height
 
@@ -118,27 +118,47 @@ export interface FormNodeWrapperOptions {
  */
 export class FormNodeWrapper {
   readonly _props: FormNodeWrapperProps;
+
   readonly _service: VueFormService;
+
   protected _ctx: FormNodeWrapperContext | undefined;
+
   protected _allNodes: Ref<FormNodeControl[]> = ref([]);
+
   protected _labelSlot: ComputedRef<TypedSlot<FormNodeWrapper> | undefined>;
+
   protected _hintSlot: ComputedRef<TypedSlot<FormNodeWrapper> | undefined>;
+
   protected _hinttip: ComputedRef<VNodeChild>;
+
   protected _hinttipDelay: ComputedRef<FormNodeWrapperHinttipDelay | undefined>;
+
   protected _hinttipPrepend?: () => VNodeChild;
+
   protected _infoAppendsSlot: ComputedRef<
     TypedSlot<FormNodeWrapper> | undefined
   >;
+
   protected _validating: ComputedRef<boolean>;
+
   protected _pending: ComputedRef<boolean>;
+
   protected _focused: ComputedRef<boolean>;
+
   protected _dirty: ComputedRef<boolean>;
+
   protected _disabled: ComputedRef<boolean>;
+
   protected _readonly: ComputedRef<boolean>;
+
   protected _viewonly: ComputedRef<boolean>;
+
   protected _touched: ComputedRef<boolean>;
+
   protected _required: ComputedRef<boolean>;
+
   protected _invalid: ComputedRef<boolean>;
+
   protected _resolvedErrorMessages: ComputedRef<FormNodeErrorMessageSource[]>;
 
   /**

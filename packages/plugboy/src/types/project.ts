@@ -1,5 +1,5 @@
-import { RequiredPackageJSON } from './_utils';
 import type { CompilerOptions } from 'typescript';
+import { RequiredPackageJSON } from './_utils';
 import { WorkspacePackageJson } from './workspace';
 import { UserPluginOption, Plugin } from './plugin';
 import type { Path } from '../path';

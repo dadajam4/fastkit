@@ -1,12 +1,12 @@
-import * as _styles from './styles.css';
 import { defineComponent, PropType, computed, Teleport, Transition } from 'vue';
+import { defineSlots } from '@fastkit/vue-utils';
+import * as _styles from './styles.css';
 import { VueAppLayoutPositionY, VueAppLayoutBarType } from '../../schemes';
 import {
   useVueAppLayout,
   VueAppBar,
   VueAppBarActivateCondition,
 } from '../../controls';
-import { defineSlots } from '@fastkit/vue-utils';
 import { useBooting } from '../../composables/booting';
 
 export interface DefineBarComponentSettings {

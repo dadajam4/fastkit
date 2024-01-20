@@ -1,5 +1,15 @@
 # @fastkit/sprite-images
 
+## 0.13.8
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/ev@0.13.2
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.13.7
 
 ### Patch Changes

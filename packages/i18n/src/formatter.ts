@@ -96,13 +96,11 @@ function createMergedOptions<
 }
 
 const valueNomalizers = {
-  dateTime: (value?: I18nDateTimeFormatArg): undefined | number | Date => {
-    return typeof value === 'string' ? new Date(value) : value;
-  },
+  dateTime: (value?: I18nDateTimeFormatArg): undefined | number | Date =>
+    typeof value === 'string' ? new Date(value) : value,
   relativeTime: undefined,
-  number: (value: I18nNumberFormatArg): number | bigint => {
-    return typeof value === 'string' ? parseFloat(value) : value;
-  },
+  number: (value: I18nNumberFormatArg): number | bigint =>
+    typeof value === 'string' ? parseFloat(value) : value,
   list: undefined,
 };
 
@@ -926,9 +924,7 @@ export class I18nFormatter<
       // settings getter
       const settingsGetter = (
         localeName: LocaleName = space.currentLocaleName,
-      ) => {
-        return this.getFormats(type, localeName);
-      };
+      ) => this.getFormats(type, localeName);
       typeBucket.settings = settingsGetter;
 
       // formatter getter
@@ -939,6 +935,7 @@ export class I18nFormatter<
 
       const formatterGetter = (
         optionsOrFormatName?: any,
+        // eslint-disable-next-line default-param-last
         localeName: LocaleName = space.currentLocaleName,
         overrides?: any,
       ) => {
@@ -983,10 +980,12 @@ export class I18nFormatter<
        * @param fnName - Name of the formatting function to be called in the target instance of Intl.
        * @returns Formatting Functions
        */
-      const buildSingleArgFormatter = (fnName: string) => {
-        return (
+      const buildSingleArgFormatter =
+        (fnName: string) =>
+        (
           value: any,
           optionsOrFormatName?: any,
+          // eslint-disable-next-line default-param-last
           localeName: LocaleName = space.currentLocaleName,
           overrides?: any,
         ) => {
@@ -997,18 +996,19 @@ export class I18nFormatter<
           );
           return (formatter as any)[fnName](normalizeValue(value));
         };
-      };
 
       /**
        * Generate a format method that takes two arguments
        * @param fnName - Name of the formatting function to be called in the target instance of Intl.
        * @returns Formatting Functions
        */
-      const buildDoubleArgsFormatter = (fnName: string) => {
-        return (
+      const buildDoubleArgsFormatter =
+        (fnName: string) =>
+        (
           startValue: any,
           endValue: any,
           optionsOrFormatName?: any,
+          // eslint-disable-next-line default-param-last
           localeName: LocaleName = space.currentLocaleName,
           overrides?: any,
         ) => {
@@ -1022,7 +1022,6 @@ export class I18nFormatter<
             normalizeValue(endValue),
           );
         };
-      };
 
       // In `"relativeTime"`, it always takes two arguments.
       const buildBaseFormatter =

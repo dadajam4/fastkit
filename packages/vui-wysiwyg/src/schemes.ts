@@ -23,11 +23,8 @@ const EDITOR_EVENTS = [
 
 type PrefixedEventName<S extends string> = `on${Capitalize<S>}`;
 
-const prefixedEventName = <S extends string>(
-  source: S,
-): PrefixedEventName<S> => {
-  return `on${source.charAt(0).toUpperCase()}${source.slice(1)}` as any;
-};
+const prefixedEventName = <S extends string>(source: S): PrefixedEventName<S> =>
+  `on${source.charAt(0).toUpperCase()}${source.slice(1)}` as any;
 
 export type WysiwygEditorEvent = (typeof EDITOR_EVENTS)[number];
 
@@ -45,6 +42,7 @@ export type WysiwygEditorEventsBucket = {
 
 export class WysiwygEditorInitializeContext {
   readonly listeners: WysiwygEditorEventsBucket = {} as any;
+
   private readonly _vui: () => VuiService;
 
   get vui() {

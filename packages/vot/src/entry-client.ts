@@ -1,5 +1,7 @@
 import { createSSRApp } from 'vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { createScrollBehavior } from '@fastkit/vue-page';
+import { createMockPathRoute } from '@fastkit/vue-utils';
 import { deserializeState } from './utils/deserialize-state';
 import { useClientRedirect } from './utils/response';
 import { getFullPath, withoutSuffix } from './utils/route';
@@ -9,9 +11,7 @@ import type {
   VotContext,
   VotBeforeRouterSetupParams,
 } from './schemes';
-import { createScrollBehavior } from '@fastkit/vue-page';
 import { provideContext } from './injections';
-import { createMockPathRoute } from '@fastkit/vue-utils';
 
 export const createEntry: ClientHandler = async function createClientEntry(
   App,

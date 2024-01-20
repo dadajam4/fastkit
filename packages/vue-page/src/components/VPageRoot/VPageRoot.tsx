@@ -1,8 +1,8 @@
 import { defineComponent, h } from 'vue';
 import { ClientOnly } from '@fastkit/vue-utils';
+import { useRouter } from 'vue-router';
 import { VPageProgress } from '../VPageProgress';
 import { useVuePageControl } from '../../injections';
-import { useRouter } from 'vue-router';
 
 export const VPageRoot = defineComponent({
   name: 'VPageRoot',

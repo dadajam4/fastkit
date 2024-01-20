@@ -44,9 +44,7 @@ export const VContentSwitcher = defineComponent({
     const elRef = ref<HTMLElement | null>(null);
     const anchorRef = ref<HTMLElement | null>(null);
     const computedOrderRef = computed(() =>
-      props.order.map((row) => {
-        return typeof row === 'string' ? row : row.value;
-      }),
+      props.order.map((row) => (typeof row === 'string' ? row : row.value)),
     );
     const currentRef = computed({
       get: () => internalValueRef.value,
@@ -69,10 +67,10 @@ export const VContentSwitcher = defineComponent({
     });
 
     function seeTop(options?: ContentSwitcherSeeTopOptions) {
-      const scoller = getDocumentScroller();
+      const scroller = getDocumentScroller();
       const { value: anchor } = anchorRef;
       if (anchor) {
-        scoller.toElement(anchor, options);
+        scroller.toElement(anchor, options);
       }
     }
 
@@ -132,10 +130,10 @@ export const VContentSwitcher = defineComponent({
           <Transition
             name={transitionRef.value}
             onBeforeLeave={(el) => {
-              getEl().style.height = (el as HTMLElement).offsetHeight + 'px';
+              getEl().style.height = `${(el as HTMLElement).offsetHeight}px`;
             }}
             onEnter={(el) => {
-              getEl().style.height = (el as HTMLElement).offsetHeight + 'px';
+              getEl().style.height = `${(el as HTMLElement).offsetHeight}px`;
             }}
             onAfterEnter={() => {
               getEl().style.height = '';

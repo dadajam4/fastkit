@@ -1,7 +1,7 @@
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 import { TextAlign, TextAlignOptions } from '@tiptap/extension-text-align';
 import { type Editor } from '@tiptap/vue-3';
 import { VuiServiceIconSettings, VButtonGroup, VButton } from '@fastkit/vui';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 
 /**
  * A list of available options for the text align attribute.
@@ -45,9 +45,7 @@ export interface WysiwygTextAlignOptions {
 
 const conditions = WYSIWYG_TEXT_ALIGN_VALUES.map<
   [WysiwygTextAlignValue, { textAlign: WysiwygTextAlignValue }]
->((value) => {
-  return [value, { textAlign: value }];
-});
+>((value) => [value, { textAlign: value }]);
 
 const ICON_AT: Record<WysiwygTextAlignValue, keyof VuiServiceIconSettings> = {
   left: 'editorAlignLeft',
@@ -97,33 +95,30 @@ export const WysiwygTextAlignTool: WysiwygEditorToolFactory<
 
   const tool: WysiwygEditorTool = {
     key: 'textAlign',
-    icon: ({ editor }) => {
-      return getIcon(getCurrentAlign(editor, resolvedOptions));
-    },
+    icon: ({ editor }) => getIcon(getCurrentAlign(editor, resolvedOptions)),
+    // eslint-disable-next-line no-shadow
     onClick: async ({ vui, editor }, ev) => {
       vui.menu({
         distance: 0,
         activator: ev,
-        content: (menu) => {
-          return (
-            <VButtonGroup variant={variant}>
-              {alignments.map((value) => {
-                const isActive = editor.isActive({ textAlign: value });
-                return (
-                  <VButton
-                    tabindex={-1}
-                    color={isActive ? toolButtonActiveColor : undefined}
-                    key={value}
-                    icon={getIcon(value)}
-                    onClick={(ev) => {
-                      editor.chain().focus().setTextAlign(value).run();
-                    }}
-                  />
-                );
-              })}
-            </VButtonGroup>
-          );
-        },
+        content: (menu) => (
+          <VButtonGroup variant={variant}>
+            {alignments.map((value) => {
+              const isActive = editor.isActive({ textAlign: value });
+              return (
+                <VButton
+                  tabindex={-1}
+                  color={isActive ? toolButtonActiveColor : undefined}
+                  key={value}
+                  icon={getIcon(value)}
+                  onClick={() => {
+                    editor.chain().focus().setTextAlign(value).run();
+                  }}
+                />
+              );
+            })}
+          </VButtonGroup>
+        ),
       });
     },
     floating: true,

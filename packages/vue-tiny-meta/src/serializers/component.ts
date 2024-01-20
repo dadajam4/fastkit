@@ -4,15 +4,15 @@ import {
   Identifier,
 } from '@fastkit/ts-tiny-meta/ts-morph';
 import { SourceFileExporter, _extractMetaDocs } from '@fastkit/ts-tiny-meta/ts';
-import { ComponentMeta } from '../types';
-import { serializeProps, serializePropsByType } from './props';
-import { serializeEmits } from './emits';
-import { serializeSlots } from './slots';
 import {
+  ComponentMeta,
   SerializeVueOptions,
   ComponentDescription,
   ResolverContext,
 } from '../types';
+import { serializeProps, serializePropsByType } from './props';
+import { serializeEmits } from './emits';
+import { serializeSlots } from './slots';
 import {
   resolveResolvers,
   trimCommonSubstring,

@@ -74,10 +74,10 @@ export const VTextareaAutosize = defineComponent({
     });
     const value = computed({
       get: () => currentValue.value,
-      set: (value) => {
-        if (currentValue.value !== value) {
-          currentValue.value = value;
-          ctx.emit('update:modelValue', value);
+      set: (_value) => {
+        if (currentValue.value !== _value) {
+          currentValue.value = _value;
+          ctx.emit('update:modelValue', _value);
         }
       },
     });

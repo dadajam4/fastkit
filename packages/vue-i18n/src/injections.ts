@@ -8,7 +8,7 @@ import { VueI18nError } from './logger';
  */
 export const VUE_I18N_INJECTION_KEY: InjectionKey<
   I18nSpace<any, any, any, any, any>
-> = Symbol();
+> = Symbol('VUE_I18N');
 
 /**
  * Obtaining Provided Internationalization Space

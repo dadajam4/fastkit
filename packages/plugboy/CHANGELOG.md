@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 0.1.10
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
 ## 0.1.9
 
 ### Patch Changes

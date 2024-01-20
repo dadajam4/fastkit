@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import './VMenu.scss';
 import {
   defineComponent,
@@ -15,6 +16,14 @@ import {
   onBeforeUnmount,
 } from 'vue';
 import {
+  useWindow,
+  UseWindowRef,
+  resizeDirectiveArgument,
+  ResizeDirectivePayload,
+} from '@fastkit/vue-resize';
+import { type ExtractPropInput } from '@fastkit/vue-utils';
+import { IN_WINDOW } from '@fastkit/helpers';
+import {
   createStackableDefine,
   MergeStackBaseSlots,
   StackableTabCloseSpec,
@@ -25,15 +34,7 @@ import {
   StackableSetupContext,
   EmitsToPropOptions,
 } from '../composables';
-import {
-  useWindow,
-  UseWindowRef,
-  resizeDirectiveArgument,
-  ResizeDirectivePayload,
-} from '@fastkit/vue-resize';
-import { type ExtractPropInput } from '@fastkit/vue-utils';
 import { logger, VueStackError } from '../logger';
-import { IN_WINDOW } from '@fastkit/helpers';
 import { getScrollParents } from '../utils';
 
 const DEFAULT_EDGE_MARGIN = 20;
@@ -373,12 +374,11 @@ export function defineMenuComponent<
       >(_props, _ctx, {
         onContentMounted: () => {
           updateRects();
-          // startHandleResize();
         },
-        // onContentDetached: stopHandleResize,
         transitionResolver,
       });
 
+      // eslint-disable-next-line no-shadow
       const { props, control } = baseCtx;
 
       const state: VMenuState = reactive({
@@ -448,9 +448,8 @@ export function defineMenuComponent<
         }
         return raw;
       };
-      const resolveSize = (size: number | 'fit' | 'free' | undefined) => {
-        return size === 'free' ? undefined : size;
-      };
+      const resolveSize = (size: number | 'fit' | 'free' | undefined) =>
+        size === 'free' ? undefined : size;
 
       const _width = computed(() => resolveSize(props.width));
       const _height = computed(() => resolveSize(props.height));
@@ -532,7 +531,10 @@ export function defineMenuComponent<
         let computedMaxWidth = _maxWidth.value;
         let computedMaxHeight = _maxHeight.value;
 
-        let left: number, top: number, width: number, height: number;
+        let left: number;
+        let top: number;
+        let width: number;
+        let height: number;
 
         const { width: myWidth, height: myHeight } = rect;
 
@@ -877,10 +879,10 @@ export function defineMenuComponent<
         };
         const rect = _rect.value;
         if (rect) {
-          styles.left = rect.left + 'px';
-          styles.top = rect.top + 'px';
-          styles.width = rect.width + 'px';
-          styles.height = rect.height + 'px';
+          styles.left = `${rect.left}px`;
+          styles.top = `${rect.top}px`;
+          styles.width = `${rect.width}px`;
+          styles.height = `${rect.height}px`;
 
           Object.assign(styles, rect.bubble.styles);
         } else {
@@ -1055,9 +1057,8 @@ export function defineMenuComponent<
 
       watch(
         () => control.isActive,
-        (isActive) => {
-          return isActive ? setupScrollerScroll() : resetScrollerScroll();
-        },
+        (isActive) =>
+          isActive ? setupScrollerScroll() : resetScrollerScroll(),
       );
 
       onBeforeUnmount(resetScrollerScroll);
@@ -1130,9 +1131,9 @@ export function defineMenuComponent<
         };
       });
 
-      return () => {
-        return control.render((children) => {
-          return withDirectives(
+      return () =>
+        control.render((children) =>
+          withDirectives(
             <div {...hostAttrs.value} style={_styles.value} ref={_scrollerRef}>
               {withDirectives(render(children, stackMenuCtx as any), [
                 resizeDirectiveArgument(updateRects),
@@ -1144,9 +1145,8 @@ export function defineMenuComponent<
                 rootMode: true,
               }),
             ],
-          );
-        });
-      };
+          ),
+        );
     },
   });
 

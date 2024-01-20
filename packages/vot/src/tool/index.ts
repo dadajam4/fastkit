@@ -31,6 +31,7 @@ export function votPlugin(options: VotPluginOptions = {}) {
     ...({
       votOptions: options,
     } as any),
+    // eslint-disable-next-line no-shadow
     options: (options) => {
       options.onwarn = (warn, defaultHandler) => {
         // Update this package.json to use a subpath pattern like "./*"
@@ -98,6 +99,7 @@ export function votPlugin(options: VotPluginOptions = {}) {
   const plugins = [pagesPlugin, vuePlugin, vueJsxPlugin, plugin];
 
   if ((options.excludeSsrComponents || []).length > 0) {
+    // eslint-disable-next-line no-shadow
     const plugin: Plugin = {
       name: 'vite:vot-exclude-components',
       enforce: 'pre',

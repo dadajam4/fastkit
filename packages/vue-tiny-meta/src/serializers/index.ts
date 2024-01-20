@@ -85,7 +85,7 @@ export function serializeVue(
     slots,
     docs,
     sourceFile: {
-      path: location.filePath.replace(exporter.workspace.dirPath + '/', ''),
+      path: location.filePath.replace(`${exporter.workspace.dirPath}/`, ''),
       line: location.start.line,
     },
   };

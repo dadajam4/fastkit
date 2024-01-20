@@ -1,6 +1,6 @@
 import { defineComponent, h, ExtractPropTypes } from 'vue';
-import { useColorClasses, colorSchemeProps } from '../service';
 import { ExtractPropInput } from '@fastkit/vue-utils';
+import { useColorClasses, colorSchemeProps } from '../service';
 
 export const colorSchemeProviderProps = {
   ...colorSchemeProps(),

@@ -27,13 +27,9 @@ export const VTooltip = defineComponent({
           class="v-tooltip"
           v-slots={{
             ...ctx.slots,
-            default: (payload) => {
-              return [
-                <span class="v-tooltip__inner">
-                  {defaultSlot && defaultSlot(payload)}
-                </span>,
-              ];
-            },
+            default: (payload) => [
+              <span class="v-tooltip__inner">{defaultSlot?.(payload)}</span>,
+            ],
           }}
         />
       );

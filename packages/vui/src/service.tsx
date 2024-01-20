@@ -1,8 +1,5 @@
-export { VuiInjectionKey } from './injections';
-
 import { VNodeChild, reactive, UnwrapNestedRefs } from 'vue';
 import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
-import type { IconName, RawIconProp } from './components/VIcon';
 import {
   type VueStackService,
   type VStackControl,
@@ -18,19 +15,22 @@ import type { Router } from 'vue-router';
 import { RouterLink, useLink, UseLinkOptions } from 'vue-router';
 import { setDefaultRouterLink } from '@fastkit/vue-action';
 import { LocationService } from '@fastkit/vue-location';
-import { VForm } from './components/VForm';
-import { VTextField, TextFieldInput } from './components/VTextField';
 import {
   VueForm,
   FormNodeWrapperHinttipDelay,
 } from '@fastkit/vue-form-control';
 import { getDocumentScroller, UseScroller } from '@fastkit/vue-scroller';
+import { VForm } from './components/VForm';
+import { VTextField, TextFieldInput } from './components/VTextField';
+import type { IconName, RawIconProp } from './components/VIcon';
 import { ControlSize } from './schemes';
 import { VButton } from './components/VButton';
 import { VDialog } from './components/VDialog';
 import { VSnackbar } from './components/VSnackbar';
 import { VMenu } from './components/VMenu';
 import { VSheetModal } from './components/VSheetModal';
+
+export { VuiInjectionKey } from './injections';
 
 export type UseLinkResult = ReturnType<typeof useLink>;
 
@@ -198,19 +198,33 @@ export class VuiService {
   readonly options: VuiServiceOptions;
 
   readonly selectionSeparator: VuiVNodeResolver;
+
   readonly autoScrollToElementOffsetTop?: number | (() => number | undefined);
+
   readonly textareaRows?: number;
+
   readonly requiredChip?: VuiVNodeResolver;
+
   readonly router: Router;
+
   readonly location: LocationService;
+
   readonly stack: VueStackService;
+
   readonly useLink: typeof useLink;
+
   readonly stackActions: VStackBuiltinActions;
+
   readonly dialog: StackableLauncher<typeof VDialog>;
+
   readonly alert: StackableLauncher<typeof VDialog>;
+
   readonly confirm: StackableLauncher<typeof VDialog, boolean>;
+
   readonly snackbar: StackableLauncher<typeof VSnackbar>;
+
   readonly menu: StackableLauncher<typeof VMenu>;
+
   readonly sheet: StackableLauncher<typeof VSheetModal>;
 
   get scroller(): UseScroller {
@@ -353,29 +367,27 @@ export class VuiService {
       }),
     ];
 
-    return this.dialog(options, (stack) => {
-      return (
-        <VForm
-          disableAutoScroll
-          size={size}
-          // onVnodeMounted={(vnode) => {
-          //   form = (vnode.component as any).ctx.form as VueForm;
-          // }}
-          onVnodeBeforeUnmount={() => {
-            form = undefined;
-          }}
-          onSubmit={(ev) => {
-            stack.resolve(_state);
-          }}
-          v-slots={{
-            default: (_form) => {
-              form = _form;
-              return slot(_state, { form, stack });
-            },
-          }}
-        />
-      );
-    });
+    return this.dialog(options, (stack) => (
+      <VForm
+        disableAutoScroll
+        size={size}
+        // onVnodeMounted={(vnode) => {
+        //   form = (vnode.component as any).ctx.form as VueForm;
+        // }}
+        onVnodeBeforeUnmount={() => {
+          form = undefined;
+        }}
+        onSubmit={(ev) => {
+          stack.resolve(_state);
+        }}
+        v-slots={{
+          default: (_form) => {
+            form = _form;
+            return slot(_state, { form, stack });
+          },
+        }}
+      />
+    ));
   }
 
   prompt(rawOptions: RawVuiPromptOptions = {}) {
@@ -410,9 +422,7 @@ export class VuiService {
         },
       },
       (state) => <VTextField {...options.input} v-model={state.input} />,
-    ).then((result) => {
-      return result ? result.input : result;
-    });
+    ).then((result) => (result ? result.input : result));
   }
 
   stackAction(
@@ -424,9 +434,9 @@ export class VuiService {
     const _onClick = BUILTIN_ACTION_HANDLERS[key];
     const action: VStackAction = {
       key,
+      // eslint-disable-next-line no-shadow
       content: ({ control, key }) => {
         const onClick = (ev: MouseEvent) => _onClick(control, ev);
-        control.guardInProgress;
 
         const _attrs: any = {
           disabled: control.guardInProgress,

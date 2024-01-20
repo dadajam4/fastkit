@@ -49,11 +49,13 @@ export class Color implements ColorImplements {
    * Get red value (0 to 255)
    */
   red(): number;
+
   /**
    * Set red value
    * @param r - red (0 to 255)
    */
   red(r: number): this;
+
   red(r?: number): number | this {
     const state = this._state;
     if (r === undefined) return state.r;
@@ -67,11 +69,13 @@ export class Color implements ColorImplements {
    * Get green value (0 to 255)
    */
   green(): number;
+
   /**
    * Set green value
    * @param r - green (0 to 255)
    */
   green(g: number): this;
+
   green(g?: number): number | this {
     const state = this._state;
     if (g === undefined) return state.g;
@@ -85,11 +89,13 @@ export class Color implements ColorImplements {
    * Get blue value (0 to 255)
    */
   blue(): number;
+
   /**
    * Set blue value
    * @param r - blue (0 to 255)
    */
   blue(b: number): this;
+
   blue(b?: number): number | this {
     const state = this._state;
     if (b === undefined) return state.b;
@@ -103,16 +109,19 @@ export class Color implements ColorImplements {
    * Returns the HSL hue of color between -360 and 360deg
    */
   hue(): number;
+
   /**
    * Set the HSL hue of color
    * @param h - hue between `-360deg and 360deg` or `xxx` or `xxx` or `xxx`
    */
   hue(deg: number): this;
+
   /**
    * Set the HSL hue of color
    * @param h - hue between `-360deg and 360deg` or `-6.283185307179586rad and 6.283185307179586rad` or `-400grad and 400grad` or `-1turn and 1turn`
    */
   hue(hue: string): this;
+
   hue(hue?: number | string) {
     const state = this._state;
     if (hue === undefined) return state.h;
@@ -127,11 +136,13 @@ export class Color implements ColorImplements {
    * Returns the HSL saturation of color (dull) 0 ... 1 (light)
    */
   saturation(): number;
+
   /**
    * Set the HSL saturation of color
    * @param s - saturation (0 to 1)
    */
   saturation(s: number): this;
+
   saturation(s?: number) {
     const state = this._state;
     if (s === undefined) return state.s;
@@ -145,11 +156,13 @@ export class Color implements ColorImplements {
    * Returns the HSL lightness of color (dark) 0 ... 1 (vivid)
    */
   lightness(): number;
+
   /**
    * Set the HSL lightness of color
    * @param l - lightness (0 to 1)
    */
   lightness(l: number): this;
+
   lightness(l?: number) {
     const state = this._state;
     if (l === undefined) return state.l;
@@ -163,11 +176,13 @@ export class Color implements ColorImplements {
    * Get alpha value (0 to 1)
    */
   alpha(): number;
+
   /**
    * Set blue value
    * @param r - alpha (0 to 1)
    */
   alpha(a: number): this;
+
   alpha(a?: number): number | this {
     const state = this._state;
     if (a === undefined) return state.a;

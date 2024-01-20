@@ -20,11 +20,8 @@ export type OmitFunction<T> = OmitByType<T, Function>;
 /**
  * Compare the identity of two types (X, Y) and obtain a type according to the result
  */
-export type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <
-  T,
->() => T extends Y ? 1 : 2
-  ? A
-  : B;
+export type IfEquals<X, Y, A, B> =
+  (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
 
 /** Retrieve writable member names from the structure by union type */
 export type WritableKeysOf<T> = {
@@ -84,11 +81,11 @@ type DeepPartialExclude = Function;
 export type DeepPartial<T> = T extends DeepPartialExclude
   ? T
   : // eslint-disable-next-line @typescript-eslint/ban-types
-  T extends object
-  ? {
-      [P in keyof T]?: DeepPartial<T[P]>;
-    }
-  : T;
+    T extends object
+    ? {
+        [P in keyof T]?: DeepPartial<T[P]>;
+      }
+    : T;
 
 /**
  * Recursive Arrays

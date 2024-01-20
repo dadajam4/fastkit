@@ -34,9 +34,9 @@ export async function createMemwatch() {
     }
   }
 
-  const log = console.log;
+  const { log } = console;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, func-names
   const mockLogger = function () {};
 
   console.log = mockLogger;

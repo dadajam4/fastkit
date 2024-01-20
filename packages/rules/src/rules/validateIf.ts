@@ -9,20 +9,16 @@ export const VALIDATE_IF_SYMBOL = 'validateIf';
 
 export const validateIf = createRule<ValidateIfChecker>({
   name: VALIDATE_IF_SYMBOL,
-  validate: (value, checker) => {
-    return checker(value) ? true : VALIDATE_CANCEL_SYMBOL;
-  },
-  constraints: (value) => {
-    return isRequired(value);
-  },
+  validate: (value, checker) =>
+    checker(value) ? true : VALIDATE_CANCEL_SYMBOL,
+  constraints: (value) => isRequired(value),
 });
 
 export function convertRequiredToValidateIf(rules: Rule[]): Rule[] {
   return rules.map((rule) => {
     if (rule.$name === REQUIRED_SYMBOL) {
       return validateIf;
-    } else {
-      return rule;
     }
+    return rule;
   });
 }

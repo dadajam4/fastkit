@@ -2,7 +2,6 @@
 
 import { App, h, Component } from 'vue';
 import { Router } from 'vue-router';
-import { createEntry } from './entry';
 import { createHead } from '@unhead/vue';
 import { isPromise, IN_WINDOW, removeUndef } from '@fastkit/helpers';
 import {
@@ -10,11 +9,14 @@ import {
   VuePageControlSettings,
   VPageRoot,
 } from '@fastkit/vue-page';
+import { createEntry } from './entry';
 import { CreateEntryOptions } from './schemes';
 import { VOT_GENERATE_PAGES_PATH } from './schemes/generate';
+
 export * from '@fastkit/vue-page';
 
 export async function createVotHook(
+  // eslint-disable-next-line no-shadow
   App: Component,
   options: CreateEntryOptions,
 ) {
@@ -91,6 +93,7 @@ export async function createVotHook(
         for (const plugin of plugins) {
           const result = plugin.setup(pageControl);
           if (isPromise(result)) {
+            // eslint-disable-next-line no-await-in-loop
             await result;
           }
         }
@@ -102,6 +105,7 @@ export async function createVotHook(
   return hook;
 }
 
+// eslint-disable-next-line no-shadow
 export function createVotEntry(App: Component, options: CreateEntryOptions) {
   const hookPromise = createVotHook(App, options);
   return async function renderer(url: string, cfg: any = {}) {

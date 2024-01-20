@@ -13,12 +13,11 @@ export function getContainerDimension(el: Element) {
       width: documentElement.clientWidth,
       height: documentElement.clientWidth,
     };
-  } else {
-    return {
-      width: el.clientWidth,
-      height: el.clientHeight,
-    };
   }
+  return {
+    width: el.clientWidth,
+    height: el.clientHeight,
+  };
 }
 
 export function $(selectorOrElement: string | Element): HTMLElement | null {
@@ -39,8 +38,8 @@ export function cumulativeOffset(element: Element) {
   }
 
   return {
-    top: top,
-    left: left,
+    top,
+    left,
   };
 }
 

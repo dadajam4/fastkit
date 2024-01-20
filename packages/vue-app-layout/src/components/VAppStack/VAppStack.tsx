@@ -1,4 +1,3 @@
-import * as styles from './VAppStack.css';
 import {
   defineComponent,
   PropType,
@@ -8,6 +7,8 @@ import {
   withDirectives,
   vShow,
 } from 'vue';
+import { defineSlots } from '@fastkit/vue-utils';
+import * as styles from './VAppStack.css';
 import {
   VueAppLayoutStickPositionX,
   VueAppLayoutStickPositionY,
@@ -22,7 +23,6 @@ import {
   VueAppStackTransitionSettings,
   VueAppStackBackdropSettings,
 } from '../../controls';
-import { defineSlots } from '@fastkit/vue-utils';
 
 export interface VAppStackRef {
   get: () => VueAppStack;

@@ -1,6 +1,8 @@
 import { parse, serialize } from 'cookie';
 import * as setCookieParser from 'set-cookie-parser';
 import type { Cookie } from 'set-cookie-parser';
+import { EV } from '@fastkit/ev';
+import { IN_DOCUMENT } from '@fastkit/helpers';
 import {
   CookiesContext,
   CookieParseOptions,
@@ -8,8 +10,6 @@ import {
   CookieSerializeOptions,
   CookiesEventMap,
 } from './schemes';
-import { EV } from '@fastkit/ev';
-import { IN_DOCUMENT } from '@fastkit/helpers';
 import {
   isCookiesBrowserContext,
   isIncomingMessage,
@@ -25,7 +25,9 @@ export interface CookiesOptions extends CookieParseOptions {
 
 export class Cookies extends EV<CookiesEventMap> {
   readonly ctx: CookiesContext;
+
   readonly options?: CookiesOptions;
+
   readonly bucket: CookiesBucket;
 
   constructor(ctx?: CookiesContext, options?: CookiesOptions) {

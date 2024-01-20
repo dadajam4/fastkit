@@ -1,10 +1,10 @@
 import { App } from 'vue';
+import { onAppUnmount } from '@fastkit/vue-utils';
 import {
   VueStackService,
   VueStackServiceOptions,
   VueStackInjectionKey,
 } from './service';
-import { onAppUnmount } from '@fastkit/vue-utils';
 
 declare module 'vue' {
   export interface ComponentCustomProperties {

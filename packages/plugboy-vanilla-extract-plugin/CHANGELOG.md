@@ -1,5 +1,14 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 1.0.14
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/plugboy@0.1.10
+
 ## 1.0.13
 
 ### Patch Changes

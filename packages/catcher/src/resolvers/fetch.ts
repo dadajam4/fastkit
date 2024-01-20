@@ -95,9 +95,7 @@ const DEFAULT_EXTRACT_FETCH_ERROR: ExtractFetchError = (source) => {
 export const fetchResponseResolver = (
   extract: ExtractFetchError = DEFAULT_EXTRACT_FETCH_ERROR,
 ) =>
-  createCatcherResolver(function fetchResponseResolver(source, ctx):
-    | FetchErrorOverrides
-    | undefined {
+  createCatcherResolver((source, ctx): FetchErrorOverrides | undefined => {
     const extracted = extract(source);
     if (!extracted) return;
 

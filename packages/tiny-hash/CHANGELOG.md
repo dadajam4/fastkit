@@ -1,5 +1,14 @@
 # @fastkit/tiny-hash
 
+## 0.1.2
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/json@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

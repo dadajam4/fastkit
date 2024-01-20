@@ -1,3 +1,4 @@
+import { isPromise } from '@fastkit/helpers';
 import {
   LogLevel,
   Transformer,
@@ -15,20 +16,20 @@ import {
   DEFAULT_LOGGER_NAME,
 } from './schemes';
 
-import { isPromise } from '@fastkit/helpers';
-
 /**
  * Logger
  */
 export class Logger {
   /** Logger Name */
   readonly name: string;
+
   /**
    * List of log transform functions
    *
    * @see Transformer
    */
   readonly transformers: Transformer[];
+
   /**
    * List of Log transporter
    *
@@ -68,9 +69,9 @@ export class Logger {
     }
 
     const results = this.transports.map(
-      ({ level, transformers, transport }) => {
-        if (level == null) level = this.level;
-        if (!isAvailableLogLevel(logLevelIndex, level))
+      ({ level: _level, transformers, transport }) => {
+        if (_level == null) _level = this.level;
+        if (!isAvailableLogLevel(logLevelIndex, _level))
           return Promise.resolve();
 
         try {

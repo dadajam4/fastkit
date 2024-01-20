@@ -130,6 +130,7 @@ export class HashedSync {
     for (const stack of stacks) {
       const { processor, updates } = stack;
       if (updates.length) {
+        // eslint-disable-next-line no-await-in-loop
         await processor.proc(updates);
       }
     }
@@ -146,11 +147,7 @@ export class HashedSync {
   }
 
   clean() {
-    return Promise.all(
-      this.removes.map((item) => {
-        return fs.remove(item.dest);
-      }),
-    );
+    return Promise.all(this.removes.map((item) => fs.remove(item.dest)));
   }
 
   async saveHistory() {

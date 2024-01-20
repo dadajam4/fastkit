@@ -2,8 +2,8 @@ import { Plugin } from 'vite';
 import { MediaMatchGeneratorRunner } from '@fastkit/media-match-gen';
 import path from 'node:path';
 import { findPackageDir } from '@fastkit/node-util';
-import { ViteMediaMatchError } from './logger';
 import { UnPromisify } from '@fastkit/helpers';
+import { ViteMediaMatchError } from './logger';
 
 export interface MediaMatchVitePluginOptions {
   src: string;

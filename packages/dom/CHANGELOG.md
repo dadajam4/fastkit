@@ -1,5 +1,14 @@
 # @fastkit/dom
 
+## 0.1.8
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.13.8
+
 ## 0.1.7
 
 ### Patch Changes

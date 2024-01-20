@@ -1,19 +1,19 @@
 import { cac } from 'cac';
 import path from 'node:path';
+import { findPackageDir, esbuildRequire } from '@fastkit/node-util';
 import {
   DEFAULT_DEST_DIRNAME,
   DEFAULT_CONFIG_FILENAME,
   IconFontConfig,
 } from './schemes';
 import { generate } from './generator';
-import { findPackageDir, esbuildRequire } from '@fastkit/node-util';
 import { IconFontGenError } from './logger';
 import pkg from '../package.json';
 
 export async function cli() {
-  const cli = cac('icon-font');
+  const _cli = cac('icon-font');
 
-  cli
+  _cli
     .option('-d, --dest <string>', 'Destination for generated fonts.', {
       default: path.join(process.cwd(), `${DEFAULT_DEST_DIRNAME}`),
     })
@@ -25,9 +25,9 @@ Path of the configuration file. (default: [your package directory]${path.sep}${D
 
     e.g.
     \`\`\`
-    import { ceateIconFontConfig } from '@fastkit/icon-font-gen';
+    import { createIconFontConfig } from '@fastkit/icon-font-gen';
 
-    export default ceateIconFontConfig({ ... });
+    export default createIconFontConfig({ ... });
     \`\`\`
       `.trim(),
     )
@@ -54,11 +54,11 @@ Path of the configuration file. (default: [your package directory]${path.sep}${D
       },
     );
 
-  cli.help();
+  _cli.help();
 
-  cli.version(pkg.version);
+  _cli.version(pkg.version);
 
-  cli.parse();
+  _cli.parse();
 }
 
 cli();

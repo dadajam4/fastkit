@@ -1,4 +1,3 @@
-import { CookiesBrowserContext, CookieSerializeOptions } from './schemes';
 import type {
   IncomingMessage,
   IncomingHttpHeaders,
@@ -6,6 +5,7 @@ import type {
 } from 'node:http';
 import type { Cookie } from 'set-cookie-parser';
 import { isObject } from '@fastkit/helpers';
+import { CookiesBrowserContext, CookieSerializeOptions } from './schemes';
 
 export function isCookiesBrowserContext(
   source: any,
@@ -43,7 +43,7 @@ export function createCookie(
   value: string,
   options: CookieSerializeOptions = {},
 ): Cookie {
-  let sameSite = options.sameSite;
+  let { sameSite } = options;
   if (sameSite === true) {
     sameSite = 'strict';
   }
@@ -53,8 +53,8 @@ export function createCookie(
   const cookieToSet = { ...options, sameSite };
   delete cookieToSet.encode;
   return {
-    name: name,
-    value: value,
+    name,
+    value,
     ...cookieToSet,
   };
 }

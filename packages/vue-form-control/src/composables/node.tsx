@@ -31,16 +31,6 @@ import {
   type Rule,
 } from '@fastkit/rules';
 import {
-  FormNodeInjectionKey,
-  useParentForm,
-  useParentFormGroup,
-  useParentFormNodeWrapper,
-  useVueForm,
-} from '../injections';
-import type { VueForm } from './form';
-import type { FormGroupControl } from './group';
-import type { FormNodeWrapper } from './wrapper';
-import {
   RecursiveArray,
   flattenRecursiveArray,
   toInt,
@@ -53,6 +43,16 @@ import {
   DefineSlotsType,
   cleanupEmptyVNodeChild,
 } from '@fastkit/vue-utils';
+import {
+  FormNodeInjectionKey,
+  useParentForm,
+  useParentFormGroup,
+  useParentFormNodeWrapper,
+  useVueForm,
+} from '../injections';
+import type { VueForm } from './form';
+import type { FormGroupControl } from './group';
+import type { FormNodeWrapper } from './wrapper';
 import type { VueFormService } from '../service';
 
 export type RecursiveVerifiableRuleOrFn = RecursiveArray<VerifiableRuleOrFn>;
@@ -348,48 +348,91 @@ export class FormNodeControl<
   Required extends Prop<any> = BooleanConstructor,
 > {
   readonly _props: FormNodeProps;
+
   readonly _service: VueFormService;
+
   readonly nodeType?: FormNodeType;
+
   readonly __multiple: boolean;
+
   protected _isMounted = ref(false);
+
   protected _ctx: FormNodeContext<T, D>;
+
   protected _parentNode: FormNodeControl | null;
+
   protected _parentForm: VueForm | null;
+
   protected _parentFormGroup: FormGroupControl | null;
+
   protected _parentFormNodeWrapper: FormNodeWrapper | null;
+
   protected _booted = ref(false);
+
   protected _name: ComputedRef<string | undefined>;
+
   protected _value: Ref<T | D> = ref(null as any);
+
   protected _initialValue: Ref<T | D> = ref(null as any);
+
   protected _focused = ref(false);
+
   protected _children: Ref<FormNodeControl[]> = ref([]);
+
   protected _invalidChildren: ComputedRef<FormNodeControl[]>;
+
   protected _finalizePromise: Ref<(() => Promise<void>) | null> = ref(null);
+
   protected _validationErrors: Ref<ValidationError[]> = ref([]);
+
   protected _validateResolvers: ValidateResolver[] = [];
+
   protected _lastValidateValueChanged = true;
+
   protected _validating = ref(false);
+
   protected _validateRequestId = 0;
+
   protected _isDestroyed = false;
+
   protected _dirty: ComputedRef<boolean>;
+
   protected _touched = ref(false);
+
   protected _shouldValidate = ref(false);
+
   protected _currentValue: WritableComputedRef<T | D>;
+
   protected _errorMessages: ComputedRef<string[]>;
+
   protected _errors: ComputedRef<FormNodeError[]>;
+
   protected _resolvedErrorMessages: ComputedRef<FormNodeErrorMessageSource[]>;
+
   protected _errorCount: ComputedRef<number>;
+
   protected _isDisabled: ComputedRef<boolean>;
+
   protected _isReadonly: ComputedRef<boolean>;
+
   protected _isViewonly: ComputedRef<boolean>;
+
   protected _canOperation: ComputedRef<boolean>;
+
   protected _rules: ComputedRef<VerifiableRule[]>;
+
   protected _hasRequired: ComputedRef<boolean>;
+
   protected _tabindex: ComputedRef<number>;
+
   protected _cii: ComponentInternalInstance | null = null;
+
   protected _validationValueGetter?: () => any;
+
   protected _validationSkip = false;
+
   protected _stateExtensions: FormNodeStateExtensions;
+
   protected _requiredFactory: () => Rule<any> | undefined;
 
   /**
@@ -901,20 +944,18 @@ export class FormNodeControl<
       return messages;
     });
 
-    this._errors = computed(() => {
-      return [
-        ...this._errorMessages.value.map(toFormNodeError),
-        ...this.validationErrors,
-      ];
-    });
+    this._errors = computed(() => [
+      ...this._errorMessages.value.map(toFormNodeError),
+      ...this.validationErrors,
+    ]);
 
-    this._resolvedErrorMessages = computed(() => {
-      return this.showOwnErrors
+    this._resolvedErrorMessages = computed(() =>
+      this.showOwnErrors
         ? this.errors.map((error, index) =>
             this._createFormNodeErrorMessageSource(error, index),
           )
-        : [];
-    });
+        : [],
+    );
 
     this._invalidChildren = computed(() =>
       this.children.filter((node) => node.hasMyError),
@@ -959,17 +1000,15 @@ export class FormNodeControl<
       return canOperationFn ? canOperationFn(this, canOperation) : canOperation;
     });
 
-    this._rules = computed(() => {
-      return this._resolveRules();
-    });
+    this._rules = computed(() => this._resolveRules());
 
-    this._hasRequired = computed(() => {
-      return !!this._props.required || !!this.hasRequiredRule();
-    });
+    this._hasRequired = computed(
+      () => !!this._props.required || !!this.hasRequiredRule(),
+    );
 
-    this._tabindex = computed(() => {
-      return this.isDisabled ? -1 : toInt(props.tabindex);
-    });
+    this._tabindex = computed(() =>
+      this.isDisabled ? -1 : toInt(props.tabindex),
+    );
 
     (
       [
@@ -1254,6 +1293,7 @@ export class FormNodeControl<
     const rules = flattenRecursiveArray(propRules).map(resolveVerifiableRule);
 
     if (required) {
+      // eslint-disable-next-line no-shadow
       const requiredRule = this._requiredFactory();
       requiredRule && rules.unshift(requiredRule);
     }

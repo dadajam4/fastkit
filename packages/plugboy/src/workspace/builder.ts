@@ -1,17 +1,18 @@
+/* eslint-disable no-await-in-loop */
 import { Options, build } from 'tsup';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import type { OutputFile, Plugin } from 'esbuild';
+import { glob } from 'glob';
+import type { Processor, AcceptedPlugin as PostcssPlugin } from 'postcss';
 import type { PlugboyWorkspace, WorkspaceObjectExport } from './workspace';
 import {
   TSUP_SYNC_OPTIONS,
   NormalizedDTSPreserveTypeSettings,
   ResolvedOptimizeCSSOptions,
 } from '../types';
-import type { OutputFile, Plugin } from 'esbuild';
 import { copyDirSync, rmrf } from '../utils';
 import { emitDTS } from './dts';
-import { glob } from 'glob';
-import type { Processor, AcceptedPlugin as PostcssPlugin } from 'postcss';
 
 const SHEBANG_MATCH_RE = /^(#!.+?)\n/;
 type EnvVarName = '__PLUGBOY_DEV__' | '__PLUGBOY_STUB__';
@@ -64,7 +65,9 @@ async function getPostcss(
 
 export class Builder {
   readonly workspace: PlugboyWorkspace;
+
   private _tsupOptions?: ResolvedOptions;
+
   private _postcssCache?: Processor;
 
   get entry() {
@@ -160,7 +163,7 @@ function __plugboyPublicDir(...paths) {
 
     const banner: NonNullable<Options['banner']> = { ..._tsupOptions.banner };
     banner.js = `${
-      banner.js ? banner.js + '\n\n' : ''
+      banner.js ? `${banner.js}\n\n` : ''
     }${PLUGBOY_VAR_ENVS_BANNER}\n\n${ENV_FN_INJECTS}`;
 
     _tsupOptions.banner = banner;
@@ -208,12 +211,10 @@ function __plugboyPublicDir(...paths) {
     const srcFromDir = path.dirname(from);
     const dtsDir = path.dirname(dtsPath);
     await Promise.all(
-      [srcFromDir, dtsDir].map((dir) => {
-        return fs.mkdir(dir, { recursive: true });
-      }),
+      [srcFromDir, dtsDir].map((dir) => fs.mkdir(dir, { recursive: true })),
     );
     await Promise.all([
-      fs.writeFile(from, `${shebang ? shebang + '\n' : ''}${code}`),
+      fs.writeFile(from, `${shebang ? `${shebang}\n` : ''}${code}`),
       fs.writeFile(dtsPath, dtsCode),
     ]);
   }
@@ -235,9 +236,11 @@ function __plugboyPublicDir(...paths) {
       links.map((link) => {
         if (link.type === 'js') {
           return this._stubLinkJS(link.from, link.to);
-        } else if (link.type === 'css') {
+        }
+        if (link.type === 'css') {
           return this._stubLinkCSS(link.from);
         }
+        throw new Error(`non supported type`);
       }),
     );
     await fs.writeFile(
@@ -281,6 +284,7 @@ function __plugboyPublicDir(...paths) {
     if (!hitTypeNames.length) return;
 
     if (pkgImports) {
+      // eslint-disable-next-line no-shadow
       const { pkg, imports, importRe } = pkgImports;
       const mods = imports
         .trim()
@@ -398,8 +402,8 @@ function __plugboyPublicDir(...paths) {
         ...options.esbuildPlugins,
         {
           name: 'output-collection',
-          setup(build) {
-            build.onEnd((result) => {
+          setup(_build) {
+            _build.onEnd((result) => {
               const { outputFiles } = result;
               if (!outputFiles) return;
               _outputFiles.push(...outputFiles);

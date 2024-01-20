@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/scroller",
-  "version": "0.13.8",
+  "version": "0.13.9",
   "description": "Library for controlling the scrolling state of DOM elements.",
   "keywords": [
     "fastkit",

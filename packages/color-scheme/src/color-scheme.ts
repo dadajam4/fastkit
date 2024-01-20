@@ -5,6 +5,7 @@ import {
   ColorSchemeJSON,
   ColorScheme,
 } from './schemes';
+
 export * from './schemes';
 
 export function createColorScheme<
@@ -25,13 +26,13 @@ export function createColorScheme<
   if (typeof scopeResolvers === 'function') {
     scopeResolvers = scopeResolvers();
   }
-  const variantSources = rawVariants.map((rawVariant) => {
-    return typeof rawVariant === 'string'
+  const variantSources = rawVariants.map((rawVariant) =>
+    typeof rawVariant === 'string'
       ? {
           name: rawVariant,
         }
-      : rawVariant;
-  });
+      : rawVariant,
+  );
 
   const variants = variantSources.map(({ name }) => name);
 

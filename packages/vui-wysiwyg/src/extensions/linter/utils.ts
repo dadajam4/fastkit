@@ -1,16 +1,19 @@
-let IDX = 256,
-  BUFFER: any;
+/* eslint-disable eqeqeq */
+/* eslint-disable no-bitwise */
+let IDX = 256;
+let BUFFER: any;
 const HEX: any = [];
 while (IDX--) HEX[IDX] = (IDX + 256).toString(16).substring(1);
 
 export function cheepUUID() {
-  let i = 0,
-    num,
-    out = '';
+  let i = 0;
+  let num;
+  let out = '';
 
   if (!BUFFER || IDX + 16 > 256) {
     BUFFER = Array((i = 256));
     while (i--) BUFFER[i] = (256 * Math.random()) | 0;
+    // eslint-disable-next-line no-multi-assign
     i = IDX = 0;
   }
 

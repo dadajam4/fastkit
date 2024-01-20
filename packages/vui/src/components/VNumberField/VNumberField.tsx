@@ -44,6 +44,7 @@ export const VNumberField = defineComponent({
     });
 
     const inputmode = computed<TextFieldInput['inputmode']>(() => {
+      // eslint-disable-next-line no-shadow
       const { inputmode } = ctx.attrs as TextFieldInput;
       if (inputmode) return inputmode;
       return hasNumberMask.value ? 'decimal' : undefined;
@@ -57,19 +58,17 @@ export const VNumberField = defineComponent({
       ctx.emit('change', toNumber(value));
     };
 
-    return () => {
-      return (
-        <VTextField
-          {...ctx.attrs}
-          type={hasNumberMask.value ? 'text' : 'number'}
-          inputmode={inputmode.value}
-          maskModel="typed"
-          modelValue={toString(props.modelValue)}
-          onUpdate:modelValue={onUpdateModelValue}
-          onChange={onChange}
-          v-slots={ctx.slots as any}
-        />
-      );
-    };
+    return () => (
+      <VTextField
+        {...ctx.attrs}
+        type={hasNumberMask.value ? 'text' : 'number'}
+        inputmode={inputmode.value}
+        maskModel="typed"
+        modelValue={toString(props.modelValue)}
+        onUpdate:modelValue={onUpdateModelValue}
+        onChange={onChange}
+        v-slots={ctx.slots as any}
+      />
+    );
   },
 });

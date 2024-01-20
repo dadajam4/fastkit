@@ -8,12 +8,10 @@ export const VApp = defineComponent({
   setup(_props, ctx) {
     useInjectTheme();
 
-    return () => {
-      return (
-        <VDynamicStacks>
-          <VAppLayout v-slots={ctx.slots} />
-        </VDynamicStacks>
-      );
-    };
+    return () => (
+      <VDynamicStacks>
+        <VAppLayout v-slots={ctx.slots} />
+      </VDynamicStacks>
+    );
   },
 });

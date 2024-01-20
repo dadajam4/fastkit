@@ -55,14 +55,14 @@ export function addTransitionEvent(
   }
 
   function start() {
-    types.forEach((type) => {
-      el.addEventListener(type, _handler, options);
+    types.forEach((_type) => {
+      el.addEventListener(_type, _handler, options);
     });
   }
 
   function clear() {
-    types.forEach((type) => {
-      el.removeEventListener(type, _handler, options);
+    types.forEach((_type) => {
+      el.removeEventListener(_type, _handler, options);
     });
   }
 

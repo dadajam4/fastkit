@@ -7,7 +7,6 @@ import {
   ComputedRef,
   watch,
 } from 'vue';
-import { rawIconProp, resolveRawIconProp } from '../VIcon';
 import { createPropsOptions } from '@fastkit/vue-utils';
 import { actionableInheritProps, VAction } from '@fastkit/vue-action';
 import { useScopeColorClass, ScopeName } from '@fastkit/vue-color-scheme';
@@ -16,7 +15,9 @@ import { useVui } from '../../injections';
 // @TODO Unable to resolve dts for `actionableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+// eslint-disable-next-line import/order
 import { RouteLocationRaw } from 'vue-router';
+import { rawIconProp, resolveRawIconProp } from '../VIcon';
 
 export function createListTileProps() {
   const icon = rawIconProp();
@@ -86,6 +87,7 @@ export const VListTile = defineComponent({
 
     watch(
       () => isActive.value,
+      // eslint-disable-next-line no-shadow
       (isActive) => {
         ctx.emit('changeActive', isActive);
       },

@@ -45,11 +45,11 @@ export function serializePropsByType(
     const isRequired = unionTypes.length === 0;
     const _types = isRequired
       ? [type]
-      : unionTypes.filter((type) => !type.isUndefined());
+      : unionTypes.filter((_type) => !_type.isUndefined());
     const values: string[] = [];
-    const types = _types.map((type) => {
-      const text = getTypeText(type, dec);
-      const literal = type.getLiteralValue();
+    const types = _types.map((_type) => {
+      const text = getTypeText(_type, dec);
+      const literal = _type.getLiteralValue();
       if (typeof literal === 'string' || typeof literal === 'number') {
         values.push(String(literal));
       }
@@ -58,7 +58,7 @@ export function serializePropsByType(
         literal,
       };
     });
-    const text = types.map((type) => type.text).join(' | ');
+    const text = types.map((_type) => _type.text).join(' | ');
     const defaultValue = docs[0]?.tags.find(
       (tag) => tag.name === 'default' || tag.name === 'defaultValue',
     )?.text;

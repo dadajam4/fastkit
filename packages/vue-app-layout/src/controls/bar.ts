@@ -19,7 +19,9 @@ export interface VueAppBarSettings {
 
 export class VueAppBar {
   readonly layout: VueAppLayout;
+
   private _position: ComputedRef<VueAppLayoutPositionY>;
+
   private _active: ComputedRef<boolean>;
 
   get position() {

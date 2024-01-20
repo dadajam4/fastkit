@@ -32,7 +32,7 @@ export const NUM = 0.5;
 /**
  * const symbol
  */
-export const SYMBOL = Symbol();
+export const SYMBOL = Symbol('TEST');
 
 /**
  * symbol type
@@ -140,44 +140,55 @@ export class CLASS {
    * @default xxx
    */
   readonly name: string;
+
   /**
    * nums
    */
   readonly nums: number[];
+
   /**
    * プライベート
    */
   private privateProperty = 1;
+
   /**
    * 組み込みDate
    */
   date: Date = new Date();
+
   /**
    * 再帰型
    */
   parent?: CLASS;
+
   /** 組み込みシンボル */
   symbol = Symbol('symbol');
+
   /** 組み込みbigint */
   bigint = BigInt(0);
+
   /** 組み込みウィンドウ */
   window = window;
+
   /**
    * ユニオンプロパティ
    */
   unionProperty: 'string' | number | Date = 'string';
+
   /**
    * ゲッターバリュー
    */
   get getterValue() {
     return this.privateProperty;
   }
+
   /**
    * セット時のコメント
    */
   set getterValue(xxx) {
     console.log(xxx);
   }
+
   /**
    * アロー実態
    *
@@ -185,6 +196,7 @@ export class CLASS {
    * @returns リターン
    */
   allowFn = (str: string) => str + str;
+
   /**
    * アロー実態2
    *
@@ -192,15 +204,18 @@ export class CLASS {
    * @returns リターン
    */
   readonly allowFn2?: (str: string) => string;
+
   /**
    * スタティックゲッターバリュー
    */
   static get staticGetterValue() {
     return 2;
   }
+
   static staticMethod() {
     return true;
   }
+
   /**
    * コンストラクターコメント
    *
@@ -212,6 +227,7 @@ export class CLASS {
     this.name = name;
     this.nums = nums;
   }
+
   /**
    * メソッドコメント
    *
@@ -222,6 +238,7 @@ export class CLASS {
   fuga(num: number) {
     return num + 1;
   }
+
   /**
    * オーバーロード1
    * です
@@ -232,16 +249,19 @@ export class CLASS {
    * @param val - number
    */
   overload(val: number): number;
+
   /**
    * オーバーロード2
    * @param val - number
    */
   overload(val: string): string;
+
   /**
    * オーバーロード3
    * @param val - number
    */
   overload(val: boolean): void;
+
   /**
    * オーバーロード実態
    * @param val - number

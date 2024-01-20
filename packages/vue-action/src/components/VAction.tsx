@@ -1,11 +1,12 @@
 import { defineComponent } from 'vue';
+import { defineSlots, defineTypedComponent } from '@fastkit/vue-utils';
 import { useActionable } from '../actionable';
 import { actionableInheritProps, Actionable } from '../schemes';
-import { defineSlots, defineTypedComponent } from '@fastkit/vue-utils';
 
 // @TODO Unable to resolve dts for `navigationableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+// eslint-disable-next-line import/order
 import { RouteLocationRaw } from 'vue-router';
 
 export const ACTIONABLE_SLOTS = defineSlots<{

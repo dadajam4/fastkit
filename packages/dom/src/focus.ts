@@ -12,10 +12,10 @@ export function isFocusable(element: HTMLElement): boolean {
 
   switch (element.nodeName) {
     case 'A':
-      return !!(element as any).href && (element as any).rel != 'ignore';
+      return !!(element as any).href && (element as any).rel !== 'ignore';
     case 'INPUT':
       return (
-        (element as any).type != 'hidden' && (element as any).type != 'file'
+        (element as any).type !== 'hidden' && (element as any).type !== 'file'
       );
     case 'BUTTON':
     case 'SELECT':

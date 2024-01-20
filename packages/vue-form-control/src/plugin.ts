@@ -1,6 +1,6 @@
 import { App } from 'vue';
-import { VueFormService, VueFormServiceOptions } from './service';
 import { onAppUnmount } from '@fastkit/vue-utils';
+import { VueFormService, VueFormServiceOptions } from './service';
 import { FormServiceInjectionKey } from './injections';
 
 declare module 'vue' {

@@ -1,7 +1,7 @@
 import { inject, App } from 'vue';
 import type { VotContext } from './schemes';
 
-const CONTEXT_SYMBOL = Symbol();
+const CONTEXT_SYMBOL = Symbol('VOT_CONTEXT');
 export function provideContext(app: App, context: VotContext) {
   app.provide(CONTEXT_SYMBOL, context);
 }

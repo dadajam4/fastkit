@@ -1,12 +1,12 @@
 import './VScroller.scss';
 
 import { defineComponent, PropType, ExtractPropTypes, computed } from 'vue';
+import { ExtractPropInput, defineTypedComponent } from '@fastkit/vue-utils';
 import {
   useScrollerControl,
   UseScrollerSetting,
   ScrollerControl,
 } from '../composables';
-import { ExtractPropInput, defineTypedComponent } from '@fastkit/vue-utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VScrollerSettings extends UseScrollerSetting {}
@@ -138,20 +138,18 @@ export const _ScrollerI = defineComponent({
       const { containerClass } = props;
       const $guides =
         guides &&
-        GuideTypes.map((type) => {
-          return (
-            <div
-              class={[
-                'v-scroller__guide',
-                {
-                  [`v-scroller__guide--${type}`]: true,
-                  [`v-scroller__guide--active`]: guides.includes(type),
-                },
-              ]}
-              key={type}
-            />
-          );
-        });
+        GuideTypes.map((type) => (
+          <div
+            class={[
+              'v-scroller__guide',
+              {
+                [`v-scroller__guide--${type}`]: true,
+                [`v-scroller__guide--active`]: guides.includes(type),
+              },
+            ]}
+            key={type}
+          />
+        ));
 
       return (
         <div class="v-scroller">

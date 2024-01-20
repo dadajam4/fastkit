@@ -1,5 +1,37 @@
 # @fastkit/vui
 
+## 0.18.32
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.1.19
+  - @fastkit/vue-click-outside@0.1.20
+  - @fastkit/color-scheme-gen@0.13.15
+  - @fastkit/vue-color-scheme@0.14.19
+  - @fastkit/vue-form-control@0.19.19
+  - @fastkit/media-match-gen@0.13.15
+  - @fastkit/vue-media-match@0.13.15
+  - @fastkit/vue-app-layout@0.14.22
+  - @fastkit/color-scheme@1.0.15
+  - @fastkit/vue-location@0.1.26
+  - @fastkit/vue-scroller@0.14.21
+  - @fastkit/media-match@1.0.10
+  - @fastkit/vue-loading@0.14.20
+  - @fastkit/vue-action@0.2.21
+  - @fastkit/vue-resize@0.1.19
+  - @fastkit/icon-font@1.0.10
+  - @fastkit/vue-stack@0.15.53
+  - @fastkit/vue-utils@0.14.17
+  - @fastkit/helpers@0.13.8
+  - @fastkit/rules@0.13.10
+  - @fastkit/dom@0.1.8
+  - @fastkit/vue-transitions@0.1.23
+  - @fastkit/vue-keyboard@0.1.8
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.18.31
 
 ### Patch Changes

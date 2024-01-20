@@ -1,16 +1,13 @@
+/* eslint-disable no-await-in-loop */
 import path from 'node:path';
-// import _imagemin from 'imagemin';
-// import imageminWebp from 'imagemin-webp';
-// const imageminWebp = require('imagemin-webp');
 import imageminPngquant from 'imagemin-pngquant';
 import imageminMozjpeg from 'imagemin-mozjpeg';
 import { createProcessor } from '../helpers';
 import { logger } from '../logger';
 import { UpdateInfo } from '../schemes';
-// const _imagemin = require('imagemin');
 
-const targetExtentions = ['jpg', 'png'];
-const targetExtentionsRe = new RegExp(`.(${targetExtentions.join('|')})$`, 'i');
+const targetExtensions = ['jpg', 'png'];
+const targetExtensionsRe = new RegExp(`.(${targetExtensions.join('|')})$`, 'i');
 
 interface MyDir {
   src: string;
@@ -21,7 +18,7 @@ interface MyDir {
 export const imagemin = createProcessor({
   name: 'imagemin',
   match(update: UpdateInfo) {
-    return targetExtentionsRe.test(update.src);
+    return targetExtensionsRe.test(update.src);
   },
   async proc(updates: UpdateInfo[]) {
     const dirs: MyDir[] = [];
@@ -52,7 +49,6 @@ export const imagemin = createProcessor({
       const images = dir.updates.map((update) => update.src);
 
       const { default: _imagemin } = await import('imagemin');
-      // import _imagemin from 'imagemin';
 
       await Promise.all([
         _imagemin(images, {
@@ -60,7 +56,7 @@ export const imagemin = createProcessor({
           plugins: [imageminPngquant(), imageminMozjpeg()],
         }),
       ]).then((results) => {
-        logger.success(`  suceeded`);
+        logger.success(`  succeeded`);
         return results;
       });
     }

@@ -1,13 +1,13 @@
 import path from 'node:path';
 import fs from 'fs-extra';
-import { MediaMatchSettings, MediaMatchDefine } from './schemes';
 import {
   esbuildRequire,
   ESbuildRunner,
   ESbuildRequireResult,
 } from '@fastkit/node-util';
-import { logger } from './logger';
 import { EV } from '@fastkit/ev';
+import { MediaMatchSettings, MediaMatchDefine } from './schemes';
+import { logger } from './logger';
 
 const BANNER = `
 /**
@@ -61,7 +61,7 @@ export async function generator(
     return 0;
   });
 
-  breakpoints.forEach((breakpoint /*, index*/) => {
+  breakpoints.forEach((breakpoint /* , index */) => {
     const { key, min, description } = breakpoint;
     // const beforeDefine = breakpoints[index - 1];
     // const nextDefine = breakpoints[index - 1];
@@ -160,21 +160,16 @@ ${BANNER}
 
 $media-matches: (
 ${mediaMatches
-  .map((match) => {
-    return (
-      '  (\n    key: ' +
-      match.key +
-      ',\n    condition: ' +
-      match.condition +
-      ',\n  )'
-    );
-  })
+  .map(
+    (match) =>
+      `  (\n    key: ${match.key},\n    condition: ${match.condition},\n  )`,
+  )
   .join(',\n')},
 );
 
 $media-match-maps: (
   ${mediaMatches
-    .map((match) => match.key + ': "' + match.condition + '"')
+    .map((match) => `${match.key}: "${match.condition}"`)
     .join(',\n  ')},
 );
 
@@ -281,7 +276,9 @@ export interface MediaMatchGeneratorRunnerEventMap {
 
 export class MediaMatchGeneratorRunner extends EV {
   private runner: ESbuildRunner<MediaMatchGeneratorResult>;
+
   readonly src: string;
+
   readonly dest: string;
 
   constructor(opts: MediaMatchGeneratorRunnerOptions) {

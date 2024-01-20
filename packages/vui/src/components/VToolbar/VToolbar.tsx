@@ -21,21 +21,17 @@ export const VToolbar = defineComponent({
       variant: () => props.variant || vui.setting('containedVariant'),
     });
 
-    const classes = computed(() => {
-      return [
-        elevation.elevationClassName.value,
-        color.colorClasses.value,
-        {
-          'v-toolbar--plain': !color.color.value.value,
-          'v-toolbar--dense': dense.value,
-        },
-      ];
-    });
+    const classes = computed(() => [
+      elevation.elevationClassName.value,
+      color.colorClasses.value,
+      {
+        'v-toolbar--plain': !color.color.value.value,
+        'v-toolbar--dense': dense.value,
+      },
+    ]);
 
-    return () => {
-      return (
-        <div class={['v-toolbar', classes.value]}>{ctx.slots.default?.()}</div>
-      );
-    };
+    return () => (
+      <div class={['v-toolbar', classes.value]}>{ctx.slots.default?.()}</div>
+    );
   },
 });

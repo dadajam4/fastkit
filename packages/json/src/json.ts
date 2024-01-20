@@ -1,3 +1,5 @@
+/* eslint-disable func-names */
+/* eslint-disable no-bitwise */
 /**
  * Primitive Value Types in JSON
  */
@@ -59,9 +61,7 @@ export function safeJSONSerializer(
     if (!_defaultCycleReplacer) {
       _defaultCycleReplacer = function (this: any, key: string, value: any) {
         if (stack[0] === value) return '[Circular ~]';
-        return (
-          '[Circular ~.' + keys.slice(0, stack.indexOf(value)).join('.') + ']'
-        );
+        return `[Circular ~.${keys.slice(0, stack.indexOf(value)).join('.')}]`;
       };
     }
     cycleReplacer = _defaultCycleReplacer;

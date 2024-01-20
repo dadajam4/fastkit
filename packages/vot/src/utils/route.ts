@@ -17,7 +17,7 @@ export function withoutSuffix(string: string, suffix: string) {
 
 export function createUrl(urlLike: string | URL | Location) {
   if (typeof urlLike === 'string' && !(urlLike || '').includes('://')) {
-    urlLike = 'http://e.g' + withPrefix(urlLike, S);
+    urlLike = `http://e.g${withPrefix(urlLike, S)}`;
   }
 
   return new URL(urlLike.toString());

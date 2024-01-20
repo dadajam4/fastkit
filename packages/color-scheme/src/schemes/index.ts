@@ -388,18 +388,18 @@ export interface ColorThemeBucket<
   ctx: C;
 }
 
-export const BULTIN_COLOR_VARIANTS = [
+export const BUILTIN_COLOR_VARIANTS = [
   'contained',
   'outlined',
   'inverted',
   'plain',
 ] as const;
 
-export type BultinColorVariant = (typeof BULTIN_COLOR_VARIANTS)[number];
+export type BuiltinColorVariant = (typeof BUILTIN_COLOR_VARIANTS)[number];
 
 export interface ColorVariantSource<VN extends string> {
   readonly name: VN;
-  from?: BultinColorVariant;
+  from?: BuiltinColorVariant;
   scss?:
     | string
     | Promise<string>
@@ -500,7 +500,7 @@ export interface TemplateScope {
   scssValues: string;
   list(source: string[], divider?: string): string;
   builtinVariantScss(
-    variant: BultinColorVariant,
+    variant: BuiltinColorVariant,
     selector?: string,
   ): Promise<string>;
   variantScss(variant: string): Promise<string>;

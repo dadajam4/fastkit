@@ -1,3 +1,4 @@
+import { isPromise } from '@fastkit/helpers';
 import {
   VALIDATE_CANCEL_SYMBOL,
   ValidationError,
@@ -5,7 +6,6 @@ import {
 } from '../schemes';
 import { objectPathJoin } from '../utils';
 import { RuleMessageService } from '../services';
-import { isPromise } from '@fastkit/helpers';
 import { RULE_DEFAULT_NAME, RULE_DEFAULT_MESSAGE } from '../constants';
 
 /**
@@ -227,6 +227,7 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
   const { name, validate, message, constraints } = settings;
 
   function rule<EC extends C = C>(
+    // eslint-disable-next-line no-shadow
     constraints: Partial<EC>,
     overRides?: string | Partial<RuleSettings<EC>>,
   ): Rule<EC> {
@@ -268,17 +269,15 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
     const { path, eachPrefix } = options;
     const fullPath = objectPathJoin(eachPrefix, path);
 
-    const context = (): RuleValidateContext => {
-      return {
-        name,
-        constraints,
-        value,
-        eachPrefix,
-        path,
-        fullPath,
-        message,
-      };
-    };
+    const context = (): RuleValidateContext => ({
+      name,
+      constraints,
+      value,
+      eachPrefix,
+      path,
+      fullPath,
+      message,
+    });
 
     const baseError: Omit<ValidationError, 'message'> = {
       $$symbol: VALIDATION_ERROR_SYMBOL,
@@ -298,6 +297,7 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
 
       if (result === VALIDATE_CANCEL_SYMBOL) return VALIDATE_CANCEL_SYMBOL;
       if (!result || children) {
+        // eslint-disable-next-line no-shadow
         const message =
           RuleMessageService.resolve(context()) || RULE_DEFAULT_MESSAGE;
 
@@ -310,6 +310,7 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
     } catch (err) {
       const ctx = context();
       ctx.exception = err;
+      // eslint-disable-next-line no-shadow
       const message =
         RuleMessageService.resolve(ctx) || 'An error has occurred.';
 
@@ -320,6 +321,7 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
     }
   };
 
+  // eslint-disable-next-line no-shadow
   rule.fork = function fork(settings: {
     name?: string;
     constraints?: C;

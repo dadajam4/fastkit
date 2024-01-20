@@ -7,14 +7,14 @@ import type {
   RouteRecordRaw,
   useLink,
 } from 'vue-router';
-import type { VotContext } from './context';
-import type { RawVotPlugin } from './plugin';
 import type { InlineConfig } from 'vite';
 import type vueJsx from '@vitejs/plugin-vue-jsx';
 import type { UserOptions as PagesUserOptions } from 'vite-plugin-pages';
 import type { Options as VuePluginOptions } from '@vitejs/plugin-vue';
 import type { Server, IncomingMessage } from 'connect';
 import type { ServerResponse } from 'node:http';
+import type { RawVotPlugin } from './plugin';
+import type { VotContext } from './context';
 import type { WrittenResponse } from './renderer';
 import type { RawVotGenerateOptions } from './generate';
 
@@ -127,6 +127,7 @@ export interface CreateEntryOptions {
   debug?: { mount?: boolean };
   transformState?: (
     state: any,
+    // eslint-disable-next-line no-shadow
     defaultTransformer: (state: any) => any,
   ) => any | Promise<any>;
   routes?: ExtendedRouteRaw[];

@@ -24,13 +24,12 @@ function resolveFilter(
   if (!spec) return () => defaults;
   if (typeof spec === 'function') return spec;
   const conditions = Array.isArray(spec) ? spec : [spec];
-  return (layerName) => {
-    return conditions.some((condition) => {
-      return typeof condition === 'string'
+  return (layerName) =>
+    conditions.some((condition) =>
+      typeof condition === 'string'
         ? layerName.includes(condition)
-        : condition.test(layerName);
-    });
-  };
+        : condition.test(layerName),
+    );
 }
 
 type SortMedia = (a: Media, b: Media) => number;
@@ -40,52 +39,6 @@ export interface OptimizeMediaOptions {
   exclude?: FilterSpec;
   sort?: SortMedia;
 }
-
-// const MEDIA_WIDTH_MATCH_RE = /\((min|max)-width:(\d+)px\)/;
-
-// const MEDIA_RANGE_TYPES = ['min', 'max', 'minmax'] as const;
-
-// type MediaRangeType = typeof MEDIA_RANGE_TYPES[number];
-
-// function getMediaRangeType(range: { min?: number; max?: number }): MediaRangeType {
-//   const { min, max } = range;
-//   const hasMin = min != null;
-//   const hasMax = max != null;
-
-//   if (!hasMin && !hasMax) throw new Error('missing amount');
-//   if (hasMin && hasMax) return 'minmax';
-//   if (hasMin) return 'min';
-//   return 'max';
-// }
-
-// function getMediaRangeTypeAndScore(range: { min?: number; max?: number }): {
-//   type: MediaRangeType;
-//   score: number;
-// } {
-//   const type = getMediaRangeType(range);
-//   return {
-//     type,
-//     score: MEDIA_RANGE_TYPES.indexOf(type),
-//   }
-// }
-
-// function parseMediaRange(query: string): MediaWidthRange {
-//   let min: number | undefined;
-//   let max: number | undefined;
-//   const chunks = query.split(' and ').map((chunk) => chunk.replace(/\s/g, ''));
-//   chunks.forEach((chunk) => {
-//     const widthMatch = chunk.match(MEDIA_WIDTH_MATCH_RE);
-//     if (!widthMatch) return;
-//     const type = widthMatch[1] as 'min' | 'max';
-//     const amount = Number(widthMatch[2]);
-//     if (type === 'min') {
-//       min = amount;
-//     } else if (type === 'max') {
-//       max = amount;
-//     }
-//   });
-//   return { min, max };
-// }
 
 function parseMedia(mediaRule: AtRule): Media {
   const { params, parent } = mediaRule;

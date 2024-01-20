@@ -13,9 +13,8 @@ import { createRule } from '../factories';
 export const minDate = createRule<number | string | Date>({
   name: 'minDate',
   validate: dateIsNotLessThan,
-  message: (value, { constraints: dateToCompare }) => {
-    return 'It is not a selectable date range.';
-  },
+  message: (value, { constraints: dateToCompare }) =>
+    'It is not a selectable date range.',
   constraints: 0,
 });
 
@@ -26,9 +25,8 @@ export const minDate = createRule<number | string | Date>({
 export const maxDate = createRule<number | string | Date>({
   name: 'maxDate',
   validate: dateIsNotGreaterThan,
-  message: (value, { constraints: dateToCompare }) => {
-    return 'It is not a selectable date range.';
-  },
+  message: (value, { constraints: dateToCompare }) =>
+    'It is not a selectable date range.',
   constraints: 0,
 });
 
@@ -39,8 +37,7 @@ export const maxDate = createRule<number | string | Date>({
 export const betweenDate = createRule<BetweenDateConstraints>({
   name: 'betweenDate',
   validate: dateIsBetween,
-  message: (value, { constraints: dateToCompare }) => {
-    return 'It is not a selectable date range.';
-  },
+  message: (value, { constraints: dateToCompare }) =>
+    'It is not a selectable date range.',
   constraints: {},
 });

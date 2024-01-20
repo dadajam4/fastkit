@@ -31,7 +31,7 @@ export function serializeSlots(
       const isOptional = slot.isOptional();
       const type =
         unionTypes.length > 0
-          ? unionTypes.find((type) => !type.isUndefined()) || slotType
+          ? unionTypes.find((_type) => !_type.isUndefined()) || slotType
           : slotType;
 
       const sourceFile = trimCommonSubstring(

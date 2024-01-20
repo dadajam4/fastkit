@@ -51,12 +51,8 @@ export function scopeResolvers(
   } = opts;
 
   const resolvers: RecommendedResolvers = {
-    light: ({ main }) => {
-      return main.alpha(0.04);
-    },
-    deep: ({ main }) => {
-      return main.alpha(0.1);
-    },
+    light: ({ main }) => main.alpha(0.04),
+    deep: ({ main }) => main.alpha(0.1),
     text: (ctx) => {
       const _lightText =
         typeof lightText === 'function' ? lightText(ctx) : lightText;
@@ -65,25 +61,19 @@ export function scopeResolvers(
       const needInvert = ctx.main.brightness() >= scopeInvertThreshold;
       if (needInvert && _darkText) {
         return _darkText;
-      } else if (!needInvert && _lightText) {
+      }
+      if (!needInvert && _lightText) {
         return _lightText;
       }
       return false;
     },
     border: false,
-    focus: ({ main }) => {
-      return main.darken(0.07);
-    },
-    focusBorder: ({ border, palette }) => {
-      return border ? border.darken(0.07) : false;
-    },
-    focusShadow: ({ main }) => {
-      return main.mixAlpha(0, 0.5);
-    },
+    focus: ({ main }) => main.darken(0.07),
+    focusBorder: ({ border, palette }) =>
+      border ? border.darken(0.07) : false,
+    focusShadow: ({ main }) => main.mixAlpha(0, 0.5),
     focusText: false,
-    active: ({ main, focus }) => {
-      return (focus || main).darken(0.07);
-    },
+    active: ({ main, focus }) => (focus || main).darken(0.07),
     activeBorder: ({ border, focusBorder }) => {
       const _border = border || focusBorder;
       return _border ? _border.darken(0.07) : false;
@@ -93,9 +83,7 @@ export function scopeResolvers(
       const base = outlineText || main;
       return base.alpha(base.alpha() * 0.5);
     },
-    invert: ({ theme }) => {
-      return theme.isLight ? '#fff' : '#000';
-    },
+    invert: ({ theme }) => (theme.isLight ? '#fff' : '#000'),
     focusInvert: ({ theme, invert, main }) => {
       if (invert) {
         return invert.mix(main, 0.05);

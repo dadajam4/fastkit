@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import { Plugin } from 'vite';
 
 import {
@@ -60,48 +61,48 @@ export function dynamicSrcVitePlugin(
   }
 
   if (colorScheme) {
-    pushPlugin((onBooted) => {
-      return colorSchemeVitePlugin({
+    pushPlugin((onBooted) =>
+      colorSchemeVitePlugin({
         ...colorScheme,
         onBooted,
-      });
-    });
+      }),
+    );
   }
 
   if (hashedSync) {
-    pushPlugin((onBooted) => {
-      return hashedSyncVitePlugin({
+    pushPlugin((onBooted) =>
+      hashedSyncVitePlugin({
         ...hashedSync,
         onBooted,
-      });
-    });
+      }),
+    );
   }
 
   if (iconFont) {
-    pushPlugin((onBooted) => {
-      return iconFontVitePlugin({
+    pushPlugin((onBooted) =>
+      iconFontVitePlugin({
         ...iconFont,
         onBooted,
-      });
-    });
+      }),
+    );
   }
 
   if (mediaMatch) {
-    pushPlugin((onBooted) => {
-      return mediaMatchVitePlugin({
+    pushPlugin((onBooted) =>
+      mediaMatchVitePlugin({
         ...mediaMatch,
         onBooted,
-      });
-    });
+      }),
+    );
   }
 
   if (spriteImages) {
-    pushPlugin((onBooted) => {
-      return spriteImagesVitePlugin({
+    pushPlugin((onBooted) =>
+      spriteImagesVitePlugin({
         ...spriteImages,
         onBooted,
-      });
-    });
+      }),
+    );
   }
 
   const dynamicSrcPlugin: Plugin = {

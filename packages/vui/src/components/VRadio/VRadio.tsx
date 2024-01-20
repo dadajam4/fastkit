@@ -17,6 +17,7 @@ export const VRadio = defineComponent({
     ...createControlProps(),
   },
   emits,
+  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const nodeControl = useFormSelectorItemControl(props, ctx, {
       nodeType: VUI_RADIO_SYMBOL,
@@ -36,17 +37,15 @@ export const VRadio = defineComponent({
       label: () => ctx.slots.default?.(),
     };
 
-    return () => {
-      return (
-        <VCheckable
-          class={classes.value}
-          checked={nodeControl.selected}
-          invalid={nodeControl.invalid}
-          disabled={nodeControl.isDisabled}
-          readonly={nodeControl.isReadonly}
-          v-slots={slots}
-        />
-      );
-    };
+    return () => (
+      <VCheckable
+        class={classes.value}
+        checked={nodeControl.selected}
+        invalid={nodeControl.invalid}
+        disabled={nodeControl.isDisabled}
+        readonly={nodeControl.isReadonly}
+        v-slots={slots}
+      />
+    );
   },
 });

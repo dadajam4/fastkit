@@ -188,8 +188,8 @@ export function useStackControl(
   const persistent = computed(() => props.persistent);
   const closeOnEsc = computed(() => props.closeOnEsc);
   const closeOnTab = computed<StackableTabCloseSetting | false>(() => {
-    const { closeOnTab } = props;
-    return closeOnTab === true ? 'always' : closeOnTab;
+    const { closeOnTab: _closeOnTab } = props;
+    return _closeOnTab === true ? 'always' : _closeOnTab;
   });
   const closeOnNavigation = computed(() => props.closeOnNavigation);
   const closeOnOutsideClick = computed(() => props.closeOnOutsideClick);
@@ -219,12 +219,12 @@ export function useStackControl(
   );
 
   const backdrop = computed(() => {
-    const { backdrop } = props;
-    if (!backdrop) return;
+    const { backdrop: _backdrop } = props;
+    if (!_backdrop) return;
     const index = zIndex.value;
     const style = {
       zIndex: index,
-      backgroundColor: typeof backdrop === 'string' ? backdrop : undefined,
+      backgroundColor: typeof _backdrop === 'string' ? _backdrop : undefined,
     };
     return (
       <div
@@ -236,12 +236,12 @@ export function useStackControl(
     );
   });
   const navigationGuard = computed<VStackNavigationGuard>(() => {
-    const { navigationGuard } = props;
-    if (typeof navigationGuard === 'function') {
-      return navigationGuard;
+    const { navigationGuard: _navigationGuard } = props;
+    if (typeof _navigationGuard === 'function') {
+      return _navigationGuard;
     }
     return function guard() {
-      if (navigationGuard || persistent.value || control.guardInProgress)
+      if (_navigationGuard || persistent.value || control.guardInProgress)
         return false;
       return true;
     };
@@ -257,8 +257,8 @@ export function useStackControl(
   });
 
   const zIndex = computed(() => {
-    const zIndex = toInt(props.zIndex);
-    return zIndex || $vstack.zIndex + control.activateOrder;
+    const _zIndex = toInt(props.zIndex);
+    return _zIndex || $vstack.zIndex + control.activateOrder;
   });
 
   const keyboard = useKeyboard(
@@ -431,17 +431,17 @@ export function useStackControl(
           name: transition,
         },
       };
+      // eslint-disable-next-line no-else-return
     } else {
-      // const { transition} = transition;
       let Ctor: any = transition.transition;
       let name: string | undefined;
 
       if (typeof Ctor === 'string' || Ctor == null) {
         name = Ctor || undefined;
         Ctor = Transition;
-        // transition.props
       }
 
+      // eslint-disable-next-line no-shadow
       const props = {
         ...transition.props,
       };
@@ -449,8 +449,7 @@ export function useStackControl(
       if (name) {
         (props as any).name = name;
       }
-      // if (!Ctor)
-      // transition.transition
+
       return {
         Ctor: Transition,
         props,
@@ -459,19 +458,19 @@ export function useStackControl(
   });
 
   const attrs = computed(() => {
-    const attrs = {
+    const _attrs = {
       ...ctx.attrs,
     };
     if (manualAttrs) {
       const { class: classes, style } = props;
       if (classes) {
-        attrs.class = classes;
+        _attrs.class = classes;
       }
       if (style) {
-        attrs.style = style;
+        _attrs.style = style;
       }
     }
-    return attrs;
+    return _attrs;
   });
 
   const privateApi: VStackControl['_'] = {
@@ -661,9 +660,7 @@ export function useStackControl(
   const containsOrSameElement: VStackControl['containsOrSameElement'] = (
     other,
     includingActivator,
-  ) => {
-    return !!getContainsOrSameElement(other, includingActivator);
-  };
+  ) => !!getContainsOrSameElement(other, includingActivator);
 
   const dispatchResolveHandler = async (type: 'resolve' | 'cancel') => {
     const handler =
@@ -794,6 +791,7 @@ export function useStackControl(
     toggle() {
       return control.isActive ? control.close() : control.show();
     },
+    // eslint-disable-next-line no-shadow
     close(opts = {}) {
       const { force = false, reason = 'indeterminate' } = opts;
       if ((control.guardInProgress || persistent.value) && !force)
@@ -836,6 +834,7 @@ export function useStackControl(
       const maxActivateOrder = front ? front.activateOrder : 0;
       state.activateOrder = maxActivateOrder + 1;
     },
+    // eslint-disable-next-line no-shadow
     isFront(filter?: (control: VStackControl) => boolean) {
       return $vstack.isFront(control, filter);
     },
@@ -852,10 +851,12 @@ export function useStackControl(
     },
     getContainsOrSameElement,
     containsOrSameElement,
+    // eslint-disable-next-line no-shadow
     render(fn, opts = {}) {
       const { booted, needRender } = state;
       const { default: defaultSlot, activator: activatorSlot } =
         ctx.slots as VStackSlots;
+      // eslint-disable-next-line no-shadow
       const { transitionListeners, Transition: TransitionDefine } = privateApi;
 
       const $activator =
@@ -996,11 +997,9 @@ export function useStackControl(
     (value) => {
       if (value) {
         privateApi.setNeedRender(true);
-      } else {
-        if (state.activator) {
-          if (focusRestorable.value) {
-            attemptFocus(state.activator);
-          }
+      } else if (state.activator) {
+        if (focusRestorable.value) {
+          attemptFocus(state.activator);
         }
       }
       privateApi.checkFocusTrap();

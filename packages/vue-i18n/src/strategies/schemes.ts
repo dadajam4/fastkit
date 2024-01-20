@@ -1,6 +1,6 @@
+import type { Router, RouterOptions } from 'vue-router';
 import type { VueI18nContext } from '../context';
 import type { VueI18nClient } from '../client';
-import type { Router, RouterOptions } from 'vue-router';
 
 /**
  * Strategy initialization results

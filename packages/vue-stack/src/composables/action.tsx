@@ -22,6 +22,7 @@ export function useStackAction(
   });
   const $actions = computed(() =>
     actions.value.map((action) => {
+      // eslint-disable-next-line no-shadow
       const onClick = (control: VStackControl, ev: MouseEvent) =>
         action.onClick?.(control, ev);
 

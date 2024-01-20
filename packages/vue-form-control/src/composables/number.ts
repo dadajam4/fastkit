@@ -1,5 +1,7 @@
 import { ExtractPropTypes, SetupContext, ComputedRef, computed } from 'vue';
 import { createPropsOptions } from '@fastkit/vue-utils';
+import { toInt, toNumber } from '@fastkit/helpers';
+import { notLessThan, notGreaterThan, multipleOf } from '@fastkit/rules';
 import {
   createFormNodeProps,
   FormNodeControl,
@@ -7,8 +9,6 @@ import {
   FormNodeContext,
   FormNodeControlBaseOptions,
 } from './node';
-import { toInt, toNumber } from '@fastkit/helpers';
-import { notLessThan, notGreaterThan, multipleOf } from '@fastkit/rules';
 
 const minValue = notLessThan.fork({ name: 'min' });
 const maxValue = notGreaterThan.fork({ name: 'max' });
@@ -63,8 +63,11 @@ export interface NumberInputNodeControlOptions
 
 export class NumberInputNodeControl extends FormNodeControl<number, undefined> {
   readonly _props: NumberInputNodeProps;
+
   protected _min: ComputedRef<number | undefined>;
+
   protected _max: ComputedRef<number | undefined>;
+
   protected _step: ComputedRef<number>;
 
   get min() {

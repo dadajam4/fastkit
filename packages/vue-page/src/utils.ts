@@ -3,13 +3,13 @@ import {
   RouteLocationMatched,
   RouteLocationNormalized,
 } from 'vue-router';
+import { isObject, IN_WINDOW } from '@fastkit/helpers';
+import { RouteMatchedItem, RawRouteComponent } from '@fastkit/vue-utils';
 import {
   WatchQueryOption,
   RouterViewSlotProps,
   VuePageKeyOverride,
 } from './schemes';
-import { isObject, IN_WINDOW } from '@fastkit/helpers';
-import { RouteMatchedItem, RawRouteComponent } from '@fastkit/vue-utils';
 
 export function parseWatchQueryOption(
   route: RouteLocationNormalized,
@@ -58,12 +58,11 @@ const interpolatePath = (
   match: {
     path: RouteLocationMatched['path'];
   },
-) => {
-  return match.path
+) =>
+  match.path
     .replace(/(:\w+)\([^)]+\)/g, '$1')
     .replace(/(:\w+)[?+*]/g, '$1')
     .replace(/:\w+/g, (r) => route.params[r.slice(1)]?.toString() || '');
-};
 
 export const generateRouteKey = (
   routeProps: RouterViewSlotProps,

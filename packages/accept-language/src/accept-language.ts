@@ -21,7 +21,7 @@ export function parse(
   const strings = (acceptLanguage || '').match(PARSE_RE);
   if (!strings) return [];
   return strings
-    .map(function (m) {
+    .map((m) => {
       if (!m) {
         return;
       }
@@ -38,9 +38,7 @@ export function parse(
       };
     })
     .filter<ParsedLanguage>(isNotNullable)
-    .sort(function (a, b) {
-      return b.quality - a.quality;
-    });
+    .sort((a, b) => b.quality - a.quality);
 }
 
 export interface PickOptions {
@@ -60,26 +58,26 @@ export function pick(
     acceptLanguages = parse(acceptLanguages);
   }
 
-  const supporteds = supportedLanguages.map<
-    LanguageBase & { original: string }
-  >((support) => {
-    const bits = support.split('-');
-    const hasScript = bits.length === 3;
+  const supports = supportedLanguages.map<LanguageBase & { original: string }>(
+    (support) => {
+      const bits = support.split('-');
+      const hasScript = bits.length === 3;
 
-    return {
-      code: bits[0],
-      script: hasScript ? bits[1] : null,
-      region: hasScript ? bits[2] : bits[1],
-      original: support,
-    };
-  });
+      return {
+        code: bits[0],
+        script: hasScript ? bits[1] : null,
+        region: hasScript ? bits[2] : bits[1],
+        original: support,
+      };
+    },
+  );
 
   for (const lang of acceptLanguages) {
     const langCode = lang.code.toLowerCase();
     const langRegion = lang.region ? lang.region.toLowerCase() : lang.region;
     const langScript = lang.script ? lang.script.toLowerCase() : lang.script;
 
-    for (const supported of supporteds) {
+    for (const supported of supports) {
       const supportedCode = supported.code.toLowerCase();
       const supportedScript = supported.script
         ? supported.script.toLowerCase()

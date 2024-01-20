@@ -1,5 +1,16 @@
 # @fastkit/vue-scroller
 
+## 0.14.21
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.14.17
+  - @fastkit/scroller@0.13.9
+  - @fastkit/tiny-logger@0.13.8
+
 ## 0.14.20
 
 ### Patch Changes

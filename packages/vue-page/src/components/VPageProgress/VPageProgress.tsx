@@ -1,6 +1,6 @@
 import { defineComponent, computed, CSSProperties, ref, nextTick } from 'vue';
-import { useVuePageControl } from '../../injections';
 import { NumberishPropOption, resolveNumberish } from '@fastkit/vue-utils';
+import { useVuePageControl } from '../../injections';
 
 export const VPageProgress = defineComponent({
   name: 'VPageProgress',
@@ -40,24 +40,20 @@ export const VPageProgress = defineComponent({
     const color = computed(() => props.color || 'black');
     const failedColor = computed(() => props.failedColor || 'red');
     const height = computed(() => resolveNumberish(props.height, 2));
-    const width = computed(() => {
-      return `${percent.value}%`;
-    });
-    const styles = computed<CSSProperties>(() => {
-      return {
-        position: 'fixed',
-        top: 0,
-        left: props.rtl ? 'auto' : 0,
-        right: 0,
-        zIndex: 999999,
-        width: width.value,
-        height: `${height.value}px`,
-        background: canSucceed.value ? color.value : failedColor.value,
-        opacity: 1,
-        // transition: `width ${duration.value}ms`,
-        transition: `width 0.1s, opacity 0.4s`,
-      };
-    });
+    const width = computed(() => `${percent.value}%`);
+    const styles = computed<CSSProperties>(() => ({
+      position: 'fixed',
+      top: 0,
+      left: props.rtl ? 'auto' : 0,
+      right: 0,
+      zIndex: 999999,
+      width: width.value,
+      height: `${height.value}px`,
+      background: canSucceed.value ? color.value : failedColor.value,
+      opacity: 1,
+      // transition: `width ${duration.value}ms`,
+      transition: `width 0.1s, opacity 0.4s`,
+    }));
 
     function clear() {
       _timer !== null && clearInterval(_timer);

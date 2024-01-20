@@ -1,13 +1,13 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import sortPackageJson from 'sort-package-json';
+import inquirer from 'inquirer';
 import { getProject } from '../project';
 import { getWorkspace, syncWorkspacePackageFields } from '../workspace';
 import { WorkspacePackageJson, ProjectScriptsTemplate } from '../types';
-import sortPackageJson from 'sort-package-json';
 import { WORKSPACE_CONFIG_BASENAME } from '../constants';
-
-import inquirer from 'inquirer';
 
 export async function generateWorkspace(
   workspaceName?: string,
@@ -103,12 +103,10 @@ export async function generateWorkspace(
       message:
         'Select the dependent packages, if any, to be used in the package',
       name: 'deps',
-      choices: Object.keys(config.peerDependencies).map((dep) => {
-        return {
-          name: dep,
-          value: dep,
-        };
-      }),
+      choices: Object.keys(config.peerDependencies).map((dep) => ({
+        name: dep,
+        value: dep,
+      })),
     });
     if (!deps.length) return;
     return Object.fromEntries(
@@ -183,7 +181,7 @@ export async function generateWorkspace(
   });
 
   if (!confirmation) {
-    console.log('Skiped.');
+    console.log('Skipped.');
     process.exit(1);
   }
 
@@ -218,8 +216,7 @@ export async function generateWorkspace(
       );
     }
 
-    const configFileCode =
-      `
+    const configFileCode = `${`
 import { defineWorkspaceConfig } from '@fastkit/plugboy';
 
 export default defineWorkspaceConfig({
@@ -227,7 +224,7 @@ export default defineWorkspaceConfig({
     '.': './src/index.ts',
   },
 });
-    `.trim() + '\n';
+    `.trim()}\n`;
     await fs.writeFile(
       path.join(workspaceDir, `${WORKSPACE_CONFIG_BASENAME}.ts`),
       configFileCode,

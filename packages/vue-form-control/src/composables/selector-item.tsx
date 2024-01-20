@@ -70,13 +70,20 @@ export interface FormSelectorItemControlOptions
 
 export class FormSelectorItemControl extends FormNodeControl<boolean> {
   readonly _props: FormSelectorItemProps;
+
   readonly parentNodeType?: FormNodeType;
+
   protected _parentSelector: FormSelectorControl | null = null;
+
   protected _groupControl: FormSelectorItemGroupControl | null = null;
+
   readonly propValue?: string | number;
+
   // readonly group?: string | number;
   protected _multiple: ComputedRef<boolean>;
+
   protected _hasValue: ComputedRef<boolean>;
+
   protected _defaultSlot: ComputedRef<Slot>;
 
   /**
@@ -197,11 +204,9 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
       const { propValue } = this;
       return propValue != null && propValue !== '';
     });
-    this._defaultSlot = computed(() => {
-      return ctx.slots.default || (() => []);
-    });
+    this._defaultSlot = computed(() => ctx.slots.default || (() => []));
 
-    const _name = this._name;
+    const { _name } = this;
     this._name = computed(() => {
       const name = _name.value;
       if (name != null) return name;
@@ -212,14 +217,13 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
       return parentSelector.multiple ? `${parentName}[]` : parentName;
     });
 
-    const _isDisabled = this._isDisabled;
-    this._isDisabled = computed(() => {
-      return (
+    const { _isDisabled } = this;
+    this._isDisabled = computed(
+      () =>
         _isDisabled.value ||
         !!this.groupControl?.isDisabled ||
-        !!this.parentSelector?.isGuardInProgress
-      );
-    });
+        !!this.parentSelector?.isGuardInProgress,
+    );
 
     watch(() => this._value.value, this._valueChangeHandler, {
       immediate: true,
@@ -251,19 +255,17 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
     if (this._parentSelector) {
       this._parentSelector &&
         this._parentSelector._itemValueChangeHandler(this);
-    } else {
-      if (value && !this.multiple && this.currentEl && this.name) {
-        const query = `input[name="${this.name}"]`;
-        const myInput = this.currentEl.querySelector(query);
-        if (!myInput) return;
-        const siblings: NodeListOf<HTMLInputElement> =
-          document.querySelectorAll(query);
-        siblings.forEach((sibling) => {
-          if (sibling === myInput) return;
-          sibling.checked = false;
-          sibling.dispatchEvent(new Event('change'));
-        });
-      }
+    } else if (value && !this.multiple && this.currentEl && this.name) {
+      const query = `input[name="${this.name}"]`;
+      const myInput = this.currentEl.querySelector(query);
+      if (!myInput) return;
+      const siblings: NodeListOf<HTMLInputElement> =
+        document.querySelectorAll(query);
+      siblings.forEach((sibling) => {
+        if (sibling === myInput) return;
+        sibling.checked = false;
+        sibling.dispatchEvent(new Event('change'));
+      });
     }
   }
 

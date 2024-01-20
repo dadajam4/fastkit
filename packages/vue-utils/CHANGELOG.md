@@ -1,5 +1,16 @@
 # @fastkit/vue-utils
 
+## 0.14.17
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/ts-type-utils@0.1.2
+  - @fastkit/visibility@0.13.8
+  - @fastkit/helpers@0.13.8
+
 ## 0.14.16
 
 ### Patch Changes

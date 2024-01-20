@@ -1,6 +1,5 @@
 import { Ref, ref, markRaw, ComputedRef, computed } from 'vue';
 import { VStackControl } from './schemes/control';
-export type { VStackControl } from './schemes/control';
 import {
   DynamicStackInternalSetting,
   StackableComponent,
@@ -11,6 +10,9 @@ import {
   resolveDynamicStackSettings,
   StackableLauncher,
 } from './schemes/dynamic';
+
+export type { VStackControl } from './schemes/control';
+
 export { VueStackInjectionKey } from './injections';
 
 export interface VueStackServiceOptions {
@@ -23,12 +25,17 @@ export interface VueStackServiceOptions {
  */
 export class VueStackService {
   private readonly _controls: Ref<(() => VStackControl)[]> = ref([]);
+
   private readonly __controls: ComputedRef<VStackControl[]>;
+
   /** z-index as a reference for all stacks */
   readonly zIndex: number;
+
   /** Snackbar default position */
   readonly snackbarDefaultPosition: 'top' | 'bottom';
+
   private _increment = 0;
+
   private readonly _dynamicSettings: Ref<DynamicStackInternalSetting[]> = ref(
     [],
   );
@@ -138,6 +145,7 @@ export class VueStackService {
    */
   isFront(
     control: VStackControl,
+    // eslint-disable-next-line no-shadow
     filter?: (control: VStackControl) => boolean,
   ) {
     return this.getFront(filter) === control;
@@ -155,22 +163,27 @@ export class VueStackService {
     Ctor: T,
     content: DefaultContent,
   ): DynamicStackPayload<Payload>;
+
   dynamic<T extends StackableComponent, Payload = any>(
     Ctor: T,
     props: ExtractDynamicStackProps<T>,
     content: DefaultContent,
     propsResolver?: (
+      // eslint-disable-next-line no-shadow
       props: ExtractDynamicStackProps<T>,
     ) => ExtractDynamicStackProps<T>,
   ): DynamicStackPayload<Payload>;
+
   dynamic<T extends StackableComponent, Payload = any>(
     Ctor: T,
     props: ExtractDynamicStackProps<T>,
     slots: ExtractDynamicStackSlots<T>,
     propsResolver?: (
+      // eslint-disable-next-line no-shadow
       props: ExtractDynamicStackProps<T>,
     ) => ExtractDynamicStackProps<T>,
   ): DynamicStackPayload<Payload>;
+
   dynamic<T extends StackableComponent, Payload = any>(
     Ctor: T,
     contentOrProps: DefaultContent | ExtractDynamicStackProps<T>,

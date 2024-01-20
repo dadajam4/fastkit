@@ -129,109 +129,105 @@ export const computedTokens = createGlobalThemeContract({
    * Calculated values for system bar
    */
   systemBar: {
-    ...verticals((y) => {
-      return [
-        y,
-        {
-          /**
-           * Height that the system bar occupies on the screen
-           *
-           * - When not displayed, it is `0px`.
-           */
-          height: `val-computed-${y}SystemBar-height`,
-          /**
-           * Coordinates of the end of the system bar inside the screen
-           *
-           * This value is always the same as `"val-computed-${y}SystemBar-height"`.
-           */
-          offsetEnd: `val-computed-${y}SystemBar-offsetEnd`,
-          /**
-           * Coordinates for starting point of transition
-           *
-           * This value is used inside vue-app-layout.
-           */
-          transitionOut: `val-computed-${y}SystemBar-transitionOut`,
-          /**
-           * Offset coordinates of the left edge of the system bar
-           *
-           * Width of the left drawer when it satisfies the following conditions
-           *
-           * - The upper end stick position is set to a position other than the system bar.
-           * - Statically placed or opened in non-overlay mode
-           */
-          left: `val-computed-${y}SystemBar-left`,
-          /**
-           * Offset coordinates of the right edge of the system bar
-           *
-           * Width of the right drawer when it satisfies the following conditions
-           *
-           * - The upper end stick position is set to a position other than the system bar.
-           * - Statically placed or opened in non-overlay mode
-           */
-          right: `val-computed-${y}SystemBar-right`,
-          /**
-           * Transition at system bar open/close
-           *
-           * This value is set to `0s` until the first rendering completes in the browser to avoid busy animations, such as during page transitions.
-           */
-          transition: `val-computed-${y}SystemBar-transition`,
-        },
-      ];
-    }),
+    ...verticals((y) => [
+      y,
+      {
+        /**
+         * Height that the system bar occupies on the screen
+         *
+         * - When not displayed, it is `0px`.
+         */
+        height: `val-computed-${y}SystemBar-height`,
+        /**
+         * Coordinates of the end of the system bar inside the screen
+         *
+         * This value is always the same as `"val-computed-${y}SystemBar-height"`.
+         */
+        offsetEnd: `val-computed-${y}SystemBar-offsetEnd`,
+        /**
+         * Coordinates for starting point of transition
+         *
+         * This value is used inside vue-app-layout.
+         */
+        transitionOut: `val-computed-${y}SystemBar-transitionOut`,
+        /**
+         * Offset coordinates of the left edge of the system bar
+         *
+         * Width of the left drawer when it satisfies the following conditions
+         *
+         * - The upper end stick position is set to a position other than the system bar.
+         * - Statically placed or opened in non-overlay mode
+         */
+        left: `val-computed-${y}SystemBar-left`,
+        /**
+         * Offset coordinates of the right edge of the system bar
+         *
+         * Width of the right drawer when it satisfies the following conditions
+         *
+         * - The upper end stick position is set to a position other than the system bar.
+         * - Statically placed or opened in non-overlay mode
+         */
+        right: `val-computed-${y}SystemBar-right`,
+        /**
+         * Transition at system bar open/close
+         *
+         * This value is set to `0s` until the first rendering completes in the browser to avoid busy animations, such as during page transitions.
+         */
+        transition: `val-computed-${y}SystemBar-transition`,
+      },
+    ]),
   },
   /**
    * Calculated values for toolbar
    */
   toolbar: {
-    ...verticals((y) => {
-      return [
-        y,
-        {
-          /**
-           * Height that the toolbar occupies on the screen
-           *
-           * - When not displayed, it is `0px`.
-           */
-          height: `val-computed-${y}Toolbar-height`,
-          /**
-           * Coordinates of the end of the toolbar inside the screen
-           *
-           * This value is usually the same as `"val-computed-${y}Toolbar-height"`, but if the system bar is displayed, `"val-computed-${y}SystemBar-height"` is added.
-           */
-          offsetEnd: `val-computed-${y}Toolbar-offsetEnd`,
-          /**
-           * Coordinates for starting point of transition
-           *
-           * This value is used inside vue-app-layout.
-           */
-          transitionOut: `val-computed-${y}Toolbar-transitionOut`,
-          /**
-           * Offset coordinates of the left edge of the toolbar
-           *
-           * Width of the left drawer when it satisfies the following conditions
-           *
-           * - The upper end stick position is set to a position other than the toolbar.
-           * - Statically placed or opened in non-overlay mode
-           */
-          left: `val-computed-${y}Toolbar-left`,
-          /**
-           * Offset coordinates of the right edge of the toolbar
-           *
-           * Width of the right drawer when it satisfies the following conditions
-           *
-           * - The upper end stick position is set to a position other than the toolbar.
-           * - Statically placed or opened in non-overlay mode
-           */
-          right: `val-computed-${y}Toolbar-right`,
-          /**
-           * Transition at toolbar open/close
-           *
-           * This value is set to `0s` until the first rendering completes in the browser to avoid busy animations, such as during page transitions.
-           */
-          transition: `val-computed-${y}Toolbar-transition`,
-        },
-      ];
-    }),
+    ...verticals((y) => [
+      y,
+      {
+        /**
+         * Height that the toolbar occupies on the screen
+         *
+         * - When not displayed, it is `0px`.
+         */
+        height: `val-computed-${y}Toolbar-height`,
+        /**
+         * Coordinates of the end of the toolbar inside the screen
+         *
+         * This value is usually the same as `"val-computed-${y}Toolbar-height"`, but if the system bar is displayed, `"val-computed-${y}SystemBar-height"` is added.
+         */
+        offsetEnd: `val-computed-${y}Toolbar-offsetEnd`,
+        /**
+         * Coordinates for starting point of transition
+         *
+         * This value is used inside vue-app-layout.
+         */
+        transitionOut: `val-computed-${y}Toolbar-transitionOut`,
+        /**
+         * Offset coordinates of the left edge of the toolbar
+         *
+         * Width of the left drawer when it satisfies the following conditions
+         *
+         * - The upper end stick position is set to a position other than the toolbar.
+         * - Statically placed or opened in non-overlay mode
+         */
+        left: `val-computed-${y}Toolbar-left`,
+        /**
+         * Offset coordinates of the right edge of the toolbar
+         *
+         * Width of the right drawer when it satisfies the following conditions
+         *
+         * - The upper end stick position is set to a position other than the toolbar.
+         * - Statically placed or opened in non-overlay mode
+         */
+        right: `val-computed-${y}Toolbar-right`,
+        /**
+         * Transition at toolbar open/close
+         *
+         * This value is set to `0s` until the first rendering completes in the browser to avoid busy animations, such as during page transitions.
+         */
+        transition: `val-computed-${y}Toolbar-transition`,
+      },
+    ]),
   },
   stack: {
     ...horizontals((x) => [
@@ -333,18 +329,15 @@ export const computedTokens = createGlobalThemeContract({
 
 base.global(':root', {
   vars: {
-    [extractTokenName(
-      computedTokens.transition,
-    )]: `${tokens.transition.duration} ${tokens.transition.function}`,
+    [extractTokenName(computedTokens.transition)]:
+      `${tokens.transition.duration} ${tokens.transition.function}`,
     ...verticals((y) => [
       extractTokenName(computedTokens.viewport[y]),
       computedTokens.toolbar[y].offsetEnd,
     ]),
-    [extractTokenName(
-      computedTokens.viewport.width,
-    )]: `calc(100svw - ${computedTokens.drawer.left.offsetEnd} - ${computedTokens.drawer.right.offsetEnd})`,
-    [extractTokenName(
-      computedTokens.viewport.height,
-    )]: `calc(100svh - ${computedTokens.toolbar.top.offsetEnd} - ${computedTokens.toolbar.bottom.offsetEnd})`,
+    [extractTokenName(computedTokens.viewport.width)]:
+      `calc(100svw - ${computedTokens.drawer.left.offsetEnd} - ${computedTokens.drawer.right.offsetEnd})`,
+    [extractTokenName(computedTokens.viewport.height)]:
+      `calc(100svh - ${computedTokens.toolbar.top.offsetEnd} - ${computedTokens.toolbar.bottom.offsetEnd})`,
   },
 });

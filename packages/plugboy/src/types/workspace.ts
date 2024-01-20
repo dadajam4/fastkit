@@ -1,9 +1,9 @@
+import type { Options as TSUpOptions } from 'tsup';
 import type { Path } from '../path';
 import { RequiredPackageJSON, MarkRequired } from './_utils';
 import type { PlugboyProject } from '../project';
 import type { UserPluginOption, Plugin } from './plugin';
 import type { UserHooks, BuildedHooks } from './hook';
-import { Options as TSUpOptions } from 'tsup';
 import { DTSSettings, NormalizedDTSSettings } from './dts';
 import { OptimizeCSSOptions } from './css';
 

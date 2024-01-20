@@ -21,9 +21,9 @@ export function toScssValues(scheme: ColorScheme<any, any, any, any>): string {
       if (!defaultScope) return;
       rows.push(`      ${key}: (`);
       const json = defaultScope.toJSON();
-      Object.entries(json).forEach(([key, value]) => {
+      Object.entries(json).forEach(([_key, value]) => {
         if (value) {
-          rows.push(`        ${key}: ${value},`);
+          rows.push(`        ${_key}: ${value},`);
         }
       });
       rows.push(`      ),`);

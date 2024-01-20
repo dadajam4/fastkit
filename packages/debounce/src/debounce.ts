@@ -89,7 +89,7 @@ export function resolveDebounceSettings<FN extends AnyFunction = AnyFunction>(
   return settings;
 }
 
-const MISSING_SYMBOL = Symbol();
+const MISSING_SYMBOL = Symbol('MISSING');
 
 function isMissingSymbol(source: unknown): source is typeof MISSING_SYMBOL {
   return source === MISSING_SYMBOL;
@@ -138,7 +138,7 @@ export function debounce<FN extends AnyFunction = AnyFunction>(
   function clear() {
     if (timerId) {
       clearTimeout(timerId as any);
-      timerId = void 0;
+      timerId = undefined;
     }
   }
 

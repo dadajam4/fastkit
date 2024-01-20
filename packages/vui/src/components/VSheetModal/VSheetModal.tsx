@@ -1,20 +1,11 @@
 import './VSheetModal.scss';
-import {
-  defineComponent,
-  // ExtractPropTypes,
-  PropType,
-  VNodeChild,
-  computed,
-} from 'vue';
+import { defineComponent, PropType, VNodeChild, computed } from 'vue';
 import {
   createStackableDefine,
   VStackSlots,
   VStackControl,
   useStackControl,
 } from '@fastkit/vue-stack';
-// import {  } from '../schemes';
-// import { useStackControl } from '../composables';
-// import { ExtractPropInput } from '@fastkit/vue-utils';
 
 const { props, emits } = createStackableDefine({
   defaultTransition: 'v-sheet-modal',
@@ -40,6 +31,7 @@ export const VSheetModal = defineComponent({
   inheritAttrs: false,
   props: sheetModalProps,
   emits,
+  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const stackControl = useStackControl(props, ctx, {
       stackType: SHEET_STACK_TYPE,
@@ -57,32 +49,24 @@ export const VSheetModal = defineComponent({
     };
   },
   render() {
-    const {
-      render,
-      // color,
-    } = this.stackControl;
+    const { render } = this.stackControl;
     const headerSlot = this.$slots.header || this.header;
-    return render((children) => {
-      return (
-        <div
-          class={[
-            'v-sheet-modal',
-            {
-              'v-sheet-modal--has-active-child': this.hasActiveChild,
-            },
-            // color.colorClasses.value,
-          ]}
-          tabindex="0">
-          {headerSlot && (
-            <div class="v-sheet-modal__header">
-              {headerSlot(this.stackControl)}
-            </div>
-          )}
-          <div class="v-sheet-modal__scroller">{children}</div>
-        </div>
-      );
-    });
+    return render((children) => (
+      <div
+        class={[
+          'v-sheet-modal',
+          {
+            'v-sheet-modal--has-active-child': this.hasActiveChild,
+          },
+        ]}
+        tabindex="0">
+        {headerSlot && (
+          <div class="v-sheet-modal__header">
+            {headerSlot(this.stackControl)}
+          </div>
+        )}
+        <div class="v-sheet-modal__scroller">{children}</div>
+      </div>
+    ));
   },
 });
-
-// export type VSheetModalStatic = typeof VSheetModal;

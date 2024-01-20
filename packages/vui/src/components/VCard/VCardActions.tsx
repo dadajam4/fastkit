@@ -4,8 +4,6 @@ import { defineComponent } from 'vue';
 export const VCardActions = defineComponent({
   name: 'VCardActions',
   setup(_props, ctx) {
-    return () => {
-      return <div class="v-card-actions">{ctx.slots.default?.()}</div>;
-    };
+    return () => <div class="v-card-actions">{ctx.slots.default?.()}</div>;
   },
 });

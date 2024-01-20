@@ -30,17 +30,15 @@ export const VOptionGroup = defineComponent({
     const groupControl = useFormSelectorItemGroupControl(props, ctx, {
       parentNodeType: VUI_SELECT_SYMBOL,
     });
-    const labelSlot = computed(() => {
-      return resolveVNodeChildOrSlots(props.label, ctx.slots.label);
-    });
-    const classes = computed(() => {
-      return [
-        'v-option-group',
-        {
-          'v-option-group--disabled': groupControl.isDisabled,
-        },
-      ];
-    });
+    const labelSlot = computed(() =>
+      resolveVNodeChildOrSlots(props.label, ctx.slots.label),
+    );
+    const classes = computed(() => [
+      'v-option-group',
+      {
+        'v-option-group--disabled': groupControl.isDisabled,
+      },
+    ]);
 
     ctx.expose({
       control: groupControl,

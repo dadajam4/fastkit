@@ -1,3 +1,4 @@
+import type { LocationQueryValue } from 'vue-router';
 import type {
   RawBooleanQueryValues,
   RawBooleanQuerySchema,
@@ -5,7 +6,6 @@ import type {
   QuerySchemaSpec,
   QuerySchema,
 } from './types';
-import type { LocationQueryValue } from 'vue-router';
 
 export type Data = Record<string, unknown>;
 
@@ -79,18 +79,18 @@ export type OptionalKeys<T> = Exclude<keyof T, RequiredKeys<T>>;
 export type NormalizeConstructor<T> = T extends StringConstructor
   ? string
   : T extends NumberConstructor
-  ? number
-  : T extends BooleanConstructor
-  ? boolean
-  : T;
+    ? number
+    : T extends BooleanConstructor
+      ? boolean
+      : T;
 
 type NormalizeDefaultType<D> = D extends (...args: any[]) => infer U ? U : D;
 
 export type InferMultipleAndDefault<T, U> = [T] extends [{ multiple: true }]
   ? U[]
   : [T] extends [{ default: infer D }]
-  ? U | NormalizeDefaultType<D>
-  : U | undefined;
+    ? U | NormalizeDefaultType<D>
+    : U | undefined;
 
 export const normalizeType = (type: any) =>
   type == null || type === true ? String : type;

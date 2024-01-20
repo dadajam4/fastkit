@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/hashed-sync",
-  "version": "0.13.7",
+  "version": "0.13.8",
   "description": "Compare and synchronize the status of entire files and directories by hash value.",
   "keywords": [
     "fastkit",

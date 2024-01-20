@@ -1,18 +1,18 @@
 /* eslint-disable no-console */
 import path from 'node:path';
 import fs from 'fs-extra';
+import { ResolvedConfig } from 'vite';
+import http from 'node:http';
+import chalk from 'chalk';
+import {
+  generateVotGeneratePagePaths,
+  VOT_GENERATE_PAGES_PATH,
+} from '../../schemes/generate';
 import {
   resolveViteConfig,
   findVotPlugin,
   resolveExtractedPages,
 } from '../utils';
-import { ResolvedConfig } from 'vite';
-import {
-  generateVotGeneratePagePaths,
-  VOT_GENERATE_PAGES_PATH,
-} from '../../schemes/generate';
-import http, { Server } from 'node:http';
-import chalk from 'chalk';
 
 function isIncomingMessage(source: unknown): source is http.IncomingMessage {
   return (
@@ -64,13 +64,14 @@ export async function generate(_config?: ResolvedConfig) {
   const { serve } = await import('../../server');
 
   const launched = await serve();
-  const server: Server = launched.server;
+  const { server } = launched;
 
   const urlParseRe = /(https?:)([^?]+)(\?.+)?/;
   const normalizeUrl = (url: string) => {
     const matched = url.replace(/\/+/g, '/').match(urlParseRe);
     if (!matched) throw new Error(`Invalid url: ${url}`);
     const protocol = matched[1];
+    // eslint-disable-next-line no-shadow
     let path = matched[2];
     const query = matched[3] || '';
     if (!path.endsWith('/')) {
@@ -128,6 +129,7 @@ export async function generate(_config?: ResolvedConfig) {
             },
           });
           if (typeof html !== 'string') {
+            // eslint-disable-next-line no-throw-literal
             throw { statusCode: html.status };
           }
           await fs.ensureDir(outDir);

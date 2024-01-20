@@ -1,3 +1,5 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { ProjectPackageJson, WorkspacePackageJson } from './types';
 import {
   findConfig,
@@ -6,8 +8,6 @@ import {
 } from './utils';
 import { PACKAGE_JSON_FILENAME } from './constants';
 import { Path } from './path';
-import fs from 'node:fs/promises';
-import path from 'node:path';
 
 export interface GetProjectPackageJsonResult {
   dir: Path;

@@ -1,7 +1,7 @@
-import { extractAll } from '../serializers';
 import type { PluginOption, FilterPattern } from 'vite';
 import { createFilter } from 'vite';
 import MagicString from 'magic-string';
+import { extractAll } from '../serializers';
 import { SerializeVueOptions } from '../types';
 import { SUPPORT_ANNOTATION } from '../constants';
 

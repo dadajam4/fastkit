@@ -114,19 +114,16 @@ export function defineDialogComponent<
         tabindex: '0',
       };
 
-      return () => {
-        return control.render((children, { withClickOutside }) => {
-          return (
-            <div {...hostAttrs}>
-              <div class="v-stack-dialog__scroller">
-                <div class="v-stack-dialog__centerer">
-                  {withClickOutside(render(children, dialogCtx as any))}
-                </div>
+      return () =>
+        control.render((children, { withClickOutside }) => (
+          <div {...hostAttrs}>
+            <div class="v-stack-dialog__scroller">
+              <div class="v-stack-dialog__centerer">
+                {withClickOutside(render(children, dialogCtx as any))}
               </div>
             </div>
-          );
-        });
-      };
+          </div>
+        ));
     },
   });
 

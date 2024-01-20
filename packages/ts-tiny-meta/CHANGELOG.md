@@ -1,5 +1,11 @@
 # @fastkit/ts-tiny-meta
 
+## 0.1.8
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
 ## 0.1.7
 
 ### Patch Changes

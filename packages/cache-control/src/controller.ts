@@ -1,3 +1,5 @@
+import { clone } from '@fastkit/cloner';
+import { Duration } from '@fastkit/duration';
 import {
   RawDeleteCacheRequest,
   RawGetCacheRequest,
@@ -7,8 +9,6 @@ import {
   CacheControllerBehavior,
   CacheDetailsWithRemainingTimes,
 } from './schemes';
-import { clone } from '@fastkit/cloner';
-import { Duration } from '@fastkit/duration';
 import {
   createCacheDetails,
   toCacheDetailsWithRemainingTimes,

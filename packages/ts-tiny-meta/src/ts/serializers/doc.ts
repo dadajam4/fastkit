@@ -75,40 +75,15 @@ export function normalizeJSDocComment(
     if (!node) return;
     if ('getText' in node) {
       nodes.push(node);
-    } else {
-      if (node.kind !== 'link') {
-        nodes.push({
-          text: node.text,
-          getText: () => node.text,
-        });
-      }
-      // console.log('★★★★', node.text);
-      // nodes.push({
-      //   text: node.text,
-      //   getText: () => node.text,
-      // });
+    } else if (node.kind !== 'link') {
+      nodes.push({
+        text: node.text,
+        getText: () => node.text,
+      });
     }
-    // node && nodes.push(node);
   });
   return nodes;
 }
-
-// function normalizeSymbolDisplayParts(
-//   parts: ts.SymbolDisplayPart[],
-// ): JSDocCommentNode[] {
-//   return parts.map((part) => {
-//     return {
-//       text: part.text,
-//       getText: () => part.text,
-//     };
-//   });
-// }
-
-// function extractMetaDocPartsFromSymbolDisplayParts(
-//   parts: ts.SymbolDisplayPart[],
-// ) {
-//   const normalizedNodes = normalizeSymbolDisplayParts(parts);
-// }
 
 export function extractMetaDocPartsFromJSDocComment(
   comment: JSDocCommentType,
@@ -167,11 +142,7 @@ export function extractMetaDocPartsFromJSDocComment(
  * @returns
  */
 export function metaDocPartToString(parts: MetaDocPart[]): string {
-  return parts
-    .map((part) => {
-      return part.text;
-    })
-    .join('');
+  return parts.map((part) => part.text).join('');
 }
 
 export function parseJSDocComment(
@@ -228,7 +199,7 @@ export function parseJSDocTags(tags: JSDocTag[] | JSDocTagInfo[]): {
 
   tags.forEach((tag) => {
     const normalized = normalizeTag(tag);
-    const name = normalized.name;
+    const { name } = normalized;
     if (name === 'param') {
       const parameterName = normalized.text.match(PARAMETER_NAME_MATCH_RE)?.[2];
       if (!parameterName) return;
@@ -277,9 +248,7 @@ function isPrivateLikeTag(tag: string): tag is PrivateLikeTag {
 export function hasPrivateLikeTag(docs: MetaDoc[]) {
   return (
     !!docs &&
-    docs.some((doc) => {
-      return doc.tags.some((tag) => isPrivateLikeTag(tag.name));
-    })
+    docs.some((doc) => doc.tags.some((tag) => isPrivateLikeTag(tag.name)))
   );
 }
 

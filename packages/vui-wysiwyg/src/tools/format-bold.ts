@@ -1,5 +1,5 @@
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 import { Bold, BoldOptions } from '@tiptap/extension-bold';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 
 export const WysiwygFormatBoldTool: WysiwygEditorToolFactory<BoldOptions> = (
   vui,

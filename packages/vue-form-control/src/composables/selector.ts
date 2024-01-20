@@ -18,6 +18,7 @@ import {
   TypedSlot,
   resolveVNodeChildOrSlot,
 } from '@fastkit/vue-utils';
+import { IN_WINDOW, isPromise, arrayRemove } from '@fastkit/helpers';
 import {
   FormNodeType,
   createFormNodeProps,
@@ -28,7 +29,6 @@ import {
 } from './node';
 import type { FormSelectorItemControl } from './selector-item';
 import { FormSelectorInjectionKey } from '../injections';
-import { IN_WINDOW, isPromise, arrayRemove } from '@fastkit/helpers';
 
 export const DEFAULT_FORM_SELECTOR_GROUP_ID = '__default__';
 
@@ -177,19 +177,30 @@ export type FormSelectorLoadState = 'ready' | 'loading' | 'error';
 
 export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   readonly _props: FormSelectorProps;
+
   readonly parentNodeType?: FormNodeType;
+
   protected _items: Ref<FormSelectorItemControl[]> = ref([]);
+
   protected _itemsLoadState = ref<FormSelectorLoadState>('ready');
+
   protected _propGroups: Ref<ResolvedFormSelectorGroup[]> = ref([]);
+
   protected _loadedItems: ComputedRef<ResolvedFormSelectorItem[]>;
+
   protected _selectedPropItems: ComputedRef<ResolvedFormSelectorItem[]>;
+
   protected _selectedValues: ComputedRef<(string | number)[]>;
+
   protected _selectedItems: ComputedRef<FormSelectorItemControl[]>;
+
   protected _guardingItem: Ref<(() => FormSelectorItemControl) | undefined>;
+
   protected onSelectItem?: (
     item: FormSelectorItemControl,
     ev: MouseEvent,
   ) => any;
+
   protected onCancelSelect?: (
     item: FormSelectorItemControl,
     ev: MouseEvent,
@@ -561,11 +572,12 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   }
 
   protected _safeMultipleValues(_value = this.value): (string | number)[] {
+    // eslint-disable-next-line no-nested-ternary
     const values: (string | number)[] = Array.isArray(_value)
       ? _value
       : _value == null
-      ? []
-      : [_value];
+        ? []
+        : [_value];
     return values;
   }
 
@@ -787,13 +799,11 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       accepted = true;
       if (this.multiple) {
         item.toggle();
+      } else if (!item.selected) {
+        item.select();
+        this.handleSelectItem(item, ev);
       } else {
-        if (!item.selected) {
-          item.select();
-          this.handleSelectItem(item, ev);
-        } else {
-          this.onCancelSelect?.(item, ev);
-        }
+        this.onCancelSelect?.(item, ev);
       }
     };
 
@@ -811,17 +821,15 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     if (isPromise(result)) {
       this._guardingItem.value = () => item;
       result
-        .then((result) => {
+        .then((_result) => {
           this.clearGuard();
-          if (result !== false) accept();
+          if (_result !== false) accept();
         })
         .catch((err) => {
           this.clearGuard();
           throw err;
         });
-    } else {
-      if (result !== false) accept();
-    }
+    } else if (result !== false) accept();
   }
 
   /**

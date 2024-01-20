@@ -23,9 +23,9 @@ const FULL_WIDTH_SPACE_RE = /　/g;
  */
 export function toHalfWidth(source?: string | null) {
   return nilToEmptyString(source)
-    .replace(FULL_WIDTH_SYMBOL_RE, (source) => {
-      return String.fromCharCode(source.charCodeAt(0) - 0xfee0);
-    })
+    .replace(FULL_WIDTH_SYMBOL_RE, (_source) =>
+      String.fromCharCode(_source.charCodeAt(0) - 0xfee0),
+    )
     .replace(FULL_WIDTH_SPACE_RE, ' ');
 }
 

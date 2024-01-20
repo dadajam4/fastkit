@@ -12,10 +12,9 @@ export async function getCrypto(): Promise<Crypto> {
     if (typeof crypto !== 'undefined') {
       __crypto = crypto;
       return crypto;
-    } else {
-      const { webcrypto } = await import('node:crypto');
-      __crypto = webcrypto as any;
     }
+    const { webcrypto } = await import('node:crypto');
+    __crypto = webcrypto as any;
   }
   if (!__crypto) {
     throw new Error('missing Crypto.');

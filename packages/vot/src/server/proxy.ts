@@ -46,7 +46,7 @@ export function proxyMiddleware(
           if (
             opts.ws ||
             opts.target?.toString().startsWith('ws:') /* &&
-            req.headers['sec-websocket-protocol'] !== HMR_HEADER*/
+            req.headers['sec-websocket-protocol'] !== HMR_HEADER */
           ) {
             if (opts.rewrite) {
               req.url = opts.rewrite(url);
@@ -67,6 +67,7 @@ export function proxyMiddleware(
     for (const context in proxies) {
       if (doesProxyContextMatchUrl(context, url)) {
         const [proxy, opts] = proxies[context];
+        // eslint-disable-next-line no-shadow
         const options: HttpProxy.ServerOptions = {};
 
         if (opts.bypass) {
@@ -75,11 +76,13 @@ export function proxyMiddleware(
             req.url = bypassResult;
             // debug(`bypass: ${req.url} -> ${bypassResult}`);
             return next();
-          } else if (isObject(bypassResult)) {
+          }
+          if (isObject(bypassResult)) {
             Object.assign(options, bypassResult);
             // debug(`bypass: ${req.url} use modified options: %O`, options);
             return next();
-          } else if (bypassResult === false) {
+          }
+          if (bypassResult === false) {
             // debug(`bypass: ${req.url} -> 404`);
             console.log(`bypass: ${req.url} -> 404`);
             return res.end(404);

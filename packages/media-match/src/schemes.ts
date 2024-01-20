@@ -17,7 +17,9 @@ export type MediaMatchConditionProxy = Record<MediaMatchKey, string>;
 
 export class MediaMatchConditions {
   private _array: MediaMatchCondition[] = [];
+
   private _at: MediaMatchConditionAt = {} as any;
+
   private _conditionProxy: MediaMatchConditionProxy;
 
   get at() {
@@ -30,9 +32,7 @@ export class MediaMatchConditions {
 
   constructor() {
     this._conditionProxy = new Proxy({} as Record<MediaMatchKey, string>, {
-      get: (target, prop) => {
-        return this._at[prop as MediaMatchKey].condition;
-      },
+      get: (target, prop) => this._at[prop as MediaMatchKey].condition,
     });
   }
 

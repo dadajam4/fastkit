@@ -99,6 +99,7 @@ export function renderVNodeChildOrSlotsOrEmpty<Prop>(
 
 export function renderSlotOrEmpty(
   slots: Slots | { [key: string]: TypedSlot },
+  // eslint-disable-next-line default-param-last
   name = 'default',
   prop?: { [key: string]: unknown },
 ) {

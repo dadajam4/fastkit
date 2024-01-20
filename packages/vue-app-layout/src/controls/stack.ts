@@ -1,5 +1,6 @@
-import { fadeTransition } from '../styles';
 import { computed, ComputedRef, ref, Ref, watch, TransitionProps } from 'vue';
+import { resolveFunctionableValue, FunctionableValue } from '@fastkit/helpers';
+import { fadeTransition } from '../styles';
 import type { VueAppLayout } from './layout';
 import {
   VueAppLayoutStickPositionX,
@@ -7,7 +8,6 @@ import {
   VAL_STACK_DEFAULT_POSITION_X,
   VAL_STACK_DEFAULT_POSITION_Y,
 } from '../schemes';
-import { resolveFunctionableValue, FunctionableValue } from '@fastkit/helpers';
 
 export type VueAppStackTransitionSettings = string | TransitionProps;
 
@@ -26,11 +26,10 @@ export interface VueAppStackResolvedBackdropSettings
 
 const resolveTransitionSettings = (
   settings: VueAppStackTransitionSettings = {},
-): TransitionProps => {
-  return typeof settings === 'string'
+): TransitionProps =>
+  typeof settings === 'string'
     ? { name: settings }
     : { name: fadeTransition, ...settings };
-};
 
 export type VueAppStackPositionX = FunctionableValue<
   VueAppLayoutStickPositionX,
@@ -104,12 +103,17 @@ export interface VueAppStackRef {
 
 export class VueAppStack {
   readonly layout: VueAppLayout;
+
   private _active: Ref<boolean>;
+
   private _transition: ComputedRef<TransitionProps>;
+
   private _backdrop: ComputedRef<
     VueAppStackResolvedBackdropSettings | undefined
   >;
+
   private _positions: ComputedRef<VueAppStackPositions>;
+
   private _emit: (modelValue: boolean) => void;
 
   get active() {

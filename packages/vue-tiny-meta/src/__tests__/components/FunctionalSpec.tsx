@@ -11,9 +11,9 @@ export const FunctionalSpec = defineComponent(
     hoge: number;
     /** prop comment */
     fuga?: boolean;
-  }) => {
-    return () => undefined;
-  },
+  }) =>
+    () =>
+      undefined,
   {
     emits: ['click'],
   },

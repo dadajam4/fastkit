@@ -17,6 +17,7 @@ const { props, emits } = createFormNodeWrapperSettings();
 
 export function createRequiredChipRenderer(
   required: () => boolean,
+  // eslint-disable-next-line no-shadow
   props: {
     requiredChip?: RequiredChipSource;
   },
@@ -56,6 +57,7 @@ export const VFormControl = defineComponent({
   },
   slots,
   emits,
+  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const vui = useVui();
     const control = useFormNodeWrapper(props, ctx, {
@@ -68,6 +70,7 @@ export const VFormControl = defineComponent({
     });
 
     const hinttipDelay = computed(() => {
+      // eslint-disable-next-line no-shadow
       let { hinttipDelay } = control;
       if (hinttipDelay == null) {
         hinttipDelay = vui.setting('hinttipDelay');
@@ -100,11 +103,12 @@ export const VFormControl = defineComponent({
         'v-form-control--valid': control.valid,
       },
       colorProvider.className(
+        // eslint-disable-next-line no-nested-ternary
         props.error
           ? 'error'
           : control.invalid && !control.isReadonly
-          ? 'error'
-          : 'primary',
+            ? 'error'
+            : 'primary',
       ),
     ]);
 
@@ -142,6 +146,7 @@ export const VFormControl = defineComponent({
                     activator: (tooltip) => (
                       <a
                         class="v-form-control__label__hinttip"
+                        // eslint-disable-next-line no-script-url
                         href="javascript:void(0)"
                         {...tooltip.attrs}>
                         {hinttip.tip}

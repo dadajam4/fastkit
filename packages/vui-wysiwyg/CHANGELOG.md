@@ -1,5 +1,14 @@
 # @fastkit/vui-wysiwyg
 
+## 6.0.33
+
+### Patch Changes
+
+- Refactored internal implementation due to a review of ESLint rules, with no changes to the specifications.
+
+- Updated dependencies []:
+  - @fastkit/vui@0.18.32
+
 ## 6.0.32
 
 ### Patch Changes

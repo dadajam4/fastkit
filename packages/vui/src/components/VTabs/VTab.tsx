@@ -6,9 +6,8 @@ import {
   computed,
   ComponentPublicInstance,
 } from 'vue';
-import { RouteLocationRaw } from 'vue-router';
+import { RouteLocationRaw, RouterLink } from 'vue-router';
 import { RawIconProp, resolveRawIconProp } from '../VIcon';
-import { RouterLink } from 'vue-router';
 
 export interface VTabExpose {
   value: string;
@@ -60,28 +59,22 @@ export const VTab = defineComponent({
       if (to) {
         const replace = typeof to === 'string' ? undefined : to.replace;
         return (
-          <RouterLink
-            class={classes}
-            to={to}
-            replace={replace}
-            // disableScrollBehavior
-          >
+          <RouterLink class={classes} to={to} replace={replace}>
             {children}
           </RouterLink>
         );
-      } else {
-        return (
-          <button
-            class={classes}
-            type="button"
-            value={value}
-            onClick={(ev) => {
-              ctx.emit('click', ev);
-            }}>
-            {children}
-          </button>
-        );
       }
+      return (
+        <button
+          class={classes}
+          type="button"
+          value={value}
+          onClick={(ev) => {
+            ctx.emit('click', ev);
+          }}>
+          {children}
+        </button>
+      );
     };
   },
 });

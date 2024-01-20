@@ -38,12 +38,19 @@ export interface VueAppDrawerSettings extends VueAppStackBaseSettings {
 
 export class VueAppDrawer {
   readonly layout: VueAppLayout;
+
   private _stack: Ref<VueAppStack | null> = ref(null);
+
   readonly id: VueAppDrawerId;
+
   private _position: ComputedRef<VueAppLayoutPositionX>;
+
   private _static: ComputedRef<boolean>;
+
   private _rale: ComputedRef<boolean>;
+
   private _backdrop: ComputedRef<boolean>;
+
   private _sticked: ComputedRef<VueAppDrawerResolvedStickedSettings>;
 
   get stack() {
@@ -87,7 +94,8 @@ export class VueAppDrawer {
 
     const { id } = settings;
 
-    this.id = id instanceof VueAppDrawerControl ? id.id : id ?? Symbol();
+    this.id =
+      id instanceof VueAppDrawerControl ? id.id : id ?? Symbol('VueAppDrawer');
     this.stackRef = this.stackRef.bind(this);
 
     this._position = computed(
@@ -159,6 +167,7 @@ export class VueAppDrawer {
 
 export class VueAppDrawerControl {
   readonly layout: VueAppLayout;
+
   readonly id: VueAppDrawerId;
 
   get isActive() {
@@ -169,7 +178,10 @@ export class VueAppDrawerControl {
     return this.get()?.isStatic || false;
   }
 
-  constructor(layout: VueAppLayout, id: VueAppDrawerId = Symbol()) {
+  constructor(
+    layout: VueAppLayout,
+    id: VueAppDrawerId = Symbol('VueAppDrawerControl'),
+  ) {
     this.layout = layout;
     this.id = id;
   }

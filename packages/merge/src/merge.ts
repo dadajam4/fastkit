@@ -109,14 +109,14 @@ export function mergeObject<T1 extends AnyObject, T2 extends AnyObject>(
 ): T1 & T2 {
   const destination: { [key: symbol]: any } = {};
   if (options.isMergeableObject(target)) {
-    getKeys(target).forEach(function (key) {
+    getKeys(target).forEach((key) => {
       destination[key] = cloneUnlessOtherwiseSpecified(
         (target as any)[key],
         options,
       );
     });
   }
-  getKeys(source).forEach(function (key) {
+  getKeys(source).forEach((key) => {
     if (propertyIsUnsafe(target, key)) {
       return;
     }
@@ -168,12 +168,12 @@ export function deepmerge<T1, T2>(
 
   if (!sourceAndTargetTypesMatch) {
     return cloneUnlessOtherwiseSpecified(source, _options);
-  } else if (sourceIsArray) {
-    return _options.arrayMerge(target as unknown as any[], source, _options);
-  } else {
-    // @FIXME
-    return mergeObject(target as any, source as any, _options);
   }
+  if (sourceIsArray) {
+    return _options.arrayMerge(target as unknown as any[], source, _options);
+  }
+  // @FIXME
+  return mergeObject(target as any, source as any, _options);
 }
 
 deepmerge.all = function deepmergeAll<T>(

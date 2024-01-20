@@ -53,6 +53,7 @@ describe('general', () => {
       [true, false],
       [{}, false],
       [new Date(), false, 'new Date()'],
+      // eslint-disable-next-line func-names
       [function () {}, false, 'function () {}'],
       [class {}, false, 'class {}'],
       [Symbol(''), false, 'Symbol()'],
@@ -69,11 +70,13 @@ describe('general', () => {
       [true, 0],
       [{}, 0],
       [new Date(), 0, 'new Date()'],
+      // eslint-disable-next-line func-names
       [function () {}, 0, 'function () {}'],
       [class {}, 0, 'class {}'],
       [
         class {
           x = 1;
+
           y() {}
         },
         0,

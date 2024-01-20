@@ -10,13 +10,13 @@ import {
   watch,
 } from 'vue';
 import { createPropsOptions } from '@fastkit/vue-utils';
+import { createRule, isEmpty } from '@fastkit/rules';
 import {
   createFormNodeProps,
   FormNodeControl,
   createFormNodeEmits,
   FormNodeControlBaseOptions,
 } from './node';
-import { createRule, isEmpty } from '@fastkit/rules';
 
 export type BoundableValue = number | string;
 
@@ -55,9 +55,8 @@ export const boundableRequired = createRule<BoundableRequiredConstraints>({
         return false;
       }
       return true;
-    } else {
-      return !isEmpty(value);
     }
+    return !isEmpty(value);
   },
   message: (value, { constraints: type }) => {
     if (!Array.isArray(value)) {
@@ -75,9 +74,8 @@ export const boundableRequired = createRule<BoundableRequiredConstraints>({
     const [start] = value;
     if (isEmpty(start)) {
       return 'The start value is not entered.';
-    } else {
-      return 'The end value is not entered.';
     }
+    return 'The end value is not entered.';
   },
   constraints: 'any',
 });
@@ -87,10 +85,9 @@ export const boundableMin = createRule<BoundableValue>({
   validate: (value, min) => {
     if (value == null) return true;
     if (Array.isArray(value)) {
-      return value.every((value) => value >= min);
-    } else {
-      return value >= min;
+      return value.every((_value) => _value >= min);
     }
+    return value >= min;
   },
   message: (value, { constraints: min }) => {
     if (min != null) {
@@ -106,10 +103,9 @@ export const boundableMax = createRule<BoundableValue>({
   validate: (value, max) => {
     if (value == null) return true;
     if (Array.isArray(value)) {
-      return value.every((value) => value <= max);
-    } else {
-      return value <= max;
+      return value.every((_value) => _value <= max);
     }
+    return value <= max;
   },
   message: (value, { constraints: max }) => {
     if (max != null) {
@@ -333,6 +329,7 @@ export class BoundableInputControl<
   Max extends T | null = null,
 > extends FormNodeControl<MV, MV, typeof REQUIRED_PROP_OPTIONS> {
   readonly _props: BoundableInputProps<T, MV, SV, EV, Min, Max>;
+
   protected _boundableOptions: BoundableInputControlOptions<
     T,
     MV,
@@ -343,15 +340,25 @@ export class BoundableInputControl<
   >;
 
   protected _startValue: Ref<SV>;
+
   protected _endValue: Ref<EV>;
+
   protected _initialStartValue: Ref<SV>;
+
   protected _initialEndValue: Ref<EV>;
+
   protected _currentStartValue: WritableComputedRef<SV>;
+
   protected _currentEndValue: WritableComputedRef<EV>;
+
   protected _startName: ComputedRef<string | undefined>;
+
   protected _endName: ComputedRef<string | undefined>;
+
   protected _isRange: Ref<boolean>;
+
   protected _min: Ref<Min>;
+
   protected _max: Ref<Max>;
 
   get isRange() {
@@ -381,6 +388,7 @@ export class BoundableInputControl<
   set endValue(endValue) {
     this._currentEndValue.value = endValue;
   }
+
   get validationValue() {
     if (!this.isMounted) {
       return super.validationValue;
@@ -394,6 +402,7 @@ export class BoundableInputControl<
     }
     return this.value;
   }
+
   get initialStartValue() {
     return this._initialStartValue.value;
   }

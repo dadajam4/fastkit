@@ -1,7 +1,7 @@
 import { definePlugin, findFile } from '@fastkit/plugboy';
+import fs from 'node:fs/promises';
 import { ESBuildVanillaExtract } from './esbuild';
 import { VanillaExtractPlugin, PluginOptions, PLUGIN_NAME } from './types';
-import fs from 'node:fs/promises';
 
 declare module '@fastkit/plugboy' {
   export interface WorkspaceMeta {

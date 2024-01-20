@@ -1,11 +1,11 @@
 import { App } from 'vue';
-import type { AnySpace } from './schemes';
 import type { Router, RouteLocationRaw } from 'vue-router';
+import { IN_WINDOW } from '@fastkit/helpers';
+import type { AnySpace } from './schemes';
 import type { VueI18nContext } from './context';
 import { VueI18nSubSpaceProvider } from './provider';
 import { VueI18nStrategy } from './strategies';
 import { logger, VueI18nError } from './logger';
-import { IN_WINDOW } from '@fastkit/helpers';
 
 /**
  * Result of Client Language Retrieval

@@ -11,9 +11,8 @@ export const Generic = genericScheme.defineComponent({
     en,
     // @see https://jestjs.io/docs/ecmascript-modules
     // 'zh-cn': () => import('./zh-cn'),
-    'zh-cn': () => {
-      return new Promise((resolve) => setTimeout(() => resolve(zhcn), 500));
-    },
+    'zh-cn': () =>
+      new Promise((resolve) => setTimeout(() => resolve(zhcn), 500)),
     'zh-tw': zhtw,
   },
 });

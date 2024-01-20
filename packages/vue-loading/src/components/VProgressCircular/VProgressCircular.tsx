@@ -23,17 +23,14 @@ export const VProgressCircular = defineComponent({
     const circumference = computed(() => 2 * Math.PI * radius.value);
     const colorClass = useScopeColorClass(props);
 
-    const classes = computed(() => {
-      const classes: any[] = [
-        {
-          'v-progress-circular--indeterminate': props.indeterminate,
-          'v-progress-circular--button': props.button,
-          'v-progress-circular--has-color': !!colorClass.value.value,
-        },
-        colorClass.value.className,
-      ];
-      return classes;
-    });
+    const classes = computed(() => [
+      {
+        'v-progress-circular--indeterminate': props.indeterminate,
+        'v-progress-circular--button': props.button,
+        'v-progress-circular--has-color': !!colorClass.value.value,
+      },
+      colorClass.value.className,
+    ]);
 
     const normalizedValue = computed(() => {
       const value = resolveNumberish(props.value, 0);
@@ -53,7 +50,7 @@ export const VProgressCircular = defineComponent({
     );
 
     const strokeDashOffset = computed(
-      () => ((100 - normalizedValue.value) / 100) * circumference.value + 'px',
+      () => `${((100 - normalizedValue.value) / 100) * circumference.value}px`,
     );
 
     const viewBoxSize = computed(

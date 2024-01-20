@@ -1,5 +1,11 @@
 import { ComputedRef, computed } from 'vue';
 import {
+  useRouter,
+  type LocationQuery,
+  type Router,
+  type RouteLocationRaw,
+} from 'vue-router';
+import {
   QueriesSchema,
   ExtractQueryTypes,
   ExtractQueryInputs,
@@ -10,12 +16,6 @@ import {
   QueryExtractorResult,
   QueriesExtractor,
 } from './extractor';
-import {
-  useRouter,
-  type LocationQuery,
-  type Router,
-  type RouteLocationRaw,
-} from 'vue-router';
 
 /**
  * Route generation options
@@ -182,9 +182,7 @@ export function useTypedQuery<Schema extends QueriesSchema>(
   const states = {} as Record<string, ComputedRef<QueryExtractorResult>>;
 
   const $states = new Proxy(states, {
-    get: (_target, p) => {
-      return states[p as string].value;
-    },
+    get: (_target, p) => states[p as string].value,
     getOwnPropertyDescriptor() {
       return {
         enumerable: true,

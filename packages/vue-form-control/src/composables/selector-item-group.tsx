@@ -42,11 +42,17 @@ export interface FormSelectorItemGroupControlOptions
  */
 export class FormSelectorItemGroupControl {
   readonly _props: FormSelectorItemGroupProps;
+
   readonly parentNodeType?: FormNodeType;
+
   protected _parentSelector: FormSelectorControl | null = null;
+
   readonly groupId!: string | number;
+
   protected _notSelected: ComputedRef<boolean>;
+
   protected _allSelected: ComputedRef<boolean>;
+
   protected _indeterminate: ComputedRef<boolean>;
 
   /**
@@ -116,17 +122,17 @@ export class FormSelectorItemGroupControl {
 
     this._parentSelector = parentSelector;
 
-    this._notSelected = computed(() => {
-      return parentSelector.isNotSelected(this.groupId);
-    });
+    this._notSelected = computed(() =>
+      parentSelector.isNotSelected(this.groupId),
+    );
 
-    this._allSelected = computed(() => {
-      return parentSelector.isAllSelected(this.groupId);
-    });
+    this._allSelected = computed(() =>
+      parentSelector.isAllSelected(this.groupId),
+    );
 
-    this._indeterminate = computed(() => {
-      return parentSelector.isIndeterminate(this.groupId);
-    });
+    this._indeterminate = computed(() =>
+      parentSelector.isIndeterminate(this.groupId),
+    );
 
     onBeforeUnmount(() => {
       this._parentSelector = null;

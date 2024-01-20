@@ -56,17 +56,15 @@ export const WysiwygColorExtension = Extension.create<WysiwygColorOptions>({
     return {
       setColor:
         (color) =>
-        ({ chain }) => {
-          return chain().setMark('textStyle', { color }).run();
-        },
+        ({ chain }) =>
+          chain().setMark('textStyle', { color }).run(),
       unsetColor:
         () =>
-        ({ chain }) => {
-          return chain()
+        ({ chain }) =>
+          chain()
             .setMark('textStyle', { color: null })
             .removeEmptyTextStyle()
-            .run();
-        },
+            .run(),
     };
   },
 });

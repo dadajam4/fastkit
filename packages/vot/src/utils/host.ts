@@ -42,7 +42,7 @@ export async function getLocalhostAddressIfDiffersFromDNS(): Promise<
 }
 
 export interface Hostname {
-  /** undefined sets the default behaviour of server.listen */
+  /** undefined sets the default behavior of server.listen */
   host: string | undefined;
   /** resolve to localhost when possible */
   name: string;
@@ -92,7 +92,7 @@ export async function resolveServerUrls(
   const network: string[] = [];
   const hostname = await resolveHostname(options.host);
   const protocol = options.https ? 'https' : 'http';
-  const port = address.port;
+  const { port } = address;
   const base =
     config.rawBase === './' || config.rawBase === '' ? '/' : config.rawBase;
 
