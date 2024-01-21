@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.2.22
+
+### Patch Changes
+
+- Added a method to set the default value for the actionable class name at the application level.
+
 ## 0.2.21
 
 ### Patch Changes

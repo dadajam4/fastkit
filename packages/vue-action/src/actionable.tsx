@@ -49,6 +49,12 @@ const normalizeBoolean = <T extends boolean | string | undefined>(
   return value;
 };
 
+let _defaultActionableClassName: string | undefined;
+
+export function setDefaultActionableClassName(className: string) {
+  _defaultActionableClassName = className;
+}
+
 export function useActionable(
   setupContext: SetupContext<any>,
   opts: UseActionableOptions = {},
@@ -88,7 +94,8 @@ export function useActionable(
       delete ctxAttrs.onClick;
       delete ctxAttrs.guard;
 
-      const { guard, onClick } = props;
+      const { guard, onClick, onMouseenter, onMouseover, onContextmenu } =
+        props;
       const disabled = normalizeBoolean(props.disabled);
 
       const linkFallbackTag = opts.linkFallbackTag || props.linkFallbackTag;
@@ -105,7 +112,14 @@ export function useActionable(
       let routerLink: ActionableRouterLinkSettings | undefined;
 
       const isDisabled = !!(disabled || ctxAttrs.ariaDisabled);
-      let hasAction = !!(onClick || to || href);
+      let hasAction = !!(
+        onClick ||
+        to ||
+        href ||
+        onMouseenter ||
+        onMouseover ||
+        onContextmenu
+      );
       const actionable = hasAction && !isDisabled;
 
       let action: ((ev: MouseEvent) => void) | undefined;
@@ -255,7 +269,11 @@ export function useActionable(
 
       isDisabled && classes.push(disabledClass, propsDisabledClass);
       hasAction && classes.push(hasActionClass, propsHasActionClass);
-      actionable && classes.push(actionableClass, propsActionableClass);
+      actionable &&
+        classes.push(
+          actionableClass,
+          propsActionableClass || _defaultActionableClassName,
+        );
       guardInProgress.value &&
         classes.push(guardInProgressClass, propsGuardInProgressClass);
 

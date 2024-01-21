@@ -7,17 +7,19 @@ import { VuiServiceOptions } from '@fastkit/vui';
 import { render } from 'eta';
 import { VitePluginVuiError } from './logger';
 
-const COLOR_DUMP_STYLE = `@layer vui-normalize, vui-color-scheme, vue-loading, vue-app-layout, vui; @include dump-color-scheme(true, "vui-color-scheme");`;
+const COLOR_DUMP_STYLE = `${`
+@layer vui-normalize, vui-color-scheme, vue-loading, vue-app-layout, vui;
+@include dump-color-scheme(true, "vui-color-scheme");
+@import '@fastkit/vue-stack/vue-stack.css';
+@import '@fastkit/vue-app-layout/vue-app-layout.css';
+@import '@fastkit/vue-loading/vue-loading.css';
+@import '@fastkit/vue-scroller/vue-scroller.css';
+@import '@fastkit/vui/vui.css';
+`.trim()}\n`;
 
 const TEMPLATE = `
 /* eslint-disable */
 // @ts-nocheck
-import '@fastkit/vue-stack/vue-stack.css';
-import '@fastkit/vue-app-layout/vue-app-layout.css';
-import '@fastkit/vue-loading/vue-loading.css';
-import '@fastkit/vue-scroller/vue-scroller.css';
-import '@fastkit/vui/vui.css';
-import './setup.scss';
 import type { App } from 'vue';
 import type { Router } from 'vue-router';
 import { VPageLink } from '@fastkit/vue-page';

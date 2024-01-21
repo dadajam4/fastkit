@@ -14,6 +14,7 @@ import { VueColorSchemePlugin } from '@fastkit/vue-color-scheme';
 import { installVueAppLayout } from '@fastkit/vue-app-layout';
 import { onAppUnmount } from '@fastkit/vue-utils';
 import { getDocumentScroller } from '@fastkit/vue-scroller';
+import { setDefaultActionableClassName } from '@fastkit/vue-action';
 import {
   VuiService,
   VuiServiceOptions,
@@ -22,6 +23,7 @@ import {
   VuiInjectionKey,
 } from './service';
 
+setDefaultActionableClassName('clickable');
 const scroller = getDocumentScroller();
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

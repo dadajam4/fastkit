@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.18.34
+
+### Patch Changes
+
+- Fixed an issue where the hover effect for actionable elements was not displaying in certain components.
+
+- Updated dependencies []:
+  - @fastkit/vue-action@0.2.22
+
 ## 0.18.33
 
 ### Patch Changes

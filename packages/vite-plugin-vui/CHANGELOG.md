@@ -1,5 +1,14 @@
 # @fastkit/vite-plugin-vui
 
+## 1.1.125
+
+### Patch Changes
+
+- Separated the style setup from the installer and improved the determination of layer priorities in the correct order.
+
+- Updated dependencies []:
+  - @fastkit/vui@0.18.34
+
 ## 1.1.124
 
 ### Patch Changes

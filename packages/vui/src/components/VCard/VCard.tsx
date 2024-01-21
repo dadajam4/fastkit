@@ -27,11 +27,7 @@ export const VCard = defineComponent({
       const attrs = {
         ..._props.value,
         ...ctx.attrs,
-        class: [
-          'v-card',
-          ctx.attrs.class,
-          typeof ctx.attrs.onClick === 'function' && 'clickable',
-        ],
+        class: ['v-card', ctx.attrs.class],
         tag: hasLink ? VAction : 'div',
       };
       if (props.disabled) {

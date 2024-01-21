@@ -122,7 +122,6 @@ export const VButton = defineComponent({
       spacer.value ? `v-button--spacer-${spacer.value}` : undefined,
       `v-button--${control.size.value}`,
       `v-button--align-${props.align}`,
-      'clickable',
       {
         'v-button--loading': isLoading.value,
         'v-button--icon': !!icon.value,
