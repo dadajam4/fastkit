@@ -323,9 +323,13 @@
     // Use the project's typescript version
     "typescript.tsdk": "node_modules/typescript/lib",
 
-    "vetur.format.defaultFormatter.html": "prettier",
+    "html.format.enable": false,
+    "css.format.enable": false,
+    "typescript.format.enable": false,
+    "javascript.format.enable": false,
 
-    // Editor base settings
+    // Editor settings
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": false,
     "editor.formatOnPaste": false,
     "editor.formatOnType": false,
@@ -335,31 +339,33 @@
       "source.fixAll.stylelint": "explicit"
     },
 
-    // Stylelint base settings
-    "stylelint.validate": [
-      "css",
-      "scss",
-    ],
-
-    // ESLint base settings
+    // ESLint settings
     "eslint.format.enable": true,
+    "eslint.options": {
+      "extensions": [".js", ".jsx", ".cjs", ".mjs", ".ts", ".tsx"]
+    },
     "eslint.validate": [
       "vue",
       "html",
       "javascript",
       "typescriptreact",
-      // "json",
-      "yaml",
     ],
-    "typescript.format.enable": false,
-    "javascript.format.enable": false,
+
+    // Stylelint settings
+    "stylelint.validate": [
+      "css",
+      "scss",
+      "vue"
+    ],
   },
   "extensions": {
     "recommendations": [
       "editorconfig.editorconfig",
       "sohamkamani.code-eol",
       "dbaeumer.vscode-eslint",
-      "mikestead.dotenv",
+      "esbenp.prettier-vscode",
+      "stylelint.vscode-stylelint",
+      "mikestead.dotenv"
     ]
   }
 }

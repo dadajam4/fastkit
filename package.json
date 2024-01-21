@@ -84,7 +84,7 @@
     "prismjs": "^1.29.0",
     "rollup": "^3.28.0",
     "set-cookie-parser": "^2.6.0",
-    "stylelint": "^15.10.2",
+    "stylelint": "^16.2.0",
     "turbo": "^1.10.12",
     "typescript": "^5.1.6",
     "vite": "^4.4.9",

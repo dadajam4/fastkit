@@ -1,3 +1,6 @@
 module.exports = {
-  extends: ['@fastkit/stylelint-config', 'stylelint-config-recommended-vue'],
+  extends: [
+    '@fastkit/stylelint-config',
+    'stylelint-config-recommended-vue/scss',
+  ],
 };

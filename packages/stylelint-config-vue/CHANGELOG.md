@@ -1,5 +1,14 @@
 # @fastkit/stylelint-config-vue
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated Stylelint peer dependency to v16 and updated major dependencies.
+
+- Updated dependencies []:
+  - @fastkit/stylelint-config@0.13.6
+
 ## 0.0.2
 
 ### Patch Changes

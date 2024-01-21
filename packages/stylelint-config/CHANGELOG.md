@@ -1,5 +1,11 @@
 # @fastkit/stylelint-config
 
+## 0.13.6
+
+### Patch Changes
+
+- Updated Stylelint peer dependency to v16 and updated major dependencies.
+
 ## 0.13.5
 
 ### Patch Changes
