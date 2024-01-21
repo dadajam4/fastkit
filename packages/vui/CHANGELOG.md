@@ -1,5 +1,11 @@
 # @fastkit/vui
 
+## 0.18.33
+
+### Patch Changes
+
+- Fixed an issue where the hover effect for clickable elements was not displaying.
+
 ## 0.18.32
 
 ### Patch Changes

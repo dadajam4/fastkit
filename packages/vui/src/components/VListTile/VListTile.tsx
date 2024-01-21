@@ -77,6 +77,7 @@ export const VListTile = defineComponent({
 
       return [
         color.value.className,
+        'clickable',
         {
           'v-list-tile--plain': !hasColor,
           'v-list-tile--has-color': hasColor,
