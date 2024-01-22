@@ -1,5 +1,11 @@
 # @fastkit/vui
 
+## 0.19.2
+
+### Patch Changes
+
+- Fixed an issue where the hover interaction for the VCard component was not displaying.
+
 ## 0.19.1
 
 ### Patch Changes

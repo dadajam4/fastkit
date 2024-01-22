@@ -23,12 +23,12 @@ export const VCard = defineComponent({
   setup(props, ctx) {
     const _props = computed(() => props);
     const data = computed(() => {
-      const hasLink = !!ctx.attrs.href || !!ctx.attrs.to;
       const attrs = {
         ..._props.value,
         ...ctx.attrs,
         class: ['v-card', ctx.attrs.class],
-        tag: hasLink ? VAction : 'div',
+        tag: VAction,
+        linkFallbackTag: 'div',
       };
       if (props.disabled) {
         attrs.disabled = 'disabled' as any;
