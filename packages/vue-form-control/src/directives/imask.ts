@@ -1,5 +1,5 @@
 import { DirectiveBinding, ObjectDirective } from 'vue';
-import IMask from 'imask';
+import IMask, { InputMask } from 'imask';
 import {
   createIMaskEvent,
   IMaskEventType,
@@ -14,7 +14,7 @@ export type IMaskDirectiveBinding =
   DirectiveBinding<IMaskDirectiveBindingValue>;
 
 export interface IMaskElement extends HTMLInputElement {
-  maskRef?: IMask.InputMask<any>;
+  maskRef?: InputMask<any>;
 }
 
 export type IMaskDirective = ObjectDirective<
@@ -25,7 +25,7 @@ export type IMaskDirective = ObjectDirective<
 function fireEvent(
   el: IMaskElement,
   type: IMaskEventType,
-  inputMask?: IMask.InputMask<any>,
+  inputMask?: InputMask<any>,
 ) {
   const ev = createIMaskEvent(type, {
     bubbles: true,
@@ -51,16 +51,16 @@ function destroyMask(el: IMaskElement) {
 
 export const imaskDirective: IMaskDirective = {
   beforeMount(el, { value: options }) {
-    options = resolveIMaskInput(options);
-    options && initMask(el, options);
+    const _options = resolveIMaskInput(options);
+    _options && initMask(el, _options);
   },
   updated(el, { value: options }) {
-    options = resolveIMaskInput(options);
-    if (options) {
+    const _options = resolveIMaskInput(options);
+    if (_options) {
       if (el.maskRef) {
-        el.maskRef.updateOptions(options);
+        el.maskRef.updateOptions(_options as any);
         if (el.value !== el.maskRef.value) (el.maskRef as any)._onChange();
-      } else initMask(el, options);
+      } else initMask(el, _options);
     } else {
       destroyMask(el);
     }

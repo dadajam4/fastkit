@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/duration",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "description": "@fastkit/duration",
   "keywords": [
     "fastkit",
@@ -28,15 +28,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/duration.mjs",
-  "types": "./dist/duration.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/duration.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

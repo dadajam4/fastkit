@@ -172,21 +172,26 @@ export const VBusyImage = defineComponent({
     });
 
     let booted = false;
+    const mounted = ref(false);
 
     watch(
-      () => ctx.attrs.src as string | null | undefined,
-      (value) => {
+      () =>
+        [ctx.attrs.src as string | null | undefined, mounted.value] as const,
+      ([src, _mounted]) => {
+        if (!_mounted) return;
         coverImageRef.value = undefined;
-        if (isAvailableSrc(value)) {
+        if (isAvailableSrc(src)) {
           loadStateRef.value = 'loading';
           if (props.cover) {
-            loadImage(value)
+            loadImage(src)
               .then((image) => {
                 coverImageRef.value = image;
                 setManualState('load');
               })
-              .catch((err) => {
+              .catch((_err) => {
                 setManualState('error');
+                // eslint-disable-next-line no-console
+                console.error(_err);
               });
           }
         } else {
@@ -209,6 +214,7 @@ export const VBusyImage = defineComponent({
     };
 
     onMounted(() => {
+      mounted.value = true;
       if (booted || props.cover) return;
 
       const image = nodeRef.value;

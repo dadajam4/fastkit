@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-body-scroll-lock",
-  "version": "0.1.19",
+  "version": "0.2.0",
   "description": "vue-body-scroll-lock",
   "keywords": [],
   "repository": {
@@ -19,15 +19,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/vue-body-scroll-lock.mjs",
-  "types": "./dist/vue-body-scroll-lock.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-body-scroll-lock.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"
@@ -50,6 +41,6 @@
     "@fastkit/vue-utils": "workspace:*"
   },
   "peerDependencies": {
-    "vue": "^3.3.0"
+    "vue": "^3.4.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "description": "Helper to handle icon definitions for Type safe.",
   "keywords": [
     "fastkit",
@@ -32,18 +32,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/icon-font.mjs",
-  "types": "./dist/icon-font.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/icon-font.d.ts"
-      ],
-      "plugboy-dts-preserve": [
-        "./dist/plugboy-dts-preserve.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

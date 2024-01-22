@@ -77,6 +77,15 @@ export default defineComponent({
       },
     });
 
+    createMaskedOptions({
+      mask: [
+        {
+          mask: '',
+          meta: 2,
+        },
+      ],
+    });
+
     const mask = createMaskedOptions({
       mask: [
         {
@@ -150,6 +159,7 @@ export default defineComponent({
         },
       ],
       dispatch: (appended, dynamicMasked) => {
+        // eslint-disable-next-line no-shadow
         const number = (dynamicMasked.value + appended).replace(/\D/g, '');
 
         for (let i = 0; i < dynamicMasked.compiledMasks.length; i++) {
@@ -222,13 +232,11 @@ export default defineComponent({
         <VMenu
           v-model={opened.value}
           v-slots={{
-            activator: ({ attrs }) => {
-              return (
-                <button type="button" {...attrs}>
-                  open
-                </button>
-              );
-            },
+            activator: ({ attrs }) => (
+              <button type="button" {...attrs}>
+                open
+              </button>
+            ),
           }}>
           <div>Hello</div>
         </VMenu>

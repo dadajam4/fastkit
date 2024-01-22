@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot-i18n",
-  "version": "3.0.17",
+  "version": "4.0.0",
   "description": "Library for multilingual localization of vot applications.",
   "keywords": [
     "fastkit",
@@ -32,15 +32,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/vot-i18n.mjs",
-  "types": "./dist/vot-i18n.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vot-i18n.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

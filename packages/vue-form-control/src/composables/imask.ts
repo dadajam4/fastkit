@@ -10,21 +10,24 @@ import {
   computed,
   toRaw,
 } from 'vue';
-import type { AnyMaskedOptions } from 'imask';
-import IMask, { MaskedDynamic } from 'imask';
+import type { InputMask, Masked, MaskedDynamicOptions } from 'imask';
+import IMask, { MaskedDynamic, PIPE_TYPE } from 'imask';
 import {
   IMaskInput,
   resolveIMaskInput,
   IMaskEvent,
   createIMaskEvent,
   MaskedDynamicOptionsWithMeta,
+  AnyMaskedOptions,
 } from '../schemes';
 
-export type { AnyMaskedOptions } from 'imask';
+export type { AnyMaskedOptions } from '../schemes';
+
+export type { InputMask as IMaskInstance } from 'imask';
 
 export function createMaskedOptions<
   Opts extends
-    | Exclude<IMask.AnyMaskedOptions, IMask.MaskedDynamicOptions>
+    | Omit<Exclude<AnyMaskedOptions, MaskedDynamicOptions>, 'dispatch'>
     | MaskedDynamicOptionsWithMeta,
 >(options: Opts): Opts {
   return options;
@@ -37,13 +40,13 @@ export function createMaskControlProps() {
   };
 }
 
-export type IMaskInstance = IMask.InputMask<AnyMaskedOptions>;
+// export type IMaskInstance = InputMask;
 
 export type IMaskControlProps = ExtractPropTypes<
   ReturnType<typeof createMaskControlProps>
 >;
 
-type IMaskPipeTypeMap = typeof IMask.PIPE_TYPE;
+type IMaskPipeTypeMap = typeof PIPE_TYPE;
 export type IMaskPipeType = IMaskPipeTypeMap[keyof IMaskPipeTypeMap];
 type IMaskPipeValue = string | number | null | undefined;
 
@@ -58,8 +61,8 @@ export function useIMaskControl(
 ) {
   const { el, onAccept, onAcceptDynamicMeta, onComplete } = opts;
   const maskInput = computed(() => resolveIMaskInput(toRaw(props.mask)));
-  const inputMask: Ref<IMaskInstance | null> = ref(null);
-  const staticMask: Ref<IMask.AnyMasked | null> = ref(null);
+  const inputMask: Ref<InputMask | null> = ref(null);
+  const staticMask: Ref<Masked | null> = ref(null);
   const masked = ref<string>('');
   const unmasked = ref<string>('');
   const typed = ref<string | number | Date | undefined>();
@@ -70,7 +73,7 @@ export function useIMaskControl(
 
   const pipe = (
     value: IMaskPipeValue,
-    from: IMaskPipeType = IMask.PIPE_TYPE.MASKED,
+    from: IMaskPipeType = PIPE_TYPE.MASKED,
   ): string => {
     const _value =
       // eslint-disable-next-line no-nested-ternary
@@ -80,7 +83,7 @@ export function useIMaskControl(
     if (!masked) return _value;
     return masked.runIsolated((m) => {
       m[from] = _value;
-      return m[IMask.PIPE_TYPE.MASKED];
+      return m[PIPE_TYPE.MASKED];
     });
   };
 
@@ -164,7 +167,7 @@ export function useIMaskControl(
       $typed !== typed.value &&
       typed.value !== undefined
     ) {
-      $typed = inputMask.value.typedValue = typed.value;
+      $typed = inputMask.value.typedValue = typed.value as any;
     }
   });
 
@@ -184,7 +187,7 @@ export function useIMaskControl(
       if (!inputMask.value) {
         _initMask();
       } else {
-        inputMask.value.updateOptions($props);
+        inputMask.value.updateOptions($props as any);
       }
     }
   });

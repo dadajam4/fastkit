@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.14.17",
+  "version": "0.15.0",
   "description": "Utilities for efficient development of Vue applications.",
   "keywords": [
     "fastkit",
@@ -27,15 +27,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-utils.mjs",
-  "types": "./dist/vue-utils.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-utils.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -59,7 +50,7 @@
     "vue-router": "^4.2.0"
   },
   "peerDependencies": {
-    "vue": "^3.3.0",
+    "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
   "buildOptions": {

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "description": "Schema for Type-safe handling of media query breakpoints.",
   "keywords": [
     "fastkit",
@@ -33,18 +33,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/media-match.mjs",
-  "types": "./dist/media-match.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/media-match.d.ts"
-      ],
-      "plugboy-dts-preserve": [
-        "./dist/plugboy-dts-preserve.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

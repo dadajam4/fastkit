@@ -4,7 +4,7 @@ import path from 'node:path';
 import fs from 'fs-extra';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
 import { VuiServiceOptions } from '@fastkit/vui';
-import { render } from 'eta';
+import { Eta } from 'eta';
 import { VitePluginVuiError } from './logger';
 
 const COLOR_DUMP_STYLE = `${`
@@ -49,16 +49,13 @@ async function renderTemplate({
   uiSettings,
   icons,
 }: ViteVuiPluginResultSettings) {
-  const result = await render(
-    TEMPLATE,
-    {
-      colorScheme,
-      mediaMatch,
-      uiSettings: JSON.stringify(uiSettings),
-      icons: JSON.stringify(icons),
-    },
-    { async: true },
-  );
+  const eta = new Eta();
+  const result = await eta.renderStringAsync(TEMPLATE, {
+    colorScheme,
+    mediaMatch,
+    uiSettings: JSON.stringify(uiSettings),
+    icons: JSON.stringify(icons),
+  });
   if (!result) {
     throw new VitePluginVuiError('template render error.');
   }

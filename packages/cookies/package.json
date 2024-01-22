@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cookies",
-  "version": "0.13.8",
+  "version": "0.14.0",
   "description": "Helper implementation for universal server/browser control of cookie headers.",
   "keywords": [
     "fastkit",
@@ -27,15 +27,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/cookies.mjs",
-  "types": "./dist/cookies.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/cookies.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -54,12 +45,12 @@
     "@fastkit/ev": "workspace:*",
     "@fastkit/helpers": "workspace:*",
     "@fastkit/tiny-logger": "workspace:*",
-    "cookie": "^0.5.0",
+    "cookie": "^0.6.0",
     "set-cookie-parser": "^2.6.0"
   },
   "devDependencies": {
-    "@types/cookie": "^0.5.1",
-    "@types/set-cookie-parser": "^2.4.3"
+    "@types/cookie": "^0.6.0",
+    "@types/set-cookie-parser": "^2.4.7"
   },
   "buildOptions": {
     "name": "Cookies"

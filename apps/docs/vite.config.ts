@@ -3,9 +3,9 @@ import { ViteVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plugi
 import { viteVuiPlugin } from '@fastkit/vite-plugin-vui';
 import { votPlugin } from '@fastkit/vot/tool';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { ViteTSTinyMeta } from '@fastkit/ts-tiny-meta/vite';
 import { PackageLoader } from './modules/package-loader/plugin';
 import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
-import { ViteTSTinyMeta } from '@fastkit/ts-tiny-meta/vite';
 // import { ViteVueTinyMeta } from '@fastkit/vue-tiny-meta/vite';
 
 const USE_GENERATE = true;

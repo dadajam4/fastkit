@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy-vue-jsx-plugin",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "description": "",
   "keywords": [],
   "repository": {
@@ -20,15 +20,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/plugboy-vue-jsx-plugin.mjs",
-  "types": "./dist/plugboy-vue-jsx-plugin.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/plugboy-vue-jsx-plugin.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -43,20 +34,20 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/core": "^7.22.10",
-    "@babel/plugin-transform-typescript": "^7.22.10",
-    "@vue/babel-plugin-jsx": "^1.1.5"
+    "@babel/core": "^7.23.7",
+    "@babel/plugin-transform-typescript": "^7.23.6",
+    "@vue/babel-plugin-jsx": "^1.2.0"
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:*",
-    "@types/babel__core": "^7.20.1",
-    "@vitejs/plugin-vue-jsx": "^3.0.1",
-    "vite": "^4.4.9"
+    "@types/babel__core": "^7.20.5",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "vite": "^5.0.12"
   },
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:*",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
-    "vite": "^4.3.0"
+    "vite": "^5.0.0"
   },
   "peerDependenciesMeta": {
     "@vitejs/plugin-vue-jsx": {

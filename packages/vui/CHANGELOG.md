@@ -1,5 +1,41 @@
 # @fastkit/vui
 
+## 0.19.0
+
+### Minor Changes
+
+- This release includes no functional changes, but it contains the following important updates:
+
+  - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.2.0
+  - @fastkit/vue-click-outside@0.2.0
+  - @fastkit/color-scheme-gen@0.14.0
+  - @fastkit/vue-color-scheme@0.15.0
+  - @fastkit/vue-form-control@0.20.0
+  - @fastkit/media-match-gen@0.14.0
+  - @fastkit/vue-media-match@0.14.0
+  - @fastkit/vue-transitions@0.2.0
+  - @fastkit/vue-app-layout@0.15.0
+  - @fastkit/color-scheme@2.0.0
+  - @fastkit/vue-keyboard@0.2.0
+  - @fastkit/vue-location@0.2.0
+  - @fastkit/vue-scroller@0.15.0
+  - @fastkit/media-match@2.0.0
+  - @fastkit/tiny-logger@0.14.0
+  - @fastkit/vue-loading@0.15.0
+  - @fastkit/vue-action@0.3.0
+  - @fastkit/vue-resize@0.2.0
+  - @fastkit/icon-font@2.0.0
+  - @fastkit/vue-stack@0.16.0
+  - @fastkit/vue-utils@0.15.0
+  - @fastkit/helpers@0.14.0
+  - @fastkit/rules@0.14.0
+  - @fastkit/dom@0.2.0
+
 ## 0.18.34
 
 ### Patch Changes

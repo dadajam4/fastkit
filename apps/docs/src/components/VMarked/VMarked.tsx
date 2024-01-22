@@ -1,7 +1,7 @@
 import { h, defineComponent, computed, withDirectives } from 'vue';
 import { marked } from 'marked';
-import { MarkedDirectiveArgument } from './directive';
 import { useRouter } from 'vue-router';
+import { MarkedDirectiveArgument } from './directive';
 import { i18n } from '@@';
 import { trimCode } from '../VPrism/utils';
 import { highlight } from '../VPrism/prism';
@@ -58,14 +58,14 @@ export const VMarked = defineComponent({
       return result.html();
     };
 
-    const htmlRef = computed(() => {
-      return marked.parse(trimCode(props.code), {
+    const htmlRef = computed(() =>
+      marked.parse(trimCode(props.code), {
         renderer,
-      });
-    });
+      }),
+    );
 
-    return () => {
-      return withDirectives(
+    return () =>
+      withDirectives(
         h('div', {
           ...attrs,
           class: ['v-marked', attrs.class],
@@ -73,6 +73,5 @@ export const VMarked = defineComponent({
         }),
         [MarkedDirectiveArgument(directiveBinding)],
       );
-    };
   },
 });

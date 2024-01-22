@@ -61,7 +61,6 @@ export function DDTransport(settings: DDTransportSettings): Transport {
       dd.init({
         site: 'datadoghq.com',
         forwardErrorsToLogs: false,
-        sampleRate: 100,
         ...settings.config,
       });
     }

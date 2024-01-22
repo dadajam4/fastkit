@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-click-outside",
-  "version": "0.1.20",
+  "version": "0.2.0",
   "description": "vue-click-outside",
   "keywords": [],
   "repository": {
@@ -20,15 +20,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-click-outside.mjs",
-  "types": "./dist/vue-click-outside.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-click-outside.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -47,6 +38,6 @@
     "@fastkit/vue-utils": "workspace:*"
   },
   "peerDependencies": {
-    "vue": "^3.3.0"
+    "vue": "^3.4.0"
   }
 }

@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 0.2.0
+
+### Minor Changes
+
+- Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
+
 ## 0.1.10
 
 ### Patch Changes

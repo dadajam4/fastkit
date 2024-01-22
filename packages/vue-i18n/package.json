@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-i18n",
-  "version": "0.13.19",
+  "version": "0.14.0",
   "description": "@fastkit/vue-i18n",
   "keywords": [
     "fastkit",
@@ -33,15 +33,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-i18n.mjs",
-  "types": "./dist/vue-i18n.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-i18n.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -63,11 +54,11 @@
     "@fastkit/vue-utils": "workspace:*"
   },
   "devDependencies": {
-    "vue": "^3.3.0",
+    "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
   "peerDependencies": {
-    "vue": "^3.3.0",
+    "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
   "_docs": {

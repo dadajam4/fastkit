@@ -41,7 +41,7 @@ export const VTextareaAutosize = defineComponent({
     minlength: NumberishPropOption,
     name: String,
     placeholder: String,
-    readonly: Boolean,
+    readonly: BooleanishPropOption,
     required: BooleanishPropOption,
     // rows: NumberishPropOption,
     modelValue: {

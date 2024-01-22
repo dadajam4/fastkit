@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-loading",
-  "version": "0.14.20",
+  "version": "0.15.0",
   "description": "Loading component for Vue applications.",
   "keywords": [
     "fastkit",
@@ -29,15 +29,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-loading.mjs",
-  "types": "./dist/vue-loading.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-loading.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -62,7 +53,7 @@
     "@fastkit/vue-utils": "workspace:*"
   },
   "peerDependencies": {
-    "vue": "^3.3.0",
+    "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
   "buildOptions": {

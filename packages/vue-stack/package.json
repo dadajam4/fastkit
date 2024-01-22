@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-stack",
-  "version": "0.15.53",
+  "version": "0.16.0",
   "description": "Library for displaying dialogs, tooltips and menus in Vue applications.",
   "keywords": [
     "fastkit",
@@ -33,15 +33,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-stack.mjs",
-  "types": "./dist/vue-stack.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-stack.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -70,7 +61,7 @@
     "@fastkit/vue-utils": "workspace:*"
   },
   "peerDependencies": {
-    "vue": "^3.3.0",
+    "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
   "buildOptions": {

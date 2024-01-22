@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-app-layout",
-  "version": "0.14.22",
+  "version": "0.15.0",
   "description": "Component implementation to control the overall layout of the Vue application.",
   "keywords": [
     "fastkit",
@@ -29,15 +29,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-app-layout.mjs",
-  "types": "./dist/vue-app-layout.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-app-layout.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -61,11 +52,11 @@
     "@fastkit/vue-utils": "workspace:*"
   },
   "devDependencies": {
-    "vue": "^3.3.0",
+    "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
   "peerDependencies": {
-    "vue": "^3.3.0",
+    "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
   "_docs": {

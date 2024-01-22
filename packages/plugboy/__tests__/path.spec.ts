@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
-import { Path } from '@fastkit/plugboy';
 import nodePath from 'node:path';
+import { Path } from '../src/path';
 
 describe('hoge', () => {
   test('fuga', () => {

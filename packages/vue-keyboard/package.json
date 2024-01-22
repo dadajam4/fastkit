@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-keyboard",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "vue-keyboard",
   "keywords": [],
   "repository": {
@@ -20,15 +20,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-keyboard.mjs",
-  "types": "./dist/vue-keyboard.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-keyboard.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -47,6 +38,6 @@
     "@fastkit/keyboard": "workspace:*"
   },
   "peerDependencies": {
-    "vue": "^3.3.0"
+    "vue": "^3.4.0"
   }
 }

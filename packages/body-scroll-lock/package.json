@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/body-scroll-lock",
-  "version": "0.13.8",
+  "version": "0.14.0",
   "description": "@fastkit/body-scroll-lock",
   "keywords": [
     "fastkit",
@@ -26,15 +26,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/body-scroll-lock.mjs",
-  "types": "./dist/body-scroll-lock.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/body-scroll-lock.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color",
-  "version": "0.13.8",
+  "version": "0.14.0",
   "description": "Value object implementation for controlling \"color\".",
   "keywords": [
     "fastkit",
@@ -26,15 +26,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/color.mjs",
-  "types": "./dist/color.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/color.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

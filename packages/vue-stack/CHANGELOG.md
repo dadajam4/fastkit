@@ -1,5 +1,26 @@
 # @fastkit/vue-stack
 
+## 0.16.0
+
+### Minor Changes
+
+- This release includes no functional changes, but it contains the following important updates:
+
+  - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.2.0
+  - @fastkit/vue-click-outside@0.2.0
+  - @fastkit/vue-transitions@0.2.0
+  - @fastkit/vue-keyboard@0.2.0
+  - @fastkit/tiny-logger@0.14.0
+  - @fastkit/vue-resize@0.2.0
+  - @fastkit/vue-utils@0.15.0
+  - @fastkit/helpers@0.14.0
+  - @fastkit/dom@0.2.0
+
 ## 0.15.53
 
 ### Patch Changes

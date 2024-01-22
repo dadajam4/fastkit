@@ -1,5 +1,19 @@
 # @fastkit/i18n
 
+## 0.14.0
+
+### Minor Changes
+
+- This release includes no functional changes, but it contains the following important updates:
+
+  - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.14.0
+  - @fastkit/helpers@0.14.0
+
 ## 0.13.8
 
 ### Patch Changes

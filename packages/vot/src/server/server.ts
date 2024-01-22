@@ -81,7 +81,7 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
 
   const { ssr, exports } = require(path.join(dist, 'server/package.json'));
 
-  const manifest = require(path.join(dist, 'client/ssr-manifest.json'));
+  const manifest = require(path.join(dist, 'client/.vite/ssr-manifest.json'));
 
   const { default: renderPage } = await import(
     path.join(dist, 'server', exports)

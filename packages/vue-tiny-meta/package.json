@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-tiny-meta",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "description": "vue-tiny-meta",
   "keywords": [],
   "repository": {
@@ -32,21 +32,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-tiny-meta.mjs",
-  "types": "./dist/vue-tiny-meta.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-tiny-meta.d.ts"
-      ],
-      "vite": [
-        "./dist/vite.d.ts"
-      ],
-      "storybook": [
-        "./dist/storybook.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -63,13 +48,13 @@
   },
   "dependencies": {
     "@fastkit/ts-tiny-meta": "workspace:*",
-    "magic-string": "^0.30.2"
+    "magic-string": "^0.30.5"
   },
   "devDependencies": {
-    "vite": "^4.4.9"
+    "vite": "^5.0.12"
   },
   "peerDependencies": {
-    "vite": "^4.3.0"
+    "vite": "^5.0.0"
   },
   "peerDependenciesMeta": {
     "vite": {

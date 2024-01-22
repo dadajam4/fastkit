@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/hashed-sync",
-  "version": "0.13.8",
+  "version": "0.14.0",
   "description": "Compare and synchronize the status of entire files and directories by hash value.",
   "keywords": [
     "fastkit",
@@ -30,15 +30,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/hashed-sync.mjs",
-  "types": "./dist/hashed-sync.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/hashed-sync.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -56,15 +47,15 @@
   "dependencies": {
     "@fastkit/tiny-logger": "workspace:*",
     "folder-hash": "^4.0.4",
-    "fs-extra": "^11.1.1",
+    "fs-extra": "^11.2.0",
     "imagemin": "^8.0.1",
     "imagemin-mozjpeg": "^10.0.0",
     "imagemin-pngquant": "^9.0.2"
   },
   "devDependencies": {
-    "@types/folder-hash": "^4.0.2",
-    "@types/imagemin": "^8.0.1",
-    "@types/imagemin-mozjpeg": "^8.0.1"
+    "@types/folder-hash": "^4.0.4",
+    "@types/imagemin": "^8.0.5",
+    "@types/imagemin-mozjpeg": "^8.0.4"
   },
   "buildOptions": {
     "name": "HashedSync"

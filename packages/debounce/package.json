@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/debounce",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "debounce",
   "keywords": [],
   "repository": {
@@ -19,15 +19,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/debounce.mjs",
-  "types": "./dist/debounce.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/debounce.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

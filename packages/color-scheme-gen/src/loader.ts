@@ -6,7 +6,7 @@ import {
 } from '@fastkit/color-scheme';
 import fs from 'fs-extra';
 import path from 'node:path';
-import { render } from 'eta';
+import { Eta } from 'eta';
 import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
 import { EV } from '@fastkit/ev';
 import { toScssValues } from './to-scss-values';
@@ -83,14 +83,15 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
       scheme,
       scssValues,
       list(source, divider = ', ') {
-        return source.map((sourc) => `'${sourc}'`).join(divider);
+        return source.map((_source) => `'${_source}'`).join(divider);
       },
       async builtinVariantScss(variant, selector) {
         const tmpl = await getVariantTemplate(variant);
         if (!selector) {
           selector = variant;
         }
-        const _result = await render(tmpl, { selector }, { async: true });
+        const eta = new Eta();
+        const _result = await eta.renderStringAsync(tmpl, { selector });
         return _result || '';
       },
       async variantScss(variant) {
@@ -194,6 +195,7 @@ async function getVariantTemplate(name: BuiltinColorVariant) {
 
 async function renderTemplate(name: TemplateName, scope: TemplateScope) {
   const tmpl = await getTemplate(name);
-  const result = await render(tmpl, scope, { async: true });
+  const eta = new Eta();
+  const result = await eta.renderStringAsync(tmpl, scope);
   return result || '';
 }

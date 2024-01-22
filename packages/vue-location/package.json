@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-location",
-  "version": "0.1.26",
+  "version": "0.2.0",
   "description": "vue-location",
   "keywords": [
     "vue",
@@ -23,15 +23,6 @@
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-location.mjs",
-  "types": "./dist/vue-location.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-location.d.ts"
-      ]
-    }
-  },
   "files": [
     "dist"
   ],
@@ -51,7 +42,7 @@
     "@fastkit/vue-utils": "workspace:*"
   },
   "peerDependencies": {
-    "vue": "^3.3.0",
+    "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
   "_docs": {

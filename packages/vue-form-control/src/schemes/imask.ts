@@ -1,21 +1,27 @@
-import IMask, {
-  Masked,
+import type {
   MaskedFunction,
   MaskedRegExp,
   MaskedEnum,
   MaskedRange,
+  Masked,
+  InputMask,
+  MaskedDynamic,
+  FactoryOpts,
+  MaskedDynamicOptions,
+  AppendFlags,
 } from 'imask';
-import type { AnyMaskedOptions } from 'imask';
 
 export type IMaskEventType = 'accept' | 'complete';
 
-export type IMaskEvent = CustomEvent<IMask.InputMask<any>>;
+export type AnyMaskedOptions = FactoryOpts;
+
+export type IMaskEvent = CustomEvent<InputMask>;
 
 export function createIMaskEvent(
   type: IMaskEventType,
-  eventInitDict?: CustomEventInit<IMask.InputMask<any>>,
+  eventInitDict?: CustomEventInit<InputMask>,
 ): IMaskEvent {
-  return new CustomEvent<IMask.InputMask<any>>(type, eventInitDict);
+  return new CustomEvent<InputMask>(type, eventInitDict);
 }
 
 export type IMaskTypedValue = string | number | Date;
@@ -35,9 +41,7 @@ type DynamicMaskedMeta = {
 
 type AnyMaskedOptionsWithMeta = AnyMaskedOptions & DynamicMaskedMeta;
 
-type AnyMaskedWithMeta = IMask.AnyMasked & DynamicMaskedMeta;
-
-type MaskedDynamic = IMask.MaskedDynamic;
+type AnyMaskedWithMeta = Masked & DynamicMaskedMeta;
 
 type MaskedDynamicWithMeta = Omit<
   MaskedDynamic,
@@ -48,19 +52,19 @@ type MaskedDynamicWithMeta = Omit<
 };
 
 export type MaskedDynamicOptionsWithMeta = Omit<
-  IMask.MaskedDynamicOptions,
+  MaskedDynamicOptions,
   'mask' | 'dispatch'
 > & {
   mask: AnyMaskedOptionsWithMeta[];
   dispatch?: (
     value: string,
     masked: MaskedDynamicWithMeta,
-    flags: IMask.AppendFlags,
-  ) => IMask.AnyMasked;
+    flags: AppendFlags,
+  ) => Masked;
 };
 
 export type IMaskInput =
-  | Exclude<AnyMaskedOptions, IMask.MaskedDynamicOptions>
+  | Exclude<AnyMaskedOptions, MaskedDynamicOptions>
   | IMaskRawInput
   | Masked<any>
   | MaskedFunction
@@ -77,9 +81,9 @@ export function resolveIMaskInput(
   source?: IMaskInput,
 ): AnyMaskedOptions | undefined {
   if (isRawType(source)) {
-    source = <AnyMaskedOptions>{ mask: source };
+    return <AnyMaskedOptions>{ mask: source };
   }
   if (source) {
-    return source;
+    return source as AnyMaskedOptions;
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/keyboard",
-  "version": "0.13.8",
+  "version": "0.14.0",
   "description": "Observer implementation to handle keyboard input to Type safe.",
   "keywords": [
     "fastkit",
@@ -26,15 +26,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/keyboard.mjs",
-  "types": "./dist/keyboard.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/keyboard.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

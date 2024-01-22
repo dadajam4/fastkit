@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "description": "",
   "keywords": [],
   "repository": {
@@ -13,49 +13,43 @@
   "exports": {
     "./package.json": "./package.json",
     "./dependencies/bundle-require": {
-      "import": "./dist/dependencies/bundle-require.mjs"
+      "import": "./dist/dependencies/bundle-require.mjs",
+      "types": "./dist/dependencies/bundle-require.d.ts"
     },
     "./dependencies/cac": {
-      "import": "./dist/dependencies/cac"
+      "import": "./dist/dependencies/cac.mjs",
+      "types": "./dist/dependencies/cac.d.ts"
     },
     "./dependencies/esbuild": {
-      "import": "./dist/dependencies/esbuild"
+      "import": "./dist/dependencies/esbuild.mjs",
+      "types": "./dist/dependencies/esbuild.d.ts"
     },
     "./dependencies/glob": {
-      "import": "./dist/dependencies/glob"
+      "import": "./dist/dependencies/glob.mjs",
+      "types": "./dist/dependencies/glob.d.ts"
     },
     "./dependencies/inquirer": {
-      "import": "./dist/dependencies/inquirer"
+      "import": "./dist/dependencies/inquirer.mjs",
+      "types": "./dist/dependencies/inquirer.d.ts"
     },
     "./dependencies/pkg-types": {
-      "import": "./dist/dependencies/pkg-types"
+      "import": "./dist/dependencies/pkg-types.mjs",
+      "types": "./dist/dependencies/pkg-types.d.ts"
     },
     "./dependencies/sort-package-json": {
-      "import": "./dist/dependencies/sort-package-json"
+      "import": "./dist/dependencies/sort-package-json.mjs",
+      "types": "./dist/dependencies/sort-package-json.d.ts"
     },
     "./dependencies/tsup": {
-      "import": "./dist/dependencies/tsup"
+      "import": "./dist/dependencies/tsup.mjs",
+      "types": "./dist/dependencies/tsup.d.ts"
     },
-    "./cli": {
-      "import": "./dist/cli.mjs"
+    "./env": {
+      "types": "./env.d.ts"
     },
     ".": {
-      "import": "./dist/plugboy.mjs"
-    }
-  },
-  "main": "./dist/plugboy.mjs",
-  "types": "./dist/plugboy.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/plugboy.d.ts"
-      ],
-      "cli": [
-        "./dist/cli.d.ts"
-      ],
-      "dependencies/*": [
-        "./dist/dependencies/*.d.ts"
-      ]
+      "import": "./dist/plugboy.mjs",
+      "types": "./dist/plugboy.d.ts"
     }
   },
   "bin": {
@@ -77,18 +71,18 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "bundle-require": "^4.0.1",
+    "bundle-require": "^4.0.2",
     "cac": "^6.7.14",
-    "cssnano": "^6.0.1",
-    "esbuild": "^0.18.20",
-    "execa": "^7.2.0",
-    "glob": "^9.3.5",
-    "inquirer": "^9.2.10",
+    "cssnano": "^6.0.3",
+    "esbuild": "^0.19.11",
+    "execa": "^8.0.1",
+    "glob": "^10.3.10",
+    "inquirer": "^9.2.12",
     "pkg-types": "^1.0.3",
-    "sort-package-json": "^2.5.1",
-    "tsup": "^7.2.0"
+    "sort-package-json": "^2.6.0",
+    "tsup": "^8.0.1"
   },
   "devDependencies": {
-    "@types/inquirer": "^9.0.3"
+    "@types/inquirer": "^9.0.7"
   }
 }

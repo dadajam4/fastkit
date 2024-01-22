@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color-scheme",
-  "version": "1.0.15",
+  "version": "2.0.0",
   "description": "An implementation to control the schema associated with \"color\".",
   "keywords": [
     "fastkit",
@@ -32,18 +32,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/color-scheme.mjs",
-  "types": "./dist/color-scheme.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/color-scheme.d.ts"
-      ],
-      "plugboy-dts-preserve": [
-        "./dist/plugboy-dts-preserve.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/dom",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "dom",
   "keywords": [],
   "repository": {
@@ -19,15 +19,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/dom.mjs",
-  "types": "./dist/dom.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/dom.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

@@ -151,6 +151,7 @@ export async function generate(_config?: ResolvedConfig) {
               )}${chalk.red(pagePath)}`,
             );
           } else {
+            console.error(`failed >>> ${pagePath}`);
             throw _err;
           }
         }

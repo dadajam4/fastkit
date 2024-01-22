@@ -1,5 +1,18 @@
 # @fastkit/vot
 
+## 0.16.0
+
+### Minor Changes
+
+- Updated Vite to version 5.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.0
+  - @fastkit/vue-page@0.15.0
+  - @fastkit/helpers@0.14.0
+
 ## 0.15.17
 
 ### Patch Changes

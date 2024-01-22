@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/comparator",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "comparator",
   "keywords": [],
   "repository": {
@@ -19,15 +19,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/comparator.mjs",
-  "types": "./dist/comparator.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/comparator.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"

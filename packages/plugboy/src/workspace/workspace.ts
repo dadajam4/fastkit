@@ -234,33 +234,31 @@ export class PlugboyWorkspace {
   async preparePackageJSON() {
     const { exports, json, project } = this;
     const _exports: Record<string, any> = {};
-    const typesVersions: Record<string, any> = {};
-    let main: string | undefined;
-    let mainTypes: string | undefined;
 
     exports.forEach(({ id, at }) => {
       const _at = extractWorkspaceObjectExport(at);
       _exports[id] = _at;
-      if (typeof _at !== 'object') return;
-      const isMainExport = id === '.';
-      const trimmedId = isMainExport ? id : id.replace(/^\.\//, '');
-      typesVersions[trimmedId] = [_at.types];
-
-      if (isMainExport) {
-        main = _at.import.default;
-        mainTypes = _at.types;
-      }
     });
+
+    if (json.exports) {
+      const entries = Object.entries(json.exports);
+      entries.forEach(([id, at]) => {
+        const types = Object.keys(at);
+        if (types.length === 1 && types[0] === 'types') {
+          _exports[id] = at;
+        }
+      });
+    }
 
     _exports['./*'] = './dist/*';
 
-    const cloned: typeof json = JSON.parse(JSON.stringify(json));
+    const originalJSONString = JSON.stringify(json);
+    const cloned: typeof json = JSON.parse(originalJSONString);
     cloned.exports = _exports;
-    cloned.typesVersions = {
-      '*': typesVersions,
-    };
-    if (main) cloned.main = main;
-    if (mainTypes) cloned.types = mainTypes;
+
+    delete cloned.main;
+    delete cloned.types;
+    delete cloned.typesVersions;
 
     const projectPeerDependencies = project?.config.peerDependencies;
     (['dependencies', 'devDependencies', 'peerDependencies'] as const).forEach(
@@ -292,9 +290,8 @@ export class PlugboyWorkspace {
     await this.hooks.preparePackageJSON(json, this);
 
     const sorted = sortPackageJson(cloned);
-    const fromStr = JSON.stringify(cloned, null, 2);
     const toStr = JSON.stringify(sorted, null, 2);
-    if (fromStr !== toStr || process) {
+    if (originalJSONString !== toStr) {
       await fs.writeFile(this.dir.join(PACKAGE_JSON_FILENAME).value, toStr);
       this._json = sorted;
     }

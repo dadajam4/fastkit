@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-transitions",
-  "version": "0.1.23",
+  "version": "0.2.0",
   "description": "vue-transitions",
   "keywords": [],
   "repository": {
@@ -19,15 +19,6 @@
       }
     },
     "./*": "./dist/*"
-  },
-  "main": "./dist/vue-transitions.mjs",
-  "types": "./dist/vue-transitions.d.ts",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/vue-transitions.d.ts"
-      ]
-    }
   },
   "files": [
     "dist"
@@ -49,6 +40,6 @@
     "@fastkit/vue-utils": "workspace:*"
   },
   "peerDependencies": {
-    "vue": "^3.3.0"
+    "vue": "^3.4.0"
   }
 }
