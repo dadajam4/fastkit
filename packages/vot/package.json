@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "Orchestration tools for building Vue applications.",
   "keywords": [
     "fastkit",
@@ -38,6 +38,21 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vot.mjs",
+  "types": "./dist/vot.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vot.d.ts"
+      ],
+      "tool": [
+        "./dist/tool.d.ts"
+      ],
+      "server": [
+        "./dist/server.d.ts"
+      ]
+    }
   },
   "bin": {
     "vot": "./bin/vot.mjs"

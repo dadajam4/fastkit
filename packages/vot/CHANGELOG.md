@@ -1,5 +1,16 @@
 # @fastkit/vot
 
+## 0.16.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.1
+  - @fastkit/vue-page@0.15.1
+  - @fastkit/helpers@0.14.1
+
 ## 0.16.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-color-scheme",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "A library for using Type-safe \"color\" schemas in Vue applications.",
   "keywords": [
     "fastkit",
@@ -27,6 +27,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-color-scheme.mjs",
+  "types": "./dist/vue-color-scheme.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-color-scheme.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

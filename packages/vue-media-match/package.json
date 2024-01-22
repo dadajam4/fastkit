@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-media-match",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "Library for handling Type-safe media query breakpoint schemas in Vue applications.",
   "keywords": [
     "fastkit",
@@ -28,6 +28,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-media-match.mjs",
+  "types": "./dist/vue-media-match.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-media-match.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

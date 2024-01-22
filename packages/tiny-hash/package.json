@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/tiny-hash",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "tiny-hash",
   "keywords": [],
   "repository": {
@@ -19,6 +19,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/tiny-hash.mjs",
+  "types": "./dist/tiny-hash.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/tiny-hash.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Utilities for efficient development of Vue applications.",
   "keywords": [
     "fastkit",
@@ -26,6 +26,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-utils.mjs",
+  "types": "./dist/vue-utils.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-utils.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

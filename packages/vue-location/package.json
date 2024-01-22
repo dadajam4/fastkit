@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-location",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "vue-location",
   "keywords": [
     "vue",
@@ -22,6 +22,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-location.mjs",
+  "types": "./dist/vue-location.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-location.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

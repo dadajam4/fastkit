@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-resize",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "vue-resize",
   "keywords": [],
   "repository": {
@@ -19,6 +19,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-resize.mjs",
+  "types": "./dist/vue-resize.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-resize.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

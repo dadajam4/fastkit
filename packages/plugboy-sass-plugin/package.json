@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy-sass-plugin",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "plugboy-sass-plugin",
   "keywords": [
     "plugboy",
@@ -22,6 +22,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/plugboy-sass-plugin.mjs",
+  "types": "./dist/plugboy-sass-plugin.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/plugboy-sass-plugin.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

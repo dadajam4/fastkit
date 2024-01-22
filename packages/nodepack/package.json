@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/nodepack",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "A small bundled tool for developing Node.js server and tool implementations.",
   "keywords": [
     "fastkit",
@@ -27,6 +27,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/nodepack.mjs",
+  "types": "./dist/nodepack.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/nodepack.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

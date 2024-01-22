@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-kit",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "A collection of toolkits for vite application setup.",
   "keywords": [
     "fastkit",
@@ -26,6 +26,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vite-kit.mjs",
+  "types": "./dist/vite-kit.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vite-kit.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

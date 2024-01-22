@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/node-util",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "Utilities for Node.js server and tool implementation.",
   "keywords": [
     "fastkit",
@@ -26,6 +26,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/node-util.mjs",
+  "types": "./dist/node-util.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/node-util.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-loading",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Loading component for Vue applications.",
   "keywords": [
     "fastkit",
@@ -28,6 +28,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-loading.mjs",
+  "types": "./dist/vue-loading.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-loading.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

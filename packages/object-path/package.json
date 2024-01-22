@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/object-path",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "object-path",
   "keywords": [],
   "repository": {
@@ -19,6 +19,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/object-path.mjs",
+  "types": "./dist/object-path.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/object-path.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

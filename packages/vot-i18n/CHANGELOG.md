@@ -1,5 +1,16 @@
 # @fastkit/vot-i18n
 
+## 4.0.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/accept-language@0.14.1
+  - @fastkit/vue-i18n@0.14.1
+  - @fastkit/vot@0.16.1
+
 ## 4.0.0
 
 ### Minor Changes

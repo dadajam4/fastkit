@@ -1,5 +1,19 @@
 # @fastkit/async-control
 
+## 0.14.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/cache-control@0.14.1
+  - @fastkit/tiny-logger@0.14.1
+  - @fastkit/tiny-hash@0.2.1
+  - @fastkit/duration@0.14.1
+  - @fastkit/helpers@0.14.1
+  - @fastkit/cloner@0.2.1
+
 ## 0.14.0
 
 ### Minor Changes

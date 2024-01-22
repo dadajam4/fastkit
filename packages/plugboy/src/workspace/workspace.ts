@@ -234,10 +234,22 @@ export class PlugboyWorkspace {
   async preparePackageJSON() {
     const { exports, json, project } = this;
     const _exports: Record<string, any> = {};
+    const typesVersions: Record<string, any> = {};
+    let main: string | undefined;
+    let mainTypes: string | undefined;
 
     exports.forEach(({ id, at }) => {
       const _at = extractWorkspaceObjectExport(at);
       _exports[id] = _at;
+      if (typeof _at !== 'object') return;
+      const isMainExport = id === '.';
+      const trimmedId = isMainExport ? id : id.replace(/^\.\//, '');
+      typesVersions[trimmedId] = [_at.types];
+
+      if (isMainExport) {
+        main = _at.import.default;
+        mainTypes = _at.types;
+      }
     });
 
     if (json.exports) {
@@ -255,10 +267,15 @@ export class PlugboyWorkspace {
     const originalJSONString = JSON.stringify(json);
     const cloned: typeof json = JSON.parse(originalJSONString);
     cloned.exports = _exports;
+    cloned.typesVersions = {
+      '*': typesVersions,
+    };
+    if (main) cloned.main = main;
+    if (mainTypes) cloned.types = mainTypes;
 
-    delete cloned.main;
-    delete cloned.types;
-    delete cloned.typesVersions;
+    // delete cloned.main;
+    // delete cloned.types;
+    // delete cloned.typesVersions;
 
     const projectPeerDependencies = project?.config.peerDependencies;
     (['dependencies', 'devDependencies', 'peerDependencies'] as const).forEach(

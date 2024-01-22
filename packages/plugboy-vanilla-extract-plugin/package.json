@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy-vanilla-extract-plugin",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "keywords": [],
   "repository": {
@@ -25,6 +25,18 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/plugboy-vanilla-extract-plugin.mjs",
+  "types": "./dist/plugboy-vanilla-extract-plugin.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/plugboy-vanilla-extract-plugin.d.ts"
+      ],
+      "css": [
+        "./dist/css.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

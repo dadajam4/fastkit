@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/ev",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "@fastkit/ev",
   "keywords": [
     "fastkit",
@@ -26,6 +26,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/ev.mjs",
+  "types": "./dist/ev.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/ev.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

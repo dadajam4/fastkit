@@ -1,5 +1,22 @@
 # @fastkit/vue-stack
 
+## 0.16.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.2.1
+  - @fastkit/vue-click-outside@0.2.1
+  - @fastkit/vue-transitions@0.2.1
+  - @fastkit/vue-keyboard@0.2.1
+  - @fastkit/tiny-logger@0.14.1
+  - @fastkit/vue-resize@0.2.1
+  - @fastkit/vue-utils@0.15.1
+  - @fastkit/helpers@0.14.1
+  - @fastkit/dom@0.2.1
+
 ## 0.16.0
 
 ### Minor Changes

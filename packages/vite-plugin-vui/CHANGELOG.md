@@ -1,5 +1,17 @@
 # @fastkit/vite-plugin-vui
 
+## 2.0.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/icon-font-gen@0.14.1
+  - @fastkit/tiny-logger@0.14.1
+  - @fastkit/vite-kit@0.14.1
+  - @fastkit/vui@0.19.1
+
 ## 2.0.0
 
 ### Minor Changes

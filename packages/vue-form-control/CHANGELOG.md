@@ -1,5 +1,19 @@
 # @fastkit/vue-form-control
 
+## 0.20.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.14.1
+  - @fastkit/vue-utils@0.15.1
+  - @fastkit/debounce@0.2.1
+  - @fastkit/helpers@0.14.1
+  - @fastkit/rules@0.14.1
+  - @fastkit/dom@0.2.1
+
 ## 0.20.0
 
 ### Minor Changes

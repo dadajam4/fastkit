@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/universal-logger",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "Pluggable and universal log output library for any server/browser execution environment.",
   "keywords": [
     "fastkit",
@@ -27,6 +27,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/universal-logger.mjs",
+  "types": "./dist/universal-logger.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/universal-logger.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

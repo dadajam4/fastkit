@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-visibility",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "vue-visibility",
   "keywords": [],
   "repository": {
@@ -19,6 +19,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-visibility.mjs",
+  "types": "./dist/vue-visibility.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-visibility.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

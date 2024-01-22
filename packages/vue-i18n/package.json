@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-i18n",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "@fastkit/vue-i18n",
   "keywords": [
     "fastkit",
@@ -32,6 +32,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-i18n.mjs",
+  "types": "./dist/vue-i18n.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-i18n.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

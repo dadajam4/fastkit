@@ -1,5 +1,16 @@
 # @fastkit/vue-color-scheme
 
+## 0.15.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/color-scheme@2.0.1
+  - @fastkit/tiny-logger@0.14.1
+  - @fastkit/vue-utils@0.15.1
+
 ## 0.15.0
 
 ### Minor Changes

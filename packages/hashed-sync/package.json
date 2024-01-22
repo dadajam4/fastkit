@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/hashed-sync",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "Compare and synchronize the status of entire files and directories by hash value.",
   "keywords": [
     "fastkit",
@@ -29,6 +29,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/hashed-sync.mjs",
+  "types": "./dist/hashed-sync.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/hashed-sync.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

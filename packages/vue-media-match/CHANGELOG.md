@@ -1,5 +1,15 @@
 # @fastkit/vue-media-match
 
+## 0.14.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/media-match@2.0.1
+  - @fastkit/helpers@0.14.1
+
 ## 0.14.0
 
 ### Minor Changes

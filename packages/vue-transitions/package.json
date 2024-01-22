@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-transitions",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "vue-transitions",
   "keywords": [],
   "repository": {
@@ -19,6 +19,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-transitions.mjs",
+  "types": "./dist/vue-transitions.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-transitions.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

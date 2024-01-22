@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-form-control",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "Basic form implementation library for Vue applications.",
   "keywords": [
     "fastkit",
@@ -29,6 +29,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-form-control.mjs",
+  "types": "./dist/vue-form-control.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-form-control.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

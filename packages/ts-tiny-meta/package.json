@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/ts-tiny-meta",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "ts-tiny-meta",
   "keywords": [],
   "repository": {
@@ -40,6 +40,24 @@
       "types": "./client.d.ts"
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/ts-tiny-meta.mjs",
+  "types": "./dist/ts-tiny-meta.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/ts-tiny-meta.d.ts"
+      ],
+      "ts": [
+        "./dist/ts.d.ts"
+      ],
+      "vite": [
+        "./dist/vite.d.ts"
+      ],
+      "ts-morph": [
+        "./dist/ts-morph.d.ts"
+      ]
+    }
   },
   "files": [
     "dist",

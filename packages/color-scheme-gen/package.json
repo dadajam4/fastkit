@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color-scheme-gen",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "Generator for generating \"color\" schemas.",
   "keywords": [
     "fastkit",
@@ -26,6 +26,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/color-scheme-gen.mjs",
+  "types": "./dist/color-scheme-gen.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/color-scheme-gen.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

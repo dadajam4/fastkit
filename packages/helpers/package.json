@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/helpers",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "A small collection of helper implementations for processing primitive values and objects.",
   "keywords": [
     "fastkit",
@@ -26,6 +26,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/helpers.mjs",
+  "types": "./dist/helpers.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/helpers.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

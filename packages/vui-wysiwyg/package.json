@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui-wysiwyg",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "vui-wysiwyg",
   "keywords": [],
   "repository": {
@@ -188,6 +188,99 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vui-wysiwyg.mjs",
+  "types": "./dist/vui-wysiwyg.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vui-wysiwyg.d.ts"
+      ],
+      "tiptap/core": [
+        "./dist/tiptap/core.d.ts"
+      ],
+      "pm/view": [
+        "./dist/pm/view.d.ts"
+      ],
+      "pm/transform": [
+        "./dist/pm/transform.d.ts"
+      ],
+      "pm/trailing-node": [
+        "./dist/pm/trailing-node.d.ts"
+      ],
+      "pm/tables": [
+        "./dist/pm/tables.d.ts"
+      ],
+      "pm/state": [
+        "./dist/pm/state.d.ts"
+      ],
+      "pm/schema-list": [
+        "./dist/pm/schema-list.d.ts"
+      ],
+      "pm/schema-basic": [
+        "./dist/pm/schema-basic.d.ts"
+      ],
+      "pm/model": [
+        "./dist/pm/model.d.ts"
+      ],
+      "pm/menu": [
+        "./dist/pm/menu.d.ts"
+      ],
+      "pm/markdown": [
+        "./dist/pm/markdown.d.ts"
+      ],
+      "pm/keymap": [
+        "./dist/pm/keymap.d.ts"
+      ],
+      "pm/inputrules": [
+        "./dist/pm/inputrules.d.ts"
+      ],
+      "pm/history": [
+        "./dist/pm/history.d.ts"
+      ],
+      "pm/gapcursor": [
+        "./dist/pm/gapcursor.d.ts"
+      ],
+      "pm/dropcursor": [
+        "./dist/pm/dropcursor.d.ts"
+      ],
+      "pm/commands": [
+        "./dist/pm/commands.d.ts"
+      ],
+      "pm/collab": [
+        "./dist/pm/collab.d.ts"
+      ],
+      "pm/changeset": [
+        "./dist/pm/changeset.d.ts"
+      ],
+      "tiptap/extensions/underline": [
+        "./dist/tiptap/extensions/underline.d.ts"
+      ],
+      "tiptap/extensions/text-style": [
+        "./dist/tiptap/extensions/text-style.d.ts"
+      ],
+      "tiptap/extensions/text-align": [
+        "./dist/tiptap/extensions/text-align.d.ts"
+      ],
+      "tiptap/extensions/ordered-list": [
+        "./dist/tiptap/extensions/ordered-list.d.ts"
+      ],
+      "tiptap/extensions/link": [
+        "./dist/tiptap/extensions/link.d.ts"
+      ],
+      "tiptap/extensions/italic": [
+        "./dist/tiptap/extensions/italic.d.ts"
+      ],
+      "tiptap/extensions/history": [
+        "./dist/tiptap/extensions/history.d.ts"
+      ],
+      "tiptap/extensions/bullet-list": [
+        "./dist/tiptap/extensions/bullet-list.d.ts"
+      ],
+      "tiptap/extensions/bold": [
+        "./dist/tiptap/extensions/bold.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

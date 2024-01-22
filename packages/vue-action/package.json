@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-action",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "vue-action",
   "keywords": [],
   "repository": {
@@ -19,6 +19,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-action.mjs",
+  "types": "./dist/vue-action.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-action.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

@@ -7,7 +7,7 @@
     "isolatedModules": true,
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
     "strict": true,
     "noImplicitThis": true,
     "noImplicitAny": true,

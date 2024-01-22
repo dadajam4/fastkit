@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cloner",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "cloner",
   "keywords": [],
   "repository": {
@@ -19,6 +19,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/cloner.mjs",
+  "types": "./dist/cloner.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/cloner.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

@@ -1,5 +1,14 @@
 # @fastkit/vui-wysiwyg
 
+## 7.0.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/vui@0.19.1
+
 ## 7.0.0
 
 ### Minor Changes

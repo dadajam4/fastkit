@@ -1,5 +1,17 @@
 # @fastkit/vue-body-scroll-lock
 
+## 0.2.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/body-scroll-lock@0.14.1
+  - @fastkit/vue-utils@0.15.1
+  - @fastkit/helpers@0.14.1
+  - @fastkit/dom@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

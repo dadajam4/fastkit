@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/json",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "json",
   "keywords": [],
   "repository": {
@@ -19,6 +19,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/json.mjs",
+  "types": "./dist/json.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/json.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

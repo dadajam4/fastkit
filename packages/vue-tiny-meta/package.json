@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-tiny-meta",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "vue-tiny-meta",
   "keywords": [],
   "repository": {
@@ -31,6 +31,21 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-tiny-meta.mjs",
+  "types": "./dist/vue-tiny-meta.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-tiny-meta.d.ts"
+      ],
+      "vite": [
+        "./dist/vite.d.ts"
+      ],
+      "storybook": [
+        "./dist/storybook.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

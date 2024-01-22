@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-plugin-vui",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "vite-plugin-vui",
   "keywords": [
     "vite",
@@ -23,6 +23,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vite-plugin-vui.mjs",
+  "types": "./dist/vite-plugin-vui.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vite-plugin-vui.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/catcher",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "Custom classes for Type-safe handling of exceptions in your application.",
   "keywords": [
     "fastkit",
@@ -28,6 +28,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/catcher.mjs",
+  "types": "./dist/catcher.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/catcher.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

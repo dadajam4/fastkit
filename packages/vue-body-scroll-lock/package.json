@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-body-scroll-lock",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "vue-body-scroll-lock",
   "keywords": [],
   "repository": {
@@ -19,6 +19,15 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/vue-body-scroll-lock.mjs",
+  "types": "./dist/vue-body-scroll-lock.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-body-scroll-lock.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"

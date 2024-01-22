@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font-gen",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "A tool to generate icon web fonts and their definitions Type-safe for your application.",
   "keywords": [
     "fastkit",
@@ -32,6 +32,18 @@
       }
     },
     "./*": "./dist/*"
+  },
+  "main": "./dist/icon-font-gen.mjs",
+  "types": "./dist/icon-font-gen.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/icon-font-gen.d.ts"
+      ],
+      "cli": [
+        "./dist/cli.d.ts"
+      ]
+    }
   },
   "bin": {
     "icon-font": "./bin/cli.mjs"

@@ -1,5 +1,14 @@
 # @fastkit/comparator
 
+## 0.2.1
+
+### Patch Changes
+
+- Reverted the removal of the `main` field that was introduced in the previous release and restored support for the old `moduleResolution`.
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.14.1
+
 ## 0.2.0
 
 ### Minor Changes
