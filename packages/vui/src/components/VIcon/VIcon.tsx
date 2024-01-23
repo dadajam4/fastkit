@@ -89,21 +89,26 @@ export const VIcon = defineComponent({
         'v-icon--clickable': clickable.value,
       },
     ]);
-    const bodyClasses = computed(() => `icon-${iconName.value}`);
-    const bodyStyles = computed<CSSProperties | undefined>(() => {
-      const { rotate } = props;
-      if (!rotate) return;
-      return {
-        transform: `rotate(${rotate}deg)`,
+
+    const iconAttrs = computed(() => {
+      const attrs: {
+        class: any;
+        style?: CSSProperties;
+      } = {
+        class: ['v-icon__body icon', `icon-${iconName.value}`],
       };
+      const { rotate } = props;
+      if (rotate) {
+        attrs.style = {
+          transform: `rotate(${rotate}deg)`,
+        };
+      }
+      return attrs;
     });
 
     return () => (
       <span class={[`v-icon notranslate`, classes.value]}>
-        <i
-          class={['v-icon__body icon', bodyClasses.value]}
-          style={bodyStyles.value}
-        />
+        <i {...iconAttrs.value} />
       </span>
     );
   },

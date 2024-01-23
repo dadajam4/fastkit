@@ -1,5 +1,11 @@
 # @fastkit/vui
 
+## 0.19.3
+
+### Patch Changes
+
+- Implemented a temporary solution to address edge cases where VIcon was not displaying correctly in Vue 3.4.
+
 ## 0.19.2
 
 ### Patch Changes
