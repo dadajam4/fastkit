@@ -1,5 +1,11 @@
 # @fastkit/universal-logger
 
+## 0.14.2
+
+### Patch Changes
+
+- Fixed the peer dependency version of `@datadog/browser-logs`.
+
 ## 0.14.1
 
 ### Patch Changes
