@@ -75,6 +75,10 @@ export const VWysiwygEditor = defineComponent({
     floatingToolbar: Boolean,
     disabledMinHeight: Boolean,
     disabledMaxHeight: Boolean,
+    removeDefaultWrapper: {
+      type: Boolean,
+      default: true,
+    },
   },
   emits: {
     ...createTextableEmits(),
@@ -108,9 +112,19 @@ export const VWysiwygEditor = defineComponent({
       validationValue: () => textRef.value,
     });
 
+    const getOutput = (
+      editor: Pick<Editor, 'isEmpty' | 'getHTML' | 'getText'>,
+      type: 'text' | 'html',
+    ) => {
+      if (props.removeDefaultWrapper && editor.isEmpty) return '';
+      if (type === 'html') return editor.getHTML();
+      if (type === 'text') return editor.getText();
+      return '';
+    };
+
     const initializeCtx = new WysiwygEditorInitializeContext(() => vui, {
       onCreate: ({ editor }) => {
-        textRef.value = editor.getText();
+        textRef.value = getOutput(editor, 'text');
         updateEditable();
       },
       onFocus: ({ event }) => {
@@ -120,8 +134,8 @@ export const VWysiwygEditor = defineComponent({
         inputControl.blurHandler(event);
       },
       onUpdate: ({ editor }) => {
-        inputControl.value = editor.getHTML();
-        textRef.value = editor.getText();
+        inputControl.value = getOutput(editor, 'html');
+        textRef.value = getOutput(editor, 'text');
       },
     });
 
@@ -133,9 +147,6 @@ export const VWysiwygEditor = defineComponent({
         history: false,
         italic: false,
       }),
-      // Linter.configure({
-      //   plugins: [BadWords(['abc', 'evidently']), Punctuation, HeadingLevel],
-      // }),
       ...resolveRawWysiwygExtensions(props.extensions, initializeCtx),
       ...wysiwygSettings.value.extensions,
     ];
@@ -151,18 +162,18 @@ export const VWysiwygEditor = defineComponent({
       () => props.modelValue,
       (modelValue) => {
         const $editor = editor.value;
-        if (!$editor || $editor.getHTML() === modelValue) return;
+        if (!$editor || getOutput($editor, 'html') === modelValue) return;
 
         $editor.commands.setContent(
           modelValue == null ? '' : modelValue,
           false,
         );
-        textRef.value = $editor.getText();
+        textRef.value = getOutput($editor, 'text');
       },
     );
 
     initializeCtx.on('create', ({ editor }) => {
-      textRef.value = editor.getText();
+      textRef.value = getOutput(editor, 'text');
       updateEditable();
     });
 
@@ -178,8 +189,6 @@ export const VWysiwygEditor = defineComponent({
       },
     });
 
-    // editor.value.state.doc.content
-
     const focus = (
       position?: FocusPosition,
       options?: {
@@ -187,22 +196,10 @@ export const VWysiwygEditor = defineComponent({
       },
     ) => editor.value?.chain().focus(position, options);
 
-    // const blur = () => {
-    //   if (!editor.value) return;
-    //   return editor.value.chain().blur();
-    // };
-
-    const wysiwygContext = computed<WysiwygEditorContext>(() => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const _editor = editor.value!;
-      // if (!_editor) {
-      //   throw new Error('missing editor value');
-      // }
-      return {
-        vui,
-        editor: _editor,
-      };
-    });
+    const wysiwygContext = computed<WysiwygEditorContext>(() => ({
+      vui,
+      editor: editor.value!,
+    }));
 
     const createTools = (bubbleMenu = false) => {
       const { value: settings } = wysiwygSettings;
@@ -265,7 +262,7 @@ export const VWysiwygEditor = defineComponent({
     };
 
     onBeforeUnmount(() => {
-      editor.value && editor.value.destroy();
+      editor.value?.destroy();
     });
 
     const api: VWysiwygEditorAPI = {
@@ -281,6 +278,24 @@ export const VWysiwygEditor = defineComponent({
       focus('start', { scrollIntoView: true });
     };
 
+    const defaultSlot = () => (
+      <div class="v-wysiwyg-editor__body">
+        <EditorContent
+          class="v-wysiwyg-editor__input__element wysiwyg"
+          editor={editor.value}
+        />
+        {!props.floatingToolbar &&
+          !!editor.value &&
+          !inputControl.isReadonly && (
+            <BubbleMenu
+              class="v-wysiwyg-editor__bubble-menu"
+              editor={editor.value}>
+              {createTools(true)}
+            </BubbleMenu>
+          )}
+      </div>
+    );
+
     const formControlDefaultSlot = () => (
       <div class="v-wysiwyg-editor__wrapper">
         {!inputControl.isReadonly && createTools()}
@@ -292,27 +307,7 @@ export const VWysiwygEditor = defineComponent({
           size={control.size.value}
           v-slots={{
             ...ctx.slots,
-            default: () => (
-              <div class="v-wysiwyg-editor__body">
-                <EditorContent
-                  {...({
-                    class: 'v-wysiwyg-editor__input__element wysiwyg',
-                  } as any)}
-                  editor={editor.value}
-                />
-                {!props.floatingToolbar &&
-                  !!editor.value &&
-                  !inputControl.isReadonly && (
-                    <BubbleMenu
-                      {...({
-                        class: 'v-wysiwyg-editor__bubble-menu',
-                      } as any)}
-                      editor={editor.value}>
-                      {createTools(true)}
-                    </BubbleMenu>
-                  )}
-              </div>
-            ),
+            default: defaultSlot,
           }}
         />
       </div>

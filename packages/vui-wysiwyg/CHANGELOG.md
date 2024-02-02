@@ -1,5 +1,11 @@
 # @fastkit/vui-wysiwyg
 
+## 7.0.4
+
+### Patch Changes
+
+- Added the `removeDefaultWrapper` option to remove the insertion of an empty tag when the input is empty. This is enabled by default.
+
 ## 7.0.3
 
 ### Patch Changes
