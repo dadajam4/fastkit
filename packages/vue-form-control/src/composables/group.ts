@@ -167,6 +167,10 @@ export class FormGroupControl extends FormNodeControl {
     !this.disableAutoScroll && this.scrollToFirstInvalidNode();
   }
 
+  protected _forceFinalize() {
+    return true;
+  }
+
   /**
    * Validate the values of this group and all descendant nodes. If there is one or more errors, scroll to the top error node
    *

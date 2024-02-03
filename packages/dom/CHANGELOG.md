@@ -1,5 +1,11 @@
 # @fastkit/dom
 
+## 0.2.2
+
+### Patch Changes
+
+- Added the method `blurActiveElement` to remove focus from the currently focused element in the document.
+
 ## 0.2.1
 
 ### Patch Changes

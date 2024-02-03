@@ -1,5 +1,17 @@
 # @fastkit/vui
 
+## 0.19.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/dom@0.2.2
+  - @fastkit/vue-form-control@0.20.2
+  - @fastkit/vue-body-scroll-lock@0.2.2
+  - @fastkit/vue-stack@0.16.2
+  - @fastkit/vue-transitions@0.2.2
+  - @fastkit/vue-app-layout@0.15.2
+
 ## 0.19.3
 
 ### Patch Changes

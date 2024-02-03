@@ -81,7 +81,6 @@ export default defineComponent({
         <DocsSection title="Basic">
           <VForm
             disabled={this.form1Sending}
-            sending
             onSubmit={(form) => {
               this.submit1();
             }}
@@ -130,6 +129,7 @@ export default defineComponent({
                     // hinttip="氏名を入力とは"
                     required
                     counter={10}
+                    finalizers="trim"
                   />
 
                   <VSelect

@@ -1,3 +1,10 @@
+export function isFocusableElement(
+  element: Element | null | undefined,
+): element is SVGElement | HTMLElement {
+  if (typeof document !== 'undefined') return false;
+  return element instanceof HTMLElement || element instanceof SVGElement;
+}
+
 export function isFocusable(element: HTMLElement): boolean {
   if (
     element.tabIndex > 0 ||
@@ -31,13 +38,11 @@ export function attemptFocus(element: HTMLElement): boolean {
     return false;
   }
 
-  // aria.Utils.IgnoreUtilFocusChanges = true;
   try {
     element.focus();
   } catch (e) {
     // noop
   }
-  // aria.Utils.IgnoreUtilFocusChanges = false;
   return document.activeElement === element;
 }
 
@@ -52,4 +57,19 @@ export function focusFirstDescendant(element: HTMLElement): boolean {
     }
   }
   return false;
+}
+
+/**
+ * If the document currently has a focused element, unfocus it and return that element
+ */
+export function blurActiveElement(): SVGElement | HTMLElement | undefined {
+  if (typeof document === 'undefined') return;
+  const { activeElement } = document;
+  if (!isFocusableElement(activeElement)) return;
+  try {
+    activeElement.blur();
+    return activeElement;
+  } catch (_err) {
+    // noop
+  }
 }

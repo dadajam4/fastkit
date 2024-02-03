@@ -1,5 +1,14 @@
 # @fastkit/vue-form-control
 
+## 0.20.2
+
+### Patch Changes
+
+- Fixed an issue where the finalization of values might not be completed during form or group actions and validation executions.
+
+- Updated dependencies []:
+  - @fastkit/dom@0.2.2
+
 ## 0.20.1
 
 ### Patch Changes

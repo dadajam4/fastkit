@@ -1270,6 +1270,24 @@ export class FormNodeControl<
   }
 
   /**
+   * Ensure that the input value is finalized
+   */
+  ensureFinalized(): Promise<void> {
+    const currentFinalize = this._finalizePromise.value?.();
+    return currentFinalize || this.finalize();
+  }
+
+  /**
+   * Ensure that the value of the self-node and all its child nodes is finalized
+   */
+  async finalizeAll(): Promise<void> {
+    await Promise.all([
+      this.ensureFinalized(),
+      ...this.children.map((node) => node.ensureFinalized()),
+    ]);
+  }
+
+  /**
    * Set the value
    *
    * @param value - value
@@ -1502,13 +1520,26 @@ export class FormNodeControl<
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   blur(): void {}
 
+  protected _forceFinalize(): boolean | undefined {
+    return undefined;
+  }
+
   /**
    * Execute validation for this node and all its descendant nodes, and retrieve the validation results
    *
+   * @param force - Force execution
+   * @param forceFinalize - Always finalize the value before validation
+   *
    * @returns If validation is successful, return `true`.
    */
-  async validate(): Promise<boolean> {
-    await Promise.all([this.validateSelf(), this.validateChildren()]);
+  async validate(
+    force?: boolean,
+    forceFinalize: boolean | undefined = this._forceFinalize(),
+  ): Promise<boolean> {
+    await Promise.all([
+      this.validateSelf(force, forceFinalize),
+      this.validateChildren(force, forceFinalize),
+    ]);
     return this.valid;
   }
 
@@ -1517,9 +1548,21 @@ export class FormNodeControl<
    *
    * @remarks
    * Typically, consider using {@link FormNodeControl.validate validate}.
+   *
+   * @param force - Force execution
+   * @param forceFinalize - Always finalize the value before validation
    */
-  validateChildren(): Promise<boolean[]> {
-    return Promise.all(this.children.map((node) => node.validate()));
+  validateChildren(
+    force?: boolean,
+    forceFinalize: boolean | undefined = this._forceFinalize(),
+  ): Promise<boolean[]> {
+    return Promise.all(
+      this.children.map((node) => node.validate(force, forceFinalize)),
+    );
+  }
+
+  protected _allowFinalize(): boolean {
+    return true;
   }
 
   /**
@@ -1533,13 +1576,17 @@ export class FormNodeControl<
    * If you want to ignore this and force validation, specify `true` for the `force` argument
    *
    * @param force - Force execution
+   * @param forceFinalize - Always finalize the value before validation
    *
    * @returns Validation result (either the list of validation errors or null).
    *
    * @remarks
    * This method does not perform a reset on descendant nodes. Typically, consider using {@link FormNodeControl.validate validate}.
    */
-  validateSelf(force?: boolean): Promise<ValidationResult> {
+  validateSelf(
+    force?: boolean,
+    forceFinalize: boolean | undefined = this._forceFinalize(),
+  ): Promise<ValidationResult> {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve) => {
       this.setShouldValidate(true);
@@ -1560,7 +1607,10 @@ export class FormNodeControl<
 
       const { rules } = this;
 
-      if (!this.focused) {
+      const currentFinalizePromise = this._finalizePromise.value?.();
+      if (currentFinalizePromise) {
+        await currentFinalizePromise;
+      } else if (forceFinalize || !this.focused) {
         await this.finalize();
       }
 
