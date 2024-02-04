@@ -1,5 +1,11 @@
 # @fastkit/node-util
 
+## 0.14.2
+
+### Patch Changes
+
+- Added support for the `__dirname` and `__filename` constants.
+
 ## 0.14.1
 
 ### Patch Changes

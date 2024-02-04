@@ -11,16 +11,23 @@ import { resolveEntryPoint, pathExists } from './path';
 
 const require = module.createRequire(import.meta.url);
 
-const importMetaUrlPlugin: Plugin = {
-  name: 'import_meta_url',
+const jsFileLocationPlugin: Plugin = {
+  name: 'js-file-location',
   setup({ onLoad }) {
-    onLoad({ filter: /\.(m?(j|t)sx?)$/, namespace: 'file' }, (args) => {
+    const isWindows = /^win/.test(process.platform);
+    const esc = (p: string) => (isWindows ? p.replace(/\\/g, '/') : p);
+
+    onLoad({ filter: /\.((m|c)?(j|t)sx?)$/, namespace: 'file' }, (args) => {
       let code = fs.readFileSync(args.path, 'utf8');
 
-      code = code.replace(
-        /\bimport\.meta\.url\b/g,
-        JSON.stringify(url.pathToFileURL(args.path)),
-      );
+      const fileURL = url.pathToFileURL(args.path);
+      const filename = esc(args.path);
+      const dirname = esc(path.dirname(args.path));
+
+      code = code
+        .replace(/\bimport\.meta\.url\b/g, JSON.stringify(fileURL))
+        .replace(/\b__filename\b/g, JSON.stringify(filename))
+        .replace(/\b__dirname\b/g, JSON.stringify(dirname));
 
       const chunks = args.path.split('.');
       const ext = chunks[chunks.length - 1];
@@ -122,7 +129,7 @@ export async function esbuildRequire<T = any>(
     metafile: true,
     // logLevel: 'warning',
     // external: ['module'],
-    plugins: [importMetaUrlPlugin, nativeNodeModulesPlugin],
+    plugins: [jsFileLocationPlugin, nativeNodeModulesPlugin],
     outfile,
   });
 
