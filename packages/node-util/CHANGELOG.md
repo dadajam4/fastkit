@@ -1,5 +1,11 @@
 # @fastkit/node-util
 
+## 0.14.3
+
+### Patch Changes
+
+- Added the `external` option to the `esbuildRequire` method.
+
 ## 0.14.2
 
 ### Patch Changes

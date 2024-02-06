@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/nodepack",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "description": "A small bundled tool for developing Node.js server and tool implementations.",
   "keywords": [
     "fastkit",

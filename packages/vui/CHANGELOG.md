@@ -1,5 +1,13 @@
 # @fastkit/vui
 
+## 0.19.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/color-scheme-gen@0.14.3
+  - @fastkit/media-match-gen@0.14.3
+
 ## 0.19.5
 
 ### Patch Changes

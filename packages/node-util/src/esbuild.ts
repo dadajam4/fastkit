@@ -14,6 +14,9 @@ const require = module.createRequire(import.meta.url);
 const jsFileLocationPlugin: Plugin = {
   name: 'js-file-location',
   setup({ onLoad }) {
+    const filenameMatchRE = /(?<!\.|'|"|var |let |const )__filename/g;
+    const dirnameMatchRE = /(?<!\.|'|"|var |let |const )__dirname/g;
+
     const isWindows = /^win/.test(process.platform);
     const esc = (p: string) => (isWindows ? p.replace(/\\/g, '/') : p);
 
@@ -26,8 +29,8 @@ const jsFileLocationPlugin: Plugin = {
 
       code = code
         .replace(/\bimport\.meta\.url\b/g, JSON.stringify(fileURL))
-        .replace(/\b__filename\b/g, JSON.stringify(filename))
-        .replace(/\b__dirname\b/g, JSON.stringify(dirname));
+        .replace(filenameMatchRE, JSON.stringify(filename))
+        .replace(dirnameMatchRE, JSON.stringify(dirname));
 
       const chunks = args.path.split('.');
       const ext = chunks[chunks.length - 1];
@@ -95,10 +98,31 @@ export async function findTSConfigPath(
   return findTSConfigPath(parentDir);
 }
 
+export interface ESbuildRequireOptions {
+  filename?: string;
+  external?: string[];
+}
+
 export async function esbuildRequire<T = any>(
   rawEntryPoint: string,
   filename?: string,
+): Promise<ESbuildRequireResult<T>>;
+
+export async function esbuildRequire<T = any>(
+  rawEntryPoint: string,
+  options?: ESbuildRequireOptions,
+): Promise<ESbuildRequireResult<T>>;
+
+export async function esbuildRequire<T = any>(
+  rawEntryPoint: string,
+  filenameOrOptions: string | ESbuildRequireOptions = {},
 ): Promise<ESbuildRequireResult<T>> {
+  const options: ESbuildRequireOptions =
+    typeof filenameOrOptions === 'string'
+      ? { filename: filenameOrOptions }
+      : filenameOrOptions;
+  let { filename } = options;
+  const { external = [] } = options;
   const entryPoint = await resolveEntryPoint(rawEntryPoint);
   if (!filename) {
     const { name, ext } = path.parse(entryPoint);
@@ -121,7 +145,7 @@ export async function esbuildRequire<T = any>(
   const buildResult = await esbuild.build({
     // outfile
     entryPoints: [entryPoint],
-    external: ['esbuild'],
+    external: ['esbuild', ...external],
     bundle: true,
     tsconfig,
     platform: 'node',
