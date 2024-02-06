@@ -1,5 +1,12 @@
 # @fastkit/nodepack
 
+## 0.14.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/node-util@0.14.4
+
 ## 0.14.3
 
 ### Patch Changes

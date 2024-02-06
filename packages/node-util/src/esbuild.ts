@@ -14,8 +14,11 @@ const require = module.createRequire(import.meta.url);
 const jsFileLocationPlugin: Plugin = {
   name: 'js-file-location',
   setup({ onLoad }) {
-    const filenameMatchRE = /(?<!\.|'|"|var |let |const )__filename/g;
-    const dirnameMatchRE = /(?<!\.|'|"|var |let |const )__dirname/g;
+    const createRE = (name: string) =>
+      new RegExp(`(?<!\\.|'|"|var |let |const )__${name}`, 'g');
+
+    const filenameMatchRE = createRE('filename');
+    const dirnameMatchRE = createRE('dirname');
 
     const isWindows = /^win/.test(process.platform);
     const esc = (p: string) => (isWindows ? p.replace(/\\/g, '/') : p);

@@ -1,5 +1,11 @@
 # @fastkit/node-util
 
+## 0.14.4
+
+### Patch Changes
+
+- Fixed the escape processing to prevent unnecessary replacement of `__dirname` and `__filename` implementations.
+
 ## 0.14.3
 
 ### Patch Changes
