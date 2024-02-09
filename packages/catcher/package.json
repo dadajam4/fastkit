@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/catcher",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "Custom classes for Type-safe handling of exceptions in your application.",
   "keywords": [
     "fastkit",
@@ -56,7 +56,7 @@
     "@fastkit/helpers": "workspace:*"
   },
   "devDependencies": {
-    "axios": "^1.6.5"
+    "axios": "^1.6.7"
   },
   "peerDependencies": {
     "axios": "^1.6.0"

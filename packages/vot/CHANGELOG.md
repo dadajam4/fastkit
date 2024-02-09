@@ -1,5 +1,11 @@
 # @fastkit/vot
 
+## 0.16.2
+
+### Patch Changes
+
+- Updated major dependencies.
+
 ## 0.16.1
 
 ### Patch Changes

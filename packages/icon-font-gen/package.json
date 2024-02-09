@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font-gen",
-  "version": "0.14.4",
+  "version": "0.14.5",
   "description": "A tool to generate icon web fonts and their definitions Type-safe for your application.",
   "keywords": [
     "fastkit",
@@ -70,7 +70,7 @@
     "@fastkit/node-util": "workspace:*",
     "@fastkit/tiny-logger": "workspace:*",
     "cac": "^6.7.14",
-    "chokidar": "^3.5.3",
+    "chokidar": "^3.6.0",
     "fs-extra": "^11.2.0",
     "webfont": "^11.2.26"
   },

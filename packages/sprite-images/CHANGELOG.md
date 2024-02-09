@@ -1,5 +1,11 @@
 # @fastkit/sprite-images
 
+## 0.14.2
+
+### Patch Changes
+
+- Updated major dependencies.
+
 ## 0.14.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @fastkit/media-match-gen
 
+## 0.14.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/node-util@0.14.5
+  - @fastkit/media-match@2.0.2
+
 ## 0.14.4
 
 ### Patch Changes

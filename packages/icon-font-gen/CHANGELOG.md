@@ -1,5 +1,15 @@
 # @fastkit/icon-font-gen
 
+## 0.14.5
+
+### Patch Changes
+
+- Updated major dependencies.
+
+- Updated dependencies []:
+  - @fastkit/node-util@0.14.5
+  - @fastkit/icon-font@2.0.2
+
 ## 0.14.4
 
 ### Patch Changes

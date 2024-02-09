@@ -115,7 +115,7 @@ export function optimizeMedia(
 
     combinedRules.forEach((rule) => {
       const nodes = rule.medias
-        .map((media) => media.rule.nodes.map((node) => node.clone()))
+        .map((media) => (media.rule.nodes || []).map((node) => node.clone()))
         .flat();
       const newAtRule = new AtRule({
         name: 'media',

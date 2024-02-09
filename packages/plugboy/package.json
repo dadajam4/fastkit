@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "",
   "keywords": [],
   "repository": {
@@ -74,12 +74,12 @@
     "bundle-require": "^4.0.2",
     "cac": "^6.7.14",
     "cssnano": "^6.0.3",
-    "esbuild": "^0.19.11",
+    "esbuild": "^0.19.12",
     "execa": "^8.0.1",
     "glob": "^10.3.10",
-    "inquirer": "^9.2.12",
+    "inquirer": "^9.2.14",
     "pkg-types": "^1.0.3",
-    "sort-package-json": "^2.6.0",
+    "sort-package-json": "^2.7.0",
     "tsup": "^8.0.1"
   },
   "devDependencies": {

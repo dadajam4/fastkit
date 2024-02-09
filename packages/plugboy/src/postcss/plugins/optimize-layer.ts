@@ -70,7 +70,7 @@ export function optimizeLayer(
 
     if (atFirst) return;
 
-    layerRule.nodes.forEach((node) => {
+    layerRule.nodes?.forEach((node) => {
       layer.rule.append(node.clone());
     });
 

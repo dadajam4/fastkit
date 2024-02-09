@@ -1,5 +1,12 @@
 # @fastkit/media-match
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/plugboy@0.2.2
+
 ## 2.0.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated major dependencies.
+
 ## 0.2.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @fastkit/universal-logger
 
+## 0.14.3
+
+### Patch Changes
+
+- Updated major dependencies.
+
 ## 0.14.2
 
 ### Patch Changes

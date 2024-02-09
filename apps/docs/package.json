@@ -27,7 +27,7 @@
     "@fastkit/vue-transitions": "workspace:*",
     "@fastkit/vui": "workspace:*",
     "@fastkit/vui-wysiwyg": "workspace:*",
-    "marked": "^11.1.1"
+    "marked": "^11.2.0"
   },
   "devDependencies": {
     "@mdi/svg": "^7.4.47",

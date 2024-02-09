@@ -1,5 +1,22 @@
 # @fastkit/vui
 
+## 0.19.8
+
+### Patch Changes
+
+- Updated major dependencies.
+
+- Updated dependencies []:
+  - @fastkit/vue-form-control@0.20.3
+  - @fastkit/color-scheme-gen@0.14.5
+  - @fastkit/media-match-gen@0.14.5
+  - @fastkit/color-scheme@2.0.2
+  - @fastkit/icon-font@2.0.2
+  - @fastkit/media-match@2.0.2
+  - @fastkit/vue-color-scheme@0.15.2
+  - @fastkit/vue-loading@0.15.2
+  - @fastkit/vue-media-match@0.14.2
+
 ## 0.19.7
 
 ### Patch Changes
