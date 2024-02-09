@@ -4,7 +4,7 @@ import path from 'node:path';
 import nodemon from 'nodemon';
 import { inferPackageFormat } from '@fastkit/node-util';
 import { logger } from './logger';
-import { nodeExternalPlugin } from './esbuild-plugin';
+import { externalPlugin } from './esbuild-plugin';
 import { NodepackOptions } from './schemes';
 
 function log(type: 'warn' | 'error', messages: Message[]) {
@@ -25,7 +25,7 @@ interface ResolvedBuildOptions extends BuildOptions {
 }
 
 function resolveOptions(opts: NodepackOptions): ResolvedBuildOptions {
-  const { sourcemap = true, target, define, nodeExternals, minify } = opts;
+  const { sourcemap = true, target, define, minify } = opts;
   let { entry, dest } = opts;
   if (!path.isAbsolute(entry)) {
     entry = path.resolve(entry);
@@ -67,7 +67,7 @@ function resolveOptions(opts: NodepackOptions): ResolvedBuildOptions {
     bundle: true,
     minify,
     sourcemap,
-    plugins: [nodeExternalPlugin(nodeExternals)],
+    plugins: [externalPlugin(opts)],
   };
 }
 

@@ -1,48 +1,79 @@
 import type { Plugin } from 'esbuild';
-import { NodeExternalPluginOptions } from './schemes';
+import { ExternalPluginOptions } from './schemes';
 
-const NON_NODE_MODULE_RE = /^[^./]|^\.[^./]|^\.\.[^/]/;
+// Must not start with "/" or "./" or "../" or "C:\" or be the exact strings ".." or "."
+const NON_NODE_MODULE_RE = /^[A-Z]:[\\/]|^\.{0,2}[/]|^\.{1,2}$/;
+
 const ALIAS_LIKE_RE = /^[~@$]+\//;
 
-export function nodeExternalPlugin(
-  opts: NodeExternalPluginOptions = {},
-): Plugin {
-  const { skipNodeModulesBundle = true, patterns = [] } = opts;
+const tsconfigPathsToRegExp = (paths: Record<string, any>) =>
+  Object.keys(paths || {}).map(
+    (key) => new RegExp(`^${key.replace(/\*/, '.*')}$`),
+  );
+
+const match = (id: string, patterns?: (string | RegExp)[]) => {
+  if (!patterns) return false;
+  return patterns.some((p) => {
+    if (p instanceof RegExp) {
+      return p.test(id);
+    }
+    return id === p || id.startsWith(`${p}/`);
+  });
+};
+
+export function externalPlugin(opts: ExternalPluginOptions = {}): Plugin {
+  const {
+    skipNodeModulesBundle = true,
+    external,
+    noExternal,
+    tsconfigResolvePaths,
+  } = opts;
+  const resolvePatterns = tsconfigPathsToRegExp(tsconfigResolvePaths || {});
   return {
-    name: 'node-external-plugin',
+    name: 'external-plugin',
     setup(build) {
       if (skipNodeModulesBundle) {
-        build.onResolve({ filter: NON_NODE_MODULE_RE }, (args) => {
+        build.onResolve({ filter: /.*/ }, (args) => {
+          // Resolve `paths` from tsconfig
+          if (match(args.path, resolvePatterns)) {
+            return;
+          }
+          // Respect explicit external/noExternal conditions
+          if (match(args.path, noExternal)) {
+            return;
+          }
+          if (match(args.path, external)) {
+            return { external: true };
+          }
           if (ALIAS_LIKE_RE.test(args.path)) {
             return {
               external: false,
             };
           }
-          if (typeof skipNodeModulesBundle === 'function') {
-            const result = skipNodeModulesBundle(args);
-            if (result) return result;
+          // Exclude any other import that looks like a Node module
+          if (!NON_NODE_MODULE_RE.test(args.path)) {
+            return {
+              path: args.path,
+              external: true,
+            };
           }
-          return {
-            path: args.path,
-            external: true,
-          };
+        });
+      } else {
+        build.onResolve({ filter: /.*/ }, (args) => {
+          // Respect explicit external/noExternal conditions
+          if (match(args.path, noExternal)) {
+            return;
+          }
+          if (match(args.path, external)) {
+            return { external: true };
+          }
+          if (ALIAS_LIKE_RE.test(args.path)) {
+            return {
+              external: false,
+            };
+          }
         });
       }
-
-      if (!patterns || patterns.length === 0) return;
-
-      build.onResolve({ filter: /.*/ }, (args) => {
-        const external = patterns.some((p) => {
-          if (p instanceof RegExp) {
-            return p.test(args.path);
-          }
-          return args.path === p;
-        });
-
-        if (external) {
-          return { path: args.path, external };
-        }
-      });
     },
   };
 }

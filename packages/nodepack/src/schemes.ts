@@ -1,13 +1,15 @@
 import type { OnResolveArgs, OnResolveResult } from 'esbuild';
 
-export interface NodeExternalPluginOptions {
+export interface ExternalPluginOptions {
   skipNodeModulesBundle?:
     | boolean
     | ((args: OnResolveArgs) => OnResolveResult | void);
-  patterns?: (string | RegExp)[];
+  external?: (string | RegExp)[];
+  noExternal?: (string | RegExp)[];
+  tsconfigResolvePaths?: Record<string, string[]>;
 }
 
-export interface NodepackOptions {
+export interface NodepackOptions extends ExternalPluginOptions {
   entry: string;
   dest: string;
   minify?: boolean;
@@ -16,5 +18,4 @@ export interface NodepackOptions {
   define?: {
     [key: string]: string;
   };
-  nodeExternals?: NodeExternalPluginOptions;
 }

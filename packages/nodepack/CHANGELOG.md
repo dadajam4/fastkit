@@ -1,5 +1,11 @@
 # @fastkit/nodepack
 
+## 0.15.0
+
+### Minor Changes
+
+- Added the `noExternal` option to prevent any packages from being externalized.
+
 ## 0.14.4
 
 ### Patch Changes
