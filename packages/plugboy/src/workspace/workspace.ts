@@ -284,8 +284,8 @@ export class PlugboyWorkspace {
         if (!deps) return;
         Object.keys(deps).forEach((dep) => {
           const version = deps[dep];
-          if (version.startsWith('workspace:')) {
-            deps[dep] = 'workspace:*';
+          if (version.startsWith(WORKSPACE_SPEC_PREFIX)) {
+            deps[dep] = `${WORKSPACE_SPEC_PREFIX}^`;
           } else if (projectPeerDependencies && projectPeerDependencies[dep]) {
             deps[dep] = projectPeerDependencies[dep];
           }

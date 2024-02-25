@@ -1,5 +1,14 @@
 # @fastkit/vite-kit
 
+## 0.14.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/color-scheme-gen@0.14.6
+  - @fastkit/icon-font-gen@0.14.6
+  - @fastkit/media-match-gen@0.14.6
+
 ## 0.14.5
 
 ### Patch Changes

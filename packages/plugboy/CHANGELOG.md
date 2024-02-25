@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 0.2.3
+
+### Patch Changes
+
+- Changed the version specification for dependencies within the workspace to use `"^"` instead of `"*"` when automatically generating. This change aligns with the behavior of installing workspace packages in pnpm.
+
 ## 0.2.2
 
 ### Patch Changes

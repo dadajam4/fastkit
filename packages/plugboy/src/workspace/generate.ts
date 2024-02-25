@@ -7,7 +7,7 @@ import inquirer from 'inquirer';
 import { getProject } from '../project';
 import { getWorkspace, syncWorkspacePackageFields } from '../workspace';
 import { WorkspacePackageJson, ProjectScriptsTemplate } from '../types';
-import { WORKSPACE_CONFIG_BASENAME } from '../constants';
+import { WORKSPACE_CONFIG_BASENAME, WORKSPACE_SPEC_PREFIX } from '../constants';
 
 export async function generateWorkspace(
   workspaceName?: string,
@@ -132,7 +132,10 @@ export async function generateWorkspace(
     });
     if (!deps.length) return;
     return Object.fromEntries(
-      deps.map((dep) => [`@${project.name}/${dep}`, 'workspace:*']),
+      deps.map((dep) => [
+        `@${project.name}/${dep}`,
+        `${WORKSPACE_SPEC_PREFIX}^`,
+      ]),
     );
   })();
 

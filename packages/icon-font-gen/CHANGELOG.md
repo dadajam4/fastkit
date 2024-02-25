@@ -1,5 +1,12 @@
 # @fastkit/icon-font-gen
 
+## 0.14.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/icon-font@2.0.3
+
 ## 0.14.5
 
 ### Patch Changes

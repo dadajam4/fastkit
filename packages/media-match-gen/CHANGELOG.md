@@ -1,5 +1,12 @@
 # @fastkit/media-match-gen
 
+## 0.14.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/media-match@2.0.3
+
 ## 0.14.5
 
 ### Patch Changes
