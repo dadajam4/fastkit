@@ -60,14 +60,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/color": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*"
+    "@fastkit/color": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^"
   },
   "devDependencies": {
-    "@fastkit/plugboy": "workspace:*"
+    "@fastkit/plugboy": "workspace:^"
   },
   "peerDependencies": {
-    "@fastkit/plugboy": "workspace:*"
+    "@fastkit/plugboy": "workspace:^"
   },
   "buildOptions": {
     "name": "ColorScheme"

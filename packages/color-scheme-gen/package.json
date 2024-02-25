@@ -51,11 +51,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/color": "workspace:*",
-    "@fastkit/color-scheme": "workspace:*",
-    "@fastkit/ev": "workspace:*",
-    "@fastkit/node-util": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/color": "workspace:^",
+    "@fastkit/color-scheme": "workspace:^",
+    "@fastkit/ev": "workspace:^",
+    "@fastkit/node-util": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
     "eta": "^3.2.0",
     "fs-extra": "^11.2.0"
   },

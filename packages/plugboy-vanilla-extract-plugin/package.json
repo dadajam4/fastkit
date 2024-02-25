@@ -57,11 +57,11 @@
     "@vanilla-extract/vite-plugin": "^3.9.5"
   },
   "devDependencies": {
-    "@fastkit/plugboy": "workspace:*",
+    "@fastkit/plugboy": "workspace:^",
     "vite": "^5.1.0"
   },
   "peerDependencies": {
-    "@fastkit/plugboy": "workspace:*",
+    "@fastkit/plugboy": "workspace:^",
     "vite": "^5.1.0"
   },
   "peerDependenciesMeta": {

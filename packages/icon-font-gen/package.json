@@ -64,11 +64,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/ev": "workspace:*",
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/icon-font": "workspace:*",
-    "@fastkit/node-util": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/ev": "workspace:^",
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/icon-font": "workspace:^",
+    "@fastkit/node-util": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
     "cac": "^6.7.14",
     "chokidar": "^3.6.0",
     "fs-extra": "^11.2.0",

@@ -314,10 +314,10 @@
     "@types/markdown-it": "^13.0.7"
   },
   "devDependencies": {
-    "@fastkit/vui": "workspace:*"
+    "@fastkit/vui": "workspace:^"
   },
   "peerDependencies": {
-    "@fastkit/vui": "workspace:*",
+    "@fastkit/vui": "workspace:^",
     "vue": "^3.4.0"
   }
 }

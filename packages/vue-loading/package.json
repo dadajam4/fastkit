@@ -55,11 +55,11 @@
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "workspace:*",
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
-    "@fastkit/vue-color-scheme": "workspace:*",
-    "@fastkit/vue-utils": "workspace:*"
+    "@fastkit/color-scheme": "workspace:^",
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
+    "@fastkit/vue-color-scheme": "workspace:^",
+    "@fastkit/vue-utils": "workspace:^"
   },
   "peerDependencies": {
     "vue": "^3.4.0",

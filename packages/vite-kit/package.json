@@ -51,14 +51,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/color-scheme-gen": "workspace:*",
-    "@fastkit/hashed-sync": "workspace:*",
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/icon-font-gen": "workspace:*",
-    "@fastkit/media-match-gen": "workspace:*",
-    "@fastkit/node-util": "workspace:*",
-    "@fastkit/sprite-images": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*"
+    "@fastkit/color-scheme-gen": "workspace:^",
+    "@fastkit/hashed-sync": "workspace:^",
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/icon-font-gen": "workspace:^",
+    "@fastkit/media-match-gen": "workspace:^",
+    "@fastkit/node-util": "workspace:^",
+    "@fastkit/sprite-images": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^"
   },
   "peerDependencies": {
     "vite": "^5.1.0"

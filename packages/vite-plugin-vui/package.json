@@ -48,17 +48,17 @@
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
-    "@fastkit/tiny-logger": "workspace:*",
-    "@fastkit/vite-kit": "workspace:*",
-    "@fastkit/vui": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:^",
+    "@fastkit/vite-kit": "workspace:^",
+    "@fastkit/vui": "workspace:^",
     "eta": "^3.2.0",
     "fs-extra": "^11.2.0"
   },
   "devDependencies": {
-    "@fastkit/icon-font-gen": "workspace:*"
+    "@fastkit/icon-font-gen": "workspace:^"
   },
   "peerDependencies": {
-    "@fastkit/icon-font-gen": "workspace:*",
+    "@fastkit/icon-font-gen": "workspace:^",
     "vite": "^5.1.0"
   },
   "peerDependenciesMeta": {

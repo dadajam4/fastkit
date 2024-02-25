@@ -52,10 +52,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/ev": "workspace:*",
-    "@fastkit/media-match": "workspace:*",
-    "@fastkit/node-util": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/ev": "workspace:^",
+    "@fastkit/media-match": "workspace:^",
+    "@fastkit/node-util": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
     "fs-extra": "^11.2.0"
   },
   "buildOptions": {

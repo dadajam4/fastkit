@@ -60,10 +60,10 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@fastkit/plugboy": "workspace:*"
+    "@fastkit/plugboy": "workspace:^"
   },
   "peerDependencies": {
-    "@fastkit/plugboy": "workspace:*"
+    "@fastkit/plugboy": "workspace:^"
   },
   "_docs": {
     "scope": "",

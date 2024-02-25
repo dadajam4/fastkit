@@ -51,9 +51,9 @@
     "sass": "^1.70.0"
   },
   "devDependencies": {
-    "@fastkit/plugboy": "workspace:*"
+    "@fastkit/plugboy": "workspace:^"
   },
   "peerDependencies": {
-    "@fastkit/plugboy": "workspace:*"
+    "@fastkit/plugboy": "workspace:^"
   }
 }
