@@ -82,6 +82,7 @@ export class VuiPlugin {
         },
         // eslint-disable-next-line no-shadow
         fn: (el, opts) => {
+          if (window.getComputedStyle(el).scrollMargin) return;
           const duration = opts?.behavior === 'smooth' ? undefined : 0;
           return scroller.toElement(el, {
             offset: $vui.getAutoScrollToElementOffsetTop(),

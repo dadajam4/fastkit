@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.19.10
+
+### Patch Changes
+
+- When scrolling within the Form element, scrolling to elements with set scrollMargin now utilizes native scrolling. While there are currently no form components that support this feature, it is planned to be gradually addressed in future updates.
+
+- Updated dependencies []:
+  - @fastkit/vue-form-control@0.20.4
+
 ## 0.19.9
 
 ### Patch Changes

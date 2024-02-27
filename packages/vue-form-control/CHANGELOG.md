@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.4
+
+### Patch Changes
+
+- When a falsy value is returned in the scroll handler function, the default scroll handler of vue-form-control is now executed. This enables finer control over the necessity of default scrolling within the application.
+
 ## 0.20.3
 
 ### Patch Changes

@@ -5,13 +5,33 @@ export type FormErrorMessageResolver = (
   node?: FormNodeControl,
 ) => string | void;
 
+/**
+ * Scroll option for the form element
+ */
 export interface VueFormScrollOptions {
+  /**
+   * Default scroll option
+   *
+   * @see {@link ScrollIntoViewOptions}
+   */
   options?: ScrollIntoViewOptions;
+  /**
+   * Scroll handler function
+   *
+   * @param element - Scroll target element
+   * @param options - Scroll option
+   * @returns When canceling the default scroll and implementing custom scrolling within the application, return a truthy value.
+   */
   fn?: (element: HTMLElement, options?: ScrollIntoViewOptions) => void;
 }
 
 export interface VueFormServiceOptions {
   errorMessageResolvers?: FormErrorMessageResolver[];
+  /**
+   * Scroll option for the form element
+   *
+   * @see {@link VueFormScrollOptions}
+   */
   scroll?: VueFormScrollOptions;
 }
 
@@ -21,6 +41,11 @@ export interface VueFormServiceOptions {
 export class VueFormService {
   readonly errorMessageResolvers: FormErrorMessageResolver[] = [];
 
+  /**
+   * Scroll option for the form element
+   *
+   * @see {@link VueFormScrollOptions}
+   */
   readonly scroll?: VueFormScrollOptions;
 
   constructor(options: VueFormServiceOptions = {}) {
@@ -56,8 +81,8 @@ export class VueFormService {
     };
     const fn = scroll?.fn;
 
-    if (fn) {
-      return fn(element, _options);
+    if (fn?.(element, _options)) {
+      return;
     }
     return element.scrollIntoView(_options);
   }
