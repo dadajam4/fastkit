@@ -1,5 +1,14 @@
 # @fastkit/vue-action
 
+## 0.3.2
+
+### Patch Changes
+
+- Added a utility for splitting and retrieving Action elements and other attributes.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.2
+
 ## 0.3.1
 
 ### Patch Changes

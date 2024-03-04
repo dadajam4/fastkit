@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "description": "Orchestration tools for building Vue applications.",
   "keywords": [
     "fastkit",
@@ -73,9 +73,9 @@
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/vue-page": "workspace:*",
-    "@fastkit/vue-utils": "workspace:*",
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/vue-page": "workspace:^",
+    "@fastkit/vue-utils": "workspace:^",
     "@rollup/plugin-replace": "^5.0.5",
     "@types/connect": "^3.4.38",
     "@types/express": "^4.17.21",

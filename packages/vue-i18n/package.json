@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-i18n",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "@fastkit/vue-i18n",
   "keywords": [
     "fastkit",
@@ -57,10 +57,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/i18n": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
-    "@fastkit/vue-utils": "workspace:*"
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/i18n": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
+    "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
     "vue": "^3.4.0",

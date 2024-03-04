@@ -1,5 +1,12 @@
 # @fastkit/vue-form-control
 
+## 0.20.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.2
+
 ## 0.20.4
 
 ### Patch Changes

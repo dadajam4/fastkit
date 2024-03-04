@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-click-outside",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "vue-click-outside",
   "keywords": [],
   "repository": {
@@ -44,7 +44,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/vue-utils": "workspace:*"
+    "@fastkit/vue-utils": "workspace:^"
   },
   "peerDependencies": {
     "vue": "^3.4.0"

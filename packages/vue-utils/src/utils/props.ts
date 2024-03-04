@@ -134,12 +134,22 @@ export type HTMLAttributesPropOptions<
 
 const _mock: unknown = undefined;
 
+export const FOCUSABLE_ATTRIBUTES_PROP_KEYS = [
+  'tabindex',
+  'onFocus',
+  'onFocusin',
+  'onFocusout',
+  'onBlur',
+] as const;
+
+export type FocusableAttributesPropKey =
+  (typeof FOCUSABLE_ATTRIBUTES_PROP_KEYS)[number];
+
 /**
  * Focusable Element Events
  */
-export const FOCUSABLE_ATTRIBUTES_PROPS = _mock as HTMLAttributesPropOptions<
-  'tabindex' | 'onFocus' | 'onFocusin' | 'onFocusout' | 'onBlur'
->;
+export const FOCUSABLE_ATTRIBUTES_PROPS =
+  _mock as HTMLAttributesPropOptions<FocusableAttributesPropKey>;
 
 /**
  * Focusable Element Events
@@ -160,34 +170,40 @@ export const KEYBOARDABLE_ATTRIBUTES_PROPS = _mock as HTMLAttributesPropOptions<
  */
 export type KeyboardableAttributesProps = typeof KEYBOARDABLE_ATTRIBUTES_PROPS;
 
+export const POINTABLE_ATTRIBUTES_PROP_KEYS = [
+  'onAuxclick',
+  'onClick',
+  'onContextmenu',
+  'onDblclick',
+  'onMousedown',
+  'onMouseenter',
+  'onMouseleave',
+  'onMousemove',
+  'onMouseout',
+  'onMouseover',
+  'onMouseup',
+  'onTouchcancel',
+  'onTouchend',
+  'onTouchmove',
+  'onTouchstart',
+  'onPointerdown',
+  'onPointermove',
+  'onPointerup',
+  'onPointercancel',
+  'onPointerenter',
+  'onPointerleave',
+  'onPointerover',
+  'onPointerout',
+] as const;
+
+export type PointableAttributesPropKey =
+  (typeof POINTABLE_ATTRIBUTES_PROP_KEYS)[number];
+
 /**
  * Pointer Operable Element Events
  */
-export const POINTABLE_ATTRIBUTES_PROPS = _mock as HTMLAttributesPropOptions<
-  | 'onAuxclick'
-  | 'onClick'
-  | 'onContextmenu'
-  | 'onDblclick'
-  | 'onMousedown'
-  | 'onMouseenter'
-  | 'onMouseleave'
-  | 'onMousemove'
-  | 'onMouseout'
-  | 'onMouseover'
-  | 'onMouseup'
-  | 'onTouchcancel'
-  | 'onTouchend'
-  | 'onTouchmove'
-  | 'onTouchstart'
-  | 'onPointerdown'
-  | 'onPointermove'
-  | 'onPointerup'
-  | 'onPointercancel'
-  | 'onPointerenter'
-  | 'onPointerleave'
-  | 'onPointerover'
-  | 'onPointerout'
->;
+export const POINTABLE_ATTRIBUTES_PROPS =
+  _mock as HTMLAttributesPropOptions<PointableAttributesPropKey>;
 
 /**
  * Pointer Operable Element Events

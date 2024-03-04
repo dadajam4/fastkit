@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-stack",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "description": "Library for displaying dialogs, tooltips and menus in Vue applications.",
   "keywords": [
     "fastkit",
@@ -59,15 +59,15 @@
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
-    "@fastkit/dom": "workspace:*",
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
-    "@fastkit/vue-body-scroll-lock": "workspace:*",
-    "@fastkit/vue-click-outside": "workspace:*",
-    "@fastkit/vue-keyboard": "workspace:*",
-    "@fastkit/vue-resize": "workspace:*",
-    "@fastkit/vue-transitions": "workspace:*",
-    "@fastkit/vue-utils": "workspace:*"
+    "@fastkit/dom": "workspace:^",
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
+    "@fastkit/vue-body-scroll-lock": "workspace:^",
+    "@fastkit/vue-click-outside": "workspace:^",
+    "@fastkit/vue-keyboard": "workspace:^",
+    "@fastkit/vue-resize": "workspace:^",
+    "@fastkit/vue-transitions": "workspace:^",
+    "@fastkit/vue-utils": "workspace:^"
   },
   "peerDependencies": {
     "vue": "^3.4.0",

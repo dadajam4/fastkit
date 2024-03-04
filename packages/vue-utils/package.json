@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "description": "Utilities for efficient development of Vue applications.",
   "keywords": [
     "fastkit",
@@ -51,9 +51,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/ts-type-utils": "workspace:*",
-    "@fastkit/visibility": "workspace:*"
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/ts-type-utils": "workspace:^",
+    "@fastkit/visibility": "workspace:^"
   },
   "devDependencies": {
     "vue-router": "^4.2.0"

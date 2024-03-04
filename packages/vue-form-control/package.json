@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-form-control",
-  "version": "0.20.4",
+  "version": "0.20.5",
   "description": "Basic form implementation library for Vue applications.",
   "keywords": [
     "fastkit",
@@ -54,12 +54,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/debounce": "workspace:*",
-    "@fastkit/dom": "workspace:*",
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/rules": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
-    "@fastkit/vue-utils": "workspace:*",
+    "@fastkit/debounce": "workspace:^",
+    "@fastkit/dom": "workspace:^",
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/rules": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
+    "@fastkit/vue-utils": "workspace:^",
     "imask": "^7.4.0"
   },
   "devDependencies": {

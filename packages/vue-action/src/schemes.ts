@@ -8,9 +8,11 @@ import type {
   VNodeChild,
 } from 'vue';
 import type { RouterLinkProps, useLink, Router } from 'vue-router';
-import type {
-  PointableAttributesProps,
-  FocusableAttributesProps,
+import {
+  type PointableAttributesProps,
+  type FocusableAttributesProps,
+  POINTABLE_ATTRIBUTES_PROP_KEYS,
+  FOCUSABLE_ATTRIBUTES_PROP_KEYS,
 } from '@fastkit/vue-utils';
 
 type RouterLinkSlotPayload = UnwrapRef<ReturnType<typeof useLink>>;
@@ -33,9 +35,39 @@ export interface ActionableRouterLinkProps
     Omit<RouterLinkProps, 'to'>,
     CustomRouterLinkProps {}
 
+const ROUTER_LINK_PROPS = [
+  'to',
+  'replace',
+  'custom',
+  'activeClass',
+  'exactActiveClass',
+  'ariaCurrentValue',
+] as const;
+
+export const isRouterLinkProp = (
+  source: unknown,
+): source is RouterLinkPropKey =>
+  ROUTER_LINK_PROPS.includes(source as RouterLinkPropKey);
+
 export type ActionableRouterLinkPropKey = keyof ActionableRouterLinkProps;
 
 export type CustomRouterLinkPropKey = keyof CustomRouterLinkProps;
+
+const CUSTOM_ROUTER_LINK_PROPS: CustomRouterLinkPropKey[] = [];
+
+export function registerCustomRouterLinkProps(...props: any[]) {
+  CUSTOM_ROUTER_LINK_PROPS.push(...(props as CustomRouterLinkPropKey[]));
+}
+
+export const isCustomRouterLinkProp = (
+  source: unknown,
+): source is CustomRouterLinkPropKey =>
+  CUSTOM_ROUTER_LINK_PROPS.includes(source as CustomRouterLinkPropKey);
+
+export const isActionableRouterLinkPropKey = (
+  source: unknown,
+): source is ActionableRouterLinkPropKey =>
+  isRouterLinkProp(source) || isCustomRouterLinkProp(source);
 
 /** Attributes for actionable components */
 export interface ActionableAttrs extends ActionableRouterLinkProps {
@@ -137,6 +169,36 @@ export interface ActionableAttrs extends ActionableRouterLinkProps {
   guard?: ActionableGuard;
 }
 
+export type ActionableAttrsKey = keyof ActionableAttrs;
+
+const ACTIONABLE_ATTRS_PROPS = [
+  'disabledClass',
+  'hasActionClass',
+  'actionableClass',
+  'guardInProgressClass',
+  'href',
+  'target',
+  'rel',
+  'name',
+  'hreflang',
+  'download',
+  'media',
+  'ping',
+  'referrerpolicy',
+  'type',
+  'title',
+  'disabled',
+  'guard',
+] as const;
+
+export const isActionableAttrsKey = (
+  source: unknown,
+): source is ActionableAttrsKey =>
+  isActionableRouterLinkPropKey(source) ||
+  ACTIONABLE_ATTRS_PROPS.includes(
+    source as (typeof ACTIONABLE_ATTRS_PROPS)[number],
+  );
+
 type ActionableAttrsRequired = Required<ActionableAttrs>;
 
 type ActionableAttrsProps = {
@@ -162,11 +224,49 @@ export interface ActionableInheritPropOptions
   linkFallbackTag: PropType<string | (() => string | undefined)>;
 }
 
+export const ACTIONABLE_INHERIT_PROPS = [
+  'tag',
+  'linkFallbackTag',
+  ...POINTABLE_ATTRIBUTES_PROP_KEYS,
+  ...FOCUSABLE_ATTRIBUTES_PROP_KEYS,
+] as const;
+
+export type ActionableInheritPropKey =
+  | ActionableAttrsKey
+  | (typeof ACTIONABLE_INHERIT_PROPS)[number];
+
+export const isActionableInheritPropKey = (
+  source: unknown,
+): source is ActionableInheritPropKey =>
+  isActionableAttrsKey(source) ||
+  ACTIONABLE_INHERIT_PROPS.includes(
+    source as (typeof ACTIONABLE_INHERIT_PROPS)[number],
+  );
+
 export const actionableInheritProps: ActionableInheritPropOptions = {} as any;
 
 export type ActionableInheritProps = ExtractPropTypes<
   typeof actionableInheritProps
 >;
+
+export interface SplittedActionableAttrs {
+  action: {
+    [K in ActionableInheritPropKey]?: ActionableInheritProps[K];
+  };
+  splitted: Record<string, any>;
+}
+
+export function splitActionableAttrs(
+  attrs: Record<string, any>,
+): SplittedActionableAttrs {
+  const action: Record<string, any> = {};
+  const splitted: Record<string, any> = {};
+  for (const [key, value] of Object.entries(attrs)) {
+    const bucket = isActionableInheritPropKey(key) ? action : splitted;
+    bucket[key] = value;
+  }
+  return { action, splitted };
+}
 
 /** Actionable Tags */
 export type ActionableTag = any;

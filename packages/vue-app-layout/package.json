@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-app-layout",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "description": "Component implementation to control the overall layout of the Vue application.",
   "keywords": [
     "fastkit",
@@ -53,12 +53,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
-    "@fastkit/vue-body-scroll-lock": "workspace:*",
-    "@fastkit/vue-resize": "workspace:*",
-    "@fastkit/vue-scroller": "workspace:*",
-    "@fastkit/vue-utils": "workspace:*"
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
+    "@fastkit/vue-body-scroll-lock": "workspace:^",
+    "@fastkit/vue-resize": "workspace:^",
+    "@fastkit/vue-scroller": "workspace:^",
+    "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
     "vue": "^3.4.0",

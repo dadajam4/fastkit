@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot-i18n",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Library for multilingual localization of vot applications.",
   "keywords": [
     "fastkit",
@@ -57,14 +57,14 @@
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
-    "@fastkit/accept-language": "workspace:*",
-    "@fastkit/vue-i18n": "workspace:*"
+    "@fastkit/accept-language": "workspace:^",
+    "@fastkit/vue-i18n": "workspace:^"
   },
   "devDependencies": {
-    "@fastkit/vot": "workspace:*"
+    "@fastkit/vot": "workspace:^"
   },
   "peerDependencies": {
-    "@fastkit/vot": "workspace:*"
+    "@fastkit/vot": "workspace:^"
   },
   "_docs": {
     "scope": "vot",
