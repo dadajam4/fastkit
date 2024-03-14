@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cookies",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "Helper implementation for universal server/browser control of cookie headers.",
   "keywords": [
     "fastkit",

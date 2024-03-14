@@ -1,5 +1,12 @@
 # @fastkit/sprite-images
 
+## 0.14.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.14.2
+
 ## 0.14.2
 
 ### Patch Changes

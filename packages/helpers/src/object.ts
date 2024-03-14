@@ -305,6 +305,10 @@ export function mixin<T extends object, U extends object>(
       const target = Reflect.has(trait, propertyKey) ? trait : _target;
       return Reflect.get(target, propertyKey, receiver);
     },
+    set: (_target, propertyKey, newValue, receiver) => {
+      const target = Reflect.has(trait, propertyKey) ? trait : _target;
+      return Reflect.set(target, propertyKey, newValue, receiver);
+    },
     has: (target, propertyKey) =>
       Reflect.has(trait, propertyKey) || Reflect.has(target, propertyKey),
     ownKeys: (target) =>

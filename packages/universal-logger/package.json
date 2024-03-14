@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/universal-logger",
-  "version": "0.14.3",
+  "version": "0.14.4",
   "description": "Pluggable and universal log output library for any server/browser execution environment.",
   "keywords": [
     "fastkit",

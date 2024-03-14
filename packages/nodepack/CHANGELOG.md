@@ -1,5 +1,13 @@
 # @fastkit/nodepack
 
+## 0.15.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.14.2
+  - @fastkit/node-util@0.14.6
+
 ## 0.15.1
 
 ### Patch Changes

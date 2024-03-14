@@ -1,5 +1,13 @@
 # @fastkit/cache-control
 
+## 0.14.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.14.2
+  - @fastkit/cloner@0.2.2
+
 ## 0.14.1
 
 ### Patch Changes
