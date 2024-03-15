@@ -51,7 +51,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:*"
+    "@fastkit/helpers": "workspace:^"
   },
   "_docs": {
     "scope": "",

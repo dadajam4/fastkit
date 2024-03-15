@@ -52,8 +52,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/ev": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/ev": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
     "chokidar": "^3.6.0",
     "fs-extra": "^11.2.0",
     "spritesmith": "^3.4.1"

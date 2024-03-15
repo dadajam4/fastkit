@@ -44,6 +44,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:*"
+    "@fastkit/helpers": "workspace:^"
   }
 }

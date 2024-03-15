@@ -51,7 +51,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/tiny-logger": "workspace:*"
+    "@fastkit/tiny-logger": "workspace:^"
   },
   "buildOptions": {
     "name": "Color"

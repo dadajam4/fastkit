@@ -52,10 +52,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/cloner": "workspace:*",
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/json": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*"
+    "@fastkit/cloner": "workspace:^",
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/json": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^"
   },
   "devDependencies": {
     "@datadog/browser-logs": "^5.9.0"

@@ -51,9 +51,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/ev": "workspace:*",
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/ev": "workspace:^",
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
     "cookie": "^0.6.0",
     "set-cookie-parser": "^2.6.0"
   },

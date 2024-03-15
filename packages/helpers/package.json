@@ -51,7 +51,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/ts-type-utils": "workspace:*"
+    "@fastkit/ts-type-utils": "workspace:^"
   },
   "buildOptions": {
     "name": "Helpers"

@@ -52,8 +52,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/node-util": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/node-util": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
     "esbuild": "^0.19.12",
     "nodemon": "^3.0.3"
   },

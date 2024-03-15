@@ -54,7 +54,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/tiny-logger": "workspace:^",
     "folder-hash": "^4.0.4",
     "fs-extra": "^11.2.0",
     "imagemin": "^8.0.1",

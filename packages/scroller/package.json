@@ -51,10 +51,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/ev": "workspace:*",
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
-    "@fastkit/visibility": "workspace:*",
+    "@fastkit/ev": "workspace:^",
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
+    "@fastkit/visibility": "workspace:^",
     "bezier-easing": "^2.1.0"
   },
   "buildOptions": {

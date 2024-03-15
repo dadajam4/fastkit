@@ -52,8 +52,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*"
+    "@fastkit/helpers": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^"
   },
   "_docs": {
     "scope": "",

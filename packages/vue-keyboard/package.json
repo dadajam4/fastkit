@@ -44,7 +44,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/keyboard": "workspace:*"
+    "@fastkit/keyboard": "workspace:^"
   },
   "peerDependencies": {
     "vue": "^3.4.0"

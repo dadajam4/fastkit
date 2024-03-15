@@ -53,7 +53,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:*"
+    "@fastkit/helpers": "workspace:^"
   },
   "devDependencies": {
     "axios": "^1.6.7"

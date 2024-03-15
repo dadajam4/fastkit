@@ -51,8 +51,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/ev": "workspace:*",
-    "@fastkit/tiny-logger": "workspace:*",
+    "@fastkit/ev": "workspace:^",
+    "@fastkit/tiny-logger": "workspace:^",
     "chokidar": "^3.6.0",
     "esbuild": "^0.19.12",
     "execa": "^8.0.1",
