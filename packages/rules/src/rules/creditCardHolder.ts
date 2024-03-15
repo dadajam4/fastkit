@@ -5,5 +5,5 @@ export const creditCardHolder = createRule({
   name: 'creditCardHolder',
   validate: isCreditCardHolder,
   message:
-    '半角英数、半角記号（スペース、コンマ、ハイフン、ピリオド、スラッシュ）のみ入力可能です。',
+    'You can only input alphanumeric characters and half-width symbols (hyphen, apostrophe, period, underscore, comma, slash, space).',
 });

@@ -1,5 +1,11 @@
 # @fastkit/rules
 
+## 0.14.3
+
+### Patch Changes
+
+- Updated messages for `alphaSpaces` and `creditCardHolder`.
+
 ## 0.14.2
 
 ### Patch Changes

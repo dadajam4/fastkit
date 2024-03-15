@@ -284,7 +284,7 @@ export function isKanaAlphaNumeric(value: unknown): value is string {
   return typeof value === 'string' && kanaAlphaNumericRe.test(value);
 }
 
-export const creditCardHolderRe = /^[a-z\d ,\-./]+$/i;
+export const creditCardHolderRe = /^[a-z\d ,\-_'./]+$/i;
 export function isCreditCardHolder(value: unknown) {
   return typeof value === 'string' && creditCardHolderRe.test(value);
 }
