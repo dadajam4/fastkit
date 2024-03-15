@@ -50,6 +50,9 @@ export type RuleValidationResultValue =
   /** When the verification is considered successful and the subsequent verifications are skipped */
   | typeof VALIDATE_CANCEL_SYMBOL
 
+  /** When verification fails */
+  | string
+
   /** When there is a nested validation result object */
   | ValidationError[];
 
@@ -296,6 +299,12 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
       const children = Array.isArray(result) ? result : undefined;
 
       if (result === VALIDATE_CANCEL_SYMBOL) return VALIDATE_CANCEL_SYMBOL;
+      if (typeof result === 'string') {
+        return {
+          ...baseError,
+          message: result,
+        };
+      }
       if (!result || children) {
         // eslint-disable-next-line no-shadow
         const message =

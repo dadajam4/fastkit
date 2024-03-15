@@ -1,5 +1,11 @@
 # @fastkit/rules
 
+## 0.14.4
+
+### Patch Changes
+
+- Implemented the ability to return messages directly from the validation function.
+
 ## 0.14.3
 
 ### Patch Changes
