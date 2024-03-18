@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.10
+
+### Patch Changes
+
+- Added utility `mergeFormNodeRules` for merging rules of FormNode.
+
 ## 0.20.9
 
 ### Patch Changes

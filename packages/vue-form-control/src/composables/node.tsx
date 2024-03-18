@@ -57,6 +57,37 @@ import type { VueFormService } from '../service';
 
 export type RecursiveVerifiableRuleOrFn = RecursiveArray<VerifiableRuleOrFn>;
 
+export type RecursiveVerifiableRuleOrFnArray = Exclude<
+  RecursiveVerifiableRuleOrFn,
+  VerifiableRuleOrFn
+>;
+
+const rulesToArray = (
+  rules: RecursiveVerifiableRuleOrFn | undefined,
+  shallowCopy: boolean = false,
+): RecursiveVerifiableRuleOrFnArray => {
+  if (!rules) return [];
+  // eslint-disable-next-line no-nested-ternary
+  return Array.isArray(rules) ? (shallowCopy ? rules.slice() : rules) : [rules];
+};
+
+/**
+ * Merge two specified recursive rule specifications into a single array and return it.
+ *
+ * @param baseRules - Base rules
+ * @param mergeRules - Merge rules
+ * @returns Array of merged rules
+ */
+export function mergeFormNodeRules(
+  baseRules: RecursiveVerifiableRuleOrFn | undefined,
+  mergeRules: RecursiveVerifiableRuleOrFn | undefined,
+): RecursiveVerifiableRuleOrFnArray {
+  const _mergeRules = rulesToArray(mergeRules);
+  if (!baseRules) return _mergeRules;
+  const _baseRules = rulesToArray(baseRules);
+  return [..._baseRules, ..._mergeRules];
+}
+
 export type FormNodeType = string | number | symbol;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
