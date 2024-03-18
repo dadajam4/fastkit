@@ -1,5 +1,14 @@
 # @fastkit/vue-color-scheme
 
+## 0.15.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.14.3
+  - @fastkit/vue-utils@0.15.4
+  - @fastkit/color-scheme@2.0.5
+
 ## 0.15.5
 
 ### Patch Changes

@@ -1,5 +1,19 @@
 # @fastkit/vite-kit
 
+## 0.14.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.14.3
+  - @fastkit/icon-font-gen@0.14.8
+  - @fastkit/tiny-logger@0.14.3
+  - @fastkit/color-scheme-gen@0.14.8
+  - @fastkit/hashed-sync@0.14.3
+  - @fastkit/media-match-gen@0.14.8
+  - @fastkit/node-util@0.14.7
+  - @fastkit/sprite-images@0.14.4
+
 ## 0.14.7
 
 ### Patch Changes

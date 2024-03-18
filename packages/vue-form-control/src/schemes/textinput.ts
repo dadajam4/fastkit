@@ -1,4 +1,9 @@
-import { nilToEmptyString, toHalfWidth, toSingleSpace } from '@fastkit/helpers';
+import {
+  nilToEmptyString,
+  removeSpace,
+  toHalfWidth,
+  toSingleSpace,
+} from '@fastkit/helpers';
 
 export const TEXT_INPUT_TYPES = [
   'color',
@@ -40,7 +45,7 @@ function defineFinalizers<T extends string>(
 
 export const BUILTIN_TEXT_FINALIZERS = defineFinalizers({
   trim: (v) => nilToEmptyString(v).trim(),
-  removeSpace: (v) => nilToEmptyString(v).replace(/\s/g, ''),
+  removeSpace: (v) => removeSpace(v),
   upper: (v) => nilToEmptyString(v).toUpperCase(),
   lower: (v) => nilToEmptyString(v).toLowerCase(),
   halfWidth: toHalfWidth,

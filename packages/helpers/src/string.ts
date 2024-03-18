@@ -13,6 +13,17 @@ const FULL_WIDTH_SYMBOL_RE = /[！-～]/g;
 // eslint-disable-next-line no-irregular-whitespace
 const FULL_WIDTH_SPACE_RE = /　/g;
 
+const REMOVE_SPACE_RE = /[\s\t]/g;
+
+/**
+ * Remove all spaces and tab characters
+ *
+ * @param source - String to be converted
+ * @returns A string with spaces removed.
+ */
+export const removeSpace = (source: string | null | undefined): string =>
+  nilToEmptyString(source).replace(REMOVE_SPACE_RE, '');
+
 /**
  * Convert string to lowercase
  *
@@ -21,7 +32,7 @@ const FULL_WIDTH_SPACE_RE = /　/g;
  * @param source - String to be converted
  * @returns Converted string
  */
-export function toHalfWidth(source?: string | null) {
+export function toHalfWidth(source: string | null | undefined) {
   return nilToEmptyString(source)
     .replace(FULL_WIDTH_SYMBOL_RE, (_source) =>
       String.fromCharCode(_source.charCodeAt(0) - 0xfee0),
@@ -34,7 +45,7 @@ export function toHalfWidth(source?: string | null) {
  * @param source - String to be converted
  * @returns Converted string
  */
-export function toSingleSpace(source?: string | null) {
+export function toSingleSpace(source: string | null | undefined) {
   return nilToEmptyString(source).replace(/([\s]+)/g, (m) => m.charAt(0));
 }
 

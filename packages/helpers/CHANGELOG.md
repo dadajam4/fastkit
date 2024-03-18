@@ -1,5 +1,11 @@
 # @fastkit/helpers
 
+## 0.14.3
+
+### Patch Changes
+
+- Added a method `removeSpace` for removing all spaces and tab characters.
+
 ## 0.14.2
 
 ### Patch Changes
