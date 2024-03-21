@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.3.5
+
+### Patch Changes
+
+- Fixed an issue where the `guardInProgressClass` was not being applied to elements.
+
 ## 0.3.4
 
 ### Patch Changes

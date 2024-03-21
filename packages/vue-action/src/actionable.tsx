@@ -78,6 +78,7 @@ export function useActionable(
       delete ctxAttrs.disabledClass;
       delete ctxAttrs.hasActionClass;
       delete ctxAttrs.actionableClass;
+      delete ctxAttrs.guardInProgressClass;
       delete ctxAttrs.tag;
       delete ctxAttrs.href;
       delete ctxAttrs.target;
