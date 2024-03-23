@@ -31,8 +31,15 @@ export interface PropMeta extends BaseMeta {
   docs: MetaDoc[];
 }
 
-export interface EventMeta extends BaseMeta {
+export type EventType = {
+  /** List of signatures */
+  names: string[];
+  // elements?: ParamType[];
+};
+
+export interface EventMeta extends Omit<BaseMeta, 'type'> {
   name: `on${string}`;
+  type: EventType;
 }
 
 export interface SlotMeta extends BaseMeta {

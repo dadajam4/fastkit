@@ -120,7 +120,9 @@ export function serializeDefineComponent(
     _events.push({
       name: emitLike.name as `on${string}`,
       description: emitLike.description,
-      type: emitLike.type,
+      type: {
+        names: [emitLike.type.name],
+      },
       docs: emitLike.docs,
       sourceFile: emitLike.sourceFile,
     });

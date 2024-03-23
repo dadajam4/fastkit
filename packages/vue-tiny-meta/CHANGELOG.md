@@ -1,5 +1,11 @@
 # @fastkit/vue-tiny-meta
 
+## 0.3.0
+
+### Minor Changes
+
+- Achieved compatibility with events from vue-doc-gen.
+
 ## 0.2.2
 
 ### Patch Changes

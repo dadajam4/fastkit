@@ -72,7 +72,7 @@ export function serializeEmits(
       name: `on${capitalize(name)}`,
       description: docs[0]?.description.text,
       type: {
-        name: text,
+        names: [text],
       },
       docs,
       sourceFile,
