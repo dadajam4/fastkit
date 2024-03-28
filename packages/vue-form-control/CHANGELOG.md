@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.11
+
+### Patch Changes
+
+- Modified the condition of `isAnySelected` in `DateInputNodeControl` from AND to OR.
+
 ## 0.20.10
 
 ### Patch Changes

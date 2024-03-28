@@ -255,7 +255,7 @@ export class DateInputNodeControl<
     });
 
     this._isAnySelected = computed(() =>
-      this.isRange ? !!this.startValue && !!this.endValue : !!this.value,
+      this.isRange ? !!this.startValue || !!this.endValue : !!this.value,
     );
   }
 
