@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.12
+
+### Patch Changes
+
+- Fixed a bug where an `invalid` node directly under FormNode was not recognized as invalidChildren.
+
 ## 0.20.11
 
 ### Patch Changes

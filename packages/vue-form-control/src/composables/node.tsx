@@ -989,7 +989,7 @@ export class FormNodeControl<
     );
 
     this._invalidChildren = computed(() =>
-      this.children.filter((node) => node.hasMyError),
+      this.children.filter((node) => node.invalid),
     );
 
     this._errorCount = computed(() => {
