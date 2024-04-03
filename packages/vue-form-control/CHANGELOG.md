@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.14
+
+### Patch Changes
+
+- Fixed SelectorItem disabled condition.
+
 ## 0.20.13
 
 ### Patch Changes
