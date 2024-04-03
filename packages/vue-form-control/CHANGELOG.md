@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.13
+
+### Patch Changes
+
+- Corrected an issue where the input element of `SelectorItem` remained active when `viewonly` was enabled.
+
 ## 0.20.12
 
 ### Patch Changes
