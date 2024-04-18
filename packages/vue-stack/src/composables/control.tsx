@@ -338,10 +338,12 @@ export function useStackControl(
 
   const availableEvents = {
     onClick: (ev: MouseEvent) => {
+      if (props.disabled) return;
       setActivatorByEvent(ev);
       control.toggle();
     },
     onMouseenter: (ev: MouseEvent) => {
+      if (props.disabled) return;
       mouseStates.onEnterActivator();
       if (control.transitioning) return;
       privateApi.clearDelay();
@@ -353,36 +355,16 @@ export function useStackControl(
     },
     onMouseleave: (ev: MouseEvent) => {
       privateApi.clearDelay();
-      // if (!control.isActive) return;
       mouseStates.onLeaveActivator();
-      // privateApi.runDelay('closeDelay', () => {
-      //   if (!control.isActive) return;
-      //   const $content = contentRef.value;
-      //   const relatedTarget = ev.relatedTarget as HTMLElement;
-      //   if (
-      //     $content &&
-      //     (relatedTarget === $content || $content.contains(relatedTarget))
-      //   ) {
-      //     return;
-      //   }
-      //   const { activator } = state;
-
-      //   if (
-      //     activator &&
-      //     (relatedTarget === activator || activator.contains(relatedTarget))
-      //   ) {
-      //     return;
-      //   }
-      //   control.close();
-      // });
     },
     onContextmenu: (ev: MouseEvent) => {
-      if (ev.defaultPrevented) return;
+      if (props.disabled || ev.defaultPrevented) return;
       ev.preventDefault();
       setActivatorByEvent(ev);
       control.toggle();
     },
     onFocus: (ev: FocusEvent) => {
+      if (props.disabled) return;
       if (
         SUPPORTS_FOCUS_VISIBLE &&
         !(ev.target as HTMLElement).matches(':focus-visible')
@@ -538,7 +520,7 @@ export function useStackControl(
       }
     },
     setIsActive(value, withEmit = true) {
-      if (state.isActive === value) return;
+      if (state.isActive === value || (value && props.disabled)) return;
       privateApi.clearTimeoutId();
       value && triggerContentMountedTick();
       state.isActive = value;
@@ -774,6 +756,9 @@ export function useStackControl(
     },
     get guardInProgress() {
       return !!state.guardInProgressType;
+    },
+    get disabled() {
+      return props.disabled;
     },
     setActivator(query) {
       activatorEl.value = getActivator(query);
@@ -1015,6 +1000,13 @@ export function useStackControl(
       }
     },
     { immediate: true },
+  );
+
+  watch(
+    () => props.disabled,
+    (disabled) => {
+      disabled && control.close({ force: true });
+    },
   );
 
   function triggerContentMountedTick(count = 0) {

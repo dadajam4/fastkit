@@ -1,5 +1,14 @@
 # @fastkit/vue-stack
 
+## 0.16.6
+
+### Patch Changes
+
+- I've added the following features to the stack:
+
+  - Added `disabled` option to the stack.
+  - Added missing stack control type to MenuAPI.
+
 ## 0.16.5
 
 ### Patch Changes

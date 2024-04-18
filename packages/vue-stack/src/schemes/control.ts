@@ -222,6 +222,10 @@ export interface VStackControl {
   /** Stack type */
   readonly stackType?: string | symbol;
   /**
+   * Inactivate the stack and disable all display processing
+   */
+  readonly disabled: boolean;
+  /**
    * If the asynchronous resolution handler is in progress, its type.
    */
   readonly guardInProgressType: null | 'cancel' | 'resolve';
@@ -678,6 +682,10 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
       type: Boolean,
       default: defaultPersistent,
     },
+    /**
+     * Inactivate the stack and disable all display processing
+     */
+    disabled: Boolean,
     /** z index */
     zIndex: rawNumberProp(0),
     /** Timeout setting (milliseconds) */

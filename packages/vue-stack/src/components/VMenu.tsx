@@ -27,6 +27,7 @@ import {
   createStackableDefine,
   MergeStackBaseSlots,
   StackableTabCloseSpec,
+  VStackControl,
 } from '../schemes';
 import {
   DefineStackableSettings,
@@ -301,6 +302,7 @@ export interface VMenuState {
 }
 
 export interface MenuAPI {
+  readonly control: VStackControl;
   readonly attrs: Record<string, any>;
   readonly pageXOffset: number;
   readonly pageYOffset: number;
