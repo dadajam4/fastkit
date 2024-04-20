@@ -38,6 +38,12 @@ export function setDefaultRouterLink(
 
 const noop = () => {};
 
+const isRightClick = (ev: MouseEvent) =>
+  ev.button !== undefined && ev.button !== 0;
+
+const isWithControlKey = (ev: MouseEvent) =>
+  !!(ev.metaKey || ev.altKey || ev.ctrlKey || ev.shiftKey);
+
 const unWrapFn = (
   source: string | undefined | (() => string | undefined),
 ): string | undefined => (typeof source === 'function' ? source() : source);
@@ -126,11 +132,16 @@ export function useActionable(
       let action: ((ev: MouseEvent) => void) | undefined;
 
       const handleClick = async (ev: MouseEvent): Promise<void> => {
-        // don't action on right click
-        if (ev.button !== undefined && ev.button !== 0) return;
+        if (ev.defaultPrevented || isRightClick(ev)) return;
+        if (href || to) {
+          if (isWithControlKey(ev) || props.target) {
+            return;
+          }
+          ev?.preventDefault();
+        }
 
         if (isDisabled || guard) {
-          ev.preventDefault();
+          ev.preventDefault?.();
         }
         if (isDisabled) return;
 
@@ -201,11 +212,6 @@ export function useActionable(
             // avoid uncaught errors are they are logged anyway
           ).catch(noop);
 
-        const _handleClick = (ev: MouseEvent) => {
-          ev.preventDefault();
-          handleClick(ev);
-        };
-
         const slots: ActionableRouterLinkSettings['slots'] = (children) => ({
           // eslint-disable-next-line no-shadow
           default: ({ href, isActive, isExactActive }) => {
@@ -214,7 +220,7 @@ export function useActionable(
               isExactActive && exactActiveClass,
             ];
             return (
-              <a {...attrs} class={classes} href={href} onClick={_handleClick}>
+              <a {...attrs} class={classes} href={href} onClick={handleClick}>
                 {children}
               </a>
             );
@@ -236,9 +242,7 @@ export function useActionable(
 
         if (guard || onClick) {
           action = (ev) => {
-            const isForceBlank =
-              ev.shiftKey || ev.ctrlKey || ev.metaKey || ev.altKey;
-            const target = isForceBlank ? '_blank' : dynamicAttrs.target;
+            const { target } = dynamicAttrs;
             if (!target) {
               location.href = href;
             } else {

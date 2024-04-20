@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.3.6
+
+### Patch Changes
+
+- Fixed issue where clicking using the target attribute or control keys did not behave as expected.
+
 ## 0.3.5
 
 ### Patch Changes
