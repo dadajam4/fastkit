@@ -77,7 +77,8 @@ export function resolveRelativePath(base: string, relativePath: string) {
 }
 
 /**
- * 指定のロケーションにパス文字列が検出され相対パスが含まれていた場合、指定の現在のパスとマージしロケーション情報を正規化します
+ * If a path string is detected at the specified location and it contains a relative path, it merges with the current specified path and normalizes the location information.
+ *
  * @param raw - User-level route location
  * @param currentPath - current path
  * @returns resolved location

@@ -1,5 +1,12 @@
 # @fastkit/vui
 
+## 0.19.24
+
+### Patch Changes
+
+- Updated dependencies [[`d7101e2`](https://github.com/dadajam4/fastkit/commit/d7101e2a5724f8f578c253c4f98de715b0949825)]:
+  - @fastkit/vue-action@0.3.7
+
 ## 0.19.23
 
 ### Patch Changes

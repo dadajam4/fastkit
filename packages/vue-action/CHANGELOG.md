@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.3.7
+
+### Patch Changes
+
+- [`d7101e2`](https://github.com/dadajam4/fastkit/commit/d7101e2a5724f8f578c253c4f98de715b0949825) Thanks [@dadajam4](https://github.com/dadajam4)! - Added a helper function registerActionableAttrsResolver to customize all action attributes in the application.
+
 ## 0.3.6
 
 ### Patch Changes
