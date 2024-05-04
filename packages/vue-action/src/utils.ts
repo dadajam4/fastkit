@@ -1,8 +1,8 @@
 import {
-  RouteLocationPathRaw,
-  LocationQueryRaw,
-  RouteLocationRaw,
-  RouteLocationNamedRaw,
+  type RouteLocationPathRaw,
+  type LocationQueryRaw,
+  type RouteLocationRaw,
+  type RouteLocationNamedRaw,
 } from 'vue-router';
 
 function locationStringToPathRaw(locationStr: string): RouteLocationPathRaw {

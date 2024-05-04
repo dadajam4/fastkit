@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import { defineSlots, defineTypedComponent } from '@fastkit/vue-utils';
 import { useActionable } from '../actionable';
-import { actionableInheritProps, Actionable } from '../schemes';
+import { actionableInheritProps, Actionable } from '../schema';
 
 // @TODO Unable to resolve dts for `navigationableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

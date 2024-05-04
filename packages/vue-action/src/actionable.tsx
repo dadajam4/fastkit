@@ -1,6 +1,6 @@
-import { SetupContext, computed, mergeProps, ref } from 'vue';
+import { type SetupContext, computed, mergeProps, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
-import {
+import type {
   UseActionableOptions,
   Actionable,
   ActionableInheritProps,
@@ -9,9 +9,10 @@ import {
   RouterLinkPropKey,
   CustomRouterLinkPropKey,
   ActionableRouterLinkSettings,
-} from './schemes';
+} from './schema';
 import { resolveRelativeLocationRaw } from './utils';
 import { DEFAULT_ACTIVE_CLASS, DEFAULT_EXACT_ACTIVE_CLASS } from './constants';
+import { resolveActionableAttrs } from './resolver';
 
 let _defaultRouterLink = RouterLink;
 
@@ -69,7 +70,7 @@ export function useActionable(
   const guardInProgress = ref(false);
   const states = computed<Omit<Actionable, 'guardInProgress' | 'router'>>(
     () => {
-      const ctxAttrs = { ...setupContext.attrs } as any;
+      const ctxAttrs = resolveActionableAttrs(setupContext.attrs, router);
       const props: ActionableInheritProps = { ...ctxAttrs };
 
       const disabledClass = unWrapFn(opts.disabledClass);
@@ -90,7 +91,6 @@ export function useActionable(
       delete ctxAttrs.target;
       delete ctxAttrs.rel;
       delete ctxAttrs.name;
-      delete ctxAttrs.charset;
       delete ctxAttrs.hreflang;
       delete ctxAttrs.download;
       delete ctxAttrs.media;
@@ -118,7 +118,13 @@ export function useActionable(
       const dynamicAttrs: Record<string, unknown> = {};
       let routerLink: ActionableRouterLinkSettings | undefined;
 
-      const isDisabled = !!(disabled || ctxAttrs.ariaDisabled);
+      const ariaDisabled =
+        (ctxAttrs as any).ariaDisabled ?? (ctxAttrs as any)['aria-disabled'];
+      const isDisabled = !!(
+        disabled ||
+        ariaDisabled === '' ||
+        ariaDisabled === 'true'
+      );
       let hasAction = !!(
         onClick ||
         to ||
