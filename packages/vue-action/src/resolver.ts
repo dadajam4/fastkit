@@ -1,23 +1,63 @@
+import type { SetupContext } from 'vue';
 import type { Router } from 'vue-router';
-import { ActionableInheritProps } from './schema';
+import type { ActionableInheritProps } from './schema';
+
+export interface CustomActionableAttrsResolverContext {}
+
+/**
+ * Context information when resolving attributes
+ */
+export interface ActionableAttrsResolverSetupContext {
+  /**
+   * Component setup context
+   *
+   * @see {@link SetupContext}
+   */
+  readonly setupContext: SetupContext;
+  /**
+   * Router instance.
+   *
+   * @see {@link Router}
+   */
+  readonly router: Router;
+}
+
+/**
+ * Context information when resolving attributes
+ */
+export interface ActionableAttrsResolverContext
+  extends ActionableAttrsResolverSetupContext,
+    CustomActionableAttrsResolverContext {}
 
 /**
  * Attributes Resolver
  *
  * @param attrs - Attributes for actionable components
- * @param router - Router instance.
+ * @param ctx - Context information when resolving attributes
  *
  * @returns If you're swapping objects, it's the attributes object of those.
  *
  * @see {@link ActionableInheritProps}
- * @see {@link Router}
+ * @see {@link ActionableAttrsResolverContext}
  */
-export type ActionableAttrsResolver = (
+export type ActionableAttrsResolverHandler = (
   attrs: ActionableInheritProps,
-  router: Router,
+  ctx: ActionableAttrsResolverContext,
 ) => ActionableInheritProps | void;
 
-const _resolvers: ActionableAttrsResolver[] = [];
+export type ActionableAttrsResolverHandlerSetup = (
+  ctx: ActionableAttrsResolverSetupContext,
+) => {
+  [K in keyof any]: any;
+};
+
+export interface ActionableAttrsResolver {
+  setup?: ActionableAttrsResolverHandlerSetup;
+  handler?: ActionableAttrsResolverHandler;
+}
+
+const _setups: ActionableAttrsResolverHandlerSetup[] = [];
+const _handlers: ActionableAttrsResolverHandler[] = [];
 
 /**
  * Register attributes Resolver
@@ -27,30 +67,39 @@ const _resolvers: ActionableAttrsResolver[] = [];
  * @see {@link ActionableAttrsResolver}
  */
 export function registerActionableAttrsResolver(
-  resolver: ActionableAttrsResolver,
+  resolverOrHandler: ActionableAttrsResolver | ActionableAttrsResolverHandler,
 ) {
-  _resolvers.push(resolver);
+  if (typeof resolverOrHandler === 'function') {
+    _handlers.push(resolverOrHandler);
+  } else {
+    const { setup, handler } = resolverOrHandler;
+    setup && _setups.push(setup);
+    handler && _handlers.push(handler);
+  }
 }
 
-/**
- * Resolve attributes
- *
- * @param attrs - Attributes for actionable components
- * @param router - Router instance.
- *
- * @returns Resolved attributes
- *
- * @see {@link ActionableAttrs}
- * @see {@link Router}
- */
-export function resolveActionableAttrs(
-  attrs: ActionableInheritProps,
-  router: Router,
-): ActionableInheritProps {
-  if (!_resolvers.length) return { ...attrs };
-  let modified = { ...attrs };
-  for (const resolver of _resolvers) {
-    modified = resolver(modified, router) || modified;
+export function initActionableAttrsResolverContext(
+  ctx: ActionableAttrsResolverSetupContext,
+): ActionableAttrsResolverContext {
+  if (!_setups.length) return ctx;
+  const modified = { ...ctx } as ActionableAttrsResolverContext;
+  for (const setup of _setups) {
+    Object.assign(modified, setup(ctx));
   }
   return modified;
+}
+
+export function useActionableResolvedAttrs(
+  ctx: ActionableAttrsResolverSetupContext,
+) {
+  const _ctx = initActionableAttrsResolverContext(ctx);
+  return () => {
+    const { attrs } = ctx.setupContext;
+    if (!_handlers.length) return { ...attrs };
+    let modified = { ...attrs };
+    for (const handler of _handlers) {
+      modified = handler(modified, _ctx) || modified;
+    }
+    return modified;
+  };
 }

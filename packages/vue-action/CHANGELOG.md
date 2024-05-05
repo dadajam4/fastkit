@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.3.8
+
+### Patch Changes
+
+- Implemented functionality to enable setting up Vue application context in the attribute resolution handler.
+
 ## 0.3.7
 
 ### Patch Changes

@@ -12,7 +12,7 @@ import type {
 } from './schema';
 import { resolveRelativeLocationRaw } from './utils';
 import { DEFAULT_ACTIVE_CLASS, DEFAULT_EXACT_ACTIVE_CLASS } from './constants';
-import { resolveActionableAttrs } from './resolver';
+import { useActionableResolvedAttrs } from './resolver';
 
 let _defaultRouterLink = RouterLink;
 
@@ -67,10 +67,14 @@ export function useActionable(
   opts: UseActionableOptions = {},
 ): Actionable {
   const router = useRouter();
+  const getAttrs = useActionableResolvedAttrs({
+    setupContext,
+    router,
+  });
   const guardInProgress = ref(false);
   const states = computed<Omit<Actionable, 'guardInProgress' | 'router'>>(
     () => {
-      const ctxAttrs = resolveActionableAttrs(setupContext.attrs, router);
+      const ctxAttrs = getAttrs();
       const props: ActionableInheritProps = { ...ctxAttrs };
 
       const disabledClass = unWrapFn(opts.disabledClass);
