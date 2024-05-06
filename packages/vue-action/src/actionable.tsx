@@ -21,17 +21,15 @@ import { useActionableResolvedAttrs } from './resolver';
 
 let _defaultRouterLink = RouterLink;
 
-export type ActionableRouteLocationResolver = (
+export type RouteActionHandler = (
   to: RouteLocationRaw,
   router: Router,
-) => ReturnType<Router['resolve']> | undefined;
+) => RouteLocationRaw | ReturnType<Router['resolve']> | undefined;
 
-let _routeLocationResolver: ActionableRouteLocationResolver | undefined;
+let _routeActionHandler: RouteActionHandler | undefined;
 
-export const registerRouteLocationResolver = (
-  resolver: ActionableRouteLocationResolver,
-) => {
-  _routeLocationResolver = resolver;
+export const registerRouteActionHandler = (handler: RouteActionHandler) => {
+  _routeActionHandler = handler;
 };
 
 const _ROUTER_PROP_KEYS: RouterLinkPropKey[] = [
@@ -218,22 +216,10 @@ export function useActionable(
           delete ctxAttrs[customPropKey];
         }
 
-        let _to = resolveRelativeLocationRaw(
+        const _to = resolveRelativeLocationRaw(
           to,
           router.currentRoute.value.path,
         );
-
-        if (_routeLocationResolver) {
-          const resolved = _routeLocationResolver(_to, router);
-          if (resolved) {
-            _to = {
-              path: resolved.path,
-              query: resolved.query,
-              hash: resolved.hash,
-              params: resolved.params,
-            };
-          }
-        }
 
         routerLinkProps.to = _to;
 
@@ -246,11 +232,13 @@ export function useActionable(
           opts.exactActiveClass || DEFAULT_EXACT_ACTIVE_CLASS,
         ];
 
-        action = () =>
-          router[routerLinkProps.replace ? 'replace' : 'push'](
-            _to,
+        action = () => {
+          const target = _routeActionHandler?.(_to, router) ?? _to;
+          return router[routerLinkProps.replace ? 'replace' : 'push'](
+            target,
             // avoid uncaught errors are they are logged anyway
           ).catch(noop);
+        };
 
         const slots: ActionableRouterLinkSettings['slots'] = (children) => ({
           // eslint-disable-next-line no-shadow

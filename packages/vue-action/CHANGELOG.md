@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.3.10
+
+### Patch Changes
+
+- Modified the handler registration for Route actions to only trigger on link clicks. This change facilitates easier integration with nuxtjs/i18n.
+
 ## 0.3.9
 
 ### Patch Changes
