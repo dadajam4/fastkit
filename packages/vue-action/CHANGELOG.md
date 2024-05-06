@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.3.9
+
+### Patch Changes
+
+- Added feature: Custom function for adjusting RouteLocation can now be configured from the application. This facilitates easier setup when used in conjunction with modules like nuxtjs/i18n.
+
 ## 0.3.8
 
 ### Patch Changes

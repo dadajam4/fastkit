@@ -1,5 +1,10 @@
 import { type SetupContext, computed, mergeProps, ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import {
+  RouterLink,
+  useRouter,
+  type Router,
+  type RouteLocationRaw,
+} from 'vue-router';
 import type {
   UseActionableOptions,
   Actionable,
@@ -15,6 +20,19 @@ import { DEFAULT_ACTIVE_CLASS, DEFAULT_EXACT_ACTIVE_CLASS } from './constants';
 import { useActionableResolvedAttrs } from './resolver';
 
 let _defaultRouterLink = RouterLink;
+
+export type ActionableRouteLocationResolver = (
+  to: RouteLocationRaw,
+  router: Router,
+) => ReturnType<Router['resolve']> | undefined;
+
+let _routeLocationResolver: ActionableRouteLocationResolver | undefined;
+
+export const registerRouteLocationResolver = (
+  resolver: ActionableRouteLocationResolver,
+) => {
+  _routeLocationResolver = resolver;
+};
 
 const _ROUTER_PROP_KEYS: RouterLinkPropKey[] = [
   'activeClass',
@@ -200,10 +218,22 @@ export function useActionable(
           delete ctxAttrs[customPropKey];
         }
 
-        const _to = resolveRelativeLocationRaw(
+        let _to = resolveRelativeLocationRaw(
           to,
           router.currentRoute.value.path,
         );
+
+        if (_routeLocationResolver) {
+          const resolved = _routeLocationResolver(_to, router);
+          if (resolved) {
+            _to = {
+              path: resolved.path,
+              query: resolved.query,
+              hash: resolved.hash,
+              params: resolved.params,
+            };
+          }
+        }
 
         routerLinkProps.to = _to;
 
