@@ -1,5 +1,12 @@
 # @fastkit/vue-click-outside
 
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.5
+
 ## 0.2.4
 
 ### Patch Changes

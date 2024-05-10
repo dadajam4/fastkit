@@ -1,5 +1,12 @@
 # @fastkit/hashed-sync
 
+## 0.14.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.14.4
+
 ## 0.14.3
 
 ### Patch Changes

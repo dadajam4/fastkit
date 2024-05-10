@@ -313,6 +313,62 @@ export function mixin<T extends object, U extends object>(
       Reflect.has(trait, propertyKey) || Reflect.has(target, propertyKey),
     ownKeys: (target) =>
       arrayUnique([...Reflect.ownKeys(target), ...Reflect.ownKeys(trait)]),
+    getOwnPropertyDescriptor: (target, propertyKey) =>
+      Reflect.getOwnPropertyDescriptor(trait, propertyKey) ||
+      Reflect.getOwnPropertyDescriptor(base, propertyKey),
+  }) as any;
+  return proxy;
+}
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+  k: infer I,
+) => void
+  ? I
+  : never;
+
+export type Mixins<T extends object, R> =
+  R extends Array<infer U>
+    ? Mixins<T, UnionToIntersection<U>>
+    : R extends object
+      ? Mixin<T, R>
+      : never;
+
+/**
+ * Obtain a Proxy instance mixed with multiple objects as mixins.
+ *
+ * @param base - Base object
+ * @param traits - trait objects
+ * @returns Mixed-in Proxy
+ */
+export function mixins<T extends object, R extends object[]>(
+  base: T,
+  ...traits: R
+): Mixins<T, R> {
+  const targets = [base, ...traits].reverse();
+  const proxy = new Proxy(base, {
+    get: (_target, propertyKey, receiver) => {
+      const target =
+        targets.find((t) => Reflect.has(t, propertyKey)) || _target;
+      return Reflect.get(target, propertyKey, receiver);
+    },
+    set: (_target, propertyKey, newValue, receiver) => {
+      const target =
+        targets.find((t) => Reflect.has(t, propertyKey)) || _target;
+      return Reflect.set(target, propertyKey, newValue, receiver);
+    },
+    has: (_target, propertyKey) =>
+      targets.some((target) => Reflect.has(target, propertyKey)),
+    ownKeys: (_target) =>
+      arrayUnique(targets.map((target) => Reflect.ownKeys(target)).flat()),
+    getOwnPropertyDescriptor: (_target, propertyKey) => {
+      for (const target of targets) {
+        const descriptor = Reflect.getOwnPropertyDescriptor(
+          target,
+          propertyKey,
+        );
+        if (descriptor) return descriptor;
+      }
+    },
   }) as any;
   return proxy;
 }

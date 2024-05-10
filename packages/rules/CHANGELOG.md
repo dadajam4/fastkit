@@ -1,5 +1,13 @@
 # @fastkit/rules
 
+## 0.14.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.14.4
+  - @fastkit/tiny-logger@0.14.4
+
 ## 0.14.5
 
 ### Patch Changes

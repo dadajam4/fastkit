@@ -1,5 +1,13 @@
 # @fastkit/vue-utils
 
+## 0.15.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.14.4
+  - @fastkit/visibility@0.14.4
+
 ## 0.15.4
 
 ### Patch Changes

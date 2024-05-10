@@ -1,5 +1,11 @@
 # @fastkit/helpers
 
+## 0.14.4
+
+### Patch Changes
+
+- Added multiple object mixin helper.
+
 ## 0.14.3
 
 ### Patch Changes

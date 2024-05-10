@@ -1,5 +1,15 @@
 # @fastkit/async-control
 
+## 0.14.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.14.4
+  - @fastkit/cache-control@0.14.4
+  - @fastkit/cloner@0.2.4
+  - @fastkit/tiny-logger@0.14.4
+
 ## 0.14.3
 
 ### Patch Changes

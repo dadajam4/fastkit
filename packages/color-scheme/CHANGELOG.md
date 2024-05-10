@@ -1,5 +1,13 @@
 # @fastkit/color-scheme
 
+## 2.0.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.14.4
+  - @fastkit/color@0.14.4
+
 ## 2.0.5
 
 ### Patch Changes
