@@ -1,5 +1,13 @@
 # @fastkit/vue-loading
 
+## 0.15.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.6
+  - @fastkit/vue-color-scheme@0.15.8
+
 ## 0.15.7
 
 ### Patch Changes

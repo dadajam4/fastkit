@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.15.6
+
+### Patch Changes
+
+- Added a helper function (`refsProxy`) for mixin operations after flattening multiple objects, `Ref`, and getters.
+
 ## 0.15.5
 
 ### Patch Changes
