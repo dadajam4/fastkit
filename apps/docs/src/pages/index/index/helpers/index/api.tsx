@@ -1,8 +1,8 @@
 import { defineComponent } from 'vue';
 import { VPage } from '@fastkit/vot';
 import { VHero, VTabs, VTabsItem, VBreadcrumbs } from '@fastkit/vui';
-import { VDocsPaging } from '~/components';
 import { PackageProvide } from '@@/package-loader';
+import { VDocsPaging } from '~/components';
 import { useMatchedCategory } from './api/-shared';
 
 export default defineComponent({
@@ -25,9 +25,7 @@ export default defineComponent({
           <VHero>{`${pkg.displayName} API`}</VHero>
           <VTabs
             items={tabsItems}
-            router={(value) => {
-              return `/helpers/api/${value}/`;
-            }}
+            router={(value) => `/helpers/api/${value}/`}
           />
           <VBreadcrumbs
             items={[

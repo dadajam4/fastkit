@@ -15,33 +15,31 @@ export default defineComponent({
       title: trans.whatIsFastkit,
     });
 
-    return () => {
-      return (
-        <div>
-          <VHero>{trans.whatIsFastkit}</VHero>
+    return () => (
+      <div>
+        <VHero>{trans.whatIsFastkit}</VHero>
 
-          <VDocsSection title={guide.motivation.title}>
-            <VMarked code={guide.motivation.body} />
+        <VDocsSection title={guide.motivation.title}>
+          <VMarked code={guide.motivation.body} />
 
-            <VDocsSection title={guide.feature.title}>
-              <VMarked code={guide.feature.body} />
-            </VDocsSection>
-
-            <VMarked code={guide.thanks} class="mt-6" />
-
-            <VDocsSection title={guide.contributing.title}>
-              <VMarked code={guide.contributing.body} />
-            </VDocsSection>
+          <VDocsSection title={guide.feature.title}>
+            <VMarked code={guide.feature.body} />
           </VDocsSection>
 
-          <VDocsPaging
-            next={{
-              to: '/guide/',
-              title: trans.howToUse,
-            }}
-          />
-        </div>
-      );
-    };
+          <VMarked code={guide.thanks} class="mt-6" />
+
+          <VDocsSection title={guide.contributing.title}>
+            <VMarked code={guide.contributing.body} />
+          </VDocsSection>
+        </VDocsSection>
+
+        <VDocsPaging
+          next={{
+            to: '/guide/',
+            title: trans.howToUse,
+          }}
+        />
+      </div>
+    );
   },
 });

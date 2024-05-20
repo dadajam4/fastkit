@@ -1,8 +1,8 @@
 import { defineComponent } from 'vue';
-import { VDocsSection, VCode, VTSDocsAnyMeta } from '~/components';
 import { VPackageProvider } from 'virtual:package-provider:catcher';
-import { ApiMeta } from '../-shared';
 import { PackageProvide } from '@@/package-loader';
+import { VDocsSection, VCode, VTSDocsAnyMeta } from '~/components';
+import { ApiMeta } from '../-shared';
 import { PkgI18nSubSpace } from '../index';
 
 export default defineComponent({
@@ -13,33 +13,33 @@ export default defineComponent({
     const messages = _pkgI18n.at.pkg.t;
     const meta = new ApiMeta();
 
-    return () => {
-      return (
-        <VPackageProvider
-          v-slots={{
-            default: ({ pkg }) => (
-              <>
-                {pkg.renderHeader()}
+    return () => (
+      <VPackageProvider
+        v-slots={{
+          // eslint-disable-next-line no-shadow
+          default: ({ pkg }) => (
+            <>
+              {pkg.renderHeader()}
 
-                <VDocsSection title={messages.why.title}>
-                  {messages.why.content()}
+              <VDocsSection title={messages.why.title}>
+                {messages.why.content()}
 
-                  <VDocsSection title={messages.assumedPhilosophy.title}>
-                    {messages.assumedPhilosophy.content()}
-                  </VDocsSection>
+                <VDocsSection title={messages.assumedPhilosophy.title}>
+                  {messages.assumedPhilosophy.content()}
+                </VDocsSection>
+              </VDocsSection>
+
+              <VDocsSection title={messages.flowOfUsage.title}>
+                <VDocsSection title={`1. ${messages.step1.title}`}>
+                  <small>{messages.flowOfUsage.example}</small>
+                  {messages.step1.content()}
                 </VDocsSection>
 
-                <VDocsSection title={messages.flowOfUsage.title}>
-                  <VDocsSection title={`1. ${messages.step1.title}`}>
-                    <small>{messages.flowOfUsage.example}</small>
-                    {messages.step1.content()}
-                  </VDocsSection>
-
-                  <VDocsSection title={`2. ${messages.step2.title}`}>
-                    <small>{messages.flowOfUsage.example}</small>
-                    <VCode
-                      language="ts"
-                      code={`
+                <VDocsSection title={`2. ${messages.step2.title}`}>
+                  <small>{messages.flowOfUsage.example}</small>
+                  <VCode
+                    language="ts"
+                    code={`
                         import { build, axiosErrorResolver } from '@fastkit/catcher';
 
                         type YourAppErrorInput = string | number | { [key: string]: any };
@@ -89,14 +89,14 @@ export default defineComponent({
                           },
                         });
                       `}
-                    />
-                  </VDocsSection>
+                  />
+                </VDocsSection>
 
-                  <VDocsSection title={`3. ${messages.step3.title}`}>
-                    <small>{messages.flowOfUsage.example}</small>
-                    <VCode
-                      language="ts"
-                      code={`
+                <VDocsSection title={`3. ${messages.step3.title}`}>
+                  <small>{messages.flowOfUsage.example}</small>
+                  <VCode
+                    language="ts"
+                    code={`
                         import { YourAppError } from './error';
 
                         export async function someFn() {
@@ -113,19 +113,18 @@ export default defineComponent({
                           }
                         }
                       `}
-                    />
-                  </VDocsSection>
+                  />
                 </VDocsSection>
+              </VDocsSection>
 
-                <VTSDocsAnyMeta value={meta.types.buildMeta} />
-                <VTSDocsAnyMeta value={meta.types.CatcherBuilderOptionsMeta} />
-                <VTSDocsAnyMeta value={meta.types.CatcherConstructorMeta} />
-                <VTSDocsAnyMeta value={meta.types.CatcherMeta} />
-              </>
-            ),
-          }}
-        />
-      );
-    };
+              <VTSDocsAnyMeta value={meta.types.buildMeta} />
+              <VTSDocsAnyMeta value={meta.types.CatcherBuilderOptionsMeta} />
+              <VTSDocsAnyMeta value={meta.types.CatcherConstructorMeta} />
+              <VTSDocsAnyMeta value={meta.types.CatcherMeta} />
+            </>
+          ),
+        }}
+      />
+    );
   },
 });

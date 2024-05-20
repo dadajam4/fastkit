@@ -25,6 +25,7 @@ export const VPrism = defineComponent({
 
     return () => {
       const { inline, language } = props;
+      // eslint-disable-next-line no-shadow
       const { slots } = ctx;
 
       let { code } = props;
@@ -33,11 +34,12 @@ export const VPrism = defineComponent({
         const children = firstChild?.children;
         const child = Array.isArray(children) ? children[0] : children;
         code =
+          // eslint-disable-next-line no-nested-ternary
           typeof child === 'object'
             ? ((child as any).children as string)
             : typeof child === 'string'
-            ? child
-            : '';
+              ? child
+              : '';
       }
 
       return highlighter.highlight(code, language, { inline });

@@ -5,12 +5,10 @@ export default defineComponent({
   setup() {
     const vui = useVui();
 
-    return () => {
-      return (
-        <div>
-          <h1>Here is {vui.location.currentRoute.params.childId}</h1>
-        </div>
-      );
-    };
+    return () => (
+      <div>
+        <h1>Here is {vui.location.currentRoute.params.childId}</h1>
+      </div>
+    );
   },
 });

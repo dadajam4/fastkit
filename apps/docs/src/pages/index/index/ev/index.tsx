@@ -6,16 +6,15 @@ import { ApiMeta } from './-shared';
 export default defineComponent({
   prefetch: ApiMeta.prefetch,
   setup() {
+    // eslint-disable-next-line no-new
     new ApiMeta();
 
-    return () => {
-      return (
-        <VPackageProvider
-          v-slots={{
-            default: () => <VPage />,
-          }}
-        />
-      );
-    };
+    return () => (
+      <VPackageProvider
+        v-slots={{
+          default: () => <VPage />,
+        }}
+      />
+    );
   },
 });

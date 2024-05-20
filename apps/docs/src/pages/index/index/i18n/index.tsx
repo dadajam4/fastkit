@@ -4,14 +4,12 @@ import { VPage } from '@fastkit/vot';
 
 export default defineComponent({
   setup() {
-    return () => {
-      return (
-        <VPackageProvider
-          v-slots={{
-            default: () => <VPage />,
-          }}
-        />
-      );
-    };
+    return () => (
+      <VPackageProvider
+        v-slots={{
+          default: () => <VPage />,
+        }}
+      />
+    );
   },
 });

@@ -1,15 +1,15 @@
 import { Ref, ref, inject } from 'vue';
-import { PackageManagerName } from './schemes';
 import { Cookies } from '@fastkit/cookies';
+import { VuePageControl } from '@fastkit/vot';
+import { VTabs, VTabsItem } from '@fastkit/vui';
+import { PackageManagerName } from './schemes';
 import {
   PACKAGE_MANAGER_NAMES,
   COOKIE_STORE_KEY,
   COOKIE_MAX_AGE,
   DEFAULT_PM,
 } from './constants';
-import { VuePageControl } from '@fastkit/vot';
 import { PM_SCRIPT_INJECTION_KEY } from './injections';
-import { VTabs, VTabsItem } from '@fastkit/vui';
 import { VCode } from '~/components';
 
 function isPackageManagerName(source: any): source is PackageManagerName {
@@ -22,12 +22,10 @@ const INSTALL_COMMAND_MAP: Record<PackageManagerName, string> = {
   pnpm: 'add',
 };
 
-const tabsItems: VTabsItem[] = PACKAGE_MANAGER_NAMES.map((name) => {
-  return {
-    label: () => <span class="notranslate">{name}</span>,
-    value: name,
-  };
-});
+const tabsItems: VTabsItem[] = PACKAGE_MANAGER_NAMES.map((name) => ({
+  label: () => <span class="notranslate">{name}</span>,
+  value: name,
+}));
 
 export class PMScript {
   static use(): PMScript {
@@ -39,7 +37,9 @@ export class PMScript {
   }
 
   readonly ctx: VuePageControl;
+
   private _selected: Ref<PackageManagerName> = ref(DEFAULT_PM);
+
   private _cookies?: Cookies;
 
   get selected(): PackageManagerName {

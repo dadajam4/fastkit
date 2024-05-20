@@ -1,8 +1,8 @@
 import './VLanguageSwitcher.scss';
 
 import { defineComponent } from 'vue';
-import { i18n } from '@@';
 import { VButton } from '@fastkit/vui';
+import { i18n } from '@@';
 
 export const VLanguageSwitcher = defineComponent({
   name: 'VLanguageSwitcher',

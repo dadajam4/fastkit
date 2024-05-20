@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import { VHero } from '@fastkit/vui';
-import { VDocsSection, VDocsPaging, VTSDocsAnyMeta } from '~/components';
 import { PackageProvide } from '@@/package-loader';
+import { VDocsSection, VDocsPaging, VTSDocsAnyMeta } from '~/components';
 import { ApiMeta } from '../-shared';
 
 export default defineComponent({
@@ -13,34 +13,32 @@ export default defineComponent({
 
     const meta = ApiMeta.use();
 
-    return () => {
-      return (
-        <div>
-          <VHero>Builtin Transports</VHero>
+    return () => (
+      <div>
+        <VHero>Builtin Transports</VHero>
 
-          <VDocsSection title="Console">
-            <VTSDocsAnyMeta value={meta.types.ConsoleTransportMeta} />
-            <VTSDocsAnyMeta value={meta.types.ConsoleTransportSettingsMeta} />
-          </VDocsSection>
+        <VDocsSection title="Console">
+          <VTSDocsAnyMeta value={meta.types.ConsoleTransportMeta} />
+          <VTSDocsAnyMeta value={meta.types.ConsoleTransportSettingsMeta} />
+        </VDocsSection>
 
-          <VDocsSection title="Standard output">
-            <VTSDocsAnyMeta value={meta.types.STDOTransportMeta} />
-            <VTSDocsAnyMeta value={meta.types.STDOTransportSettingsMeta} />
-          </VDocsSection>
+        <VDocsSection title="Standard output">
+          <VTSDocsAnyMeta value={meta.types.STDOTransportMeta} />
+          <VTSDocsAnyMeta value={meta.types.STDOTransportSettingsMeta} />
+        </VDocsSection>
 
-          <VDocsSection title="Datadog">
-            <VTSDocsAnyMeta value={meta.types.DDTransportMeta} />
-            <VTSDocsAnyMeta value={meta.types.DDTransportSettingsMeta} />
-          </VDocsSection>
+        <VDocsSection title="Datadog">
+          <VTSDocsAnyMeta value={meta.types.DDTransportMeta} />
+          <VTSDocsAnyMeta value={meta.types.DDTransportSettingsMeta} />
+        </VDocsSection>
 
-          <VDocsPaging
-            prev={{
-              to: `/universal-logger/transformers/`,
-              title: 'Transformers',
-            }}
-          />
-        </div>
-      );
-    };
+        <VDocsPaging
+          prev={{
+            to: `/universal-logger/transformers/`,
+            title: 'Transformers',
+          }}
+        />
+      </div>
+    );
   },
 });

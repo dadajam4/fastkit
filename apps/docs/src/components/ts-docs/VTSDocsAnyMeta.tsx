@@ -1,9 +1,9 @@
 import { AnyMeta } from '@fastkit/ts-tiny-meta';
 import { defineComponent, PropType, computed } from 'vue';
+import { ScopeName, ColorVariant, VChip } from '@fastkit/vui';
 import { VTSMetaDocs } from './VTSMetaDocs';
 import { VDocsSection, VCode } from '~/components';
 import { normalizeMeta, MetaInfo } from './schemes';
-import { ScopeName, ColorVariant, VChip } from '@fastkit/vui';
 import { VTSSignaturesMeta } from './VTSSignaturesMeta';
 
 interface ChipInfo {

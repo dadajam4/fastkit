@@ -1,0 +1,64 @@
+{
+  "name": "@fastkit/vue-scoped-loading",
+  "version": "0.0.0",
+  "description": "vue-scoped-loading",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/vue-scoped-loading.d.ts",
+      "import": {
+        "default": "./dist/vue-scoped-loading.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vue-scoped-loading.mjs",
+  "types": "./dist/vue-scoped-loading.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vue-scoped-loading.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
+    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastkit/helpers": "workspace:^"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0",
+    "vue-router": "^4.2.0"
+  },
+  "buildOptions": {
+    "name": "Vue Scoped Loading"
+  },
+  "_docs": {
+    "scope": "vue",
+    "feature": "ui",
+    "description": {
+      "en": "Headless UI for generating a loading scope in a Vue application",
+      "ja": "Vueアプリケーションにローディングスコープを生成するためのheadless UI"
+    }
+  }
+}

@@ -80,6 +80,7 @@ export default defineComponent({
               class="my-2"
               color="primary"
               onClick={(ev) => {
+                // eslint-disable-next-line no-console
                 console.log(ev);
               }}
               disabled={this.disabled}>

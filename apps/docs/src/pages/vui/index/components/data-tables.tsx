@@ -17,18 +17,16 @@ const prefetch = createPrefetch(
     // await new Promise((resolve) => setTimeout(resolve, 1000));
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const items = range(count, offset + 1).map((i) => {
-      return {
-        id: String(i),
-        name: `項目${i}`,
-        test: 'これはデータです',
-        column1: 'This is Nagai text. This is Nagai text.',
-        column2: 'This is Nagai text. This is Nagai text.',
-        column3: 'This is Nagai text. This is Nagai text.',
-        column4: 'This is Nagai text. This is Nagai text.',
-        column5: 'This is Nagai text. This is Nagai text.',
-      };
-    });
+    const items = range(count, offset + 1).map((i) => ({
+      id: String(i),
+      name: `項目${i}`,
+      test: 'これはデータです',
+      column1: 'This is Nagai text. This is Nagai text.',
+      column2: 'This is Nagai text. This is Nagai text.',
+      column3: 'This is Nagai text. This is Nagai text.',
+      column4: 'This is Nagai text. This is Nagai text.',
+      column5: 'This is Nagai text. This is Nagai text.',
+    }));
 
     return {
       page,

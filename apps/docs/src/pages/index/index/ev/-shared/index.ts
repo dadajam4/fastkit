@@ -16,6 +16,7 @@ const API_META_INJECTION_KEY: InjectionKey<ApiMeta> = Symbol('ApiMeta');
 
 export class ApiMeta {
   static prefetch = prefetch;
+
   static use(): ApiMeta {
     const meta = inject(API_META_INJECTION_KEY);
     if (!meta) {
@@ -25,6 +26,7 @@ export class ApiMeta {
   }
 
   readonly exports: SourceFileExports;
+
   readonly types: Types;
 
   constructor() {

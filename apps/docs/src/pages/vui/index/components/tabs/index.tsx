@@ -8,9 +8,9 @@ import {
   VTabsItem,
   VContentSwitcher,
 } from '@fastkit/vui';
-import { DocsSection } from '../../../../-components';
 import { range, objectFromArray } from '@fastkit/helpers';
 import { VPage } from '@fastkit/vue-page';
+import { DocsSection } from '../../../../-components';
 import { MOCK_ITEMS_1 } from './-tabs';
 
 export default defineComponent({
@@ -25,21 +25,19 @@ export default defineComponent({
 
     const mockItems1 = MOCK_ITEMS_1.slice();
 
-    const createSlots = (items: VTabsItem[]) => {
-      return objectFromArray(items, (row, index) => {
+    const createSlots = (items: VTabsItem[]) =>
+      objectFromArray(items, (row, index) => {
         const { value } = row;
         let _range = parseInt(value, 10);
         if (isNaN(_range)) _range = index;
         return [
           value,
-          () => {
-            return range(_range, 1).map((n) => {
-              return <div>{`コンテンツ${value} - 行 ${n}`}</div>;
-            });
-          },
+          () =>
+            range(_range, 1).map((n) => (
+              <div>{`コンテンツ${value} - 行 ${n}`}</div>
+            )),
         ];
       });
-    };
 
     return {
       createSlots,
@@ -93,15 +91,13 @@ export default defineComponent({
             items={this.mockItems1}
             v-model={this.tab2}
             withQuery
-            router={(value) => {
-              return {
-                path: this.$route.path,
-                query: {
-                  ...this.$route.query,
-                  tab2: value,
-                },
-              };
-            }}
+            router={(value) => ({
+              path: this.$route.path,
+              query: {
+                ...this.$route.query,
+                tab2: value,
+              },
+            })}
           />
           <VContentSwitcher
             v-model={this.tab2}
@@ -114,14 +110,12 @@ export default defineComponent({
           <VTabs
             items={this.mockItems1}
             v-model={this.tab3}
-            router={(value) => {
-              return {
-                path: `/vui/components/tabs/${value}`,
-                query: {
-                  ...this.vui.location.currentRoute.query,
-                },
-              };
-            }}
+            router={(value) => ({
+              path: `/vui/components/tabs/${value}`,
+              query: {
+                ...this.vui.location.currentRoute.query,
+              },
+            })}
           />
           <VPage />
         </DocsSection>

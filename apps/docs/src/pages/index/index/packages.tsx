@@ -1,8 +1,8 @@
 import { defineComponent } from 'vue';
 import { VHero } from '@fastkit/vui';
+import _pkgs from 'virtual:packages';
 import { VDocsSection, VDocsPaging, VMarked } from '~/components';
 import { PackageProvide, VPackageExplorer } from '@@';
-import _pkgs from 'virtual:packages';
 import { GuideI18nSpace } from './guide/-i18n';
 
 export default defineComponent({
@@ -16,25 +16,23 @@ export default defineComponent({
       title: trans.packages,
     });
 
-    return () => {
-      return (
-        <div>
-          <VHero>{trans.packages}</VHero>
+    return () => (
+      <div>
+        <VHero>{trans.packages}</VHero>
 
-          <VDocsSection title={guide.packages.title}>
-            <VMarked code={guide.packages.description} />
+        <VDocsSection title={guide.packages.title}>
+          <VMarked code={guide.packages.description} />
 
-            <VPackageExplorer class="mt-6" value={_pkgs} />
-          </VDocsSection>
+          <VPackageExplorer class="mt-6" value={_pkgs} />
+        </VDocsSection>
 
-          <VDocsPaging
-            prev={{
-              to: '/guide/',
-              title: trans.howToUse,
-            }}
-          />
-        </div>
-      );
-    };
+        <VDocsPaging
+          prev={{
+            to: '/guide/',
+            title: trans.howToUse,
+          }}
+        />
+      </div>
+    );
   },
 });

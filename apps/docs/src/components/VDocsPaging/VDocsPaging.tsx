@@ -48,8 +48,8 @@ export const VDocsPaging = defineComponent({
 
     const createItems = () => VECTORS.map((key) => createItem(key));
 
-    return () => {
-      return <nav class="v-docs-paging docs-container">{createItems()}</nav>;
-    };
+    return () => (
+      <nav class="v-docs-paging docs-container">{createItems()}</nav>
+    );
   },
 });

@@ -9,15 +9,13 @@ export const DocsSection = defineComponent({
     title: String,
   },
   setup(props, ctx) {
-    return () => {
-      return (
-        <VCard class="docs-section" tag="section">
-          <VCardContent>
-            <h2 class="docs-section__title">{props.title}</h2>
-            <div class="docs-section__body">{ctx.slots.default?.()}</div>
-          </VCardContent>
-        </VCard>
-      );
-    };
+    return () => (
+      <VCard class="docs-section" tag="section">
+        <VCardContent>
+          <h2 class="docs-section__title">{props.title}</h2>
+          <div class="docs-section__body">{ctx.slots.default?.()}</div>
+        </VCardContent>
+      </VCard>
+    );
   },
 });

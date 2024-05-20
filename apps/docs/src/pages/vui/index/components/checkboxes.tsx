@@ -27,14 +27,13 @@ export default defineComponent({
       value: String(i),
       label: `アイテム${i}`,
     }));
-    const asyncItems = (): Promise<FormSelectorItem[]> => {
-      return new Promise((resolve, reject) => {
+    const asyncItems = (): Promise<FormSelectorItem[]> =>
+      new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([...items]);
           // reject(new Error('jjj'));
         }, 3000);
       });
-    };
 
     return {
       check1,

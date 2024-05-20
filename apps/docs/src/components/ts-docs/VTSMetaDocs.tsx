@@ -11,14 +11,12 @@ export const VTSMetaDocs = defineComponent({
     },
   },
   setup(props) {
-    return () => {
-      return (
-        <div class="VTSMetaDocs">
-          {props.value.map((doc, index) => (
-            <VTSMetaDoc value={doc} key={index} />
-          ))}
-        </div>
-      );
-    };
+    return () => (
+      <div class="VTSMetaDocs">
+        {props.value.map((doc, index) => (
+          <VTSMetaDoc value={doc} key={index} />
+        ))}
+      </div>
+    );
   },
 });

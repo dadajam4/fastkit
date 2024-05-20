@@ -13,30 +13,28 @@ export default defineComponent({
   setup() {
     const subSpace = I18nSubSpace.use();
 
-    return () => {
-      return (
-        <VPackageHome
-          name="Fastkit"
-          logo={`${import.meta.env.BASE_URL}logo.svg`}
-          description={subSpace.at.Home.trans.lead}
-          title={`Fastkit - ${subSpace.at.Home.trans.lead}`}
-          github="https://github.com/dadajam4/fastkit"
-          actions={[
-            {
-              to: '/guide/',
-              color: 'primary',
-              startIcon: 'mdi-compass',
-              label: subSpace.at.common.t.howToUse,
-            },
-            {
-              to: '/guide/what/',
-              color: 'primary',
-              variant: 'outlined',
-              label: subSpace.at.common.t.whatIsFastkit,
-            },
-          ]}
-        />
-      );
-    };
+    return () => (
+      <VPackageHome
+        name="Fastkit"
+        logo={`${import.meta.env.BASE_URL}logo.svg`}
+        description={subSpace.at.Home.trans.lead}
+        title={`Fastkit - ${subSpace.at.Home.trans.lead}`}
+        github="https://github.com/dadajam4/fastkit"
+        actions={[
+          {
+            to: '/guide/',
+            color: 'primary',
+            startIcon: 'mdi-compass',
+            label: subSpace.at.common.t.howToUse,
+          },
+          {
+            to: '/guide/what/',
+            color: 'primary',
+            variant: 'outlined',
+            label: subSpace.at.common.t.whatIsFastkit,
+          },
+        ]}
+      />
+    );
   },
 });

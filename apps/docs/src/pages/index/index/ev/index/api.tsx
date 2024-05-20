@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import { VHero } from '@fastkit/vui';
-import { VDocsPaging, VTSDocsAnyMeta } from '~/components';
 import { PackageProvide } from '@@/package-loader';
+import { VDocsPaging, VTSDocsAnyMeta } from '~/components';
 import { ApiMeta } from '../-shared';
 
 export default defineComponent({
@@ -13,21 +13,19 @@ export default defineComponent({
 
     const meta = ApiMeta.use();
 
-    return () => {
-      return (
-        <div>
-          <VHero>{`${pkg.displayName} API`}</VHero>
+    return () => (
+      <div>
+        <VHero>{`${pkg.displayName} API`}</VHero>
 
-          <VTSDocsAnyMeta value={meta.types.EVMeta} />
+        <VTSDocsAnyMeta value={meta.types.EVMeta} />
 
-          <VDocsPaging
-            prev={{
-              to: `/ev/`,
-              title: 'HOME',
-            }}
-          />
-        </div>
-      );
-    };
+        <VDocsPaging
+          prev={{
+            to: `/ev/`,
+            title: 'HOME',
+          }}
+        />
+      </div>
+    );
   },
 });

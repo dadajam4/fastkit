@@ -16,15 +16,13 @@ export default defineComponent({
 
     const { ComponentStaticMeta, ComponentMeta } = metaPrefetch.inject().types;
 
-    return () => {
-      return (
-        <div>
-          {createBreadcrumbs(title)}
+    return () => (
+      <div>
+        {createBreadcrumbs(title)}
 
-          <VTSDocsAnyMeta value={ComponentStaticMeta} />
-          <VTSDocsAnyMeta value={ComponentMeta} />
-        </div>
-      );
-    };
+        <VTSDocsAnyMeta value={ComponentStaticMeta} />
+        <VTSDocsAnyMeta value={ComponentMeta} />
+      </div>
+    );
   },
 });

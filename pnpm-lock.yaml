@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   '@types/node': ^20.11.17
   vite: ^5.1.0
@@ -20,64 +16,64 @@ importers:
         specifier: ^2.27.1
         version: 2.27.1
       '@fastkit/color-scheme':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/color-scheme
       '@fastkit/color-scheme-gen':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/color-scheme-gen
       '@fastkit/eslint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/eslint-config
       '@fastkit/eslint-config-vue':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/eslint-config-vue
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/ev
       '@fastkit/node-util':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/node-util
       '@fastkit/plugboy':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/plugboy
       '@fastkit/plugboy-sass-plugin':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/plugboy-sass-plugin
       '@fastkit/plugboy-vanilla-extract-plugin':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/plugboy-vanilla-extract-plugin
       '@fastkit/plugboy-vue-jsx-plugin':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/plugboy-vue-jsx-plugin
       '@fastkit/scroller':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/scroller
       '@fastkit/stylelint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/stylelint-config
       '@fastkit/stylelint-config-vue':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/stylelint-config-vue
       '@fastkit/ts-tiny-meta':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/ts-tiny-meta
       '@fastkit/vite-plugin-vui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vite-plugin-vui
       '@fastkit/vot':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vot
       '@fastkit/vot-i18n':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vot-i18n
       '@fastkit/vue-i18n':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vue-i18n
       '@fastkit/vue-page':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vue-page
       '@fastkit/vue-tiny-meta':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vue-tiny-meta
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -164,43 +160,43 @@ importers:
   apps/docs:
     dependencies:
       '@fastkit/cookies':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/cookies
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/helpers
       '@fastkit/icon-font':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/icon-font
       '@fastkit/media-match':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/media-match
       '@fastkit/vite-plugin-vui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vite-plugin-vui
       '@fastkit/vot':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vot
       '@fastkit/vue-app-layout':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-app-layout
       '@fastkit/vue-loading':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-loading
       '@fastkit/vue-scroller':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-scroller
       '@fastkit/vue-stack':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-stack
       '@fastkit/vue-transitions':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-transitions
       '@fastkit/vui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vui
       '@fastkit/vui-wysiwyg':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vui-wysiwyg
       marked:
         specifier: ^11.2.0
@@ -213,58 +209,60 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1(typescript@5.3.3)(vite@5.1.0)
 
+  apps/docs/dist/server: {}
+
   packages/accept-language:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
 
   packages/async-control:
     dependencies:
       '@fastkit/cache-control':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../cache-control
       '@fastkit/cloner':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../cloner
       '@fastkit/duration':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../duration
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-hash':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-hash
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
 
   packages/body-scroll-lock:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
 
   packages/cache-control:
     dependencies:
       '@fastkit/cloner':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../cloner
       '@fastkit/duration':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../duration
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
 
   packages/catcher:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
     devDependencies:
       axios:
@@ -274,44 +272,44 @@ importers:
   packages/cloner:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
 
   packages/color:
     dependencies:
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
 
   packages/color-scheme:
     dependencies:
       '@fastkit/color':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../color
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
     devDependencies:
       '@fastkit/plugboy':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugboy
 
   packages/color-scheme-gen:
     dependencies:
       '@fastkit/color':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../color
       '@fastkit/color-scheme':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../color-scheme
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ev
       '@fastkit/node-util':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../node-util
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       eta:
         specifier: ^3.2.0
@@ -323,19 +321,19 @@ importers:
   packages/comparator:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
 
   packages/cookies:
     dependencies:
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ev
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       cookie:
         specifier: ^0.6.0
@@ -356,7 +354,7 @@ importers:
   packages/dom:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
 
   packages/duration: {}
@@ -394,7 +392,7 @@ importers:
   packages/eslint-config-vue:
     dependencies:
       '@fastkit/eslint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../eslint-config
       '@rushstack/eslint-patch':
         specifier: ^1.7.2
@@ -411,7 +409,7 @@ importers:
   packages/hashed-sync:
     dependencies:
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       folder-hash:
         specifier: ^4.0.4
@@ -442,40 +440,40 @@ importers:
   packages/helpers:
     dependencies:
       '@fastkit/ts-type-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ts-type-utils
 
   packages/i18n:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
 
   packages/icon-font:
     devDependencies:
       '@fastkit/plugboy':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugboy
 
   packages/icon-font-gen:
     dependencies:
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ev
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/icon-font':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../icon-font
       '@fastkit/node-util':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../node-util
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       cac:
         specifier: ^6.7.14
@@ -495,28 +493,28 @@ importers:
   packages/keyboard:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
 
   packages/media-match:
     devDependencies:
       '@fastkit/plugboy':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugboy
 
   packages/media-match-gen:
     dependencies:
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ev
       '@fastkit/media-match':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../media-match
       '@fastkit/node-util':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../node-util
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       fs-extra:
         specifier: ^11.2.0
@@ -525,16 +523,16 @@ importers:
   packages/merge:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
 
   packages/node-util:
     dependencies:
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ev
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       chokidar:
         specifier: ^3.6.0
@@ -559,10 +557,10 @@ importers:
   packages/nodepack:
     dependencies:
       '@fastkit/node-util':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../node-util
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       esbuild:
         specifier: ^0.19.12
@@ -627,7 +625,7 @@ importers:
         version: 1.70.0
     devDependencies:
       '@fastkit/plugboy':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugboy
 
   packages/plugboy-vanilla-extract-plugin:
@@ -643,7 +641,7 @@ importers:
         version: 3.9.5(@types/node@20.11.17)(vite@5.1.0)
     devDependencies:
       '@fastkit/plugboy':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugboy
       vite:
         specifier: ^5.1.0
@@ -662,7 +660,7 @@ importers:
         version: 1.2.1(@babel/core@7.23.9)
     devDependencies:
       '@fastkit/plugboy':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../plugboy
       '@types/babel__core':
         specifier: ^7.20.5
@@ -677,25 +675,25 @@ importers:
   packages/rules:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
 
   packages/scroller:
     dependencies:
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ev
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/visibility':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../visibility
       bezier-easing:
         specifier: ^2.1.0
@@ -704,10 +702,10 @@ importers:
   packages/sprite-images:
     dependencies:
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ev
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       chokidar:
         specifier: ^3.6.0
@@ -754,7 +752,7 @@ importers:
   packages/stylelint-config-vue:
     dependencies:
       '@fastkit/stylelint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../stylelint-config
       stylelint:
         specifier: ^15.6.0
@@ -766,13 +764,13 @@ importers:
   packages/tiny-hash:
     dependencies:
       '@fastkit/json':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../json
 
   packages/tiny-logger:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
 
   packages/ts-tiny-meta:
@@ -802,16 +800,16 @@ importers:
   packages/universal-logger:
     dependencies:
       '@fastkit/cloner':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../cloner
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/json':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../json
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
     devDependencies:
       '@datadog/browser-logs':
@@ -821,34 +819,34 @@ importers:
   packages/visibility:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
 
   packages/vite-kit:
     dependencies:
       '@fastkit/color-scheme-gen':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../color-scheme-gen
       '@fastkit/hashed-sync':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../hashed-sync
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/icon-font-gen':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../icon-font-gen
       '@fastkit/media-match-gen':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../media-match-gen
       '@fastkit/node-util':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../node-util
       '@fastkit/sprite-images':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../sprite-images
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       vite:
         specifier: ^5.1.0
@@ -857,13 +855,13 @@ importers:
   packages/vite-plugin-vui:
     dependencies:
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vite-kit':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vite-kit
       '@fastkit/vui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vui
       eta:
         specifier: ^3.2.0
@@ -876,19 +874,19 @@ importers:
         version: 5.1.0(@types/node@20.11.17)
     devDependencies:
       '@fastkit/icon-font-gen':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../icon-font-gen
 
   packages/vot:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/vue-page':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-page
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       '@rollup/plugin-replace':
         specifier: ^5.0.5
@@ -951,23 +949,23 @@ importers:
   packages/vot-i18n:
     dependencies:
       '@fastkit/accept-language':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../accept-language
       '@fastkit/vue-i18n':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-i18n
     devDependencies:
       '@fastkit/vot':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vot
 
   packages/vue-action:
     dependencies:
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -976,22 +974,22 @@ importers:
   packages/vue-app-layout:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vue-body-scroll-lock':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-body-scroll-lock
       '@fastkit/vue-resize':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-resize
       '@fastkit/vue-scroller':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-scroller
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
     devDependencies:
       vue:
@@ -1004,40 +1002,40 @@ importers:
   packages/vue-body-scroll-lock:
     dependencies:
       '@fastkit/body-scroll-lock':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../body-scroll-lock
       '@fastkit/dom':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../dom
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-click-outside:
     dependencies:
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-color-scheme:
     dependencies:
       '@fastkit/color-scheme':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../color-scheme
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
     devDependencies:
       '@unhead/vue':
@@ -1050,22 +1048,22 @@ importers:
   packages/vue-form-control:
     dependencies:
       '@fastkit/debounce':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../debounce
       '@fastkit/dom':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../dom
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/rules':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../rules
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       imask:
         specifier: ^7.4.0
@@ -1078,16 +1076,16 @@ importers:
   packages/vue-i18n:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/i18n':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../i18n
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
     devDependencies:
       vue:
@@ -1100,31 +1098,31 @@ importers:
   packages/vue-keyboard:
     dependencies:
       '@fastkit/keyboard':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../keyboard
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-loading:
     dependencies:
       '@fastkit/color-scheme':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../color-scheme
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vue-color-scheme':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-color-scheme
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1133,10 +1131,10 @@ importers:
   packages/vue-location:
     dependencies:
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1145,34 +1143,34 @@ importers:
   packages/vue-media-match:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/media-match':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../media-match
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-page:
     dependencies:
       '@fastkit/cookies':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../cookies
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ev
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1181,28 +1179,40 @@ importers:
   packages/vue-resize:
     dependencies:
       '@fastkit/debounce':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../debounce
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
+
+  packages/vue-scoped-loading:
+    dependencies:
+      '@fastkit/helpers':
+        specifier: workspace:^
+        version: link:../helpers
+      vue:
+        specifier: ^3.4.0
+        version: 3.4.18(typescript@5.3.3)
+      vue-router:
+        specifier: ^4.2.0
+        version: 4.2.5(vue@3.4.18)
 
   packages/vue-scroller:
     dependencies:
       '@fastkit/scroller':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../scroller
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
     devDependencies:
       vue:
@@ -1212,34 +1222,34 @@ importers:
   packages/vue-stack:
     dependencies:
       '@fastkit/dom':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../dom
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vue-body-scroll-lock':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-body-scroll-lock
       '@fastkit/vue-click-outside':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-click-outside
       '@fastkit/vue-keyboard':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-keyboard
       '@fastkit/vue-resize':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-resize
       '@fastkit/vue-transitions':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-transitions
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1248,7 +1258,7 @@ importers:
   packages/vue-tiny-meta:
     dependencies:
       '@fastkit/ts-tiny-meta':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ts-tiny-meta
       magic-string:
         specifier: ^0.30.7
@@ -1261,31 +1271,31 @@ importers:
   packages/vue-transitions:
     dependencies:
       '@fastkit/dom':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../dom
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-utils:
     dependencies:
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/ts-type-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../ts-type-utils
       '@fastkit/visibility':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../visibility
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
     devDependencies:
       vue-router:
@@ -1295,91 +1305,91 @@ importers:
   packages/vue-visibility:
     dependencies:
       '@fastkit/visibility':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../visibility
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vui:
     dependencies:
       '@fastkit/color-scheme':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../color-scheme
       '@fastkit/color-scheme-gen':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../color-scheme-gen
       '@fastkit/dom':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../dom
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../helpers
       '@fastkit/icon-font':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../icon-font
       '@fastkit/media-match':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../media-match
       '@fastkit/media-match-gen':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../media-match-gen
       '@fastkit/rules':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../rules
       '@fastkit/stylebase':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../stylebase
       '@fastkit/tiny-logger':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tiny-logger
       '@fastkit/vue-action':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-action
       '@fastkit/vue-app-layout':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-app-layout
       '@fastkit/vue-body-scroll-lock':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-body-scroll-lock
       '@fastkit/vue-click-outside':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-click-outside
       '@fastkit/vue-color-scheme':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-color-scheme
       '@fastkit/vue-form-control':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-form-control
       '@fastkit/vue-keyboard':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-keyboard
       '@fastkit/vue-loading':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-loading
       '@fastkit/vue-location':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-location
       '@fastkit/vue-media-match':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-media-match
       '@fastkit/vue-resize':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-resize
       '@fastkit/vue-scroller':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-scroller
       '@fastkit/vue-stack':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-stack
       '@fastkit/vue-transitions':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-transitions
       '@fastkit/vue-utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1427,11 +1437,11 @@ importers:
         specifier: ^13.0.7
         version: 13.0.7
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
     devDependencies:
       '@fastkit/vui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../vui
 
 packages:
@@ -1507,7 +1517,7 @@ packages:
     resolution: {integrity: sha512-LvBTxu8bQSQkcyKOU+a1btnNFQ1dMAd0R6PyW3arXes06F6QLWLIrd681bxRPIXlrMGR3XYnW9JyML7dP3qgxg==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.23.6
+      '@babel/types': 7.23.9
 
   /@babel/helper-compilation-targets@7.23.6:
     resolution: {integrity: sha512-9JB548GZoQVmzrFgp8o7KxdgkTGm6xs9DW0o/Pim72UDjzr5ObUQ6ZzYPqA+g9OTS2bBQoctLJrky0RDCAWRgQ==}
@@ -1551,7 +1561,7 @@ packages:
     resolution: {integrity: sha512-wGjk9QZVzvknA6yKIUURb8zY3grXCcOZt+/7Wcy8O2uctxhplmUPkOdlgoNhmdVee2c92JXbf1xpMtVNbfoxRw==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.23.6
+      '@babel/types': 7.23.9
 
   /@babel/helper-member-expression-to-functions@7.23.0:
     resolution: {integrity: sha512-6gfrPwh7OuT6gZyJZvd6WbTfrqAo7vm4xCzAXOusKqq/vWdKXphTpj5klHKNmRUU6/QRGlBsyU9mAIPaWHlqJA==}
@@ -1563,7 +1573,7 @@ packages:
     resolution: {integrity: sha512-0pYVBnDKZO2fnSPCrgM/6WMc7eS20Fbok+0r88fp+YtWVLZrp4CkafFGIp+W0VKw4a22sgebPT99y+FDNMdP4w==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.23.6
+      '@babel/types': 7.23.9
 
   /@babel/helper-module-transforms@7.23.3(@babel/core@7.23.9):
     resolution: {integrity: sha512-7bBs4ED9OmswdfDzpz4MpWgSrV7FXlc3zIagvLFjS5H+Mk7Snr21vQ6QwrsoCGMfNC4e4LQPdoULEt4ykz0SRQ==}
@@ -1621,17 +1631,8 @@ packages:
     resolution: {integrity: sha512-803gmbQdqwdf4olxrX4AJyFBV/RTr3rSmOj0rKwesmzlfhYNDEs+/iOcznzpNWlJlIlTJC2QfPFcHB6DlzdVLQ==}
     engines: {node: '>=6.9.0'}
 
-  /@babel/helper-validator-identifier@7.19.1:
-    resolution: {integrity: sha512-awrNfaMtnHUr653GgGEs++LlAvW6w+DcPrOliSMXWCKo597CwL5Acf/wWdNkf/tfEQE3mjkeD1YOVZOUV/od1w==}
-    engines: {node: '>=6.9.0'}
-    dev: false
-
   /@babel/helper-validator-identifier@7.22.20:
     resolution: {integrity: sha512-Y4OZ+ytlatR8AI+8KZfKuL5urKp7qey08ha31L8b3BwewJAoJamTzyvxPR/5D+KkdJCGPq/+8TukHBlY10FX9A==}
-    engines: {node: '>=6.9.0'}
-
-  /@babel/helper-validator-identifier@7.22.5:
-    resolution: {integrity: sha512-aJXu+6lErq8ltp+JhkJUfk1MTGyuA4v7f3pA+BJ5HLfNC6nAQ0Cpi9uOquUj8Hehg0aUiHzWQbOVJGao6ztBAQ==}
     engines: {node: '>=6.9.0'}
 
   /@babel/helper-validator-option@7.23.5:
@@ -1652,7 +1653,7 @@ packages:
     resolution: {integrity: sha512-u7stbOuYjaPezCuLj29hNW1v64M2Md2qupEKP1fHc7WdOA3DgLh37suiSrZYY7haUB7iBeQZ9P1uiRF359do3g==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/helper-validator-identifier': 7.19.1
+      '@babel/helper-validator-identifier': 7.22.20
       chalk: 2.4.2
       js-tokens: 4.0.0
     dev: false
@@ -1661,7 +1662,7 @@ packages:
     resolution: {integrity: sha512-78aUtVcT7MUscr0K5mIEnkwxPE0MaxkR5RxRwuHaQ+JuU5AmTPhY+do2mdzVTnIJJpyBglql2pehuBIWHug+WQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/helper-validator-identifier': 7.22.5
+      '@babel/helper-validator-identifier': 7.22.20
       chalk: 2.4.2
       js-tokens: 4.0.0
 
@@ -1678,7 +1679,8 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
-      '@babel/types': 7.23.6
+      '@babel/types': 7.23.9
+    dev: true
 
   /@babel/parser@7.23.9:
     resolution: {integrity: sha512-9tcKgqKbs3xGJ+NtKF2ndOBBLVwPjl1SHxPQkd36r3Dlirw3xWUeGaTbqr7uGZcTaxkVNwc+03SVP7aCdWrTlA==}
@@ -1736,8 +1738,8 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.23.5
-      '@babel/parser': 7.23.6
-      '@babel/types': 7.23.6
+      '@babel/parser': 7.23.9
+      '@babel/types': 7.23.9
 
   /@babel/template@7.23.9:
     resolution: {integrity: sha512-+xrD2BWLpvHKNmX2QbpdpsBaWnRxahMwJjO+KZk2JOElj5nSmKezyS1B4u+QbHMTX69t4ukm6hh9lsYQ7GHCKA==}
@@ -1757,8 +1759,8 @@ packages:
       '@babel/helper-function-name': 7.23.0
       '@babel/helper-hoist-variables': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/parser': 7.23.6
-      '@babel/types': 7.23.6
+      '@babel/parser': 7.23.9
+      '@babel/types': 7.23.9
       debug: 4.3.4(supports-color@5.5.0)
       globals: 11.12.0
     transitivePeerDependencies:
@@ -2907,7 +2909,7 @@ packages:
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
-      vue: ^3.4.18
+      vue: ^3.0.0
     peerDependenciesMeta:
       '@tiptap/core':
         optional: true
@@ -2953,20 +2955,20 @@ packages:
   /@types/babel__generator@7.6.8:
     resolution: {integrity: sha512-ASsj+tpEDsEiFr1arWrlN6V3mdfjRMZt6LtK/Vp/kreFLnr5QH5+DhvD5nINYZXzwJvXeGq+05iUXcAzVrqWtw==}
     dependencies:
-      '@babel/types': 7.23.6
+      '@babel/types': 7.23.9
     dev: true
 
   /@types/babel__template@7.4.4:
     resolution: {integrity: sha512-h/NUaSyG5EyxBIp8YRxo4RMe2/qQgvyowRwVMzhYhBCONbW8PUsg4lkFMrhgZhUe5z3L3MiLDuvyJ/CaPa2A8A==}
     dependencies:
-      '@babel/parser': 7.23.6
-      '@babel/types': 7.23.6
+      '@babel/parser': 7.23.9
+      '@babel/types': 7.23.9
     dev: true
 
   /@types/babel__traverse@7.20.5:
     resolution: {integrity: sha512-WXCyOcRtH37HAUkpXhUduaxdm82b4GSlyTqajXviN4EfiuPgNYR109xMCKvpl6zPIpua0DGlMEDCq+g8EdoheQ==}
     dependencies:
-      '@babel/types': 7.23.6
+      '@babel/types': 7.23.9
     dev: true
 
   /@types/body-parser@1.19.5:
@@ -3351,7 +3353,7 @@ packages:
   /@unhead/vue@1.8.10(vue@3.4.18):
     resolution: {integrity: sha512-KF8pftHnxnlBlgNpKXWLTg3ZUtkuDCxRPUFSDBy9CtqRSX/qvAhLZ26mbqRVmHj8KigiRHP/wnPWNyGnUx20Bg==}
     peerDependencies:
-      vue: ^3.4.18
+      vue: '>=2.7 || >=3'
     peerDependenciesMeta:
       vue:
         optional: true
@@ -3469,7 +3471,7 @@ packages:
   /@vanilla-extract/vite-plugin@3.9.5(@types/node@20.11.17)(vite@5.1.0):
     resolution: {integrity: sha512-CWI/CtrVW6i3HKccI6T7uGQkTJ8bd8Xl2UMBg3Pkr7dwWMmavXTeucV0I9KSbmXaYXSbEj+Q8c9y0xAZwtmTig==}
     peerDependencies:
-      vite: ^5.1.0
+      vite: ^2.2.3 || ^3.0.0 || ^4.0.3 || ^5.0.0
     peerDependenciesMeta:
       vite:
         optional: true
@@ -3495,8 +3497,8 @@ packages:
     resolution: {integrity: sha512-w9M6F3LSEU5kszVb9An2/MmXNxocAnUb3WhRr8bHlimhDrXNt6n6D2nJQR3UXpGlZHh/EsgouOHCsM8V3Ln+WA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^5.1.0
-      vue: ^3.4.18
+      vite: ^4.0.0 || ^5.0.0
+      vue: ^3.0.0
     peerDependenciesMeta:
       vite:
         optional: true
@@ -3515,8 +3517,8 @@ packages:
     resolution: {integrity: sha512-b8S5dVS40rgHdDrw+DQi/xOM9ed+kSRZzfm1T74bMmBDCd8XO87NKlFYInzCtwvtWwXZvo1QxE2OSspTATWrbA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^5.1.0
-      vue: ^3.4.18
+      vite: ^5.0.0
+      vue: ^3.2.25
     peerDependenciesMeta:
       vite:
         optional: true
@@ -3662,7 +3664,7 @@ packages:
   /@vue/server-renderer@3.4.18(vue@3.4.18):
     resolution: {integrity: sha512-YJd1wa7mzUN3NRqLEsrwEYWyO+PUBSROIGlCc3J/cvn7Zu6CxhNLgXa8Z4zZ5ja5/nviYO79J1InoPeXgwBTZA==}
     peerDependencies:
-      vue: ^3.4.18
+      vue: 3.4.18
     peerDependenciesMeta:
       vue:
         optional: true
@@ -11567,7 +11569,7 @@ packages:
     resolution: {integrity: sha512-OxS3n0zUo5wsfgNCAuw2FiG/KD1ipgQV+2Flst4RyeI2iPv+m0YueVq+nx41k5NOWJj/zhqEas6I0b7HXveXjA==}
     peerDependencies:
       '@vue/compiler-sfc': ^2.7.0 || ^3.0.0
-      vite: ^5.1.0
+      vite: ^2.0.0 || ^3.0.0-0 || ^4.0.0 || ^5.0.0
     peerDependenciesMeta:
       '@vue/compiler-sfc':
         optional: true
@@ -11591,7 +11593,7 @@ packages:
   /vite-tsconfig-paths@4.3.1(typescript@5.3.3)(vite@5.1.0):
     resolution: {integrity: sha512-cfgJwcGOsIxXOLU/nELPny2/LUD/lcf1IbfyeKTv2bsupVbTH/xpFtdQlBmIP1GEK2CjjLxYhFfB+QODFAx5aw==}
     peerDependencies:
-      vite: ^5.1.0
+      vite: '*'
     peerDependenciesMeta:
       vite:
         optional: true
@@ -11610,7 +11612,7 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': ^20.11.17
+      '@types/node': ^18.0.0 || >=20.0.0
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
@@ -11646,7 +11648,7 @@ packages:
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
-      '@types/node': ^20.11.17
+      '@types/node': ^18.0.0 || >=20.0.0
       '@vitest/browser': ^1.0.0
       '@vitest/ui': ^1.0.0
       happy-dom: '*'
@@ -11721,7 +11723,7 @@ packages:
   /vue-router@4.2.5(vue@3.4.18):
     resolution: {integrity: sha512-DIUpKcyg4+PTQKfFPX88UWhlagBEBEfJ5A8XDXRJLUnZOvcpMF8o/dnL90vpVkGaPbjvXazV/rC1qBKrZlFugw==}
     peerDependencies:
-      vue: ^3.4.18
+      vue: ^3.2.0
     peerDependenciesMeta:
       vue:
         optional: true
@@ -12026,3 +12028,7 @@ packages:
 
   /zhead@2.2.4:
     resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

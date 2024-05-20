@@ -22,7 +22,7 @@ export default defineComponent({
     // const disabled = ref(false);
     const text = ref('Chip Component');
     const label = ref(false);
-    const variants = vui.options.colorScheme.variants;
+    const { variants } = vui.options.colorScheme;
     const color = ref<ScopeName>();
     const size = ref<ChipSize>();
     const variant = ref<ColorVariant>();

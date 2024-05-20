@@ -3,6 +3,8 @@ import {
   getWorkspacePackageJson,
   findWorkspacePackages,
 } from '@fastkit/plugboy';
+import fs from 'fs-extra';
+import path from 'node:path';
 import {
   PACKAGES_DIR,
   GET_PACKAGE_PREFIX,
@@ -10,8 +12,6 @@ import {
   PROVIDER_TEMPLATE_PATH,
   MODULES_ROOT,
 } from './constants';
-import fs from 'fs-extra';
-import path from 'node:path';
 import { FastkitPackage, PackageDep, PackageInfo } from '../schemes';
 
 export function toLoadResult(source: string | Record<string, any>): LoadResult {

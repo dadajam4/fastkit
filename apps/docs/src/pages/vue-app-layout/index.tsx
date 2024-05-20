@@ -12,14 +12,12 @@ export default defineComponent({
     // const pkgI18n = PkgI18nSubSpace.use();
     // const { common } = pkgI18n.at;
 
-    return () => {
-      return (
-        <VPackageProvider
-          v-slots={{
-            default: ({ pkg }) => <VPage />,
-          }}
-        />
-      );
-    };
+    return () => (
+      <VPackageProvider
+        v-slots={{
+          default: () => <VPage />,
+        }}
+      />
+    );
   },
 });

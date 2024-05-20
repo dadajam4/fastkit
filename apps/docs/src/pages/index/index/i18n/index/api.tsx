@@ -1,8 +1,8 @@
 import { defineComponent } from 'vue';
 import { VPage } from '@fastkit/vot';
 import { VHero, VTabs, VTabsItem } from '@fastkit/vui';
-import { VDocsPaging } from '~/components';
 import { PackageProvide } from '@@/package-loader';
+import { VDocsPaging } from '~/components';
 import { API_CATEGORIES } from './api/-shared';
 
 export default defineComponent({
@@ -21,25 +21,18 @@ export default defineComponent({
       value: category,
     }));
 
-    return () => {
-      return (
-        <div>
-          <VHero>{`${pkg.displayName} API`}</VHero>
-          <VTabs
-            items={tabsItems}
-            router={(value) => {
-              return `/i18n/api/${value}/`;
-            }}
-          />
-          <VPage />
-          <VDocsPaging
-            prev={{
-              to: `/i18n/`,
-              title: 'HOME',
-            }}
-          />
-        </div>
-      );
-    };
+    return () => (
+      <div>
+        <VHero>{`${pkg.displayName} API`}</VHero>
+        <VTabs items={tabsItems} router={(value) => `/i18n/api/${value}/`} />
+        <VPage />
+        <VDocsPaging
+          prev={{
+            to: `/i18n/`,
+            title: 'HOME',
+          }}
+        />
+      </div>
+    );
   },
 });
