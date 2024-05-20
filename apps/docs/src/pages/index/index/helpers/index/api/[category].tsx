@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
-import { useMatchedCategory, prefetch } from './-shared';
 import { PackageProvide } from '@@/package-loader';
+import { useMatchedCategory, prefetch } from './-shared';
 import { VTSDocsAnyMeta } from '~/components';
 
 export default defineComponent({
@@ -16,16 +16,12 @@ export default defineComponent({
       title: category.name,
     });
 
-    return () => {
-      return (
-        <div>
-          {category.types.map((meta, index) => {
-            return (
-              <VTSDocsAnyMeta key={`${index}:${meta.name}`} value={meta} />
-            );
-          })}
-        </div>
-      );
-    };
+    return () => (
+      <div>
+        {category.types.map((meta, index) => (
+          <VTSDocsAnyMeta key={`${index}:${meta.name}`} value={meta} />
+        ))}
+      </div>
+    );
   },
 });

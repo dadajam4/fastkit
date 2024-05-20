@@ -26,8 +26,8 @@ export default defineComponent({
       value: String(i),
       label: `アイテム${i}`,
     }));
-    const asyncItems: RawFormSelectorItems = () => {
-      return new Promise((resolve, reject) => {
+    const asyncItems: RawFormSelectorItems = () =>
+      new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([
             ...items,
@@ -54,7 +54,6 @@ export default defineComponent({
           // reject(new Error('jjj'));
         }, 3000);
       });
-    };
 
     return {
       select1,

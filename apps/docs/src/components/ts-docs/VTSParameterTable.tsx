@@ -27,6 +27,7 @@ function parameterDoc2HTML(doc: ParameterDoc): string {
       if (!link) return text;
       const url = (link.type === 'linkPlain' && link.url) || '';
       const title = link.type === 'link' ? link.url : '';
+      // eslint-disable-next-line no-script-url
       return `<a href="${url || 'javascript:void(0);'}"${
         url && ' target="_blank" rel="noopener"'
       }${title && ` title="${title}"`}>${link.name}</a>`;

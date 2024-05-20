@@ -27,12 +27,33 @@ export const VTSMetaDoc = defineComponent({
   },
   setup(props) {
     const comment = computed(() => commentToMarkDown(props.value.description));
-    return () => {
-      return (
-        <div class="VTSMetaDoc">
-          <VMarked code={comment.value} />
-        </div>
-      );
-    };
+    const examples = computed(() =>
+      props.value.tags.filter((tag) => tag.name === 'example'),
+    );
+    return () => (
+      <div class="VTSMetaDoc">
+        <VMarked code={comment.value} />
+        {examples.value.length > 0 && (
+          <div>
+            <h4
+              style={{
+                marginBottom: '0px',
+                fontSize: '10px',
+                border: 'solid 1px',
+                display: 'inline-block',
+                padding: '2px 4px',
+                lineHeight: 1,
+                borderRadius: '4px',
+                opacity: 0.8,
+              }}>
+              Example
+            </h4>
+            {examples.value.map((example, index) => (
+              <VMarked key={index} code={example.text} />
+            ))}
+          </div>
+        )}
+      </div>
+    );
   },
 });

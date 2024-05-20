@@ -1,12 +1,12 @@
 import { defineComponent } from 'vue';
+import { VPackageProvider } from 'virtual:package-provider:vue-location';
+import { PackageProvide } from '@@/package-loader';
 import {
   // VDocsSection,
   // VCode,
   VTSDocsAnyMeta,
 } from '~/components';
-import { VPackageProvider } from 'virtual:package-provider:vue-location';
 import { ApiMeta } from '../-shared';
-import { PackageProvide } from '@@/package-loader';
 // import { PkgI18nSubSpace } from '../index';
 
 export default defineComponent({
@@ -17,15 +17,15 @@ export default defineComponent({
     // const messages = _pkgI18n.at.pkg.t;
     const meta = new ApiMeta();
 
-    return () => {
-      return (
-        <VPackageProvider
-          v-slots={{
-            default: ({ pkg }) => (
-              <>
-                {pkg.renderHeader()}
+    return () => (
+      <VPackageProvider
+        v-slots={{
+          // eslint-disable-next-line no-shadow
+          default: ({ pkg }) => (
+            <>
+              {pkg.renderHeader()}
 
-                {/* <VDocsSection title={messages.why.title}>
+              {/* <VDocsSection title={messages.why.title}>
                   {messages.why.content()}
 
                   <VDocsSection title={messages.assumedPhilosophy.title}>
@@ -33,7 +33,7 @@ export default defineComponent({
                   </VDocsSection>
                 </VDocsSection> */}
 
-                {/* <VDocsSection title={messages.flowOfUsage.title}>
+              {/* <VDocsSection title={messages.flowOfUsage.title}>
                   <VDocsSection title={`1. ${messages.step1.title}`}>
                     <small>{messages.flowOfUsage.example}</small>
                     {messages.step1.content()}
@@ -121,16 +121,15 @@ export default defineComponent({
                   </VDocsSection>
                 </VDocsSection> */}
 
-                <VTSDocsAnyMeta value={meta.types.LocationServiceMeta} />
-                {/* <VTSDocsAnyMeta value={meta.types.buildMeta} />
+              <VTSDocsAnyMeta value={meta.types.LocationServiceMeta} />
+              {/* <VTSDocsAnyMeta value={meta.types.buildMeta} />
                 <VTSDocsAnyMeta value={meta.types.CatcherBuilderOptionsMeta} />
                 <VTSDocsAnyMeta value={meta.types.CatcherConstructorMeta} />
                 <VTSDocsAnyMeta value={meta.types.CatcherMeta} /> */}
-              </>
-            ),
-          }}
-        />
-      );
-    };
+            </>
+          ),
+        }}
+      />
+    );
   },
 });

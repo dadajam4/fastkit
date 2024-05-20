@@ -1,4 +1,3 @@
-import * as styles from './index.css';
 import { defineComponent, VNode } from 'vue';
 import {
   VAppSystemBar,
@@ -8,10 +7,11 @@ import {
   VueAppLayoutPositionX,
 } from '@fastkit/vue-app-layout';
 import { VHero, VButton, VDialog, VBreadcrumbs } from '@fastkit/vui';
+import { range } from '@fastkit/helpers';
+import * as styles from './index.css';
 import { ItemLevel } from './-schemes';
 import { PlaygroundContext } from './-context';
 import { PlaygroundEditor } from './-components';
-import { range } from '@fastkit/helpers';
 
 export default defineComponent({
   setup() {
@@ -64,22 +64,20 @@ export default defineComponent({
           position={toolbarState.position}
           active={toolbarState.active}
           v-slots={{
-            default: () => {
-              return (
-                <div class={[styles.toolbar, 'elevation-4']}>
-                  {renderToolbarDrawerActivator('left')}
-                  <div>{`Toolbar(${level})`}</div>
-                  <VButton
-                    class={styles.toolbarEdit}
-                    onClick={(ev) => {
-                      ctx.edting = true;
-                    }}>
-                    Edit
-                  </VButton>
-                  {renderToolbarDrawerActivator('right')}
-                </div>
-              );
-            },
+            default: () => (
+              <div class={[styles.toolbar, 'elevation-4']}>
+                {renderToolbarDrawerActivator('left')}
+                <div>{`Toolbar(${level})`}</div>
+                <VButton
+                  class={styles.toolbarEdit}
+                  onClick={(ev) => {
+                    ctx.edting = true;
+                  }}>
+                  Edit
+                </VButton>
+                {renderToolbarDrawerActivator('right')}
+              </div>
+            ),
           }}
         />
       );
@@ -98,43 +96,41 @@ export default defineComponent({
           static={drawerState.static}
           rale={drawerState.rale}
           v-slots={{
-            default: () => {
-              return (
-                <div
-                  class={[
-                    styles.drawer,
-                    'elevation-4',
-                    { [styles.drawerRale]: drawerState.rale },
-                  ]}>
-                  {drawerState.rale ? (
-                    <div key="default">
-                      <VButton
-                        class={styles.drawerRaleButton}
-                        icon={
-                          drawerState.position === 'left'
-                            ? 'mdi-arrow-right'
-                            : 'mdi-arrow-left'
-                        }
-                        size="lg"
-                        onClick={() => {
-                          drawerState.rale = false;
-                        }}
-                      />
+            default: () => (
+              <div
+                class={[
+                  styles.drawer,
+                  'elevation-4',
+                  { [styles.drawerRale]: drawerState.rale },
+                ]}>
+                {drawerState.rale ? (
+                  <div key="default">
+                    <VButton
+                      class={styles.drawerRaleButton}
+                      icon={
+                        drawerState.position === 'left'
+                          ? 'mdi-arrow-right'
+                          : 'mdi-arrow-left'
+                      }
+                      size="lg"
+                      onClick={() => {
+                        drawerState.rale = false;
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div key="rale">
+                    <div class={styles.drawerLabel}>{`Drawer(${level})`}</div>
+                    <PlaygroundEditor tabs />
+                    <div>
+                      {range(50).map((i) => (
+                        <p>This is text.</p>
+                      ))}
                     </div>
-                  ) : (
-                    <div key="rale">
-                      <div class={styles.drawerLabel}>{`Drawer(${level})`}</div>
-                      <PlaygroundEditor tabs />
-                      <div>
-                        {range(50).map((i) => (
-                          <p>This is text.</p>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            },
+                  </div>
+                )}
+              </div>
+            ),
           }}
         />
       );
@@ -153,54 +149,52 @@ export default defineComponent({
       return nodes;
     };
 
-    return () => {
-      return (
-        <div>
-          {renderLevel('main')}
-          <VAppContainer>
-            <VHero>Playground</VHero>
+    return () => (
+      <div>
+        {renderLevel('main')}
+        <VAppContainer>
+          <VHero>Playground</VHero>
 
-            <VBreadcrumbs
-              items={[
-                {
-                  to: '/vue-app-layout/',
-                  text: 'Vue App Layout',
-                },
-                {
-                  text: 'Playground',
-                },
-              ]}
-            />
-
-            <p>各種コンポーネントの組み合わせをテストすることができます。</p>
-
-            <PlaygroundEditor />
-
-            <div>
-              {range(100).map((i) => (
-                <p key={`row-${i}`}>
-                  This is content... This is content... This is content... This
-                  is content... This is content... This is content... This is
-                  content... This is content... This is content... This is
-                  content...
-                </p>
-              ))}
-            </div>
-          </VAppContainer>
-          {renderLevel('sub')}
-
-          <VDialog
-            v-model={ctx.edting}
-            v-slots={{
-              default: () => (
-                <div>
-                  <PlaygroundEditor tabs />
-                </div>
-              ),
-            }}
+          <VBreadcrumbs
+            items={[
+              {
+                to: '/vue-app-layout/',
+                text: 'Vue App Layout',
+              },
+              {
+                text: 'Playground',
+              },
+            ]}
           />
-        </div>
-      );
-    };
+
+          <p>各種コンポーネントの組み合わせをテストすることができます。</p>
+
+          <PlaygroundEditor />
+
+          <div>
+            {range(100).map((i) => (
+              <p key={`row-${i}`}>
+                This is content... This is content... This is content... This is
+                content... This is content... This is content... This is
+                content... This is content... This is content... This is
+                content...
+              </p>
+            ))}
+          </div>
+        </VAppContainer>
+        {renderLevel('sub')}
+
+        <VDialog
+          v-model={ctx.edting}
+          v-slots={{
+            default: () => (
+              <div>
+                <PlaygroundEditor tabs />
+              </div>
+            ),
+          }}
+        />
+      </div>
+    );
   },
 });

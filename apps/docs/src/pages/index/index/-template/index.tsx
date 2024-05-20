@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
-import { VDocsSection, VCode } from '~/components';
 import { VPackageProvider } from 'virtual:package-provider:__PACKAGE_NAME__';
+import { VDocsSection, VCode } from '~/components';
 import { i18n } from '@@';
 import { pkg } from './-i18n';
 
@@ -12,23 +12,22 @@ export default defineComponent({
     const pkgI18n = PkgI18nSubSpace.use();
     const { common } = pkgI18n.at;
 
-    return () => {
-      return (
-        <VPackageProvider
-          v-slots={{
-            default: ({ pkg }) => (
-              <>
-                {pkg.renderHeader()}
-                <VDocsSection title={common.t.usage}>
-                  <VCode language="ts">
-                    {`// ${common.t.docIsInPreparation}`}
-                  </VCode>
-                </VDocsSection>
-              </>
-            ),
-          }}
-        />
-      );
-    };
+    return () => (
+      <VPackageProvider
+        v-slots={{
+          // eslint-disable-next-line no-shadow
+          default: ({ pkg }) => (
+            <>
+              {pkg.renderHeader()}
+              <VDocsSection title={common.t.usage}>
+                <VCode language="ts">
+                  {`// ${common.t.docIsInPreparation}`}
+                </VCode>
+              </VDocsSection>
+            </>
+          ),
+        }}
+      />
+    );
   },
 });

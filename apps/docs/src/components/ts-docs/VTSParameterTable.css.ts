@@ -4,7 +4,7 @@ function vuiStyle(rule: StyleRule, debugId?: string): string {
   return style(
     {
       '@layer': {
-        ['vui']: rule,
+        vui: rule,
       },
     },
     debugId,

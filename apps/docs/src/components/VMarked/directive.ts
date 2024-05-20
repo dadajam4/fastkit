@@ -30,7 +30,7 @@ const hook: MarkedDirectiveHook = function hook(el, binding) {
     if (ev.metaKey) return;
     const { target } = ev;
     if (!target) return;
-    const routeLink = (target as HTMLElement).dataset['route'];
+    const routeLink = (target as HTMLElement).dataset.route;
     if (!routeLink) return;
     ev.preventDefault();
     binding.value.router.push(routeLink);

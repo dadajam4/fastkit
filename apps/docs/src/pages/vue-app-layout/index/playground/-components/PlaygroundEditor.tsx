@@ -1,6 +1,4 @@
-import * as styles from './PlaygroundEditor.css';
 import { defineComponent, ref, Fragment } from 'vue';
-import { PlaygroundContext } from '../-context';
 import {
   VAL_X_POSITIONS,
   VAL_Y_POSITIONS,
@@ -17,6 +15,8 @@ import {
   VAppContainer,
   VFormControl,
 } from '@fastkit/vui';
+import * as styles from './PlaygroundEditor.css';
+import { PlaygroundContext } from '../-context';
 import { ItemLevel } from '../-schemes';
 
 export const PlaygroundEditor = defineComponent({
@@ -87,202 +87,182 @@ export const PlaygroundEditor = defineComponent({
     };
 
     const slots = {
-      systemBar: () => {
-        return (
-          <VAppContainer class={styles.item}>
-            {ctx.mapSystemBarModels((model) => {
-              const { state } = model;
-              return (
-                <div class={styles.level}>
-                  <VSwitch class={styles.levelActivator} v-model={model.use}>
-                    {model.level}
-                  </VSwitch>
-                  {state && (
-                    <>
-                      <VFormControl hiddenInfo label="State">
-                        <VSwitch class={styles.field} v-model={state.active}>
-                          active
-                        </VSwitch>
-                      </VFormControl>
+      systemBar: () => (
+        <VAppContainer class={styles.item}>
+          {ctx.mapSystemBarModels((model) => {
+            const { state } = model;
+            return (
+              <div class={styles.level}>
+                <VSwitch class={styles.levelActivator} v-model={model.use}>
+                  {model.level}
+                </VSwitch>
+                {state && (
+                  <>
+                    <VFormControl hiddenInfo label="State">
+                      <VSwitch class={styles.field} v-model={state.active}>
+                        active
+                      </VSwitch>
+                    </VFormControl>
 
-                      <VRadioGroup
+                    <VRadioGroup
+                      class={styles.field}
+                      label="Position"
+                      items={yOptions}
+                      modelValue={state.position}
+                      onUpdate:modelValue={(position) => {
+                        setBarPosition(
+                          'systemBar',
+                          model.level,
+                          position as any,
+                        );
+                      }}
+                      stacked={false}
+                      hiddenInfo
+                    />
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </VAppContainer>
+      ),
+      toolbar: () => (
+        <VAppContainer class={styles.item}>
+          {ctx.mapToolbarModels((model) => {
+            const { state } = model;
+            return (
+              <div class={styles.level}>
+                <VSwitch class={styles.levelActivator} v-model={model.use}>
+                  {model.level}
+                </VSwitch>
+                {state && (
+                  <>
+                    <VFormControl hiddenInfo label="State">
+                      <VSwitch class={styles.field} v-model={state.active}>
+                        active
+                      </VSwitch>
+                    </VFormControl>
+
+                    <VRadioGroup
+                      class={styles.field}
+                      label="Position"
+                      items={yOptions}
+                      modelValue={state.position}
+                      onUpdate:modelValue={(position) => {
+                        setBarPosition('toolbar', model.level, position as any);
+                      }}
+                      stacked={false}
+                      hiddenInfo
+                    />
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </VAppContainer>
+      ),
+      drawer: () => (
+        <VAppContainer class={styles.item}>
+          {ctx.mapDrawerModels((model) => {
+            const { state } = model;
+            const drawer = ctx.layout.getDrawerById(ctx.drawerId[model.level]);
+
+            return (
+              <div class={styles.level}>
+                <VSwitch class={styles.levelActivator} v-model={model.use}>
+                  {model.level}
+                </VSwitch>
+                {state && drawer && (
+                  <>
+                    <VFormControl hiddenInfo label="State">
+                      <VSwitch
                         class={styles.field}
-                        label="Position"
-                        items={yOptions}
-                        modelValue={state.position}
-                        onUpdate:modelValue={(position) => {
-                          setBarPosition(
-                            'systemBar',
-                            model.level,
-                            position as any,
-                          );
-                        }}
-                        stacked={false}
-                        hiddenInfo
-                      />
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </VAppContainer>
-        );
-      },
-      toolbar: () => {
-        return (
-          <VAppContainer class={styles.item}>
-            {ctx.mapToolbarModels((model) => {
-              const { state } = model;
-              return (
-                <div class={styles.level}>
-                  <VSwitch class={styles.levelActivator} v-model={model.use}>
-                    {model.level}
-                  </VSwitch>
-                  {state && (
-                    <>
-                      <VFormControl hiddenInfo label="State">
-                        <VSwitch class={styles.field} v-model={state.active}>
-                          active
-                        </VSwitch>
-                      </VFormControl>
+                        modelValue={drawer.isActive}
+                        disabled={drawer.isStatic}
+                        onUpdate:modelValue={(isActive) => {
+                          isActive ? drawer.open() : drawer.close();
+                        }}>
+                        active
+                      </VSwitch>
+                      <VSwitch class={styles.field} v-model={state.static}>
+                        static
+                      </VSwitch>
+                      <VSwitch class={styles.field} v-model={state.backdrop}>
+                        backdrop
+                      </VSwitch>
+                      <VSwitch class={styles.field} v-model={state.rale}>
+                        rale
+                      </VSwitch>
+                    </VFormControl>
 
-                      <VRadioGroup
-                        class={styles.field}
-                        label="Position"
-                        items={yOptions}
-                        modelValue={state.position}
-                        onUpdate:modelValue={(position) => {
-                          setBarPosition(
-                            'toolbar',
-                            model.level,
-                            position as any,
-                          );
-                        }}
-                        stacked={false}
-                        hiddenInfo
-                      />
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </VAppContainer>
-        );
-      },
-      drawer: () => {
-        return (
-          <VAppContainer class={styles.item}>
-            {ctx.mapDrawerModels((model) => {
-              const { state } = model;
-              const drawer = ctx.layout.getDrawerById(
-                ctx.drawerId[model.level],
-              );
+                    <VRadioGroup
+                      class={styles.field}
+                      label="Position"
+                      items={xOptions}
+                      modelValue={state.position}
+                      onUpdate:modelValue={(position) => {
+                        setDrawerPosition(model.level, position as any);
+                      }}
+                      stacked={false}
+                      hiddenInfo
+                    />
 
-              return (
-                <div class={styles.level}>
-                  <VSwitch class={styles.levelActivator} v-model={model.use}>
-                    {model.level}
-                  </VSwitch>
-                  {state && drawer && (
-                    <>
-                      <VFormControl hiddenInfo label="State">
-                        <VSwitch
-                          class={styles.field}
-                          modelValue={drawer.isActive}
-                          disabled={drawer.isStatic}
-                          onUpdate:modelValue={(isActive) => {
-                            isActive ? drawer.open() : drawer.close();
-                          }}>
-                          active
-                        </VSwitch>
-                        <VSwitch class={styles.field} v-model={state.static}>
-                          static
-                        </VSwitch>
-                        <VSwitch class={styles.field} v-model={state.backdrop}>
-                          backdrop
-                        </VSwitch>
-                        <VSwitch class={styles.field} v-model={state.rale}>
-                          rale
-                        </VSwitch>
-                      </VFormControl>
+                    <VRadioGroup
+                      class={styles.field}
+                      label="Sticked Top"
+                      items={stickedYOptions}
+                      v-model={state.sticked.top}
+                      stacked={false}
+                      hiddenInfo
+                    />
 
-                      <VRadioGroup
-                        class={styles.field}
-                        label="Position"
-                        items={xOptions}
-                        modelValue={state.position}
-                        onUpdate:modelValue={(position) => {
-                          setDrawerPosition(model.level, position as any);
-                        }}
-                        stacked={false}
-                        hiddenInfo
-                      />
-
-                      <VRadioGroup
-                        class={styles.field}
-                        label="Sticked Top"
-                        items={stickedYOptions}
-                        v-model={state.sticked.top}
-                        stacked={false}
-                        hiddenInfo
-                      />
-
-                      <VRadioGroup
-                        class={styles.field}
-                        label="Sticked Bottom"
-                        items={stickedYOptions}
-                        v-model={state.sticked.bottom}
-                        stacked={false}
-                        hiddenInfo
-                      />
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </VAppContainer>
-        );
-      },
+                    <VRadioGroup
+                      class={styles.field}
+                      label="Sticked Bottom"
+                      items={stickedYOptions}
+                      v-model={state.sticked.bottom}
+                      stacked={false}
+                      hiddenInfo
+                    />
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </VAppContainer>
+      ),
     };
 
-    const renderDefault = () => {
-      return (
-        <Fragment key="default">
-          {tabs.map(({ label, value }) => (
-            <div>
-              <h3 class={styles.defaultHeading}>
-                <span class={styles.defaultHeadingLabel}>{label}</span>
-              </h3>
-              <VAppContainer key={value}>
-                {(slots as any)[value]()}
-              </VAppContainer>
-            </div>
-          ))}
-        </Fragment>
-      );
-    };
+    const renderDefault = () => (
+      <Fragment key="default">
+        {tabs.map(({ label, value }) => (
+          <div>
+            <h3 class={styles.defaultHeading}>
+              <span class={styles.defaultHeadingLabel}>{label}</span>
+            </h3>
+            <VAppContainer key={value}>{(slots as any)[value]()}</VAppContainer>
+          </div>
+        ))}
+      </Fragment>
+    );
 
-    const renderTabs = () => {
-      return (
-        <Fragment key="tabs">
-          <VTabs items={tabs} v-model={selectedTab.value} />
-          <VContentSwitcher
-            order={tabs}
-            v-model={selectedTab.value}
-            v-slots={slots}
-          />
-        </Fragment>
-      );
-    };
+    const renderTabs = () => (
+      <Fragment key="tabs">
+        <VTabs items={tabs} v-model={selectedTab.value} />
+        <VContentSwitcher
+          order={tabs}
+          v-model={selectedTab.value}
+          v-slots={slots}
+        />
+      </Fragment>
+    );
 
     const renderBody = () => (props.tabs ? renderTabs() : renderDefault());
 
-    return () => {
-      return (
-        <VForm size="sm">
-          <VAppContainer pulled>{renderBody()}</VAppContainer>
-        </VForm>
-      );
-    };
+    return () => (
+      <VForm size="sm">
+        <VAppContainer pulled>{renderBody()}</VAppContainer>
+      </VForm>
+    );
   },
 });

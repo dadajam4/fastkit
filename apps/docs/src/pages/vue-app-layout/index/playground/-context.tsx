@@ -1,5 +1,10 @@
 import { reactive, provide, inject, ref } from 'vue';
 import {
+  VueAppLayout,
+  VueAppLayoutPositionY,
+  VueAppLayoutPositionX,
+} from '@fastkit/vue-app-layout';
+import {
   createDefaultState,
   State,
   ITEM_LEVELS,
@@ -15,11 +20,6 @@ import {
   createDrawerState,
 } from './-schemes';
 import { PLAYGROUND_CONTEXT_INJECTION_KEY } from './-injections';
-import {
-  VueAppLayout,
-  VueAppLayoutPositionY,
-  VueAppLayoutPositionX,
-} from '@fastkit/vue-app-layout';
 
 export class PlaygroundContext {
   static use() {
@@ -29,7 +29,9 @@ export class PlaygroundContext {
   }
 
   readonly layout: VueAppLayout;
+
   readonly state: State;
+
   private readonly _edting = ref(false);
 
   readonly drawerId = {

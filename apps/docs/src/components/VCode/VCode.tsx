@@ -1,9 +1,9 @@
 import './VCode.scss';
 
 import { defineComponent, ref, onBeforeUnmount } from 'vue';
-import { VPrism } from '../VPrism';
 import { VButton, VTooltip } from '@fastkit/vui';
 import { i18n } from '@@/i18n';
+import { VPrism } from '../VPrism';
 
 export const VCode = defineComponent({
   name: 'VCode',

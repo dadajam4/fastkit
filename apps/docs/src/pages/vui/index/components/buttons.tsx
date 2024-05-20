@@ -14,8 +14,8 @@ import {
   VTooltip,
   VButtonGroup,
 } from '@fastkit/vui';
-import { DocsSection } from '../../../-components';
 import { useHead } from '@unhead/vue';
+import { DocsSection } from '../../../-components';
 
 export default defineComponent({
   setup() {
@@ -33,7 +33,7 @@ export default defineComponent({
     const text = ref('');
 
     const colors = vui.options.colorScheme.scopeNames;
-    const variants = vui.options.colorScheme.variants;
+    const { variants } = vui.options.colorScheme;
     const icons = ICON_NAMES.slice(100, 120);
 
     return {
@@ -71,13 +71,11 @@ export default defineComponent({
           </VButton>
           <VTooltip
             v-slots={{
-              activator: ({ attrs }) => {
-                return [
-                  <VButton color="info" {...(attrs as any)}>
-                    Tooltip
-                  </VButton>,
-                ];
-              },
+              activator: ({ attrs }) => [
+                <VButton color="info" {...(attrs as any)}>
+                  Tooltip
+                </VButton>,
+              ],
             }}>
             <div>あいいえお</div>
           </VTooltip>

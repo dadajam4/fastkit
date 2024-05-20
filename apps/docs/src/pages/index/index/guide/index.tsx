@@ -18,48 +18,46 @@ export default defineComponent({
       title: trans.howToUse,
     });
 
-    return () => {
-      return (
-        <div>
-          <VHero>{trans.howToUse}</VHero>
+    return () => (
+      <div>
+        <VHero>{trans.howToUse}</VHero>
 
-          <VDocsSection title={trans.installation}>
-            <VMarked code={guide.installation.description} />
+        <VDocsSection title={trans.installation}>
+          <VMarked code={guide.installation.description} />
 
-            {pm.renderInstallCommand([
-              '@fastkit/universal-logger',
-              '@fastkit/ev',
-            ])}
-          </VDocsSection>
+          {pm.renderInstallCommand([
+            '@fastkit/universal-logger',
+            '@fastkit/ev',
+          ])}
+        </VDocsSection>
 
-          <VDocsSection title={guide.optimization.title}>
-            <VMarked code={guide.optimization.description} />
+        <VDocsSection title={guide.optimization.title}>
+          <VMarked code={guide.optimization.description} />
 
-            <h4>npm</h4>
-            <VMarked code={guide.optimization.npm} />
+          <h4>npm</h4>
+          <VMarked code={guide.optimization.npm} />
 
-            <h4>yarn</h4>
-            <VCode
-              code="yarn upgrade --pattern @fastkit/ --latest"
-              language="sh"
-            />
-
-            <h4>pnpm</h4>
-            <VCode code={'pnpm update "@fastkit/*" --latest'} language="sh" />
-          </VDocsSection>
-
-          <VDocsPaging
-            prev={{
-              to: '/guide/what/',
-              title: trans.whatIsFastkit,
-            }}
-            next={{
-              to: '/packages/',
-              title: trans.packages,
-            }}
+          <h4>yarn</h4>
+          <VCode
+            code="yarn upgrade --pattern @fastkit/ --latest"
+            language="sh"
           />
-        </div>
-      );
-    };
+
+          <h4>pnpm</h4>
+          <VCode code={'pnpm update "@fastkit/*" --latest'} language="sh" />
+        </VDocsSection>
+
+        <VDocsPaging
+          prev={{
+            to: '/guide/what/',
+            title: trans.whatIsFastkit,
+          }}
+          next={{
+            to: '/packages/',
+            title: trans.packages,
+          }}
+        />
+      </div>
+    );
   },
 });

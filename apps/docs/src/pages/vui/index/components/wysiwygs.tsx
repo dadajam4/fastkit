@@ -130,7 +130,6 @@ export default defineComponent({
           <button
             type="button"
             onClick={(ev) => {
-              console.log(ev.pageY);
               this.$vui.menu({
                 content: 'xxx',
               });

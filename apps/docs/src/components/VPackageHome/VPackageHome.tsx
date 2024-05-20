@@ -1,4 +1,3 @@
-import * as styles from './VPackageHome.css';
 import { defineComponent, computed, PropType } from 'vue';
 import {
   VButton,
@@ -10,10 +9,11 @@ import {
   VBusyImage,
   VLink,
 } from '@fastkit/vui';
-import { PackageProvide } from '@@';
 import { useHead } from '@unhead/vue';
-import { VLanguageSwitcher } from '~/components';
 import { capitalize } from '@fastkit/helpers';
+import { PackageProvide } from '@@';
+import { VLanguageSwitcher } from '~/components';
+import * as styles from './VPackageHome.css';
 
 interface Action extends Omit<VButtonProps, 'size'> {
   label: string;

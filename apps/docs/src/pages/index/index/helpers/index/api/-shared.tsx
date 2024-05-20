@@ -29,7 +29,9 @@ export class HelpersMeta {
   }
 
   private _hydrated?: Types;
+
   readonly exports: SourceFileExports;
+
   readonly names: APICategory[];
 
   get types(): Types {

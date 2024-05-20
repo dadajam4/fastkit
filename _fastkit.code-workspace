@@ -261,6 +261,10 @@
       "path": "packages/vue-resize"
     },
     {
+      "name": "📦 @fastkit/vue-scoped-loading",
+      "path": "packages/vue-scoped-loading"
+    },
+    {
       "name": "📦 @fastkit/vue-scroller",
       "path": "packages/vue-scroller"
     },

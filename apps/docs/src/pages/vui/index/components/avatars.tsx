@@ -23,7 +23,7 @@ export default defineComponent({
     const text = ref('MJ');
     const tile = ref(false);
     const rounded = ref(false);
-    const variants = vui.options.colorScheme.variants;
+    const { variants } = vui.options.colorScheme;
     const color = ref<ScopeName>();
     const size = ref<AvatarSize>();
     const variant = ref<ColorVariant>();

@@ -1,14 +1,15 @@
 import { inject, provide, isRef, computed } from 'vue';
-import type { PackageInfo } from './schemes';
-import fastkitPackageJson from '../../../../package.json';
-import { PACKAGE_PROVIDE_INJECTION_KEY } from './injections';
 import { useHead, UseHeadInput, ReactiveHead } from '@unhead/vue';
 import { useVuePageControl, VuePageControl } from '@fastkit/vot';
-import { i18n } from '../i18n';
 import { arrayUnique } from '@fastkit/helpers';
-import { VDocsSection } from '~/components';
 import { VHero } from '@fastkit/vui';
 import { PMScript } from '@@/pm-script';
+import type { PackageInfo } from './schemes';
+// eslint-disable-next-line import/no-relative-packages
+import fastkitPackageJson from '../../../../package.json';
+import { PACKAGE_PROVIDE_INJECTION_KEY } from './injections';
+import { i18n } from '../i18n';
+import { VDocsSection } from '~/components';
 
 const FASTKIT_AUTHOR = fastkitPackageJson.author;
 

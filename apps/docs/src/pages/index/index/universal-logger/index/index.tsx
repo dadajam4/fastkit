@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
-import { VDocsSection, VCode, VDocsPaging } from '~/components';
 import { PackageProvide } from '@@/package-loader';
+import { VDocsSection, VCode, VDocsPaging } from '~/components';
 import { PkgI18nSubSpace } from '../index';
 
 export default defineComponent({
@@ -11,20 +11,19 @@ export default defineComponent({
     const { common, pkg: pkgI18n } = _pkgI18n.at;
     const messages = pkgI18n.t;
 
-    return () => {
-      return (
-        <div>
-          {pkg.renderHeader()}
+    return () => (
+      <div>
+        {pkg.renderHeader()}
 
-          <VDocsSection title={messages.concept.title}>
-            {messages.concept.content()}
-          </VDocsSection>
+        <VDocsSection title={messages.concept.title}>
+          {messages.concept.content()}
+        </VDocsSection>
 
-          <VDocsSection title={common.t.usage}>
-            <VDocsSection title={messages.define.title}>
-              <VCode
-                language="ts"
-                code={`
+        <VDocsSection title={common.t.usage}>
+          <VDocsSection title={messages.define.title}>
+            <VCode
+              language="ts"
+              code={`
                   // logger.ts
 
                   import {
@@ -84,13 +83,13 @@ export default defineComponent({
                     },
                   });
                 `}
-              />
-            </VDocsSection>
+            />
+          </VDocsSection>
 
-            <VDocsSection title={messages.use.title}>
-              <VCode
-                language="ts"
-                code={`
+          <VDocsSection title={messages.use.title}>
+            <VCode
+              language="ts"
+              code={`
                   // some-file.ts
                   import { getLogger } from './logger';
 
@@ -98,18 +97,17 @@ export default defineComponent({
 
                   logger.info('Hello world!!!', { hoge: 1, fuga: '2', piyo: { puyo: true } });
                 `}
-              />
-            </VDocsSection>
+            />
           </VDocsSection>
+        </VDocsSection>
 
-          <VDocsPaging
-            next={{
-              to: `/universal-logger/builder/`,
-              title: 'Builder API',
-            }}
-          />
-        </div>
-      );
-    };
+        <VDocsPaging
+          next={{
+            to: `/universal-logger/builder/`,
+            title: 'Builder API',
+          }}
+        />
+      </div>
+    );
   },
 });

@@ -10,7 +10,7 @@ export interface VDocsSectionContextSettings {
 }
 
 const connectingCharacterRe = /[\s\t\n\r]+/g;
-const specialCharacterRe = /[\!\?]/g;
+const specialCharacterRe = /[!?]/g;
 
 function titleToId(title: string) {
   return title
@@ -22,8 +22,11 @@ function titleToId(title: string) {
 
 export class VDocsSectionContext {
   readonly parent: VDocsSectionContext | null;
+
   readonly settings: VDocsSectionContextSettings;
+
   private _id: ComputedRef<string>;
+
   private _level: ComputedRef<VDocsSectionLevel>;
 
   constructor(settings: VDocsSectionContextSettings) {
@@ -38,11 +41,12 @@ export class VDocsSectionContext {
       const parentLevel = parent && parent.level();
 
       const level: VDocsSectionLevel =
+        // eslint-disable-next-line no-nested-ternary
         parentLevel == null
           ? 2
           : parentLevel === 4
-          ? 4
-          : ((parentLevel + 1) as VDocsSectionLevel);
+            ? 4
+            : ((parentLevel + 1) as VDocsSectionLevel);
       return level;
     });
 

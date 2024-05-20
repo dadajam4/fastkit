@@ -1,7 +1,6 @@
 import './VPackageExplorer.scss';
 
 import { defineComponent, PropType, computed } from 'vue';
-import { PackageInfo } from '../../schemes';
 import { useVuePageControl } from '@fastkit/vot';
 import {
   VDataTable,
@@ -11,9 +10,10 @@ import {
   useVui,
   VLink,
 } from '@fastkit/vui';
-import { PackageExploerI18nSpace, FilterInfo } from './i18n';
 import { i18n } from '@@/i18n';
 import { inNonNullable } from '@fastkit/helpers';
+import { PackageExploerI18nSpace, FilterInfo } from './i18n';
+import { PackageInfo } from '../../schemes';
 
 const DEFAULT_SCOPE = 'anywhere';
 
