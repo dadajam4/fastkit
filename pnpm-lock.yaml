@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   '@types/node': ^20.11.17
   vite: ^5.1.0
@@ -969,7 +965,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1018,7 +1014,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-click-outside:
@@ -1027,7 +1023,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-color-scheme:
@@ -1105,7 +1101,7 @@ importers:
         specifier: workspace:^
         version: link:../keyboard
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-loading:
@@ -1126,7 +1122,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1138,7 +1134,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1153,7 +1149,7 @@ importers:
         specifier: workspace:^
         version: link:../media-match
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-page:
@@ -1174,7 +1170,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1192,7 +1188,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-scoped-loading:
@@ -1201,7 +1197,7 @@ importers:
         specifier: workspace:^
         version: link:../helpers
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1253,7 +1249,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1284,7 +1280,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vue-utils:
@@ -1299,7 +1295,7 @@ importers:
         specifier: workspace:^
         version: link:../visibility
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
     devDependencies:
       vue-router:
@@ -1312,7 +1308,7 @@ importers:
         specifier: workspace:^
         version: link:../visibility
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
 
   packages/vui:
@@ -1393,7 +1389,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.0
@@ -1441,7 +1437,7 @@ importers:
         specifier: ^13.0.7
         version: 13.0.7
       vue:
-        specifier: ^3.4.18
+        specifier: ^3.4.0
         version: 3.4.18(typescript@5.3.3)
     devDependencies:
       '@fastkit/vui':
@@ -2913,7 +2909,7 @@ packages:
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
-      vue: ^3.4.18
+      vue: ^3.0.0
     peerDependenciesMeta:
       '@tiptap/core':
         optional: true
@@ -3357,7 +3353,7 @@ packages:
   /@unhead/vue@1.8.10(vue@3.4.18):
     resolution: {integrity: sha512-KF8pftHnxnlBlgNpKXWLTg3ZUtkuDCxRPUFSDBy9CtqRSX/qvAhLZ26mbqRVmHj8KigiRHP/wnPWNyGnUx20Bg==}
     peerDependencies:
-      vue: ^3.4.18
+      vue: '>=2.7 || >=3'
     peerDependenciesMeta:
       vue:
         optional: true
@@ -3475,7 +3471,7 @@ packages:
   /@vanilla-extract/vite-plugin@3.9.5(@types/node@20.11.17)(vite@5.1.0):
     resolution: {integrity: sha512-CWI/CtrVW6i3HKccI6T7uGQkTJ8bd8Xl2UMBg3Pkr7dwWMmavXTeucV0I9KSbmXaYXSbEj+Q8c9y0xAZwtmTig==}
     peerDependencies:
-      vite: ^5.1.0
+      vite: ^2.2.3 || ^3.0.0 || ^4.0.3 || ^5.0.0
     peerDependenciesMeta:
       vite:
         optional: true
@@ -3501,8 +3497,8 @@ packages:
     resolution: {integrity: sha512-w9M6F3LSEU5kszVb9An2/MmXNxocAnUb3WhRr8bHlimhDrXNt6n6D2nJQR3UXpGlZHh/EsgouOHCsM8V3Ln+WA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^5.1.0
-      vue: ^3.4.18
+      vite: ^4.0.0 || ^5.0.0
+      vue: ^3.0.0
     peerDependenciesMeta:
       vite:
         optional: true
@@ -3521,8 +3517,8 @@ packages:
     resolution: {integrity: sha512-b8S5dVS40rgHdDrw+DQi/xOM9ed+kSRZzfm1T74bMmBDCd8XO87NKlFYInzCtwvtWwXZvo1QxE2OSspTATWrbA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^5.1.0
-      vue: ^3.4.18
+      vite: ^5.0.0
+      vue: ^3.2.25
     peerDependenciesMeta:
       vite:
         optional: true
@@ -3668,7 +3664,7 @@ packages:
   /@vue/server-renderer@3.4.18(vue@3.4.18):
     resolution: {integrity: sha512-YJd1wa7mzUN3NRqLEsrwEYWyO+PUBSROIGlCc3J/cvn7Zu6CxhNLgXa8Z4zZ5ja5/nviYO79J1InoPeXgwBTZA==}
     peerDependencies:
-      vue: ^3.4.18
+      vue: 3.4.18
     peerDependenciesMeta:
       vue:
         optional: true
@@ -11573,7 +11569,7 @@ packages:
     resolution: {integrity: sha512-OxS3n0zUo5wsfgNCAuw2FiG/KD1ipgQV+2Flst4RyeI2iPv+m0YueVq+nx41k5NOWJj/zhqEas6I0b7HXveXjA==}
     peerDependencies:
       '@vue/compiler-sfc': ^2.7.0 || ^3.0.0
-      vite: ^5.1.0
+      vite: ^2.0.0 || ^3.0.0-0 || ^4.0.0 || ^5.0.0
     peerDependenciesMeta:
       '@vue/compiler-sfc':
         optional: true
@@ -11597,7 +11593,7 @@ packages:
   /vite-tsconfig-paths@4.3.1(typescript@5.3.3)(vite@5.1.0):
     resolution: {integrity: sha512-cfgJwcGOsIxXOLU/nELPny2/LUD/lcf1IbfyeKTv2bsupVbTH/xpFtdQlBmIP1GEK2CjjLxYhFfB+QODFAx5aw==}
     peerDependencies:
-      vite: ^5.1.0
+      vite: '*'
     peerDependenciesMeta:
       vite:
         optional: true
@@ -11616,7 +11612,7 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': ^20.11.17
+      '@types/node': ^18.0.0 || >=20.0.0
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
@@ -11652,7 +11648,7 @@ packages:
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
-      '@types/node': ^20.11.17
+      '@types/node': ^18.0.0 || >=20.0.0
       '@vitest/browser': ^1.0.0
       '@vitest/ui': ^1.0.0
       happy-dom: '*'
@@ -11727,7 +11723,7 @@ packages:
   /vue-router@4.2.5(vue@3.4.18):
     resolution: {integrity: sha512-DIUpKcyg4+PTQKfFPX88UWhlagBEBEfJ5A8XDXRJLUnZOvcpMF8o/dnL90vpVkGaPbjvXazV/rC1qBKrZlFugw==}
     peerDependencies:
-      vue: ^3.4.18
+      vue: ^3.2.0
     peerDependenciesMeta:
       vue:
         optional: true
@@ -12032,3 +12028,7 @@ packages:
 
   /zhead@2.2.4:
     resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

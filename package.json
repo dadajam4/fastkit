@@ -90,11 +90,11 @@
     "vue": "^3.4.18",
     "vue-router": "^4.2.5"
   },
-  "packageManager": "pnpm@8.14.1",
+  "packageManager": "pnpm@8.5.0",
   "engines": {
     "node": ">=18.13.0",
     "npm": "use pnpm",
-    "pnpm": ">=7",
+    "pnpm": ">=8",
     "yarn": "use pnpm"
   },
   "pnpm": {
