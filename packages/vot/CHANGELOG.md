@@ -1,5 +1,11 @@
 # @fastkit/vot
 
+## 0.16.8
+
+### Patch Changes
+
+- [#146](https://github.com/dadajam4/fastkit/pull/146) [`38c99c8`](https://github.com/dadajam4/fastkit/commit/38c99c8d34c434a4acd1df802453b1009cc4009b) Thanks [@dadajam4](https://github.com/dadajam4)! - We have addressed the issue of potential failure when generating a large number of pages simultaneously during static generation by limiting the number of pages generated at once.
+
 ## 0.16.7
 
 ### Patch Changes
