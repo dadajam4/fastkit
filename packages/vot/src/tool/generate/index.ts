@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
 import path from 'node:path';
 import fs from 'fs-extra';
@@ -113,9 +114,22 @@ export async function generate(_config?: ResolvedConfig) {
   const { length } = filteredPages;
   let completed = 0;
 
-  try {
+  const concurrency = 10;
+
+  const chunksList: string[][] = [];
+
+  for (const pagePath of filteredPages) {
+    let chunks = chunksList.at(-1);
+    if (!chunks || chunks.length === concurrency) {
+      chunks = [];
+      chunksList.push(chunks);
+    }
+    chunks.push(pagePath);
+  }
+
+  const processChunks = async (chunks: string[]) => {
     await Promise.all(
-      filteredPages.map(async (pagePath) => {
+      chunks.map(async (pagePath) => {
         const requestUrl = normalizeUrl(`${baseUrl}${pagePath}`);
         const outDir = path.join(clientOutDir, pagePath);
         const outPath = path.join(outDir, 'index.html');
@@ -127,6 +141,10 @@ export async function generate(_config?: ResolvedConfig) {
             headers: {
               'Content-Type': 'text/html',
             },
+          }).catch((_err) => {
+            console.log('http通信で失敗', pagePath);
+            console.error(_err);
+            throw _err;
           });
           if (typeof html !== 'string') {
             // eslint-disable-next-line no-throw-literal
@@ -157,6 +175,12 @@ export async function generate(_config?: ResolvedConfig) {
         }
       }),
     );
+  };
+
+  try {
+    for (const chunks of chunksList) {
+      await processChunks(chunks);
+    }
   } finally {
     server.close();
   }
