@@ -20,64 +20,64 @@ importers:
         specifier: ^2.27.1
         version: 2.27.1
       '@fastkit/color-scheme':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/color-scheme
       '@fastkit/color-scheme-gen':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/color-scheme-gen
       '@fastkit/eslint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/eslint-config
       '@fastkit/eslint-config-vue':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/eslint-config-vue
       '@fastkit/ev':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/ev
       '@fastkit/node-util':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/node-util
       '@fastkit/plugboy':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/plugboy
       '@fastkit/plugboy-sass-plugin':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/plugboy-sass-plugin
       '@fastkit/plugboy-vanilla-extract-plugin':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/plugboy-vanilla-extract-plugin
       '@fastkit/plugboy-vue-jsx-plugin':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/plugboy-vue-jsx-plugin
       '@fastkit/scroller':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/scroller
       '@fastkit/stylelint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/stylelint-config
       '@fastkit/stylelint-config-vue':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/stylelint-config-vue
       '@fastkit/ts-tiny-meta':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/ts-tiny-meta
       '@fastkit/vite-plugin-vui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vite-plugin-vui
       '@fastkit/vot':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vot
       '@fastkit/vot-i18n':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vot-i18n
       '@fastkit/vue-i18n':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vue-i18n
       '@fastkit/vue-page':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vue-page
       '@fastkit/vue-tiny-meta':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:packages/vue-tiny-meta
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -164,43 +164,43 @@ importers:
   apps/docs:
     dependencies:
       '@fastkit/cookies':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/cookies
       '@fastkit/helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/helpers
       '@fastkit/icon-font':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/icon-font
       '@fastkit/media-match':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/media-match
       '@fastkit/vite-plugin-vui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vite-plugin-vui
       '@fastkit/vot':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vot
       '@fastkit/vue-app-layout':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-app-layout
       '@fastkit/vue-loading':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-loading
       '@fastkit/vue-scroller':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-scroller
       '@fastkit/vue-stack':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-stack
       '@fastkit/vue-transitions':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vue-transitions
       '@fastkit/vui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vui
       '@fastkit/vui-wysiwyg':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/vui-wysiwyg
       marked:
         specifier: ^11.2.0
@@ -396,7 +396,7 @@ importers:
   packages/eslint-config-vue:
     dependencies:
       '@fastkit/eslint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../eslint-config
       '@rushstack/eslint-patch':
         specifier: ^1.7.2
@@ -756,7 +756,7 @@ importers:
   packages/stylelint-config-vue:
     dependencies:
       '@fastkit/stylelint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../stylelint-config
       stylelint:
         specifier: ^15.6.0
@@ -768,7 +768,7 @@ importers:
   packages/tiny-hash:
     dependencies:
       '@fastkit/json':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../json
 
   packages/tiny-logger:
