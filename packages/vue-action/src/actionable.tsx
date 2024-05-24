@@ -240,6 +240,9 @@ export function useActionable(
           ).catch(noop);
         };
 
+        // @TODO 1. This is support for cases where the href cannot be obtained when used in conjunction with nuxt-i18n.
+        let _resolvedHref: string | undefined;
+
         const slots: ActionableRouterLinkSettings['slots'] = (children) => ({
           // eslint-disable-next-line no-shadow
           default: ({ href, isActive, isExactActive }) => {
@@ -247,6 +250,14 @@ export function useActionable(
               isActive && activeClass,
               isExactActive && exactActiveClass,
             ];
+
+            // @TODO 1. This is support for cases where the href cannot be obtained when used in conjunction with nuxt-i18n.
+            if (!href) {
+              if (_resolvedHref === undefined) {
+                _resolvedHref = router.resolve(_to).href;
+              }
+              href = _resolvedHref;
+            }
             return (
               <a {...attrs} class={classes} href={href} onClick={handleClick}>
                 {children}

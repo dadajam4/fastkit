@@ -1,5 +1,11 @@
 # @fastkit/vue-action
 
+## 0.3.13
+
+### Patch Changes
+
+- Added provisional support for cases where the href cannot be obtained when used in conjunction with nuxt-i18n. This will be removed once it is improved in nuxt-i18n.
+
 ## 0.3.12
 
 ### Patch Changes
