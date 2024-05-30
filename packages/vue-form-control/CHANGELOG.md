@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.17
+
+### Patch Changes
+
+- Fixed an issue where validation was being triggered when resetting the state of form nodes.
+
 ## 0.20.16
 
 ### Patch Changes

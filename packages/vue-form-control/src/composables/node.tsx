@@ -17,7 +17,6 @@ import {
   getCurrentInstance,
   ComponentInternalInstance,
   VNodeArrayChildren,
-  nextTick,
   markRaw,
 } from 'vue';
 
@@ -69,6 +68,21 @@ const rulesToArray = (
   if (!rules) return [];
   // eslint-disable-next-line no-nested-ternary
   return Array.isArray(rules) ? (shallowCopy ? rules.slice() : rules) : [rules];
+};
+
+const rulesHasChanged = (
+  currentRules: VerifiableRule[],
+  beforeRules: VerifiableRule[],
+) => {
+  if (currentRules.length !== beforeRules.length) {
+    return true;
+  }
+  for (let i = 0, l = currentRules.length; i < l; i++) {
+    const ar = currentRules[i];
+    const br = beforeRules[i];
+    if (ar !== br) return true;
+  }
+  return false;
 };
 
 /**
@@ -1137,8 +1151,8 @@ export class FormNodeControl<
 
     watch(
       () => this.rules,
-      () => {
-        if (this.shouldValidate) {
+      (currentRules, beforeRules) => {
+        if (this.shouldValidate && rulesHasChanged(currentRules, beforeRules)) {
           this.validateSelf(true);
         }
       },
@@ -1489,11 +1503,9 @@ export class FormNodeControl<
       try {
         this._validationSkip = true;
         fn();
-        nextTick(() => {
-          nextTick(() => {
-            this._validationSkip = false;
-            resolve();
-          });
+        setTimeout(() => {
+          this._validationSkip = false;
+          resolve();
         });
       } catch (_err) {
         this._validationSkip = false;
