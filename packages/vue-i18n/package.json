@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-i18n",
-  "version": "0.14.6",
+  "version": "0.14.7",
   "description": "@fastkit/vue-i18n",
   "keywords": [
     "fastkit",
@@ -64,11 +64,11 @@
   },
   "devDependencies": {
     "vue": "^3.4.0",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.3.0"
   },
   "peerDependencies": {
     "vue": "^3.4.0",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.3.0"
   },
   "_docs": {
     "scope": "vue",

@@ -214,7 +214,7 @@ export type RawVuePageControlRedirectSpec =
 export interface VuePageControlRedirectSpec
   extends RouteQueryAndHash,
     MatcherLocationAsPath,
-    LocationAsRelativeRaw {
+    Omit<LocationAsRelativeRaw, 'path'> {
   statusCode: number;
   query?: LocationQueryRaw;
 }

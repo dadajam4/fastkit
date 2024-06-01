@@ -233,7 +233,7 @@ export function createPathPrefixStrategy(
         const resolveRelativeTypeLocation = (
           location: RelativeTypeLocation,
         ): ResolvedLocation => {
-          const { name } = location;
+          const name = 'name' in location && location.name;
           if (!name) return router.resolve(location);
           const preResolved = router.resolve(location);
           return resolvePathBaseLocation(preResolved);
@@ -244,7 +244,7 @@ export function createPathPrefixStrategy(
         ): ResolvedLocation => {
           const loc =
             typeof location === 'string' ? { path: location } : location;
-          return 'path' in loc
+          return 'path' in loc && loc.path
             ? resolvePathBaseLocation(loc)
             : resolveRelativeTypeLocation(loc);
         };

@@ -248,7 +248,7 @@ export function extractVueI18nComponentOptions(
   items.forEach((item) => {
     const { Component } = item;
     if (!isComponentCustomOptions(Component)) return;
-    const { i18n } = Component;
+    const { i18n } = Component as any;
     if (i18n) {
       results.push(...flattenVueI18nComponentOption(i18n));
     }

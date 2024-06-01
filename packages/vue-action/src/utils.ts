@@ -88,7 +88,7 @@ export function resolveRelativeLocationRaw(
   currentPath: string,
 ): RouteLocationPathRaw | RouteLocationNamedRaw {
   let obj = typeof raw === 'string' ? locationStringToPathRaw(raw) : raw;
-  if ('path' in obj && isRelativePath(obj.path)) {
+  if ('path' in obj && obj.path && isRelativePath(obj.path)) {
     obj = {
       ...obj,
       path: resolveRelativePath(currentPath, obj.path),

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-kit",
-  "version": "0.14.9",
+  "version": "0.14.10",
   "description": "A collection of toolkits for vite application setup.",
   "keywords": [
     "fastkit",

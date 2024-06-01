@@ -1,6 +1,5 @@
 import type {
   RouteLocation,
-  // LocationAsPath,
   MatcherLocationAsPath,
   LocationAsRelativeRaw,
   RouteQueryAndHash,
@@ -22,9 +21,9 @@ export type PathBaseLocation = RouteQueryAndHash &
  *
  * @see {@link LocationAsRelativeRaw}
  */
-export type RelativeTypeLocation = RouteQueryAndHash &
-  LocationAsRelativeRaw &
-  RouteLocationOptions;
+export type RelativeTypeLocation =
+  | (RouteQueryAndHash & LocationAsRelativeRaw & RouteLocationOptions)
+  | ({ path?: string } & RouteLocationOptions);
 
 /**
  * Resolved Route Locations

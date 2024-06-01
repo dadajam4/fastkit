@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/nodepack",
-  "version": "0.15.4",
+  "version": "0.15.5",
   "description": "A small bundled tool for developing Node.js server and tool implementations.",
   "keywords": [
     "fastkit",
@@ -55,7 +55,7 @@
     "@fastkit/node-util": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
     "esbuild": "^0.19.12",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.1.2"
   },
   "devDependencies": {
     "@types/nodemon": "^1.19.6"

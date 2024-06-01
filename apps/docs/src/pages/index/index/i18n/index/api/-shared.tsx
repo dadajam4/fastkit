@@ -26,7 +26,7 @@ const originalInject = metaPrefetch.inject.bind(metaPrefetch);
 
 metaPrefetch.inject = function customInject(...args) {
   const result = originalInject(...args);
-  const types = hydrateExports(result.exports);
+  const types = hydrateExports(result!.exports);
   return {
     ...result,
     types,

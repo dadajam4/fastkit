@@ -1,5 +1,11 @@
 # @fastkit/i18n
 
+## 0.14.5
+
+### Patch Changes
+
+- Updated dependencies only.
+
 ## 0.14.4
 
 ### Patch Changes

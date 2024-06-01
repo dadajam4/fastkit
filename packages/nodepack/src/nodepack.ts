@@ -1,7 +1,7 @@
 import * as esbuild from 'esbuild';
 import type { BuildOptions, Message, Plugin } from 'esbuild';
 import path from 'node:path';
-import nodemon from 'nodemon';
+import nodemon, { type Nodemon } from 'nodemon';
 import { inferPackageFormat } from '@fastkit/node-util';
 import { logger } from './logger';
 import { externalPlugin } from './esbuild-plugin';
@@ -91,7 +91,7 @@ export async function nodepack(opts: NodepackOptions) {
 }
 
 nodepack.watch = async function watch(opts: NodepackOptions) {
-  let demon: typeof nodemon | undefined;
+  let demon: Nodemon | undefined;
   const buildOptions = resolveOptions(opts);
 
   function run() {

@@ -1,5 +1,18 @@
 # @fastkit/vue-stack
 
+## 0.16.9
+
+### Patch Changes
+
+- Updated dependencies only.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.7
+  - @fastkit/vue-body-scroll-lock@0.2.8
+  - @fastkit/vue-click-outside@0.2.7
+  - @fastkit/vue-resize@0.2.7
+  - @fastkit/vue-transitions@0.2.8
+
 ## 0.16.8
 
 ### Patch Changes

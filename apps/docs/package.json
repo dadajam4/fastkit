@@ -35,6 +35,6 @@
   },
   "devDependencies": {
     "@mdi/svg": "^7.4.47",
-    "vite-tsconfig-paths": "^4.3.1"
+    "vite-tsconfig-paths": "^4.3.2"
   }
 }

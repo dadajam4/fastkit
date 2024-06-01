@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-scoped-loading",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "vue-scoped-loading",
   "keywords": [],
   "repository": {
@@ -48,7 +48,7 @@
   },
   "peerDependencies": {
     "vue": "^3.4.0",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.3.0"
   },
   "buildOptions": {
     "name": "Vue Scoped Loading"
