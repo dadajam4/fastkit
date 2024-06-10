@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.16.10
+
+### Patch Changes
+
+- Fixed an issue where the focus would be lost from the initially focused element when starting the stack.
+
 ## 0.16.9
 
 ### Patch Changes

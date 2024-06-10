@@ -552,7 +552,9 @@ export function useStackControl(
     trapFocus(ev) {
       const $content = contentRef.value;
       if (!$content) return;
-      if (ev && $content.contains(ev.target as any)) {
+
+      const activeElement = ev?.target || document.activeElement;
+      if (activeElement && $content.contains(activeElement as any)) {
         return;
       }
 
