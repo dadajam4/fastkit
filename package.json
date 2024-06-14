@@ -84,14 +84,14 @@
     "set-cookie-parser": "^2.6.0",
     "stylelint": "^16.6.1",
     "tsx": "^4.11.0",
-    "turbo": "^1.13.3",
+    "turbo": "^2.0.4",
     "typescript": "^5.4.5",
     "vite": "^5.2.12",
     "vitest": "^1.6.0",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2"
   },
-  "packageManager": "pnpm@8.5.0",
+  "packageManager": "pnpm@8.12.1",
   "engines": {
     "node": ">=20.10.0",
     "npm": "use pnpm",

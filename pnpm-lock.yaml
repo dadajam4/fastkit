@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   '@types/node': ^20.13.0
   vite: ^5.1.0
@@ -140,8 +144,8 @@ importers:
         specifier: ^4.11.0
         version: 4.11.0
       turbo:
-        specifier: ^1.13.3
-        version: 1.13.3
+        specifier: ^2.0.4
+        version: 2.0.4
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -794,7 +798,7 @@ importers:
         version: 11.0.4
       vite:
         specifier: ^5.1.0
-        version: 5.1.0
+        version: 5.1.0(@types/node@20.13.0)
 
   packages/ts-type-utils: {}
 
@@ -966,10 +970,10 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
       vue-router:
-        specifier: ^4.3.0
+        specifier: ^4.3.2
         version: 4.3.2(vue@3.4.27)
 
   packages/vue-app-layout:
@@ -1015,7 +1019,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
 
   packages/vue-click-outside:
@@ -1024,7 +1028,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
 
   packages/vue-color-scheme:
@@ -1102,7 +1106,7 @@ importers:
         specifier: workspace:^
         version: link:../keyboard
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
 
   packages/vue-loading:
@@ -1123,10 +1127,10 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
       vue-router:
-        specifier: ^4.3.0
+        specifier: ^4.3.2
         version: 4.3.2(vue@3.4.27)
 
   packages/vue-location:
@@ -1135,10 +1139,10 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
       vue-router:
-        specifier: ^4.3.0
+        specifier: ^4.3.2
         version: 4.3.2(vue@3.4.27)
 
   packages/vue-media-match:
@@ -1150,7 +1154,7 @@ importers:
         specifier: workspace:^
         version: link:../media-match
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
 
   packages/vue-page:
@@ -1171,10 +1175,10 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
       vue-router:
-        specifier: ^4.3.0
+        specifier: ^4.3.2
         version: 4.3.2(vue@3.4.27)
 
   packages/vue-resize:
@@ -1189,7 +1193,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
 
   packages/vue-scoped-loading:
@@ -1198,10 +1202,10 @@ importers:
         specifier: workspace:^
         version: link:../helpers
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
       vue-router:
-        specifier: ^4.3.0
+        specifier: ^4.3.2
         version: 4.3.2(vue@3.4.27)
 
   packages/vue-scroller:
@@ -1250,10 +1254,10 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
       vue-router:
-        specifier: ^4.3.0
+        specifier: ^4.3.2
         version: 4.3.2(vue@3.4.27)
 
   packages/vue-tiny-meta:
@@ -1281,7 +1285,7 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
 
   packages/vue-utils:
@@ -1296,7 +1300,7 @@ importers:
         specifier: workspace:^
         version: link:../visibility
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
     devDependencies:
       vue-router:
@@ -1309,7 +1313,7 @@ importers:
         specifier: workspace:^
         version: link:../visibility
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
 
   packages/vui:
@@ -1390,10 +1394,10 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
       vue-router:
-        specifier: ^4.3.0
+        specifier: ^4.3.2
         version: 4.3.2(vue@3.4.27)
 
   packages/vui-wysiwyg:
@@ -1438,7 +1442,7 @@ importers:
         specifier: ^13.0.8
         version: 13.0.8
       vue:
-        specifier: ^3.4.0
+        specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
     devDependencies:
       '@fastkit/vui':
@@ -3072,7 +3076,7 @@ packages:
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
-      vue: ^3.0.0
+      vue: ^3.4.27
     peerDependenciesMeta:
       '@tiptap/core':
         optional: true
@@ -3496,7 +3500,7 @@ packages:
   /@unhead/vue@1.9.11(vue@3.4.27):
     resolution: {integrity: sha512-7gCEJGTSnpLcHGQ2j/IsBTz2nIUWbTlqUbbNiwPFgEksJbh8Pz8WduTvLC4ANlnnFy6PDG7yrZcaKJMOrNruoQ==}
     peerDependencies:
-      vue: '>=2.7 || >=3'
+      vue: ^3.4.27
     peerDependenciesMeta:
       vue:
         optional: true
@@ -3618,7 +3622,7 @@ packages:
   /@vanilla-extract/vite-plugin@3.9.5(@types/node@20.13.0)(vite@5.1.0):
     resolution: {integrity: sha512-CWI/CtrVW6i3HKccI6T7uGQkTJ8bd8Xl2UMBg3Pkr7dwWMmavXTeucV0I9KSbmXaYXSbEj+Q8c9y0xAZwtmTig==}
     peerDependencies:
-      vite: ^2.2.3 || ^3.0.0 || ^4.0.3 || ^5.0.0
+      vite: ^5.1.0
     peerDependenciesMeta:
       vite:
         optional: true
@@ -3645,8 +3649,8 @@ packages:
     resolution: {integrity: sha512-w9M6F3LSEU5kszVb9An2/MmXNxocAnUb3WhRr8bHlimhDrXNt6n6D2nJQR3UXpGlZHh/EsgouOHCsM8V3Ln+WA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^4.0.0 || ^5.0.0
-      vue: ^3.0.0
+      vite: ^5.1.0
+      vue: ^3.4.27
     peerDependenciesMeta:
       vite:
         optional: true
@@ -3665,8 +3669,8 @@ packages:
     resolution: {integrity: sha512-LOjm7XeIimLBZyzinBQ6OSm3UBCNVCpLkxGC0oWmm2YPzVZoxMsdvNVimLTBzpAnR9hl/yn1SHGuRfe6/Td9rQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^5.0.0
-      vue: ^3.2.25
+      vite: ^5.1.0
+      vue: ^3.4.27
     peerDependenciesMeta:
       vite:
         optional: true
@@ -3812,7 +3816,7 @@ packages:
   /@vue/server-renderer@3.4.27(vue@3.4.27):
     resolution: {integrity: sha512-dlAMEuvmeA3rJsOMJ2J1kXU7o7pOxgsNHVr9K8hB3ImIkSuBrIdy0vF66h8gf8Tuinf1TK3mPAz2+2sqyf3KzA==}
     peerDependencies:
-      vue: 3.4.27
+      vue: ^3.4.27
     peerDependenciesMeta:
       vue:
         optional: true
@@ -7457,6 +7461,7 @@ packages:
 
   /known-css-properties@0.30.0:
     resolution: {integrity: sha512-VSWXYUnsPu9+WYKkfmJyLKtIvaRJi1kXUqVmBACORXZQxT5oZDsoZ2vQP+bQFDnWtpI/4eq3MLoRMjI2fnLzTQ==}
+    requiresBuild: true
     dev: false
 
   /known-css-properties@0.31.0:
@@ -10914,64 +10919,64 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /turbo-darwin-64@1.13.3:
-    resolution: {integrity: sha512-glup8Qx1qEFB5jerAnXbS8WrL92OKyMmg5Hnd4PleLljAeYmx+cmmnsmLT7tpaVZIN58EAAwu8wHC6kIIqhbWA==}
+  /turbo-darwin-64@2.0.4:
+    resolution: {integrity: sha512-x9mvmh4wudBstML8Z8IOmokLWglIhSfhQwnh2gBCSqabgVBKYvzl8Y+i+UCNPxheCGTgtsPepTcIaKBIyFIcvw==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-darwin-arm64@1.13.3:
-    resolution: {integrity: sha512-/np2xD+f/+9qY8BVtuOQXRq5f9LehCFxamiQnwdqWm5iZmdjygC5T3uVSYuagVFsZKMvX3ycySwh8dylGTl6lg==}
+  /turbo-darwin-arm64@2.0.4:
+    resolution: {integrity: sha512-/B1Ih8zPRGVw5vw4SlclOf3C/woJ/2T6ieH6u54KT4wypoaVyaiyMqBcziIXycdObIYr7jQ+raHO7q3mhay9/A==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-64@1.13.3:
-    resolution: {integrity: sha512-G+HGrau54iAnbXLfl+N/PynqpDwi/uDzb6iM9hXEDG+yJnSJxaHMShhOkXYJPk9offm9prH33Khx2scXrYVW1g==}
+  /turbo-linux-64@2.0.4:
+    resolution: {integrity: sha512-6aG670e5zOWu6RczEYcB81nEl8EhiGJEvWhUrnAfNEUIMBEH1pR5SsMmG2ol5/m3PgiRM12r13dSqTxCLcHrVg==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-arm64@1.13.3:
-    resolution: {integrity: sha512-qWwEl5VR02NqRyl68/3pwp3c/olZuSp+vwlwrunuoNTm6JXGLG5pTeme4zoHNnk0qn4cCX7DFrOboArlYxv0wQ==}
+  /turbo-linux-arm64@2.0.4:
+    resolution: {integrity: sha512-AXfVOjst+mCtPDFT4tCu08Qrfv12Nj7NDd33AjGwV79NYN1Y1rcFY59UQ4nO3ij3rbcvV71Xc+TZJ4csEvRCSg==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-64@1.13.3:
-    resolution: {integrity: sha512-Nudr4bRChfJzBPzEmpVV85VwUYRCGKecwkBFpbp2a4NtrJ3+UP1VZES653ckqCu2FRyRuS0n03v9euMbAvzH+Q==}
+  /turbo-windows-64@2.0.4:
+    resolution: {integrity: sha512-QOnUR9hKl0T5gq5h1fAhVEqBSjpcBi/BbaO71YGQNgsr6pAnCQdbG8/r3MYXet53efM0KTdOhieWeO3KLNKybA==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-arm64@1.13.3:
-    resolution: {integrity: sha512-ouJCgsVLd3icjRLmRvHQDDZnmGzT64GBupM1Y+TjtYn2LVaEBoV6hicFy8x5DUpnqdLy+YpCzRMkWlwhmkX7sQ==}
+  /turbo-windows-arm64@2.0.4:
+    resolution: {integrity: sha512-3v8WpdZy1AxZw0gha0q3caZmm+0gveBQ40OspD6mxDBIS+oBtO5CkxhIXkFJJW+jDKmDlM7wXDIGfMEq+QyNCQ==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo@1.13.3:
-    resolution: {integrity: sha512-n17HJv4F4CpsYTvKzUJhLbyewbXjq1oLCi90i5tW1TiWDz16ML1eDG7wi5dHaKxzh5efIM56SITnuVbMq5dk4g==}
+  /turbo@2.0.4:
+    resolution: {integrity: sha512-Ilme/2Q5kYw0AeRr+aw3s02+WrEYaY7U8vPnqSZU/jaDG/qd6jHVN6nRWyd/9KXvJGYM69vE6JImoGoyNjLwaw==}
     hasBin: true
     optionalDependencies:
-      turbo-darwin-64: 1.13.3
-      turbo-darwin-arm64: 1.13.3
-      turbo-linux-64: 1.13.3
-      turbo-linux-arm64: 1.13.3
-      turbo-windows-64: 1.13.3
-      turbo-windows-arm64: 1.13.3
+      turbo-darwin-64: 2.0.4
+      turbo-darwin-arm64: 2.0.4
+      turbo-linux-64: 2.0.4
+      turbo-linux-arm64: 2.0.4
+      turbo-windows-64: 2.0.4
+      turbo-windows-arm64: 2.0.4
     dev: true
 
   /tweetnacl@0.14.5:
@@ -11265,7 +11270,7 @@ packages:
       '@solidjs/router': '*'
       '@vue/compiler-sfc': ^2.7.0 || ^3.0.0
       react-router: '*'
-      vite: ^2.0.0 || ^3.0.0-0 || ^4.0.0 || ^5.0.0
+      vite: ^5.1.0
       vue-router: '*'
     peerDependenciesMeta:
       '@solidjs/router':
@@ -11297,7 +11302,7 @@ packages:
   /vite-tsconfig-paths@4.3.2(typescript@5.4.5)(vite@5.1.0):
     resolution: {integrity: sha512-0Vd/a6po6Q+86rPlntHye7F31zA2URZMbH8M3saAZ/xR9QoGN/L21bxEGfXdWmFdNkqPpRdxFT7nmNe12e9/uA==}
     peerDependencies:
-      vite: '*'
+      vite: ^5.1.0
     peerDependenciesMeta:
       vite:
         optional: true
@@ -11311,47 +11316,12 @@ packages:
       - typescript
     dev: true
 
-  /vite@5.1.0:
-    resolution: {integrity: sha512-STmSFzhY4ljuhz14bg9LkMTk3d98IO6DIArnTY6MeBwiD1Za2StcQtz7fzOUnRCqrHSD5+OS2reg4HOz1eoLnw==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      esbuild: 0.19.12
-      postcss: 8.4.38
-      rollup: 4.18.0
-    optionalDependencies:
-      fsevents: 2.3.3
-    dev: true
-
   /vite@5.1.0(@types/node@20.13.0):
     resolution: {integrity: sha512-STmSFzhY4ljuhz14bg9LkMTk3d98IO6DIArnTY6MeBwiD1Za2StcQtz7fzOUnRCqrHSD5+OS2reg4HOz1eoLnw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
+      '@types/node': ^20.13.0
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
@@ -11387,7 +11357,7 @@ packages:
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
-      '@types/node': ^18.0.0 || >=20.0.0
+      '@types/node': ^20.13.0
       '@vitest/browser': 1.6.0
       '@vitest/ui': 1.6.0
       happy-dom: '*'
@@ -11461,7 +11431,7 @@ packages:
   /vue-router@4.3.2(vue@3.4.27):
     resolution: {integrity: sha512-hKQJ1vDAZ5LVkKEnHhmm1f9pMiWIBNGF5AwU67PdH7TyXCj/a4hTccuUuYCAMgJK6rO/NVYtQIEN3yL8CECa7Q==}
     peerDependencies:
-      vue: ^3.2.0
+      vue: ^3.4.27
     peerDependenciesMeta:
       vue:
         optional: true
