@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui-wysiwyg",
-  "version": "7.0.34",
+  "version": "7.0.35",
   "description": "vui-wysiwyg",
   "keywords": [],
   "repository": {
@@ -296,7 +296,7 @@
     "stylelint": "stylelint \"**/*.{css,scss,vue,html}\" --allow-empty-input",
     "stylelint:fix": "stylelint \"**/*.{css,scss,vue,html}\" --fix --allow-empty-input",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
     "@tiptap/extension-bold": "^2.4.0",
@@ -311,7 +311,7 @@
     "@tiptap/pm": "^2.4.0",
     "@tiptap/starter-kit": "^2.4.0",
     "@tiptap/vue-3": "^2.4.0",
-    "@types/markdown-it": "^13.0.8"
+    "@types/markdown-it": "^14.1.1"
   },
   "devDependencies": {
     "@fastkit/vui": "workspace:^"

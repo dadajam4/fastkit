@@ -1,5 +1,12 @@
 # @fastkit/vot-i18n
 
+## 4.0.10
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vot@0.16.10
+
 ## 4.0.9
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 2.0.5
+
+### Patch Changes
+
+- Updated dependencies.
+
+- Updated dependencies []:
+  - @fastkit/plugboy@0.2.5
+
 ## 2.0.4
 
 ### Patch Changes

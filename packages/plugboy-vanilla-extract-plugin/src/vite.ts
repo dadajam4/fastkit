@@ -2,7 +2,7 @@ import { findProjectPlugin } from '@fastkit/plugboy';
 import { Plugin as VitePlugin } from 'vite';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import { PLUGIN_NAME, VanillaExtractPlugin } from './types';
-import { mergeExternal } from './utils';
+// import { mergeExternal } from './utils';
 
 type VanillaExtractVitePluginOptions = NonNullable<
   Parameters<typeof vanillaExtractPlugin>[0]
@@ -18,21 +18,21 @@ export async function ViteVanillaExtractPlugin(
   const plugin = await findProjectPlugin<VanillaExtractPlugin>(PLUGIN_NAME);
   const {
     identifiers: baseIdentifiers,
-    esbuildOptions: baseEsbuildOptions = {},
+    // esbuildOptions: baseEsbuildOptions = {},
   } = plugin?.options || {};
 
-  const { esbuildOptions = {} } = options;
+  // const { esbuildOptions = {} } = options;
 
   return vanillaExtractPlugin({
     identifiers: baseIdentifiers,
     ...options,
-    esbuildOptions: {
-      ...baseEsbuildOptions,
-      ...esbuildOptions,
-      external: mergeExternal(
-        baseEsbuildOptions.external,
-        esbuildOptions.external,
-      ),
-    },
+    // esbuildOptions: {
+    //   ...baseEsbuildOptions,
+    //   ...esbuildOptions,
+    //   external: mergeExternal(
+    //     baseEsbuildOptions.external,
+    //     esbuildOptions.external,
+    //   ),
+    // },
   });
 }

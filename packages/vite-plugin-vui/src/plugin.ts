@@ -221,11 +221,15 @@ export {};
         await renderTemplate(settings),
       );
 
-      const ssr = (config as any).ssr || {};
-      ssr.noExternal = ssr.noExternal || [];
-      ssr.noExternal.push(/\/vui\/dist\/builtins\//);
+      if (config.ssr?.noExternal !== true) {
+        config.ssr ??= {};
+        config.ssr.noExternal ??= [];
+        if (!Array.isArray(config.ssr.noExternal)) {
+          config.ssr.noExternal = [config.ssr.noExternal as any];
+        }
+        config.ssr.noExternal.push(/\/vui\/dist\/builtins\//);
+      }
 
-      (config as any).ssr = ssr;
       return config;
     },
   };

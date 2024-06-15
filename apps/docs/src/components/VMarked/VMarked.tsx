@@ -45,7 +45,7 @@ export const VMarked = defineComponent({
 
     const renderer = new marked.Renderer();
 
-    renderer.link = (_href, title, text) => {
+    renderer.link = ({ href: _href, text, title }) => {
       if (!_href) return text;
       const { href, target } = resolveLink(_href);
       return `<a href="${href}" ${
@@ -53,8 +53,8 @@ export const VMarked = defineComponent({
       }${title ? ` title="${title}"` : ''}>${text}</a>`;
     };
 
-    renderer.code = (code, language, isEscaped) => {
-      const result = highlight(code, language);
+    renderer.code = ({ text, lang }) => {
+      const result = highlight(text, lang);
       return result.html();
     };
 

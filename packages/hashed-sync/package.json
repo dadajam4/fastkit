@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/hashed-sync",
-  "version": "0.14.4",
+  "version": "0.14.5",
   "description": "Compare and synchronize the status of entire files and directories by hash value.",
   "keywords": [
     "fastkit",
@@ -57,13 +57,13 @@
     "@fastkit/tiny-logger": "workspace:^",
     "folder-hash": "^4.0.4",
     "fs-extra": "^11.2.0",
-    "imagemin": "^8.0.1",
+    "imagemin": "^9.0.0",
     "imagemin-mozjpeg": "^10.0.0",
-    "imagemin-pngquant": "^9.0.2"
+    "imagemin-pngquant": "^10.0.0"
   },
   "devDependencies": {
     "@types/folder-hash": "^4.0.4",
-    "@types/imagemin": "^8.0.5",
+    "@types/imagemin": "^9.0.0",
     "@types/imagemin-mozjpeg": "^8.0.4"
   },
   "buildOptions": {
