@@ -1,5 +1,14 @@
 # @fastkit/color-scheme
 
+## 2.0.9
+
+### Patch Changes
+
+- Updated dependencies.
+
+- Updated dependencies []:
+  - @fastkit/plugboy@0.2.6
+
 ## 2.0.8
 
 ### Patch Changes

@@ -100,7 +100,7 @@ export function defineSnackbarComponent<
       ...settings.emits,
     } as typeof emits & Emits,
     slots: settings.slots as MergeStackBaseSlots<Slots>,
-    setup(_props, _ctx) {
+    setup(_props: any, _ctx) {
       const baseCtx = setupStackableComponent<
         SnackbarPropsOptions,
         {},

@@ -367,7 +367,7 @@ export function defineMenuComponent<
       ...emits,
     } as typeof baseScheme.emits & Emits,
     slots: settings.slots as MergeStackBaseSlots<Slots>,
-    setup(_props, _ctx) {
+    setup(_props: any, _ctx) {
       const baseCtx = setupStackableComponent<
         MenuPropsOptions,
         {},

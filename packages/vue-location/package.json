@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-location",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "vue-location",
   "keywords": [
     "vue",
@@ -52,7 +52,7 @@
   },
   "peerDependencies": {
     "vue": "^3.4.0",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.4.0"
   },
   "_docs": {
     "scope": "vue",

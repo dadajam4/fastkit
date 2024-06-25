@@ -47,7 +47,7 @@ export function createBucket<RN, T, G, C, J, I extends Bucket<RN, T, G, C, J>>(
     const func = function (...args: any[]) {
       return (_values as any)[funcName](...args);
     };
-    instance[funcName] = func;
+    instance[funcName] = func as any;
   });
   function push(value: T) {
     return _values.push(value);

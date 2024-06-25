@@ -1,5 +1,14 @@
 # @fastkit/plugboy-sass-plugin
 
+## 2.0.6
+
+### Patch Changes
+
+- Updated dependencies.
+
+- Updated dependencies []:
+  - @fastkit/plugboy@0.2.6
+
 ## 2.0.5
 
 ### Patch Changes

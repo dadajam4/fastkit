@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-loading",
-  "version": "0.15.10",
+  "version": "0.15.11",
   "description": "Loading component for Vue applications.",
   "keywords": [
     "fastkit",
@@ -63,7 +63,7 @@
   },
   "peerDependencies": {
     "vue": "^3.4.0",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.4.0"
   },
   "buildOptions": {
     "name": "VueLoading"

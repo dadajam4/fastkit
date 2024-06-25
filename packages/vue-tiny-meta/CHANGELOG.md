@@ -1,5 +1,12 @@
 # @fastkit/vue-tiny-meta
 
+## 0.3.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/ts-tiny-meta@0.2.5
+
 ## 0.3.2
 
 ### Patch Changes

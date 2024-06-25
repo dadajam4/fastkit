@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.15.8
+
+### Patch Changes
+
+- Updated dependencies.
+
 ## 0.15.7
 
 ### Patch Changes

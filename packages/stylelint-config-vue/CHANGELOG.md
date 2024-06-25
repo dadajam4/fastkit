@@ -1,5 +1,12 @@
 # @fastkit/stylelint-config-vue
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/stylelint-config@0.13.9
+
 ## 0.0.5
 
 ### Patch Changes
