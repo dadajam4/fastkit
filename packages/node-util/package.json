@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/node-util",
-  "version": "0.14.10",
+  "version": "0.14.11",
   "description": "Utilities for Node.js server and tool implementation.",
   "keywords": [
     "fastkit",
@@ -54,7 +54,7 @@
     "@fastkit/ev": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
     "chokidar": "^3.6.0",
-    "esbuild": "^0.21.5",
+    "esbuild": "^0.23.0",
     "execa": "^9.3.0",
     "folder-hash": "^4.0.4",
     "fs-extra": "^11.2.0"

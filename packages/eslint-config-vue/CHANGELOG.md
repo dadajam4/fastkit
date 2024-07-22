@@ -1,5 +1,14 @@
 # @fastkit/eslint-config-vue
 
+## 0.13.12
+
+### Patch Changes
+
+- Dependency updates only.
+
+- Updated dependencies []:
+  - @fastkit/eslint-config@0.13.8
+
 ## 0.13.11
 
 ### Patch Changes

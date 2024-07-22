@@ -9,6 +9,7 @@ export * from './set';
 export * from './map';
 export * from './regexp';
 export * from './object';
+export * from './object-id';
 export * from './array';
 export * from './buffer';
 export * from './date';

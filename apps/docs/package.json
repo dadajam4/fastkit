@@ -27,11 +27,12 @@
     "@fastkit/vue-app-layout": "workspace:^",
     "@fastkit/vue-loading": "workspace:^",
     "@fastkit/vue-scroller": "workspace:^",
+    "@fastkit/vue-sortable": "workspace:^",
     "@fastkit/vue-stack": "workspace:^",
     "@fastkit/vue-transitions": "workspace:^",
     "@fastkit/vui": "workspace:^",
     "@fastkit/vui-wysiwyg": "workspace:^",
-    "marked": "^13.0.1"
+    "marked": "^13.0.2"
   },
   "devDependencies": {
     "@mdi/svg": "^7.4.47",

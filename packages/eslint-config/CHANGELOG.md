@@ -1,5 +1,11 @@
 # @fastkit/eslint-config
 
+## 0.13.8
+
+### Patch Changes
+
+- Dependency updates only.
+
 ## 0.13.7
 
 ### Patch Changes

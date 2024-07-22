@@ -1,7 +1,7 @@
 {
   "name": "@fastkit/eslint-config-vue",
   "type": "module",
-  "version": "0.13.11",
+  "version": "0.13.12",
   "description": "@fastkit/eslint-config-vue",
   "buildOptions": {
     "ignore": true
@@ -41,7 +41,7 @@
   "dependencies": {
     "@fastkit/eslint-config": "workspace:^",
     "@rushstack/eslint-patch": "^1.10.3",
-    "eslint-plugin-vue": "^9.26.0",
+    "eslint-plugin-vue": "^9.27.0",
     "vue-eslint-parser": "^9.4.3"
   }
 }

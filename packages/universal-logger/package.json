@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/universal-logger",
-  "version": "0.14.8",
+  "version": "0.14.9",
   "description": "Pluggable and universal log output library for any server/browser execution environment.",
   "keywords": [
     "fastkit",
@@ -58,7 +58,7 @@
     "@fastkit/tiny-logger": "workspace:^"
   },
   "devDependencies": {
-    "@datadog/browser-logs": "^5.21.0"
+    "@datadog/browser-logs": "^5.23.0"
   },
   "peerDependencies": {
     "@datadog/browser-logs": "^5.8.0"

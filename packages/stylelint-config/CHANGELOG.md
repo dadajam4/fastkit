@@ -1,5 +1,11 @@
 # @fastkit/stylelint-config
 
+## 0.13.10
+
+### Patch Changes
+
+- Dependency updates only.
+
 ## 0.13.9
 
 ### Patch Changes

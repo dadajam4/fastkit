@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/ts-tiny-meta",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "ts-tiny-meta",
   "keywords": [],
   "repository": {
@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
-    "vite": "^5.3.1"
+    "vite": "^5.3.4"
   },
   "peerDependencies": {
     "vite": "^5.3.0"

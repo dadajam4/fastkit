@@ -1,5 +1,15 @@
 # @fastkit/vue-i18n
 
+## 0.14.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.9
+  - @fastkit/helpers@0.14.5
+  - @fastkit/i18n@0.14.6
+  - @fastkit/tiny-logger@0.14.5
+
 ## 0.14.8
 
 ### Patch Changes

@@ -255,7 +255,7 @@ export class PlugboyWorkspace {
     if (json.exports) {
       const entries = Object.entries(json.exports);
       entries.forEach(([id, at]) => {
-        const types = Object.keys(at);
+        const types = Object.keys(at!);
         if (types.length === 1 && types[0] === 'types') {
           _exports[id] = at;
         }

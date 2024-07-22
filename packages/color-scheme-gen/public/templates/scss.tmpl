@@ -58,13 +58,18 @@
 
       @each $palette-name, $value in $palette {
         $key: "--palette-" + $palette-name;
-        #{$key}: #{$value};
+
+        & {
+          #{$key}: #{$value};
+        }
       }
 
       $default-scope: map-get($scope-defaults, default);
       @if ($default-scope != null) {
-        @each $key, $value in $default-scope {
-          --#{$key}-color: #{$value};
+        & {
+          @each $key, $value in $default-scope {
+            --#{$key}-color: #{$value};
+          }
         }
       }
 

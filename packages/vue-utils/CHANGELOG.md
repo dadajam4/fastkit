@@ -1,5 +1,15 @@
 # @fastkit/vue-utils
 
+## 0.15.9
+
+### Patch Changes
+
+- Added a utility (getClientIterableKey) for retrieving keys from object references when enumerating iterable objects.
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.14.5
+  - @fastkit/visibility@0.14.5
+
 ## 0.15.8
 
 ### Patch Changes

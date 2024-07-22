@@ -1,5 +1,11 @@
 # @fastkit/helpers
 
+## 0.14.5
+
+### Patch Changes
+
+- Added a function (temporaryObjectID) to generate unique IDs from object references.
+
 ## 0.14.4
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @fastkit/merge
 
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.14.5
+
 ## 0.2.4
 
 ### Patch Changes

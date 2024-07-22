@@ -2,6 +2,11 @@
   .v-paper {
     --paper-radius: var(--control-field-radius);
 
+    display: block;
+    color: var(--paper-text-color);
+    background-color: var(--paper-background--color);
+    border-radius: var(--paper-radius);
+
     &--plain {
       --paper-background--color: var(--palette-background);
       --paper-text-color: inherit;
@@ -13,11 +18,6 @@
       --paper-text-color: var(--text-color);
       --paper-link-color: var(--nav-color);
     }
-
-    display: block;
-    color: var(--paper-text-color);
-    background-color: var(--paper-background--color);
-    border-radius: var(--paper-radius);
 
     &__inner {
       position: relative;

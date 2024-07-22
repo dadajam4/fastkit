@@ -4,31 +4,34 @@
   .v-avatar {
     @include core.button-reset;
 
-    --avatar-radius: 50%;
-    --avatar-font-weight: var(--typo-medium-weight);
-    --avatar-base-font-size: var(--typo-base-size);
-    --avatar-font-size: var(--avatar-base-font-size);
+    /* stylelint-disable-next-line no-duplicate-selectors */
+    & {
+      --avatar-radius: 50%;
+      --avatar-font-weight: var(--typo-medium-weight);
+      --avatar-base-font-size: var(--typo-base-size);
+      --avatar-font-size: var(--avatar-base-font-size);
 
-    display: inline-flex;
-    flex-basis: var(--avatar-size);
-    align-items: center;
-    justify-content: center;
-    width: var(--avatar-size);
-    min-width: var(--avatar-size);
-    height: var(--avatar-size);
-    overflow: hidden;
-    font-size: var(--avatar-font-size);
-    font-weight: var(--avatar-font-weight);
-    line-height: 1;
-    text-align: center;
-    vertical-align: bottom;
-    cursor: default;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: var(--avatar-radius);
+      display: inline-flex;
+      flex-basis: var(--avatar-size);
+      align-items: center;
+      justify-content: center;
+      width: var(--avatar-size);
+      min-width: var(--avatar-size);
+      height: var(--avatar-size);
+      overflow: hidden;
+      font-size: var(--avatar-font-size);
+      font-weight: var(--avatar-font-weight);
+      line-height: 1;
+      text-align: center;
+      vertical-align: bottom;
+      cursor: default;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: var(--avatar-radius);
 
-    --shadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
-    --focusShadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
+      --shadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
+      --focusShadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
+    }
 
     &--clickable {
       cursor: pointer;

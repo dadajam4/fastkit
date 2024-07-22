@@ -47,15 +47,17 @@
 @mixin button-reset() {
   @include remove-tap-highlight;
 
-  padding: 0;
-  appearance: none;
-  touch-action: manipulation;
-  cursor: pointer;
-  user-select: none;
+  & {
+    padding: 0;
+    appearance: none;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
 
-  // background-color: transparent;
-  border-width: 0;
-  outline: 0;
+    // background-color: transparent;
+    border-width: 0;
+    outline: 0;
+  }
 
   &,
   &:hover,

@@ -3,7 +3,7 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import sortPackageJson from 'sort-package-json';
-import inquirer from 'inquirer';
+import * as prompts from '@inquirer/prompts';
 import { getProject } from '../project';
 import { getWorkspace, syncWorkspacePackageFields } from '../workspace';
 import { WorkspacePackageJson, ProjectScriptsTemplate } from '../types';
@@ -20,9 +20,7 @@ export async function generateWorkspace(
   // workspace name
   // ====================
   while (!workspaceName) {
-    const { value } = await inquirer.prompt({
-      type: 'input',
-      name: 'value',
+    const value = await prompts.input({
       message: 'Enter a workspace name',
     });
 
@@ -34,9 +32,7 @@ export async function generateWorkspace(
   // ====================
   // description
   // ====================
-  const { description } = await inquirer.prompt({
-    type: 'input',
-    name: 'description',
+  const description = await prompts.input({
     default: workspaceName,
     message: 'Please enter a description of your package',
   });
@@ -46,9 +42,7 @@ export async function generateWorkspace(
   // ====================
   let version: string | undefined;
   while (!version) {
-    const { value } = await inquirer.prompt({
-      type: 'input',
-      name: 'value',
+    const value = await prompts.input({
       default: '0.0.0',
       message: 'Please enter the initial version',
     });
@@ -61,9 +55,7 @@ export async function generateWorkspace(
   // ====================
   // keywords
   // ====================
-  const { rawKeywords } = await inquirer.prompt({
-    type: 'input',
-    name: 'rawKeywords',
+  const rawKeywords = await prompts.input({
     message: 'Enter as many keywords, if any, as needed, separated by commas',
   });
 
@@ -78,10 +70,8 @@ export async function generateWorkspace(
   const scriptsTemplates = config.scripts;
   let scriptsTemplate: ProjectScriptsTemplate | undefined;
   if (scriptsTemplates && scriptsTemplates.length) {
-    const { value } = await inquirer.prompt({
-      type: 'rawlist',
+    const value = await prompts.rawlist({
       message: 'Select a scripts template',
-      name: 'value',
       choices: [
         { name: 'None', value: '' },
         ...scriptsTemplates.map((tpl) => ({
@@ -98,11 +88,9 @@ export async function generateWorkspace(
   // peerDependencies
   // ====================
   const peerDependencies = await (async () => {
-    const { deps } = await inquirer.prompt<{ deps: string[] }>({
-      type: 'checkbox',
+    const deps = await prompts.checkbox({
       message:
         'Select the dependent packages, if any, to be used in the package',
-      name: 'deps',
       choices: Object.keys(config.peerDependencies).map((dep) => ({
         name: dep,
         value: dep,
@@ -118,10 +106,8 @@ export async function generateWorkspace(
   // dependencies
   // ====================
   const dependencies = await (async () => {
-    const { deps } = await inquirer.prompt<{ deps: string[] }>({
-      type: 'checkbox',
+    const deps = await prompts.checkbox({
       message: 'Select the internal package to be used, if any.',
-      name: 'deps',
       choices: project.resolvedWorkspaces.map((workspace) => {
         const name = path.basename(workspace);
         return {
@@ -142,9 +128,7 @@ export async function generateWorkspace(
   // ====================
   // Generate source files?
   // ====================
-  const { withGenSource } = await inquirer.prompt<{ withGenSource: boolean }>({
-    type: 'confirm',
-    name: 'withGenSource',
+  const withGenSource = await prompts.confirm({
     message: 'Generate source files?',
     default: true,
   });
@@ -176,9 +160,7 @@ export async function generateWorkspace(
   console.log(json);
   console.log('========================================');
 
-  const { confirmation } = await inquirer.prompt<{ confirmation: boolean }>({
-    type: 'confirm',
-    name: 'confirmation',
+  const confirmation = await prompts.confirm({
     message: 'Is this OK?',
     default: true,
   });

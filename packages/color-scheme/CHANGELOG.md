@@ -1,5 +1,14 @@
 # @fastkit/color-scheme
 
+## 2.0.10
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/plugboy@0.2.7
+  - @fastkit/tiny-logger@0.14.5
+  - @fastkit/color@0.14.5
+
 ## 2.0.9
 
 ### Patch Changes

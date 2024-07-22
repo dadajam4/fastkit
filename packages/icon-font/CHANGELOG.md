@@ -1,5 +1,12 @@
 # @fastkit/icon-font
 
+## 2.0.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/plugboy@0.2.7
+
 ## 2.0.6
 
 ### Patch Changes

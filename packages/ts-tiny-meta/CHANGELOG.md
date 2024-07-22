@@ -1,5 +1,11 @@
 # @fastkit/ts-tiny-meta
 
+## 0.2.6
+
+### Patch Changes
+
+- Dependency updates only.
+
 ## 0.2.5
 
 ### Patch Changes

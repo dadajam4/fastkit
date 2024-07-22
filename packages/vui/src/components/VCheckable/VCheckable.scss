@@ -6,15 +6,15 @@
     --icon-size: var(--control-checkable-icon-size);
     --color: var(--control-checkable-base-color);
 
-    &--checked {
-      --color: var(--main-color);
-    }
-
     display: inline-flex;
     align-items: center;
     padding-right: 1em;
     cursor: pointer;
     user-select: none;
+
+    &--checked {
+      --color: var(--main-color);
+    }
 
     &--invalid:not(#{&}--readonly) {
       --color: var(--main-color);

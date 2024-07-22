@@ -1,6 +1,7 @@
 import { createVotEntry } from '@fastkit/vot';
 import { LocaleLink, useLink } from '@fastkit/vue-i18n';
 import type { VuiService } from '@fastkit/vui';
+import { installSortableDirective } from '@fastkit/vue-sortable';
 import { installVui } from '../.vui/installer';
 import { App } from './App';
 import { i18n, pmScriptPlugin } from '@@';
@@ -31,6 +32,7 @@ export default createVotEntry(App, {
           noResultsMessage: '検索結果が見つかりませんでした。',
         },
       });
+      installSortableDirective(ctx.app);
       (ctx as any).$vui = ctx.app.config.globalProperties.$vui;
     },
     pmScriptPlugin,

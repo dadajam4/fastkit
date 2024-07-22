@@ -7,17 +7,17 @@
     --pagination-font-size: var(--pagination-item-font-size);
     --pagination-radius: var(--pagination-item-radius);
 
-    &::before {
-      width: var(--pagination-size);
-      margin: var(--pagination-margin);
-      content: none;
-    }
-
     display: flex;
     align-items: center;
     overflow: hidden;
     font-weight: bold;
     line-height: 1;
+
+    &::before {
+      width: var(--pagination-size);
+      margin: var(--pagination-margin);
+      content: none;
+    }
 
     &--left {
       justify-content: flex-start;
@@ -35,16 +35,19 @@
     a#{&}__item {
       @include core.button-reset;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: var(--pagination-size);
-      height: var(--pagination-size);
-      margin: calc(var(--pagination-margin) * 0.5);
-      font-size: var(--pagination-font-size);
-      color: inherit;
-      border-radius: var(--pagination-radius);
-      transition: 0.1s;
+      /* stylelint-disable-next-line no-duplicate-selectors */
+      & {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: var(--pagination-size);
+        height: var(--pagination-size);
+        margin: calc(var(--pagination-margin) * 0.5);
+        font-size: var(--pagination-font-size);
+        color: inherit;
+        border-radius: var(--pagination-radius);
+        transition: 0.1s;
+      }
 
       &:hover,
       &:focus {
