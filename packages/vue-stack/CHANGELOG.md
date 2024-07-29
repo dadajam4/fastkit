@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.16.13
+
+### Patch Changes
+
+- Fixed an issue where the y-coordinate of the Menu bubble would shift due to scrolling.
+
 ## 0.16.12
 
 ### Patch Changes

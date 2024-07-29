@@ -825,9 +825,10 @@ export function defineMenuComponent<
             bubbleStyles['--bubble-bottom'] = '100%';
           }
         } else {
-          bubbleStyles['--bubble-top'] = `${
-            activatorHeight * 0.5 + (activatorTop - top)
-          }px`;
+          bubbleStyles['--bubble-top'] = '50%';
+          // bubbleStyles['--bubble-top'] = `${
+          //   activatorHeight * 0.5 + (activatorTop - top)
+          // }px`;
         }
 
         if (isLeft) {
