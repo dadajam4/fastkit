@@ -1,4 +1,4 @@
-import { ComputedRef, computed } from 'vue';
+import { type ComputedRef, computed, type Ref, ref } from 'vue';
 import {
   useRouter,
   type LocationQuery,
@@ -146,6 +146,99 @@ export interface TypedQueryInterface<
     values: ExtractQueryInputs<Schema>,
     options?: TypedQueryRouteOptions,
   ): ReturnType<Router['replace']>;
+  /**
+   * Generate query form
+   *
+   * @param options - form options
+   *
+   * @see {@link TypedQueryFormSubmitOptions}
+   * @see {@link TypedQueryForm}
+   */
+  $form(options?: TypedQueryFormSubmitOptions): TypedQueryForm<Schema>;
+}
+
+/**
+ * Behavior of query form
+ *
+ * @see {@link Router.push}
+ * @see {@link Router.replace}
+ */
+export type TypedQueryFormSubmitBehavior = 'push' | 'replace';
+
+/**
+ * Options for submit query form
+ */
+export interface TypedQueryFormSubmitOptions {
+  /**
+   * The destination route
+   *
+   * If not specified, the current route will be selected
+   *
+   * @see {@link RouteLocationRaw}
+   */
+  to?: RouteLocationRaw;
+  /**
+   * Behavior of query form
+   *
+   * @default "push"
+   *
+   * @see {@link TypedQueryFormSubmitBehavior}
+   */
+  behavior?: TypedQueryFormSubmitBehavior;
+}
+
+/**
+ * Query form
+ */
+export interface TypedQueryForm<Schema extends QueriesSchema = QueriesSchema> {
+  /**
+   * Query object context
+   *
+   * @see {@link TypedQuery}
+   */
+  readonly ctx: TypedQuery<Schema>;
+  /**
+   * The destination route
+   *
+   * If not specified, the current route will be selected
+   *
+   * @see {@link RouteLocationRaw}
+   */
+  readonly to?: RouteLocationRaw;
+  /**
+   * Behavior of query form
+   *
+   * @see {@link TypedQueryFormSubmitBehavior}
+   */
+  readonly behavior: TypedQueryFormSubmitBehavior;
+  /**
+   * Current query value
+   */
+  readonly query: Readonly<ExtractQueryTypes<Schema>>;
+  /**
+   * Current form value
+   */
+  readonly values: ExtractQueryTypes<Schema>;
+  /**
+   * List of fields that have changed relative to the current query value
+   */
+  readonly changes: (keyof Schema)[];
+  /**
+   * Whether one or more fields have changed relative to the current query value
+   */
+  readonly hasChanged: boolean;
+  /**
+   * Reset form values to the current query value
+   */
+  reset(): void;
+  /**
+   * Submit form values and navigate to the route
+   *
+   * @param options - Options for submit query form
+   *
+   * @see {@link TypedQueryFormSubmitOptions}
+   */
+  submit(options?: TypedQueryFormSubmitOptions): ReturnType<Router['push']>;
 }
 
 /**
@@ -160,6 +253,13 @@ export type TypedQuery<Schema extends QueriesSchema = QueriesSchema> = Readonly<
   TypedQueryInterface<Schema>;
 
 type AnySchema = Record<string, true>;
+
+const unwrapArray = <T>(v: T): T => (Array.isArray(v) ? (v.slice() as T) : v);
+
+const ownPropertyDescriptor = {
+  enumerable: true,
+  configurable: true,
+};
 
 /**
  * Generate an interface for extracting and utility functions for query values corresponding to the specified schema:
@@ -184,10 +284,7 @@ export function useTypedQuery<Schema extends QueriesSchema>(
   const $states = new Proxy(states, {
     get: (_target, p) => states[p as string].value,
     getOwnPropertyDescriptor() {
-      return {
-        enumerable: true,
-        configurable: true,
-      };
+      return ownPropertyDescriptor;
     },
     ownKeys() {
       return keys;
@@ -219,7 +316,7 @@ export function useTypedQuery<Schema extends QueriesSchema>(
   const proxy = new Proxy(getters as unknown as TypedQuery<AnySchema>, {
     get: (_target, p) => {
       if (Reflect.has(api, p)) return Reflect.get(api, p);
-      return states[p as string].value.value;
+      return states[p as string]?.value.value;
     },
     getOwnPropertyDescriptor() {
       return {
@@ -228,7 +325,7 @@ export function useTypedQuery<Schema extends QueriesSchema>(
       };
     },
     ownKeys() {
-      return keys.filter((key) => states[key].value.value !== undefined);
+      return keys.filter((key) => states[key]?.value.value !== undefined);
     },
   });
 
@@ -293,6 +390,131 @@ export function useTypedQuery<Schema extends QueriesSchema>(
     router.push(proxy.$location(values, options));
   api.$replace = (values, options) =>
     router.replace(proxy.$location(values, options));
+
+  api.$form = (options) => {
+    const to = computed(() => options?.to || router.currentRoute.value);
+    const behavior = computed(() => options?.behavior || 'push');
+    const _query = new Proxy({} as Readonly<ExtractQueryTypes<AnySchema>>, {
+      get: (_target, p) => {
+        if (keys.includes(p as any)) return Reflect.get(api, p);
+      },
+      getOwnPropertyDescriptor() {
+        return ownPropertyDescriptor;
+      },
+      ownKeys() {
+        return keys;
+      },
+    });
+    const _values: Record<
+      keyof any,
+      {
+        value: Ref<any>;
+        changed: ComputedRef<boolean>;
+      }
+    > = {};
+
+    for (const key of keys) {
+      const currentValue = unwrapArray(_query[key]);
+      const value = ref(currentValue);
+      _values[key] = {
+        value,
+        changed: computed(() => {
+          const queryValue = (_query as any)[key];
+          const _currentValue = value.value;
+          if (Array.isArray(queryValue)) {
+            if (!Array.isArray(_currentValue)) {
+              return true;
+            }
+            const { length } = queryValue;
+            if (length !== _currentValue.length) {
+              return true;
+            }
+            for (let i = 0; i < length; i++) {
+              if (queryValue[i] !== _currentValue[i]) {
+                return true;
+              }
+            }
+            return false;
+          }
+          return queryValue !== _currentValue;
+        }),
+      };
+    }
+
+    const reset = () => {
+      for (const key of keys) {
+        const _ref = _values[key];
+        _ref.value.value = unwrapArray(_query[key]);
+      }
+    };
+
+    const values = new Proxy({} as ExtractQueryTypes<AnySchema>, {
+      get: (_target, p) => {
+        if (keys.includes(p as any)) return _values[p].value.value;
+      },
+      set(_target, p, newValue) {
+        if (keys.includes(p as any)) {
+          _values[p].value.value = newValue;
+          return true;
+        }
+        return false;
+      },
+      getOwnPropertyDescriptor() {
+        return ownPropertyDescriptor;
+      },
+      ownKeys() {
+        return keys;
+      },
+    });
+    const changes = computed(() =>
+      keys.filter((key) => _values[key].changed.value),
+    );
+    const submit: TypedQueryForm<AnySchema>['submit'] = (opts) => {
+      let _to = opts?.to || to.value;
+      if (typeof _to !== 'string' && 'query' in _to) {
+        _to = {
+          ..._to,
+        };
+        delete _to.query;
+      }
+      const _behavior = opts?.behavior || behavior.value;
+      const __values: Record<keyof any, any> = {};
+      for (const key of keys) {
+        const current = _values[key];
+        if (current.changed.value) {
+          __values[key] = unwrapArray(current.value.value);
+        }
+      }
+      return api[`$${_behavior}`](values, { merge: true, to: _to });
+    };
+
+    const form: TypedQueryForm<AnySchema> = {
+      get ctx() {
+        return proxy as TypedQuery<AnySchema>;
+      },
+      get to() {
+        return to.value;
+      },
+      get behavior() {
+        return behavior.value;
+      },
+      get query() {
+        return _query;
+      },
+      get values() {
+        return values;
+      },
+      get changes() {
+        return changes.value;
+      },
+      get hasChanged() {
+        return changes.value.length > 0;
+      },
+      reset,
+      submit,
+    };
+    return form;
+  };
 
   return proxy as TypedQuery<Schema>;
 }

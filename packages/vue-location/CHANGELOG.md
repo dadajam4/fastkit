@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.3.0
+
+### Minor Changes
+
+- Added TypedQueryForm for query operations linked with a form.
+
 ## 0.2.9
 
 ### Patch Changes
