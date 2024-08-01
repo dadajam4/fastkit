@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.21
+
+### Patch Changes
+
+- Fixed a bug where input elements were still interactable when in viewonly mode.
+
 ## 0.20.20
 
 ### Patch Changes

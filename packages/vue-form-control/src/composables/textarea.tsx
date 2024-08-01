@@ -158,7 +158,7 @@ export class TextareaNodeControl extends TextableControl {
       name: this.name,
       tabindex: this.tabindex,
       readonly: this.isReadonly,
-      disabled: this.isDisabled,
+      disabled: this.isDisabled || this.isViewonly,
       placeholder: this.placeholder,
       autocomplete: this.autocomplete,
       autocapitalize: this.autocapitalize,
