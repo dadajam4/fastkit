@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.3.1
+
+### Patch Changes
+
+- Fixed an issue where `TypedQueryForm.query` could not retrieve the current query values.
+
 ## 0.3.0
 
 ### Minor Changes

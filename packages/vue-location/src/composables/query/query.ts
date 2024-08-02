@@ -396,7 +396,7 @@ export function useTypedQuery<Schema extends QueriesSchema>(
     const behavior = computed(() => options?.behavior || 'push');
     const _query = new Proxy({} as Readonly<ExtractQueryTypes<AnySchema>>, {
       get: (_target, p) => {
-        if (keys.includes(p as any)) return Reflect.get(api, p);
+        if (keys.includes(p as any)) return Reflect.get(proxy, p);
       },
       getOwnPropertyDescriptor() {
         return ownPropertyDescriptor;
@@ -482,7 +482,13 @@ export function useTypedQuery<Schema extends QueriesSchema>(
       for (const key of keys) {
         const current = _values[key];
         if (current.changed.value) {
-          __values[key] = unwrapArray(current.value.value);
+          let _value = unwrapArray(current.value.value);
+          if (Array.isArray(_value) && _value.length === 0) {
+            _value = undefined;
+          }
+          if (_value !== undefined) {
+            __values[key] = _value;
+          }
         }
       }
       return api[`$${_behavior}`](values, { merge: true, to: _to });
