@@ -16,6 +16,7 @@ import {
   QueryExtractorResult,
   QueriesExtractor,
 } from './extractor';
+import { useLocationService, type LocationService } from '../../vue-location';
 
 /**
  * Route generation options
@@ -54,6 +55,23 @@ export type TypedQueryExtractStates<
 export interface TypedQueryInterface<
   Schema extends QueriesSchema = QueriesSchema,
 > {
+  /**
+   * Location Service
+   *
+   * @see {@link LocationService}
+   */
+  get $service(): LocationService;
+
+  /**
+   * List of currently transitioning query names
+   */
+  get $transitioningQueries(): (keyof Schema)[];
+
+  /**
+   * Whether this query is currently transitioning
+   */
+  get $transitioning(): boolean;
+
   /**
    * Router instance
    *
@@ -146,6 +164,12 @@ export interface TypedQueryInterface<
     values: ExtractQueryInputs<Schema>,
     options?: TypedQueryRouteOptions,
   ): ReturnType<Router['replace']>;
+
+  /**
+   * Transitioning due to query submission
+   */
+  get $sending(): boolean;
+
   /**
    * Generate query form
    *
@@ -227,6 +251,22 @@ export interface TypedQueryForm<Schema extends QueriesSchema = QueriesSchema> {
    * Whether one or more fields have changed relative to the current query value
    */
   readonly hasChanged: boolean;
+
+  /**
+   * List of currently transitioning query names
+   */
+  get transitioningQueries(): (keyof Schema)[];
+
+  /**
+   * Whether this query is currently transitioning
+   */
+  get transitioning(): boolean;
+
+  /**
+   * Transitioning due to query submission
+   */
+  get sending(): boolean;
+
   /**
    * Reset form values to the current query value
    */
@@ -275,6 +315,8 @@ export function useTypedQuery<Schema extends QueriesSchema>(
   schema: Schema,
   router = useRouter(),
 ): TypedQuery<Schema> {
+  const service = useLocationService();
+  const sending = ref(false);
   const keys = Object.keys(schema);
   const extractors = createQueriesExtractor<AnySchema>(schema as any);
   const { currentRoute } = router;
@@ -297,8 +339,23 @@ export function useTypedQuery<Schema extends QueriesSchema>(
     );
   }
 
+  const transitioningQueries = computed(() => {
+    const queries = service.transitioning?.query;
+    if (!queries || !queries.length) return [];
+    return keys.filter((key) => queries.includes(key));
+  });
+
   const getters = {} as Record<string, any>;
   const api = {
+    get $service() {
+      return service;
+    },
+    get $transitioningQueries() {
+      return transitioningQueries.value;
+    },
+    get $transitioning() {
+      return transitioningQueries.value.length > 0;
+    },
     get $router() {
       return router;
     },
@@ -310,6 +367,9 @@ export function useTypedQuery<Schema extends QueriesSchema>(
     },
     get $states() {
       return $states;
+    },
+    get $sending() {
+      return sending.value;
     },
   } as unknown as TypedQuery<AnySchema>;
 
@@ -386,10 +446,18 @@ export function useTypedQuery<Schema extends QueriesSchema>(
     return router.resolve({ ...targetRoute, query });
   };
 
-  api.$push = (values, options) =>
-    router.push(proxy.$location(values, options));
-  api.$replace = (values, options) =>
-    router.replace(proxy.$location(values, options));
+  api.$push = (values, options) => {
+    sending.value = true;
+    return router.push(proxy.$location(values, options)).finally(() => {
+      sending.value = false;
+    });
+  };
+  api.$replace = (values, options) => {
+    sending.value = true;
+    return router.replace(proxy.$location(values, options)).finally(() => {
+      sending.value = false;
+    });
+  };
 
   api.$form = (options) => {
     const to = computed(() => options?.to || router.currentRoute.value);
@@ -515,6 +583,15 @@ export function useTypedQuery<Schema extends QueriesSchema>(
       },
       get hasChanged() {
         return changes.value.length > 0;
+      },
+      get transitioningQueries() {
+        return api.$transitioningQueries;
+      },
+      get transitioning() {
+        return api.$transitioning;
+      },
+      get sending() {
+        return sending.value;
       },
       reset,
       submit,

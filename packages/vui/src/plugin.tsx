@@ -98,7 +98,7 @@ export class VuiPlugin {
     installResizeDirective(app);
 
     // Vui
-    const $vui = new VuiService(opts, app.config.globalProperties.$vstack);
+    const $vui = new VuiService(opts, app);
     app.provide(VuiInjectionKey, $vui);
     app.config.globalProperties.$vui = $vui;
 

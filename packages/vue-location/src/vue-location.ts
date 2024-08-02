@@ -1,11 +1,14 @@
 import {
   reactive,
   watch,
-  WatchCallback,
-  WatchOptions,
-  WatchStopHandle,
+  type WatchCallback,
+  type WatchOptions,
+  type WatchStopHandle,
   onBeforeUnmount,
   nextTick,
+  type App,
+  type InjectionKey,
+  inject,
 } from 'vue';
 import type {
   Router,
@@ -26,6 +29,9 @@ import { useTypedQuery, QueriesSchema, TypedQuery } from './composables';
 import { locationIsMatched } from './utils';
 
 type RawRouteComponent = NonNullable<RouteRecordRaw['component']>;
+
+const LOCATION_SERVICE_INJECTION_KEY: InjectionKey<LocationService> =
+  Symbol('LocationService');
 
 /**
  * The state of route transition
@@ -199,6 +205,12 @@ export class LocationService {
     router.onError(() => {
       this.state.transitioningTo = null;
     });
+  }
+
+  static install(app: App, ctx: LocationServiceContext) {
+    const loc = new LocationService(ctx);
+    app.provide(LOCATION_SERVICE_INJECTION_KEY, loc);
+    return loc;
   }
 
   /**
@@ -380,4 +392,12 @@ export class LocationService {
   forward(...args: Parameters<Router['forward']>) {
     return this.router.forward(...args);
   }
+}
+
+export function useLocationService(): LocationService {
+  const loc = inject(LOCATION_SERVICE_INJECTION_KEY);
+  if (!loc) {
+    throw new Error('missing provided LocationService');
+  }
+  return loc;
 }

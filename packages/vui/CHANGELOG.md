@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.19.41
+
+### Patch Changes
+
+- Enabled reference to the state of queries during transitions.
+
+- Updated dependencies []:
+  - @fastkit/vue-location@0.3.2
+
 ## 0.19.40
 
 ### Patch Changes

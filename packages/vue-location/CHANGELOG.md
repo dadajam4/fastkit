@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.3.2
+
+### Patch Changes
+
+- Enabled reference to the state of queries during transitions.
+
 ## 0.3.1
 
 ### Patch Changes

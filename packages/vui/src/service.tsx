@@ -1,4 +1,9 @@
-import { VNodeChild, reactive, UnwrapNestedRefs } from 'vue';
+import {
+  type VNodeChild,
+  reactive,
+  type UnwrapNestedRefs,
+  type App,
+} from 'vue';
 import { ScopeName, ColorVariant } from '@fastkit/color-scheme';
 import {
   type VueStackService,
@@ -231,7 +236,7 @@ export class VuiService {
     return getDocumentScroller();
   }
 
-  constructor(options: VuiServiceOptions, stackService: VueStackService) {
+  constructor(options: VuiServiceOptions, app: App) {
     this.options = options;
     this.configure();
 
@@ -246,12 +251,11 @@ export class VuiService {
     this.textareaRows = textareaRows;
     this.requiredChip = requiredChip;
     this.router = options.router;
-    this.location = new LocationService({
+    this.location = LocationService.install(app, {
       router: this.router,
     });
     this.useLink = options.useLink || useLink;
-
-    this.stack = stackService;
+    this.stack = app.config.globalProperties.$vstack;
     const { uiSettings } = options;
     this.stackActions = {
       ok: ({ bindings }) => (
@@ -271,8 +275,8 @@ export class VuiService {
       ),
     };
 
-    this.dialog = stackService.createLauncher(VDialog);
-    this.alert = stackService.createLauncher(VDialog, (props) => {
+    this.dialog = this.stack.createLauncher(VDialog);
+    this.alert = this.stack.createLauncher(VDialog, (props) => {
       const actions = [...(props?.actions || [])];
       if (!actions.length) {
         actions.push(this.stackAction('ok'));
@@ -285,7 +289,7 @@ export class VuiService {
       };
     });
 
-    this.confirm = stackService.createLauncher(VDialog, (props) => {
+    this.confirm = this.stack.createLauncher(VDialog, (props) => {
       const actions = [...(props?.actions || [])];
       if (!actions.length) {
         actions.push(this.stackAction('cancel'), this.stackAction('ok'));
@@ -297,9 +301,9 @@ export class VuiService {
         actions,
       };
     });
-    this.snackbar = stackService.createLauncher(VSnackbar);
-    this.menu = stackService.createLauncher(VMenu);
-    this.sheet = stackService.createLauncher(VSheetModal);
+    this.snackbar = this.stack.createLauncher(VSnackbar);
+    this.menu = this.stack.createLauncher(VMenu);
+    this.sheet = this.stack.createLauncher(VSheetModal);
   }
 
   configure(options?: Partial<VuiServiceOptions>) {
