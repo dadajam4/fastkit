@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.3.4
+
+### Patch Changes
+
+- Improved value change checks to ambiguously handle empty strings and nullable values.
+
 ## 0.3.3
 
 ### Patch Changes

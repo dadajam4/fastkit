@@ -301,6 +301,9 @@ const ownPropertyDescriptor = {
   configurable: true,
 };
 
+const nullableValue = (source: unknown) =>
+  source === '' || source == null ? null : source;
+
 /**
  * Generate an interface for extracting and utility functions for query values corresponding to the specified schema:
  *
@@ -513,7 +516,7 @@ export function useTypedQuery<Schema extends QueriesSchema>(
             }
             return false;
           }
-          return queryValue !== _currentValue;
+          return nullableValue(queryValue) !== nullableValue(_currentValue);
         }),
       };
     }
