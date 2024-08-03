@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.3.5
+
+### Patch Changes
+
+- Reset queries on route changes.
+
 ## 0.3.4
 
 ### Patch Changes

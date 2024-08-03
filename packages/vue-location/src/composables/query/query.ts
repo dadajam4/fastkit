@@ -528,6 +528,8 @@ export function useTypedQuery<Schema extends QueriesSchema>(
       }
     };
 
+    router.afterEach(reset);
+
     const values = new Proxy({} as ExtractQueryTypes<AnySchema>, {
       get: (_target, p) => {
         if (keys.includes(p as any)) return _values[p].value.value;
