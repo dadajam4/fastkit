@@ -1,5 +1,11 @@
 # @fastkit/vue-location
 
+## 0.3.3
+
+### Patch Changes
+
+- Fixed an issue where queries were not removed when null was specified using the merge option.
+
 ## 0.3.2
 
 ### Patch Changes

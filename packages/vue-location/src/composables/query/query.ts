@@ -439,10 +439,19 @@ export function useTypedQuery<Schema extends QueriesSchema>(
 
   api.$location = (values, options) => {
     const targetRoute = normalizeRouteLocation(options?.to);
+    let targetQuery = targetRoute.query;
+    const merge = options?.merge ?? false;
+    if (merge) {
+      const current = router.currentRoute.value;
+      if (current.path === router.resolve(targetRoute).path) {
+        targetQuery = current.query;
+      }
+    }
     const serialized = proxy.$serialize(values);
-    const query = options?.merge
-      ? { ...targetRoute.query, ...serialized }
-      : serialized;
+    const query = merge ? { ...targetQuery, ...serialized } : serialized;
+    for (const [key, v] of Object.entries(values)) {
+      if (v === null || (Array.isArray(v) && v.length === 0)) delete query[key];
+    }
     return router.resolve({ ...targetRoute, query });
   };
 
@@ -538,13 +547,7 @@ export function useTypedQuery<Schema extends QueriesSchema>(
       keys.filter((key) => _values[key].changed.value),
     );
     const submit: TypedQueryForm<AnySchema>['submit'] = (opts) => {
-      let _to = opts?.to || to.value;
-      if (typeof _to !== 'string' && 'query' in _to) {
-        _to = {
-          ..._to,
-        };
-        delete _to.query;
-      }
+      const _to = opts?.to || to.value;
       const _behavior = opts?.behavior || behavior.value;
       const __values: Record<keyof any, any> = {};
       for (const key of keys) {
@@ -552,14 +555,14 @@ export function useTypedQuery<Schema extends QueriesSchema>(
         if (current.changed.value) {
           let _value = unwrapArray(current.value.value);
           if (Array.isArray(_value) && _value.length === 0) {
-            _value = undefined;
+            _value = null;
+          } else if (_value === '') {
+            _value = null;
           }
-          if (_value !== undefined) {
-            __values[key] = _value;
-          }
+          __values[key] = _value;
         }
       }
-      return api[`$${_behavior}`](values, { merge: true, to: _to });
+      return api[`$${_behavior}`](__values, { merge: true, to: _to });
     };
 
     const form: TypedQueryForm<AnySchema> = {
