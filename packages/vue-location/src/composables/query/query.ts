@@ -16,6 +16,7 @@ import {
   QueryExtractorResult,
   QueriesExtractor,
 } from './extractor';
+import { extractDefaultValue } from './_internal';
 import { useLocationService, type LocationService } from '../../vue-location';
 
 /**
@@ -166,6 +167,11 @@ export interface TypedQueryInterface<
   ): ReturnType<Router['replace']>;
 
   /**
+   * Current query value converted to a string
+   */
+  get $watchKey(): ComputedRef<string>;
+
+  /**
    * Transitioning due to query submission
    */
   get $sending(): boolean;
@@ -266,6 +272,11 @@ export interface TypedQueryForm<Schema extends QueriesSchema = QueriesSchema> {
    * Transitioning due to query submission
    */
   get sending(): boolean;
+
+  /**
+   * Current query value converted to a string
+   */
+  get watchKey(): ComputedRef<string>;
 
   /**
    * Reset form values to the current query value
@@ -374,6 +385,14 @@ export function useTypedQuery<Schema extends QueriesSchema>(
     get $sending() {
       return sending.value;
     },
+    $watchKey: computed(() => {
+      const obj: Record<any, any> = {};
+      for (const key of keys) {
+        const value = proxy[key];
+        obj[key] = value;
+      }
+      return JSON.stringify(obj);
+    }),
   } as unknown as TypedQuery<AnySchema>;
 
   const proxy = new Proxy(getters as unknown as TypedQuery<AnySchema>, {
@@ -561,7 +580,15 @@ export function useTypedQuery<Schema extends QueriesSchema>(
           let _value = unwrapArray(current.value.value);
           if (Array.isArray(_value) && _value.length === 0) {
             _value = null;
-          } else if (_value === '') {
+          } else if (_value === '' || _value === undefined) {
+            _value = null;
+          }
+          const _schema = extractors[key]?.schema;
+          if (
+            _value != null &&
+            typeof _value !== 'object' &&
+            extractDefaultValue(_schema.default) === _value
+          ) {
             _value = null;
           }
           __values[key] = _value;
@@ -600,6 +627,9 @@ export function useTypedQuery<Schema extends QueriesSchema>(
       },
       get sending() {
         return sending.value;
+      },
+      get watchKey() {
+        return api.$watchKey;
       },
       reset,
       submit,

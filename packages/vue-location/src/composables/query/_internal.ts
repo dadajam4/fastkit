@@ -111,3 +111,6 @@ export const normalizeQuerySchemaSpec = (
 };
 
 export type LocationQueryValueChunk = LocationQueryValue | undefined;
+
+export const extractDefaultValue = (source: unknown) =>
+  typeof source === 'function' ? source() : source;

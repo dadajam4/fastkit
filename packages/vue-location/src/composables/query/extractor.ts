@@ -11,6 +11,7 @@ import {
   normalizeType,
   normalizeQuerySchemaSpec,
   LocationQueryValueChunk,
+  extractDefaultValue,
 } from './_internal';
 
 function stringExtractor(
@@ -165,9 +166,6 @@ const createMissingError = (queryName: string) =>
   new Error(
     `missing required query value${queryName ? ` "${queryName}"` : ''}.`,
   );
-
-const extractDefaultValue = (source: unknown) =>
-  typeof source === 'function' ? source() : source;
 
 /**
  * Generate a query value extractor

@@ -1,5 +1,15 @@
 # @fastkit/vue-location
 
+## 0.3.6
+
+### Patch Changes
+
+- **Improved Query Submission Behavior**
+
+  - Added `watchKey` to monitor the current query conditions.
+  - Fixed an issue where submitting `undefined` did not update the query.
+  - Queries now remove parameters if they match the default value during submission.
+
 ## 0.3.5
 
 ### Patch Changes
