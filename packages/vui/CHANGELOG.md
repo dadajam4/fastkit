@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.19.46
+
+### Patch Changes
+
+- Added an option to support datalist.
+
+- Updated dependencies []:
+  - @fastkit/vue-form-control@0.20.22
+
 ## 0.19.45
 
 ### Patch Changes

@@ -190,6 +190,8 @@ export default defineComponent({
           これはツールチップです
         </VTooltip>
 
+        <VTextField label="hello" list={[2021, 2022, { value: '2023' }]} />
+
         <VTextField
           v-model={input.value}
           mask={mask}

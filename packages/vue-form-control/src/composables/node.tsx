@@ -384,6 +384,8 @@ export interface FormNodeErrorMessageSource {
   key: string;
 }
 
+let _mountedId = 0;
+
 /**
  * Base class for all form nodes
  */
@@ -401,6 +403,8 @@ export class FormNodeControl<
   readonly __multiple: boolean;
 
   protected _isMounted = ref(false);
+
+  protected _mountedId = ref<number>();
 
   protected _ctx: FormNodeContext<T, D>;
 
@@ -550,6 +554,11 @@ export class FormNodeControl<
   /** Component mounted */
   get isMounted(): boolean {
     return this._isMounted.value;
+  }
+
+  /** If already mounted, its unique ID. */
+  get mountedId(): number | undefined {
+    return this._mountedId.value;
   }
 
   /** Finalizing the value adjustment process */
@@ -957,6 +966,7 @@ export class FormNodeControl<
 
     onMounted(() => {
       this._isMounted.value = true;
+      this._mountedId.value = ++_mountedId;
       this._cii = getCurrentInstance();
     });
 

@@ -73,10 +73,12 @@ export const VTextField = defineComponent({
         size={control.size.value}
         v-slots={{
           ...ctx.slots,
-          default: () =>
+          default: () => [
             inputControl.createInputElement({
               class: 'v-text-field__input__element',
             }),
+            inputControl.createDatalist(),
+          ],
         }}
       />
     );

@@ -39,6 +39,22 @@ const IMASK_PIPE_TYPE_MAP: Record<TextInputMaskModel, IMaskPipeType> = {
   unmasked: 'unmaskedValue',
 };
 
+export type TextInputListItemValue = string | number;
+
+export interface TextInputListItem {
+  value: TextInputListItemValue;
+  label?: string;
+}
+
+export type RawTextInputListItem = TextInputListItemValue | TextInputListItem;
+
+export type TextInputListSpec = string | RawTextInputListItem[];
+
+export interface TextInputListDetails {
+  id: string;
+  items?: TextInputListItem[];
+}
+
 export function createTextInputNodeProps() {
   return {
     ...createTextableProps(),
@@ -68,6 +84,12 @@ export function createTextInputNodeProps() {
         type: String as PropType<TextInputMaskModel>,
         default: 'masked',
       },
+      /**
+       * The ID of the datalist, or a list of its items.
+       *
+       * @see {@link https://developer.mozilla.org/docs/Web/HTML/Element/datalist}
+       */
+      list: [String, Array] as PropType<TextInputListSpec>,
     }),
   };
 }
@@ -148,6 +170,8 @@ export class TextInputNodeControl extends TextableControl {
 
   protected _maskedValue: ComputedRef<string>;
 
+  protected _list: ComputedRef<TextInputListDetails | undefined>;
+
   /**
    * Input type
    *
@@ -199,6 +223,15 @@ export class TextInputNodeControl extends TextableControl {
    */
   get useTypedValue(): boolean {
     return this._props.maskModel === 'typed';
+  }
+
+  /**
+   * datalist
+   *
+   * @see {@link TextInputListDetails}
+   */
+  get datalist(): TextInputListDetails | undefined {
+    return this._list.value;
   }
 
   constructor(
@@ -270,6 +303,23 @@ export class TextInputNodeControl extends TextableControl {
       bucket.value = v || '';
     });
 
+    this._list = computed<TextInputListDetails | undefined>(() => {
+      const { list } = props;
+      if (!list) return;
+
+      if (typeof list === 'string') {
+        return {
+          id: list,
+        };
+      }
+      return {
+        id: `_vfc-list-${this.mountedId}`,
+        items: list.map((row) =>
+          typeof row === 'object' ? row : { value: row },
+        ),
+      };
+    });
+
     /**
      * @TODO ちゃんとする
      */
@@ -315,11 +365,13 @@ export class TextInputNodeControl extends TextableControl {
     if (type === 'password' && this.isVisiblePassword) {
       type = 'text';
     }
+    const { datalist } = this;
 
     const maskInput = this._getMaskInput();
 
     const attrs: InputHTMLAttributes = {
       class: override.class,
+      list: datalist?.id,
       type,
       inputmode: this.inputmode,
       name: this.name,
@@ -346,6 +398,19 @@ export class TextInputNodeControl extends TextableControl {
     }
     const el = <input {...attrs} ref={this._inputElement} />;
     return el;
+  }
+
+  createDatalist() {
+    const { datalist } = this;
+    if (!datalist || !datalist.items) return;
+
+    return (
+      <datalist id={datalist.id}>
+        {datalist.items.map((item) => (
+          <option value={item.value}>{item.label}</option>
+        ))}
+      </datalist>
+    );
   }
 
   focus(opts?: FocusOptions) {
