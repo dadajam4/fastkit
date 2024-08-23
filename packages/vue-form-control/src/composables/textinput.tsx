@@ -370,6 +370,7 @@ export class TextInputNodeControl extends TextableControl {
     const maskInput = this._getMaskInput();
 
     const attrs: InputHTMLAttributes = {
+      id: this.mountedNodeId,
       class: override.class,
       list: datalist?.id,
       type,

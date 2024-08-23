@@ -561,6 +561,12 @@ export class FormNodeControl<
     return this._mountedId.value;
   }
 
+  /** If already mounted, its unique ID. */
+  get mountedNodeId(): string | undefined {
+    const { mountedId } = this;
+    return mountedId ? `_vfc-node-${mountedId}` : undefined;
+  }
+
   /** Finalizing the value adjustment process */
   get isFinalizing(): boolean {
     return !!this._finalizePromise.value;

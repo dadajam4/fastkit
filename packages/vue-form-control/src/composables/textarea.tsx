@@ -154,6 +154,7 @@ export class TextareaNodeControl extends TextableControl {
   createInputElement(override: Pick<TextareaHTMLAttributes, 'class'> = {}) {
     const { autosizeSettings } = this;
     const attrs: TextareaHTMLAttributes = {
+      id: this.mountedNodeId,
       class: override.class,
       name: this.name,
       tabindex: this.tabindex,

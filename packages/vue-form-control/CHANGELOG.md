@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.23
+
+### Patch Changes
+
+- Implemented a mechanism to assign unique IDs to nodes.
+
 ## 0.20.22
 
 ### Patch Changes
