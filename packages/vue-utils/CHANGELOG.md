@@ -1,5 +1,12 @@
 # @fastkit/vue-utils
 
+## 0.15.10
+
+### Patch Changes
+
+- Added: List Item Enumeration Key Detector.
+  Available via `useIterableKeyDetector()`.
+
 ## 0.15.9
 
 ### Patch Changes

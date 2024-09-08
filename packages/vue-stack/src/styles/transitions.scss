@@ -34,6 +34,7 @@
 .v-stack-slide-y {
   &-enter-active,
   &-leave-active {
+    pointer-events: none;
     transition:
       opacity var(--v-stack-transition-primary),
       transform var(--v-stack-transition-primary);
@@ -41,6 +42,7 @@
 
   &-enter-from,
   &-leave-to {
+    pointer-events: none;
     opacity: 0;
     transform: translateY(-15px);
   }
@@ -49,6 +51,7 @@
 .v-stack-slide-y-reverse {
   &-enter-active,
   &-leave-active {
+    pointer-events: none;
     transition:
       opacity var(--v-stack-transition-primary),
       transform var(--v-stack-transition-primary);
@@ -56,6 +59,7 @@
 
   &-enter-from,
   &-leave-to {
+    pointer-events: none;
     opacity: 0;
     transform: translateY(15px);
   }
@@ -64,6 +68,7 @@
 .v-stack-slide-x {
   &-enter-active,
   &-leave-active {
+    pointer-events: none;
     transition:
       opacity var(--v-stack-transition-primary),
       transform var(--v-stack-transition-primary);
@@ -71,6 +76,7 @@
 
   &-enter-from,
   &-leave-to {
+    pointer-events: none;
     opacity: 0;
     transform: translateX(-15px);
   }
@@ -79,6 +85,7 @@
 .v-stack-slide-x-reverse {
   &-enter-active,
   &-leave-active {
+    pointer-events: none;
     transition:
       opacity var(--v-stack-transition-primary),
       transform var(--v-stack-transition-primary);
@@ -86,6 +93,7 @@
 
   &-enter-from,
   &-leave-to {
+    pointer-events: none;
     opacity: 0;
     transform: translateX(15px);
   }

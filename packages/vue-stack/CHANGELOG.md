@@ -1,5 +1,18 @@
 # @fastkit/vue-stack
 
+## 0.16.14
+
+### Patch Changes
+
+- Improved: Pointer no longer responds during slide transitions.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.10
+  - @fastkit/vue-body-scroll-lock@0.2.11
+  - @fastkit/vue-click-outside@0.2.10
+  - @fastkit/vue-resize@0.2.10
+  - @fastkit/vue-transitions@0.2.11
+
 ## 0.16.13
 
 ### Patch Changes

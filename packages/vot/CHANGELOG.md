@@ -1,5 +1,13 @@
 # @fastkit/vot
 
+## 0.16.13
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.10
+  - @fastkit/vue-page@0.15.11
+
 ## 0.16.12
 
 ### Patch Changes

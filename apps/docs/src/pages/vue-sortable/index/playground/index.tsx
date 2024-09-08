@@ -48,7 +48,43 @@ export default defineComponent({
         </button>
         <div class={Styles.columns}>
           <div class={Styles.column}>
-            <Sortable
+            <table>
+              <Sortable
+                class="id-1"
+                group="hoge"
+                handle=".handle"
+                v-model={items1.value}
+                animation={150}
+                multiDrag
+                multiDragKey="SHIFT"
+                selectedClass={Styles.itemSelected}
+                v-slots={{
+                  wrapper: (ctx) => (
+                    <tbody {...ctx.attrs} class={Styles.list}>
+                      {ctx.children}
+                    </tbody>
+                  ),
+                  item: (ctx) => (
+                    <tr {...ctx.attrs} class={Styles.item}>
+                      <td>
+                        <div
+                          class="handle"
+                          style={{
+                            width: '12px',
+                            height: '12px',
+                            cursor: 'grab',
+                            background: 'currentColor',
+                          }}></div>
+                      </td>
+                      <td>{ctx.data.label}</td>
+                      <td>{String(ctx.sortable.guardInProgress)}</td>
+                    </tr>
+                  ),
+                }}
+              />
+            </table>
+
+            {/* <Sortable
               class="id-1"
               group="hoge"
               v-model={items1.value}
@@ -69,7 +105,7 @@ export default defineComponent({
                   </div>
                 ),
               }}
-            />
+            /> */}
             {JSON.stringify(items1.value)}
           </div>
           <div class={Styles.column}>

@@ -14,6 +14,7 @@ export type EventOptions = Pick<Options, EventOptionName>;
 
 export const NORMAL_OPTION_NAMES = [
   // Core
+  'handle',
   'animation',
   'bubbleScroll',
   'chosenClass',

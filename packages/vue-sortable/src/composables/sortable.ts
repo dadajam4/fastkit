@@ -11,7 +11,11 @@ import {
   markRaw,
   // getCurrentInstance,
 } from 'vue';
-import { getClientIterableKey } from '@fastkit/vue-utils';
+import {
+  useIterableKeyDetector,
+  type IterableKeyResolver,
+  type IterableKeyDetectorCandidate,
+} from '@fastkit/vue-utils';
 import Sortable from 'sortablejs';
 import { arrayRemove } from '@fastkit/helpers';
 import {
@@ -66,6 +70,24 @@ export type SortableUpdateGuardFn<T extends SortableData = SortableData> = (
 export interface SortableProps<T extends SortableData = SortableData>
   extends ExtendedSortableOptions<SortableContext<T>> {
   modelValue?: T[];
+  /**
+   * Detection criteria for item key
+   *
+   * - `string` If the item is an object, use the value of the specified property name as the key.
+   * - `IterableKeyResolver (Function)` Retrieve the key using a custom function.
+   * - `undefined` If the item is an object, detect the key from a list of candidates.
+   *
+   * @default undefined
+   *
+   * @see {@link IterableKeyResolver}
+   */
+  itemKey?: string | IterableKeyResolver<T>;
+  /**
+   * List of candidates for automatic detection
+   *
+   * @see {@link IterableKeyDetectorCandidate}
+   */
+  itemKeyCandidates?: IterableKeyDetectorCandidate[];
   clone?: (source: T) => T;
   beforeUpdate?: SortableUpdateGuardFn<T>;
 }
@@ -108,7 +130,7 @@ export interface SortableContext<T extends SortableData = SortableData> {
   get _guardController(): GuardController<T> | undefined;
 }
 
-const _SERVER_DEFAULT_KEY_ = 0;
+const _SERVER_DEFAULT_KEY_ = '__0';
 
 export type SortableEmits<T extends SortableData = SortableData> = {
   'update:modelValue': (modelValue: T[]) => true;
@@ -185,6 +207,11 @@ export function useSortable<T extends SortableData = SortableData>(
       !canOperation.value && Styles.disabled,
     ],
   }));
+  const keyDetector = useIterableKeyDetector({
+    items: () => props.modelValue,
+    itemKey: () => props.itemKey,
+    candidates: () => props.itemKeyCandidates,
+  });
 
   const getKeys = () => sortable?.toArray() ?? [];
 
@@ -316,11 +343,7 @@ export function useSortable<T extends SortableData = SortableData>(
   });
 
   const getKeyByData = (data: T): string =>
-    String(
-      mounted.value
-        ? (getClientIterableKey(data) ?? _SERVER_DEFAULT_KEY_)
-        : _SERVER_DEFAULT_KEY_,
-    );
+    keyDetector.detect(data, _SERVER_DEFAULT_KEY_);
 
   const getKeyByElement = (_el: HTMLElement): string => {
     const key = _el.getAttribute(dataIdAttr.value);
@@ -598,6 +621,7 @@ export function useSortable<T extends SortableData = SortableData>(
         onDeselect: _onDeselect,
         group: group.value,
         disabled: !canOperation.value,
+        handle: props.handle,
       };
       for (const optionName of OPTION_NAMES) {
         if (optionName in _directiveValue) {

@@ -1,5 +1,14 @@
 # @fastkit/vue-sortable
 
+## 0.0.2
+
+### Patch Changes
+
+- Added support for specifying keys for list items.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.10
+
 ## 0.0.1
 
 ### Patch Changes
