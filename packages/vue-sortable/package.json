@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-sortable",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Integration implementation of SortableJS for Vue applications.",
   "keywords": [
     "fastkit",

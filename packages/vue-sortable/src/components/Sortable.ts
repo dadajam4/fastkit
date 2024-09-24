@@ -4,7 +4,12 @@ import {
   type SetupContext,
   type VNode,
   type SlotsType,
+  type ShallowUnwrapRef,
+  type VNodeProps,
+  type AllowedComponentProps,
+  type ComponentCustomProps,
 } from 'vue';
+import { type EmitFn, type EmitsToProps } from '@fastkit/vue-utils';
 import { type SortableData } from '../schema';
 import { OPTION_NAMES } from '../schema/_internal';
 import {
@@ -38,16 +43,63 @@ const SORTABLE_PROPS = [
   'modelValue',
   'clone',
   'beforeUpdate',
+  'itemKey',
+  'itemKeyCandidates',
+  'clone',
+  'beforeUpdate',
   ...OPTION_NAMES,
 ] as const satisfies (keyof SortableProps)[];
 
 const unwrapArray = <T>(source: T): T extends Array<infer U> ? U : T =>
   (Array.isArray(source) ? source[0] : source) as any;
 
+type EmitsProps<T extends SortableData = SortableData> = EmitsToProps<
+  SortableEmits<T>
+>;
+
+type BuiltinComponentProps = VNodeProps &
+  AllowedComponentProps &
+  ComponentCustomProps;
+
+type GenericProps<T extends SortableData = SortableData> = SortableProps<T> &
+  EmitsProps & {
+    'v-model'?: T[];
+    'v-slots'?: Slots<T>;
+  } & BuiltinComponentProps;
+
+type GenericEmitFn<T extends SortableData = SortableData> = EmitFn<
+  SortableEmits<T>
+>;
+
+type GenericSlots<T extends SortableData = SortableData> = Readonly<Slots<T>>;
+
+type GenericSetupContext<T extends SortableData = SortableData> = {
+  attrs: any;
+  emit: GenericEmitFn<T>;
+  slots: GenericSlots<T>;
+};
+
+type VLSSetup<T extends SortableData = SortableData> =
+  GenericSetupContext<T> & {
+    props: SortableProps<T>;
+    expose(exposed: ShallowUnwrapRef<{}>): void;
+  };
+
+type GenericSortable = <T extends SortableData = SortableData>(
+  __VLS_props: GenericProps<T>,
+  __VLS_ctx?: GenericSetupContext<T>,
+  __VLS_expose?: (exposed: ShallowUnwrapRef<{}>) => void,
+  __VLS_setup?: Promise<VLSSetup<T>>,
+) => VNode & {
+  __ctx?: VLSSetup<T>;
+}; // & DefineComponentExpose<GenericTableInstance>;
+
 export const Sortable = defineComponent(
   <T extends SortableData = SortableData>(
     props: SortableProps<T> & { 'v-slots'?: Slots<T>; 'v-model'?: T[] },
     ctx: SetupContext<SortableEmits<T>, SlotsType<Slots<T>>>,
+    _expose?: (exposed: ShallowUnwrapRef<{}>) => void,
+    _setup?: Promise<VLSSetup<T>>,
   ) => {
     const sortable = useSortable(props, ctx);
     const wrapperSlotDefault: NonNullable<Slots<T>['wrapper']> = ({
@@ -79,6 +131,5 @@ export const Sortable = defineComponent(
   },
   {
     props: SORTABLE_PROPS as unknown as undefined,
-    // slots: undefined as unknown as Hoge<T>,
   },
-);
+) as unknown as GenericSortable;

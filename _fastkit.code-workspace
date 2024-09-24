@@ -361,6 +361,7 @@
       "scss",
       "vue"
     ],
+    "npm.packageManager": "pnpm",
   },
   "extensions": {
     "recommendations": [

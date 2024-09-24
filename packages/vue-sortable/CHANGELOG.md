@@ -1,5 +1,11 @@
 # @fastkit/vue-sortable
 
+## 0.0.3
+
+### Patch Changes
+
+- Fixed an issue where the item type was not applied to slots within Vue file templates.
+
 ## 0.0.2
 
 ### Patch Changes
