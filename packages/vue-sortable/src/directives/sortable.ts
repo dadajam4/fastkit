@@ -128,18 +128,18 @@ export class SortableDirectiveContext<C = undefined> {
     this._handlers = objectFromArray(EVENT_OPTION_NAMES, (eventName) => [
       eventName,
       (ev: any, ...args: any[]) => {
+        if (eventName === 'onStart') {
+          document.body.classList.add(Styles.dragging);
+        } else if (eventName === 'onEnd') {
+          document.body.classList.remove(Styles.dragging);
+        }
+
         const originalHandler = this.bindingValue[eventName] as any;
         if (!originalHandler) return;
         Object.defineProperty(ev, 'ctx', {
           get: () => this.ctx,
           enumerable: true,
         });
-
-        if (eventName === 'onStart') {
-          document.body.classList.add(Styles.dragging);
-        } else if (eventName === 'onEnd') {
-          document.body.classList.remove(Styles.dragging);
-        }
         originalHandler(ev, ...args);
       },
     ]);

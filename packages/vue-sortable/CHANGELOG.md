@@ -1,5 +1,11 @@
 # @fastkit/vue-sortable
 
+## 0.0.4
+
+### Patch Changes
+
+- Apply dragging className for body.
+
 ## 0.0.3
 
 ### Patch Changes
