@@ -21,8 +21,21 @@ import {
 } from '../schema/_internal';
 
 if (typeof window !== 'undefined') {
-  const { MultiDrag, Swap } = Plugins;
-  Sortable.mount(new MultiDrag(), new Swap());
+  try {
+    const { MultiDrag, Swap } = Plugins;
+    Sortable.mount(new MultiDrag(), new Swap());
+  } catch (err) {
+    if (
+      !(err instanceof TypeError) ||
+      !err.message.includes('is not a constructor')
+    ) {
+      throw err;
+    }
+    // eslint-disable-next-line no-console
+    console.warn(`Failed to mount MultiDrag, but continuing.`);
+    // eslint-disable-next-line no-console
+    console.warn(err.message);
+  }
 }
 
 export type ExtendedSortableEvent<E, C = undefined> = E extends AnyEvent

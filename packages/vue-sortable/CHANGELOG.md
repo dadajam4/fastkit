@@ -1,5 +1,11 @@
 # @fastkit/vue-sortable
 
+## 0.0.5
+
+### Patch Changes
+
+- I've implemented a temporary fix for the issue where MultiDrag fails to mount in execution environments such as Vitest.
+
 ## 0.0.4
 
 ### Patch Changes
