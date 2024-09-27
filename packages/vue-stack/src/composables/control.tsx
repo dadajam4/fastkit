@@ -40,6 +40,7 @@ import { useTeleport } from './teleport';
 export type VStackCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
 export interface UseStackControlOptions {
+  onActivated?: (isActive: boolean) => any;
   onContentMounted?: (content: HTMLElement) => any;
   onContentDetached?: () => any;
   transitionResolver?: () => string;
@@ -119,6 +120,7 @@ export function useStackControl(
   opts: UseStackControlOptions = {},
 ) {
   const {
+    onActivated,
     onContentMounted,
     onContentDetached,
     transitionResolver,
@@ -990,6 +992,7 @@ export function useStackControl(
         }
       }
       privateApi.checkFocusTrap();
+      onActivated?.(value);
     },
     { immediate: true },
   );

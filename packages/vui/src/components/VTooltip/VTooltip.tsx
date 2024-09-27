@@ -19,6 +19,9 @@ export const VTooltip = defineComponent({
       if (attrs.openDelay == null) {
         attrs.openDelay = 200;
       }
+      if (attrs.hideOnScroll == null) {
+        attrs.hideOnScroll = true;
+      }
 
       return (
         <VMenu

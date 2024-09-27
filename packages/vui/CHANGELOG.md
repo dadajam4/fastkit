@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 0.19.49
+
+### Patch Changes
+
+- Added an option to automatically hide floating elements.
+
+- Updated dependencies []:
+  - @fastkit/vue-stack@0.16.15
+
 ## 0.19.48
 
 ### Patch Changes

@@ -1,5 +1,6 @@
 .v-tooltip {
   --menu-shadow: var(--tooltip-shadow);
+  --v-stack-slide-amount: 10px;
 
   font-size: var(--tooltip-font-size);
   border-radius: var(--tooltip-radius);

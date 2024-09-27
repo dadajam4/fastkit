@@ -80,6 +80,10 @@ interface CreateMenuSchemeOptions {
   defaultCloseOnEsc?: boolean;
   /** @default true */
   defaultCloseOnTab?: StackableTabCloseSpec;
+  /** @default false */
+  defaultHideOnScroll?: boolean | string | number;
+  /** @default true */
+  defaultHideOnInvisible?: boolean;
 }
 
 type MenuSizeSpec = number | 'fit' | 'free';
@@ -106,6 +110,8 @@ export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
     defaultResizeWatchDebounce = DEFAULT_RESIZE_WATCH_DEBOUNCE,
     defaultAllowOverflow = false,
     defaultOverlap = false,
+    defaultHideOnScroll = false,
+    defaultHideOnInvisible = true,
   } = options;
 
   return {
@@ -218,6 +224,22 @@ export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
     resizeWatchDebounce: {
       type: Number,
       default: defaultResizeWatchDebounce,
+    },
+    /**
+     * Hide when scrolling
+     *
+     * If a value is specified, the tooltip will be hidden after scrolling by the specified number of pixels (px).
+     */
+    hideOnScroll: {
+      type: [Boolean, String, Number],
+      default: defaultHideOnScroll,
+    },
+    /**
+     * Hide the stack element when the activator is scrolled out of view.
+     */
+    hideOnInvisible: {
+      type: Boolean,
+      default: defaultHideOnInvisible,
     },
   };
 }
@@ -368,12 +390,14 @@ export function defineMenuComponent<
     } as typeof baseScheme.emits & Emits,
     slots: settings.slots as MergeStackBaseSlots<Slots>,
     setup(_props: any, _ctx) {
+      let _intersectionObserver: IntersectionObserver | undefined;
       const baseCtx = setupStackableComponent<
         MenuPropsOptions,
         {},
         Slots,
         MenuAPI
       >(_props, _ctx, {
+        onActivated,
         onContentMounted: () => {
           updateRects();
         },
@@ -390,11 +414,70 @@ export function defineMenuComponent<
         activatorRect: null,
       });
 
+      const startOffsets = ref({
+        pageXOffset: 0,
+        pageYOffset: 0,
+      });
+
+      function _disposeIntersectionObserver() {
+        if (_intersectionObserver) {
+          _intersectionObserver.disconnect();
+          _intersectionObserver = undefined;
+        }
+      }
+
+      function onActivated(isActive: boolean) {
+        if (!isActive) {
+          _disposeIntersectionObserver();
+          return;
+        }
+
+        const scrollingElement = getScrollingElement();
+        if (!scrollingElement) return;
+        startOffsets.value = {
+          pageXOffset: scrollingElement.scrollLeft,
+          pageYOffset: scrollingElement.scrollTop,
+        };
+
+        if (!props.hideOnInvisible) return;
+
+        const activator = getActivatorElement();
+        if (!activator) return;
+
+        _intersectionObserver = new IntersectionObserver(
+          (entries) => {
+            if (!control.isActive) return;
+            for (const entry of entries) {
+              const inview = entry.isIntersecting;
+              if (!inview) {
+                control.close();
+                break;
+              }
+            }
+          },
+          {
+            // root: scrollingElement,
+          },
+        );
+        _intersectionObserver.observe(activator);
+      }
+
       const _scrollerRef = ref<HTMLElement | null>(null);
       const _bodyRef = ref<HTMLElement | null>(null);
       const _distance = computed(() => props.distance);
       const _resizeWatchDebounce = computed(() => props.resizeWatchDebounce);
       const $window = useWindow();
+      const hideOnScrollOffset = computed<number | undefined>(() => {
+        let { hideOnScroll } = props;
+        if (typeof hideOnScroll === 'string') {
+          hideOnScroll = Number(hideOnScroll);
+        }
+        if (hideOnScroll === true) {
+          hideOnScroll = 0;
+        }
+        if (hideOnScroll === false) return;
+        return hideOnScroll;
+      });
 
       const _overlap = computed<MenuOverlapSettings>(() => {
         const { overlap } = props;
@@ -894,15 +977,21 @@ export function defineMenuComponent<
         return styles;
       });
 
-      function updatePageOffset() {
+      function getScrollingElement() {
         if (!IN_WINDOW) return;
         const { scrollingElement } = document;
         if (!scrollingElement) {
-          logger.warn('missing document.scrollingElement try use polyfill');
-          return;
+          logger.warn('document.scrollingElement is not scrollable.');
         }
-        state.pageXOffset = scrollingElement.scrollLeft;
-        state.pageYOffset = scrollingElement.scrollTop;
+        return scrollingElement;
+      }
+
+      function updatePageOffset() {
+        const scrollingElement = getScrollingElement();
+        if (scrollingElement) {
+          state.pageXOffset = scrollingElement.scrollLeft;
+          state.pageYOffset = scrollingElement.scrollTop;
+        }
       }
 
       function updateMenuRect(menuBodyRect?: ResizeDirectivePayload) {
@@ -1022,6 +1111,17 @@ export function defineMenuComponent<
 
       function handleScrollerScroll(ev: Event) {
         updateRects();
+
+        const _hideOnScrollOffset = hideOnScrollOffset.value;
+        if (_hideOnScrollOffset === undefined) return;
+        if (
+          Math.abs(state.pageYOffset - startOffsets.value.pageYOffset) >
+            _hideOnScrollOffset ||
+          Math.abs(state.pageXOffset - startOffsets.value.pageXOffset) >
+            _hideOnScrollOffset
+        ) {
+          control.close();
+        }
       }
 
       function resetScrollerScroll() {
@@ -1064,7 +1164,10 @@ export function defineMenuComponent<
           isActive ? setupScrollerScroll() : resetScrollerScroll(),
       );
 
-      onBeforeUnmount(resetScrollerScroll);
+      onBeforeUnmount(() => {
+        _disposeIntersectionObserver();
+        resetScrollerScroll();
+      });
 
       const stackMenuCtx: typeof baseCtx = {
         ...baseCtx,

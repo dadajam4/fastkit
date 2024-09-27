@@ -44,7 +44,7 @@
   &-leave-to {
     pointer-events: none;
     opacity: 0;
-    transform: translateY(-15px);
+    transform: translateY(calc(var(--v-stack-slide-amount) * -1));
   }
 }
 
@@ -61,7 +61,7 @@
   &-leave-to {
     pointer-events: none;
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(var(--v-stack-slide-amount));
   }
 }
 
@@ -78,7 +78,7 @@
   &-leave-to {
     pointer-events: none;
     opacity: 0;
-    transform: translateX(-15px);
+    transform: translateX(calc(var(var(--v-stack-slide-amount)) - 1));
   }
 }
 
@@ -95,6 +95,6 @@
   &-leave-to {
     pointer-events: none;
     opacity: 0;
-    transform: translateX(15px);
+    transform: translateX(var(--v-stack-slide-amount));
   }
 }
