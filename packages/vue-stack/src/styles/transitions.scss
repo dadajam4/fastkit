@@ -78,7 +78,7 @@
   &-leave-to {
     pointer-events: none;
     opacity: 0;
-    transform: translateX(calc(var(var(--v-stack-slide-amount)) - 1));
+    transform: translateX(calc(var(--v-stack-slide-amount) * -1));
   }
 }
 

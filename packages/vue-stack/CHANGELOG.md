@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.16.16
+
+### Patch Changes
+
+- Fixed the style of the slide animation.
+
 ## 0.16.15
 
 ### Patch Changes
