@@ -3,6 +3,19 @@ import { createPropsOptions } from '@fastkit/vue-utils';
 import { FormNodeControlBaseOptions } from './node';
 import { FormAutoComplete } from '../schemes';
 
+let _defaultAutocomplete: FormAutoComplete | boolean | undefined;
+
+/**
+ * Sets the default value for text input autocomplete.
+ *
+ * @param defaultAutocomplete - default value
+ */
+export function registerAutocompleteDefault(
+  defaultAutocomplete: FormAutoComplete | boolean | undefined,
+) {
+  _defaultAutocomplete = defaultAutocomplete;
+}
+
 export function createAutocompletableInputProps() {
   return {
     ...createPropsOptions({
@@ -11,7 +24,10 @@ export function createAutocompletableInputProps() {
        *
        * @see https://developer.mozilla.org/docs/Web/HTML/Attributes/autocomplete
        */
-      autocomplete: [String, Boolean] as PropType<FormAutoComplete | boolean>,
+      autocomplete: {
+        type: [String, Boolean] as PropType<FormAutoComplete | boolean>,
+        default: () => _defaultAutocomplete,
+      },
     }),
   };
 }
@@ -28,7 +44,7 @@ export function createAutocompletableInputControl(
 ) {
   const computedAutocomplete = computed(() => {
     let result: FormAutoComplete | undefined;
-    const { autocomplete } = props;
+    const autocomplete = props.autocomplete ?? _defaultAutocomplete;
     if (typeof autocomplete === 'boolean') {
       result = autocomplete ? 'on' : 'off';
     } else {

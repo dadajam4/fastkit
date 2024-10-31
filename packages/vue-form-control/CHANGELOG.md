@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.25
+
+### Patch Changes
+
+- Added support for setting a default value for autocomplete in text inputs. This feature is useful when building UIs, such as business applications, where autocomplete is generally unnecessary.
+
 ## 0.20.24
 
 ### Patch Changes

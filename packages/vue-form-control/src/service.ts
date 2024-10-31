@@ -1,4 +1,6 @@
 import type { FormNodeError, FormNodeControl } from './composables/node';
+import type { FormAutoComplete } from './schemes';
+import { registerAutocompleteDefault } from './composables/autocompletable';
 
 export type FormErrorMessageResolver = (
   error: FormNodeError,
@@ -33,6 +35,12 @@ export interface VueFormServiceOptions {
    * @see {@link VueFormScrollOptions}
    */
   scroll?: VueFormScrollOptions;
+  /**
+   * Default value for text input autocomplete.
+   *
+   * @see {@link FormAutoComplete}
+   */
+  defaultAutocomplete?: FormAutoComplete | boolean | undefined;
 }
 
 /**
@@ -53,6 +61,8 @@ export class VueFormService {
     errorMessageResolvers &&
       this.errorMessageResolvers.push(...errorMessageResolvers);
     this.scroll = scroll;
+
+    registerAutocompleteDefault(options.defaultAutocomplete);
   }
 
   addMessageResolver(
