@@ -194,7 +194,7 @@ export {};
   }
 
   plugins.push(
-    dynamicSrcVitePlugin({
+    ...dynamicSrcVitePlugin({
       colorScheme: {
         src: colorSchemeSrc,
         dest: colorSchemeDest,

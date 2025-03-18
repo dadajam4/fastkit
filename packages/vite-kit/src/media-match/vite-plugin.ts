@@ -4,6 +4,7 @@ import path from 'node:path';
 import { findPackageDir } from '@fastkit/node-util';
 import { UnPromisify } from '@fastkit/helpers';
 import { ViteMediaMatchError } from './logger';
+import { resolveAdditionalData } from '~/utils';
 
 export interface MediaMatchVitePluginOptions {
   src: string;
@@ -66,12 +67,12 @@ export function mediaMatchVitePlugin(
         const scssOptions = preprocessorOptions.scss;
 
         const _additionalData = scssOptions.additionalData;
-        const additionalData = (source: string, filename: string) => {
-          if (typeof _additionalData === 'string') {
-            source = _additionalData + source;
-          } else if (typeof _additionalData === 'function') {
-            source = _additionalData(source, filename);
-          }
+        const additionalData = async (source: string, filename: string) => {
+          source = await resolveAdditionalData(
+            source,
+            filename,
+            _additionalData,
+          );
           return `@use "${scssCachePath}" as *;\n${source}`;
         };
         scssOptions.additionalData = additionalData;
