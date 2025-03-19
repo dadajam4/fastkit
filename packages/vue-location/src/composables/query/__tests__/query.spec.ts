@@ -1,11 +1,15 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   createRouter,
   createMemoryHistory,
   LocationQueryRaw,
+  Router,
 } from 'vue-router';
+import { defineComponent } from 'vue';
+import { mount } from '@vue/test-utils';
 import { defineQueriesSchema } from '../helpers';
 import { useTypedQuery } from '../query';
+import { LocationService } from '../../../vue-location';
 
 const schema = defineQueriesSchema({
   // string: `string | undefined`
@@ -95,12 +99,40 @@ async function initRouter(query?: LocationQueryRaw) {
   return router;
 }
 
-beforeEach(async () => {});
+async function prepare(params?: { query?: LocationQueryRaw; router?: Router }) {
+  const router = params?.router || (await initRouter(params?.query));
+
+  // テスト用のラッパーコンポーネント
+  const TestComponent = defineComponent({
+    setup() {
+      // setup() の中で useTypedQuery を呼び出す
+      const query = useTypedQuery(schema, router);
+      return { query };
+    },
+    template: '<div></div>',
+  });
+
+  return {
+    router,
+    query: mount(TestComponent, {
+      global: {
+        plugins: [
+          /** LocationService のインスタンスを準備 */
+          {
+            install(app) {
+              app.use(router);
+              LocationService.install(app, { router });
+            },
+          },
+        ],
+      },
+    }).vm.query,
+  };
+}
 
 describe('useTypedQuery', () => {
   it('construct', async () => {
-    const router = await initRouter();
-    const query = useTypedQuery(schema, router);
+    const { query } = await prepare();
 
     expect(Object.keys(query)).toStrictEqual([
       'stringWithDefault',
@@ -143,7 +175,7 @@ describe('useTypedQuery', () => {
         number: '123',
       },
     });
-    const query = useTypedQuery(schema, router);
+    const { query } = await prepare({ router });
     expect(query.string).toBeUndefined();
     expect(query.number).toBe(123);
     expect(query.boolean).toBe(false);
@@ -157,13 +189,13 @@ describe('useTypedQuery', () => {
         string2: 'hello',
       },
     });
-    const query = useTypedQuery(schema, router);
+    const { query } = await prepare({ router });
+
     expect(query.stringAlias).toBe('hello');
   });
 
   it('dynamic value', async () => {
-    const router = await initRouter();
-    const query = useTypedQuery(schema, router);
+    const { query, router } = await prepare();
     expect(query.string).toBeUndefined();
     expect(query.stringAlias).toBeUndefined();
     expect(query.number).toBeUndefined();
@@ -189,8 +221,8 @@ describe('useTypedQuery', () => {
   });
 
   it('ensure', async () => {
-    const router = await initRouter();
-    const query = useTypedQuery(schema, router);
+    const { query } = await prepare();
+
     expect(() => query.$ensure('string')).toThrowError();
     expect(query.$ensure('stringWithDefault')).toBe('');
     expect(query.$ensure('numberWithDefault')).toBe(1);
@@ -199,8 +231,7 @@ describe('useTypedQuery', () => {
 
   describe('serialize', () => {
     it('current query', async () => {
-      const router = await initRouter();
-      const query = useTypedQuery(schema, router);
+      const { query, router } = await prepare();
       expect(query.$serializeCurrentValues()).toStrictEqual({
         stringWithDefault: '',
         numberWithDefault: '1',
@@ -252,8 +283,7 @@ describe('useTypedQuery', () => {
     });
 
     it('specified query', async () => {
-      const router = await initRouter();
-      const query = useTypedQuery(schema, router);
+      const { query } = await prepare();
       const specified = query.$serialize({
         string: 'abc',
         stringAlias: 'def',
@@ -273,8 +303,7 @@ describe('useTypedQuery', () => {
     });
 
     it('merged query', async () => {
-      const router = await initRouter();
-      const query = useTypedQuery(schema, router);
+      const { query } = await prepare();
       const specified = query.$serialize(
         {
           string: 'abc',
@@ -303,10 +332,11 @@ describe('useTypedQuery', () => {
 
   describe('location', () => {
     it('reset', async () => {
-      const router = await initRouter({
-        numberMultiple: ['1', '2'],
+      const { query } = await prepare({
+        query: {
+          numberMultiple: ['1', '2'],
+        },
       });
-      const query = useTypedQuery(schema, router);
       const loc = query.$location({
         string: 'abc',
         stringAlias: 'def',
@@ -326,11 +356,12 @@ describe('useTypedQuery', () => {
     });
 
     it('merge', async () => {
-      const router = await initRouter({
-        string: 'hello',
-        numberMultiple: [1, 2],
+      const { query } = await prepare({
+        query: {
+          string: 'hello',
+          numberMultiple: [1, 2],
+        },
       });
-      const query = useTypedQuery(schema, router);
       const loc = query.$location(
         {
           string: 'abc',
@@ -355,11 +386,12 @@ describe('useTypedQuery', () => {
     });
 
     it('another-route', async () => {
-      const router = await initRouter({
-        string: 'hello',
-        numberMultiple: [1, 2],
+      const { query } = await prepare({
+        query: {
+          string: 'hello',
+          numberMultiple: [1, 2],
+        },
       });
-      const query = useTypedQuery(schema, router);
       const loc = query.$location(
         {
           string: 'abc',
@@ -386,11 +418,12 @@ describe('useTypedQuery', () => {
   });
 
   it('push', async () => {
-    const router = await initRouter({
-      string: 'before',
-      stringOrNumber: 20,
+    const { query, router } = await prepare({
+      query: {
+        string: 'before',
+        stringOrNumber: 20,
+      },
     });
-    const query = useTypedQuery(schema, router);
     await query.$push(
       {
         string: 'abc',
@@ -414,11 +447,12 @@ describe('useTypedQuery', () => {
   });
 
   it('replace', async () => {
-    const router = await initRouter({
-      string: 'before',
-      stringOrNumber: 20,
+    const { query, router } = await prepare({
+      query: {
+        string: 'before',
+        stringOrNumber: 20,
+      },
     });
-    const query = useTypedQuery(schema, router);
     await query.$replace(
       {
         string: 'abc',
@@ -449,7 +483,7 @@ describe('useTypedQuery', () => {
         number: '123',
       },
     });
-    const query = useTypedQuery(schema, router);
+    const { query } = await prepare({ router });
     expect(query.string).toBeUndefined();
     expect(query.number).toBe(123);
     expect(query.boolean).toBe(false);
@@ -467,7 +501,7 @@ describe('useTypedQuery', () => {
         number: '123',
       },
     });
-    const query = useTypedQuery(schema, router);
+    const { query } = await prepare({ router });
     expect(query.$states.string).toMatchObject({
       state: 'missing',
       source: undefined,
