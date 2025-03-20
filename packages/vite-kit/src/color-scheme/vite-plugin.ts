@@ -4,6 +4,7 @@ import path from 'node:path';
 import { findPackageDir } from '@fastkit/node-util';
 import { UnPromisify } from '@fastkit/helpers';
 import { ViteColorSchemeError } from './logger';
+import { resolveAdditionalData } from '~/utils';
 
 export interface ColorSchemeVitePluginOptions {
   src: string;
@@ -63,12 +64,12 @@ export function colorSchemeVitePlugin(
         const scssOptions = preprocessorOptions.scss;
 
         const _additionalData = scssOptions.additionalData;
-        const additionalData = (source: string, filename: string) => {
-          if (typeof _additionalData === 'string') {
-            source = _additionalData + source;
-          } else if (typeof _additionalData === 'function') {
-            source = _additionalData(source, filename);
-          }
+        const additionalData = async (source: string, filename: string) => {
+          source = await resolveAdditionalData(
+            source,
+            filename,
+            _additionalData,
+          );
           return `@use "${cachePaths.scss}" as *;\n${source}`;
         };
         scssOptions.additionalData = additionalData;

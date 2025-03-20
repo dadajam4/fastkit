@@ -1,5 +1,6 @@
 import { Plugin } from 'vite';
 import { resolve } from 'node:path';
+import { resolveAdditionalData } from '~/utils';
 
 export interface SassAdditional {
   src: string;
@@ -47,12 +48,12 @@ export function styleAdditionalVitePlugin(
           preprocessorOptions[type] = options;
         }
         const _additionalData = options.additionalData;
-        const additionalData = (source: string, filename: string) => {
-          if (typeof _additionalData === 'string') {
-            source = _additionalData + source;
-          } else if (typeof _additionalData === 'function') {
-            source = _additionalData(source, filename);
-          }
+        const additionalData = async (source: string, filename: string) => {
+          source = await resolveAdditionalData(
+            source,
+            filename,
+            _additionalData,
+          );
           return `${uses}\n${source}`;
         };
         options.additionalData = additionalData;
