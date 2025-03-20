@@ -14,21 +14,21 @@ export async function resolveAdditionalData(
 
     // データが文字列の場合
     if (typeof data === 'string') {
-      return data;
+      return data + source;
     }
 
     // データがcontent属性を持つオブジェクトの場合
     if (typeof data === 'object' && 'content' in data) {
-      return data.content;
+      return data.content + source;
     }
 
     // データがPromiseの場合
     const resolvedData = await data;
     if (typeof resolvedData === 'string') {
-      return resolvedData;
+      return resolvedData + source;
     }
     if (typeof resolvedData === 'object' && 'content' in resolvedData) {
-      return resolvedData.content;
+      return resolvedData.content + source;
     }
   }
 
