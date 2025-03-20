@@ -1,5 +1,13 @@
 # @fastkit/vui
 
+## 0.19.52
+
+### Patch Changes
+
+- Updated dependencies [[`8b66410`](https://github.com/dadajam4/fastkit/commit/8b66410e3423016c76956f772b86426dec99a0e7)]:
+  - @fastkit/vue-app-layout@0.16.0
+  - @fastkit/vue-location@0.4.0
+
 ## 0.19.51
 
 ### Patch Changes

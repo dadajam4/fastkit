@@ -1,5 +1,12 @@
 # @fastkit/vot-i18n
 
+## 4.1.0
+
+### Patch Changes
+
+- Updated dependencies [[`8b66410`](https://github.com/dadajam4/fastkit/commit/8b66410e3423016c76956f772b86426dec99a0e7)]:
+  - @fastkit/vot@0.17.0
+
 ## 4.0.13
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @fastkit/vue-app-layout
 
+## 0.16.0
+
+### Minor Changes
+
+- [#148](https://github.com/dadajam4/fastkit/pull/148) [`8b66410`](https://github.com/dadajam4/fastkit/commit/8b66410e3423016c76956f772b86426dec99a0e7) Thanks [@nkenji09](https://github.com/nkenji09)! - 依存パッケージのアップデートを行いました
+
 ## 0.15.11
 
 ### Patch Changes
