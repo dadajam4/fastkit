@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.20.26
+
+### Patch Changes
+
+- Added support for setting an `id` on the `FormSelectorItem` input element. This enables association with a `label` using the `for` attribute.
+
 ## 0.20.25
 
 ### Patch Changes

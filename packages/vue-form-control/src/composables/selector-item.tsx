@@ -290,12 +290,13 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
   }
 
   createInputElement(
-    override: Pick<InputHTMLAttributes, 'class'> & {
+    override: Pick<InputHTMLAttributes, 'id' | 'class'> & {
       type?: FormSelectorItemInputType;
     } = {},
   ) {
     return (
       <input
+        id={override.id}
         class={override.class}
         type={override.type || this.inputType}
         name={this.name}
