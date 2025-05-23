@@ -39,6 +39,7 @@ import { logger, VueStackError } from '../logger';
 import { getScrollParents } from '../utils';
 
 const DEFAULT_EDGE_MARGIN = 20;
+const DEFAULT_FORCE_EDGE_MARGIN = false;
 const DEFAULT_DISTANCE = 10;
 const DEFAULT_RESIZE_WATCH_DEBOUNCE = 250;
 const DEFAULT_TRANSITION = 'v-menu-auto';
@@ -67,6 +68,7 @@ interface CreateMenuSchemeOptions {
   defaultScrollLock?: boolean;
   defaultDistance?: number;
   defaultEdgeMargin?: number;
+  defaultForceEdgeMargin?: boolean;
   defaultResizeWatchDebounce?: number;
   /**
    * @default false
@@ -107,6 +109,7 @@ export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
   const {
     defaultDistance = DEFAULT_DISTANCE,
     defaultEdgeMargin = DEFAULT_EDGE_MARGIN,
+    defaultForceEdgeMargin = DEFAULT_FORCE_EDGE_MARGIN,
     defaultResizeWatchDebounce = DEFAULT_RESIZE_WATCH_DEBOUNCE,
     defaultAllowOverflow = false,
     defaultOverlap = false,
@@ -205,6 +208,15 @@ export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
     edgeMargin: {
       type: Number,
       default: defaultEdgeMargin,
+    },
+    /**
+     * Force margin at edge
+     *
+     * By default, even if `edgeMargin` is set, the activator may snap outside that margin. Enabling this option forces the component to always maintain the specified `edgeMargin` from the screen edge.
+     */
+    forceEdgeMargin: {
+      type: Boolean,
+      default: defaultForceEdgeMargin,
     },
     /**
      * Overlap settings with the activator
@@ -332,6 +344,7 @@ export interface MenuAPI {
   readonly resizeWatchDebounce: number;
   readonly overlap: MenuOverlapSettings;
   readonly edgeMargin: number;
+  readonly forceEdgeMargin: boolean;
   readonly minLeft: number;
   readonly minTop: number;
   readonly maxRight: number;
@@ -487,11 +500,13 @@ export function defineMenuComponent<
         return overlap;
       });
       const _edgeMargin = computed(() => props.edgeMargin);
+      const _forceEdgeMargin = computed(() => props.forceEdgeMargin);
 
       const calcMinEdge = (direction: 'left' | 'top') => {
         const pageOffset =
           direction === 'left' ? state.pageXOffset : state.pageYOffset;
         const min = _edgeMargin.value + pageOffset;
+        if (_forceEdgeMargin.value) return min;
         const activatorEdge = state.activatorRect?.[direction];
         if (activatorEdge === undefined) return min;
         if (activatorEdge < 0) {
@@ -508,6 +523,7 @@ export function defineMenuComponent<
         const pageOffset = isX ? state.pageXOffset : state.pageYOffset;
         const windowSize = isX ? $window.width : $window.height;
         const max = windowSize - _edgeMargin.value + pageOffset;
+        if (_forceEdgeMargin.value) return max;
         const activatorEdge = state.activatorRect?.[direction];
         if (activatorEdge === undefined) return max;
         if (activatorEdge > windowSize) {

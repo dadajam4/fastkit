@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.16.17
+
+### Patch Changes
+
+- Added `forceEdgeMargin` option to VMenu to always enforce `edgeMargin` from the screen edge, preventing snapping outside the margin.
+
 ## 0.16.16
 
 ### Patch Changes
