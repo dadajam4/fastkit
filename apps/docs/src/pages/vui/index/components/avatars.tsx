@@ -89,9 +89,9 @@ export default defineComponent({
 
         <DocsSection title="With Image">
           <VAvatar>
-            <img src="/dummy-boy_1.png" alt="" />
+            <img src="/fastkit/dummy-boy_1.png" alt="" />
           </VAvatar>
-          <VAvatar src="/dummy-boy_1.png" variant="plain" />
+          <VAvatar src="/fastkit/dummy-boy_1.png" variant="plain" />
         </DocsSection>
 
         <DocsSection title="With Actions (Routing & Click)">
@@ -99,7 +99,7 @@ export default defineComponent({
             <VIcon name="mdi-abacus" />
           </VAvatar>
           <VAvatar
-            src="/dummy-boy_1.png"
+            src="/fastkit/dummy-boy_1.png"
             variant="plain"
             onClick={() => {
               vui.alert('Clicked !!');

@@ -1,5 +1,26 @@
 # @fastkit/vui
 
+## 0.19.55
+
+### Patch Changes
+
+- **Fixed**: Warning shown when slot functions were executed outside of their rendering scope.
+
+- Updated dependencies []:
+  - @fastkit/vue-action@0.3.18
+  - @fastkit/vue-utils@0.15.11
+  - @fastkit/vue-app-layout@0.16.1
+  - @fastkit/vue-body-scroll-lock@0.2.12
+  - @fastkit/vue-click-outside@0.2.11
+  - @fastkit/vue-color-scheme@0.15.14
+  - @fastkit/vue-form-control@0.20.27
+  - @fastkit/vue-loading@0.15.14
+  - @fastkit/vue-location@0.4.1
+  - @fastkit/vue-resize@0.2.11
+  - @fastkit/vue-scroller@0.15.11
+  - @fastkit/vue-stack@0.16.18
+  - @fastkit/vue-transitions@0.2.12
+
 ## 0.19.54
 
 ### Patch Changes

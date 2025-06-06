@@ -5,6 +5,7 @@ import {
   type Router,
   type RouteLocationRaw,
 } from 'vue-router';
+import { withCtx } from '@fastkit/vue-utils';
 import type {
   UseActionableOptions,
   Actionable,
@@ -245,7 +246,7 @@ export function useActionable(
 
         const slots: ActionableRouterLinkSettings['slots'] = (children) => ({
           // eslint-disable-next-line no-shadow
-          default: ({ href, isActive, isExactActive }) => {
+          default: withCtx(({ href, isActive, isExactActive }) => {
             const classes = [
               isActive && activeClass,
               isExactActive && exactActiveClass,
@@ -263,7 +264,7 @@ export function useActionable(
                 {children}
               </a>
             );
-          },
+          }),
         });
 
         routerLink = {

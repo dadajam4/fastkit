@@ -10,6 +10,7 @@ import {
   FormNodeControl,
 } from '@fastkit/vue-form-control';
 import {
+  withCtx,
   defineSlots,
   TypedSlot,
   VNodeChildOrSlot,
@@ -166,7 +167,7 @@ export function defineFormSelectorComponent(
           error={selectorControl.itemsLoadFailed}
           v-slots={{
             ...ctx.slots,
-            default: defaultSlot,
+            default: withCtx(defaultSlot),
           }}
         />
       );

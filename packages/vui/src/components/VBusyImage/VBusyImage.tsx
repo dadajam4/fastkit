@@ -177,8 +177,10 @@ export const VBusyImage = defineComponent({
     watch(
       () =>
         [ctx.attrs.src as string | null | undefined, mounted.value] as const,
-      ([src, _mounted]) => {
+      ([src, _mounted], before) => {
         if (!_mounted) return;
+        if (src === before?.[0] && !props.cover && !isPendingRef.value) return;
+
         coverImageRef.value = undefined;
         if (isAvailableSrc(src)) {
           loadStateRef.value = 'loading';

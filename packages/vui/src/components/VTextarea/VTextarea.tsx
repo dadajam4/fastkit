@@ -6,7 +6,7 @@ import {
   createFormNodeWrapperProps,
   FormNodeWrapperSlots,
 } from '@fastkit/vue-form-control';
-import { defineSlots } from '@fastkit/vue-utils';
+import { defineSlots, withCtx } from '@fastkit/vue-utils';
 import { VFormControl } from '../VFormControl';
 import {
   VControlField,
@@ -60,10 +60,11 @@ export const VTextarea = defineComponent({
         endAdornment={props.endAdornment}
         v-slots={{
           ...ctx.slots,
-          default: () =>
+          default: withCtx(() =>
             inputControl.createInputElement({
               class: 'v-textarea__input__element',
             }),
+          ),
         }}
       />
     );
@@ -88,8 +89,8 @@ export const VTextarea = defineComponent({
         }}
         v-slots={{
           ...ctx.slots,
-          default: defaultSlot,
-          infoAppends: infoAppendsSlot,
+          default: withCtx(defaultSlot),
+          infoAppends: withCtx(infoAppendsSlot),
         }}
       />
     );

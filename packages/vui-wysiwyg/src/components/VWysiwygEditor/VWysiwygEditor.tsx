@@ -28,6 +28,7 @@ import {
   useVui,
   VButton,
   VButtonGroup,
+  withCtx,
 } from '@fastkit/vui';
 import {
   EditorContent,
@@ -307,7 +308,7 @@ export const VWysiwygEditor = defineComponent({
           size={control.size.value}
           v-slots={{
             ...ctx.slots,
-            default: defaultSlot,
+            default: withCtx(defaultSlot),
           }}
         />
       </div>
@@ -331,8 +332,8 @@ export const VWysiwygEditor = defineComponent({
         onClickLabel={handleClickLabel}
         v-slots={{
           ...ctx.slots,
-          default: formControlDefaultSlot,
-          infoAppends: infoAppendsSlot,
+          default: withCtx(formControlDefaultSlot),
+          infoAppends: withCtx(infoAppendsSlot),
         }}
       />
     );

@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.15.11
+
+### Patch Changes
+
+- **Added**: Several helper functions for type-safe slot handling.
+
 ## 0.15.10
 
 ### Patch Changes

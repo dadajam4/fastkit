@@ -1,5 +1,14 @@
 # @fastkit/vui-wysiwyg
 
+## 7.0.56
+
+### Patch Changes
+
+- **Fixed**: Warning shown when slot functions were executed outside of their rendering scope.
+
+- Updated dependencies []:
+  - @fastkit/vui@0.19.55
+
 ## 7.0.55
 
 ### Patch Changes

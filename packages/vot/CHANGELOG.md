@@ -1,5 +1,15 @@
 # @fastkit/vot
 
+## 0.17.1
+
+### Patch Changes
+
+- **Fixed**: Warning shown when slot functions were executed outside of their rendering scope.
+
+- Updated dependencies []:
+  - @fastkit/vue-page@0.15.12
+  - @fastkit/vue-utils@0.15.11
+
 ## 0.17.0
 
 ### Minor Changes

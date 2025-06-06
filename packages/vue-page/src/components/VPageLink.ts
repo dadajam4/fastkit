@@ -4,7 +4,7 @@ import { useVuePageControl } from '../injections';
 
 export const VPageLink = defineComponent({
   name: 'VPageLink',
-  setup(props, ctx) {
+  setup(_props, ctx) {
     const vpc = useVuePageControl();
     return () => h(vpc.RouterLink as any, ctx.attrs, ctx.slots);
   },

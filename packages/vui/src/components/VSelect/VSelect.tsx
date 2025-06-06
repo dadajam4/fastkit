@@ -20,6 +20,8 @@ import {
   createPropsOptions,
   VNodeChildOrSlot,
   resolveVNodeChildOrSlots,
+  withCtxForSlots,
+  withCtx,
 } from '@fastkit/vue-utils';
 import { useKeyboard } from '@fastkit/vue-keyboard';
 import { VStackActivatorPayload, MenuAPI } from '@fastkit/vue-stack';
@@ -403,8 +405,8 @@ export const VSelect = defineComponent({
           }}
           v-slots={{
             ...ctx.slots,
-            default: controlDefaultSlot,
-            endAdornment: endAdornmentSlot,
+            default: withCtx(controlDefaultSlot),
+            endAdornment: withCtx(endAdornmentSlot),
           }}
         />
       );
@@ -429,7 +431,7 @@ export const VSelect = defineComponent({
           v-model={menuOpened.value}
           ref={menuRef}
           onClose={clearKeyFocused}
-          v-slots={menuSlots}
+          v-slots={withCtxForSlots(menuSlots)}
         />
       );
 
@@ -445,7 +447,7 @@ export const VSelect = defineComponent({
           onClickLabel={handleClickLabel}
           v-slots={{
             ...ctx.slots,
-            default: defaultSlot,
+            default: withCtx(defaultSlot),
           }}
         />
       );

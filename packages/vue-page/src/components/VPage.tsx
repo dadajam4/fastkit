@@ -8,6 +8,7 @@ import {
   PropType,
 } from 'vue';
 import { RouterView } from 'vue-router';
+import { withCtx } from '@fastkit/vue-utils';
 import { RouterViewSlotProps, VuePageKeyOverride } from '../schemes';
 import {
   generateRouteKeyWithWatchQuery,
@@ -50,7 +51,7 @@ export const VPage = defineComponent({
     return () => (
       <RouterView
         v-slots={{
-          default: (routeProps: RouterViewSlotProps) => {
+          default: withCtx((routeProps: RouterViewSlotProps) => {
             const { Component } = routeProps;
             let key = generateRouteKeyWithWatchQuery(routeProps, props.pageKey);
 
@@ -89,7 +90,7 @@ export const VPage = defineComponent({
                   /> */}
               </Transition>,
             ];
-          },
+          }),
         }}
       />
     );

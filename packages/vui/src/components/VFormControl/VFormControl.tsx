@@ -7,7 +7,7 @@ import {
   FormNodeWrapper,
   RequiredChipSource,
 } from '@fastkit/vue-form-control';
-import { defineSlots } from '@fastkit/vue-utils';
+import { defineSlots, typedSlotsWithCtx } from '@fastkit/vue-utils';
 import { useVuiColorProvider, useVui } from '../../injections';
 import type { VuiService } from '../../service';
 import { VIcon } from '../VIcon';
@@ -142,7 +142,7 @@ export const VFormControl = defineComponent({
                       ? _hinttipDelay
                       : undefined
                   }
-                  v-slots={{
+                  v-slots={typedSlotsWithCtx(VTooltip, {
                     activator: (tooltip) => (
                       <a
                         class="v-form-control__label__hinttip"
@@ -152,7 +152,7 @@ export const VFormControl = defineComponent({
                         {hinttip.tip}
                       </a>
                     ),
-                  }}>
+                  })}>
                   <div class="v-form-control__label__hinttip__hint">
                     {hinttip.hint}
                   </div>

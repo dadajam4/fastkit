@@ -1,6 +1,7 @@
 import './VTooltip.scss';
 
 import { defineComponent } from 'vue';
+import { typedSlotWithCtx } from '@fastkit/vue-utils';
 import { VMenu } from '../VMenu';
 
 export const VTooltip = defineComponent({
@@ -30,9 +31,9 @@ export const VTooltip = defineComponent({
           class="v-tooltip"
           v-slots={{
             ...ctx.slots,
-            default: (payload) => [
+            default: typedSlotWithCtx(VMenu, 'default', (payload) => [
               <span class="v-tooltip__inner">{defaultSlot?.(payload)}</span>,
-            ],
+            ]),
           }}
         />
       );

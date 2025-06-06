@@ -7,7 +7,11 @@ import {
   VNodeChild,
 } from 'vue';
 import { colorSchemeProps, useColorClasses } from '@fastkit/vue-color-scheme';
-import { ExtractPropInput, createPropsOptions } from '@fastkit/vue-utils';
+import {
+  ExtractPropInput,
+  createPropsOptions,
+  withCtx,
+} from '@fastkit/vue-utils';
 import { VAction, actionableInheritProps } from '@fastkit/vue-action';
 import { useVui } from '../../injections';
 import { createControlProps, useControl } from '../../composables';
@@ -136,7 +140,7 @@ export const VButton = defineComponent({
         class={['v-button', classes.value]}
         guardInProgressClass="v-button--guard-in-progress"
         v-slots={{
-          default: () => (
+          default: withCtx(() => (
             <>
               <span class="v-button__content">
                 {startIcon.value}
@@ -152,7 +156,7 @@ export const VButton = defineComponent({
                 />
               )}
             </>
-          ),
+          )),
         }}
       />
     );

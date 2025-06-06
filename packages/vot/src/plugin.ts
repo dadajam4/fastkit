@@ -9,6 +9,7 @@ import {
   VuePageControlSettings,
   VPageRoot,
 } from '@fastkit/vue-page';
+import { withCtx } from '@fastkit/vue-utils';
 import { createEntry } from './entry';
 import { CreateEntryOptions } from './schemes';
 import { VOT_GENERATE_PAGES_PATH } from './schemes/generate';
@@ -20,10 +21,11 @@ export async function createVotHook(
   App: Component,
   options: CreateEntryOptions,
 ) {
-  const slots = {
-    default: () => h(App),
-  };
-  const RootApp = () => h(VPageRoot, null, slots);
+  const defaultSlot = () => h(App);
+  const RootApp = () =>
+    h(VPageRoot, null, {
+      default: withCtx(defaultSlot),
+    });
   const routes =
     options.routes || (await import('virtual:generated-pages')).default;
 

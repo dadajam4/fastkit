@@ -1,5 +1,15 @@
 # @fastkit/vue-app-layout
 
+## 0.16.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.11
+  - @fastkit/vue-body-scroll-lock@0.2.12
+  - @fastkit/vue-resize@0.2.11
+  - @fastkit/vue-scroller@0.15.11
+
 ## 0.16.0
 
 ### Minor Changes

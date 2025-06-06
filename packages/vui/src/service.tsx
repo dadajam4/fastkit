@@ -14,7 +14,7 @@ import {
   VStackBuiltinActions,
   BUILTIN_ACTION_HANDLERS,
 } from '@fastkit/vue-stack';
-import { type VNodeChildOrSlot } from '@fastkit/vue-utils';
+import { type VNodeChildOrSlot, withCtx } from '@fastkit/vue-utils';
 import { type VueColorSchemePluginSettings } from '@fastkit/vue-color-scheme';
 import type { Router } from 'vue-router';
 import { RouterLink, useLink, UseLinkOptions } from 'vue-router';
@@ -385,10 +385,10 @@ export class VuiService {
           stack.resolve(_state);
         }}
         v-slots={{
-          default: (_form) => {
+          default: withCtx((_form: VueForm) => {
             form = _form;
             return slot(_state, { form, stack });
-          },
+          }),
         }}
       />
     ));

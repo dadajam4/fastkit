@@ -1,5 +1,12 @@
 # @fastkit/vue-i18n
 
+## 0.14.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.11
+
 ## 0.14.10
 
 ### Patch Changes

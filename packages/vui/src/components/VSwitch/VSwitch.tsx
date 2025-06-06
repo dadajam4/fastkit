@@ -4,6 +4,7 @@ import {
   createFormSelectorItemSettings,
   useFormSelectorItemControl,
 } from '@fastkit/vue-form-control';
+import { withCtxForSlots } from '@fastkit/vue-utils';
 import { createControlProps, useControl } from '../../composables';
 import { VUI_SWITCH_GROUP_SYMBOL, VUI_SWITCH_SYMBOL } from '../../injections';
 import { VCheckable } from '../VCheckable';
@@ -59,7 +60,7 @@ export const VSwitch = defineComponent({
         invalid={nodeControl.invalid}
         disabled={nodeControl.isDisabled}
         readonly={nodeControl.isReadonly}
-        v-slots={slots}
+        v-slots={withCtxForSlots(slots)}
       />
     );
   },

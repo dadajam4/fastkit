@@ -7,7 +7,7 @@ import {
   FormNodeWrapperSlots,
   TextInputNodeEmits,
 } from '@fastkit/vue-form-control';
-import { defineSlots, ExtractPropInput } from '@fastkit/vue-utils';
+import { defineSlots, ExtractPropInput, withCtx } from '@fastkit/vue-utils';
 import { VFormControl } from '../VFormControl';
 import {
   VControlField,
@@ -73,12 +73,12 @@ export const VTextField = defineComponent({
         size={control.size.value}
         v-slots={{
           ...ctx.slots,
-          default: () => [
+          default: withCtx(() => [
             inputControl.createInputElement({
               class: 'v-text-field__input__element',
             }),
             inputControl.createDatalist(),
-          ],
+          ]),
         }}
       />
     );
@@ -106,8 +106,8 @@ export const VTextField = defineComponent({
         onClickLabel={handleClickLabel}
         v-slots={{
           ...ctx.slots,
-          default: defaultSlot,
-          infoAppends: infoAppendsSlot,
+          default: withCtx(defaultSlot),
+          infoAppends: withCtx(infoAppendsSlot),
         }}
       />
     );
