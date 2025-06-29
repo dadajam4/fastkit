@@ -69,7 +69,7 @@ app.mount('#app');
     <button @click="showDialog">ダイアログを開く</button>
     
     <!-- ダイアログコンポーネント -->
-    <VStack
+    <VDialog
       v-model="dialogVisible"
       transition="v-stack-slide-down"
       backdrop
@@ -87,28 +87,28 @@ app.mount('#app');
           <button @click="cancel">キャンセル</button>
         </div>
       </div>
-    </VStack>
+    </VDialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { VStack, useStack } from '@fastkit/vue-stack';
+import { VDialog, useVueStack } from '@fastkit/vue-stack';
 
 const dialogVisible = ref(false);
-const stack = useStack();
+const $vstack = useVueStack();
 
 const showDialog = () => {
   dialogVisible.value = true;
 };
 
 const confirm = () => {
-  stack.resolve('confirmed');
+  console.log('確認されました');
   dialogVisible.value = false;
 };
 
 const cancel = () => {
-  stack.cancel();
+  console.log('キャンセルされました');
   dialogVisible.value = false;
 };
 
@@ -123,11 +123,11 @@ const onDialogClose = (control) => {
 </script>
 ```
 
-### アクティベーター付きツールチップ
+### アクティベーター付きメニュー
 
 ```vue
 <template>
-  <VStack
+  <VMenu
     open-on-hover
     :open-delay="500"
     :close-delay="200"
@@ -135,120 +135,161 @@ const onDialogClose = (control) => {
   >
     <template #activator="{ attrs }">
       <button v-bind="attrs">
-        ホバーでツールチップ表示
+        ホバーでメニュー表示
       </button>
     </template>
     
-    <div class="tooltip">
-      これはツールチップの内容です
+    <div class="menu">
+      <div class="menu-item">アイテム1</div>
+      <div class="menu-item">アイテム2</div>
+      <div class="menu-item">アイテム3</div>
     </div>
-  </VStack>
+  </VMenu>
 </template>
 
 <script setup lang="ts">
-import { VStack } from '@fastkit/vue-stack';
+import { VMenu } from '@fastkit/vue-stack';
 </script>
 
 <style scoped>
-.tooltip {
-  background: #333;
-  color: white;
-  padding: 8px 12px;
+.menu {
+  background: white;
+  border: 1px solid #e1e5e9;
   border-radius: 4px;
-  font-size: 14px;
-  max-width: 200px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+}
+
+.menu-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.menu-item:hover {
+  background: #f8f9fa;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
 }
 </style>
 ```
 
-## VStack コンポーネント
+## 利用可能なコンポーネント
 
-### Props
+### VDialog - ダイアログコンポーネント
 
-```typescript
-interface VStackProps {
-  // 表示状態
-  modelValue?: boolean;                    // 表示状態
-  lazyBoot?: boolean;                     // マウント後まで表示しない
-  value?: any;                            // スタック入力値
-  
-  // スタイリング
-  class?: any;                            // クラス属性
-  style?: StyleValue;                     // スタイル属性
-  transition?: string | object;           // トランジション設定
-  alwaysRender?: boolean;                 // 非表示時も常にレンダリング
-  backdrop?: boolean | string;            // バックドロップ表示
-  
-  // フォーカス管理
-  focusTrap?: boolean;                    // フォーカストラップ
-  focusRestorable?: boolean;              // フォーカスリストア
-  scrollLock?: boolean;                   // ドキュメントスクロールロック
-  
-  // 開く動作
-  openOnClick?: boolean;                  // クリックで開く
-  openOnHover?: boolean;                  // ホバーで開く
-  openOnContextmenu?: boolean;            // 右クリックで開く
-  openOnFocus?: boolean;                  // フォーカスで開く
-  openDelay?: number;                     // 表示遅延時間（ms）
-  
-  // 閉じる動作
-  closeDelay?: number;                    // 非表示遅延時間（ms）
-  closeOnOutsideClick?: boolean;          // 外側クリックで閉じる
-  closeOnEsc?: boolean;                   // ESCキーで閉じる
-  closeOnTab?: boolean | string;          // Tabキーで閉じる
-  closeOnNavigation?: boolean;            // ナビゲーション時に閉じる
-  
-  // その他の制御
-  persistent?: boolean;                   // 永続表示
-  disabled?: boolean;                     // 無効化
-  zIndex?: number;                        // z-index
-  timeout?: number;                       // タイムアウト（ms）
-  
-  // ガード機能
-  navigationGuard?: boolean | Function;   // ナビゲーションガード
-  guardEffect?: boolean | string;         // ガードエフェクト
-  
-  // 要素指定
-  includeElements?: () => Element[];      // 外側クリック除外要素
-  activator?: VStackActivatorQuery;       // アクティベーター要素
-  
-  // ハンドラー
-  resolveHandler?: StackableResolveHandler; // 解決ハンドラー
-  cancelHandler?: StackableResolveHandler;  // キャンセルハンドラー
-}
+モーダルダイアログを表示するためのコンポーネントです。
+
+```vue
+<template>
+  <VDialog
+    v-model="visible"
+    backdrop
+    focus-trap
+    close-on-esc
+    transition="v-stack-slide-down"
+  >
+    <div class="dialog-content">
+      <h2>ダイアログタイトル</h2>
+      <p>ダイアログの内容</p>
+      <button @click="visible = false">閉じる</button>
+    </div>
+  </VDialog>
+</template>
 ```
 
-### Events
+### VSnackbar - スナックバーコンポーネント
 
-```typescript
-interface VStackEvents {
-  'update:modelValue': (value: boolean) => void;  // 表示状態更新
-  'change': (value: boolean) => void;             // 表示状態変更
-  'payload': (value: any) => void;                // ペイロード更新
-  'show': (control: VStackControl) => void;       // 表示時
-  'close': (control: VStackControl) => void;      // 非表示時
-  'beforeEnter': (el: HTMLElement, control: VStackControl) => void;    // エンター前
-  'afterEnter': (el: HTMLElement, control: VStackControl) => void;     // エンター後
-  'enterCancelled': (el: HTMLElement, control: VStackControl) => void; // エンターキャンセル
-  'beforeLeave': (el: HTMLElement, control: VStackControl) => void;    // リーブ前
-  'afterLeave': (el: HTMLElement, control: VStackControl) => void;     // リーブ後
-  'leaveCancelled': (el: HTMLElement, control: VStackControl) => void; // リーブキャンセル
-}
+通知メッセージを表示するためのコンポーネントです。
+
+```vue
+<template>
+  <VSnackbar
+    v-model="showMessage"
+    :timeout="3000"
+    transition="v-stack-slide-up"
+  >
+    <div class="snackbar-content">
+      {{ message }}
+      <button @click="showMessage = false">×</button>
+    </div>
+  </VSnackbar>
+</template>
 ```
 
-### Slots
+### VMenu - メニューコンポーネント
 
-```typescript
-interface VStackSlots {
-  // デフォルトスロット
-  default?: (control: VStackControl) => VNodeChild;
-  
-  // アクティベータースロット
-  activator?: (payload: {
-    attrs: VStackActivatorAttributes;  // アクティベーター属性
-    control: VStackControl;            // スタックコントロール
-  }) => VNodeChild;
-}
+ドロップダウンメニューやコンテキストメニューを表示するためのコンポーネントです。
+
+```vue
+<template>
+  <VMenu open-on-click>
+    <template #activator="{ attrs }">
+      <button v-bind="attrs">メニューを開く</button>
+    </template>
+    
+    <div class="menu-content">
+      <div class="menu-item" @click="handleAction('action1')">アクション1</div>
+      <div class="menu-item" @click="handleAction('action2')">アクション2</div>
+    </div>
+  </VMenu>
+</template>
+```
+
+### VDynamicStacks - 動的スタック管理
+
+プログラマティックにスタック要素を管理するためのコンポーネントです。
+
+```vue
+<template>
+  <div>
+    <button @click="showProgrammaticDialog">プログラマティックダイアログ</button>
+    <button @click="showSnackbar">スナックバー表示</button>
+    <VDynamicStacks />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { VDynamicStacks, useVueStack } from '@fastkit/vue-stack';
+
+const $vstack = useVueStack();
+
+const showProgrammaticDialog = async () => {
+  try {
+    const result = await $vstack.modal({
+      component: 'VDialog',
+      props: {
+        backdrop: true,
+        focusTrap: true,
+        closeOnEsc: true,
+      },
+      slots: {
+        default: () => h('div', { class: 'p-4' }, [
+          h('h2', 'プログラマティックダイアログ'),
+          h('p', 'このダイアログはJavaScriptから表示されました'),
+          h('button', { 
+            onClick: () => $vstack.resolve('confirmed'),
+            class: 'btn btn-primary'
+          }, '確認')
+        ])
+      }
+    });
+    console.log('ダイアログ結果:', result);
+  } catch (error) {
+    console.log('ダイアログがキャンセルされました');
+  }
+};
+
+const showSnackbar = () => {
+  $vstack.snackbar({
+    message: 'スナックバーメッセージ',
+    timeout: 3000,
+    transition: 'v-stack-slide-up'
+  });
+};
+</script>
 ```
 
 ## VStackControl API
@@ -402,7 +443,7 @@ const confirmed = await showConfirmDialog({
 ```vue
 <!-- ConfirmDialog.vue -->
 <template>
-  <VStack
+  <VDialog
     ref="stackRef"
     v-model="internalVisible"
     :transition="transition"
@@ -453,12 +494,12 @@ const confirmed = await showConfirmDialog({
         </button>
       </div>
     </div>
-  </VStack>
+  </VDialog>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { VStack, type VStackControl } from '@fastkit/vue-stack';
+import { VDialog, type VStackControl } from '@fastkit/vue-stack';
 
 interface Props {
   modelValue?: boolean;
@@ -679,7 +720,7 @@ const onClose = (control: VStackControl) => {
 ```vue
 <!-- ContextMenu.vue -->
 <template>
-  <VStack
+  <VMenu
     ref="stackRef"
     v-model="internalVisible"
     :activator="activator"
@@ -709,12 +750,12 @@ const onClose = (control: VStackControl) => {
         </template>
       </div>
     </div>
-  </VStack>
+  </VMenu>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, nextTick } from 'vue';
-import { VStack, type VStackControl } from '@fastkit/vue-stack';
+import { VMenu, type VStackControl } from '@fastkit/vue-stack';
 
 interface MenuItem {
   label?: string;
@@ -972,14 +1013,14 @@ snackbar.custom({
 
 ```vue
 <template>
-  <VStack
+  <VDialog
     :transition="{
       transition: 'custom-slide',
       props: { duration: 500 }
     }"
   >
     <!-- コンテンツ -->
-  </VStack>
+  </VDialog>
 </template>
 
 <style>
@@ -1006,7 +1047,7 @@ snackbar.custom({
 
 ```vue
 <template>
-  <VStack
+  <VDialog
     v-model="dialogVisible"
     role="dialog"
     :aria-labelledby="titleId"
@@ -1018,7 +1059,7 @@ snackbar.custom({
       <p :id="descId">{{ description }}</p>
       <!-- コンテンツ -->
     </div>
-  </VStack>
+  </VDialog>
 </template>
 
 <script setup lang="ts">
@@ -1048,7 +1089,7 @@ const stackProps = {
 ```typescript
 import { describe, test, expect, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { VueStackService, VStack } from '@fastkit/vue-stack';
+import { VueStackService, VDialog } from '@fastkit/vue-stack';
 
 describe('VueStack', () => {
   let stackService: VueStackService;
@@ -1057,8 +1098,8 @@ describe('VueStack', () => {
     stackService = new VueStackService();
   });
   
-  test('show and hide stack', async () => {
-    const wrapper = mount(VStack, {
+  test('show and hide dialog', async () => {
+    const wrapper = mount(VDialog, {
       props: {
         modelValue: false
       },
