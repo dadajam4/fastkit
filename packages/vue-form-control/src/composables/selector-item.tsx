@@ -335,8 +335,15 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
    */
   focusHandler(ev: FocusEvent): void {
     super.focusHandler(ev);
-    const { parentSelector } = this;
-    parentSelector && parentSelector.focusHandler(ev);
+    this.parentSelector?.focusHandler(ev);
+  }
+
+  /**
+   * @override
+   */
+  blurHandler(ev: FocusEvent): void {
+    super.blurHandler(ev);
+    this.parentSelector?.blurHandler(ev);
   }
 }
 

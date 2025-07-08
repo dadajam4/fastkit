@@ -18,6 +18,7 @@ import {
   ComponentInternalInstance,
   VNodeArrayChildren,
   markRaw,
+  nextTick,
 } from 'vue';
 
 import {
@@ -478,7 +479,7 @@ export class FormNodeControl<
 
   protected _validationValueGetter?: () => any;
 
-  protected _validationSkip = false;
+  protected _shouldSkipValidation = false;
 
   protected _stateExtensions: FormNodeStateExtensions;
 
@@ -936,6 +937,18 @@ export class FormNodeControl<
     return !this.parentFormNodeWrapper?.collectErrorMessages;
   }
 
+  /**
+   * Whether to temporarily skip validation.
+   * Useful for internal operations where validation is not needed.
+   */
+  get shouldSkipValidation(): boolean {
+    return (
+      (this._shouldSkipValidation ||
+        (!this.detached && this.parentNode?.shouldSkipValidation)) ??
+      false
+    );
+  }
+
   constructor(
     props: FormNodeProps,
     ctx: FormNodeContext<T, D>,
@@ -1107,6 +1120,7 @@ export class FormNodeControl<
 
     const onValidateValueChange = () => {
       this._lastValidateValueChanged = true;
+      if (this._resetGuard || this.shouldSkipValidation) return;
 
       if (
         this.shouldValidate ||
@@ -1477,6 +1491,8 @@ export class FormNodeControl<
     this.children.forEach((child) => child.commitValue());
   }
 
+  private _resetGuard: boolean = false;
+
   /**
    * Reset the validation state of this node
    *
@@ -1487,7 +1503,11 @@ export class FormNodeControl<
     this._validationErrors.value = [];
     this._lastValidateValueChanged = true;
     this.touched = false;
-    this.setShouldValidate(!this.validateTimingIsAlways);
+    this.setShouldValidate(this.validateTimingIsAlways);
+    this._resetGuard = true;
+    nextTick(() => {
+      this._resetGuard = false;
+    });
   }
 
   /**
@@ -1517,14 +1537,14 @@ export class FormNodeControl<
   skipValidation(fn: (...args: any) => any): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       try {
-        this._validationSkip = true;
+        this._shouldSkipValidation = true;
         fn();
         setTimeout(() => {
-          this._validationSkip = false;
+          this._shouldSkipValidation = false;
           resolve();
         });
       } catch (_err) {
-        this._validationSkip = false;
+        this._shouldSkipValidation = false;
         reject(_err);
       }
     });

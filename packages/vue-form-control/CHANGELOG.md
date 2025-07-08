@@ -1,5 +1,17 @@
 # @fastkit/vue-form-control
 
+## 0.20.28
+
+### Patch Changes
+
+- 以下の改善が含まれます。
+
+  - `resetValidates()` を呼び出した際に、バリデーションの状態が正常にリセットされない不具合を修正しました。
+  - `skipValidation()` を呼び出してもバリデーションが実行される不具合を修正しました。
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.12
+
 ## 0.20.27
 
 ### Patch Changes

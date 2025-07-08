@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.15.12
+
+### Patch Changes
+
+- Skip applying `withCtx` in `typedSlotWithCtx()` when the `slot` argument is not a function.
+
 ## 0.15.11
 
 ### Patch Changes

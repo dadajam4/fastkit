@@ -1,5 +1,12 @@
 # @fastkit/vue-sortable
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.12
+
 ## 0.0.6
 
 ### Patch Changes

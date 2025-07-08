@@ -58,6 +58,10 @@ export default defineComponent({
       vui.snackbar('送信しました。');
     }
 
+    const input1 = ref('');
+    const input2 = ref('');
+    const checked = ref(true);
+
     return {
       size,
       variant,
@@ -71,10 +75,57 @@ export default defineComponent({
       dynamicKey,
       dynamicInput,
       checks1,
+      input1,
+      input2,
+      checked,
     };
   },
   render() {
     const { items } = this;
+    // return (
+    //   <div>
+    //     <VForm
+    //       v-slots={{
+    //         default: (form) => (
+    //           <div>
+    //             <div>
+    //               <pre>
+    //                 {JSON.stringify({
+    //                   input1: this.input1,
+    //                   input2: this.input2,
+    //                 })}
+    //               </pre>
+    //             </div>
+    //             <VTextField
+    //               label="input1"
+    //               v-model={this.input1}
+    //               validationDeps={() => this.input2}
+    //               required
+    //               finalizers="trim"
+    //             />
+    //             <VTextField
+    //               label="input2"
+    //               v-model={this.input2}
+    //               validationDeps={() => this.input1}
+    //               required
+    //             />
+    //             <VCheckbox v-model={this.checked} required>
+    //               check
+    //             </VCheckbox>
+    //             <VButton
+    //               onClick={() => {
+    //                 this.input1 = '';
+    //                 this.input2 = '';
+    //                 this.checked = false;
+    //                 form.resetValidates();
+    //               }}>
+    //               リセット
+    //             </VButton>
+    //           </div>
+    //         ),
+    //       }}></VForm>
+    //   </div>
+    // );
     return (
       <div class="pg-docs-components-icons">
         <VHero>Forms</VHero>
@@ -130,7 +181,29 @@ export default defineComponent({
                     required
                     counter={10}
                     finalizers="trim"
+                    v-model={this.input1}
+                    validationDeps={() => this.input2}
                   />
+                  <VTextarea
+                    label="ひとことコメント"
+                    required
+                    hint="これは入力ヒントテキストです。"
+                    counter
+                    maxlength="100"
+                    v-model={this.input2}
+                    finalizers="trim"
+                    validationDeps={() => this.input1}
+                  />
+
+                  <VButton
+                    onClick={() => {
+                      this.input1 = '';
+                      // this.input2 = '';
+
+                      form.resetValidates();
+                    }}>
+                    resetValidates
+                  </VButton>
 
                   <VSelect
                     label="Dynamic input key"
@@ -152,18 +225,11 @@ export default defineComponent({
                     v-model={this.dynamicInput[this.dynamicKey]}
                   />
 
-                  <VTextarea
-                    label="ひとことコメント"
-                    required
-                    hint="これは入力ヒントテキストです。"
-                    counter
-                    maxlength="100"
-                  />
-
                   <VSelect
                     label="居住地"
                     items={items}
                     required
+                    clearable
                     hint="これは入力ヒントテキストです。"
                   />
 
@@ -195,6 +261,14 @@ export default defineComponent({
                     loading={this.form1Sending}
                     disabled={this.form1Sending}>
                     Send
+                  </VButton>
+
+                  <VButton
+                    onClick={() => {
+                      form.resetValidates();
+                    }}
+                    disabled={this.form1Sending}>
+                    resetValidates
                   </VButton>
                 </>
               ),

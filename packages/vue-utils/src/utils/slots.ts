@@ -215,5 +215,7 @@ export function typedSlotWithCtx<
   ctx?: ComponentInternalInstance | null,
   isNonScopedSlot?: boolean,
 ): Slot {
-  return withCtx(fn as any, ctx, isNonScopedSlot);
+  return typeof fn === 'function'
+    ? withCtx(fn as any, ctx, isNonScopedSlot)
+    : fn;
 }
