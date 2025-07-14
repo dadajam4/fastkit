@@ -14,7 +14,7 @@ export interface ViteVanillaExtractPluginOptions
 
 export async function ViteVanillaExtractPlugin(
   options: ViteVanillaExtractPluginOptions = {},
-): Promise<VitePlugin> {
+): Promise<VitePlugin[]> {
   const plugin = await findProjectPlugin<VanillaExtractPlugin>(PLUGIN_NAME);
   const {
     identifiers: baseIdentifiers,
