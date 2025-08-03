@@ -106,7 +106,11 @@ export type FormSelectorGuard = (
 export function createFormSelectorProps(
   options: FormSelectorControlOptions = {},
 ) {
-  const { defaultMultiple = false, defaultValidateTiming } = options;
+  const {
+    defaultMultiple = false,
+    defaultPreserveOrder = false,
+    defaultValidateTiming,
+  } = options;
   return {
     ...createFormNodeProps({
       defaultValidateTiming,
@@ -128,6 +132,13 @@ export function createFormSelectorProps(
       items: {
         type: [Array, Function] as PropType<RawFormSelectorItems>,
         default: () => [],
+      },
+      /**
+       * Preserve the order of selection values
+       */
+      preserveOrder: {
+        type: Boolean,
+        default: defaultPreserveOrder,
       },
       /**
        * Handler before a clickable option is clicked and the selection state is changed.
@@ -169,6 +180,7 @@ export type FormSelectorContext = SetupContext<FormSelectorEmitOptions>;
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormSelectorControlOptions extends FormNodeControlBaseOptions {
   defaultMultiple?: boolean;
+  defaultPreserveOrder?: boolean;
   onSelectItem?: (item: FormSelectorItemControl, ev: MouseEvent) => any;
   onCancelSelect?: (item: FormSelectorItemControl, ev: MouseEvent) => any;
 }
@@ -179,6 +191,11 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   readonly _props: FormSelectorProps;
 
   readonly parentNodeType?: FormNodeType;
+
+  /**
+   * Whether to preserve the order of selection values
+   */
+  readonly preserveOrder: boolean;
 
   protected _items: Ref<FormSelectorItemControl[]> = ref([]);
 
@@ -337,6 +354,8 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       modelValue,
     });
     this._props = props;
+    this.preserveOrder =
+      props.preserveOrder ?? options.defaultPreserveOrder ?? false;
 
     this._guardingItem = ref();
     this.onSelectItem = options.onSelectItem;
@@ -378,9 +397,20 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     this._selectedPropItems = computed(() => {
       const { selectedValues, loadedItems } = this;
-      return loadedItems.filter(
-        ({ value }) => value != null && selectedValues.includes(value),
-      );
+      if (!this.preserveOrder) {
+        return loadedItems.filter(
+          ({ value }) => value != null && selectedValues.includes(value),
+        );
+      }
+      // preserveOrder が true の場合、選択値の順序を保持
+      const result: ResolvedFormSelectorItem[] = [];
+      selectedValues.forEach((selectedValue) => {
+        const item = loadedItems.find(({ value }) => value === selectedValue);
+        if (item) {
+          result.push(item);
+        }
+      });
+      return result;
     });
 
     watch(
@@ -529,19 +559,69 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       const values: (string | number)[] = [];
       const currentValues = this._safeMultipleValues();
       const usedValues: (string | number)[] = [];
+
+      // Get all valid values from items
       this.items.forEach((item) => {
         const { propValue } = item;
-        propValue != null && usedValues.push(propValue);
-        if (item.selected && propValue != null && !values.includes(propValue)) {
-          values.push(propValue);
+        if (propValue != null) {
+          usedValues.push(propValue);
         }
       });
-      currentValues.forEach((v) => {
-        if (!usedValues.includes(v)) {
-          values.push(v);
-        }
-      });
-      this._currentValue.value = values;
+
+      if (this.preserveOrder) {
+        // preserveOrder=true: preserve existing order
+
+        // 1. Add existing values that are currently selected, preserving their order
+        currentValues.forEach((value) => {
+          if (usedValues.includes(value)) {
+            const matchedItem = this.items.find(
+              (itemControl) => itemControl.propValue === value,
+            );
+            if (matchedItem?.selected) {
+              values.push(value);
+            }
+          }
+        });
+
+        // 2. Add newly selected values that weren't in the original order
+        this.items.forEach((item) => {
+          const { propValue } = item;
+          if (
+            item.selected &&
+            propValue != null &&
+            !values.includes(propValue)
+          ) {
+            values.push(propValue);
+          }
+        });
+
+        // 3. Add unmounted values to the end
+        currentValues.forEach((v) => {
+          if (!usedValues.includes(v) && !values.includes(v)) {
+            values.push(v);
+          }
+        });
+
+        this._currentValue.value = values;
+      } else {
+        // preserveOrder=false: use items order (original behavior)
+        this.items.forEach((item) => {
+          const { propValue } = item;
+          if (
+            item.selected &&
+            propValue != null &&
+            !values.includes(propValue)
+          ) {
+            values.push(propValue);
+          }
+        });
+        currentValues.forEach((v) => {
+          if (!usedValues.includes(v)) {
+            values.push(v);
+          }
+        });
+        this._currentValue.value = values;
+      }
     } else {
       if (changedSelectorItem) {
         if (changedSelectorItem.selected) {
@@ -578,6 +658,13 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
       : _value == null
         ? []
         : [_value];
+
+    // preserveOrder が false の場合は、loadedItems の順序に従って並び替える
+    if (!this.preserveOrder && this._loadedItems?.value) {
+      const loadedValues = this._loadedItems.value.map((item) => item.value);
+      return loadedValues.filter((value) => values.includes(value));
+    }
+
     return values;
   }
 
@@ -693,6 +780,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
         values.push(value);
       }
     });
+    // Execute select all: sets values according to items order regardless of preserveOrder
     this.value = this.sortValues(values);
   }
 
