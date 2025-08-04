@@ -134,7 +134,7 @@ export function createFormSelectorProps(
         default: () => [],
       },
       /**
-       * Preserve the order of selection values
+       * When true, maintains items order. When false (default), maintains user selection order.
        */
       preserveOrder: {
         type: Boolean,
@@ -193,7 +193,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   readonly parentNodeType?: FormNodeType;
 
   /**
-   * Whether to preserve the order of selection values
+   * When true, maintains items order. When false (default), maintains user selection order.
    */
   readonly preserveOrder: boolean;
 
@@ -397,12 +397,12 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
     this._selectedPropItems = computed(() => {
       const { selectedValues, loadedItems } = this;
-      if (!this.preserveOrder) {
+      if (this.preserveOrder) {
         return loadedItems.filter(
           ({ value }) => value != null && selectedValues.includes(value),
         );
       }
-      // preserveOrder が true の場合、選択値の順序を保持
+      // preserveOrder が false の場合、選択値の順序を保持
       const result: ResolvedFormSelectorItem[] = [];
       selectedValues.forEach((selectedValue) => {
         const item = loadedItems.find(({ value }) => value === selectedValue);
@@ -568,8 +568,8 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
         }
       });
 
-      if (this.preserveOrder) {
-        // preserveOrder=true: preserve existing order
+      if (!this.preserveOrder) {
+        // preserveOrder=false: preserve existing order
 
         // 1. Add existing values that are currently selected, preserving their order
         currentValues.forEach((value) => {
@@ -604,7 +604,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
         this._currentValue.value = values;
       } else {
-        // preserveOrder=false: use items order (original behavior)
+        // preserveOrder=true: use items order (original behavior)
         this.items.forEach((item) => {
           const { propValue } = item;
           if (
@@ -659,8 +659,8 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
         ? []
         : [_value];
 
-    // preserveOrder が false の場合は、loadedItems の順序に従って並び替える
-    if (!this.preserveOrder && this._loadedItems?.value) {
+    // preserveOrder が true の場合は、loadedItems の順序に従って並び替える
+    if (this.preserveOrder && this._loadedItems?.value) {
       const loadedValues = this._loadedItems.value.map((item) => item.value);
       return loadedValues.filter((value) => values.includes(value));
     }

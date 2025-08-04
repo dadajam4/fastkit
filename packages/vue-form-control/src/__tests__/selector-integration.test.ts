@@ -157,32 +157,32 @@ function mountSelector(
 
 describe('FormSelectorControl Vue Integration Tests', () => {
   describe('preserveOrder=false (default behavior)', () => {
-    it('should sort selected items by items array order', async () => {
+    it('should maintain user selection order', async () => {
       const { wrapper, control } = mountSelector();
 
       // Select in reverse order
       await wrapper.setProps({ modelValue: ['item4', 'item2', 'item1'] });
       await nextTick();
 
-      // Should be sorted by items array order
+      // Should preserve user selection order
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
-        'item1',
-        'item2',
         'item4',
+        'item2',
+        'item1',
       ]);
 
       expect(control.preserveOrder).toBe(false);
     });
 
-    it('should maintain items order even with dynamic selection changes', async () => {
+    it('should maintain user selection order even with dynamic selection changes', async () => {
       const { wrapper, control } = mountSelector();
 
       // Initial selection
       await wrapper.setProps({ modelValue: ['item3', 'item1'] });
       await nextTick();
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
-        'item1',
         'item3',
+        'item1',
       ]);
 
       // Additional selection
@@ -191,9 +191,9 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       });
       await nextTick();
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
+        'item3',
         'item1',
         'item2',
-        'item3',
       ]);
     });
 
@@ -204,7 +204,7 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       await wrapper.setProps({ modelValue: ['item2', 'item4'] });
       await nextTick();
 
-      // Should be sorted according to items order
+      // Should preserve user selection order
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
         'item2',
         'item4',
@@ -212,8 +212,8 @@ describe('FormSelectorControl Vue Integration Tests', () => {
     });
   });
 
-  describe('preserveOrder=true (preserve user selection order)', () => {
-    it('should preserve user selection order', async () => {
+  describe('preserveOrder=true (use items order)', () => {
+    it('should sort by items order', async () => {
       const { wrapper, control } = mountSelector(
         { preserveOrder: true },
         { defaultPreserveOrder: true },
@@ -223,25 +223,25 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       await wrapper.setProps({ modelValue: ['item4', 'item2', 'item1'] });
       await nextTick();
 
-      // Should preserve selection order
+      // Should be sorted by items order
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
-        'item4',
-        'item2',
         'item1',
+        'item2',
+        'item4',
       ]);
 
       expect(control.preserveOrder).toBe(true);
     });
 
-    it('should preserve order with dynamic changes', async () => {
+    it('should sort by items order with dynamic changes', async () => {
       const { wrapper, control } = mountSelector({ preserveOrder: true });
 
       // Initial selection
       await wrapper.setProps({ modelValue: ['item3', 'item1'] });
       await nextTick();
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
-        'item3',
         'item1',
+        'item3',
       ]);
 
       // Order change
@@ -251,8 +251,8 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       await nextTick();
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
         'item1',
-        'item3',
         'item2',
+        'item3',
       ]);
     });
 
@@ -265,12 +265,12 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       });
       await nextTick();
 
-      // Should completely preserve selection order
+      // Should be sorted by items order
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
-        'item4',
-        'item3',
-        'item2',
         'item1',
+        'item2',
+        'item3',
+        'item4',
       ]);
     });
   });
@@ -310,8 +310,8 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       ]);
     });
 
-    it('should preserve manual selection order with preserveOrder=true', async () => {
-      const { wrapper, control } = mountSelector({ preserveOrder: true });
+    it('should preserve manual selection order with preserveOrder=false', async () => {
+      const { wrapper, control } = mountSelector({ preserveOrder: false });
 
       // Simulate manual reverse order selection
       await wrapper.setProps({
@@ -319,7 +319,7 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       });
       await nextTick();
 
-      // preserveOrder=true: preserve manual selection order
+      // preserveOrder=false: preserve manual selection order
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
         'item4',
         'item3',
@@ -376,10 +376,10 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       await wrapper.setProps({ modelValue: ['item2', 'item1'] });
       await nextTick();
 
-      // Verify initial selection order is preserved
+      // Verify initial selection order is sorted by items order
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
-        'item2',
         'item1',
+        'item2',
       ]);
 
       // Execute selectAll() - this should reorder to items order regardless of preserveOrder
@@ -423,13 +423,13 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       await wrapper.setProps({ modelValue: ['item2', 'item1'] });
       await nextTick();
 
-      // Both selectedValues and selectedPropItems should be sorted by items order
+      // Both selectedValues and selectedPropItems should preserve user selection order
       // because preserveOrder=false (default)
-      expect(control.selectedValues).toEqual(['item1', 'item2']);
+      expect(control.selectedValues).toEqual(['item2', 'item1']);
       expect(control.selectedPropItems.map((item) => item.value)).toEqual([
-        'item1',
         'item2',
-      ]); // Sorted because preserveOrder=false
+        'item1',
+      ]); // Preserve user order because preserveOrder=false
     });
 
     it('should react to items changes correctly', async () => {
@@ -463,11 +463,11 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       });
 
       await nextTick();
-      // preserveOrder=false: items order
+      // preserveOrder=false: user selection order
       expect(control1.selectedPropItems.map((item) => item.value)).toEqual([
+        'item4',
         'item1',
         'item2',
-        'item4',
       ]);
 
       // Case of preserveOrder=true
@@ -477,11 +477,11 @@ describe('FormSelectorControl Vue Integration Tests', () => {
       });
 
       await nextTick();
-      // preserveOrder=true: preserve selection order
+      // preserveOrder=true: items order
       expect(control2.selectedPropItems.map((item) => item.value)).toEqual([
-        'item4',
         'item1',
         'item2',
+        'item4',
       ]);
     });
   });
@@ -555,7 +555,7 @@ describe('FormSelectorControl Vue Integration Tests', () => {
 
   describe('complex selection scenarios', () => {
     it('should handle complex order preservation scenario', async () => {
-      const { wrapper, control } = mountSelector({ preserveOrder: true });
+      const { wrapper, control } = mountSelector({ preserveOrder: false }); // User selection order
 
       // Simulate gradual selection changes
       // 1. Initial selection
@@ -594,7 +594,7 @@ describe('FormSelectorControl Vue Integration Tests', () => {
         'item4',
       ]);
 
-      // 5. Change order
+      // 5. Change order - should preserve user selection order
       await wrapper.setProps({
         modelValue: ['item4', 'item1', 'item3', 'item2'],
       });
