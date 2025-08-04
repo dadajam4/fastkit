@@ -1,8 +1,8 @@
 # @fastkit/vue-form-control
 
-## 0.20.29
+## 0.21.0
 
-### Patch Changes
+### Minor Changes
 
 - [#151](https://github.com/dadajam4/fastkit/pull/151) [`515ad05`](https://github.com/dadajam4/fastkit/commit/515ad05b1f541e372815d63ddad46fe1e113df49) Thanks [@nkenji09](https://github.com/nkenji09)! - Fix preserveOrder behavior in FormSelectorControl
 
