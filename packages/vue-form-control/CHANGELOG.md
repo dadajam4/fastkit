@@ -1,5 +1,27 @@
 # @fastkit/vue-form-control
 
+## 0.20.29
+
+### Patch Changes
+
+- [#151](https://github.com/dadajam4/fastkit/pull/151) [`515ad05`](https://github.com/dadajam4/fastkit/commit/515ad05b1f541e372815d63ddad46fe1e113df49) Thanks [@nkenji09](https://github.com/nkenji09)! - Fix preserveOrder behavior in FormSelectorControl
+
+  The preserveOrder property behavior was inverted from the intended specification:
+
+  - `preserveOrder: false` (default) now maintains user selection order
+  - `preserveOrder: true` now sorts by items order
+
+  This is a breaking change that corrects the behavior to match the intended specification.
+
+- [#150](https://github.com/dadajam4/fastkit/pull/150) [`e9b7145`](https://github.com/dadajam4/fastkit/commit/e9b7145967bda75592dac5bc8102207575a160f5) Thanks [@nkenji09](https://github.com/nkenji09)! - Add preserveOrder option to FormSelectorControl
+
+  This new option controls how selected items are ordered in multiple selection mode:
+
+  - `preserveOrder: false` (default): Selected items are sorted according to the order they appear in the items array
+  - `preserveOrder: true`: Selected items maintain the order in which they were selected by the user
+
+  The option can be configured globally via `defaultPreserveOrder` in FormSelectorControlOptions or per-component via the `preserveOrder` prop.
+
 ## 0.20.28
 
 ### Patch Changes
