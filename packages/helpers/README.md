@@ -1,16 +1,19 @@
+
 # @fastkit/helpers
 
-プリミティブな値やオブジェクトを処理するための小さなヘルパー実装のコレクションです。
+🌐 English | [日本語](./README-ja.md)
 
-## 特徴
+A collection of small helper implementations for processing primitive values and objects.
 
-- **TypeScript完全対応**: 厳密な型定義でタイプセーフな操作を提供
-- **軽量**: 必要最小限の依存関係でサイズを最小化
-- **多機能**: 文字列、配列、オブジェクト、数値など幅広いデータ型をサポート
-- **実用的**: 実際の開発でよく使用される処理を関数化
-- **ゼロ依存**: 外部ライブラリに依存せず単体で利用可能
+## Features
 
-## インストール
+- **Full TypeScript Support**: Provides type-safe operations with strict type definitions
+- **Lightweight**: Minimized size with minimal necessary dependencies
+- **Multi-functional**: Supports a wide range of data types including strings, arrays, objects, and numbers
+- **Practical**: Functions commonly used operations in actual development
+- **Zero Dependencies**: Can be used standalone without depending on external libraries
+
+## Installation
 
 ```bash
 npm install @fastkit/helpers
@@ -18,9 +21,9 @@ npm install @fastkit/helpers
 pnpm add @fastkit/helpers
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### 文字列処理
+### String Processing
 
 ```typescript
 import { 
@@ -131,84 +134,84 @@ toNumber('123.45'); // → 123.45
 
 ## API
 
-### 文字列処理
+### String Processing
 
 #### `capitalize<T extends string>(str: T): Capitalize<T>`
-文字列の最初の文字を大文字化
+Capitalizes the first character of a string
 
 #### `uncapitalize<T extends string>(str: T): Uncapitalize<T>`
-文字列の最初の文字を小文字化
+Uncapitalizes the first character of a string
 
 #### `toHalfWidth(source: string | null | undefined): string`
-全角文字を半角に変換
+Converts full-width characters to half-width
 
 #### `removeSpace(source: string | null | undefined): string`
-全てのスペースとタブ文字を除去
+Removes all spaces and tab characters
 
 #### `stripIndent(str: string, retainUnnecessaryLines?: boolean): string`
-最小インデント数を除去してインデントを正規化
+Normalizes indentation by removing the minimum indent count
 
-### 配列操作
+### Array Operations
 
 #### `arrayUnique<T>(array: T[]): T[]`
-重複を除去した配列を取得
+Returns array with duplicates removed
 
 #### `arrayRemove<T>(array: T[], entry: T): void`
-配列から指定要素を削除（破壊的操作）
+Removes specified element from array (destructive operation)
 
 #### `range(length: number, offset?: number): number[]`
-指定された範囲の数値配列を生成
+Generates numeric array of specified range
 
 #### `flattenRecursiveArray<T>(source: RecursiveArray<T>): T[]`
-再帰的配列を平坦化
+Flattens recursive array
 
-### オブジェクト操作
+### Object Operations
 
 #### `isPlainObject<T>(value: unknown): value is T`
-プレーンオブジェクトかどうかを判定
+Determines whether value is a plain object
 
 #### `isObject<T>(value: unknown): value is T`
-Objectクラスの派生インスタンスかどうかを判定
+Determines whether value is an instance derived from Object class
 
 #### `pickProperties<T, K>(obj: T, props: K[]): Pick<T, K>`
-指定したプロパティのみを抽出
+Extracts only specified properties
 
 #### `omitProperties<T, K>(obj: T, props: K[]): Omit<T, K>`
-指定したプロパティを除外
+Excludes specified properties
 
 #### `mixin<T, U>(base: T, trait: U): Mixin<T, U>`
-オブジェクトをミックスインしたProxyを生成
+Generates a Proxy that mixes objects
 
-### 数値操作
+### Number Operations
 
 #### `toInt(value: string | number): number`
-整数値に変換
+Converts to integer value
 
 #### `toFloat(value: string | number): number`
-浮動小数点数に変換
+Converts to floating-point number
 
 #### `toNumber(source: any): number`
-数値に正規化
+Normalizes to number
 
-### ユーティリティ
+### Utilities
 
 #### `isEmpty(value: any): boolean`
-空値かどうかを判定
+Determines whether value is empty
 
 #### `notEmptyValue<T>(args: T[], defaultValue?: T): T`
-配列から最初の非空値を取得
+Returns first non-empty value from array
 
 #### `inNonNullable<T>(value: T): value is Exclude<T, null | undefined>`
-null/undefinedでないかを判定
+Determines whether value is not null or undefined
 
-## 依存関係
+## Dependencies
 
-- `@fastkit/ts-type-utils`: TypeScriptの型ユーティリティ（同一リポジトリ内）
+- `@fastkit/ts-type-utils`: TypeScript type utilities (within same repository)
 
-## ドキュメント
+## Documentation
 
-詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/helpers/)をご覧ください。
+For detailed documentation, please visit [here](https://dadajam4.github.io/fastkit/helpers/).
 
-## ライセンス
+## License
 
 MIT

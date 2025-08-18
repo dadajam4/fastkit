@@ -1,8 +1,11 @@
+
 # @fastkit/duration
+
+🌐 English | [日本語](./README-ja.md)
 
 「期間」を表現する値オブジェクト実装。時間の計算、変換、操作を直感的に行うためのクラスを提供し、ミリ秒・秒・分・時間・日数の相互変換や、日時範囲からの期間計算を簡潔に実装できます。
 
-## 機能
+## Features
 
 - **多単位対応**: ミリ秒、秒、分、時間、日数での期間表現
 - **柔軟な初期化**: 数値、日時範囲、既存のDurationインスタンスから作成
@@ -12,13 +15,13 @@
 - **immutable**: 不変オブジェクトとして安全な値の受け渡し
 - **軽量**: 依存関係なしの軽量ライブラリ
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/duration
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### Durationインスタンスの作成
 
@@ -89,7 +92,7 @@ const duration2 = new Duration([
 console.log(`勤務時間: ${duration2.hours}時間`) // 8時間
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### タイムトラッキングシステム
 
@@ -584,7 +587,7 @@ async function timeoutExample() {
 }
 ```
 
-## API仕様
+## API Specification
 
 ### `Duration`クラス
 
@@ -656,7 +659,7 @@ const duration5 = new Duration([
 ])  // 8時間
 ```
 
-## 注意事項
+## Considerations
 
 ### 精度について
 - 内部的にはミリ秒単位で値を保持
@@ -680,6 +683,6 @@ const duration5 = new Duration([
 - 時間追跡システム
 - 期間計算が必要な業務処理
 
-## ライセンス
+## License
 
 MIT

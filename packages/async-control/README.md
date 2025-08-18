@@ -1,147 +1,149 @@
 # @fastkit/async-control
 
-非同期処理を効率的に制御・管理するためのヘルパーライブラリ。同一引数での連続する非同期処理の重複実行を防ぎ、キャッシュ機能やバックグラウンド更新などの高度な機能を提供します。TypeScriptで記述され、厳密な型安全性を保証します。
+🌐 English | [日本語](./README-ja.md)
 
-## 機能
+A helper library for efficient control and management of asynchronous processing. It prevents duplicate execution of consecutive asynchronous processes with the same arguments and provides advanced features such as caching and background updates. Written in TypeScript with strict type safety guarantees.
 
-- **重複実行防止**: 同一引数での連続する非同期処理を自動的に統合
-- **高度なキャッシュ制御**: カスタマイズ可能なキャッシュ機能とバックグラウンド更新
-- **遅延実行**: 指定された時間だけ実行を遅延させる機能
-- **デコレータサポート**: TypeScriptデコレータによる宣言的な非同期制御
-- **エラーハンドリング**: 包括的なエラー処理とカスタムログ機能
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **柔軟な設定**: 実行時の有効・無効切り替えや引数カスタマイズ
-- **状態管理**: 非同期処理の詳細な状態追跡
+## Features
 
-## インストール
+- **Duplicate Execution Prevention**: Automatically consolidates consecutive asynchronous processes with identical arguments
+- **Advanced Cache Control**: Customizable caching functionality with background updates
+- **Delayed Execution**: Ability to delay execution for a specified time
+- **Decorator Support**: Declarative async control through TypeScript decorators
+- **Error Handling**: Comprehensive error handling with custom logging capabilities
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Flexible Configuration**: Runtime enable/disable switching and argument customization
+- **State Management**: Detailed state tracking of asynchronous processes
+
+## Installation
 
 ```bash
 npm install @fastkit/async-control
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
-### シンプルな非同期制御
+### Simple Async Control
 
 ```typescript
 import { AsyncHandler } from '@fastkit/async-control'
 
-// 非同期関数の定義
+// Define async function
 async function fetchUserData(userId: string): Promise<{ id: string; name: string }> {
   const response = await fetch(`/api/users/${userId}`)
   return response.json()
 }
 
-// AsyncHandlerでラップ
+// Wrap with AsyncHandler
 const handler = new AsyncHandler(fetchUserData)
 
-// 使用例
+// Usage example
 async function example() {
-  // 同じuserIdで同時に複数回呼び出されても、実際のAPIコールは1回のみ
+  // Even if called multiple times simultaneously with the same userId, only one actual API call is made
   const promise1 = handler.handler('user123')
   const promise2 = handler.handler('user123')
   const promise3 = handler.handler('user123')
   
-  // すべて同じ結果を受け取る
+  // All receive the same result
   const [result1, result2, result3] = await Promise.all([promise1, promise2, promise3])
   
   console.log(result1 === result2 && result2 === result3) // true
 }
 ```
 
-### デコレータを使用した宣言的な制御
+### Declarative Control Using Decorators
 
 ```typescript
 import { AsyncHandle } from '@fastkit/async-control'
 
 class ApiService {
-  // デコレータで非同期制御を適用
+  // Apply async control with decorator
   @AsyncHandle()
   async getUserProfile(userId: string) {
-    console.log(`APIコール: ${userId}`)
+    console.log(`API call: ${userId}`)
     const response = await fetch(`/api/users/${userId}`)
     return response.json()
   }
   
-  @AsyncHandle({ delay: 500 }) // 500ms遅延
+  @AsyncHandle({ delay: 500 }) // 500ms delay
   async searchUsers(query: string) {
-    console.log(`検索実行: ${query}`)
+    console.log(`Executing search: ${query}`)
     const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
     return response.json()
   }
   
   @AsyncHandle({
-    hashArgs: (productId: string, _timestamp: number) => [productId] // timestampは無視
+    hashArgs: (productId: string, _timestamp: number) => [productId] // ignore timestamp
   })
   async getProductInfo(productId: string, timestamp: number) {
-    // timestampが異なっていても、productIdが同じなら重複実行を防ぐ
+    // Even if timestamp is different, prevents duplicate execution if productId is the same
     const response = await fetch(`/api/products/${productId}`)
     return response.json()
   }
 }
 
-// 使用例
+// Usage example
 const apiService = new ApiService()
 
-// 短時間で複数回呼び出されても、実際のAPIコールは1回のみ
+// Even if called multiple times in a short period, only one actual API call is made
 apiService.getUserProfile('user123')
 apiService.getUserProfile('user123')
 apiService.getUserProfile('user123')
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
-### キャッシュ機能付きの非同期制御
+### Async Control with Caching
 
 ```typescript
 import { AsyncHandler } from '@fastkit/async-control'
 import { createMemoryCacheController } from '@fastkit/cache-control'
 
-// キャッシュコントローラーの作成
+// Create cache controller
 const cacheController = createMemoryCacheController({
-  ttl: 60 * 1000, // 60秒間キャッシュ
-  max: 100        // 最大100エントリ
+  ttl: 60 * 1000, // Cache for 60 seconds
+  max: 100        // Maximum 100 entries
 })
 
-// キャッシュ付きAsyncHandler
+// AsyncHandler with cache
 const handler = new AsyncHandler(fetchUserData, {
   cache: {
     controller: cacheController,
-    ttl: 60 * 1000, // 60秒間有効
+    ttl: 60 * 1000, // Valid for 60 seconds
     
-    // バックグラウンド更新の設定
+    // Background update settings
     revalidate: (details) => {
-      // 残り有効期間が10秒以下の場合、バックグラウンド更新を実行
+      // Execute background update if remaining valid time is 10 seconds or less
       return details.remainingTimes.ttl <= 10 * 1000
     },
     
     errorHandlers: {
-      get: (error) => console.warn('キャッシュ取得エラー:', error),
-      set: (error) => console.warn('キャッシュ保存エラー:', error)
+      get: (error) => console.warn('Cache retrieval error:', error),
+      set: (error) => console.warn('Cache save error:', error)
     }
   }
 })
 
 async function fetchUserData(userId: string) {
-  console.log(`API呼び出し: ${userId}`)
+  console.log(`API call: ${userId}`)
   const response = await fetch(`/api/users/${userId}`)
   return response.json()
 }
 
-// 使用例
+// Usage example
 async function cacheExample() {
-  // 初回呼び出し: APIコールが実行される
+  // First call: API call is executed
   const user1 = await handler.handler('user123')
   
-  // 2回目の呼び出し: キャッシュから取得（APIコールなし）
+  // Second call: Retrieved from cache (no API call)
   const user2 = await handler.handler('user123')
   
-  // キャッシュの有効期限が近い場合、バックグラウンドで更新が実行される
+  // Background update is executed when cache expiration is near
   console.log(user1, user2)
 }
 ```
 
-### 検索機能での活用
+### Utilization in Search Functionality
 
 ```typescript
 import { AsyncHandle, getAsyncHandler } from '@fastkit/async-control'
@@ -154,41 +156,41 @@ interface SearchResult {
 
 class SearchService {
   @AsyncHandle({
-    delay: 300, // 300ms遅延（デバウンス効果）
+    delay: 300, // 300ms delay (debounce effect)
     
-    // 検索クエリが空の場合は制御を無効化
+    // Disable control if search query is empty
     enabled: (query: string) => query.trim().length > 0,
     
     cache: {
-      ttl: 5 * 60 * 1000, // 5分間キャッシュ
-      revalidate: 'always' // 常にバックグラウンド更新
+      ttl: 5 * 60 * 1000, // Cache for 5 minutes
+      revalidate: 'always' // Always background update
     }
   })
   async searchProducts(query: string): Promise<SearchResult[]> {
-    console.log(`検索実行: "${query}"`)
+    console.log(`Executing search: "${query}"`)
     
     const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
     if (!response.ok) {
-      throw new Error(`検索エラー: ${response.status}`)
+      throw new Error(`Search error: ${response.status}`)
     }
     
     return response.json()
   }
   
-  // 検索のキャンセル機能
+  // Search cancellation feature
   cancelSearch() {
     const handler = getAsyncHandler(this.searchProducts)
-    // 現在実行中のリクエストをすべて破棄
+    // Destroy all currently running requests
     Object.values((handler as any)._requestMap).forEach((request: any) => {
       request.destroy()
     })
   }
 }
 
-// 使用例
+// Usage example
 const searchService = new SearchService()
 
-// リアルタイム検索の実装
+// Real-time search implementation
 function setupRealTimeSearch() {
   const searchInput = document.querySelector('#search') as HTMLInputElement
   
@@ -204,22 +206,22 @@ function setupRealTimeSearch() {
       const results = await searchService.searchProducts(query)
       displaySearchResults(results)
     } catch (error) {
-      console.error('検索エラー:', error)
-      displayError('検索中にエラーが発生しました')
+      console.error('Search error:', error)
+      displayError('An error occurred during search')
     }
   })
 }
 
 function displaySearchResults(results: SearchResult[]) {
-  // 検索結果の表示処理
+  // Display search results
 }
 
 function displayError(message: string) {
-  // エラー表示処理
+  // Display error
 }
 ```
 
-### API呼び出しの最適化
+### API Call Optimization
 
 ```typescript
 import { AsyncHandler } from '@fastkit/async-control'
@@ -229,23 +231,23 @@ class OptimizedApiClient {
   private postsHandler: AsyncHandler<typeof this.fetchUserPosts>
   
   constructor() {
-    // ユーザー情報の取得（長期キャッシュ）
+    // User information retrieval (long-term cache)
     this.userHandler = new AsyncHandler(this.fetchUser.bind(this), {
       cache: {
-        ttl: 10 * 60 * 1000, // 10分間キャッシュ
-        revalidate: 30 * 1000 // 残り30秒でバックグラウンド更新
+        ttl: 10 * 60 * 1000, // Cache for 10 minutes
+        revalidate: 30 * 1000 // Background update with 30 seconds remaining
       },
       errorLogger: (error) => {
-        console.error('ユーザー取得エラー:', error)
+        console.error('User retrieval error:', error)
       }
     })
     
-    // 投稿一覧の取得（短期キャッシュ + デバウンス）
+    // Post list retrieval (short-term cache + debounce)
     this.postsHandler = new AsyncHandler(this.fetchUserPosts.bind(this), {
-      delay: 100, // 100ms遅延
+      delay: 100, // 100ms delay
       cache: {
-        ttl: 60 * 1000, // 1分間キャッシュ
-        revalidate: 'always' // 常にバックグラウンド更新
+        ttl: 60 * 1000, // Cache for 1 minute
+        revalidate: 'always' // Always background update
       }
     })
   }
@@ -260,7 +262,7 @@ class OptimizedApiClient {
     return response.json()
   }
   
-  // パブリックメソッド
+  // Public methods
   async getUser(userId: string) {
     return this.userHandler.handler(userId)
   }
@@ -269,9 +271,9 @@ class OptimizedApiClient {
     return this.postsHandler.handler(userId, page)
   }
   
-  // 一括データ取得
+  // Batch data retrieval
   async getUserWithPosts(userId: string) {
-    // 並行して実行（キャッシュと重複制御が効く）
+    // Execute in parallel (cache and duplicate control are effective)
     const [user, posts] = await Promise.all([
       this.getUser(userId),
       this.getUserPosts(userId, 1)
@@ -281,22 +283,22 @@ class OptimizedApiClient {
   }
 }
 
-// 使用例
+// Usage example
 const apiClient = new OptimizedApiClient()
 
 async function loadUserDashboard(userId: string) {
   try {
-    // 複数の場所から同時に呼び出されても効率的
+    // Efficient even when called simultaneously from multiple places
     const dashboardData = await apiClient.getUserWithPosts(userId)
     return dashboardData
   } catch (error) {
-    console.error('ダッシュボード読み込みエラー:', error)
+    console.error('Dashboard loading error:', error)
     throw error
   }
 }
 ```
 
-### カスタム引数ハッシュ化
+### Custom Argument Hashing
 
 ```typescript
 import { AsyncHandler } from '@fastkit/async-control'
@@ -307,10 +309,10 @@ interface RequestOptions {
   version?: string
 }
 
-// デフォルト設定を除外したハッシュ化
+// Hashing excluding default settings
 const handler = new AsyncHandler(
   async (resourceId: string, options: RequestOptions = {}) => {
-    // リソースを取得
+    // Retrieve resource
     const response = await fetch(`/api/resources/${resourceId}`, {
       headers: {
         'Accept': options.format === 'xml' ? 'application/xml' : 'application/json',
@@ -320,7 +322,7 @@ const handler = new AsyncHandler(
     return response.json()
   },
   {
-    // デフォルト値は無視してハッシュ化
+    // Hash excluding default values
     hashArgs: (resourceId: string, options: RequestOptions = {}) => [
       resourceId,
       {
@@ -331,25 +333,25 @@ const handler = new AsyncHandler(
     ],
     
     cache: {
-      ttl: 5 * 60 * 1000 // 5分間キャッシュ
+      ttl: 5 * 60 * 1000 // Cache for 5 minutes
     }
   }
 )
 
-// 使用例
+// Usage example
 async function resourceExample() {
-  // これらの呼び出しは同じハッシュを生成するため、重複実行されない
+  // These calls generate the same hash, so duplicate execution is prevented
   const resource1 = handler.handler('resource123')
   const resource2 = handler.handler('resource123', {})
   const resource3 = handler.handler('resource123', { format: 'json' })
   const resource4 = handler.handler('resource123', { version: '1.0' })
   
   const results = await Promise.all([resource1, resource2, resource3, resource4])
-  // すべて同じ結果
+  // All same results
 }
 ```
 
-### 条件付き非同期制御
+### Conditional Async Control
 
 ```typescript
 import { AsyncHandle } from '@fastkit/async-control'
@@ -358,33 +360,33 @@ class ConditionalService {
   private isProductionMode = process.env.NODE_ENV === 'production'
   
   @AsyncHandle({
-    // 本番環境でのみ非同期制御を有効化
+    // Enable async control only in production environment
     enabled: function(this: ConditionalService) {
       return this.isProductionMode
     },
     
     cache: {
-      ttl: 30 * 1000, // 30秒キャッシュ
+      ttl: 30 * 1000, // 30 seconds cache
     }
   })
   async getAnalyticsData(eventType: string, dateRange: string) {
-    console.log(`分析データ取得: ${eventType}, ${dateRange}`)
+    console.log(`Getting analytics data: ${eventType}, ${dateRange}`)
     
-    // 重い分析処理
+    // Heavy analysis processing
     const response = await fetch(`/api/analytics/${eventType}?range=${dateRange}`)
     return response.json()
   }
   
   @AsyncHandle({
-    // データサイズに基づく制御の有効化
-    enabled: (data: any[]) => data.length > 100, // 100件超の場合のみ制御
+    // Enable control based on data size
+    enabled: (data: any[]) => data.length > 100, // Control only when over 100 items
     
-    delay: 50, // 少し遅延
+    delay: 50, // Slight delay
   })
   async processLargeDataset(data: any[]) {
-    console.log(`大量データ処理開始: ${data.length}件`)
+    console.log(`Starting large data processing: ${data.length} items`)
     
-    // 重い処理のシミュレーション
+    // Heavy processing simulation
     await new Promise(resolve => setTimeout(resolve, 1000))
     
     return data.map(item => ({
@@ -395,14 +397,14 @@ class ConditionalService {
   }
 }
 
-// 使用例
+// Usage example
 const service = new ConditionalService()
 
 async function conditionalExample() {
-  // 小さなデータセット（制御なし）
+  // Small dataset (no control)
   const smallResult = await service.processLargeDataset([1, 2, 3])
   
-  // 大きなデータセット（制御あり）
+  // Large dataset (with control)
   const largeData = Array.from({ length: 200 }, (_, i) => ({ id: i }))
   const largeResult = await service.processLargeDataset(largeData)
   
@@ -410,102 +412,102 @@ async function conditionalExample() {
 }
 ```
 
-## リクエスト状態の管理
+## Request State Management
 
 ```typescript
 import { AsyncHandler } from '@fastkit/async-control'
 
 const handler = new AsyncHandler(async (id: string) => {
-  // 長時間の処理をシミュレーション
+  // Simulate long-running process
   await new Promise(resolve => setTimeout(resolve, 2000))
-  return { id, data: `結果: ${id}` }
+  return { id, data: `Result: ${id}` }
 })
 
 async function requestStateExample() {
-  // リクエストオブジェクトを取得
+  // Get request object
   const request = handler.getRequestByArgs(['test123'])
   
-  console.log('初期状態:', request.state) // 'pending'
-  console.log('保留中?:', request.isPending) // true
+  console.log('Initial state:', request.state) // 'pending'
+  console.log('Is pending?:', request.isPending) // true
   
-  // 処理開始
+  // Start processing
   const resultPromise = handler.handler('test123')
   
-  // 少し待って状態確認
+  // Wait a bit and check state
   setTimeout(() => {
-    console.log('実行中の状態:', request.state) // 'running'
-    console.log('実行中?:', request.isRunning) // true
+    console.log('Running state:', request.state) // 'running'
+    console.log('Is running?:', request.isRunning) // true
   }, 100)
   
-  // 結果を待機
+  // Wait for result
   const result = await resultPromise
   
-  console.log('完了状態:', request.state) // 'resolved'
-  console.log('解決済み?:', request.isResolved) // true
-  console.log('結果:', result)
+  console.log('Completed state:', request.state) // 'resolved'
+  console.log('Is resolved?:', request.isResolved) // true
+  console.log('Result:', result)
 }
 ```
 
-## API仕様
+## API Specification
 
-### `AsyncHandler`クラス
+### `AsyncHandler` Class
 
 ```typescript
 class AsyncHandler<Fn extends AsyncFn> {
   constructor(func: Fn, options?: AsyncHandlerOptions<Fn>)
   
-  // 制御された非同期関数
+  // Controlled async function
   readonly handler: Fn
   
-  // 元の関数を直接呼び出し
+  // Direct call to original function
   call(...args: Parameters<Fn>): Promise<Awaited<ReturnType<Fn>>>
   
-  // 指定引数が制御対象かどうか
+  // Check if specified arguments are controlled
   isEnabled(...args: Parameters<Fn>): boolean
   
-  // 引数に対応するリクエストオブジェクトを取得
+  // Get request object corresponding to arguments
   getRequestByArgs(args: Parameters<Fn>): AsyncHandlerRequest<Fn>
 }
 ```
 
-### オプション設定
+### Option Settings
 
 ```typescript
 interface AsyncHandlerOptions<Fn extends AsyncFn> {
-  // エラーログ関数
+  // Error log function
   errorLogger?: (error: unknown) => any
   
-  // 関数のthisオブジェクト
+  // Function's this object
   thisObj?: any
   
-  // 実行遅延時間（ミリ秒）
+  // Execution delay time (milliseconds)
   delay?: number
   
-  // 引数ハッシュ化のカスタマイズ
+  // Customize argument hashing
   hashArgs?: (...args: Parameters<Fn>) => any
   
-  // キャッシュ設定
+  // Cache settings
   cache?: RawAsyncHandlerCacheBehavior<AwaitedReturnType<Fn>>
   
-  // 制御の有効・無効
+  // Enable/disable control
   enabled?: boolean | ((...args: Parameters<Fn>) => boolean)
 }
 ```
 
-### キャッシュ設定
+### Cache Settings
 
 ```typescript
 interface AsyncHandlerCacheBehavior<T> {
-  // TTL（有効期間）
+  // TTL (Time To Live)
   ttl?: number | Duration
   
-  // 最大エントリ数
+  // Maximum number of entries
   max?: number
   
-  // バックグラウンド更新条件
+  // Background update condition
   revalidate?: 'always' | number | Duration | ((details) => boolean)
   
-  // エラーハンドラ
+  // Error handlers
   errorHandlers?: {
     get?: (error: unknown) => any
     set?: (error: unknown) => any
@@ -513,63 +515,63 @@ interface AsyncHandlerCacheBehavior<T> {
 }
 ```
 
-### デコレータ
+### Decorators
 
 ```typescript
-// メソッドデコレータ
+// Method decorator
 @AsyncHandle<Fn>(options?: AsyncHandlerOptions<Fn>)
 
-// ハンドラー取得
+// Handler retrieval
 function getAsyncHandler<Fn extends AsyncFn>(func: Fn): AsyncHandler<Fn>
 ```
 
-### リクエスト状態
+### Request State
 
 ```typescript
 interface AsyncHandlerRequest<Fn extends AsyncFn> {
-  // 実行状態
+  // Execution state
   readonly state: 'pending' | 'running' | 'resolved' | 'rejected' | 'destroyed'
   
-  // 状態確認
+  // State checks
   readonly isPending: boolean
   readonly isRunning: boolean
   readonly isResolved: boolean
   readonly isRejected: boolean
   readonly isDestroyed: boolean
   
-  // 結果取得
+  // Result retrieval
   getResolvedValue(): Awaited<ReturnType<Fn>>
   
-  // リクエスト破棄
+  // Destroy request
   destroy(): void
 }
 ```
 
-## 注意事項
+## Considerations
 
-### パフォーマンス考慮事項
-- 引数の複雑なオブジェクトはハッシュ計算コストが高くなる
-- キャッシュサイズは適切に制限する
-- 長時間実行される処理では適切なタイムアウト設定を検討
+### Performance Considerations
+- Complex objects in arguments increase hash calculation cost
+- Cache size should be properly limited
+- Consider appropriate timeout settings for long-running processes
 
-### メモリ管理
-- 不要になったリクエストは自動的に破棄される
-- 大量の異なる引数での呼び出しは内部マップサイズに注意
-- キャッシュの最大サイズを適切に設定
+### Memory Management
+- Unnecessary requests are automatically destroyed
+- Be careful with internal map size when calling with many different arguments
+- Set appropriate maximum cache size
 
-### エラー処理
-- 元の関数のエラーは呼び出し元に伝播される
-- キャッシュ操作のエラーは個別にハンドリング可能
-- カスタムエラーロガーでログ出力をカスタマイズ
+### Error Handling
+- Errors from original function are propagated to caller
+- Cache operation errors can be handled individually
+- Customize log output with custom error logger
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
-- [@fastkit/cache-control](../cache-control/README.md): キャッシュ制御機能
-- [@fastkit/duration](../duration/README.md): 時間期間管理
-- [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数
-- [@fastkit/tiny-hash](../tiny-hash/README.md): 軽量ハッシュ生成
-- [@fastkit/tiny-logger](../tiny-logger/README.md): ログ出力機能
+- [@fastkit/cache-control](../cache-control/README.md): Cache control functionality
+- [@fastkit/duration](../duration/README.md): Time duration management
+- [@fastkit/helpers](../helpers/README.md): Basic utility functions
+- [@fastkit/tiny-hash](../tiny-hash/README.md): Lightweight hash generation
+- [@fastkit/tiny-logger](../tiny-logger/README.md): Log output functionality

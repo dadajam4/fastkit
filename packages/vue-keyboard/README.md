@@ -1,8 +1,10 @@
 # @fastkit/vue-keyboard
 
+🌐 English | [日本語](./README-ja.md)
+
 Vue.jsアプリケーションでキーボードイベントを効率的に管理するためのComposition APIライブラリ。複雑なキーボードショートカット、キーボードナビゲーション、アクセシビリティ対応を簡単に実装できます。
 
-## 機能
+## Features
 
 - **Vue Composition API**: Vue 3のComposition APIと完全統合
 - **自動ライフサイクル管理**: コンポーネントのマウント/アンマウントに自動対応
@@ -14,13 +16,13 @@ Vue.jsアプリケーションでキーボードイベントを効率的に管�
 - **パフォーマンス最適化**: 効率的なイベントハンドリングとメモリ管理
 - **SSR対応**: サーバーサイドレンダリング環境での安全な動作
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/vue-keyboard
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### シンプルなキーハンドリング
 
@@ -711,7 +713,7 @@ onMounted(() => {
 </style>
 ```
 
-## API仕様
+## API Specification
 
 ### `useKeyboard(settings, options?)`
 
@@ -770,7 +772,7 @@ Key.is(event.key, ['Enter', 'Tab'])          // 複数キー判定
 Key.is(event.key, Key.Navigation(['ArrowUp', 'ArrowDown'])) // カテゴリ判定
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### ゲーム風キーボード制御
 
@@ -928,7 +930,7 @@ onMounted(() => {
 </style>
 ```
 
-## 注意事項
+## Considerations
 
 ### パフォーマンス考慮事項
 
@@ -948,11 +950,11 @@ onMounted(() => {
 - スクリーンリーダーとの互換性を考慮してARIA属性を適切に設定してください
 - 視覚的なフィードバックを提供して、現在のフォーカス位置を明確にしてください
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
 - [@fastkit/keyboard](../keyboard/README.md): コアキーボード処理ライブラリ
 - [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数

@@ -1,8 +1,11 @@
+
 # @fastkit/json
+
+🌐 English | [日本語](./README-ja.md)
 
 JSON操作のためのセーフなユーティリティライブラリ。循環参照を含むオブジェクトでも安全にシリアライゼーションを行い、`JSON.stringify`で発生するエラーを回避しながら、カスタマイズ可能なシリアライゼーション機能を提供します。
 
-## 機能
+## Features
 
 - **循環参照対応**: 循環参照を含むオブジェクトの安全なシリアライゼーション
 - **カスタムリプレーサー**: 値の変換・フィルタリング機能
@@ -11,13 +14,13 @@ JSON操作のためのセーフなユーティリティライブラリ。循環�
 - **軽量**: 依存関係なしの軽量ライブラリ
 - **エラー回避**: `JSON.stringify`の典型的なエラーを予防
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/json
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### 循環参照の安全な処理
 
@@ -113,7 +116,7 @@ console.log(jsonString)
 */
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### API レスポンスの安全なログ出力
 
@@ -599,7 +602,7 @@ function debugExample() {
 }
 ```
 
-## API仕様
+## API Specification
 
 ### 型定義
 
@@ -672,7 +675,7 @@ function safeJSONSerializer(
 "[Circular ~.path.to.object]"
 ```
 
-## 注意事項
+## Considerations
 
 ### パフォーマンス考慮事項
 - 大きなオブジェクトや深いネストのオブジェクトでは処理時間が増加
@@ -694,6 +697,6 @@ function safeJSONSerializer(
 - デバッグ用のオブジェクト出力
 - 循環参照を含むデータ構造の処理
 
-## ライセンス
+## License
 
 MIT

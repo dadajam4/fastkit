@@ -1,60 +1,63 @@
+
 # @fastkit/catcher
 
-アプリケーション内でTypeセーフな例外処理を実現するためのカスタムクラスライブラリ。様々な例外タイプ（Native Error、Axios Error、Fetch Error）を統一的に処理し、型安全性を保ちながら詳細なエラー情報の抽出と正規化を提供します。
+🌐 English | [日本語](./README-ja.md)
 
-## 機能
+A custom class library for implementing type-safe exception handling within applications. Provides unified processing of various exception types (Native Error, Axios Error, Fetch Error) while maintaining type safety and offering detailed error information extraction and normalization.
 
-- **型安全な例外処理**: TypeScriptでの厳密な型定義による安全な例外ハンドリング
-- **カスタムリゾルバー**: 様々な例外タイプに対応するカスタムリゾルバーシステム
-- **例外の正規化**: 異なる形式の例外を統一的なフォーマットに正規化
-- **履歴管理**: 例外の継承・連鎖を追跡する履歴機能
-- **JSON シリアライゼーション**: 例外情報の JSON 出力機能
-- **Axios 統合**: Axios エラーの詳細情報抽出とシリアライゼーション
-- **Fetch API 統合**: Fetch API レスポンスエラーの処理
-- **カスタマイズ可能**: 独自のリゾルバーとノーマライザーの作成
+## Features
 
-## インストール
+- **Type-Safe Exception Handling**: Safe exception handling through strict type definitions in TypeScript
+- **Custom Resolvers**: Custom resolver system supporting various exception types
+- **Exception Normalization**: Normalizes different exception formats to a unified format
+- **History Management**: History functionality to track exception inheritance and chaining
+- **JSON Serialization**: JSON output functionality for exception information
+- **Axios Integration**: Detailed information extraction and serialization for Axios errors
+- **Fetch API Integration**: Handling of Fetch API response errors
+- **Customizable**: Create custom resolvers and normalizers
+
+## Installation
 
 ```bash
 npm install @fastkit/catcher
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
-### シンプルなキャッチャーの作成
+### Creating a Simple Catcher
 
 ```typescript
 import { build, createCatcherNormalizer } from '@fastkit/catcher'
 
-// 基本的なノーマライザーの作成
+// Creating a basic normalizer
 const normalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo) => {
   return {
     timestamp: new Date().toISOString(),
     code: 'UNKNOWN_ERROR',
-    message: '予期しないエラーが発生しました'
+    message: 'An unexpected error occurred'
   }
 })
 
-// キャッチャークラスの生成
+// Generating the catcher class
 const MyCatcher = build({
   normalizer,
   defaultName: 'ApplicationError'
 })
 
-// 使用例
+// Usage example
 try {
-  throw new Error('何かしらのエラー')
+  throw new Error('Some error')
 } catch (error) {
   const caughtError = MyCatcher.from(error)
   
   console.log(caughtError.name)        // 'ApplicationError'
-  console.log(caughtError.message)     // 'エラーメッセージ'
+  console.log(caughtError.message)     // 'Error message'
   console.log(caughtError.timestamp)   // '2024-01-01T00:00:00.000Z'
   console.log(caughtError.code)        // 'UNKNOWN_ERROR'
 }
 ```
 
-### カスタムリゾルバーの使用
+### Using Custom Resolvers
 
 ```typescript
 import { 
@@ -63,7 +66,7 @@ import {
   createCatcherNormalizer 
 } from '@fastkit/catcher'
 
-// カスタムエラータイプの定義
+// Defining custom error types
 interface APIError {
   code: string
   detail: string
@@ -78,10 +81,10 @@ function isAPIError(source: unknown): source is APIError {
          'statusCode' in source
 }
 
-// APIエラー用のリゾルバー
+// Resolver for API errors
 const apiErrorResolver = createCatcherResolver((source, ctx) => {
   if (isAPIError(source)) {
-    ctx.resolve() // 後続のリゾルバーをスキップ
+    ctx.resolve() // Skip subsequent resolvers
     return {
       apiErrorCode: source.code,
       apiErrorDetail: source.detail,
@@ -90,7 +93,7 @@ const apiErrorResolver = createCatcherResolver((source, ctx) => {
   }
 })
 
-// ノーマライザーの作成
+// Creating the normalizer
 const normalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo) => {
   if (resolvedData.apiErrorCode) {
     return {
@@ -103,35 +106,35 @@ const normalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo) => 
   
   return {
     code: 'UNKNOWN_ERROR',
-    message: '予期しないエラーが発生しました',
+    message: 'An unexpected error occurred',
     type: 'GENERIC_ERROR'
   }
 })
 
-// キャッチャークラスの生成
+// Generating the catcher class
 const APICatcher = build({
   resolvers: [apiErrorResolver],
   normalizer,
   defaultName: 'APIError'
 })
 
-// 使用例
+// Usage example
 const apiError: APIError = {
   code: 'VALIDATION_FAILED',
-  detail: 'ユーザー名が無効です',
+  detail: 'Username is invalid',
   statusCode: 400
 }
 
 const caught = APICatcher.from(apiError)
 console.log(caught.code)        // 'VALIDATION_FAILED'
-console.log(caught.message)     // 'ユーザー名が無効です'
+console.log(caught.message)     // 'Username is invalid'
 console.log(caught.statusCode)  // 400
 console.log(caught.type)        // 'API_ERROR'
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
-### Axios エラーハンドリング
+### Axios Error Handling
 
 ```typescript
 import { 
@@ -141,7 +144,7 @@ import {
 } from '@fastkit/catcher'
 import axios from 'axios'
 
-// Axiosエラー用ノーマライザー
+// Normalizer for Axios errors
 const axiosNormalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo) => {
   if (resolvedData.axiosError) {
     const { axiosError } = resolvedData
@@ -160,19 +163,19 @@ const axiosNormalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo
   }
   
   return {
-    message: '通信エラーが発生しました',
+    message: 'A communication error occurred',
     type: 'NETWORK_ERROR'
   }
 })
 
-// Axiosキャッチャーの作成
+// Creating Axios catcher
 const HttpCatcher = build({
   resolvers: [axiosErrorResolver],
   normalizer: axiosNormalizer,
   defaultName: 'HttpError'
 })
 
-// 使用例
+// Usage example
 async function fetchUserData(userId: string) {
   try {
     const response = await axios.get(`/api/users/${userId}`)
@@ -180,13 +183,13 @@ async function fetchUserData(userId: string) {
   } catch (error) {
     const httpError = HttpCatcher.from(error)
     
-    console.log('エラータイプ:', httpError.type)      // 'HTTP_ERROR'
-    console.log('HTTPメソッド:', httpError.method)    // 'GET'
+    console.log('Error type:', httpError.type)      // 'HTTP_ERROR'
+    console.log('HTTP method:', httpError.method)    // 'GET'
     console.log('URL:', httpError.url)               // '/api/users/123'
-    console.log('ステータス:', httpError.statusCode) // 404
-    console.log('レスポンス:', httpError.responseData)
+    console.log('Status:', httpError.statusCode) // 404
+    console.log('Response:', httpError.responseData)
     
-    // JSON形式での出力
+    // JSON format output
     console.log(httpError.toJSONString(true))
     
     throw httpError
@@ -194,7 +197,7 @@ async function fetchUserData(userId: string) {
 }
 ```
 
-### Fetch API エラーハンドリング
+### Fetch API Error Handling
 
 ```typescript
 import { 
@@ -203,13 +206,13 @@ import {
   fetchResponseResolver 
 } from '@fastkit/catcher'
 
-// カスタムFetchエラー抽出関数
+// Custom Fetch error extraction function
 const extractFetchError = (source: unknown) => {
   if (source instanceof Response) {
     return { response: source }
   }
   
-  // カスタムエラー形式
+  // Custom error format
   if (source instanceof Error && 'response' in source) {
     return {
       name: source.name,
@@ -220,7 +223,7 @@ const extractFetchError = (source: unknown) => {
   }
 }
 
-// Fetchエラー用ノーマライザー
+// Normalizer for Fetch errors
 const fetchNormalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo) => {
   if (resolvedData.fetchError) {
     const { fetchError } = resolvedData
@@ -240,25 +243,25 @@ const fetchNormalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo
   }
   
   return {
-    message: 'ネットワークエラーが発生しました',
+    message: 'A network error occurred',
     type: 'NETWORK_ERROR'
   }
 })
 
-// Fetchキャッチャーの作成
+// Creating Fetch catcher
 const FetchCatcher = build({
   resolvers: [fetchResponseResolver(extractFetchError)],
   normalizer: fetchNormalizer,
   defaultName: 'FetchError'
 })
 
-// カスタムfetch関数
+// Custom fetch function
 async function safeFetch(url: string, options?: RequestInit) {
   try {
     const response = await fetch(url, options)
     
     if (!response.ok) {
-      // レスポンスエラーを例外として投げる
+      // Throw response error as exception
       throw response
     }
     
@@ -266,30 +269,30 @@ async function safeFetch(url: string, options?: RequestInit) {
   } catch (error) {
     const fetchError = FetchCatcher.from(error)
     
-    console.log('フェッチエラー:', fetchError.message)
+    console.log('Fetch error:', fetchError.message)
     console.log('URL:', fetchError.url)
-    console.log('ステータス:', fetchError.status)
-    console.log('レスポンスヘッダー:', fetchError.headers)
+    console.log('Status:', fetchError.status)
+    console.log('Response headers:', fetchError.headers)
     
     throw fetchError
   }
 }
 
-// 使用例
+// Usage example
 async function loadApiData() {
   try {
     const response = await safeFetch('/api/data')
     return await response.json()
   } catch (error) {
     if (error.type === 'FETCH_ERROR') {
-      console.error('API呼び出しに失敗:', error.message)
+      console.error('API call failed:', error.message)
     }
     throw error
   }
 }
 ```
 
-### 複数リゾルバーとエラー履歴管理
+### Multiple Resolvers and Error History Management
 
 ```typescript
 import { 
@@ -300,7 +303,7 @@ import {
   fetchResponseResolver
 } from '@fastkit/catcher'
 
-// 汎用エラーリゾルバー
+// Generic error resolver
 const genericErrorResolver = createCatcherResolver((source, ctx) => {
   if (typeof source === 'string') {
     return { errorMessage: source }
@@ -311,9 +314,9 @@ const genericErrorResolver = createCatcherResolver((source, ctx) => {
   }
 })
 
-// 統合ノーマライザー
+// Unified normalizer
 const unifiedNormalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo) => {
-  // Axiosエラーの場合
+  // For Axios errors
   if (resolvedData.axiosError) {
     return {
       type: 'HTTP_ERROR',
@@ -324,7 +327,7 @@ const unifiedNormalizer = createCatcherNormalizer((resolvedData) => (exceptionIn
     }
   }
   
-  // Fetchエラーの場合
+  // For Fetch errors
   if (resolvedData.fetchError) {
     return {
       type: 'FETCH_ERROR',
@@ -334,7 +337,7 @@ const unifiedNormalizer = createCatcherNormalizer((resolvedData) => (exceptionIn
     }
   }
   
-  // Nativeエラーの場合
+  // For Native errors
   if (resolvedData.nativeError) {
     return {
       type: 'NATIVE_ERROR',
@@ -344,7 +347,7 @@ const unifiedNormalizer = createCatcherNormalizer((resolvedData) => (exceptionIn
     }
   }
   
-  // 汎用エラーの場合
+  // For generic errors
   if (resolvedData.errorMessage) {
     return {
       type: 'GENERIC_ERROR',
@@ -354,11 +357,11 @@ const unifiedNormalizer = createCatcherNormalizer((resolvedData) => (exceptionIn
   
   return {
     type: 'UNKNOWN_ERROR',
-    message: '不明なエラーが発生しました'
+    message: 'An unknown error occurred'
   }
 })
 
-// 統合キャッチャーの作成
+// Creating unified catcher
 const UnifiedCatcher = build({
   resolvers: [
     axiosErrorResolver,
@@ -369,32 +372,32 @@ const UnifiedCatcher = build({
   defaultName: 'UnifiedError'
 })
 
-// エラー処理チェーン
+// Error processing chain
 async function processWithErrorHandling() {
   try {
-    // 何らかの処理
-    throw new Error('処理に失敗しました')
+    // Some processing
+    throw new Error('Processing failed')
   } catch (originalError) {
     const primaryError = UnifiedCatcher.from(originalError)
     
     try {
-      // リトライ処理
-      throw new Error('リトライも失敗しました')
+      // Retry processing
+      throw new Error('Retry also failed')
     } catch (retryError) {
-      // 元のエラー情報を保持しつつ新しいエラーを作成
+      // Create new error while preserving original error information
       const finalError = UnifiedCatcher.from(retryError, {
-        message: 'すべての処理が失敗しました',
+        message: 'All processing failed',
         originalError: primaryError.message
       })
       
-      // エラー履歴の確認
-      console.log('エラー履歴:')
+      // Check error history
+      console.log('Error history:')
       finalError.histories.forEach((history, index) => {
         console.log(`  ${index + 1}. ${history.message}`)
       })
       
-      // すべてのメッセージを取得
-      console.log('全メッセージ:', finalError.messages)
+      // Get all messages
+      console.log('All messages:', finalError.messages)
       
       throw finalError
     }
@@ -402,62 +405,62 @@ async function processWithErrorHandling() {
 }
 ```
 
-### ユーティリティ関数の活用
+### Utilizing Utility Functions
 
 ```typescript
 import { isCatcher, isCatcherData } from '@fastkit/catcher'
 
-// エラー判定の例
+// Error determination example
 function handleAnyError(error: unknown) {
   if (isCatcher(error)) {
-    console.log('キャッチャーエラー:', error.type)
-    console.log('詳細情報:', error.toJSONString(true))
+    console.log('Catcher error:', error.type)
+    console.log('Detailed information:', error.toJSONString(true))
     return
   }
   
   if (error instanceof Error) {
-    console.log('ネイティブエラー:', error.message)
+    console.log('Native error:', error.message)
     return
   }
   
-  console.log('その他のエラー:', error)
+  console.log('Other error:', error)
 }
 
-// データ復元の例
+// Data restoration example
 function restoreErrorFromData(data: unknown) {
   if (isCatcherData(data)) {
-    // キャッチャーデータから復元
+    // Restore from catcher data
     const restoredError = UnifiedCatcher.from(data)
     return restoredError
   }
   
-  throw new Error('有効なキャッチャーデータではありません')
+  throw new Error('Not valid catcher data')
 }
 
-// JSON保存・復元の例
+// JSON save/restore example
 function saveAndRestoreError() {
   try {
-    throw new Error('テストエラー')
+    throw new Error('Test error')
   } catch (originalError) {
     const caughtError = UnifiedCatcher.from(originalError)
     
-    // JSON文字列として保存
+    // Save as JSON string
     const jsonString = caughtError.toJSONString()
-    console.log('保存用JSON:', jsonString)
+    console.log('JSON for saving:', jsonString)
     
-    // JSON文字列から復元
+    // Restore from JSON string
     const parsedData = JSON.parse(jsonString)
     const restoredError = restoreErrorFromData(parsedData)
     
-    console.log('復元されたエラー:', restoredError.message)
-    console.log('元のエラーと同じ?:', caughtError.message === restoredError.message)
+    console.log('Restored error:', restoredError.message)
+    console.log('Same as original error?:', caughtError.message === restoredError.message)
   }
 }
 ```
 
-## API仕様
+## API Specification
 
-### `build` 関数
+### `build` Function
 
 ```typescript
 function build<
@@ -468,24 +471,24 @@ function build<
 ): CatcherConstructor<Resolvers, Normalizer>
 ```
 
-キャッチャークラスを生成します。
+Generates a catcher class.
 
-#### オプション
+#### Options
 
 ```typescript
 interface CatcherBuilderOptions<Resolvers, Normalizer> {
-  // デフォルトエラー名
+  // Default error name
   defaultName?: string
   
-  // リゾルバー配列
+  // Resolver array
   resolvers?: Resolvers
   
-  // ノーマライザー関数
+  // Normalizer function
   normalizer: Normalizer
 }
 ```
 
-### `createCatcherResolver` 関数
+### `createCatcherResolver` Function
 
 ```typescript
 function createCatcherResolver<Resolver extends AnyResolver>(
@@ -493,9 +496,9 @@ function createCatcherResolver<Resolver extends AnyResolver>(
 ): Resolver
 ```
 
-カスタムリゾルバーを作成します。
+Creates a custom resolver.
 
-### `createCatcherNormalizer` 関数
+### `createCatcherNormalizer` Function
 
 ```typescript
 function createCatcherNormalizer<
@@ -507,80 +510,80 @@ function createCatcherNormalizer<
 ): Normalizer
 ```
 
-カスタムノーマライザーを作成します。
+Creates a custom normalizer.
 
-### キャッチャーインスタンス
+### Catcher Instance
 
 ```typescript
 interface Catcher<Resolvers, T> extends Error {
-  // キャッチャーフラグ
+  // Catcher flag
   readonly isCatcher: true
   
-  // 処理済みデータ
+  // Processed data
   readonly data: CatcherData<T>
   
-  // リゾルバーで抽出されたデータ
+  // Data extracted by resolvers
   readonly resolvedData: ResolvedCatcherData<Resolvers>
   
-  // 元のソースエラー（オーバーライド時のみ）
+  // Original source error (only when overridden)
   readonly source?: Catcher<Resolvers, T>
   
-  // エラー履歴
+  // Error history
   readonly histories: Catcher<Resolvers, T>[]
   
-  // 全メッセージ
+  // All messages
   readonly messages: string[]
   
-  // JSON出力
+  // JSON output
   toJSON(): ErrorImplements & CatcherData<T> & { messages: string[] }
   
-  // JSON文字列出力
+  // JSON string output
   toJSONString(indent?: number | boolean): string
 }
 ```
 
-### 組み込みリゾルバー
+### Built-in Resolvers
 
 #### `nativeErrorResolver`
-ネイティブErrorオブジェクトを処理します。
+Processes native Error objects.
 
 #### `axiosErrorResolver`
-Axiosエラーを処理し、詳細な HTTP リクエスト・レスポンス情報を抽出します。
+Processes Axios errors and extracts detailed HTTP request/response information.
 
 #### `fetchResponseResolver`
-Fetch API のレスポンスエラーを処理します。
+Processes Fetch API response errors.
 
-### ユーティリティ関数
+### Utility Functions
 
 ```typescript
-// キャッチャーインスタンス判定
+// Catcher instance determination
 function isCatcher(source: unknown): source is Catcher
 
-// キャッチャーデータ判定
+// Catcher data determination
 function isCatcherData<T extends Catcher>(source: unknown): source is T['data']
 ```
 
-## 注意事項
+## Considerations
 
-### TypeScript考慮事項
-- リゾルバーとノーマライザーの型定義を正確に行う
-- 戻り値の型が適切に推論されるようにする
-- カスタムエラータイプの型ガードを適切に実装
+### TypeScript Considerations
+- Accurately define types for resolvers and normalizers
+- Ensure return value types are properly inferred
+- Properly implement type guards for custom error types
 
-### パフォーマンス考慮事項
-- 大量のエラーが発生する環境では履歴管理のメモリ使用量に注意
-- 複雑なリゾルバーチェーンは処理コストを考慮
-- JSON シリアライゼーション時の循環参照に注意
+### Performance Considerations
+- Be mindful of memory usage from history management in environments with high error volumes
+- Consider processing costs for complex resolver chains
+- Be aware of circular references during JSON serialization
 
-### エラーハンドリング
-- リゾルバー内での例外は適切に処理される
-- ノーマライザーでの例外はキャッチャー自体の生成に影響
-- 外部ライブラリのエラー形式変更に対する互換性維持
+### Error Handling
+- Exceptions within resolvers are handled appropriately
+- Exceptions in normalizers affect catcher generation itself
+- Maintain compatibility against error format changes in external libraries
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
-- [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数
+- [@fastkit/helpers](../helpers/README.md): Basic utility functions

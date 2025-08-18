@@ -1,8 +1,11 @@
+
 # @fastkit/dom
+
+🌐 English | [日本語](./README-ja.md)
 
 ブラウザ環境でのDOM操作を安全かつ効率的に行うためのユーティリティライブラリ。フォーカス管理、スタイル操作、スクリプト読み込み、CSS トランジション監視、ウィンドウ操作、画像読み込みなどの機能を提供します。
 
-## 機能
+## Features
 
 - **フォーカス管理**: 要素のフォーカス可能性判定とフォーカス制御
 - **動的スタイル**: 実行時でのスタイル追加とCSS操作
@@ -13,7 +16,7 @@
 - **SSR対応**: サーバーサイドレンダリング環境での安全な動作
 - **TypeScript完全サポート**: 厳密な型定義による型安全性
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/dom
@@ -1010,10 +1013,10 @@ function ownerWindow(node: Node | undefined): Window
 function loadImage(url: string): Promise<HTMLImageElement>
 ```
 
-## 関連パッケージ
+## Related Packages
 
 - `@fastkit/helpers` - 汎用ヘルパー関数（`IN_DOCUMENT`定数など）
 
-## ライセンス
+## License
 
 MIT

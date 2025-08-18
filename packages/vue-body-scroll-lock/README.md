@@ -1,8 +1,11 @@
+
 # @fastkit/vue-body-scroll-lock
+
+🌐 English | [日本語](./README-ja.md)
 
 Vue.jsアプリケーションでモーダル、ドロワー、オーバーレイ表示時にbodyスクロールを無効化するためのライブラリ。複数要素の同時管理、ネストした要素の対応、iOS Safariでの特殊な動作への対策を提供します。
 
-## 機能
+## Features
 
 - **bodyスクロール無効化**: モーダルやドロワー表示時のbodyスクロール防止
 - **v-body-scroll-lockディレクティブ**: 簡単なディレクティブによるスクロール制御
@@ -14,13 +17,13 @@ Vue.jsアプリケーションでモーダル、ドロワー、オーバーレ�
 - **SSR対応**: サーバーサイドレンダリング環境での安全な動作
 - **軽量実装**: 最小限の依存関係と効率的なメモリ使用
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/vue-body-scroll-lock
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### モーダルダイアログでの使用
 
@@ -840,7 +843,7 @@ if (typeof window !== 'undefined') {
 </style>
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### カスタムスクロール領域の指定
 
@@ -1171,13 +1174,13 @@ iOS Safariの特殊なスクロール動作に対応しており、適切にbody
 
 コンポーネントがアンマウントされる際に、自動的にスクロールロックが解除されます。手動でのクリーンアップは不要です。
 
-## 関連パッケージ
+## Related Packages
 
 - `@fastkit/body-scroll-lock` - コアのbodyスクロールロック機能
 - `@fastkit/dom` - DOM操作ユーティリティ
 - `@fastkit/helpers` - ユーティリティ関数（`IN_WINDOW`等）
 - `@fastkit/vue-utils` - Vue.js開発ユーティリティ
 
-## ライセンス
+## License
 
 MIT

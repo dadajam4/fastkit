@@ -1,32 +1,34 @@
 # @fastkit/accept-language
 
-HTTPのAccept-Languageヘッダを解析し、品質順にソートする軽量なパーサライブラリ。多言語対応のWebアプリケーションで、クライアントが希望する言語を適切に判定するために使用します。
+🌐 English | [日本語](./README-ja.md)
 
-## 機能
+A lightweight parser library that analyzes HTTP Accept-Language headers and sorts them by quality order. Used in multilingual web applications to properly determine the language preferred by clients.
 
-- **Accept-Languageヘッダ解析**: HTTPヘッダの標準形式に完全対応
-- **品質値ソート**: q値（品質値）に基づく優先順位付け
-- **言語コード分析**: コード、スクリプト、地域の詳細解析
-- **最適言語選択**: サポート言語リストから最適な言語を自動選択
-- **緩い一致オプション**: 部分的な言語一致をサポート
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **軽量設計**: 依存関係を最小限に抑えた効率的な実装
-- **エラーハンドリング**: 不正なヘッダへの堅牢な対応
+## Features
 
-## インストール
+- **Accept-Language Header Parsing**: Full compatibility with standard HTTP header format
+- **Quality Value Sorting**: Prioritization based on q-values (quality values)
+- **Language Code Analysis**: Detailed parsing of code, script, and region
+- **Optimal Language Selection**: Automatic selection of the best language from supported language list
+- **Loose Matching Option**: Support for partial language matching
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Lightweight Design**: Efficient implementation with minimal dependencies
+- **Error Handling**: Robust handling of malformed headers
+
+## Installation
 
 ```bash
 npm install @fastkit/accept-language
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
-### Accept-Languageヘッダの解析
+### Accept-Language Header Parsing
 
 ```typescript
 import { parse } from '@fastkit/accept-language'
 
-// 典型的なAccept-Languageヘッダの解析
+// Parse typical Accept-Language header
 const acceptLanguage = 'en-US,en;q=0.9,ja;q=0.8,zh-CN;q=0.7'
 const parsed = parse(acceptLanguage)
 
@@ -38,7 +40,7 @@ console.log(parsed)
 //   { code: 'zh', script: null, region: 'CN', quality: 0.7 }
 // ]
 
-// スクリプト付き言語コードの解析
+// Parse language codes with scripts
 const complexHeader = 'zh-Hans-CN;q=0.9,zh-Hant-TW;q=0.8,en;q=0.7'
 const complexParsed = parse(complexHeader)
 
@@ -50,28 +52,28 @@ console.log(complexParsed)
 // ]
 ```
 
-### 最適な言語の選択
+### Optimal Language Selection
 
 ```typescript
 import { pick } from '@fastkit/accept-language'
 
-// サポートしている言語リスト
+// List of supported languages
 const supportedLanguages = ['en-US', 'ja-JP', 'zh-CN', 'fr-FR']
 
-// クライアントのAccept-Languageヘッダ
+// Client's Accept-Language header
 const clientLanguages = 'ja;q=0.9,en-US;q=0.8,zh-CN;q=0.7'
 
-// 最適な言語を選択
+// Select the best language
 const bestLanguage = pick(supportedLanguages, clientLanguages)
 console.log(bestLanguage) // 'ja-JP'
 
-// 解析済みの言語配列からも選択可能
+// Can also select from parsed language array
 const parsedLanguages = parse(clientLanguages)
 const bestFromParsed = pick(supportedLanguages, parsedLanguages)
 console.log(bestFromParsed) // 'ja-JP'
 ```
 
-### 緩い一致による言語選択
+### Language Selection with Loose Matching
 
 ```typescript
 import { pick } from '@fastkit/accept-language'
@@ -79,18 +81,18 @@ import { pick } from '@fastkit/accept-language'
 const supportedLanguages = ['en', 'ja', 'zh-CN']
 const clientLanguages = 'en-US,ja-JP,zh-TW'
 
-// 厳密な一致（デフォルト）
+// Strict matching (default)
 const strictMatch = pick(supportedLanguages, clientLanguages)
-console.log(strictMatch) // null（完全一致なし）
+console.log(strictMatch) // null (no exact match)
 
-// 緩い一致を有効化
+// Enable loose matching
 const looseMatch = pick(supportedLanguages, clientLanguages, { loose: true })
-console.log(looseMatch) // 'en'（言語コードのみで一致）
+console.log(looseMatch) // 'en' (matches by language code only)
 ```
 
-## 実用的な使用例
+## Practical Usage Examples
 
-### Express.jsでの多言語対応
+### Multilingual Support with Express.js
 
 ```typescript
 import express from 'express'
@@ -98,29 +100,29 @@ import { pick } from '@fastkit/accept-language'
 
 const app = express()
 
-// サポートしている言語設定
+// Supported language configuration
 const SUPPORTED_LANGUAGES = ['en-US', 'ja-JP', 'ko-KR', 'zh-CN']
 const DEFAULT_LANGUAGE = 'en-US'
 
-// 言語判定ミドルウェア
+// Language detection middleware
 app.use((req, res, next) => {
   const acceptLanguage = req.headers['accept-language']
   
-  // 最適な言語を判定
+  // Determine the optimal language
   const preferredLanguage = pick(
     SUPPORTED_LANGUAGES,
     acceptLanguage,
     { loose: true }
   ) || DEFAULT_LANGUAGE
   
-  // リクエストに言語情報を追加
+  // Add language information to request
   req.locale = preferredLanguage
   res.locals.locale = preferredLanguage
   
   next()
 })
 
-// APIレスポンス例
+// API response example
 app.get('/api/messages', (req, res) => {
   const messages = getLocalizedMessages(req.locale)
   res.json({
@@ -130,7 +132,7 @@ app.get('/api/messages', (req, res) => {
 })
 ```
 
-### Next.jsでの国際化
+### Internationalization with Next.js
 
 ```typescript
 // middleware.ts
@@ -141,7 +143,7 @@ const SUPPORTED_LOCALES = ['en', 'ja', 'ko', 'zh']
 const DEFAULT_LOCALE = 'en'
 
 export function middleware(request: NextRequest) {
-  // Accept-Languageヘッダから最適な言語を選択
+  // Select optimal language from Accept-Language header
   const acceptLanguage = request.headers.get('accept-language')
   const preferredLocale = pick(
     SUPPORTED_LOCALES,
@@ -149,7 +151,7 @@ export function middleware(request: NextRequest) {
     { loose: true }
   ) || DEFAULT_LOCALE
   
-  // パスに言語コードが含まれていない場合はリダイレクト
+  // Redirect if path doesn't include language code
   const pathname = request.nextUrl.pathname
   if (!SUPPORTED_LOCALES.some(locale => pathname.startsWith(`/${locale}`))) {
     const url = request.nextUrl.clone()
@@ -163,18 +165,18 @@ export const config = {
 }
 ```
 
-### Vue.jsアプリケーションでの言語自動設定
+### Automatic Language Setup in Vue.js Applications
 
 ```typescript
 // plugins/i18n.ts
 import { createI18n } from 'vue-i18n'
 import { pick } from '@fastkit/accept-language'
 
-// ブラウザの言語設定を取得
+// Get browser language settings
 const browserLanguages = navigator.language || navigator.languages?.[0]
 const supportedLocales = ['en-US', 'ja-JP', 'ko-KR']
 
-// 最適な言語を自動選択
+// Auto-select optimal language
 const defaultLocale = pick(
   supportedLocales,
   browserLanguages,
@@ -193,7 +195,7 @@ export const i18n = createI18n({
 })
 ```
 
-### カスタム言語判定関数
+### Custom Language Detection Function
 
 ```typescript
 import { parse, pick, type ParsedLanguage } from '@fastkit/accept-language'
@@ -211,24 +213,24 @@ class LanguageDetector {
   }
 
   /**
-   * 最適な言語を判定（複数の戦略を組み合わせ）
+   * Determine optimal language (combining multiple strategies)
    */
   detectBestLanguage(
     acceptLanguageHeader?: string | null,
     userPreference?: string,
     sessionLanguage?: string
   ): string {
-    // 1. ユーザー設定を最優先
+    // 1. User preference takes highest priority
     if (userPreference && this.isSupported(userPreference)) {
       return userPreference
     }
 
-    // 2. セッション言語を次に考慮
+    // 2. Consider session language next
     if (sessionLanguage && this.isSupported(sessionLanguage)) {
       return sessionLanguage
     }
 
-    // 3. Accept-Languageヘッダから判定
+    // 3. Determine from Accept-Language header
     if (acceptLanguageHeader) {
       const detected = pick(
         this.supportedLanguages,
@@ -238,12 +240,12 @@ class LanguageDetector {
       if (detected) return detected
     }
 
-    // 4. フォールバック言語を返す
+    // 4. Return fallback language
     return this.fallbackLanguage
   }
 
   /**
-   * 詳細な言語分析
+   * Detailed language analysis
    */
   analyzeLanguagePreferences(acceptLanguageHeader: string) {
     const parsed = parse(acceptLanguageHeader)
@@ -265,7 +267,7 @@ class LanguageDetector {
   }
 }
 
-// 使用例
+// Usage example
 const detector = new LanguageDetector(
   ['en-US', 'ja-JP', 'ko-KR', 'zh-CN'],
   'en-US'
@@ -273,64 +275,64 @@ const detector = new LanguageDetector(
 
 const bestLanguage = detector.detectBestLanguage(
   'ja;q=0.9,en-US;q=0.8,ko;q=0.7',
-  undefined, // ユーザー設定なし
-  'zh-CN'    // セッション言語
+  undefined, // No user preference
+  'zh-CN'    // Session language
 )
 
 console.log(bestLanguage) // 'zh-CN'
 ```
 
-## API仕様
+## API Specification
 
 ### `parse(acceptLanguage)`
 
-Accept-Languageヘッダ文字列を解析し、品質順にソートされた言語配列を返します。
+Parses Accept-Language header string and returns language array sorted by quality.
 
-**パラメータ:**
-- `acceptLanguage` (string | null | undefined): Accept-Languageヘッダ文字列
+**Parameters:**
+- `acceptLanguage` (string | null | undefined): Accept-Language header string
 
-**戻り値:**
-- `ParsedLanguage[]`: 解析された言語の配列
+**Return Value:**
+- `ParsedLanguage[]`: Array of parsed languages
 
 ```typescript
 interface ParsedLanguage {
-  code: string;        // 言語コード（例: 'en', 'ja'）
-  script: string | null; // スクリプト（例: 'Hans', 'Hant'）
-  region: string;      // 地域コード（例: 'US', 'JP'）
-  quality: number;     // 品質値（0.0-1.0）
+  code: string;        // Language code (e.g. 'en', 'ja')
+  script: string | null; // Script (e.g. 'Hans', 'Hant')
+  region: string;      // Region code (e.g. 'US', 'JP')
+  quality: number;     // Quality value (0.0-1.0)
 }
 ```
 
 ### `pick(supportedLanguages, acceptLanguages, options?)`
 
-サポートしている言語リストから、クライアントの希望に最も適した言語を選択します。
+Selects the most suitable language from the list of supported languages based on client preferences.
 
-**パラメータ:**
-- `supportedLanguages` (string[] | readonly string[]): サポートしている言語のリスト
-- `acceptLanguages` (string | ParsedLanguage[] | null | undefined): Accept-Languageヘッダまたは解析済み言語配列
-- `options` (PickOptions, optional): 選択オプション
+**Parameters:**
+- `supportedLanguages` (string[] | readonly string[]): List of supported languages
+- `acceptLanguages` (string | ParsedLanguage[] | null | undefined): Accept-Language header or parsed language array
+- `options` (PickOptions, optional): Selection options
 
-**戻り値:**
-- `string | null`: 最適な言語（見つからない場合は null）
+**Return Value:**
+- `string | null`: Optimal language (null if not found)
 
 ```typescript
 interface PickOptions {
-  loose?: boolean; // 緩い一致を許可するか（デフォルト: false）
+  loose?: boolean; // Allow loose matching (default: false)
 }
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
-### 地域特有の言語処理
+### Region-Specific Language Processing
 
 ```typescript
 import { parse, pick } from '@fastkit/accept-language'
 
-// 地域別の言語バリエーション
+// Regional language variations
 const regionalLanguages = {
-  'zh-CN': '简体中文',  // 中国（簡体字）
-  'zh-TW': '繁體中文',  // 台湾（繁体字）
-  'zh-HK': '繁體中文',  // 香港（繁体字）
+  'zh-CN': '简体中文',  // China (Simplified)
+  'zh-TW': '繁體中文',  // Taiwan (Traditional)
+  'zh-HK': '繁體中文',  // Hong Kong (Traditional)
   'en-US': 'English (US)',
   'en-GB': 'English (UK)',
   'pt-BR': 'Português (Brasil)',
@@ -340,11 +342,11 @@ const regionalLanguages = {
 function getRegionalLanguage(acceptLanguage: string) {
   const supportedLanguages = Object.keys(regionalLanguages)
   
-  // 厳密な一致を先に試行
+  // Try strict matching first
   let selected = pick(supportedLanguages, acceptLanguage)
   
   if (!selected) {
-    // 緩い一致で再試行
+    // Retry with loose matching
     selected = pick(supportedLanguages, acceptLanguage, { loose: true })
   }
   
@@ -358,7 +360,7 @@ function getRegionalLanguage(acceptLanguage: string) {
 }
 ```
 
-### パフォーマンス最適化
+### Performance Optimization
 
 ```typescript
 import { parse, pick } from '@fastkit/accept-language'
@@ -373,26 +375,26 @@ class OptimizedLanguageDetector {
   ) {}
 
   detectLanguage(acceptLanguageHeader: string): string {
-    // キャッシュから検索
+    // Search from cache
     const cached = this.cache.get(acceptLanguageHeader)
     if (cached !== undefined) {
       return cached || this.defaultLanguage
     }
 
-    // 新しい判定を実行
+    // Execute new detection
     const detected = pick(
       this.supportedLanguages,
       acceptLanguageHeader,
       { loose: true }
     )
 
-    // キャッシュサイズ制限
+    // Cache size limit
     if (this.cache.size >= this.maxCacheSize) {
       const firstKey = this.cache.keys().next().value
       this.cache.delete(firstKey)
     }
 
-    // 結果をキャッシュ
+    // Cache result
     this.cache.set(acceptLanguageHeader, detected)
     
     return detected || this.defaultLanguage
@@ -404,32 +406,32 @@ class OptimizedLanguageDetector {
 }
 ```
 
-## 注意事項
+## Considerations
 
-### ブラウザ対応
+### Browser Support
 
-- モダンブラウザすべてでサポート
-- Internet Explorer 11以降で動作
-- Node.js環境での使用を推奨
+- Supported in all modern browsers
+- Works with Internet Explorer 11 and later
+- Recommended for use in Node.js environments
 
-### パフォーマンス考慮事項
+### Performance Considerations
 
-- 解析処理は軽量ですが、大量のリクエストでは結果のキャッシュを推奨
-- 長いAccept-Languageヘッダの処理時間は言語数に比例
-- メモリ使用量は処理する言語数によって決まる
+- Parsing is lightweight, but caching results is recommended for high-volume requests
+- Processing time for long Accept-Language headers is proportional to number of languages
+- Memory usage depends on number of languages processed
 
-### セキュリティ
+### Security
 
-- 入力値の検証は内部で実行される
-- 不正なヘッダ値に対する堅牢な処理
-- XSS攻撃につながる可能性のある値は自動的に除外
+- Input validation is performed internally
+- Robust handling of malformed header values
+- Values that could lead to XSS attacks are automatically excluded
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
-- [@fastkit/i18n](../i18n/README.md): 多言語化フレームワーク
-- [@fastkit/vue-i18n](../vue-i18n/README.md): Vue.js用多言語化ツール
-- [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数
+- [@fastkit/i18n](../i18n/README.md): Internationalization framework
+- [@fastkit/vue-i18n](../vue-i18n/README.md): Vue.js internationalization tools
+- [@fastkit/helpers](../helpers/README.md): Basic utility functions

@@ -1,8 +1,11 @@
+
 # @fastkit/vui-wysiwyg
+
+🌐 English | [日本語](./README-ja.md)
 
 Vue.js 3用の高機能WYSIWYGエディタコンポーネント。TiptapとProseMirrorをベースとした豊富な編集機能とカスタマイズ性を提供し、@fastkit/vuiデザインシステムと完全に統合されています。
 
-## 機能
+## Features
 
 - **リッチテキスト編集**: テキストフォーマット、リスト、リンク、色付け等の包括的な編集機能
 - **@fastkit/vui統合**: vuiデザインシステムとの完全な統合とコンポーネント互換性
@@ -15,13 +18,13 @@ Vue.js 3用の高機能WYSIWYGエディタコンポーネント。TiptapとProse
 - **高いパフォーマンス**: 効率的な仮想DOM操作と最適化された描画
 - **カスタムスタイリング**: Sass変数による詳細なスタイルカスタマイズ
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/vui-wysiwyg
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### 基本的なエディタ
 
@@ -882,7 +885,7 @@ const saveArticle = async (data: typeof formData) => {
 }
 ```
 
-## API仕様
+## API Specification
 
 ### `VWysiwygEditor`コンポーネント
 
@@ -981,7 +984,7 @@ function createWysiwygExtension<Options = any, Storage = any>(
 - `WysiwygTextAlignTool` - テキスト整列
 - `WysiwygCustomTagTool` - カスタムタグ
 
-## 注意事項
+## Considerations
 
 ### ブラウザ対応
 - モダンブラウザのみサポート
@@ -998,11 +1001,11 @@ function createWysiwygExtension<Options = any, Storage = any>(
 - XSS攻撃への対策が必要
 - 信頼できないコンテンツの表示には注意
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
 - [@fastkit/vui](../vui/README.md): 基盤UIコンポーネントライブラリ
 - [@fastkit/vue-form-control](../vue-form-control/README.md): フォーム制御機能

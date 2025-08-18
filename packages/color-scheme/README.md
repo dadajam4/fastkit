@@ -1,4 +1,7 @@
+
 # @fastkit/color-scheme
+
+🌐 English | [日本語](./README-ja.md)
 
 アプリケーションのカラーテーマとスキームを管理するための包括的なカラーシステムライブラリです。TypeScriptで構築され、型安全性、動的テーマ切り替え、アクセシビリティ対応を重視したカラー管理システムを提供します。
 
@@ -15,7 +18,7 @@
 - **パフォーマンス最適化**: 遅延評価とキャッシュ機構
 - **ビルドツール統合**: Plugboyとの完全統合
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/color-scheme
@@ -260,7 +263,7 @@ const colorScheme = createColorScheme({
 });
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### レスポンシブカラーシステム
 
@@ -737,6 +740,6 @@ console.log(debugScheme.debug.info());
 
 詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/color-scheme/)をご覧ください。
 
-## ライセンス
+## License
 
 MIT

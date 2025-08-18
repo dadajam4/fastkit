@@ -1,8 +1,11 @@
+
 # @fastkit/vue-app-layout
+
+🌐 English | [日本語](./README-ja.md)
 
 Vueアプリケーションの全体レイアウトを制御するための包括的なコンポーネント実装。レスポンシブなアプリケーションレイアウト、ドロワー、ツールバー、サイドバー、スタックナビゲーションなどのUIパターンを提供します。
 
-## 機能
+## Features
 
 - **レスポンシブレイアウト**: デバイスサイズに対応したアダプティブレイアウト
 - **ドロワーナビゲーション**: スライド式サイドメニューシステム
@@ -13,13 +16,13 @@ Vueアプリケーションの全体レイアウトを制御するための包�
 - **スクロール制御**: ボディスクロールロックとカスタムスクロール
 - **アニメーション**: スムーズなトランジション効果
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/vue-app-layout
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### CSSのインポート
 
@@ -681,7 +684,7 @@ interface VueAppLayoutComposable {
 }
 ```
 
-## 関連パッケージ
+## Related Packages
 
 - `@fastkit/vue-body-scroll-lock` - ボディスクロール制御
 - `@fastkit/vue-resize` - リサイズ検出
@@ -692,6 +695,6 @@ interface VueAppLayoutComposable {
 - `vue` - Vue.js フレームワーク（ピア依存関係）
 - `vue-router` - Vue Router（ピア依存関係）
 
-## ライセンス
+## License
 
 MIT

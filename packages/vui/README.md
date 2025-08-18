@@ -1,4 +1,7 @@
+
 # @fastkit/vui
+
+🌐 English | [日本語](./README-ja.md)
 
 Vue.js 3アプリケーション用のシンプルで拡張可能なUIコンポーネントライブラリです。TypeScript完全対応、カラーテーマシステム、アクセシビリティ、そして@fastkit/vue-form-controlとの緊密な統合に焦点を当てています。
 
@@ -15,7 +18,7 @@ Vue.js 3アプリケーション用のシンプルで拡張可能なUIコンポ�
 - **国際化対応**: 多言語フォント設定、RTL言語サポート
 - **プログラマティックUI**: ダイアログ、通知などの命令的操作
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/vui
@@ -120,7 +123,7 @@ import { VApp } from '@fastkit/vui';
 - **VHero** - ヒーローセクション
 - **VContentSwitcher** - コンテンツ切り替え
 
-## 使用例
+## Usage Examples
 
 ### ボタンコンポーネント
 
@@ -552,7 +555,7 @@ const { theme: currentTheme, toggle: toggleTheme } = useColorScheme();
 </script>
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### カスタムコンポーネント作成
 
@@ -927,6 +930,6 @@ interface VuiPluginOptions {
 
 詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/vui/)をご覧ください。
 
-## ライセンス
+## License
 
 MIT

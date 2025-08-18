@@ -1,170 +1,173 @@
+
 # @fastkit/color
 
-「色」をコントロールするための包括的な値オブジェクト実装。RGB、HSL、HEX形式の相互変換、色の操作（明度・彩度調整、混色など）、W3C X11色名のサポートを提供します。
+🌐 English | [日本語](./README-ja.md)
 
-## 機能
+A comprehensive value object implementation for controlling "color". Provides mutual conversion between RGB, HSL, and HEX formats, color manipulation (brightness/saturation adjustment, color mixing, etc.), and W3C X11 color name support.
 
-- **多様な色形式サポート**: RGB、RGBA、HSL、HSLA、HEX、W3C X11色名
-- **色空間変換**: RGB ⇔ HSL の自動変換と同期
-- **色操作メソッド**: lighten、darken、saturate、desaturate、mix
-- **チェーンメソッド**: メソッドチェーンによる直感的な色操作
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **不変性オプション**: clone()メソッドによる安全な色操作
-- **JSON対応**: toJSON()メソッドによるシリアライゼーション
+## Features
 
-## インストール
+- **Diverse Color Format Support**: RGB, RGBA, HSL, HSLA, HEX, W3C X11 color names
+- **Color Space Conversion**: Automatic RGB ⇔ HSL conversion and synchronization
+- **Color Manipulation Methods**: lighten, darken, saturate, desaturate, mix
+- **Method Chaining**: Intuitive color manipulation through method chaining
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Immutability Options**: Safe color manipulation via clone() method
+- **JSON Support**: Serialization through toJSON() method
+
+## Installation
 
 ```bash
 npm install @fastkit/color
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
-### Color インスタンスの作成
+### Creating Color Instances
 
 ```typescript
 import { Color } from '@fastkit/color'
 
-// HEX形式から作成
+// Create from HEX format
 const color1 = new Color('#ff6b35')
 
-// RGB配列から作成
+// Create from RGB array
 const color2 = new Color([255, 107, 53])
 
-// RGBA配列から作成
+// Create from RGBA array
 const color3 = new Color([255, 107, 53, 0.8])
 
-// RGBオブジェクトから作成
+// Create from RGB object
 const color4 = new Color({ r: 255, g: 107, b: 53 })
 
-// HSLオブジェクトから作成
+// Create from HSL object
 const color5 = new Color({ h: 15, s: 1, l: 0.6 })
 
-// W3C X11色名から作成
+// Create from W3C X11 color name
 const color6 = new Color('tomato')
 
-// CSS形式の文字列から作成
+// Create from CSS format string
 const color7 = new Color('rgb(255, 107, 53)')
 const color8 = new Color('hsl(15, 100%, 60%)')
 ```
 
-### 色の取得
+### Getting Color Values
 
 ```typescript
 const color = new Color('#ff6b35')
 
-// RGB値の取得
+// Get RGB values
 console.log(color.red())    // 255
 console.log(color.green())  // 107  
 console.log(color.blue())   // 53
 
-// HSL値の取得
+// Get HSL values
 console.log(color.hue())        // 15
 console.log(color.saturation()) // 1
 console.log(color.lightness())  // 0.6
 
-// アルファ値の取得
+// Get alpha value
 console.log(color.alpha()) // 1
 
-// 文字列形式の取得
+// Get string formats
 console.log(color.hex())   // '#ff6b35'
 console.log(color.rgb())   // 'rgb(255,107,53)'
 console.log(color.rgba())  // 'rgba(255,107,53,1)'
-console.log(color.toString()) // '#ff6b35' (デフォルトはHEX)
+console.log(color.toString()) // '#ff6b35' (default is HEX)
 ```
 
-### 色の設定
+### Setting Color Values
 
 ```typescript
 const color = new Color('#ff6b35')
 
-// RGB値の設定（チェーンメソッド）
+// Set RGB values (method chaining)
 color.red(200).green(150).blue(100)
 
-// HSL値の設定
+// Set HSL values
 color.hue(180).saturation(0.8).lightness(0.5)
 
-// アルファ値の設定
+// Set alpha value
 color.alpha(0.7)
 
-// 複数の色形式で再設定
+// Reset with multiple color formats
 color.set('#3498db')
 color.set([52, 152, 219])
 color.set({ h: 204, s: 0.7, l: 0.53 })
 ```
 
-## 色の操作
+## Color Manipulation
 
-### 明度・彩度の調整
+### Brightness and Saturation Adjustment
 
 ```typescript
 const color = new Color('#3498db')
 
-// 明度を上げる（明るくする）
+// Increase brightness (lighten)
 const lightColor = color.clone().lighten(0.2)
 
-// 明度を下げる（暗くする）
+// Decrease brightness (darken)
 const darkColor = color.clone().darken(0.3)
 
-// 彩度を上げる（鮮やかにする）
+// Increase saturation (more vivid)
 const vibrancyColor = color.clone().saturate(0.4)
 
-// 彩度を下げる（くすませる）
+// Decrease saturation (muted)
 const mutedColor = color.clone().desaturate(0.5)
 
-// グレースケール変換
+// Grayscale conversion
 const grayColor = color.clone().grayscale()
 ```
 
-### 色の混合
+### Color Mixing
 
 ```typescript
 const baseColor = new Color('#3498db')
 
-// 他の色と混合（デフォルト50%）
+// Mix with another color (default 50%)
 const mixedColor = baseColor.clone().mix('#e74c3c')
 
-// 混合比率を指定
+// Specify mixing ratio
 const mixedColor2 = baseColor.clone().mix('#e74c3c', 0.3)
 
-// RGB個別値の混合
+// Mix individual RGB values
 const redMixed = baseColor.clone().mixRed(255, 0.4)
 const greenMixed = baseColor.clone().mixGreen(100, 0.6)
 const blueMixed = baseColor.clone().mixBlue(50, 0.2)
 
-// アルファ値の混合
+// Mix alpha values
 const alphaMixed = baseColor.clone().mixAlpha(0.5, 0.8)
 ```
 
-### HSLモデルでの混合
+### HSL Model Mixing
 
 ```typescript
 const color1 = new Color({ h: 180, s: 0.8, l: 0.6 })
 const color2 = new Color({ h: 300, s: 0.9, l: 0.4 })
 
-// HSLモデルで混合
+// Mix in HSL model
 const hslMixed = color1.clone().mix(color2, { per: 0.4, model: 'hsl' })
 
-// 部分的なHSL値での混合
+// Mix with partial HSL values
 const hueMixed = color1.clone().mix({ h: 60 }, 0.3)
 ```
 
-## 色情報の取得
+## Getting Color Information
 
-### JSON形式での取得
+### Getting in JSON Format
 
 ```typescript
 const color = new Color('#ff6b35')
 
-// RGBA情報の取得
+// Get RGBA information
 const rgba = color.rgbaJSON()
 // { r: 255, g: 107, b: 53, a: 1 }
 
-// HSLA情報の取得
+// Get HSLA information
 const hsla = color.hslaJSON()
 // { h: 15, s: 1, l: 0.6, a: 1 }
 
-// 完全な色情報の取得
+// Get complete color information
 const info = color.info()
 // {
 //   r: 255, g: 107, b: 53, h: 15, s: 1, l: 0.6, a: 1,
@@ -172,31 +175,31 @@ const info = color.info()
 //   hsl: 'hsl(15,100%,60%)', hsla: 'hsla(15,100%,60%,1)'
 // }
 
-// JSON.stringify対応
+// JSON.stringify support
 const jsonString = JSON.stringify(color)
 ```
 
-### 色の分析
+### Color Analysis
 
 ```typescript
 const color = new Color('#ff6b35')
 
-// HSP明度（知覚的明度）
-console.log(color.brightness()) // 0 〜 1
+// HSP brightness (perceptual brightness)
+console.log(color.brightness()) // 0 to 1
 
-// HWB白さ
-console.log(color.whiteness()) // 0 〜 1
+// HWB whiteness
+console.log(color.whiteness()) // 0 to 1
 
-// HSV明度
-console.log(color.value()) // 0 〜 1
+// HSV brightness
+console.log(color.value()) // 0 to 1
 
-// HWB黒さ
-console.log(color.blackness()) // 0 〜 1
+// HWB blackness
+console.log(color.blackness()) // 0 to 1
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
-### 色のパレット生成
+### Color Palette Generation
 
 ```typescript
 function generatePalette(baseColor: string, steps: number = 5) {
@@ -221,7 +224,7 @@ function generatePalette(baseColor: string, steps: number = 5) {
 const bluePalette = generatePalette('#3498db', 5)
 ```
 
-### テーマ色の生成
+### Theme Color Generation
 
 ```typescript
 function generateThemeColors(primaryColor: string) {
@@ -243,7 +246,7 @@ function generateThemeColors(primaryColor: string) {
 const theme = generateThemeColors('#2196f3')
 ```
 
-### グラデーション色の計算
+### Gradient Color Calculation
 
 ```typescript
 function generateGradient(
@@ -267,14 +270,14 @@ function generateGradient(
 const blueToRed = generateGradient('#3498db', '#e74c3c', 10)
 ```
 
-### アクセシビリティ対応
+### Accessibility Support
 
 ```typescript
 function getContrastColor(backgroundColor: string): string {
   const bg = new Color(backgroundColor)
   const brightness = bg.brightness()
   
-  // 明度が0.5以下なら白、それ以外は黒を返す
+  // Return white if brightness is 0.5 or less, otherwise return black
   return brightness < 0.5 ? '#ffffff' : '#000000'
 }
 
@@ -294,12 +297,12 @@ function ensureContrast(
     return text.hex()
   }
   
-  // コントラストが不足している場合は調整
+  // Adjust if contrast is insufficient
   if (bgBrightness > 0.5) {
-    // 背景が明るい場合はテキストを暗くする
+    // If background is bright, darken the text
     return text.clone().darken(minContrast - contrast).hex()
   } else {
-    // 背景が暗い場合はテキストを明るくする
+    // If background is dark, lighten the text
     return text.clone().lighten(minContrast - contrast).hex()
   }
 }
@@ -308,19 +311,19 @@ const contrastColor = getContrastColor('#3498db')
 const accessibleText = ensureContrast('#666666', '#f0f0f0')
 ```
 
-### カスタム色効果
+### Custom Color Effects
 
 ```typescript
-// カスタム効果付きColorクラス
+// Custom Color class with effects
 const vintageColor = new Color('#3498db', {
   effectState: (state) => {
-    // ヴィンテージ効果：彩度を下げて茶色を混ぜる
+    // Vintage effect: desaturate and mix with brown
     const vintage = new Color(state)
     return vintage.desaturate(0.3).mix('#8b7355', 0.1).info()
   }
 })
 
-console.log(vintageColor.hex()) // ヴィンテージ効果が適用された色
+console.log(vintageColor.hex()) // Color with vintage effect applied
 ```
 
 ## API リファレンス
@@ -415,10 +418,10 @@ const purple = new Color('mediumorchid')
 - グレー系: `lightgray`, `darkgray`, `silver`, `dimgray`
 - 特殊色: `tomato`, `cornflowerblue`, `mediumseagreen`, `goldenrod`
 
-## 関連パッケージ
+## Related Packages
 
-- `@fastkit/tiny-logger` - ロギング機能（内部依存）
+- `@fastkit/tiny-logger` - Logging functionality (internal dependency)
 
-## ライセンス
+## License
 
 MIT

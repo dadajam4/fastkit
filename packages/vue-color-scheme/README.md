@@ -1,32 +1,35 @@
+
 # @fastkit/vue-color-scheme
 
-Vue.js アプリケーションで型安全なカラースキームを利用するためのライブラリです。@fastkit/color-schemeとVue 3 Composition APIを統合し、動的テーマ切り替え、CSS Variables統合、型安全なカラーアクセスを提供します。
+🌐 English | [日本語](./README-ja.md)
 
-## 特徴
+A library for using type-safe color schemes in Vue.js applications. Integrates @fastkit/color-scheme with Vue 3 Composition API, providing dynamic theme switching, CSS Variables integration, and type-safe color access.
 
-- **Vue 3 完全統合**: Composition APIとOptionsAPIの両方をサポート
-- **型安全**: TypeScriptによる完全な型安全性
-- **動的テーマ切り替え**: リアルタイムでのライト/ダーク切り替え
-- **CSS Variables統合**: 自動CSS変数生成とバインディング
-- **Composables**: useColorScheme、useColorClasses等の便利なコンポーザブル
-- **props統合**: colorSchemePropsによる標準化されたprop定義
-- **HTMLクラス管理**: テーマクラスの自動HTMLバインディング
-- **Head管理**: @unhead/vueとの統合によるメタ情報管理
-- **プラグインシステム**: Vueアプリケーションレベルでの簡単セットアップ
-- **SSR対応**: サーバーサイドレンダリング完全対応
+## Features
 
-## インストール
+- **Full Vue 3 Integration**: Supports both Composition API and Options API
+- **Type Safety**: Complete type safety with TypeScript
+- **Dynamic Theme Switching**: Real-time light/dark theme switching
+- **CSS Variables Integration**: Automatic CSS variable generation and binding
+- **Composables**: Convenient composables like useColorScheme, useColorClasses
+- **Props Integration**: Standardized prop definitions with colorSchemeProps
+- **HTML Class Management**: Automatic HTML binding of theme classes
+- **Head Management**: Meta information management through @unhead/vue integration
+- **Plugin System**: Easy setup at Vue application level
+- **SSR Support**: Full server-side rendering support
+
+## Installation
 
 ```bash
 npm install @fastkit/vue-color-scheme
 # or
 pnpm add @fastkit/vue-color-scheme
 
-# 依存関係
+# Dependencies
 npm install @fastkit/color-scheme vue @unhead/vue
 ```
 
-## 基本的な使い方
+## Basic Usage
 
 ### プラグイン設定
 
@@ -302,7 +305,7 @@ export default defineComponent({
 });
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### コンポーネントライブラリ統合
 
@@ -863,6 +866,6 @@ describe('VueColorScheme', () => {
 
 https://dadajam4.github.io/fastkit/vue-color-scheme/
 
-## ライセンス
+## License
 
 MIT

@@ -1,8 +1,11 @@
+
 # @fastkit/vue-i18n
+
+🌐 English | [日本語](./README-ja.md)
 
 Vue.jsアプリケーションに型安全で強力な国際化(i18n)機能を提供するライブラリ。@fastkit/i18nコアライブラリをベースに、Vue 3とVue Routerとのシームレスな統合を実現します。
 
-## 機能
+## Features
 
 - **Vue 3完全統合**: Composition APIとOptions API両方をサポート
 - **型安全性**: TypeScriptによる厳密な型定義とコンパイル時検証
@@ -15,13 +18,13 @@ Vue.jsアプリケーションに型安全で強力な国際化(i18n)機能を�
 - **サブスペース**: コンポーネント単位の独立した翻訳スコープ
 - **カスタムストレージ**: Cookie、LocalStorage、カスタムストレージ対応
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/vue-i18n @fastkit/i18n
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### 多言語スペースの定義
 
@@ -602,7 +605,7 @@ export default {
 }
 ```
 
-## API仕様
+## API Specification
 
 ### `createVueI18n(Space, options?)`
 
@@ -671,7 +674,7 @@ interface VueI18nStrategy {
 }
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### マルチテナント対応
 
@@ -770,7 +773,7 @@ export function createFormatPlugin(options: FormatPluginOptions = {}) {
 }
 ```
 
-## 注意事項
+## Considerations
 
 ### パフォーマンス考慮事項
 
@@ -790,11 +793,11 @@ export function createFormatPlugin(options: FormatPluginOptions = {}) {
 - 右から左へ（RTL）の言語に対応
 - スクリーンリーダー向けの言語切り替え通知
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
 - [@fastkit/i18n](../i18n/README.md): コア国際化ライブラリ
 - [@fastkit/accept-language](../accept-language/README.md): Accept-Languageヘッダー解析

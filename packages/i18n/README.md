@@ -1,18 +1,21 @@
+
 # @fastkit/i18n
 
-サーバー/ブラウザーの実行環境に依存せず、アプリケーションを多言語にローカライズするための包括的なライブラリです。
+🌐 English | [日本語](./README-ja.md)
 
-## 特徴
+A comprehensive library for internationalizing applications to multiple languages without depending on server/browser execution environments.
 
-- **ユニバーサル対応**: Node.js、ブラウザ環境で同じAPIを使用可能
-- **型安全性**: TypeScript完全対応で型安全な翻訳システム
-- **階層構造**: Space、Component、Locale の3層アーキテクチャ
-- **Intl API統合**: ネイティブなブラウザ国際化機能をフル活用
-- **フォールバック**: 階層的な翻訳フォールバック機構
-- **非同期ローディング**: 動的な翻訳データ読み込み対応
-- **カスタマイズ**: 柔軟なフォーマッター・ストレージシステム
+## Features
 
-## インストール
+- **Universal Support**: Same API can be used in Node.js and browser environments
+- **Type Safety**: Full TypeScript support with type-safe translation system
+- **Hierarchical Structure**: 3-layer architecture of Space, Component, and Locale
+- **Intl API Integration**: Full utilization of native browser internationalization features
+- **Fallback**: Hierarchical translation fallback mechanism
+- **Asynchronous Loading**: Support for dynamic translation data loading
+- **Customizable**: Flexible formatter and storage system
+
+## Installation
 
 ```bash
 npm install @fastkit/i18n
@@ -20,37 +23,37 @@ npm install @fastkit/i18n
 pnpm add @fastkit/i18n
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### 1. 国際化スペースの定義
+### 1. Defining Internationalization Space
 
 ```typescript
 import { defineI18nSpace } from '@fastkit/i18n';
 
-// スペース定義（プロジェクト全体の言語設定）
+// Space definition (language settings for entire project)
 const Space = defineI18nSpace({
   locales: [
     'ja',
     { name: 'en', formatLocales: ['en-US'] },
     { name: 'zh', formatLocales: ['zh-CN'] }
   ],
-  baseLocale: 'ja',        // 基準言語
-  defaultLocale: 'en',     // デフォルト言語
-  fallbackLocale: 'ja'     // フォールバック言語
+  baseLocale: 'ja',        // Base language
+  defaultLocale: 'en',     // Default language
+  fallbackLocale: 'ja'     // Fallback language
 });
 ```
 
-### 2. コンポーネントスキーマの定義
+### 2. Defining Component Schema
 
 ```typescript
-// 翻訳データの型定義
+// Translation data type definition
 interface Translations {
   greeting: string;
   farewell: string;
   itemCount: string;
 }
 
-// フォーマット定義
+// Format definition
 const dateTimeFormats = {
   short: { year: 'numeric', month: 'short', day: 'numeric' },
   long: { 
@@ -66,7 +69,7 @@ const numberFormats = {
   percent: { style: 'percent' }
 } as const;
 
-// スキーマ定義
+// Schema definition
 const scheme = Space.defineScheme({
   translations: (t: Translations) => true,
   dateTimeFormats,
@@ -74,10 +77,10 @@ const scheme = Space.defineScheme({
 });
 ```
 
-### 3. ロケール別データの定義
+### 3. Defining Locale-Specific Data
 
 ```typescript
-// 日本語
+// Japanese
 const ja = scheme.defineLocale.strict({
   translations: {
     greeting: 'こんにちは',
@@ -92,7 +95,7 @@ const ja = scheme.defineLocale.strict({
   }
 });
 
-// 英語
+// English
 const en = scheme.defineLocale.strict({
   translations: {
     greeting: 'Hello',
@@ -105,36 +108,36 @@ const en = scheme.defineLocale.strict({
 });
 ```
 
-### 4. コンポーネントの作成と使用
+### 4. Creating and Using Components
 
 ```typescript
-// コンポーネント定義
+// Component definition
 const Component = scheme.defineComponent({
   locales: { ja, en }
 });
 
-// インスタンス作成
+// Instance creation
 const i18n = Component.createInstance();
 
-// 言語切り替え
+// Language switching
 await i18n.setLocale('ja');
 
-// 翻訳取得
+// Get translation
 const greeting = i18n.t.greeting; // → 'こんにちは'
 
-// パラメーター付き翻訳
+// Translation with parameters
 const count = i18n.t.itemCount.replace('{count}', '5'); // → '5個のアイテム'
 
-// 日時フォーマット
+// Date/time formatting
 const date = i18n.d(new Date(), 'short'); // → '2024年1月15日'
 
-// 数値フォーマット
+// Number formatting
 const price = i18n.n(1500, 'currency'); // → '¥1,500'
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
-### 非同期ローディング
+### Asynchronous Loading
 
 ```typescript
 const Component = scheme.defineComponent({
@@ -147,20 +150,20 @@ const Component = scheme.defineComponent({
 
 const i18n = Component.createInstance();
 
-// 言語切り替え時に自動ローディング
+// Automatic loading on language switching
 await i18n.setLocale('zh');
-console.log(i18n.t.greeting); // 中国語の翻訳が表示
+console.log(i18n.t.greeting); // Displays Chinese translation
 ```
 
-### 依存関係のあるコンポーネント
+### Components with Dependencies
 
 ```typescript
-// 共通コンポーネント
+// Common component
 const CommonComponent = scheme.defineComponent({
   locales: { ja: commonJa, en: commonEn }
 });
 
-// 依存関係を持つスキーマ
+// Schema with dependencies
 const pageScheme = Space.defineScheme({
   translations: (t: PageTranslations) => true,
   dependencies: {
@@ -174,17 +177,17 @@ const PageComponent = pageScheme.defineComponent({
 
 const pageI18n = PageComponent.createInstance();
 
-// 依存コンポーネントにアクセス
+// Access dependent components
 const commonGreeting = pageI18n.common.t.greeting;
 const pageTitle = pageI18n.t.title;
 ```
 
-### カスタムストレージ
+### Custom Storage
 
 ```typescript
 import { createI18nObjectStorage } from '@fastkit/i18n';
 
-// Redis ストレージの例
+// Redis storage example
 const redisStorage = createI18nObjectStorage({
   get: async (key) => {
     return await redis.get(key);
@@ -204,103 +207,103 @@ const Component = scheme.defineComponent({
 
 ### defineI18nSpace
 
-国際化スペースを定義します。
+Defines an internationalization space.
 
 ```typescript
 const Space = defineI18nSpace({
-  locales: LocaleSource[],           // ロケール設定
-  baseLocale: string,                // 基準言語
-  defaultLocale?: string,            // デフォルト言語
-  fallbackLocale?: FallbackConfig    // フォールバック設定
+  locales: LocaleSource[],           // Locale settings
+  baseLocale: string,                // Base language
+  defaultLocale?: string,            // Default language
+  fallbackLocale?: FallbackConfig    // Fallback settings
 });
 ```
 
 ### Space.defineScheme
 
-コンポーネントスキーマを定義します。
+Defines a component schema.
 
 ```typescript
 const scheme = Space.defineScheme({
-  translations: (t: T) => boolean,            // 翻訳型定義
-  dateTimeFormats?: DateTimeFormats,          // 日時フォーマット
-  relativeTimeFormats?: RelativeTimeFormats,  // 相対時間フォーマット  
-  numberFormats?: NumberFormats,              // 数値フォーマット
-  listFormats?: ListFormats,                  // リストフォーマット
-  dependencies?: Dependencies                 // 依存コンポーネント
+  translations: (t: T) => boolean,            // Translation type definition
+  dateTimeFormats?: DateTimeFormats,          // Date/time formats
+  relativeTimeFormats?: RelativeTimeFormats,  // Relative time formats  
+  numberFormats?: NumberFormats,              // Number formats
+  listFormats?: ListFormats,                  // List formats
+  dependencies?: Dependencies                 // Dependent components
 });
 ```
 
 ### scheme.defineLocale
 
-ロケール固有データを定義します。
+Defines locale-specific data.
 
 ```typescript
 const locale = scheme.defineLocale({
-  translations: TranslationsData,     // 翻訳データ
-  dateTimeFormats?: DateTimeFormats,  // 日時フォーマット
-  numberFormats?: NumberFormats,      // 数値フォーマット
-  // ...その他のフォーマット
+  translations: TranslationsData,     // Translation data
+  dateTimeFormats?: DateTimeFormats,  // Date/time formats
+  numberFormats?: NumberFormats,      // Number formats
+  // ...other formats
 });
 ```
 
 ### scheme.defineComponent
 
-コンポーネントを定義します。
+Defines a component.
 
 ```typescript
 const Component = scheme.defineComponent({
-  locales: LocaleMap,          // ロケールマップ
-  storage?: Storage,           // ストレージ設定
-  strict?: boolean            // 厳密モード
+  locales: LocaleMap,          // Locale map
+  storage?: Storage,           // Storage settings
+  strict?: boolean            // Strict mode
 });
 ```
 
-### インスタンスAPI
+### Instance API
 
-#### 言語操作
+#### Language Operations
 
 ```typescript
-// 現在の言語取得
+// Get current language
 const currentLocale = i18n.locale;
 
-// 言語切り替え
+// Switch language
 await i18n.setLocale('en');
 
-// 利用可能言語一覧
+// List of available languages
 const available = i18n.availableLocales;
 ```
 
-#### 翻訳
+#### Translation
 
 ```typescript
-// 翻訳取得
+// Get translation
 const text = i18n.t.keyName;
 
-// 翻訳関数（パラメーター対応）
+// Translation function (with parameter support)
 const formatted = i18n.translate('keyName', { param: 'value' });
 ```
 
-#### フォーマッター
+#### Formatters
 
 ```typescript
-// 日時フォーマット
-i18n.d(new Date())                    // デフォルト
-i18n.d(new Date(), 'short')           // 名前付きフォーマット
-i18n.d(new Date(), { year: '2-digit' }) // カスタムオプション
+// Date/time formatting
+i18n.d(new Date())                    // Default
+i18n.d(new Date(), 'short')           // Named format
+i18n.d(new Date(), { year: '2-digit' }) // Custom options
 
-// 数値フォーマット
-i18n.n(1234.56)                       // デフォルト
-i18n.n(1234.56, 'currency')          // 通貨フォーマット
-i18n.n(0.95, 'percent')              // パーセント
+// Number formatting
+i18n.n(1234.56)                       // Default
+i18n.n(1234.56, 'currency')          // Currency format
+i18n.n(0.95, 'percent')              // Percent
 
-// 相対時間
-i18n.rt(-2, 'day')                    // '2日前'
+// Relative time
+i18n.rt(-2, 'day')                    // '2 days ago'
 
-// リスト
-i18n.l(['apple', 'banana', 'orange']) // 'apple、banana、orange'
+// List
+i18n.l(['apple', 'banana', 'orange']) // 'apple, banana, orange'
 ```
 
-## フォールバック機構
+## Fallback Mechanism
 
 ```typescript
 const Space = defineI18nSpace({
@@ -313,15 +316,15 @@ const Space = defineI18nSpace({
 });
 ```
 
-翻訳が見つからない場合の検索順序：
-1. 現在のロケール
-2. 指定されたフォールバックロケール
-3. ベースロケール
+Search order when translation is not found:
+1. Current locale
+2. Specified fallback locale
+3. Base locale
 
-## TypeScript統合
+## TypeScript Integration
 
 ```typescript
-// 翻訳型の自動推論
+// Automatic inference of translation types
 interface AppTranslations {
   nav: {
     home: string;
@@ -338,20 +341,20 @@ const scheme = Space.defineScheme({
   translations: (t: AppTranslations) => true
 });
 
-// 型安全な翻訳アクセス
-const welcome = i18n.t.messages.welcome; // ✅ 型チェック
-const invalid = i18n.t.invalid;          // ❌ コンパイルエラー
+// Type-safe translation access
+const welcome = i18n.t.messages.welcome; // ✅ Type checked
+const invalid = i18n.t.invalid;          // ❌ Compile error
 ```
 
-## 依存関係
+## Dependencies
 
-- `@fastkit/helpers`: ヘルパーユーティリティ
-- `@fastkit/tiny-logger`: ログ機能
+- `@fastkit/helpers`: Helper utilities
+- `@fastkit/tiny-logger`: Logging functionality
 
-## ドキュメント
+## Documentation
 
-詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/i18n/)をご覧ください。
+For detailed documentation, please visit [here](https://dadajam4.github.io/fastkit/i18n/).
 
-## ライセンス
+## License
 
 MIT

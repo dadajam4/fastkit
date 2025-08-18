@@ -1,8 +1,11 @@
+
 # @fastkit/vue-tiny-meta
+
+🌐 English | [日本語](./README-ja.md)
 
 Vueコンポーネントの型情報とメタデータを自動抽出・解析するライブラリ。TypeScriptのコンパイラAPIを使用してVueコンポーネントのProps、Events、Slotsなどの詳細な型情報を抽出し、ドキュメント生成やStorybookの自動設定に活用できます。
 
-## 機能
+## Features
 
 - **自動型抽出**: TypeScriptコンパイラAPIによるVueコンポーネントの型情報抽出
 - **包括的なメタデータ**: Props、Events、Slots、JSDocコメントの完全サポート
@@ -13,13 +16,13 @@ Vueコンポーネントの型情報とメタデータを自動抽出・解析�
 - **高いパフォーマンス**: 効率的な解析とキャッシュ機能
 - **開発者体験**: 詳細なJSDocコメントの自動抽出
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/vue-tiny-meta
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### Vueコンポーネントの型アノテーション
 
@@ -592,7 +595,7 @@ export const WithSlots: Story = {
 }
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### カスタムリゾルバーの実装
 
@@ -776,7 +779,7 @@ function generateTypeDefinitions(documentation: ComponentDocumentation) {
 generateComponentDocs()
 ```
 
-## API仕様
+## API Specification
 
 ### `extractAll(filePath, options?)`
 
@@ -843,7 +846,7 @@ function ViteVueTinyMeta(
 - `exclude`: 除外ファイルパターン
 - `injectProperty`: 注入プロパティ名（デフォルト: `__docgenInfo`）
 
-## 注意事項
+## Considerations
 
 ### TypeScript設定
 
@@ -863,11 +866,11 @@ function ViteVueTinyMeta(
 - 動的に生成されるProps/Eventsは解析対象外
 - ファイル間の依存関係が複雑な場合は解析に時間がかかる場合あり
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
 - [@fastkit/ts-tiny-meta](../ts-tiny-meta/README.md): TypeScriptメタデータ抽出コア機能
 - [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数

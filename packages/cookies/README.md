@@ -1,52 +1,55 @@
+
 # @fastkit/cookies
 
-サーバーとブラウザの両方でユニバーサルにCookieヘッダーを制御するためのヘルパーライブラリ。TypeScriptファーストで設計され、Node.jsサーバー環境とブラウザ環境の両方で一貫したAPIを提供します。
+🌐 English | [日本語](./README-ja.md)
 
-## 機能
+A helper library for universally controlling Cookie headers on both server and browser. Designed TypeScript-first and provides a consistent API for both Node.js server environments and browser environments.
 
-- **ユニバーサルAPI**: サーバー（Node.js）とブラウザで統一されたCookie操作インターフェース
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **イベントドリブン**: Cookie変更時のリアルタイム通知機能
-- **自動コンテキスト検出**: 実行環境に応じた自動的なコンテキスト設定
-- **セキュアCookie対応**: HttpOnly、Secure、SameSite等のセキュリティオプション完全サポート
-- **重複防止**: サーバー環境での重複したSet-Cookieヘッダーの自動排除
-- **エラーハンドリング**: 適切なエラー処理と警告メッセージ
-- **軽量設計**: 最小限の依存関係で高いパフォーマンス
+## Features
 
-## インストール
+- **Universal API**: Unified Cookie operation interface for server (Node.js) and browser
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Event-Driven**: Real-time notification functionality for Cookie changes
+- **Automatic Context Detection**: Automatic context setting based on execution environment
+- **Secure Cookie Support**: Complete support for security options like HttpOnly, Secure, SameSite
+- **Duplicate Prevention**: Automatic elimination of duplicate Set-Cookie headers in server environments
+- **Error Handling**: Proper error handling and warning messages
+- **Lightweight Design**: High performance with minimal dependencies
+
+## Installation
 
 ```bash
 npm install @fastkit/cookies
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
-### ブラウザでの基本操作
+### Basic Browser Operations
 
 ```typescript
 import { Cookies } from '@fastkit/cookies'
 
-// ブラウザ環境では自動的にdocumentコンテキストを使用
+// Browser environment automatically uses document context
 const cookies = new Cookies()
 
-// Cookieの設定
+// Set cookies
 cookies.set('username', 'john_doe')
 cookies.set('theme', 'dark', {
-  expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30日後
+  expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days later
   path: '/',
   secure: true,
   sameSite: 'strict'
 })
 
-// Cookieの取得
+// Get cookies
 const username = cookies.get('username') // 'john_doe'
 const theme = cookies.get('theme') // 'dark'
 
-// Cookieの削除
+// Delete cookies
 cookies.delete('username')
 
-// 全Cookieの確認
-console.log(cookies.bucket) // 現在の全Cookie
+// Check all cookies
+console.log(cookies.bucket) // All current cookies
 ```
 
 ### サーバー（Node.js）での使用
@@ -134,7 +137,7 @@ function generateToken(username: string): string {
 }
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### Cookie変更のリアルタイム監視
 
@@ -509,7 +512,7 @@ cookies.set('none_cookie', 'value', {
 })
 ```
 
-## API仕様
+## API Specification
 
 ### `Cookies`クラス
 
@@ -589,7 +592,7 @@ function createCookie(name: string, value: string, options?: CookieSerializeOpti
 function areCookiesEqual(a: Cookie, b: Cookie): boolean
 ```
 
-## 注意事項
+## Considerations
 
 ### ブラウザ制限
 - ブラウザではhttpOnlyオプションは使用不可
@@ -611,11 +614,11 @@ function areCookiesEqual(a: Cookie, b: Cookie): boolean
 - 頻繁な更新によるパフォーマンス影響を考慮
 - 大きなデータはCookieではなくセッションストレージを使用
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
 - [@fastkit/ev](../ev/README.md): イベントエミッター基盤
 - [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数

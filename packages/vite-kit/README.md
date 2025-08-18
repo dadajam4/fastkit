@@ -1,8 +1,11 @@
+
 # @fastkit/vite-kit
+
+🌐 English | [日本語](./README-ja.md)
 
 Viteアプリケーションセットアップ用の包括的なツールキット集。カラースキーム生成、アイコンフォント作成、スプライト画像生成、メディアクエリ管理などの開発効率化プラグインを提供します。
 
-## 機能
+## Features
 
 - **カラースキーム生成**: CSS変数とTypeScript型定義の自動生成
 - **アイコンフォント作成**: SVGファイルからWebフォントの自動生成
@@ -12,7 +15,7 @@ Viteアプリケーションセットアップ用の包括的なツールキッ�
 - **ハッシュ同期**: ファイルハッシュ管理とキャッシュ制御
 - **追加スタイル**: Sassの追加データ管理
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/vite-kit
@@ -613,7 +616,7 @@ colorSchemeVitePlugin({
 })
 ```
 
-## 関連パッケージ
+## Related Packages
 
 - `@fastkit/color-scheme-gen` - カラースキーム生成器
 - `@fastkit/icon-font-gen` - アイコンフォント生成器
@@ -624,6 +627,6 @@ colorSchemeVitePlugin({
 - `@fastkit/tiny-logger` - ロガー
 - `vite` - ビルドツール（ピア依存関係）
 
-## ライセンス
+## License
 
 MIT

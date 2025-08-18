@@ -1,8 +1,11 @@
+
 # @fastkit/vue-page
+
+🌐 English | [日本語](./README-ja.md)
 
 Vueアプリケーションのルーティングをより便利にコントロールするためのミドルウェア。データのプリフェッチ、エラーハンドリング、ページ状態管理、プログレス表示などの高度なルーティング機能を提供します。
 
-## 機能
+## Features
 
 - **データプリフェッチ**: ページ遷移前の自動データ取得
 - **エラーハンドリング**: 統一されたエラーページ表示システム
@@ -13,13 +16,13 @@ Vueアプリケーションのルーティングをより便利にコントロ�
 - **ミドルウェア**: ページアクセス前の処理実行
 - **TypeScript完全サポート**: 厳密な型定義による型安全性
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/vue-page
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### アプリケーションの設定
 
@@ -518,7 +521,7 @@ const pageControl = new VuePageControl({
 app.mount('#app')
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### 動的ルーティング
 
@@ -676,7 +679,7 @@ function definePageOptions(options: PageOptions): void
 - `VPage`: ページラッパー
 - `VPageLink`: ページリンク
 
-## 関連パッケージ
+## Related Packages
 
 - `@fastkit/vue-utils` - Vue ユーティリティ関数
 - `@fastkit/cookies` - Cookie 管理
@@ -686,6 +689,6 @@ function definePageOptions(options: PageOptions): void
 - `vue` - Vue.js フレームワーク（ピア依存関係）
 - `vue-router` - Vue Router（ピア依存関係）
 
-## ライセンス
+## License
 
 MIT

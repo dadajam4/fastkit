@@ -1,44 +1,47 @@
+
 # @fastkit/vue-scroller
 
-Vue.jsアプリケーションでスクロール機能を精密に制御するための包括的なライブラリ。リアクティブなスクロール状態監視、アニメーション付きスクロール、ガイド表示機能、元素へのスクロールなど、高度なスクロール体験を簡単に実装できます。
+🌐 English | [日本語](./README-ja.md)
 
-## 機能
+A comprehensive library for precisely controlling scroll functionality in Vue.js applications. Easily implement advanced scroll experiences including reactive scroll state monitoring, animated scrolling, guide display features, and element scrolling.
 
-- **Vue 3 Composition API**: Vue.jsとの完全統合
-- **リアクティブスクロール状態**: scrollTop、scrollLeft、scrollableなど全て自動更新
-- **アニメーション付きスクロール**: スムーズなスクロールアニメーション
-- **要素への自動スクロール**: 指定要素への精密なスクロール機能
-- **スクロールガイド**: スクロール可能方向の視覚的インジケーター
-- **スクロール停止機能**: 一時的なスクロール無効化
-- **ドキュメントスクロール対応**: ページ全体のスクロール制御
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
+## Features
 
-## インストール
+- **Vue 3 Composition API**: Complete integration with Vue.js
+- **Reactive Scroll State**: Automatic updates for scrollTop, scrollLeft, scrollable, and more
+- **Animated Scrolling**: Smooth scroll animations
+- **Automatic Element Scrolling**: Precise scrolling to specified elements
+- **Scroll Guides**: Visual indicators for scrollable directions
+- **Scroll Stop Function**: Temporary scroll disabling
+- **Document Scroll Support**: Full-page scroll control
+- **Full TypeScript Support**: Type safety with strict type definitions
+- **SSR Compatible**: Safe operation in server-side rendering environments
+
+## Installation
 
 ```bash
 npm install @fastkit/vue-scroller
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### Composition API
 
 ```vue
 <template>
   <div>
-    <button @click="scrollToTop">トップへ</button>
-    <button @click="scrollToBottom">ボトムへ</button>
+    <button @click="scrollToTop">To Top</button>
+    <button @click="scrollToBottom">To Bottom</button>
     <div 
       ref="scrollerRef" 
       style="height: 300px; overflow: auto;"
     >
       <div style="height: 1000px; background: linear-gradient(to bottom, red, blue);">
-        スクロールコンテンツ
+        Scroll Content
       </div>
     </div>
-    <p>スクロール位置: {{ scroller.scrollTop }}px</p>
-    <p>スクロール可能: Y軸 {{ scroller.scrollableY ? 'Yes' : 'No' }}</p>
+    <p>Scroll Position: {{ scroller.scrollTop }}px</p>
+    <p>Scrollable: Y-axis {{ scroller.scrollableY ? 'Yes' : 'No' }}</p>
   </div>
 </template>
 
@@ -47,7 +50,7 @@ import { useScrollerControl } from '@fastkit/vue-scroller'
 
 const scroller = useScrollerControl({
   el: 'self',
-  duration: 300, // アニメーション時間
+  duration: 300, // Animation duration
   easing: 'ease-out'
 })
 
@@ -63,7 +66,7 @@ const scrollToBottom = () => {
 </script>
 ```
 
-### VScrollerコンポーネント
+### VScroller Component
 
 ```vue
 <template>
@@ -75,18 +78,18 @@ const scrollToBottom = () => {
     style="height: 400px;"
   >
     <div class="content">
-      <h2>セクション1</h2>
+      <h2>Section 1</h2>
       <p>Lorem ipsum dolor sit amet...</p>
       
-      <h2 ref="section2">セクション2</h2>
+      <h2 ref="section2">Section 2</h2>
       <p>Consectetur adipiscing elit...</p>
       
-      <h2>セクション3</h2>
+      <h2>Section 3</h2>
       <p>Sed do eiusmod tempor incididunt...</p>
     </div>
   </VScroller>
   
-  <button @click="scrollToSection2">セクション2へ移動</button>
+  <button @click="scrollToSection2">Go to Section 2</button>
 </template>
 
 <script setup lang="ts">
@@ -100,7 +103,7 @@ const scrollToSection2 = () => {
   if (scrollerComponent.value && section2.value) {
     scrollerComponent.value.scroller.toElement(section2.value, {
       duration: 600,
-      offsetTop: -20 // 上部に20pxのマージン
+      offsetTop: -20 // 20px margin at the top
     })
   }
 }
@@ -109,7 +112,7 @@ const scrollToSection2 = () => {
 <style>
 .content {
   padding: 20px;
-  height: 1200px; /* スクロール可能な高さを確保 */
+  height: 1200px; /* Ensure scrollable height */
 }
 
 .v-scroller {
@@ -119,9 +122,9 @@ const scrollToSection2 = () => {
 </style>
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
-### ドキュメントスクロール制御
+### Document Scroll Control
 
 ```vue
 <template>
@@ -145,9 +148,9 @@ const scrollToSection2 = () => {
     </section>
     
     <div class="scroll-info">
-      <p>スクロール位置: {{ documentScroller.scrollTop }}px</p>
-      <p>スクロール中: {{ documentScroller.nowScrolling ? 'Yes' : 'No' }}</p>
-      <p>スクロール方向: {{ documentScroller.lastDirection }}</p>
+      <p>Scroll Position: {{ documentScroller.scrollTop }}px</p>
+      <p>Scrolling: {{ documentScroller.nowScrolling ? 'Yes' : 'No' }}</p>
+      <p>Scroll Direction: {{ documentScroller.lastDirection }}</p>
     </div>
   </div>
 </template>
@@ -163,7 +166,7 @@ const scrollToSection = (sectionId: string) => {
     documentScroller.toElement(element, {
       duration: 800,
       easing: 'ease-in-out',
-      offsetTop: -60 // ナビゲーションバーの高さ分のオフセット
+      offsetTop: -60 // Offset for navigation bar height
     })
   }
 }
@@ -200,17 +203,17 @@ const scrollToSection = (sectionId: string) => {
 </style>
 ```
 
-### スクロール停止とフィルタリング
+### Scroll Stopping and Filtering
 
 ```vue
 <template>
   <div>
     <div class="controls">
       <button @click="toggleScrollLock">
-        スクロール {{ isScrollLocked ? 'ロック解除' : 'ロック' }}
+        Scroll {{ isScrollLocked ? 'Unlock' : 'Lock' }}
       </button>
-      <button @click="addVerticalOnlyFilter">縦スクロールのみ</button>
-      <button @click="clearFilters">フィルタークリア</button>
+      <button @click="addVerticalOnlyFilter">Vertical Only</button>
+      <button @click="clearFilters">Clear Filters</button>
     </div>
     
     <VScroller 
@@ -219,7 +222,7 @@ const scrollToSection = (sectionId: string) => {
       style="height: 300px; width: 500px; border: 1px solid #ccc;"
     >
       <div style="width: 800px; height: 600px; background: linear-gradient(45deg, red, blue);">
-        <p>両方向にスクロール可能なコンテンツ</p>
+        <p>Content scrollable in both directions</p>
       </div>
     </VScroller>
   </div>
@@ -237,15 +240,15 @@ const toggleScrollLock = () => {
   if (!scroller.value) return
   
   if (isScrollLocked.value) {
-    // ロック解除
+    // Unlock
     currentStoppers.forEach(stopper => {
       scroller.value!.scroller.removeScrollStopper(stopper)
     })
     currentStoppers.length = 0
     isScrollLocked.value = false
   } else {
-    // ロック
-    const stopper: ScrollStopper = () => true // 全てのスクロールを停止
+    // Lock
+    const stopper: ScrollStopper = () => true // Stop all scrolling
     scroller.value.scroller.pushScrollStopper(stopper)
     currentStoppers.push(stopper)
     isScrollLocked.value = true
@@ -256,7 +259,7 @@ const addVerticalOnlyFilter = () => {
   if (!scroller.value) return
   
   const stopper: ScrollStopper = (axis) => {
-    return axis === 'x' // X軸のスクロールのみ停止（横スクロール無効）
+    return axis === 'x' // Stop only X-axis scrolling (disable horizontal scroll)
   }
   
   scroller.value.scroller.pushScrollStopper(stopper)
@@ -295,7 +298,7 @@ const clearFilters = () => {
 </style>
 ```
 
-### 無限スクロールの実装
+### Implementing Infinite Scroll
 
 ```vue
 <template>
@@ -314,7 +317,7 @@ const clearFilters = () => {
       </div>
       
       <div v-if="loading" class="loading">
-        読み込み中...
+        Loading...
       </div>
     </div>
   </VScroller>
@@ -334,12 +337,12 @@ const items = ref<ListItem[]>([])
 const loading = ref(false)
 const currentPage = ref(1)
 
-// 初期データ読み込み
+// Load initial data
 onMounted(() => {
   loadMoreItems()
 })
 
-// スクロール位置を監視
+// Monitor scroll position
 watch(() => scrollerRef.value?.scroller.scrollBottom, (scrollBottom) => {
   if (scrollBottom !== undefined && scrollBottom < 50 && !loading.value) {
     loadMoreItems()
@@ -351,12 +354,12 @@ const loadMoreItems = async () => {
   
   loading.value = true
   
-  // APIリクエストのシミュレーション
+  // Simulate API request
   await new Promise(resolve => setTimeout(resolve, 1000))
   
   const newItems: ListItem[] = Array.from({ length: 20 }, (_, index) => ({
     id: (currentPage.value - 1) * 20 + index + 1,
-    title: `アイテム ${(currentPage.value - 1) * 20 + index + 1}`
+    title: `Item ${(currentPage.value - 1) * 20 + index + 1}`
   }))
   
   items.value.push(...newItems)
@@ -390,15 +393,15 @@ const loadMoreItems = async () => {
 </style>
 ```
 
-### スクロール位置の保存・復元
+### Saving and Restoring Scroll Position
 
 ```vue
 <template>
   <div>
     <div class="controls">
-      <button @click="savePosition">位置を保存</button>
-      <button @click="restorePosition">位置を復元</button>
-      <button @click="clearSavedPosition">保存データクリア</button>
+      <button @click="savePosition">Save Position</button>
+      <button @click="restorePosition">Restore Position</button>
+      <button @click="clearSavedPosition">Clear Saved Data</button>
     </div>
     
     <VScroller 
@@ -407,13 +410,13 @@ const loadMoreItems = async () => {
     >
       <div class="content">
         <div v-for="n in 100" :key="n" class="item">
-          アイテム {{ n }}
+          Item {{ n }}
         </div>
       </div>
     </VScroller>
     
     <div v-if="savedPosition" class="saved-info">
-      保存済み位置: Top={{ savedPosition.scrollTop }}px, Left={{ savedPosition.scrollLeft }}px
+      Saved Position: Top={{ savedPosition.scrollTop }}px, Left={{ savedPosition.scrollLeft }}px
     </div>
   </div>
 </template>
@@ -434,7 +437,7 @@ const savePosition = () => {
     scrollLeft: scroller.scrollLeft
   }
   
-  // ローカルストレージに保存
+  // Save to localStorage
   localStorage.setItem('scrollPosition', JSON.stringify(savedPosition.value))
 }
 
@@ -452,7 +455,7 @@ const clearSavedPosition = () => {
   localStorage.removeItem('scrollPosition')
 }
 
-// ページ読み込み時に保存された位置を復元
+// Restore saved position on page load
 onMounted(() => {
   const saved = localStorage.getItem('scrollPosition')
   if (saved) {
@@ -492,7 +495,7 @@ onMounted(() => {
 </style>
 ```
 
-### パララックススクロール効果
+### Parallax Scroll Effects
 
 ```vue
 <template>
@@ -501,7 +504,7 @@ onMounted(() => {
     style="height: 100vh; position: relative; overflow: hidden;"
   >
     <div class="parallax-container">
-      <!-- 背景レイヤー（遅く動く） -->
+      <!-- Background layer (moves slowly) -->
       <div 
         class="parallax-layer background"
         :style="{ transform: `translateY(${backgroundOffset}px)` }"
@@ -509,7 +512,7 @@ onMounted(() => {
         <div class="bg-pattern"></div>
       </div>
       
-      <!-- 中間レイヤー（中程度の速度） -->
+      <!-- Middle layer (medium speed) -->
       <div 
         class="parallax-layer midground"
         :style="{ transform: `translateY(${midgroundOffset}px)` }"
@@ -517,13 +520,13 @@ onMounted(() => {
         <div class="floating-shapes"></div>
       </div>
       
-      <!-- フォアグラウンド（通常速度） -->
+      <!-- Foreground (normal speed) -->
       <div class="parallax-layer foreground">
         <div class="content">
-          <h1>パララックス効果</h1>
+          <h1>Parallax Effect</h1>
           <div v-for="n in 20" :key="n" class="content-block">
-            <h2>セクション {{ n }}</h2>
-            <p>スクロールすると背景と中間レイヤーが異なる速度で動きます。</p>
+            <h2>Section {{ n }}</h2>
+            <p>When scrolling, the background and middle layers move at different speeds.</p>
           </div>
         </div>
       </div>
@@ -537,22 +540,22 @@ import { VScroller } from '@fastkit/vue-scroller'
 
 const scrollerRef = ref<InstanceType<typeof VScroller>>()
 
-// パララックス効果の計算
+// Calculate parallax effects
 const backgroundOffset = computed(() => {
   if (!scrollerRef.value) return 0
-  return scrollerRef.value.scroller.scrollTop * 0.5 // 50%の速度
+  return scrollerRef.value.scroller.scrollTop * 0.5 // 50% speed
 })
 
 const midgroundOffset = computed(() => {
   if (!scrollerRef.value) return 0
-  return scrollerRef.value.scroller.scrollTop * 0.7 // 70%の速度
+  return scrollerRef.value.scroller.scrollTop * 0.7 // 70% speed
 })
 </script>
 
 <style>
 .parallax-container {
   position: relative;
-  height: 200vh; /* スクロール可能な高さ */
+  height: 200vh; /* Scrollable height */
 }
 
 .parallax-layer {
@@ -606,7 +609,7 @@ const midgroundOffset = computed(() => {
 </style>
 ```
 
-## API リファレンス
+## API Reference
 
 ### useScrollerControl
 
@@ -615,9 +618,9 @@ function useScrollerControl(setting: UseScrollerSetting): UseScroller
 
 interface UseScrollerSetting extends Omit<Partial<ScrollerSetting>, 'el'> {
   el?: 'self' | 'body'
-  duration?: number        // アニメーション時間（ミリ秒）
-  easing?: string         // イージング関数
-  throttle?: number       // スクロールイベントのスロットル間隔
+  duration?: number        // Animation duration (milliseconds)
+  easing?: string         // Easing function
+  throttle?: number       // Scroll event throttle interval
 }
 
 interface UseScroller {
@@ -679,13 +682,13 @@ interface UseScroller {
 }
 ```
 
-### VScrollerコンポーネント
+### VScroller Component
 
 ```typescript
 interface VScrollerProps {
   settings?: VScrollerSettings | null
-  guide?: boolean | number    // スクロールガイドの表示とオフセット
-  containerClass?: string     // コンテナ要素のクラス名
+  guide?: boolean | number    // Display and offset for scroll guides
+  containerClass?: string     // Class name for container element
 }
 
 interface VScrollerSettings extends UseScrollerSetting {}
@@ -696,28 +699,28 @@ interface ScrollerAPI {
 }
 
 interface ScrollerCombinedScrollability {
-  left: boolean      // 左方向にスクロール可能
-  right: boolean     // 右方向にスクロール可能
-  top: boolean       // 上方向にスクロール可能
-  bottom: boolean    // 下方向にスクロール可能
-  strict: ScrollerScrollability  // 厳密なスクロール可能性
+  left: boolean      // Scrollable to the left
+  right: boolean     // Scrollable to the right
+  top: boolean       // Scrollable upward
+  bottom: boolean    // Scrollable downward
+  strict: ScrollerScrollability  // Strict scrollability
 }
 ```
 
-### スクロールオプション
+### Scroll Options
 
 ```typescript
 interface ScrollerScrollOptions {
-  duration?: number           // アニメーション時間（ミリ秒）
-  easing?: string            // イージング関数
-  cancelable?: boolean       // キャンセル可能かどうか
+  duration?: number           // Animation duration (milliseconds)
+  easing?: string            // Easing function
+  cancelable?: boolean       // Whether cancellable
 }
 
 interface ScrollerScrollToElementOptions extends ScrollerScrollOptions {
-  offsetTop?: number         // 上方向のオフセット
-  offsetLeft?: number        // 左方向のオフセット
-  offsetRight?: number       // 右方向のオフセット
-  offsetBottom?: number      // 下方向のオフセット
+  offsetTop?: number         // Top offset
+  offsetLeft?: number        // Left offset
+  offsetRight?: number       // Right offset
+  offsetBottom?: number      // Bottom offset
 }
 
 interface ScrollPosition {
@@ -734,14 +737,14 @@ type ScrollStopper = (axis?: ScrollAxis, direction?: ScrollDirection) => boolean
 function getDocumentScroller(): UseScroller
 ```
 
-ページ全体のスクロールを制御するためのシングルトンインスタンスを取得します。
+Get a singleton instance for controlling page-wide scrolling.
 
-## スタイルのカスタマイズ
+## Style Customization
 
-### CSSクラス
+### CSS Classes
 
 ```css
-/* VScrollerコンポーネントのスタイル */
+/* VScroller component styles */
 .v-scroller {
   position: relative;
   overflow: hidden;
@@ -796,10 +799,10 @@ function getDocumentScroller(): UseScroller
 }
 ```
 
-### カスタムガイドスタイル
+### Custom Guide Styles
 
 ```css
-/* カスタムガイドスタイルの例 */
+/* Custom guide style examples */
 .v-scroller__guide--top {
   background: linear-gradient(to bottom, #4ECDC4, transparent);
   height: 6px;
@@ -817,12 +820,12 @@ function getDocumentScroller(): UseScroller
 }
 ```
 
-## 関連パッケージ
+## Related Packages
 
-- `@fastkit/scroller` - コアスクロール制御ライブラリ
-- `@fastkit/vue-utils` - Vue.js開発ユーティリティ
-- `@fastkit/tiny-logger` - ロギングシステム
+- `@fastkit/scroller` - Core scroll control library
+- `@fastkit/vue-utils` - Vue.js development utilities
+- `@fastkit/tiny-logger` - Logging system
 
-## ライセンス
+## License
 
 MIT

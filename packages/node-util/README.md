@@ -1,8 +1,11 @@
+
 # @fastkit/node-util
+
+🌐 English | [日本語](./README-ja.md)
 
 Node.jsのサーバやツール実装のためのユーティリティライブラリ。パッケージ管理、esbuildを使用した動的モジュール読み込み、ファイルシステム操作、ハッシュ比較などの機能を提供し、Node.js環境での開発を効率化します。
 
-## 機能
+## Features
 
 - **パッケージ管理**: package.jsonの検索・解析とパッケージマネージャー自動検出
 - **動的モジュール読み込み**: esbuildを使用したTypeScript/JavaScriptの実行時コンパイル・実行
@@ -12,13 +15,13 @@ Node.jsのサーバやツール実装のためのユーティリティライブ�
 - **型安全性**: TypeScriptによる厳密な型定義
 - **ESM/CommonJS対応**: モジュール形式の自動判定と適切な処理
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/node-util
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### パッケージ情報の取得
 
@@ -77,7 +80,7 @@ async function pathExample() {
 }
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### esbuildを使用した動的モジュール実行
 
@@ -436,7 +439,7 @@ async function scriptRunner(scriptName: string) {
 }
 ```
 
-## API仕様
+## API Specification
 
 ### パッケージ管理
 
@@ -542,7 +545,7 @@ interface ESbuildRunnerOptions<T = any> {
 type PackageManagerName = 'npm' | 'yarn' | 'pnpm'
 ```
 
-## 注意事項
+## Considerations
 
 ### パフォーマンス考慮事項
 - `esbuildRequire`は毎回コンパイルするため開発時のみ使用推奨
@@ -564,11 +567,11 @@ type PackageManagerName = 'npm' | 'yarn' | 'pnpm'
 - 監視モードはメモリリークに注意
 - 適切なクリーンアップ処理を実装
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
 - [@fastkit/ev](../ev/README.md): イベントエミッター機能
 - [@fastkit/tiny-logger](../tiny-logger/README.md): ログ出力機能

@@ -1,8 +1,11 @@
+
 # @fastkit/debounce
+
+🌐 English | [日本語](./README-ja.md)
 
 軽量で高性能なデバウンス（遅延実行）ライブラリ。頻繁に呼び出される関数の実行を効率的に制御し、パフォーマンスの向上とリソースの節約を実現します。TypeScriptで記述され、厳密な型安全性を提供します。
 
-## 機能
+## Features
 
 - **高性能デバウンス**: 効率的なタイマー管理による最適化されたデバウンス処理
 - **即座実行オプション**: 最初の呼び出しを即座に実行するimmediateモード
@@ -13,13 +16,13 @@
 - **ブラウザ・Node.js対応**: あらゆる環境で動作
 - **柔軟なAPI**: 複数のオーバーロードによる使いやすいインターフェース
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/debounce
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### シンプルなデバウンス
 
@@ -84,7 +87,7 @@ immediateDebounced() // デバウンスされる
 immediateDebounced() // デバウンスされる
 ```
 
-## 高度な使用例
+## Advanced Usage Examples
 
 ### リアルタイム検索機能
 
@@ -549,7 +552,7 @@ for (let i = 0; i < 20; i++) {
 }
 ```
 
-## API仕様
+## API Specification
 
 ### `debounce`関数
 
@@ -665,7 +668,7 @@ class PerformantComponent {
 }
 ```
 
-## 注意事項
+## Considerations
 
 ### this コンテキストの保持
 
@@ -716,10 +719,10 @@ const debouncedAsync = debounce(async (data: any) => {
 debouncedAsync(data) // Promise<any>ではなくvoid
 ```
 
-## ライセンス
+## License
 
 MIT
 
-## 関連パッケージ
+## Related Packages
 
 このパッケージは依存関係を持たない独立したライブラリです。

@@ -1,8 +1,10 @@
 # @fastkit/tiny-logger
 
+🌐 English | [日本語](./README-ja.md)
+
 アプリケーションログをほんの少し綺麗に表示するための小さなロガーライブラリ。色付きログ出力、名前空間による分類、カスタムエラークラス生成機能を提供します。
 
-## 機能
+## Features
 
 - **色付きログ出力**: ログレベルに応じた自動色分け（debug, info, warn, error, success）
 - **名前空間管理**: ロガー名による出力の分類と識別
@@ -12,13 +14,13 @@
 - **TypeScript完全サポート**: 厳密な型定義による型安全性
 - **カスタムエラークラス**: 名前空間付きエラークラスの自動生成
 
-## インストール
+## Installation
 
 ```bash
 npm install @fastkit/tiny-logger
 ```
 
-## 基本的な使用方法
+## Basic Usage
 
 ### TinyLogger の作成と使用
 
@@ -386,10 +388,10 @@ type ConsoleColorPaletteName = 'red' | 'green' | 'yellow' | 'magenta' | 'cyan' |
 | シアン | `\u001b[36m` |
 | リセット | `\u001b[0m` |
 
-## 関連パッケージ
+## Related Packages
 
 - `@fastkit/helpers` - ヘルパー関数（内部依存）
 
-## ライセンス
+## License
 
 MIT
