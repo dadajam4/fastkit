@@ -1,20 +1,20 @@
 
 # @fastkit/vue-action
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-action/README-ja.md)
 
-Vue 3用のアクショナブル（クリック可能）要素を扱うための包括的なコンポーネントライブラリです。ボタン、リンク、RouterLinkの統一されたインターフェースを提供し、ガード機能、状態管理、アクセシビリティサポートを含みます。
+A comprehensive component library for handling actionable (clickable) elements in Vue 3. Provides a unified interface for buttons, links, and RouterLinks, including guard functionality, state management, and accessibility support.
 
 ## Features
 
-- **統一されたAPI**: ボタン、aタグ、RouterLinkを同じインターフェースで扱える
-- **VActionコンポーネント**: 宣言的で使いやすいコンポーネントAPI
-- **Vue Router統合**: シームレスなルーティング機能とナビゲーション
-- **ガード機能**: アクション実行前の条件チェック（非同期対応）
-- **状態管理**: disabled、actionable、hasActionなどの状態を自動管理
-- **CSS クラス制御**: 各状態に応じた自動CSSクラス適用
-- **TypeScript完全サポート**: 厳密な型定義によるタイプセーフ
-- **アクセシビリティ**: ARIA属性とキーボードナビゲーション対応
+- **Unified API**: Handle buttons, anchor tags, and RouterLink with the same interface
+- **VAction Component**: Declarative and easy-to-use component API
+- **Vue Router Integration**: Seamless routing functionality and navigation
+- **Guard Functionality**: Pre-action condition checking (with async support)
+- **State Management**: Automatic management of states like disabled, actionable, hasAction
+- **CSS Class Control**: Automatic CSS class application based on each state
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Accessibility**: ARIA attributes and keyboard navigation support
 
 ## Installation
 
@@ -24,58 +24,58 @@ npm install @fastkit/vue-action
 
 ## Basic Usage
 
-### VActionコンポーネント
+### VAction Component
 
-統一されたインターフェースでボタン、リンク、RouterLinkを扱えるコンポーネントです。
+A component that handles buttons, links, and RouterLink with a unified interface.
 
 ```vue
 <template>
   <div>
-    <!-- ボタンとして使用 -->
-    <VAction 
+    <!-- Use as button -->
+    <VAction
       @click="handleSubmit"
       :disabled="isLoading"
       class="btn btn-primary"
     >
-      送信
+      Submit
     </VAction>
 
-    <!-- 外部リンクとして使用 -->
-    <VAction 
+    <!-- Use as external link -->
+    <VAction
       href="https://example.com"
       target="_blank"
       rel="noopener"
       class="btn btn-link"
     >
-      外部サイトへ
+      To External Site
     </VAction>
 
-    <!-- RouterLinkとして使用 -->
-    <VAction 
+    <!-- Use as RouterLink -->
+    <VAction
       :to="{ name: 'profile', params: { id: userId } }"
       class="nav-link"
     >
-      プロフィール
+      Profile
     </VAction>
 
-    <!-- ガード機能付き -->
-    <VAction 
+    <!-- With guard functionality -->
+    <VAction
       :to="'/admin'"
       :guard="checkAdminPermission"
       :guardInProgressClass="'loading'"
       class="admin-link"
     >
-      管理画面
+      Admin Panel
     </VAction>
 
-    <!-- 条件付きタグ -->
+    <!-- Conditional tag -->
     <VAction
       :href="externalUrl"
       :to="internalRoute"
       :tag="customTag"
       class="dynamic-action"
     >
-      動的アクション
+      Dynamic Action
     </VAction>
   </div>
 </template>
@@ -92,26 +92,26 @@ const customTag = ref('div');
 
 const handleSubmit = () => {
   isLoading.value = true;
-  // 送信処理
+  // Submit processing
   setTimeout(() => {
     isLoading.value = false;
-    console.log('送信完了');
+    console.log('Submit completed');
   }, 2000);
 };
 
 const checkAdminPermission = async () => {
-  // 管理者権限チェック（非同期）
+  // Admin permission check (async)
   const hasPermission = await checkUserPermissions();
   if (!hasPermission) {
-    alert('管理者権限が必要です');
-    return false; // ナビゲーションを阻止
+    alert('Admin permission required');
+    return false; // Block navigation
   }
-  return true; // ナビゲーションを許可
+  return true; // Allow navigation
 };
 
 const checkUserPermissions = (): Promise<boolean> => {
   return new Promise(resolve => {
-    // API呼び出しのシミュレーション
+    // API call simulation
     setTimeout(() => resolve(Math.random() > 0.5), 1000);
   });
 };
@@ -172,12 +172,12 @@ const checkUserPermissions = (): Promise<boolean> => {
 </style>
 ```
 
-#### VActionコンポーネントの高度な使用例
+#### Advanced Usage Examples of VAction Component
 
 ```vue
 <template>
   <div class="action-showcase">
-    <!-- 条件付きボタン群 -->
+    <!-- Conditional button group -->
     <div class="button-group">
       <VAction
         v-for="action in actions"
@@ -190,7 +190,7 @@ const checkUserPermissions = (): Promise<boolean> => {
       </VAction>
     </div>
 
-    <!-- ナビゲーションメニュー -->
+    <!-- Navigation menu -->
     <nav class="navigation">
       <VAction
         v-for="route in navRoutes"
@@ -207,7 +207,7 @@ const checkUserPermissions = (): Promise<boolean> => {
       </VAction>
     </nav>
 
-    <!-- ダウンロードリンク -->
+    <!-- Download links -->
     <div class="download-section">
       <VAction
         v-for="file in downloadFiles"
@@ -221,7 +221,7 @@ const checkUserPermissions = (): Promise<boolean> => {
       </VAction>
     </div>
 
-    <!-- ソーシャルシェア -->
+    <!-- Social share -->
     <div class="social-share">
       <VAction
         v-for="social in socialPlatforms"
@@ -241,64 +241,64 @@ const checkUserPermissions = (): Promise<boolean> => {
 import { ref, computed } from 'vue';
 import { VAction } from '@fastkit/vue-action';
 
-// 動的ボタン設定
+// Dynamic button configuration
 const actions = ref([
   {
     id: 'save',
-    label: '保存',
+    label: 'Save',
     props: { type: 'button', disabled: false },
     class: 'btn btn-success',
-    handler: () => console.log('保存中...')
+    handler: () => console.log('Saving...')
   },
   {
     id: 'cancel',
-    label: 'キャンセル',
+    label: 'Cancel',
     props: { type: 'button' },
     class: 'btn btn-secondary',
-    handler: () => console.log('キャンセル')
+    handler: () => console.log('Cancelled')
   },
   {
     id: 'delete',
-    label: '削除',
-    props: { 
+    label: 'Delete',
+    props: {
       type: 'button',
       guard: async () => {
-        return confirm('本当に削除しますか？');
+        return confirm('Are you sure you want to delete?');
       }
     },
     class: 'btn btn-danger',
-    handler: () => console.log('削除実行')
+    handler: () => console.log('Delete executed')
   }
 ]);
 
-// ナビゲーションルート
+// Navigation routes
 const navRoutes = ref([
   {
     path: '/dashboard',
-    label: 'ダッシュボード',
+    label: 'Dashboard',
     icon: '📊',
     guard: null
   },
   {
     path: '/users',
-    label: 'ユーザー管理',
+    label: 'User Management',
     icon: '👥',
     guard: () => checkPermission('users.read')
   },
   {
     path: '/settings',
-    label: '設定',
+    label: 'Settings',
     icon: '⚙️',
     guard: () => checkPermission('settings.access')
   },
   {
     path: '/reports',
-    label: 'レポート',
+    label: 'Reports',
     icon: '📈',
     guard: async () => {
       const hasAccess = await checkPermission('reports.view');
       if (!hasAccess) {
-        alert('レポート閲覧権限がありません');
+        alert('You do not have permission to view reports');
         return false;
       }
       return true;
@@ -306,23 +306,23 @@ const navRoutes = ref([
   }
 ]);
 
-// ダウンロードファイル
+// Download files
 const downloadFiles = ref([
   {
     id: 1,
-    name: 'ユーザーガイド',
+    name: 'User Guide',
     filename: 'user-guide.pdf',
     url: '/downloads/user-guide.pdf'
   },
   {
     id: 2,
-    name: 'API仕様書',
+    name: 'API Documentation',
     filename: 'api-docs.pdf',
     url: '/downloads/api-documentation.pdf'
   }
 ]);
 
-// ソーシャルプラットフォーム
+// Social platforms
 const socialPlatforms = computed(() => [
   {
     name: 'twitter',
@@ -344,26 +344,26 @@ const socialPlatforms = computed(() => [
   }
 ]);
 
-const shareText = ref('素晴らしいアプリをチェックしてください！');
+const shareText = ref('Check out this amazing app!');
 const currentUrl = ref('https://example.com');
 
-// 権限チェック関数
+// Permission check function
 const checkPermission = async (permission: string): Promise<boolean> => {
-  // 実際のアプリケーションでは、APIを呼び出して権限をチェック
-  console.log(`権限チェック: ${permission}`);
+  // In actual applications, call API to check permissions
+  console.log(`Permission check: ${permission}`);
   return new Promise(resolve => {
     setTimeout(() => {
-      // ランダムに権限を付与（デモ用）
+      // Randomly grant permissions (for demo)
       resolve(Math.random() > 0.3);
     }, 500);
   });
 };
 
-// ダウンロード権限チェック
+// Download permission check
 const checkDownloadPermission = async (): Promise<boolean> => {
   const hasPermission = await checkPermission('files.download');
   if (!hasPermission) {
-    alert('ファイルダウンロード権限がありません');
+    alert('You do not have file download permissions');
     return false;
   }
   return true;
@@ -483,12 +483,12 @@ const checkDownloadPermission = async (): Promise<boolean> => {
 
 ```vue
 <template>
-  <component 
-    :is="actionable.Tag" 
+  <component
+    :is="actionable.Tag"
     v-bind="actionable.attrs"
     @click="handleClick"
   >
-    クリックして！
+    Click me!
   </component>
 </template>
 
@@ -505,20 +505,20 @@ const actionable = useActionable(
 )
 
 const handleClick = () => {
-  console.log('クリックされました！')
+  console.log('Clicked!')
 }
 </script>
 ```
 
-### ボタンとしての使用
+### Using as Button
 
 ```vue
 <template>
-  <component 
-    :is="buttonAction.Tag" 
+  <component
+    :is="buttonAction.Tag"
     v-bind="buttonAction.attrs"
   >
-    送信
+    Submit
   </component>
 </template>
 
@@ -532,15 +532,15 @@ const buttonAction = useActionable(
 </script>
 ```
 
-### RouterLinkとしての使用
+### Using as RouterLink
 
 ```vue
 <template>
-  <component 
-    :is="linkAction.Tag" 
+  <component
+    :is="linkAction.Tag"
     v-bind="linkAction.attrs"
   >
-    ホームページへ
+    To Homepage
   </component>
 </template>
 
@@ -548,12 +548,12 @@ const buttonAction = useActionable(
 import { useActionable } from '@fastkit/vue-action'
 
 const linkAction = useActionable(
-  { 
-    attrs: { 
+  {
+    attrs: {
       to: '/home',
-      activeClass: 'active-link' 
-    }, 
-    emit: () => {} 
+      activeClass: 'active-link'
+    },
+    emit: () => {}
   },
   {
     activeClass: 'router-link-active',
@@ -563,20 +563,20 @@ const linkAction = useActionable(
 </script>
 ```
 
-## ガード機能
+## Guard Functionality
 
-アクション実行前に条件をチェックできます：
+You can check conditions before action execution:
 
 ```vue
 <template>
-  <component 
-    :is="guardedAction.Tag" 
+  <component
+    :is="guardedAction.Tag"
     v-bind="guardedAction.attrs"
-    :class="{ 
-      'loading': guardedAction.guardInProgress 
+    :class="{
+      'loading': guardedAction.guardInProgress
     }"
   >
-    {{ guardedAction.guardInProgress ? '処理中...' : '危険な操作' }}
+    {{ guardedAction.guardInProgress ? 'Processing...' : 'Dangerous Operation' }}
   </component>
 </template>
 
@@ -584,15 +584,15 @@ const linkAction = useActionable(
 import { useActionable } from '@fastkit/vue-action'
 
 const guardedAction = useActionable(
-  { 
-    attrs: { 
+  {
+    attrs: {
       guard: async (ev: MouseEvent) => {
         // 非同期ガード処理
-        const result = await confirm('本当に実行しますか？')
-        return result // false を返すとアクションがキャンセルされる
+        const result = await confirm('Are you sure you want to execute?')
+        return result // Returning false cancels the action
       }
-    }, 
-    emit: () => {} 
+    },
+    emit: () => {}
   },
   {
     guardInProgressClass: 'guard-processing'
@@ -601,15 +601,15 @@ const guardedAction = useActionable(
 </script>
 ```
 
-## 外部リンクとしての使用
+## Using as External Links
 
 ```vue
 <template>
-  <component 
-    :is="externalLink.Tag" 
+  <component
+    :is="externalLink.Tag"
     v-bind="externalLink.attrs"
   >
-    外部サイトを開く
+    Open external site
   </component>
 </template>
 
@@ -617,26 +617,26 @@ const guardedAction = useActionable(
 import { useActionable } from '@fastkit/vue-action'
 
 const externalLink = useActionable(
-  { 
-    attrs: { 
+  {
+    attrs: {
       href: 'https://example.com',
       target: '_blank',
       rel: 'noopener noreferrer'
-    }, 
-    emit: () => {} 
+    },
+    emit: () => {}
   }
 )
 </script>
 ```
 
-## 状態ベースのスタイリング
+## State-based Styling
 
-コンポーネントの状態に基づいて自動的にCSSクラスが適用されます：
+CSS classes are automatically applied based on component state:
 
 ```vue
 <template>
-  <component 
-    :is="styledAction.Tag" 
+  <component
+    :is="styledAction.Tag"
     v-bind="styledAction.attrs"
     :class="{
       'is-disabled': styledAction.disabled,
@@ -656,15 +656,15 @@ const props = defineProps<{
 }>()
 
 const styledAction = useActionable(
-  { 
-    attrs: { 
-      disabled: props.disabled 
-    }, 
-    emit: () => {} 
+  {
+    attrs: {
+      disabled: props.disabled
+    },
+    emit: () => {}
   },
   {
     disabledClass: 'btn-disabled',
-    hasActionClass: 'btn-has-action', 
+    hasActionClass: 'btn-has-action',
     actionableClass: 'btn-actionable'
   }
 )
@@ -687,33 +687,33 @@ const styledAction = useActionable(
 </style>
 ```
 
-## カスタムRouterLinkの設定
+## Custom RouterLink Configuration
 
-Nuxt LinkやカスタムRouterLinkコンポーネントを使用する場合：
+When using Nuxt Link or custom RouterLink components:
 
 ```typescript
 import { setDefaultRouterLink } from '@fastkit/vue-action'
 import { NuxtLink } from '#components'
 
-// デフォルトのRouterLinkコンポーネントを設定
+// Set default RouterLink component
 setDefaultRouterLink(NuxtLink, ['prefetch', 'noPrefetch'])
 ```
 
 ## Advanced Usage Examples
 
-### フォーム送信との組み合わせ
+### Form Submission Integration
 
 ```vue
 <template>
   <form @submit.prevent="handleSubmit">
-    <input v-model="form.name" type="text" placeholder="名前" />
-    
-    <component 
-      :is="submitAction.Tag" 
+    <input v-model="form.name" type="text" placeholder="Name" />
+
+    <component
+      :is="submitAction.Tag"
       v-bind="submitAction.attrs"
       :disabled="!form.name || isSubmitting"
     >
-      {{ isSubmitting ? '送信中...' : '送信' }}
+      {{ isSubmitting ? 'Submitting...' : 'Submit' }}
     </component>
   </form>
 </template>
@@ -726,18 +726,18 @@ const form = ref({ name: '' })
 const isSubmitting = ref(false)
 
 const submitAction = useActionable(
-  { 
-    attrs: { 
+  {
+    attrs: {
       type: 'submit',
       guard: async () => {
         if (!form.value.name) {
-          alert('名前を入力してください')
+          alert('Please enter a name')
           return false
         }
         return true
       }
-    }, 
-    emit: () => {} 
+    },
+    emit: () => {}
   },
   {
     disabledClass: 'btn-disabled',
@@ -761,8 +761,8 @@ const handleSubmit = async () => {
 
 ```vue
 <template>
-  <component 
-    :is="conditionalLink.Tag" 
+  <component
+    :is="conditionalLink.Tag"
     v-bind="conditionalLink.attrs"
   >
     {{ canNavigate ? 'ページに移動' : 'ログインが必要' }}
@@ -777,8 +777,8 @@ const isLoggedIn = ref(false)
 const canNavigate = computed(() => isLoggedIn.value)
 
 const conditionalLink = useActionable(
-  { 
-    attrs: { 
+  {
+    attrs: {
       to: canNavigate.value ? '/protected' : undefined,
       guard: async () => {
         if (!isLoggedIn.value) {
@@ -788,8 +788,8 @@ const conditionalLink = useActionable(
         }
         return true
       }
-    }, 
-    emit: () => {} 
+    },
+    emit: () => {}
   }
 )
 </script>
@@ -799,96 +799,96 @@ const conditionalLink = useActionable(
 
 ### VAction
 
-統一されたアクショナブル要素のコンポーネント。
+A unified actionable element component.
 
 ```typescript
-// コンポーネントプロパティ
+// Component properties
 interface VActionProps extends ActionableAttrs {
-  tag?: string;                    // HTMLタグ名
-  class?: any;                     // CSSクラス
-  style?: CSSProperties;           // スタイル
-  linkFallbackTag?: string | (() => string | undefined); // フォールバックタグ
+  tag?: string;                    // HTML tag name
+  class?: any;                     // CSS class
+  style?: CSSProperties;           // Style
+  linkFallbackTag?: string | (() => string | undefined); // Fallback tag
 
-  // Router Link関連
-  to?: RouteLocationRaw;           // Vue Routerの遷移先
-  replace?: boolean;               // replaceナビゲーション
-  activeClass?: string;            // アクティブ時のクラス
-  exactActiveClass?: string;       // 完全一致アクティブ時のクラス
+  // Router Link related
+  to?: RouteLocationRaw;           // Vue Router destination
+  replace?: boolean;               // Replace navigation
+  activeClass?: string;            // Active class
+  exactActiveClass?: string;       // Exact active class
 
-  // Link関連
-  href?: string;                   // ハイパーリンクURL
-  target?: string;                 // リンクターゲット
-  rel?: string;                    // rel属性
-  download?: boolean | string;     // ダウンロード属性
+  // Link related
+  href?: string;                   // Hyperlink URL
+  target?: string;                 // Link target
+  rel?: string;                    // rel attribute
+  download?: boolean | string;     // Download attribute
 
-  // Button関連
-  type?: 'button' | 'submit' | 'reset'; // ボタンタイプ
-  disabled?: boolean;              // 無効状態
-  name?: string;                   // フォーム名
+  // Button related
+  type?: 'button' | 'submit' | 'reset'; // Button type
+  disabled?: boolean;              // Disabled state
+  name?: string;                   // Form name
 
-  // ガード機能
-  guard?: ActionableGuard;         // アクション実行前ガード関数
+  // Guard functionality
+  guard?: ActionableGuard;         // Pre-action guard function
 
-  // 状態別CSSクラス
+  // State-specific CSS classes
   disabledClass?: string | (() => string | undefined);
   hasActionClass?: string | (() => string | undefined);
   actionableClass?: string | (() => string | undefined);
   guardInProgressClass?: string | (() => string | undefined);
 }
 
-// ガード関数の型定義
+// Guard function type definition
 type ActionableGuard = (ev: MouseEvent) => boolean | void | Promise<boolean | void>;
 
-// スロット
+// Slots
 interface VActionSlots {
   default?: (actionable: Actionable) => any;
 }
 ```
 
-#### VActionの動作
+#### VAction Behavior
 
-VActionコンポーネントは以下の優先順位でHTMLタグを決定します：
+The VAction component determines HTML tags in the following priority order:
 
-1. **RouterLink**: `to`プロパティが指定された場合
-2. **<a>タグ**: `href`プロパティが指定された場合
-3. **<button>タグ**: `@click`ハンドラまたは`type`プロパティが指定された場合
-4. **フォールバックタグ**: `linkFallbackTag`または`tag`プロパティで指定されたタグ（デフォルト: `div`）
+1. **RouterLink**: When `to` property is specified
+2. **<a> tag**: When `href` property is specified
+3. **<button> tag**: When `@click` handler or `type` property is specified
+4. **Fallback tag**: Tag specified by `linkFallbackTag` or `tag` property (default: `div`)
 
-#### ガード機能
+#### Guard Functionality
 
 ```typescript
-// 同期ガード
+// Synchronous guard
 const syncGuard: ActionableGuard = (ev) => {
   if (someCondition) {
-    return false; // アクションを阻止
+    return false; // Prevent action
   }
-  return true; // アクションを許可
+  return true; // Allow action
 };
 
-// 非同期ガード
+// Asynchronous guard
 const asyncGuard: ActionableGuard = async (ev) => {
   const result = await someAsyncValidation();
   return result.isValid;
 };
 
-// ガード中の状態表示
+// State display during guard
 <VAction
   :guard="asyncGuard"
   :guardInProgressClass="'is-loading'"
   @click="handleAction"
 >
-  実行
+  Execute
 </VAction>
 ```
 
-#### 状態管理
+#### State Management
 
-VActionコンポーネントは以下の状態を自動的に管理します：
+The VAction component automatically manages the following states:
 
-- **disabled**: `disabled`または`aria-disabled`が設定されている状態
-- **hasAction**: リンク、クリックハンドラ、またはbuttonタグが設定されている状態
-- **actionable**: アクションがあり、かつ無効状態でない状態
-- **guardInProgress**: ガード関数の実行中状態
+- **disabled**: State when `disabled` or `aria-disabled` is set
+- **hasAction**: State when link, click handler, or button tag is set
+- **actionable**: State when action exists and is not disabled
+- **guardInProgress**: State when guard function is executing
 
 ### useActionable
 
@@ -959,12 +959,12 @@ interface ActionableAttrs extends ActionableRouterLinkProps {
 type ActionableGuard = (ev: MouseEvent) => boolean | void | Promise<boolean | void>
 ```
 
-ガード関数は`false`を返すことでアクションをキャンセルできます。
+Guard functions can cancel actions by returning `false`.
 
 ## Related Packages
 
-- `@fastkit/vue-utils` - Vue.js ユーティリティ関数
-- `vue-router` - Vue Router（ピア依存関係）
+- `@fastkit/vue-utils` - Vue.js utility functions
+- `vue-router` - Vue Router (peer dependency)
 
 ## License
 

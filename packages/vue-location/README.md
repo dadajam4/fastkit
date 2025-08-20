@@ -1,21 +1,21 @@
 
 # @fastkit/vue-location
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-location/README-ja.md)
 
-Vue Routerの拡張ライブラリで、ルート状態の管理、タイプセーフなクエリパラメータ操作、ルート遷移状態の追跡機能を提供します。スキーマベースのクエリ操作、フォーム管理、ルートマッチングを簡単に実現できます。
+An extension library for Vue Router that provides route state management, type-safe query parameter operations, and route transition state tracking. Easily implement schema-based query operations, form management, and route matching.
 
 ## Features
 
-- **LocationService**: Vue Routerの状態を一元管理するサービスクラス
-- **タイプセーフクエリ**: スキーマベースのクエリパラメータ操作
-- **ルート遷移追跡**: ルート遷移中の状態監視とローディング表示
-- **フォーム管理**: クエリパラメータ連動のフォームコンポーネント
-- **ルートマッチング**: 現在のルートと指定ルートのマッチ判定
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **Vue 3 Composition API**: リアクティブシステムとの完全統合
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **軽量実装**: Vue Routerの上位拡張でパフォーマンスに影響なし
+- **LocationService**: Service class for centralized Vue Router state management
+- **Type-safe Queries**: Schema-based query parameter operations
+- **Route Transition Tracking**: State monitoring and loading display during route transitions
+- **Form Management**: Form components linked with query parameters
+- **Route Matching**: Match determination between current and specified routes
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Vue 3 Composition API**: Complete integration with reactive system
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Lightweight Implementation**: Upper-level extension of Vue Router with no performance impact
 
 ## Installation
 
@@ -25,7 +25,7 @@ npm install @fastkit/vue-location
 
 ## Basic Usage
 
-### LocationServiceのセットアップ
+### LocationService Setup
 
 ```typescript
 // main.ts
@@ -48,82 +48,82 @@ const app = createApp(App)
 
 app.use(router)
 
-// LocationServiceをインストール
+// Install LocationService
 LocationService.install(app, { router })
 
 app.mount('#app')
 ```
 
-### 基本的なLocationServiceの使用
+### Basic LocationService Usage
 
 ```vue
 <template>
   <div>
-    <h1>ナビゲーションサンプル</h1>
-    
-    <!-- ルート情報表示 -->
+    <h1>Navigation Sample</h1>
+
+    <!-- Route information display -->
     <div class="route-info">
-      <h2>現在のルート</h2>
-      <p><strong>パス:</strong> {{ location.currentRoute.path }}</p>
-      <p><strong>クエリ:</strong> {{ JSON.stringify(location.currentRoute.query) }}</p>
-      <p><strong>ハッシュ:</strong> {{ location.currentRoute.hash || 'なし' }}</p>
+      <h2>Current Route</h2>
+      <p><strong>Path:</strong> {{ location.currentRoute.path }}</p>
+      <p><strong>Query:</strong> {{ JSON.stringify(location.currentRoute.query) }}</p>
+      <p><strong>Hash:</strong> {{ location.currentRoute.hash || 'None' }}</p>
     </div>
-    
-    <!-- 遷移状態表示 -->
+
+    <!-- Transition state display -->
     <div v-if="location.transitioning" class="transitioning">
-      <h3>ルート遷移中...</h3>
-      <p>遷移先: {{ location.transitioningTo?.path }}</p>
+      <h3>Route transitioning...</h3>
+      <p>Transition target: {{ location.transitioningTo?.path }}</p>
       <div class="transition-details">
-        <p v-if="location.transitioning.path">パスを変更中</p>
-        <p v-if="location.transitioning.hash">ハッシュを変更中</p>
+        <p v-if="location.transitioning.path">Changing path</p>
+        <p v-if="location.transitioning.hash">Changing hash</p>
         <p v-if="location.transitioning.query.length > 0">
-          クエリを変更中: {{ location.transitioning.query.join(', ') }}
+          Changing query: {{ location.transitioning.query.join(', ') }}
         </p>
       </div>
     </div>
-    
-    <!-- ナビゲーションボタン -->
+
+    <!-- Navigation buttons -->
     <div class="navigation">
-      <h3>ナビゲーション</h3>
+      <h3>Navigation</h3>
       <div class="nav-buttons">
-        <button 
+        <button
           @click="location.push('/')"
           :class="{ active: location.match('/') }"
         >
-          ホーム
+          Home
         </button>
-        <button 
+        <button
           @click="location.push('/about')"
           :class="{ active: location.match('/about') }"
         >
-          アバウト
+          About
         </button>
-        <button 
+        <button
           @click="location.push('/users/123')"
           :class="{ active: location.match('/users/123') }"
         >
-          ユーザーページ
+          User Page
         </button>
       </div>
     </div>
-    
-    <!-- クエリ操作 -->
+
+    <!-- Query operations -->
     <div class="query-operations">
-      <h3>クエリ操作</h3>
+      <h3>Query Operations</h3>
       <div class="query-buttons">
-        <button @click="addSearchQuery">検索クエリを追加</button>
-        <button @click="addFilterQuery">フィルタークエリを追加</button>
-        <button @click="clearQueries">クエリをクリア</button>
+        <button @click="addSearchQuery">Add Search Query</button>
+        <button @click="addFilterQuery">Add Filter Query</button>
+        <button @click="clearQueries">Clear Queries</button>
       </div>
-      
+
       <div class="current-queries">
-        <h4>現在のクエリパラメータ</h4>
+        <h4>Current Query Parameters</h4>
         <ul>
           <li v-for="(value, key) in location.currentRoute.query" :key="key">
             <strong>{{ key }}:</strong> {{ value }}
           </li>
           <li v-if="Object.keys(location.currentRoute.query).length === 0">
-            クエリパラメータはありません
+            No query parameters
           </li>
         </ul>
       </div>
@@ -148,9 +148,9 @@ const clearQueries = () => {
   location.push({ path: location.currentRoute.path })
 }
 
-// ルート変更を監視
+// Watch route changes
 location.watchRoute((newRoute, oldRoute) => {
-  console.log('ルートが変更されました:', {
+  console.log('Route changed:', {
     from: oldRoute?.path,
     to: newRoute.path,
     query: newRoute.query
@@ -264,133 +264,133 @@ location.watchRoute((newRoute, oldRoute) => {
 </style>
 ```
 
-### タイプセーフクエリの使用
+### Type-safe Query Usage
 
 ```vue
 <template>
   <div>
-    <h1>検索ページ</h1>
-    
-    <!-- 検索フォーム -->
+    <h1>Search Page</h1>
+
+    <!-- Search form -->
     <form @submit.prevent="search.submit()" class="search-form">
       <div class="form-group">
-        <label for="keyword">キーワード:</label>
-        <input 
+        <label for="keyword">Keyword:</label>
+        <input
           id="keyword"
           v-model="search.values.keyword"
-          type="text" 
-          placeholder="検索キーワードを入力"
+          type="text"
+          placeholder="Enter search keyword"
         >
       </div>
-      
+
       <div class="form-group">
-        <label for="category">カテゴリ:</label>
+        <label for="category">Category:</label>
         <select id="category" v-model="search.values.category">
-          <option value="">すべて</option>
-          <option value="frontend">フロントエンド</option>
-          <option value="backend">バックエンド</option>
-          <option value="mobile">モバイル</option>
+          <option value="">All</option>
+          <option value="frontend">Frontend</option>
+          <option value="backend">Backend</option>
+          <option value="mobile">Mobile</option>
           <option value="devops">DevOps</option>
         </select>
       </div>
-      
+
       <div class="form-group">
-        <label for="sort">並び順:</label>
+        <label for="sort">Sort by:</label>
         <select id="sort" v-model="search.values.sort">
-          <option value="relevance">関連度</option>
-          <option value="date">日付</option>
-          <option value="popularity">人気</option>
-          <option value="title">タイトル</option>
+          <option value="relevance">Relevance</option>
+          <option value="date">Date</option>
+          <option value="popularity">Popularity</option>
+          <option value="title">Title</option>
         </select>
       </div>
-      
+
       <div class="form-group">
-        <label for="limit">表示件数:</label>
+        <label for="limit">Items per page:</label>
         <select id="limit" v-model="search.values.limit">
-          <option :value="10">10件</option>
-          <option :value="20">20件</option>
-          <option :value="50">50件</option>
-          <option :value="100">100件</option>
+          <option :value="10">10 items</option>
+          <option :value="20">20 items</option>
+          <option :value="50">50 items</option>
+          <option :value="100">100 items</option>
         </select>
       </div>
-      
+
       <div class="form-group">
         <label>
-          <input 
+          <input
             v-model="search.values.includeArchived"
             type="checkbox"
           >
-          アーカイブされたアイテムを含む
+          Include archived items
         </label>
       </div>
-      
+
       <div class="form-actions">
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           :disabled="search.sending || !search.hasChanged"
           class="submit-button"
         >
-          <span v-if="search.sending">検索中...</span>
-          <span v-else>検索</span>
+          <span v-if="search.sending">Searching...</span>
+          <span v-else>Search</span>
         </button>
-        
-        <button 
-          type="button" 
+
+        <button
+          type="button"
           @click="search.reset()"
           :disabled="search.sending"
           class="reset-button"
         >
-          リセット
+          Reset
         </button>
-        
-        <button 
-          type="button" 
+
+        <button
+          type="button"
           @click="clearSearch()"
           :disabled="search.sending"
           class="clear-button"
         >
-          クリア
+          Clear
         </button>
       </div>
     </form>
-    
-    <!-- 現在の検索条件表示 -->
+
+    <!-- Current search conditions display -->
     <div class="current-search">
-      <h3>現在の検索条件</h3>
+      <h3>Current Search Conditions</h3>
       <div class="search-params">
         <div v-if="query.keyword" class="param">
-          <strong>キーワード:</strong> {{ query.keyword }}
+          <strong>Keyword:</strong> {{ query.keyword }}
         </div>
         <div v-if="query.category" class="param">
-          <strong>カテゴリ:</strong> {{ getCategoryLabel(query.category) }}
+          <strong>Category:</strong> {{ getCategoryLabel(query.category) }}
         </div>
         <div class="param">
-          <strong>並び順:</strong> {{ getSortLabel(query.sort) }}
+          <strong>Sort:</strong> {{ getSortLabel(query.sort) }}
         </div>
         <div class="param">
-          <strong>表示件数:</strong> {{ query.limit }}件
+          <strong>Items per page:</strong> {{ query.limit }} items
         </div>
         <div v-if="query.includeArchived" class="param">
-          <strong>アーカイブ:</strong> 含む
+          <strong>Archive:</strong> Included
         </div>
       </div>
     </div>
-    
-    <!-- 変更状態表示 -->
+
+    <!-- Change status display -->
     <div v-if="search.hasChanged" class="changes">
-      <h4>変更された項目</h4>
+      <h4>Changed Items</h4>
       <ul>
         <li v-for="change in search.changes" :key="change">
           {{ getFieldLabel(change) }}
         </li>
       </ul>
     </div>
-    
-    <!-- 検索結果表示 -->
+
+    <!-- Search results display -->
     <div class="search-results">
-      <h3>検索結果 ({{ searchResults.length }}件)</h3>
+      <h3>Search Results ({{ searchResults.length }} items)</h3>
       <div v-if="searchResults.length === 0" class="no-results">
-        検索結果がありません
+        No search results found
       </div>
       <div v-else class="results-list">
         <div v-for="result in searchResults" :key="result.id" class="result-item">
@@ -410,7 +410,7 @@ location.watchRoute((newRoute, oldRoute) => {
 import { computed, watch } from 'vue'
 import { useLocationService } from '@fastkit/vue-location'
 
-// 検索クエリのスキーマ定義
+// Search query schema definition
 const searchSchema = {
   keyword: { type: String, default: '' },
   category: { type: String, default: '' },
@@ -423,12 +423,12 @@ const location = useLocationService()
 const query = location.useQuery(searchSchema)
 const search = query.$form()
 
-// ラベル定義
+// Label definitions
 const getCategoryLabel = (category: string) => {
   const labels: Record<string, string> = {
-    frontend: 'フロントエンド',
-    backend: 'バックエンド',
-    mobile: 'モバイル',
+    frontend: 'Frontend',
+    backend: 'Backend',
+    mobile: 'Mobile',
     devops: 'DevOps'
   }
   return labels[category] || category
@@ -436,21 +436,21 @@ const getCategoryLabel = (category: string) => {
 
 const getSortLabel = (sort: string) => {
   const labels: Record<string, string> = {
-    relevance: '関連度',
-    date: '日付',
-    popularity: '人気',
-    title: 'タイトル'
+    relevance: 'Relevance',
+    date: 'Date',
+    popularity: 'Popularity',
+    title: 'Title'
   }
   return labels[sort] || sort
 }
 
 const getFieldLabel = (field: string) => {
   const labels: Record<string, string> = {
-    keyword: 'キーワード',
-    category: 'カテゴリ',
-    sort: '並び順',
-    limit: '表示件数',
-    includeArchived: 'アーカイブ含む'
+    keyword: 'Keyword',
+    category: 'Category',
+    sort: 'Sort',
+    limit: 'Items per page',
+    includeArchived: 'Include archived'
   }
   return labels[field] || field
 }
@@ -459,7 +459,7 @@ const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString('ja-JP')
 }
 
-// 検索結果のモックデータ
+// Mock data for search results
 interface SearchResult {
   id: string
   title: string
@@ -469,54 +469,54 @@ interface SearchResult {
 }
 
 const searchResults = computed<SearchResult[]>(() => {
-  // 実際のアプリケーションでは、ここでAPIを呼び出す
+  // In actual applications, API calls would be made here
   const mockResults: SearchResult[] = [
     {
       id: '1',
-      title: 'Vue.js 3入門ガイド',
-      description: 'Vue.js 3の基本的な使い方とComposition APIの解説',
+      title: 'Vue.js 3 Beginner Guide',
+      description: 'Basic usage of Vue.js 3 and explanation of Composition API',
       category: 'frontend',
       date: '2024-01-15'
     },
     {
       id: '2',
-      title: 'TypeScriptとVue Routerの連携',
-      description: 'TypeScriptで型安全なVue Routerの実装方法',
+      title: 'TypeScript and Vue Router Integration',
+      description: 'How to implement type-safe Vue Router with TypeScript',
       category: 'frontend',
       date: '2024-01-20'
     },
     {
       id: '3',
-      title: 'Node.jsでのREST API開発',
-      description: 'Express.jsを使ったREST APIの構築方法',
+      title: 'REST API Development with Node.js',
+      description: 'How to build REST APIs using Express.js',
       category: 'backend',
       date: '2024-01-25'
     }
   ]
-  
-  // フィルタリングロジック
+
+  // Filtering logic
   let filtered = mockResults
-  
+
   if (query.keyword) {
     const keyword = query.keyword.toLowerCase()
-    filtered = filtered.filter(item => 
+    filtered = filtered.filter(item =>
       item.title.toLowerCase().includes(keyword) ||
       item.description.toLowerCase().includes(keyword)
     )
   }
-  
+
   if (query.category) {
     filtered = filtered.filter(item => item.category === query.category)
   }
-  
-  // ソート
+
+  // Sorting
   if (query.sort === 'date') {
     filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   } else if (query.sort === 'title') {
     filtered.sort((a, b) => a.title.localeCompare(b.title))
   }
-  
-  // 件数制限
+
+  // Limit results
   return filtered.slice(0, query.limit)
 })
 
@@ -524,9 +524,9 @@ const clearSearch = () => {
   location.push({ path: '/search' })
 }
 
-// クエリの変更を監視して検索結果を更新
+// Monitor query changes to update search results
 watch(query.$watchKey, () => {
-  console.log('検索条件が変更されました:', {
+  console.log('Search conditions changed:', {
     keyword: query.keyword,
     category: query.category,
     sort: query.sort,
@@ -720,155 +720,155 @@ watch(query.$watchKey, () => {
 </style>
 ```
 
-### ルート遷移状態の監視
+### Route Transition State Monitoring
 
 ```vue
 <template>
   <div>
-    <h1>ローディング状態の表示</h1>
-    
-    <!-- グローバルローディングインジケーター -->
+    <h1>Loading State Display</h1>
+
+    <!-- Global loading indicator -->
     <div v-if="isLoading" class="global-loading">
       <div class="loading-spinner"></div>
-      <p>ページを読み込んでいます...</p>
+      <p>Loading page...</p>
     </div>
-    
-    <!-- クエリのみ変更中の表示 -->
+
+    <!-- Query only loading display -->
     <div v-if="isQueryOnlyLoading" class="query-loading">
       <div class="loading-bar"></div>
-      <p>フィルターを更新中...</p>
+      <p>Updating filters...</p>
     </div>
-    
-    <!-- ナビゲーションメニュー -->
+
+    <!-- Navigation menu -->
     <nav class="navigation">
       <div class="nav-links">
-        <router-link 
+        <router-link
           to="/"
           class="nav-link"
           :class="{ loading: isNavigatingTo('/') }"
         >
-          ホーム
+          Home
           <span v-if="isNavigatingTo('/')" class="nav-spinner"></span>
         </router-link>
-        
-        <router-link 
+
+        <router-link
           to="/about"
           class="nav-link"
           :class="{ loading: isNavigatingTo('/about') }"
         >
-          アバウト
+          About
           <span v-if="isNavigatingTo('/about')" class="nav-spinner"></span>
         </router-link>
-        
-        <router-link 
+
+        <router-link
           to="/products"
           class="nav-link"
           :class="{ loading: isNavigatingTo('/products') }"
         >
-          商品一覧
+          Products
           <span v-if="isNavigatingTo('/products')" class="nav-spinner"></span>
         </router-link>
-        
-        <button 
+
+        <button
           @click="loadHeavyPage"
           class="nav-link button"
           :class="{ loading: isNavigatingTo('/heavy') }"
           :disabled="isNavigatingTo('/heavy')"
         >
-          重いページ
+          Heavy Page
           <span v-if="isNavigatingTo('/heavy')" class="nav-spinner"></span>
         </button>
       </div>
     </nav>
-    
-    <!-- フィルターコントロール -->
+
+    <!-- Filter controls -->
     <div class="filter-controls">
-      <h3>フィルターコントロール</h3>
+      <h3>Filter Controls</h3>
       <div class="filter-buttons">
-        <button 
+        <button
           @click="applyFilter('category', 'electronics')"
           :disabled="isFilterLoading"
           class="filter-button"
         >
-          電子機器
+          Electronics
         </button>
-        <button 
+        <button
           @click="applyFilter('category', 'clothing')"
           :disabled="isFilterLoading"
           class="filter-button"
         >
-          衣類
+          Clothing
         </button>
-        <button 
+        <button
           @click="applyFilter('sort', 'price')"
           :disabled="isFilterLoading"
           class="filter-button"
         >
-          価格順
+          By Price
         </button>
-        <button 
+        <button
           @click="clearFilters"
           :disabled="isFilterLoading"
           class="filter-button clear"
         >
-          クリア
+          Clear
         </button>
       </div>
-      
+
       <div v-if="isFilterLoading" class="filter-loading">
-        フィルターを適用中...
+        Applying filters...
       </div>
     </div>
-    
-    <!-- 遷移状態詳細 -->
+
+    <!-- Transition state details -->
     <div class="transition-details">
-      <h3>遷移状態詳細</h3>
+      <h3>Transition State Details</h3>
       <div class="status-grid">
         <div class="status-item">
-          <strong>現在のパス:</strong>
+          <strong>Current Path:</strong>
           <span>{{ location.currentRoute.path }}</span>
         </div>
-        
+
         <div v-if="location.transitioningTo" class="status-item">
-          <strong>遷移先パス:</strong>
+          <strong>Transition Target Path:</strong>
           <span>{{ location.transitioningTo.path }}</span>
         </div>
-        
+
         <div class="status-item">
-          <strong>遷移中:</strong>
+          <strong>Transitioning:</strong>
           <span :class="isLoading ? 'text-warning' : 'text-success'">
-            {{ isLoading ? 'はい' : 'いいえ' }}
+            {{ isLoading ? 'Yes' : 'No' }}
           </span>
         </div>
-        
+
         <div class="status-item">
-          <strong>クエリのみ遷移:</strong>
+          <strong>Query Only Transition:</strong>
           <span :class="isQueryOnlyLoading ? 'text-warning' : 'text-success'">
-            {{ isQueryOnlyLoading ? 'はい' : 'いいえ' }}
+            {{ isQueryOnlyLoading ? 'Yes' : 'No' }}
           </span>
         </div>
-        
+
         <div v-if="location.transitioning?.query.length" class="status-item">
-          <strong>変更中クエリ:</strong>
+          <strong>Changing Queries:</strong>
           <span>{{ location.transitioning.query.join(', ') }}</span>
         </div>
       </div>
     </div>
-    
-    <!-- パフォーマンス計測 -->
+
+    <!-- Performance metrics -->
     <div class="performance-metrics">
-      <h3>パフォーマンス計測</h3>
+      <h3>Performance Metrics</h3>
       <div class="metrics-grid">
         <div class="metric">
-          <strong>遷移回数:</strong>
+          <strong>Navigation Count:</strong>
           <span>{{ navigationCount }}</span>
         </div>
         <div class="metric">
-          <strong>最後の遷移時間:</strong>
+          <strong>Last Navigation Time:</strong>
           <span>{{ lastNavigationTime }}ms</span>
         </div>
         <div class="metric">
-          <strong>平均遷移時間:</strong>
+          <strong>Average Navigation Time:</strong>
           <span>{{ averageNavigationTime }}ms</span>
         </div>
       </div>
@@ -885,22 +885,22 @@ const navigationCount = ref(0)
 const navigationTimes = ref<number[]>([])
 const navigationStartTime = ref<number | null>(null)
 
-// ローディング状態
+// Loading state
 const isLoading = computed(() => !!location.transitioning)
-const isQueryOnlyLoading = computed(() => 
+const isQueryOnlyLoading = computed(() =>
   location.isQueryOnlyTransitioning()
 )
-const isFilterLoading = computed(() => 
+const isFilterLoading = computed(() =>
   location.isQueryOnlyTransitioning(['category', 'sort', 'filter'])
 )
 
-// 特定パスへの遷移状態をチェック
+// Check transition state to specific path
 const isNavigatingTo = (path: string) => {
   return location.transitioningTo?.path === path
 }
 
-// パフォーマンス計測
-const lastNavigationTime = computed(() => 
+// Performance measurement
+const lastNavigationTime = computed(() =>
   navigationTimes.value[navigationTimes.value.length - 1] || 0
 )
 
@@ -910,39 +910,39 @@ const averageNavigationTime = computed(() => {
   return Math.round(sum / navigationTimes.value.length)
 })
 
-// ナビゲーションの監視
+// Monitor navigation
 location.watchRoute((newRoute, oldRoute) => {
   if (oldRoute) {
     navigationCount.value++
-    
+
     if (navigationStartTime.value) {
       const duration = Date.now() - navigationStartTime.value
       navigationTimes.value.push(duration)
-      
-      // 最大100件まで保持
+
+      // Keep up to 100 items
       if (navigationTimes.value.length > 100) {
         navigationTimes.value.shift()
       }
     }
   }
-  
-  // 次の遷移のためにリセット
+
+  // Reset for next transition
   navigationStartTime.value = null
 })
 
-// ルーターフックで遷移開始を検知
+// Detect transition start with router hook
 location.router.beforeEach(() => {
   navigationStartTime.value = Date.now()
 })
 
-// 重いページのロード（シミュレーション）
+// Load heavy page (simulation)
 const loadHeavyPage = async () => {
-  // 遅延をシミュレート
+  // Simulate delay
   await new Promise(resolve => setTimeout(resolve, 2000))
   location.push('/heavy')
 }
 
-// フィルター適用
+// Apply filters
 const applyFilter = (key: string, value: string) => {
   location.pushQuery({ [key]: value })
 }
@@ -1164,34 +1164,34 @@ const clearFilters = () => {
 
 ## Advanced Usage Examples
 
-### カスタムルートマッチング
+### Custom Route Matching
 
 ```typescript
-// カスタムマッチングロジックの実装
+// Custom matching logic implementation
 import { useLocationService } from '@fastkit/vue-location'
 
 const useAdvancedRouteMatching = () => {
   const location = useLocationService()
-  
-  // パスパラメータを含むマッチング
+
+  // Matching with path parameters
   const matchesUserRoute = (userId?: string) => {
     const current = location.currentRoute
     if (current.name !== 'user-detail') return false
     if (userId && current.params.id !== userId) return false
     return true
   }
-  
-  // クエリパラメータを含むマッチング
+
+  // Matching with query parameters
   const matchesSearchRoute = (filters?: Record<string, string>) => {
     if (!location.match('/search')) return false
     if (!filters) return true
-    
-    return Object.entries(filters).every(([key, value]) => 
+
+    return Object.entries(filters).every(([key, value]) =>
       location.currentRoute.query[key] === value
     )
   }
-  
-  // 適応的ナビゲーション
+
+  // Adaptive navigation
   const smartNavigate = (target: string, fallback: string = '/') => {
     if (location.isAvailable(target)) {
       return location.push(target)
@@ -1200,7 +1200,7 @@ const useAdvancedRouteMatching = () => {
       return location.push(fallback)
     }
   }
-  
+
   return {
     matchesUserRoute,
     matchesSearchRoute,
@@ -1209,39 +1209,39 @@ const useAdvancedRouteMatching = () => {
 }
 ```
 
-### クエリパラメータの高度なバリデーション
+### Advanced Query Parameter Validation
 
 ```typescript
-// 高度なクエリスキーマの定義
+// Advanced query schema definition
 const advancedSearchSchema = {
-  // 文字列フィールド
+  // String field
   keyword: {
     type: String,
     default: '',
     validate: (value: string) => {
       if (value.length > 100) {
-        throw new Error('キーワードは100文字以内で入力してください')
+        throw new Error('Keywords must be 100 characters or less')
       }
       return value.trim()
     }
   },
-  
-  // 数値フィールド
+
+  // Number field
   page: {
     type: Number,
     default: 1,
     validate: (value: number) => {
       if (value < 1) {
-        throw new Error('ページ番号は1以上である必要があります')
+        throw new Error('Page number must be 1 or greater')
       }
       if (value > 1000) {
-        throw new Error('ページ番号は1000以下である必要があります')
+        throw new Error('Page number must be 1000 or less')
       }
       return Math.floor(value)
     }
   },
-  
-  // 配列フィールド
+
+  // Array field
   categories: {
     type: Array,
     default: [],
@@ -1249,13 +1249,13 @@ const advancedSearchSchema = {
       const validCategories = ['tech', 'design', 'business', 'science']
       const invalid = value.filter(cat => !validCategories.includes(cat))
       if (invalid.length > 0) {
-        throw new Error(`無効なカテゴリ: ${invalid.join(', ')}`)
+        throw new Error(`Invalid categories: ${invalid.join(', ')}`)
       }
-      return [...new Set(value)] // 重複を除去
+      return [...new Set(value)] // Remove duplicates
     }
   },
-  
-  // カスタム型フィールド
+
+  // Custom type field
   dateRange: {
     type: Object,
     default: () => ({ start: null, end: null }),
@@ -1279,7 +1279,7 @@ const advancedSearchSchema = {
     },
     validate: (value: { start: Date | null, end: Date | null }) => {
       if (value.start && value.end && value.start > value.end) {
-        throw new Error('開始日は終了日より前である必要があります')
+        throw new Error('Start date must be before end date')
       }
       return value
     }
@@ -1287,7 +1287,7 @@ const advancedSearchSchema = {
 }
 ```
 
-## API リファレンス
+## API Reference
 
 ### LocationService
 
@@ -1298,24 +1298,24 @@ class LocationService {
   readonly currentRoute: RouteLocationNormalizedLoaded
   readonly transitioningTo: _RouteLocationBase | null
   readonly transitioning: LocationTransitioning | null
-  
-  // ルート監視
+
+  // Route monitoring
   watchRoute<Immediate extends boolean>(
     cb: WatchCallback<RouteLocationNormalizedLoaded>,
     options?: WatchRouteOptions<Immediate>
   ): WatchStopHandle
-  
-  // ルートマッチング
+
+  // Route matching
   locationIsMatched(target: RouteLocationRaw): boolean
   match(raw?: RouteLocationRaw, opts?: SameRouteCheckOptions): boolean
   isAvailable(raw?: RouteLocationRaw): boolean
-  
-  // クエリ操作
+
+  // Query operations
   useQuery<Schema extends QueriesSchema>(schema: Schema): TypedQuery<Schema>
   getQuery(key: string, type?: RouteQueryType, defaultValue?: any): any
   getQueryMergedLocation(query: LocationQueryRaw, route?: RouteLocationNormalizedLoaded): _RouteLocationBase
-  
-  // ナビゲーション
+
+  // Navigation
   push(...args: Parameters<Router['push']>): ReturnType<Router['push']>
   pushQuery(query: LocationQueryRaw): ReturnType<Router['push']>
   replace(...args: Parameters<Router['replace']>): ReturnType<Router['replace']>
@@ -1323,14 +1323,14 @@ class LocationService {
   go(...args: Parameters<Router['go']>): ReturnType<Router['go']>
   back(...args: Parameters<Router['back']>): ReturnType<Router['back']>
   forward(...args: Parameters<Router['forward']>): ReturnType<Router['forward']>
-  
-  // 遷移状態
+
+  // Transition state
   isQueryOnlyTransitioning(queries?: string | string[]): boolean
-  
-  // コンポーネント取得
+
+  // Component retrieval
   getMatchedComponents(raw?: RouteLocationRaw): RawRouteComponent[]
-  
-  // インストール
+
+  // Installation
   static install(app: App, ctx: LocationServiceContext): LocationService
 }
 ```
@@ -1345,22 +1345,22 @@ function useLocationService(): LocationService
 
 ```typescript
 interface TypedQuery<Schema extends QueriesSchema> {
-  // サービスアクセス
+  // Service access
   readonly $service: LocationService
   readonly $router: Router
   readonly $currentRoute: RouteLocationNormalizedLoaded
-  
-  // 状態
+
+  // State
   readonly $transitioningQueries: (keyof Schema)[]
   readonly $transitioning: boolean
   readonly $sending: boolean
   readonly $watchKey: ComputedRef<string>
-  
-  // エクストラクター
+
+  // Extractor
   readonly $extractors: QueriesExtractor<Schema>
   readonly $states: TypedQueryExtractStates<Schema>
-  
-  // ユーティリティ
+
+  // Utility
   $ensure<K extends keyof Schema>(queryKey: K): Exclude<InferQueryType<Schema[K]>, undefined>
   $serialize(values: ExtractQueryInputs<Schema>, mergeCurrentValues?: boolean): LocationQuery
   $serializeCurrentValues(): LocationQuery
@@ -1386,59 +1386,59 @@ interface TypedQueryForm<Schema extends QueriesSchema> {
   readonly transitioning: boolean
   readonly sending: boolean
   readonly watchKey: ComputedRef<string>
-  
+
   reset(): void
   submit(options?: TypedQueryFormSubmitOptions): ReturnType<Router['push']>
 }
 ```
 
-### ユーティリティ関数
+### Utility Functions
 
 ```typescript
 function locationIsMatched(router: Router, target: RouteLocationRaw): boolean
 function pickShallowRoute(route: _RouteLocationBase): _RouteLocationBase
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### メモリリークの防止
+### Memory Leak Prevention
 
 ```typescript
-// コンポーネントでの適切なクリーンアップ
+// Proper cleanup in components
 import { onBeforeUnmount } from 'vue'
 import { useLocationService } from '@fastkit/vue-location'
 
 const useRouteWatcher = () => {
   const location = useLocationService()
-  
-  // autoStop: true（デフォルト）で自動クリーンアップ
+
+  // Automatic cleanup with autoStop: true (default)
   const stopWatcher = location.watchRoute((route) => {
     console.log('Route changed:', route.path)
   }, { autoStop: true })
-  
-  // 手動でクリーンアップする場合
+
+  // Manual cleanup when needed
   onBeforeUnmount(() => {
     stopWatcher()
   })
 }
 ```
 
-### 大量クエリの最適化
+### Optimization for Large Queries
 
 ```typescript
-// クエリのデバウンス処理
+// Query debounce processing
 import { debounce } from 'lodash-es'
 
 const useOptimizedQuery = <T extends QueriesSchema>(schema: T) => {
   const location = useLocationService()
   const query = location.useQuery(schema)
-  
-  // デバウンスされた更新関数
+
+  // Debounced update function
   const debouncedPush = debounce(
     (values: any) => query.$push(values),
     300
   )
-  
+
   return {
     ...query,
     pushDebounced: debouncedPush
@@ -1449,7 +1449,7 @@ const useOptimizedQuery = <T extends QueriesSchema>(schema: T) => {
 ## Related Packages
 
 - `vue-router` - Vue Router 4.x
-- `@fastkit/vue-utils` - Vue.js開発ユーティリティ
+- `@fastkit/vue-utils` - Vue.js development utilities
 
 ## License
 

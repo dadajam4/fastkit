@@ -1,20 +1,20 @@
 
 # @fastkit/vue-app-layout
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-app-layout/README-ja.md)
 
-Vueアプリケーションの全体レイアウトを制御するための包括的なコンポーネント実装。レスポンシブなアプリケーションレイアウト、ドロワー、ツールバー、サイドバー、スタックナビゲーションなどのUIパターンを提供します。
+A comprehensive component implementation for controlling the overall layout of Vue applications. Provides UI patterns such as responsive application layouts, drawers, toolbars, sidebars, and stack navigation.
 
 ## Features
 
-- **レスポンシブレイアウト**: デバイスサイズに対応したアダプティブレイアウト
-- **ドロワーナビゲーション**: スライド式サイドメニューシステム
-- **ツールバー**: ヘッダー・フッターエリアの管理
-- **スタック**: 多層コンテンツナビゲーション
-- **フレキシブル配置**: top、bottom、left、rightの自由な配置
-- **ビューポート管理**: 画面サイズとレイアウトの自動調整
-- **スクロール制御**: ボディスクロールロックとカスタムスクロール
-- **アニメーション**: スムーズなトランジション効果
+- **Responsive Layout**: Adaptive layout compatible with device sizes
+- **Drawer Navigation**: Slide-style side menu system
+- **Toolbar**: Header and footer area management
+- **Stack**: Multi-layer content navigation
+- **Flexible Placement**: Free placement of top, bottom, left, right
+- **Viewport Management**: Automatic adjustment of screen size and layout
+- **Scroll Control**: Body scroll lock and custom scroll
+- **Animation**: Smooth transition effects
 
 ## Installation
 
@@ -24,49 +24,49 @@ npm install @fastkit/vue-app-layout
 
 ## Basic Usage
 
-### CSSのインポート
+### CSS Import
 
 ```typescript
 // main.ts
 import '@fastkit/vue-app-layout/vue-app-layout.css'
 ```
 
-### 基本レイアウトの設定
+### Basic Layout Setup
 
 ```vue
 <template>
   <VAppLayout>
     <template #default="{ layout }">
-      <!-- システムバー -->
+      <!-- System bar -->
       <VAppSystemBar>
         App Title
       </VAppSystemBar>
-      
-      <!-- メインツールバー -->
+
+      <!-- Main toolbar -->
       <VAppToolbar>
         <button @click="layout.toggleDrawer('left')">
-          メニュー
+          Menu
         </button>
-        <h1>ページタイトル</h1>
+        <h1>Page Title</h1>
       </VAppToolbar>
-      
-      <!-- 左サイドドロワー -->
+
+      <!-- Left side drawer -->
       <VAppDrawer position="left">
         <nav>
-          <router-link to="/">ホーム</router-link>
+          <router-link to="/">Home</router-link>
           <router-link to="/about">About</router-link>
           <router-link to="/contact">Contact</router-link>
         </nav>
       </VAppDrawer>
-      
-      <!-- メインコンテンツエリア -->
+
+      <!-- Main content area -->
       <VAppBody>
         <VAppContainer>
           <router-view />
         </VAppContainer>
       </VAppBody>
-      
-      <!-- フッターツールバー -->
+
+      <!-- Footer toolbar -->
       <VAppBottom>
         <p>&copy; 2024 My App</p>
       </VAppBottom>
@@ -87,9 +87,9 @@ import {
 </script>
 ```
 
-## ドロワーナビゲーション
+## Drawer Navigation
 
-### 基本的なドロワー
+### Basic Drawer
 
 ```vue
 <template>
@@ -101,9 +101,9 @@ import {
         </button>
         <h1>App Title</h1>
       </VAppToolbar>
-      
+
       <!-- 左ドロワー -->
-      <VAppDrawer 
+      <VAppDrawer
         position="left"
         :width="280"
         :persistent="isDesktop"
@@ -127,7 +127,7 @@ import {
           </router-link>
         </nav>
       </VAppDrawer>
-      
+
       <VAppBody>
         <router-view />
       </VAppBody>
@@ -162,16 +162,16 @@ const closeDrawerOnMobile = () => {
           設定
         </button>
       </VAppToolbar>
-      
+
       <!-- 右ドロワー -->
-      <VAppDrawer 
+      <VAppDrawer
         position="right"
         :width="320"
         overlay
       >
         <div class="settings-panel">
           <h3>設定</h3>
-          
+
           <div class="setting-group">
             <label>テーマ</label>
             <select v-model="theme">
@@ -179,7 +179,7 @@ const closeDrawerOnMobile = () => {
               <option value="dark">ダーク</option>
             </select>
           </div>
-          
+
           <div class="setting-group">
             <label>言語</label>
             <select v-model="language">
@@ -187,13 +187,13 @@ const closeDrawerOnMobile = () => {
               <option value="en">English</option>
             </select>
           </div>
-          
+
           <button @click="layout.closeDrawer('right')">
-            閉じる
+            Close
           </button>
         </div>
       </VAppDrawer>
-      
+
       <VAppBody>
         <router-view />
       </VAppBody>
@@ -215,7 +215,7 @@ const closeDrawerOnMobile = () => {
         <span class="system-info">System Status: Online</span>
         <span class="system-time">{{ currentTime }}</span>
       </VAppSystemBar>
-      
+
       <!-- メインツールバー -->
       <VAppToolbar class="main-toolbar">
         <button @click="layout.toggleDrawer('left')">
@@ -238,7 +238,7 @@ const closeDrawerOnMobile = () => {
           </button>
         </div>
       </VAppToolbar>
-      
+
       <!-- サブツールバー（タブナビゲーション） -->
       <VAppToolbar class="sub-toolbar">
         <nav class="tab-navigation">
@@ -253,7 +253,7 @@ const closeDrawerOnMobile = () => {
           </router-link>
         </nav>
       </VAppToolbar>
-      
+
       <VAppBody>
         <router-view />
       </VAppBody>
@@ -293,15 +293,15 @@ onUnmounted(() => {
   <VAppLayout>
     <template #default="{ layout }">
       <VAppToolbar>
-        <button 
-          v-if="canGoBack" 
+        <button
+          v-if="canGoBack"
           @click="layout.popStack()"
         >
           <i class="back-icon"></i>
         </button>
         <h1>{{ currentStackTitle }}</h1>
       </VAppToolbar>
-      
+
       <!-- スタックコンテナ -->
       <VAppStack>
         <router-view />
@@ -322,7 +322,7 @@ const currentStackTitle = computed(() => {
   return currentStack?.title || 'Page'
 })
 
-// スタックをプッシュする例
+// Example of pushing to stack
 const pushToStack = (component: any, props: any = {}) => {
   layout.pushStack({
     component,
@@ -343,23 +343,23 @@ const pushToStack = (component: any, props: any = {}) => {
     <template #default="{ layout }">
       <VAppToolbar>
         <!-- モバイル: ハンバーガーメニュー -->
-        <button 
-          v-if="isMobile" 
+        <button
+          v-if="isMobile"
           @click="layout.toggleDrawer('left')"
         >
           <i class="menu-icon"></i>
         </button>
-        
+
         <h1>App</h1>
-        
+
         <!-- デスクトップ: 検索バー -->
         <div v-if="isDesktop" class="search-bar">
           <input type="search" placeholder="検索..." />
         </div>
       </VAppToolbar>
-      
+
       <!-- 左ドロワー：レスポンシブ設定 -->
-      <VAppDrawer 
+      <VAppDrawer
         position="left"
         :width="drawerWidth"
         :persistent="isDesktop"
@@ -367,7 +367,7 @@ const pushToStack = (component: any, props: any = {}) => {
         :mini="isTablet && !layout.isDrawerOpen('left')"
       >
         <nav class="responsive-nav">
-          <router-link 
+          <router-link
             v-for="item in navigationItems"
             :key="item.path"
             :to="item.path"
@@ -381,17 +381,17 @@ const pushToStack = (component: any, props: any = {}) => {
           </router-link>
         </nav>
       </VAppDrawer>
-      
+
       <VAppBody>
         <VAppContainer :fluid="isMobile">
           <router-view />
         </VAppContainer>
       </VAppBody>
-      
+
       <!-- モバイル: ボトムナビゲーション -->
       <VAppBottom v-if="isMobile">
         <nav class="bottom-nav">
-          <router-link 
+          <router-link
             v-for="item in bottomNavItems"
             :key="item.path"
             :to="item.path"
@@ -414,8 +414,8 @@ const layout = useVueAppLayout()
 
 // レスポンシブブレークポイント
 const isMobile = computed(() => layout.viewportRect.value.width < 768)
-const isTablet = computed(() => 
-  layout.viewportRect.value.width >= 768 && 
+const isTablet = computed(() =>
+  layout.viewportRect.value.width >= 768 &&
   layout.viewportRect.value.width < 1024
 )
 const isDesktop = computed(() => layout.viewportRect.value.width >= 1024)
@@ -506,7 +506,7 @@ const toggleTheme = () => {
   <VAppLayout>
     <template #default="{ layout }">
       <!-- カスタムトランジション付きドロワー -->
-      <VAppDrawer 
+      <VAppDrawer
         position="left"
         transition-duration="400ms"
         transition-timing="cubic-bezier(0.4, 0, 0.2, 1)"
@@ -515,7 +515,7 @@ const toggleTheme = () => {
           <!-- ナビゲーション内容 -->
         </nav>
       </VAppDrawer>
-      
+
       <!-- ページトランジション -->
       <VAppBody>
         <transition name="page-fade" mode="out-in">
@@ -557,9 +557,9 @@ const toggleTheme = () => {
       <VAppToolbar>
         <h1>App</h1>
       </VAppToolbar>
-      
-      <!-- 条件付きで重いコンポーネントをロード -->
-      <VAppDrawer 
+
+      <!-- Conditionally load heavy components -->
+      <VAppDrawer
         v-if="shouldShowDrawer"
         position="left"
         @open="onDrawerOpen"
@@ -575,7 +575,7 @@ const toggleTheme = () => {
           </template>
         </Suspense>
       </VAppDrawer>
-      
+
       <VAppBody>
         <router-view />
       </VAppBody>
@@ -589,12 +589,12 @@ import { defineAsyncComponent, ref } from 'vue'
 const shouldShowDrawer = ref(false)
 
 // 非同期コンポーネント
-const AsyncNavigationMenu = defineAsyncComponent(() => 
+const AsyncNavigationMenu = defineAsyncComponent(() =>
   import('./components/NavigationMenu.vue')
 )
 
 const onDrawerOpen = () => {
-  // ドロワーが開かれた時に重いコンポーネントをロード
+  // Load heavy components when drawer is opened
   shouldShowDrawer.value = true
 }
 </script>
@@ -608,7 +608,7 @@ const onDrawerOpen = () => {
 
 ```typescript
 interface VAppLayoutProps {
-  // レイアウト固有のプロパティは現在なし
+  // No layout-specific properties currently
 }
 ```
 
@@ -646,7 +646,7 @@ interface VAppToolbarProps {
 
 ```typescript
 interface VAppBodyProps {
-  // 基本的なプロパティのみ
+  // Basic properties only
 }
 ```
 
@@ -672,13 +672,13 @@ interface VueAppLayoutComposable {
   openDrawer(position: 'left' | 'right'): void
   closeDrawer(position?: 'left' | 'right'): void
   isDrawerOpen(position: 'left' | 'right'): boolean
-  
+
   // スタック制御
   pushStack(options: StackOptions): void
   popStack(): void
   stackDepth: Ref<number>
   currentStack: Ref<StackItem | null>
-  
+
   // ビューポート情報
   viewportRect: Ref<ViewportRect>
 }

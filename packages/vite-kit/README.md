@@ -1,19 +1,19 @@
 
 # @fastkit/vite-kit
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vite-kit/README-ja.md)
 
-Viteアプリケーションセットアップ用の包括的なツールキット集。カラースキーム生成、アイコンフォント作成、スプライト画像生成、メディアクエリ管理などの開発効率化プラグインを提供します。
+A comprehensive toolkit collection for Vite application setup. Provides development efficiency plugins including color scheme generation, icon font creation, sprite image generation, and media query management.
 
 ## Features
 
-- **カラースキーム生成**: CSS変数とTypeScript型定義の自動生成
-- **アイコンフォント作成**: SVGファイルからWebフォントの自動生成
-- **スプライト画像生成**: 複数画像の結合とCSS生成
-- **メディアクエリ管理**: レスポンシブデザイン用の型安全な管理
-- **ダイナミックソース**: 動的なソースファイル処理
-- **ハッシュ同期**: ファイルハッシュ管理とキャッシュ制御
-- **追加スタイル**: Sassの追加データ管理
+- **Color Scheme Generation**: Automatic generation of CSS variables and TypeScript type definitions
+- **Icon Font Creation**: Automatic web font generation from SVG files
+- **Sprite Image Generation**: Image combining and CSS generation
+- **Media Query Management**: Type-safe management for responsive design
+- **Dynamic Source**: Dynamic source file processing
+- **Hash Sync**: File hash management and cache control
+- **Additional Styles**: Sass additional data management
 
 ## Installation
 
@@ -21,9 +21,9 @@ Viteアプリケーションセットアップ用の包括的なツールキッ�
 npm install @fastkit/vite-kit
 ```
 
-## カラースキームプラグイン
+## Color Scheme Plugin
 
-### 基本的な使用方法
+### Basic Usage
 
 ```typescript
 // vite.config.ts
@@ -33,42 +33,42 @@ import { colorSchemeVitePlugin } from '@fastkit/vite-kit'
 export default defineConfig({
   plugins: [
     colorSchemeVitePlugin({
-      // カラースキーム定義ファイル
+      // Color scheme definition file
       src: 'src/styles/color-scheme.ts',
-      
-      // 出力ディレクトリ（省略時は .color-scheme）
+
+      // Output directory (defaults to .color-scheme)
       dest: '.color-scheme',
-      
-      // 生成完了時のコールバック
+
+      // Callback on generation completion
       onBooted: () => {
-        console.log('カラースキーム生成完了')
+        console.log('Color scheme generation completed')
       },
-      
-      // エラー時のコールバック
+
+      // Callback on error
       onBootError: (err) => {
-        console.error('カラースキーム生成エラー:', err)
+        console.error('Color scheme generation error:', err)
       }
     })
   ]
 })
 ```
 
-### カラースキーム定義
+### Color Scheme Definition
 
 ```typescript
 // src/styles/color-scheme.ts
 import { defineColorScheme } from '@fastkit/color-scheme-gen'
 
 export default defineColorScheme({
-  // 基本色の定義
+  // Basic color definitions
   colors: {
     primary: '#3b82f6',
     secondary: '#64748b',
     success: '#22c55e',
     warning: '#f59e0b',
     error: '#ef4444',
-    
-    // グレースケール
+
+    // Grayscale
     gray: {
       50: '#f9fafb',
       100: '#f3f4f6',
@@ -82,8 +82,8 @@ export default defineColorScheme({
       900: '#111827'
     }
   },
-  
-  // テーマ定義
+
+  // Theme definitions
   themes: {
     light: {
       background: '$gray.50',
@@ -99,16 +99,16 @@ export default defineColorScheme({
 })
 ```
 
-### 生成されたスタイルの使用
+### Using Generated Styles
 
 ```scss
-// CSS変数として利用
+// Use as CSS variables
 .button {
   background-color: var(--color-primary);
   color: var(--color-primary-contrast);
 }
 
-// テーマ切り替え
+// Theme switching
 [data-theme="dark"] {
   background-color: var(--theme-background);
   color: var(--theme-text);
@@ -116,17 +116,17 @@ export default defineColorScheme({
 ```
 
 ```typescript
-// TypeScript型定義として利用
+// Use as TypeScript type definitions
 import { colors, themes } from '.color-scheme'
 
-// 型安全なカラー参照
+// Type-safe color references
 const primaryColor: string = colors.primary
 const darkTheme = themes.dark
 ```
 
-## アイコンフォントプラグイン
+## Icon Font Plugin
 
-### 基本的な使用方法
+### Basic Usage
 
 ```typescript
 // vite.config.ts
@@ -135,41 +135,41 @@ import { iconFontVitePlugin } from '@fastkit/vite-kit'
 export default defineConfig({
   plugins: [
     iconFontVitePlugin({
-      // SVGアイコンのディレクトリ
+      // SVG icons directory
       src: 'src/assets/icons',
-      
-      // 出力先ディレクトリ
+
+      // Output directory
       dest: 'public/fonts',
-      
-      // フォント名
+
+      // Font name
       fontName: 'MyIcons',
-      
-      // CSS出力先
+
+      // CSS output path
       cssPath: 'src/styles/icons.css',
-      
-      // TypeScript型定義出力先
+
+      // TypeScript type definitions output path
       typesPath: 'src/types/icons.ts',
-      
-      // 生成完了時のコールバック
+
+      // Callback on generation completion
       onBooted: () => {
-        console.log('アイコンフォント生成完了')
+        console.log('Icon font generation completed')
       }
     })
   ]
 })
 ```
 
-### アイコンの使用
+### Using Icons
 
 ```html
-<!-- CSS クラスとして使用 -->
+<!-- Use as CSS classes -->
 <i class="icon icon-home"></i>
 <i class="icon icon-user"></i>
 <i class="icon icon-settings"></i>
 ```
 
 ```scss
-// SCSSでの使用
+// Use in SCSS
 .button {
   &::before {
     @include icon('chevron-right');
@@ -178,15 +178,15 @@ export default defineConfig({
 ```
 
 ```typescript
-// TypeScript での型安全な使用
+// Type-safe usage in TypeScript
 import { IconName } from './types/icons'
 
-const iconName: IconName = 'home' // 型補完が効く
+const iconName: IconName = 'home' // Type completion works
 ```
 
-## スプライト画像プラグイン
+## Sprite Images Plugin
 
-### 基本的な使用方法
+### Basic Usage
 
 ```typescript
 // vite.config.ts
@@ -195,13 +195,13 @@ import { spriteImagesVitePlugin } from '@fastkit/vite-kit'
 export default defineConfig({
   plugins: [
     spriteImagesVitePlugin({
-      // 画像ディレクトリ
+      // Images directory
       src: 'src/assets/sprites',
-      
-      // 出力ディレクトリ
+
+      // Output directory
       dest: 'public/images',
-      
-      // スプライト設定
+
+      // Sprite configuration
       sprites: [
         {
           name: 'icons',
@@ -210,26 +210,26 @@ export default defineConfig({
           cssPath: 'src/styles/sprites.css'
         }
       ],
-      
-      // 最適化オプション
+
+      // Optimization options
       optimization: {
         algorithm: 'binary-tree',
         padding: 2,
         sort: true
       },
-      
+
       onBooted: () => {
-        console.log('スプライト画像生成完了')
+        console.log('Sprite images generation completed')
       }
     })
   ]
 })
 ```
 
-### 生成されたスプライトの使用
+### Using Generated Sprites
 
 ```scss
-// 自動生成されたCSS
+// Auto-generated CSS
 .sprite {
   background-image: url('/images/icons.png');
   background-repeat: no-repeat;
@@ -250,9 +250,9 @@ export default defineConfig({
 }
 ```
 
-## メディアマッチプラグイン
+## Media Match Plugin
 
-### 基本的な使用方法
+### Basic Usage
 
 ```typescript
 // vite.config.ts
@@ -261,7 +261,7 @@ import { mediaMatchVitePlugin } from '@fastkit/vite-kit'
 export default defineConfig({
   plugins: [
     mediaMatchVitePlugin({
-      // ブレークポイント定義
+      // Breakpoint definitions
       breakpoints: {
         xs: 480,
         sm: 640,
@@ -270,25 +270,25 @@ export default defineConfig({
         xl: 1280,
         '2xl': 1536
       },
-      
-      // CSS変数出力先
+
+      // CSS variables output path
       cssPath: 'src/styles/media.css',
-      
-      // TypeScript型定義出力先
+
+      // TypeScript type definitions output path
       typesPath: 'src/types/media.ts',
-      
+
       onBooted: () => {
-        console.log('メディアクエリ生成完了')
+        console.log('Media query generation completed')
       }
     })
   ]
 })
 ```
 
-### メディアクエリの使用
+### Using Media Queries
 
 ```scss
-// 生成されたCSS変数
+// Generated CSS variables
 :root {
   --breakpoint-xs: 480px;
   --breakpoint-sm: 640px;
@@ -298,14 +298,14 @@ export default defineConfig({
   --breakpoint-2xl: 1536px;
 }
 
-// 使用例
+// Usage example
 .container {
   width: 100%;
-  
+
   @media (min-width: var(--breakpoint-md)) {
     max-width: 768px;
   }
-  
+
   @media (min-width: var(--breakpoint-lg)) {
     max-width: 1024px;
   }
@@ -313,19 +313,19 @@ export default defineConfig({
 ```
 
 ```typescript
-// TypeScript での使用
+// Usage in TypeScript
 import { breakpoints, mediaQueries } from './types/media'
 
-// 型安全なブレークポイント参照
+// Type-safe breakpoint references
 const lgBreakpoint = breakpoints.lg // 1024
 
-// メディアクエリ文字列の生成
+// Media query string generation
 const lgAndUp = mediaQueries.lgAndUp // '(min-width: 1024px)'
 ```
 
-## ハッシュ同期プラグイン
+## Hash Sync Plugin
 
-### 基本的な使用方法
+### Basic Usage
 
 ```typescript
 // vite.config.ts
@@ -334,45 +334,45 @@ import { hashedSyncVitePlugin } from '@fastkit/vite-kit'
 export default defineConfig({
   plugins: [
     hashedSyncVitePlugin({
-      // 監視対象ファイル
+      // Target files to watch
       files: [
         'src/assets/**/*',
         'public/**/*'
       ],
-      
-      // ハッシュファイル出力先
+
+      // Hash file output path
       hashFile: '.hashed-sync.json',
-      
-      // 除外パターン
+
+      // Exclude patterns
       exclude: [
         '**/*.tmp',
         '**/.DS_Store'
       ],
-      
+
       onBooted: () => {
-        console.log('ハッシュ同期完了')
+        console.log('Hash sync completed')
       }
     })
   ]
 })
 ```
 
-### ハッシュファイルの活用
+### Utilizing Hash Files
 
 ```typescript
-// ハッシュ情報の読み込み
+// Load hash information
 import hashInfo from './.hashed-sync.json'
 
-// キャッシュバスターとして使用
+// Use as cache buster
 const assetUrl = `/assets/image.png?v=${hashInfo.files['src/assets/image.png']}`
 
-// ファイル変更検知
+// File change detection
 const hasChanged = hashInfo.lastUpdate > previousUpdate
 ```
 
-## 追加スタイルプラグイン
+## Additional Styles Plugin
 
-### 基本的な使用方法
+### Basic Usage
 
 ```typescript
 // vite.config.ts
@@ -381,13 +381,13 @@ import { styleAdditionalVitePlugin } from '@fastkit/vite-kit'
 export default defineConfig({
   plugins: [
     styleAdditionalVitePlugin({
-      // 追加するSassデータ
+      // Additional Sass data to include
       additionalData: [
         '@import "src/styles/variables.scss";',
         '@import "src/styles/mixins.scss";'
       ],
-      
-      // 動的追加データ
+
+      // Dynamic additional data
       dynamicAdditionalData: () => {
         const timestamp = Date.now()
         return `$build-timestamp: ${timestamp};`
@@ -397,9 +397,9 @@ export default defineConfig({
 })
 ```
 
-## 動的ソースプラグイン
+## Dynamic Source Plugin
 
-### 基本的な使用方法
+### Basic Usage
 
 ```typescript
 // vite.config.ts
@@ -408,12 +408,12 @@ import { dynamicSrcVitePlugin } from '@fastkit/vite-kit'
 export default defineConfig({
   plugins: [
     dynamicSrcVitePlugin({
-      // パターンマッチング
+      // Pattern matching
       patterns: [
         {
           match: /\.env\.ts$/,
           transform: (code, id) => {
-            // 環境変数の注入
+            // Environment variable injection
             return code.replace(
               'process.env.NODE_ENV',
               JSON.stringify(process.env.NODE_ENV)
@@ -421,16 +421,16 @@ export default defineConfig({
           }
         }
       ],
-      
+
       onBooted: () => {
-        console.log('動的ソース処理完了')
+        console.log('Dynamic source processing completed')
       }
     })
   ]
 })
 ```
 
-## 複数プラグインの組み合わせ
+## Combining Multiple Plugins
 
 ```typescript
 // vite.config.ts
@@ -444,19 +444,19 @@ import {
 
 export default defineConfig({
   plugins: [
-    // カラースキーム
+    // Color scheme
     colorSchemeVitePlugin({
       src: 'src/styles/color-scheme.ts'
     }),
-    
-    // アイコンフォント
+
+    // Icon font
     iconFontVitePlugin({
       src: 'src/assets/icons',
       dest: 'public/fonts',
       fontName: 'AppIcons'
     }),
-    
-    // スプライト画像
+
+    // Sprite images
     spriteImagesVitePlugin({
       sprites: [
         {
@@ -466,8 +466,8 @@ export default defineConfig({
         }
       ]
     }),
-    
-    // メディアクエリ
+
+    // Media queries
     mediaMatchVitePlugin({
       breakpoints: {
         mobile: 768,
@@ -479,9 +479,9 @@ export default defineConfig({
 })
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### 開発時の最適化
+### Development Optimization
 
 ```typescript
 // vite.config.ts
@@ -489,20 +489,20 @@ export default defineConfig({
   plugins: [
     colorSchemeVitePlugin({
       src: 'src/styles/color-scheme.ts',
-      // 開発時はキャッシュを有効化
+      // Enable cache during development
       cache: process.env.NODE_ENV === 'development'
     }),
-    
+
     iconFontVitePlugin({
       src: 'src/assets/icons',
-      // 開発時は変更監視を有効化
+      // Enable change watching during development
       watch: process.env.NODE_ENV === 'development'
     })
   ]
 })
 ```
 
-### 本番ビルドの最適化
+### Production Build Optimization
 
 ```typescript
 // vite.config.ts
@@ -512,12 +512,12 @@ export default defineConfig({
       sprites: [{
         name: 'icons',
         src: 'src/assets/sprites/*.png',
-        // 本番時は最適化を有効化
+        // Enable optimization in production
         optimization: {
           algorithm: 'binary-tree',
           padding: 1,
           sort: true,
-          // PNG最適化
+          // PNG optimization
           pngquant: process.env.NODE_ENV === 'production'
         }
       }]
@@ -526,7 +526,7 @@ export default defineConfig({
 })
 ```
 
-## API リファレンス
+## API Reference
 
 ### colorSchemeVitePlugin
 
@@ -569,9 +569,9 @@ interface MediaMatchVitePluginOptions {
 }
 ```
 
-## CLI統合
+## CLI Integration
 
-### package.json スクリプト
+### package.json Scripts
 
 ```json
 {
@@ -585,47 +585,47 @@ interface MediaMatchVitePluginOptions {
 }
 ```
 
-### 自動生成の監視
+### Auto-generation Monitoring
 
 ```bash
-# 開発サーバー起動時に自動生成・監視
+# Auto-generation and monitoring when starting dev server
 npm run dev
 
-# 個別生成
+# Individual generation
 npm run generate:colors
 npm run generate:icons
 npm run generate:sprites
 ```
 
-## トラブルシューティング
+## Troubleshooting
 
-### よくある問題
+### Common Issues
 
-1. **ファイルが見つからない**: `src`パスが正しいか確認
-2. **権限エラー**: 出力ディレクトリの書き込み権限を確認
-3. **メモリ不足**: 大量のファイル処理時はNode.jsメモリ上限を増加
+1. **File not found**: Check if the `src` path is correct
+2. **Permission errors**: Check write permissions for output directories
+3. **Out of memory**: Increase Node.js memory limit when processing large amounts of files
 
-### デバッグ方法
+### Debugging Methods
 
 ```typescript
-// デバッグログの有効化
+// Enable debug logging
 colorSchemeVitePlugin({
   src: 'src/styles/color-scheme.ts',
-  onBooted: () => console.log('✓ カラースキーム生成完了'),
-  onBootError: (err) => console.error('✗ エラー:', err)
+  onBooted: () => console.log('✓ Color scheme generation completed'),
+  onBootError: (err) => console.error('✗ Error:', err)
 })
 ```
 
 ## Related Packages
 
-- `@fastkit/color-scheme-gen` - カラースキーム生成器
-- `@fastkit/icon-font-gen` - アイコンフォント生成器
-- `@fastkit/sprite-images` - スプライト画像生成器
-- `@fastkit/media-match-gen` - メディアクエリ生成器
-- `@fastkit/hashed-sync` - ファイルハッシュ管理
-- `@fastkit/helpers` - ヘルパー関数
-- `@fastkit/tiny-logger` - ロガー
-- `vite` - ビルドツール（ピア依存関係）
+- `@fastkit/color-scheme-gen` - Color scheme generator
+- `@fastkit/icon-font-gen` - Icon font generator
+- `@fastkit/sprite-images` - Sprite image generator
+- `@fastkit/media-match-gen` - Media query generator
+- `@fastkit/hashed-sync` - File hash management
+- `@fastkit/helpers` - Helper functions
+- `@fastkit/tiny-logger` - Logger
+- `vite` - Build tool (peer dependency)
 
 ## License
 

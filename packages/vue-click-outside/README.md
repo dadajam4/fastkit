@@ -1,20 +1,20 @@
 
 # @fastkit/vue-click-outside
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-click-outside/README-ja.md)
 
-Vue.jsアプリケーションで要素外のクリックを検出するためのディレクティブライブラリ。モーダル、ドロップダウン、ポップアップなどのUIコンポーネントで、外部をクリックした際の処理を簡単に実装できます。
+A directive library for detecting clicks outside elements in Vue.js applications. Easily implement handling for external clicks in UI components such as modals, dropdowns, and popups.
 
 ## Features
 
-- **Vue 3ディレクティブ**: シンプルなディレクティブとして提供
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **柔軟な条件設定**: クリック検出の条件をカスタマイズ可能
-- **要素の除外**: 特定の要素をクリック範囲から除外
-- **高いパフォーマンス**: 効率的なイベント処理とメモリ管理
-- **アクセシビリティ対応**: trusted eventsのみを処理
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **軽量設計**: 最小限の依存関係
+- **Vue 3 Directive**: Provided as a simple directive
+- **Complete TypeScript Support**: Type safety through strict type definitions
+- **Flexible Condition Settings**: Customizable click detection conditions
+- **Element Exclusion**: Exclude specific elements from click range
+- **High Performance**: Efficient event processing and memory management
+- **Accessibility Support**: Processes only trusted events
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Lightweight Design**: Minimal dependencies
 
 ## Installation
 
@@ -24,7 +24,7 @@ npm install @fastkit/vue-click-outside
 
 ## Basic Usage
 
-### プラグインの登録
+### Plugin Registration
 
 ```typescript
 // main.ts
@@ -34,79 +34,79 @@ import App from './App.vue'
 
 const app = createApp(App)
 
-// click-outsideディレクティブをグローバル登録
+// Register click-outside directive globally
 installClickOutsideDirective(app)
 
 app.mount('#app')
 ```
 
-### 基本的なクリック外検出
+### Basic Click Outside Detection
 
 ```vue
 <template>
   <div>
-    <h2>基本的なクリック外検出</h2>
-    
-    <!-- 簡単な使用例 -->
+    <h2>Basic Click Outside Detection</h2>
+
+    <!-- Simple usage example -->
     <div class="example-section">
-      <h3>シンプルなモーダル</h3>
-      <button @click="showSimpleModal = true">モーダルを開く</button>
-      
+      <h3>Simple Modal</h3>
+      <button @click="showSimpleModal = true">Open Modal</button>
+
       <div v-if="showSimpleModal" class="modal-overlay">
-        <div 
+        <div
           class="modal-content"
           v-click-outside="() => showSimpleModal = false"
         >
-          <h4>シンプルモーダル</h4>
-          <p>外側をクリックするとモーダルが閉じます</p>
-          <button @click="showSimpleModal = false">閉じる</button>
+          <h4>Simple Modal</h4>
+          <p>Clicking outside will close the modal</p>
+          <button @click="showSimpleModal = false">Close</button>
         </div>
       </div>
     </div>
-    
-    <!-- ドロップダウンメニュー -->
+
+    <!-- Dropdown menu -->
     <div class="example-section">
-      <h3>ドロップダウンメニュー</h3>
+      <h3>Dropdown Menu</h3>
       <div class="dropdown">
         <button @click="toggleDropdown">
-          メニュー {{ isDropdownOpen ? '▲' : '▼' }}
+          Menu {{ isDropdownOpen ? '▲' : '▼' }}
         </button>
-        
-        <div 
-          v-if="isDropdownOpen" 
+
+        <div
+          v-if="isDropdownOpen"
           class="dropdown-menu"
           v-click-outside="closeDropdown"
         >
-          <div class="dropdown-item" @click="selectItem('オプション1')">オプション1</div>
-          <div class="dropdown-item" @click="selectItem('オプション2')">オプション2</div>
-          <div class="dropdown-item" @click="selectItem('オプション3')">オプション3</div>
+          <div class="dropdown-item" @click="selectItem('Option 1')">Option 1</div>
+          <div class="dropdown-item" @click="selectItem('Option 2')">Option 2</div>
+          <div class="dropdown-item" @click="selectItem('Option 3')">Option 3</div>
         </div>
       </div>
-      <p>選択されたアイテム: {{ selectedItem }}</p>
+      <p>Selected item: {{ selectedItem }}</p>
     </div>
-    
-    <!-- ツールチップ -->
+
+    <!-- Tooltip -->
     <div class="example-section">
-      <h3>ツールチップ</h3>
-      <button 
+      <h3>Tooltip</h3>
+      <button
         ref="tooltipTrigger"
         @click="showTooltip = !showTooltip"
         class="tooltip-trigger"
       >
-        ツールチップを表示
+        Show Tooltip
       </button>
-      
-      <div 
+
+      <div
         v-if="showTooltip"
         class="tooltip"
-        v-click-outside="{ 
+        v-click-outside="{
           handler: () => showTooltip = false,
           include: () => tooltipTrigger ? [tooltipTrigger] : []
         }"
       >
         <div class="tooltip-content">
-          これはツールチップです。<br>
-          外側をクリックして閉じてください。
+          This is a tooltip.<br>
+          Click outside to close.
         </div>
       </div>
     </div>
@@ -229,80 +229,80 @@ const selectItem = (item: string) => {
 </style>
 ```
 
-## 実用的な使用例
+## Practical Usage Examples
 
-### 高度な条件付きクリック検出
+### Advanced Conditional Click Detection
 
 ```vue
 <template>
   <div>
-    <h2>高度なクリック外検出</h2>
-    
-    <!-- 条件付きモーダル -->
+    <h2>Advanced Click Outside Detection</h2>
+
+    <!-- Conditional modal -->
     <div class="advanced-section">
-      <h3>条件付きモーダル</h3>
+      <h3>Conditional Modal</h3>
       <div class="controls">
         <label>
           <input type="checkbox" v-model="enableClickOutside" />
-          クリック外で閉じる機能を有効にする
+          Enable click outside to close functionality
         </label>
         <label>
           <input type="checkbox" v-model="confirmBeforeClose" />
-          閉じる前に確認する
+          Confirm before closing
         </label>
       </div>
-      
-      <button @click="showAdvancedModal = true">高度なモーダルを開く</button>
-      
+
+      <button @click="showAdvancedModal = true">Open Advanced Modal</button>
+
       <div v-if="showAdvancedModal" class="modal-overlay">
-        <div 
+        <div
           class="modal-content"
           v-click-outside="{
             handler: handleModalClickOutside,
             conditional: (ev, pre) => enableClickOutside && (pre || !confirmBeforeClose || hasUnsavedChanges)
           }"
         >
-          <h4>高度なモーダル</h4>
+          <h4>Advanced Modal</h4>
           <div class="form-section">
             <label>
-              名前:
-              <input 
-                v-model="formData.name" 
+              Name:
+              <input
+                v-model="formData.name"
                 @input="hasUnsavedChanges = true"
-                placeholder="名前を入力"
+                placeholder="Enter name"
               />
             </label>
             <label>
-              メールアドレス:
-              <input 
-                v-model="formData.email" 
+              Email:
+              <input
+                v-model="formData.email"
                 @input="hasUnsavedChanges = true"
-                placeholder="メールアドレスを入力"
+                placeholder="Enter email address"
               />
             </label>
           </div>
-          
+
           <div class="modal-actions">
-            <button @click="saveForm">保存</button>
-            <button @click="closeAdvancedModal">キャンセル</button>
+            <button @click="saveForm">Save</button>
+            <button @click="closeAdvancedModal">Cancel</button>
           </div>
-          
+
           <div v-if="hasUnsavedChanges" class="warning">
-            未保存の変更があります
+            Unsaved changes exist
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- マルチレベルドロップダウン -->
+
+    <!-- Multi-level dropdown -->
     <div class="advanced-section">
-      <h3>マルチレベルドロップダウン</h3>
+      <h3>Multi-level Dropdown</h3>
       <div class="multi-dropdown">
         <button @click="toggleMainMenu">
-          メインメニュー {{ isMainMenuOpen ? '▲' : '▼' }}
+          Main Menu {{ isMainMenuOpen ? '▲' : '▼' }}
         </button>
-        
-        <div 
+
+        <div
           v-if="isMainMenuOpen"
           class="dropdown-menu"
           v-click-outside="{
@@ -310,33 +310,33 @@ const selectItem = (item: string) => {
             include: getMenuIncludes
           }"
         >
-          <div class="dropdown-item" @click="selectMainItem('ファイル')">
-            ファイル
+          <div class="dropdown-item" @click="selectMainItem('File')">
+            File
           </div>
-          <div 
-            class="dropdown-item submenu-trigger" 
+          <div
+            class="dropdown-item submenu-trigger"
             @click="toggleSubMenu"
             ref="subMenuTrigger"
           >
-            編集 {{ isSubMenuOpen ? '▶' : '▶' }}
+            Edit {{ isSubMenuOpen ? '▶' : '▶' }}
           </div>
-          <div class="dropdown-item" @click="selectMainItem('表示')">
-            表示
+          <div class="dropdown-item" @click="selectMainItem('View')">
+            View
           </div>
         </div>
-        
-        <div 
+
+        <div
           v-if="isSubMenuOpen"
           class="dropdown-menu submenu"
           ref="subMenu"
         >
-          <div class="dropdown-item" @click="selectSubItem('切り取り')">切り取り</div>
-          <div class="dropdown-item" @click="selectSubItem('コピー')">コピー</div>
-          <div class="dropdown-item" @click="selectSubItem('貼り付け')">貼り付け</div>
+          <div class="dropdown-item" @click="selectSubItem('Cut')">Cut</div>
+          <div class="dropdown-item" @click="selectSubItem('Copy')">Copy</div>
+          <div class="dropdown-item" @click="selectSubItem('Paste')">Paste</div>
         </div>
       </div>
-      
-      <p>最後の選択: {{ lastSelection }}</p>
+
+      <p>Last selection: {{ lastSelection }}</p>
     </div>
   </div>
 </template>
@@ -344,7 +344,7 @@ const selectItem = (item: string) => {
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 
-// 条件付きモーダル
+// Conditional modal
 const showAdvancedModal = ref(false)
 const enableClickOutside = ref(true)
 const confirmBeforeClose = ref(false)
@@ -357,7 +357,7 @@ const formData = reactive({
 
 const handleModalClickOutside = () => {
   if (hasUnsavedChanges.value && confirmBeforeClose.value) {
-    if (confirm('未保存の変更があります。本当に閉じますか？')) {
+    if (confirm('You have unsaved changes. Are you sure you want to close?')) {
       closeAdvancedModal()
     }
   } else {
@@ -373,12 +373,12 @@ const closeAdvancedModal = () => {
 }
 
 const saveForm = () => {
-  console.log('フォームを保存:', formData)
+  console.log('Saving form:', formData)
   hasUnsavedChanges.value = false
   closeAdvancedModal()
 }
 
-// マルチレベルドロップダウン
+// Multi-level dropdown
 const isMainMenuOpen = ref(false)
 const isSubMenuOpen = ref(false)
 const lastSelection = ref('')
@@ -407,7 +407,7 @@ const selectMainItem = (item: string) => {
 }
 
 const selectSubItem = (item: string) => {
-  lastSelection.value = `編集 > ${item}`
+  lastSelection.value = `Edit > ${item}`
   closeAllMenus()
 }
 
@@ -504,24 +504,24 @@ const getMenuIncludes = () => {
 </style>
 ```
 
-### ローダブルディレクティブ (個別インポート)
+### Loadable Directive (Individual Import)
 
 ```vue
 <template>
   <div>
-    <h2>ローカルディレクティブ使用例</h2>
-    
+    <h2>Local Directive Usage Example</h2>
+
     <div class="local-example">
-      <button @click="showLocalModal = true">ローカルモーダルを開く</button>
-      
+      <button @click="showLocalModal = true">Open Local Modal</button>
+
       <div v-if="showLocalModal" class="modal-overlay">
-        <div 
+        <div
           class="modal-content"
           v-click-outside="closeLocalModal"
         >
-          <h4>ローカルディレクティブモーダル</h4>
-          <p>このモーダルではローカルに登録されたディレクティブを使用しています。</p>
-          <button @click="closeLocalModal">閉じる</button>
+          <h4>Local Directive Modal</h4>
+          <p>This modal uses a locally registered directive.</p>
+          <button @click="closeLocalModal">Close</button>
         </div>
       </div>
     </div>
@@ -532,7 +532,7 @@ const getMenuIncludes = () => {
 import { ref } from 'vue'
 import { clickOutsideDirective } from '@fastkit/vue-click-outside'
 
-// ローカルディレクティブとして登録
+// Register as local directive
 const vClickOutside = clickOutsideDirective
 
 const showLocalModal = ref(false)
@@ -552,19 +552,19 @@ const closeLocalModal = () => {
 </style>
 ```
 
-### Composition APIとの組み合わせ
+### Composition API Integration
 
 ```vue
 <template>
   <div>
-    <h2>Composition API統合例</h2>
-    
-    <!-- 通知システム -->
+    <h2>Composition API Integration Example</h2>
+
+    <!-- Notification system -->
     <div class="notification-system">
-      <button @click="addNotification">通知を追加</button>
-      
+      <button @click="addNotification">Add Notification</button>
+
       <div class="notifications">
-        <div 
+        <div
           v-for="notification in notifications"
           :key="notification.id"
           class="notification"
@@ -578,7 +578,7 @@ const closeLocalModal = () => {
             <h5>{{ notification.title }}</h5>
             <p>{{ notification.message }}</p>
           </div>
-          <button 
+          <button
             v-if="notification.dismissible"
             @click="removeNotification(notification.id)"
             class="close-btn"
@@ -588,28 +588,28 @@ const closeLocalModal = () => {
         </div>
       </div>
     </div>
-    
-    <!-- コンテキストメニュー -->
+
+    <!-- Context menu -->
     <div class="context-menu-area">
-      <h3>右クリックでコンテキストメニュー</h3>
-      <div 
+      <h3>Right-click for context menu</h3>
+      <div
         class="context-area"
         @contextmenu.prevent="showContextMenu"
       >
-        右クリックしてください
+        Right-click here
       </div>
-      
-      <div 
+
+      <div
         v-if="contextMenu.visible"
         class="context-menu"
         :style="contextMenuStyle"
         v-click-outside="hideContextMenu"
       >
-        <div class="context-item" @click="executeAction('コピー')">コピー</div>
-        <div class="context-item" @click="executeAction('切り取り')">切り取り</div>
-        <div class="context-item" @click="executeAction('貼り付け')">貼り付け</div>
+        <div class="context-item" @click="executeAction('Copy')">Copy</div>
+        <div class="context-item" @click="executeAction('Cut')">Cut</div>
+        <div class="context-item" @click="executeAction('Paste')">Paste</div>
         <hr>
-        <div class="context-item" @click="executeAction('削除')">削除</div>
+        <div class="context-item" @click="executeAction('Delete')">Delete</div>
       </div>
     </div>
   </div>
@@ -618,7 +618,7 @@ const closeLocalModal = () => {
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 
-// 通知システム
+// Notification system
 interface Notification {
   id: string
   title: string
@@ -632,18 +632,18 @@ const notifications = ref<Notification[]>([])
 const addNotification = () => {
   const types: Notification['type'][] = ['info', 'success', 'warning', 'error']
   const type = types[Math.floor(Math.random() * types.length)]
-  
+
   const notification: Notification = {
     id: Math.random().toString(36).substr(2, 9),
-    title: `${type.charAt(0).toUpperCase() + type.slice(1)} 通知`,
-    message: `これは${type}タイプの通知です。外側をクリックして閉じることができます。`,
+    title: `${type.charAt(0).toUpperCase() + type.slice(1)} Notification`,
+    message: `This is a ${type} type notification. You can close it by clicking outside.`,
     type,
     dismissible: true
   }
-  
+
   notifications.value.push(notification)
-  
-  // 自動削除（10秒後）
+
+  // Auto removal (after 10 seconds)
   setTimeout(() => {
     removeNotification(notification.id)
   }, 10000)
@@ -656,7 +656,7 @@ const removeNotification = (id: string) => {
   }
 }
 
-// コンテキストメニュー
+// Context menu
 const contextMenu = reactive({
   visible: false,
   x: 0,
@@ -681,7 +681,7 @@ const hideContextMenu = () => {
 }
 
 const executeAction = (action: string) => {
-  console.log(`実行されたアクション: ${action}`)
+  console.log(`Executed action: ${action}`)
   hideContextMenu()
 }
 </script>
@@ -799,73 +799,73 @@ const executeAction = (action: string) => {
 
 ## API Specification
 
-### `v-click-outside` ディレクティブ
+### `v-click-outside` Directive
 
-要素外のクリックを検出してハンドラーを実行するディレクティブ。
+A directive that detects clicks outside an element and executes a handler.
 
-**基本的な使用法:**
+**Basic usage:**
 ```vue
-<div v-click-outside="handler">コンテンツ</div>
+<div v-click-outside="handler">Content</div>
 ```
 
-**高度な設定:**
+**Advanced configuration:**
 ```vue
 <div v-click-outside="{
   handler: clickHandler,
   conditional: (ev, pre) => someCondition,
   include: () => [additionalElement1, additionalElement2]
 }">
-  コンテンツ
+  Content
 </div>
 ```
 
-### 型定義
+### Type Definitions
 
 ```typescript
-// ハンドラー関数の型
-type ClickOutsideDirectiveHandler = 
+// Handler function type
+type ClickOutsideDirectiveHandler =
   | ((ev: MouseEvent | PointerEvent) => any)
   | undefined
   | void
   | false
   | null
 
-// 詳細設定オブジェクトの型
+// Detailed configuration object type
 interface ClickOutsideDirectiveBindingValue {
   handler?: ClickOutsideDirectiveHandler
   conditional?: (ev: MouseEvent | PointerEvent, pre?: boolean) => boolean
   include?: () => Element[]
 }
 
-// ディレクティブの値の型（関数または設定オブジェクト）
+// Directive value type (function or configuration object)
 type RawClickOutsideDirectiveBindingValue =
   | ClickOutsideDirectiveHandler
   | ClickOutsideDirectiveBindingValue
 ```
 
-### プロパティ
+### Properties
 
-- **`handler`**: クリック外で実行される関数
-- **`conditional`**: クリック検出の条件を制御する関数
-  - `ev`: マウス/ポインターイベント
-  - `pre`: true=事前チェック、false=実行前の最終チェック
-- **`include`**: クリック範囲に含める追加要素を返す関数
+- **`handler`**: Function executed on click outside
+- **`conditional`**: Function to control click detection conditions
+  - `ev`: Mouse/pointer event
+  - `pre`: true=pre-check, false=final check before execution
+- **`include`**: Function that returns additional elements to include in click range
 
-### インストール関数
+### Installation Functions
 
 ```typescript
-// グローバル登録
+// Global registration
 import { installClickOutsideDirective } from '@fastkit/vue-click-outside'
 installClickOutsideDirective(app)
 
-// ローカル使用
+// Local usage
 import { clickOutsideDirective } from '@fastkit/vue-click-outside'
 const vClickOutside = clickOutsideDirective
 ```
 
 ## Advanced Usage Examples
 
-### 複雑なUIコンポーネント統合
+### Complex UI Component Integration
 
 ```typescript
 // composables/useModal.ts
@@ -877,13 +877,13 @@ export function useModal(options: {
 } = {}) {
   const isOpen = ref(false)
   const hasChanges = ref(false)
-  
+
   const clickOutsideHandler = computed(() => {
     if (!options.closeOnClickOutside) return null
-    
+
     return (ev: MouseEvent | PointerEvent) => {
       if (options.confirmBeforeClose && hasChanges.value) {
-        if (confirm('変更が保存されていません。閉じますか？')) {
+        if (confirm('Changes are not saved. Do you want to close?')) {
           close()
         }
       } else {
@@ -891,20 +891,20 @@ export function useModal(options: {
       }
     }
   })
-  
+
   const open = () => {
     isOpen.value = true
   }
-  
+
   const close = () => {
     isOpen.value = false
     hasChanges.value = false
   }
-  
+
   const markAsChanged = () => {
     hasChanges.value = true
   }
-  
+
   return {
     isOpen,
     hasChanges,
@@ -918,28 +918,28 @@ export function useModal(options: {
 
 ## Considerations
 
-### パフォーマンス考慮事項
+### Performance Considerations
 
-- イベントリスナーはコンポーネントの`mounted`/`beforeUnmount`で自動管理
-- 大量のclick-outsideディレクティブを同時使用する場合は、パフォーマンスに注意
-- `include`関数は必要な時のみ要素を返すよう最適化
+- Event listeners are automatically managed at component `mounted`/`beforeUnmount`
+- Be careful about performance when using many click-outside directives simultaneously
+- Optimize the `include` function to return elements only when necessary
 
-### ブラウザ対応
+### Browser Support
 
-- モダンブラウザすべてでサポート
-- Internet Explorer 11以降で動作
-- PointerEventとMouseEventの両方に対応
+- Supported in all modern browsers
+- Works with Internet Explorer 11 and later
+- Supports both PointerEvent and MouseEvent
 
-### アクセシビリティ
+### Accessibility
 
-- trusted eventsのみを処理してセキュリティを確保
-- キーボードナビゲーションとの組み合わせに注意
-- スクリーンリーダーユーザーへの配慮
+- Processes only trusted events to ensure security
+- Be careful when combining with keyboard navigation
+- Consider screen reader users
 
-### セキュリティ
+### Security
 
-- `isTrusted`プロパティをチェックして合成イベントを除外
-- PointerEventの`pointerType`をチェックして不正なイベントを除外
+- Checks the `isTrusted` property to exclude synthetic events
+- Checks PointerEvent's `pointerType` to exclude malicious events
 
 ## License
 
@@ -947,4 +947,4 @@ MIT
 
 ## Related Packages
 
-- [@fastkit/vue-utils](../vue-utils/README.md): Vue.jsユーティリティ関数
+- [@fastkit/vue-utils](../vue-utils/README.md): Vue.js utility functions

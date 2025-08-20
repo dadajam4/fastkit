@@ -1,22 +1,22 @@
 
 # @fastkit/rules
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/rules/README-ja.md)
 
-サーバーとブラウザの両方で動作するユニバーサルなバリデーションライブラリです。TypeScriptで構築され、型安全性と柔軟性を重視したバリデーションシステムを提供します。
+A universal validation library that works on both server and browser. Built with TypeScript, providing a validation system that emphasizes type safety and flexibility.
 
-## 特徴
+## Features
 
-- **ユニバーサル対応**: サーバーサイド・クライアントサイド共通のコード
-- **TypeScript完全対応**: 厳密な型安全性とIntelliSenseサポート
-- **非同期バリデーション**: Promiseベースの非同期処理対応
-- **ネストバリデーション**: 深いオブジェクト構造の検証
-- **カスタムルール**: 柔軟なカスタムバリデーションルール作成
-- **Vue.js統合**: @fastkit/vue-form-controlとのシームレス連携
-- **豊富な組み込みルール**: 30以上の実用的なバリデーションルール
-- **詳細なエラー情報**: 構造化されたエラーレポート
-- **国際化対応**: 多言語エラーメッセージサポート
-- **軽量設計**: 最小限の依存関係
+- **Universal Support**: Common code for server-side and client-side
+- **Full TypeScript Support**: Strict type safety and IntelliSense support
+- **Async Validation**: Promise-based asynchronous processing support
+- **Nested Validation**: Validation of deep object structures
+- **Custom Rules**: Flexible custom validation rule creation
+- **Vue.js Integration**: Seamless integration with @fastkit/vue-form-control
+- **Rich Built-in Rules**: 30+ practical validation rules
+- **Detailed Error Information**: Structured error reporting
+- **Internationalization Support**: Multi-language error message support
+- **Lightweight Design**: Minimal dependencies
 
 ## Installation
 
@@ -26,57 +26,57 @@ npm install @fastkit/rules
 pnpm add @fastkit/rules
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### シンプルなバリデーション
+### Simple Validation
 
 ```typescript
 import { validate, required, email, maxLength } from '@fastkit/rules';
 
-// 単一ルールでの検証
+// Single rule validation
 const result1 = await validate('', required);
-console.log(result1); // ValidationError オブジェクト
+console.log(result1); // ValidationError object
 
 const result2 = await validate('test@example.com', email);
-console.log(result2); // null (成功)
+console.log(result2); // null (success)
 
-// 複数ルールでの検証
+// Multiple rules validation
 const result3 = await validate('user@example.com', [
   required,
   email,
   maxLength(50)
 ]);
-console.log(result3); // null (全て成功) または ValidationError
+console.log(result3); // null (all success) or ValidationError
 ```
 
-### Vue.js フォームとの統合
+### Vue.js Form Integration
 
 ```vue
 <template>
   <form @submit.prevent="handleSubmit">
     <VTextField
       v-model="form.email.value"
-      label="メールアドレス"
+      label="Email Address"
       :rules="[required, email]"
       :invalid="form.email.invalid"
       :error-message="form.email.errorMessage"
     />
-    
+
     <VTextField
       v-model="form.password.value"
-      label="パスワード"
+      label="Password"
       type="password"
       :rules="[required, minLength(8)]"
       :invalid="form.password.invalid"
       :error-message="form.password.errorMessage"
     />
-    
-    <VButton 
+
+    <VButton
       type="submit"
       :disabled="form.invalid"
       color="primary"
     >
-      ログイン
+      Login
     </VButton>
   </form>
 </template>
@@ -96,115 +96,115 @@ const form = useForm({
   }
 }, {
   onSubmit: async (values) => {
-    console.log('送信データ:', values);
-    // API呼び出し処理
+    console.log('Submit data:', values);
+    // API call processing
   }
 });
 </script>
 ```
 
-## 組み込みバリデーションルール
+## Built-in Validation Rules
 
-### 基本ルール
+### Basic Rules
 
-#### required - 必須チェック
+#### required - Required Check
 
 ```typescript
 import { required } from '@fastkit/rules';
 
-// 空でない値が必要
-await validate('', required); // エラー
+// Non-empty value required
+await validate('', required); // Error
 await validate('text', required); // OK
 await validate(0, required); // OK
 await validate(false, required); // OK
-await validate([], required); // エラー (空配列)
+await validate([], required); // Error (empty array)
 await validate([1], required); // OK
 ```
 
-#### email - メール形式チェック
+#### email - Email Format Check
 
 ```typescript
 import { email } from '@fastkit/rules';
 
 await validate('user@example.com', email); // OK
-await validate('invalid-email', email); // エラー
+await validate('invalid-email', email); // Error
 
-// 複数メール対応
+// Multiple email support
 await validate('user1@example.com,user2@example.com', email); // OK
 ```
 
-#### pattern - 正規表現チェック
+#### pattern - Regular Expression Check
 
 ```typescript
 import { pattern } from '@fastkit/rules';
 
 const phoneRule = pattern(/^\d{3}-\d{4}-\d{4}$/);
 await validate('090-1234-5678', phoneRule); // OK
-await validate('invalid-phone', phoneRule); // エラー
+await validate('invalid-phone', phoneRule); // Error
 
-// カスタムメッセージ付き
+// With custom message
 const customPattern = pattern({
   pattern: /^[A-Z]+$/,
-  message: '大文字のアルファベットのみ使用できます'
+  message: 'Only uppercase letters are allowed'
 });
 ```
 
-### 文字列・数値ルール
+### String & Number Rules
 
-#### length - 長さチェック
+#### length - Length Check
 
 ```typescript
 import { length, minLength, maxLength } from '@fastkit/rules';
 
-// 正確な長さ
+// Exact length
 await validate('hello', length(5)); // OK
-await validate('hello', length(3)); // エラー
+await validate('hello', length(3)); // Error
 
-// 最小長
+// Minimum length
 await validate('abc', minLength(2)); // OK
-await validate('a', minLength(2)); // エラー
+await validate('a', minLength(2)); // Error
 
-// 最大長
+// Maximum length
 await validate('hello', maxLength(10)); // OK
-await validate('very long text here', maxLength(10)); // エラー
+await validate('very long text here', maxLength(10)); // Error
 
-// 範囲指定
+// Range specification
 await validate('test', length({ min: 2, max: 6 })); // OK
 ```
 
-#### numeric - 数値チェック
+#### numeric - Number Check
 
 ```typescript
 import { numeric, between, greaterThan, lessThan } from '@fastkit/rules';
 
-// 数値形式チェック
+// Number format check
 await validate('123', numeric); // OK
 await validate('123.45', numeric); // OK
-await validate('abc', numeric); // エラー
+await validate('abc', numeric); // Error
 
-// 範囲チェック
+// Range check
 await validate(25, between({ min: 18, max: 65 })); // OK
-await validate(10, between({ min: 18, max: 65 })); // エラー
+await validate(10, between({ min: 18, max: 65 })); // Error
 
-// 比較
+// Comparison
 await validate(10, greaterThan(5)); // OK
-await validate(3, greaterThan(5)); // エラー
+await validate(3, greaterThan(5)); // Error
 await validate(3, lessThan(5)); // OK
 ```
 
-### 特殊な形式チェック
+### Special Format Checks
 
-#### url - URL形式チェック
+#### url - URL Format Check
 
 ```typescript
 import { url } from '@fastkit/rules';
 
 await validate('https://example.com', url); // OK
 await validate('http://localhost:3000', url); // OK
-await validate('invalid-url', url); // エラー
+await validate('invalid-url', url); // Error
 ```
 
-#### date - 日付チェック
+#### date - Date Check
 
 ```typescript
 import { date } from '@fastkit/rules';
@@ -212,53 +212,53 @@ import { date } from '@fastkit/rules';
 await validate('2023-12-25', date); // OK
 await validate('2023/12/25', date); // OK
 await validate(new Date(), date); // OK
-await validate('invalid-date', date); // エラー
+await validate('invalid-date', date); // Error
 ```
 
-#### alphaSpaces - 英字＋スペースチェック
+#### alphaSpaces - Alphabetic + Spaces Check
 
 ```typescript
 import { alphaSpaces } from '@fastkit/rules';
 
 await validate('John Doe', alphaSpaces); // OK
-await validate('John123', alphaSpaces); // エラー
+await validate('John123', alphaSpaces); // Error
 ```
 
-#### kana - カナ文字チェック
+#### kana - Kana Character Check
 
 ```typescript
 import { kana } from '@fastkit/rules';
 
-await validate('タナカタロウ', kana); // OK (カタカナ)
-await validate('たなかたろう', kana); // OK (ひらがな)
-await validate('田中太郎', kana); // エラー (漢字)
+await validate('タナカタロウ', kana); // OK (Katakana)
+await validate('tanakatarou', kana); // OK (Hiragana)
+await validate('田中太郎', kana); // Error (Kanji)
 ```
 
-## ネストバリデーション
+## Nested Validation
 
-### 配列バリデーション
+### Array Validation
 
 ```typescript
 import { each, required, maxLength } from '@fastkit/rules';
 
-// 配列の各要素をバリデーション
+// Validate each element in array
 const arrayRule = each({
   rules: [required, maxLength(10)],
-  skipIfEmpty: true // 空配列はスキップ
+  skipIfEmpty: true // Skip empty arrays
 });
 
 await validate(['hello', 'world'], arrayRule); // OK
-await validate(['hello', ''], arrayRule); // エラー (空要素)
-await validate(['hello', 'very long text'], arrayRule); // エラー (長すぎる)
+await validate(['hello', ''], arrayRule); // Error (empty element)
+await validate(['hello', 'very long text'], arrayRule); // Error (too long)
 
-// インデックス付きエラー情報取得
+// Get indexed error information
 const result = await validate(['', 'valid'], arrayRule);
 if (result) {
-  console.log(result.children[0].path); // 0 (エラーのインデックス)
+  console.log(result.children[0].path); // 0 (error index)
 }
 ```
 
-### オブジェクトバリデーション
+### Object Validation
 
 ```typescript
 import { fields, required, email, minLength } from '@fastkit/rules';
@@ -272,7 +272,7 @@ interface User {
   };
 }
 
-// オブジェクトフィールドバリデーション
+// Object field validation
 const userRule = fields<User>({
   rules: {
     name: [required, maxLength(50)],
@@ -287,96 +287,96 @@ const userRule = fields<User>({
 });
 
 const userData = {
-  name: '田中太郎',
+  name: 'Taro Tanaka',
   email: 'tanaka@example.com',
   profile: {
-    bio: 'エンジニアです',
+    bio: 'I am an engineer',
     age: 30
   }
 };
 
 const result = await validate(userData, userRule);
-// result は null (成功) または ネストしたエラー情報
+// result is null (success) or nested error information
 ```
 
-## カスタムバリデーションルール
+## Custom Validation Rules
 
-### 基本的なカスタムルール作成
+### Basic Custom Rule Creation
 
 ```typescript
 import { createRule } from '@fastkit/rules';
 
-// シンプルなカスタムルール
+// Simple custom rule
 const evenNumber = createRule({
   name: 'evenNumber',
   validate: (value) => {
     const num = Number(value);
     return !isNaN(num) && num % 2 === 0;
   },
-  message: '偶数を入力してください'
+  message: 'Please enter an even number'
 });
 
 await validate(4, evenNumber); // OK
-await validate(3, evenNumber); // エラー
+await validate(3, evenNumber); // Error
 
-// 動的メッセージ
+// Dynamic message
 const minimumAge = createRule<{ age: number }>({
   name: 'minimumAge',
   validate: (value, constraints) => {
     const age = Number(value);
     return age >= constraints.age;
   },
-  message: (value, { constraints }) => 
-    `${constraints.age}歳以上である必要があります`,
+  message: (value, { constraints }) =>
+    `Must be ${constraints.age} years or older`,
   constraints: { age: 18 }
 });
 
-// 制約をカスタマイズして使用
+// Use with customized constraints
 const adultAge = minimumAge.fork({ constraints: { age: 20 } });
 ```
 
-### 非同期バリデーション
+### Async Validation
 
 ```typescript
-// 非同期APIを使ったバリデーション
+// Validation using async API
 const uniqueEmail = createRule({
   name: 'uniqueEmail',
   validate: async (value) => {
-    if (!value) return true; // 空値は他のルールに任せる
-    
+    if (!value) return true; // Leave empty values to other rules
+
     try {
       const response = await fetch(`/api/check-email?email=${value}`);
       const data = await response.json();
       return data.isUnique;
     } catch (error) {
-      // ネットワークエラーは成功とみなす
+      // Consider network errors as success
       return true;
     }
   },
-  message: 'このメールアドレスは既に使用されています'
+  message: 'This email address is already in use'
 });
 
-// 使用例
+// Usage example
 const emailRules = [required, email, uniqueEmail];
 await validate('user@example.com', emailRules);
 ```
 
-### 関数型ルール
+### Function-style Rules
 
 ```typescript
-// 簡単な関数型ルール
+// Simple function-style rule
 const notEmpty = (value: any) => {
   if (!value || (Array.isArray(value) && value.length === 0)) {
-    return '空にできません';
+    return 'Cannot be empty';
   }
   return true;
 };
 
-// 条件付きルール
+// Conditional rule
 const conditionalRequired = (value: any, _constraints: any, context: any) => {
-  // contextから他のフィールドの値を参照可能
+  // Can reference values from other fields via context
   if (context.type === 'business' && !value) {
-    return '企業の場合は必須です';
+    return 'Required for business accounts';
   }
   return true;
 };
@@ -384,7 +384,7 @@ const conditionalRequired = (value: any, _constraints: any, context: any) => {
 
 ## Advanced Usage Examples
 
-### フォーム全体のバリデーション
+### Whole Form Validation
 
 ```typescript
 import { validate, fields, required, email, minLength, pattern } from '@fastkit/rules';
@@ -403,16 +403,16 @@ interface RegistrationForm {
   terms: boolean;
 }
 
-// パスワード確認ルール
+// Password confirmation rule
 const confirmPassword = createRule({
   name: 'confirmPassword',
   validate: (value, _constraints, context) => {
     return value === context.account.password;
   },
-  message: 'パスワードが一致しません'
+  message: 'Passwords do not match'
 });
 
-// フォーム全体のルール定義
+// Whole form rule definition
 const registrationRule = fields<RegistrationForm>({
   rules: {
     personal: fields({
@@ -425,8 +425,8 @@ const registrationRule = fields<RegistrationForm>({
     account: fields({
       rules: {
         username: [
-          required, 
-          minLength(3), 
+          required,
+          minLength(3),
           maxLength(20),
           pattern(/^[a-zA-Z0-9_]+$/)
         ],
@@ -434,15 +434,15 @@ const registrationRule = fields<RegistrationForm>({
         confirmPassword: [required, confirmPassword]
       }
     }),
-    terms: (value) => value === true ? true : '利用規約に同意してください'
+    terms: (value) => value === true ? true : 'Please agree to the terms of service'
   }
 });
 
-// バリデーション実行
+// Execute validation
 const formData: RegistrationForm = {
   personal: {
-    firstName: '太郎',
-    lastName: '田中',
+    firstName: 'Taro',
+    lastName: 'Tanaka',
     email: 'taro@example.com'
   },
   account: {
@@ -455,18 +455,18 @@ const formData: RegistrationForm = {
 
 const errors = await validate(formData, registrationRule);
 if (errors) {
-  // エラーを階層構造で取得
-  console.log('個人情報エラー:', errors.children?.personal);
-  console.log('アカウント情報エラー:', errors.children?.account);
+  // Get errors in hierarchical structure
+  console.log('Personal info errors:', errors.children?.personal);
+  console.log('Account info errors:', errors.children?.account);
 }
 ```
 
-### 条件付きバリデーション
+### Conditional Validation
 
 ```typescript
 import { validateIf, required, pattern } from '@fastkit/rules';
 
-// 条件に応じてバリデーションを実行
+// Execute validation based on conditions
 const businessPhoneRule = validateIf(
   (value, _constraints, context) => context.accountType === 'business',
   [required, pattern(/^\d{2,4}-\d{2,4}-\d{4}$/)]
@@ -475,7 +475,7 @@ const businessPhoneRule = validateIf(
 const formRule = fields({
   rules: {
     accountType: required,
-    businessPhone: businessPhoneRule, // 企業の場合のみ必須
+    businessPhone: businessPhoneRule, // Required only for business accounts
     personalEmail: validateIf(
       (value, _constraints, context) => context.accountType === 'personal',
       [required, email]
@@ -484,25 +484,25 @@ const formRule = fields({
 });
 ```
 
-### バッチバリデーション
+### Batch Validation
 
 ```typescript
-// 複数の値を一括でバリデーション
+// Validate multiple values in batch
 const batchValidate = async (data: Record<string, any>, rules: Record<string, any[]>) => {
   const results: Record<string, any> = {};
-  
+
   for (const [key, value] of Object.entries(data)) {
     if (rules[key]) {
       results[key] = await validate(value, rules[key]);
     }
   }
-  
+
   return results;
 };
 
-// 使用例
+// Usage example
 const userData = {
-  name: '田中太郎',
+  name: 'Taro Tanaka',
   email: 'invalid-email',
   age: 25
 };
@@ -516,73 +516,73 @@ const userRules = {
 const results = await batchValidate(userData, userRules);
 console.log(results);
 // {
-//   name: null,           // 成功
-//   email: ValidationError,  // エラー
-//   age: null            // 成功
+//   name: null,           // Success
+//   email: ValidationError,  // Error
+//   age: null            // Success
 // }
 ```
 
-### カスタムエラーメッセージプロバイダー
+### Custom Error Message Provider
 
 ```typescript
-// 国際化対応のメッセージプロバイダー
+// Internationalization-ready message provider
 const createI18nRule = (baseRule: any, messages: Record<string, string>) => {
   return baseRule.fork({
     message: (value: any, { constraints }: any, context: any) => {
-      const locale = context.locale || 'ja';
-      return messages[locale] || messages['ja'];
+      const locale = context.locale || 'en';
+      return messages[locale] || messages['en'];
     }
   });
 };
 
-// 多言語対応ルール
+// Multi-language rules
 const requiredI18n = createI18nRule(required, {
-  'ja': 'この項目は必須です',
   'en': 'This field is required',
+  'ja': 'This field is required',
   'ko': '이 필드는 필수입니다'
 });
 
 const emailI18n = createI18nRule(email, {
-  'ja': '有効なメールアドレスを入力してください',
   'en': 'Please enter a valid email address',
+  'ja': 'Please enter a valid email address',
   'ko': '유효한 이메일 주소를 입력하세요'
 });
 ```
 
-## Vue.js での実践的な使用例
+## Practical Vue.js Usage Examples
 
-### リアルタイムバリデーション
+### Real-time Validation
 
 ```vue
 <template>
   <div class="registration-form">
-    <h2>ユーザー登録</h2>
-    
-    <!-- 基本情報 -->
+    <h2>User Registration</h2>
+
+    <!-- Basic Information -->
     <fieldset>
-      <legend>基本情報</legend>
-      
+      <legend>Basic Information</legend>
+
       <VTextField
         v-model="form.firstName.value"
-        label="名前"
+        label="First Name"
         :rules="nameRules"
         :invalid="form.firstName.invalid"
         :error-message="form.firstName.errorMessage"
         validate-on="blur"
       />
-      
+
       <VTextField
         v-model="form.lastName.value"
-        label="姓"
+        label="Last Name"
         :rules="nameRules"
         :invalid="form.lastName.invalid"
         :error-message="form.lastName.errorMessage"
         validate-on="blur"
       />
-      
+
       <VTextField
         v-model="form.email.value"
-        label="メールアドレス"
+        label="Email Address"
         type="email"
         :rules="emailRules"
         :invalid="form.email.invalid"
@@ -591,50 +591,50 @@ const emailI18n = createI18nRule(email, {
         :loading="form.email.validating"
       />
     </fieldset>
-    
-    <!-- アカウント情報 -->
+
+    <!-- Account Information -->
     <fieldset>
-      <legend>アカウント情報</legend>
-      
+      <legend>Account Information</legend>
+
       <VTextField
         v-model="form.username.value"
-        label="ユーザー名"
+        label="Username"
         :rules="usernameRules"
         :invalid="form.username.invalid"
         :error-message="form.username.errorMessage"
-        hint="3-20文字の英数字とアンダースコア"
+        hint="3-20 characters, alphanumeric and underscore"
       />
-      
+
       <VTextField
         v-model="form.password.value"
-        label="パスワード"
+        label="Password"
         type="password"
         :rules="passwordRules"
         :invalid="form.password.invalid"
         :error-message="form.password.errorMessage"
-        hint="8文字以上"
+        hint="8 characters or more"
       />
-      
+
       <VTextField
         v-model="form.confirmPassword.value"
-        label="パスワード確認"
+        label="Confirm Password"
         type="password"
         :rules="confirmPasswordRules"
         :invalid="form.confirmPassword.invalid"
         :error-message="form.confirmPassword.errorMessage"
       />
     </fieldset>
-    
-    <!-- 利用規約 -->
+
+    <!-- Terms of Service -->
     <VCheckbox
       v-model="form.terms.value"
       :rules="[required]"
       :invalid="form.terms.invalid"
     >
-      <a href="/terms" target="_blank">利用規約</a>に同意する
+      I agree to the <a href="/terms" target="_blank">Terms of Service</a>
     </VCheckbox>
-    
-    <!-- 送信ボタン -->
+
+    <!-- Submit Button -->
     <VButton
       type="submit"
       color="primary"
@@ -643,7 +643,7 @@ const emailI18n = createI18nRule(email, {
       :loading="submitting"
       @click="handleSubmit"
     >
-      登録する
+      Register
     </VButton>
   </div>
 </template>
@@ -651,14 +651,14 @@ const emailI18n = createI18nRule(email, {
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useForm } from '@fastkit/vue-form-control';
-import { 
+import {
   required, email, minLength, maxLength, pattern,
-  createRule 
+  createRule
 } from '@fastkit/rules';
 
 const submitting = ref(false);
 
-// カスタムバリデーションルール
+// Custom validation rules
 const uniqueEmail = createRule({
   name: 'uniqueEmail',
   validate: async (value) => {
@@ -667,7 +667,7 @@ const uniqueEmail = createRule({
     const data = await response.json();
     return data.isUnique;
   },
-  message: 'このメールアドレスは既に使用されています'
+  message: 'This email address is already in use'
 });
 
 const uniqueUsername = createRule({
@@ -678,10 +678,10 @@ const uniqueUsername = createRule({
     const data = await response.json();
     return data.isUnique;
   },
-  message: 'このユーザー名は既に使用されています'
+  message: 'This username is already in use'
 });
 
-// バリデーションルール定義
+// Validation rule definitions
 const nameRules = [required, maxLength(50)];
 const emailRules = [required, email, uniqueEmail];
 const usernameRules = [
@@ -693,20 +693,20 @@ const usernameRules = [
 ];
 const passwordRules = [required, minLength(8)];
 
-// フォーム定義
+// Form definition
 const form = useForm({
   firstName: { value: '', rules: nameRules },
   lastName: { value: '', rules: nameRules },
   email: { value: '', rules: emailRules },
   username: { value: '', rules: usernameRules },
   password: { value: '', rules: passwordRules },
-  confirmPassword: { 
-    value: '', 
+  confirmPassword: {
+    value: '',
     rules: [
       required,
       (value) => {
         if (value !== form.password.value) {
-          return 'パスワードが一致しません';
+          return 'Passwords do not match';
         }
         return true;
       }
@@ -722,13 +722,13 @@ const form = useForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values)
       });
-      
+
       if (response.ok) {
-        // 登録成功
-        alert('登録が完了しました');
+        // Registration success
+        alert('Registration completed successfully');
       } else {
-        // サーバーエラー
-        alert('登録に失敗しました');
+        // Server error
+        alert('Registration failed');
       }
     } finally {
       submitting.value = false;
@@ -736,12 +736,12 @@ const form = useForm({
   }
 });
 
-// パスワード確認ルールを動的に更新
+// Dynamically update password confirmation rule
 const confirmPasswordRules = computed(() => [
   required,
   (value: string) => {
     if (value !== form.password.value) {
-      return 'パスワードが一致しません';
+      return 'Passwords do not match';
     }
     return true;
   }
@@ -773,38 +773,38 @@ legend {
 </style>
 ```
 
-## エラーハンドリング
+## Error Handling
 
-### ValidationError構造
+### ValidationError Structure
 
 ```typescript
 interface ValidationError {
   $$symbol: 'ValidationError';
-  name: string;           // ルール名
-  message: string;        // エラーメッセージ
-  value?: any;           // 検証失敗した値
-  path?: string | number; // フィールドパス
-  fullPath?: string;     // 完全なパス（ネスト含む）
-  children?: ValidationError[]; // 子要素のエラー
-  constraints?: any;     // ルールの制約
+  name: string;           // Rule name
+  message: string;        // Error message
+  value?: any;           // Failed validation value
+  path?: string | number; // Field path
+  fullPath?: string;     // Full path (including nested)
+  children?: ValidationError[]; // Child element errors
+  constraints?: any;     // Rule constraints
 }
 
-// エラー情報の活用例
+// Error information usage example
 const errors = await validate(formData, formRules);
 if (errors) {
-  // フィールド別エラー処理
+  // Field-specific error handling
   if (errors.children?.email) {
-    console.log('メールエラー:', errors.children.email.message);
+    console.log('Email error:', errors.children.email.message);
   }
-  
-  // 全エラーメッセージ取得
+
+  // Get all error messages
   const allErrors = collectAllErrors(errors);
   allErrors.forEach(error => {
     console.log(`${error.fullPath}: ${error.message}`);
   });
 }
 
-// エラー収集ヘルパー関数
+// Error collection helper function
 function collectAllErrors(error: ValidationError): ValidationError[] {
   const errors = [error];
   if (error.children) {
@@ -818,55 +818,55 @@ function collectAllErrors(error: ValidationError): ValidationError[] {
 }
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### バリデーション戦略
+### Validation Strategy
 
 ```typescript
-// 早期終了戦略（最初のエラーで停止）
-const result1 = await validate(value, rules); // デフォルト
+// Early termination strategy (stop at first error)
+const result1 = await validate(value, rules); // Default
 
-// 全ルール実行戦略（全エラー収集）
+// All rules execution strategy (collect all errors)
 const result2 = await validate(value, rules, { forceAll: true });
 
-// 非同期ルールの並列実行
+// Parallel execution of async rules
 const asyncRules = [asyncRule1, asyncRule2, asyncRule3];
-const result3 = await validate(value, asyncRules, { 
-  parallel: true  // 並列実行でパフォーマンス向上
+const result3 = await validate(value, asyncRules, {
+  parallel: true  // Parallel execution for performance improvement
 });
 ```
 
-### バリデーションキャッシュ
+### Validation Cache
 
 ```typescript
-// 結果をキャッシュして重複チェックを避ける
+// Cache results to avoid duplicate checks
 const memoizedValidate = (() => {
   const cache = new Map();
-  
+
   return async (value: any, rules: any[]) => {
     const key = JSON.stringify({ value, rules: rules.map(r => r.name) });
-    
+
     if (cache.has(key)) {
       return cache.get(key);
     }
-    
+
     const result = await validate(value, rules);
     cache.set(key, result);
-    
-    // キャッシュサイズ制限
+
+    // Cache size limit
     if (cache.size > 1000) {
       const firstKey = cache.keys().next().value;
       cache.delete(firstKey);
     }
-    
+
     return result;
   };
 })();
 ```
 
-## テストパターン
+## Test Patterns
 
-### ユニットテスト例
+### Unit Test Examples
 
 ```typescript
 import { describe, test, expect } from 'vitest';
@@ -874,33 +874,33 @@ import { validate, required, email, minLength } from '@fastkit/rules';
 
 describe('Validation Rules', () => {
   describe('required', () => {
-    test('空値でエラー', async () => {
+    test('error on empty value', async () => {
       const result = await validate('', required);
       expect(result).toBeTruthy();
       expect(result?.name).toBe('required');
     });
-    
-    test('値があれば成功', async () => {
+
+    test('success when value exists', async () => {
       const result = await validate('test', required);
       expect(result).toBeNull();
     });
   });
-  
+
   describe('email', () => {
-    test('有効なメールで成功', async () => {
+    test('success with valid email', async () => {
       const result = await validate('user@example.com', email);
       expect(result).toBeNull();
     });
-    
-    test('無効なメールでエラー', async () => {
+
+    test('error with invalid email', async () => {
       const result = await validate('invalid-email', email);
       expect(result).toBeTruthy();
       expect(result?.name).toBe('email');
     });
   });
-  
-  describe('複合ルール', () => {
-    test('全てのルールが成功', async () => {
+
+  describe('compound rules', () => {
+    test('all rules succeed', async () => {
       const result = await validate('user@example.com', [
         required,
         email,
@@ -908,8 +908,8 @@ describe('Validation Rules', () => {
       ]);
       expect(result).toBeNull();
     });
-    
-    test('いずれかのルールでエラー', async () => {
+
+    test('error on any rule failure', async () => {
       const result = await validate('a@b.c', [
         required,
         email,
@@ -922,12 +922,12 @@ describe('Validation Rules', () => {
 });
 ```
 
-## 依存関係
+## Dependencies
 
 ```json
 {
   "dependencies": {
-    "@fastkit/helpers": "ユーティリティ関数"
+    "@fastkit/helpers": "utility functions"
   },
   "peerDependencies": {},
   "devDependencies": {
@@ -937,9 +937,9 @@ describe('Validation Rules', () => {
 }
 ```
 
-## ドキュメント
+## Documentation
 
-詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/rules/)をご覧ください。
+For detailed documentation, please visit [here](https://dadajam4.github.io/fastkit/rules/).
 
 ## License
 

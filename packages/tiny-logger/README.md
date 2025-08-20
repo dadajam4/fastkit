@@ -1,18 +1,18 @@
 # @fastkit/tiny-logger
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/tiny-logger/README-ja.md)
 
-アプリケーションログをほんの少し綺麗に表示するための小さなロガーライブラリ。色付きログ出力、名前空間による分類、カスタムエラークラス生成機能を提供します。
+A small logger library for displaying application logs in a slightly more beautiful way. Provides colored log output, namespace-based classification, and custom error class generation functionality.
 
 ## Features
 
-- **色付きログ出力**: ログレベルに応じた自動色分け（debug, info, warn, error, success）
-- **名前空間管理**: ロガー名による出力の分類と識別
-- **複数ログレベル**: debug、info、warn、error、successの5段階
-- **色制御**: 色出力の有効/無効切り替え
-- **軽量設計**: 最小限の依存関係でシンプルな実装
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **カスタムエラークラス**: 名前空間付きエラークラスの自動生成
+- **Colored Log Output**: Automatic color coding based on log level (debug, info, warn, error, success)
+- **Namespace Management**: Output classification and identification by logger name
+- **Multiple Log Levels**: 5 levels - debug, info, warn, error, success
+- **Color Control**: Enable/disable color output toggle
+- **Lightweight Design**: Simple implementation with minimal dependencies
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Custom Error Classes**: Automatic generation of namespaced error classes
 
 ## Installation
 
@@ -22,118 +22,118 @@ npm install @fastkit/tiny-logger
 
 ## Basic Usage
 
-### TinyLogger の作成と使用
+### Creating and Using TinyLogger
 
 ```typescript
 import { TinyLogger } from '@fastkit/tiny-logger'
 
-// ロガーインスタンスの作成
+// Create logger instance
 const logger = new TinyLogger('MyApp')
 
-// 各種ログレベルでの出力
-logger.debug('デバッグ情報です')        // 紫色で表示
-logger.info('通常の情報です')          // シアン色で表示
-logger.warn('警告メッセージです')       // 黄色で表示
-logger.error('エラーが発生しました')    // 赤色で表示
-logger.success('処理が成功しました')    // 緑色で表示
+// Output at various log levels
+logger.debug('This is debug information')        // Displayed in purple
+logger.info('This is normal information')        // Displayed in cyan
+logger.warn('This is a warning message')        // Displayed in yellow
+logger.error('An error has occurred')           // Displayed in red
+logger.success('Process completed successfully') // Displayed in green
 ```
 
-### 引数付きログ出力
+### Log Output with Arguments
 
 ```typescript
 const logger = new TinyLogger('API')
 
-// 追加引数を渡すことができます
-logger.info('ユーザー情報を取得しました', { userId: 123, name: 'John' })
-logger.error('リクエストに失敗しました', new Error('Network timeout'))
-logger.debug('デバッグ情報', { timestamp: Date.now(), level: 'verbose' })
+// You can pass additional arguments
+logger.info('Retrieved user information', { userId: 123, name: 'John' })
+logger.error('Request failed', new Error('Network timeout'))
+logger.debug('Debug information', { timestamp: Date.now(), level: 'verbose' })
 ```
 
-### 複数のロガーインスタンス
+### Multiple Logger Instances
 
 ```typescript
 import { TinyLogger } from '@fastkit/tiny-logger'
 
-// 機能別にロガーを分離
+// Separate loggers by functionality
 const dbLogger = new TinyLogger('Database')
 const authLogger = new TinyLogger('Auth')
 const apiLogger = new TinyLogger('API')
 
-dbLogger.info('データベース接続が確立されました')
-// 出力: [Database] データベース接続が確立されました
+dbLogger.info('Database connection established')
+// Output: [Database] Database connection established
 
-authLogger.warn('認証トークンの有効期限が近づいています')
-// 出力: [Auth] 認証トークンの有効期限が近づいています
+authLogger.warn('Authentication token expiration approaching')
+// Output: [Auth] Authentication token expiration approaching
 
-apiLogger.error('APIリクエストでエラーが発生しました')
-// 出力: [API] APIリクエストでエラーが発生しました
+apiLogger.error('Error occurred in API request')
+// Output: [API] Error occurred in API request
 ```
 
-## ログレベルと色分け
+## Log Levels and Color Coding
 
-各ログレベルには専用の色が割り当てられています：
+Each log level has a dedicated color assigned:
 
-| ログレベル | 色 | 用途 |
-|-----------|----|----|
-| `debug` | 紫 (magenta) | デバッグ情報、開発時の詳細ログ |
-| `info` | シアン (cyan) | 一般的な情報、正常な処理結果 |
-| `warn` | 黄 (yellow) | 警告、注意が必要な状況 |
-| `error` | 赤 (red) | エラー、異常な状況 |
-| `success` | 緑 (green) | 成功、完了した処理 |
+| Log Level | Color | Purpose |
+|-----------|-------|---------|
+| `debug` | Purple (magenta) | Debug information, detailed logs during development |
+| `info` | Cyan | General information, normal processing results |
+| `warn` | Yellow | Warnings, situations requiring attention |
+| `error` | Red | Errors, abnormal situations |
+| `success` | Green | Success, completed processing |
 
-### 色出力の制御
+### Color Output Control
 
 ```typescript
 import { TinyLogger } from '@fastkit/tiny-logger'
 
-// 色出力を無効にする
+// Disable color output
 TinyLogger.colorEnable(false)
 
 const logger = new TinyLogger('App')
-logger.info('この出力は色が付きません')
+logger.info('This output will not be colored')
 
-// 色出力を有効にする
+// Enable color output
 TinyLogger.colorEnable(true)
-logger.info('この出力は色が付きます')
+logger.info('This output will be colored')
 ```
 
-## カスタムエラークラス
+## Custom Error Classes
 
-`createTinyError` 関数を使用して、名前空間付きのカスタムエラークラスを作成できます：
+You can create custom error classes with namespaces using the `createTinyError` function:
 
 ```typescript
 import { createTinyError } from '@fastkit/tiny-logger'
 
-// カスタムエラークラスを作成
+// Create custom error classes
 const ValidationError = createTinyError('Validation')
 const DatabaseError = createTinyError('Database')
 const AuthError = createTinyError('Authentication')
 
-// エラーの使用
+// Using errors
 try {
-  throw new ValidationError('ユーザー名は必須です')
+  throw new ValidationError('Username is required')
 } catch (error) {
   console.log(error.message)
-  // 出力: [Validation] ユーザー名は必須です
+  // Output: [Validation] Username is required
 }
 
-// エラーチェーンも対応
+// Error chaining is also supported
 try {
-  throw new Error('データベース接続に失敗しました')
+  throw new Error('Database connection failed')
 } catch (originalError) {
   throw new DatabaseError(originalError)
-  // 出力: [Database] データベース接続に失敗しました
+  // Output: [Database] Database connection failed
 }
 ```
 
-## 実用的な使用例
+## Practical Usage Examples
 
-### アプリケーション全体でのロガー管理
+### Application-wide Logger Management
 
 ```typescript
 import { TinyLogger } from '@fastkit/tiny-logger'
 
-// 各モジュール用のロガーを作成
+// Create loggers for each module
 export const loggers = {
   app: new TinyLogger('App'),
   user: new TinyLogger('User'),
@@ -142,13 +142,13 @@ export const loggers = {
   notification: new TinyLogger('Notification')
 } as const
 
-// 使用例
-loggers.user.info('ユーザーがログインしました', { userId: '12345' })
-loggers.product.warn('在庫が少なくなっています', { productId: 'P001', stock: 3 })
-loggers.payment.error('決済処理でエラーが発生', { orderId: 'O12345', error: 'カードエラー' })
+// Usage examples
+loggers.user.info('User logged in', { userId: '12345' })
+loggers.product.warn('Low stock level', { productId: 'P001', stock: 3 })
+loggers.payment.error('Payment processing error', { orderId: 'O12345', error: 'Card error' })
 ```
 
-### 開発環境でのデバッグログ
+### Debug Logs in Development Environment
 
 ```typescript
 import { TinyLogger } from '@fastkit/tiny-logger'
@@ -159,23 +159,23 @@ class ApiService {
   private logger = new TinyLogger('ApiService')
 
   async fetchUser(userId: string) {
-    this.logger.debug('ユーザー取得開始', { userId })
-    
+    this.logger.debug('Starting user fetch', { userId })
+
     try {
       const response = await fetch(`/api/users/${userId}`)
       const user = await response.json()
-      
-      this.logger.success('ユーザー取得成功', { userId, user })
+
+      this.logger.success('User fetch successful', { userId, user })
       return user
     } catch (error) {
-      this.logger.error('ユーザー取得エラー', { userId, error })
+      this.logger.error('User fetch error', { userId, error })
       throw error
     }
   }
 }
 ```
 
-### エラーハンドリングと組み合わせ
+### Integration with Error Handling
 
 ```typescript
 import { TinyLogger, createTinyError } from '@fastkit/tiny-logger'
@@ -185,43 +185,43 @@ const FileProcessError = createTinyError('FileProcessor')
 
 class FileProcessor {
   async processFile(filePath: string) {
-    logger.info('ファイル処理開始', { filePath })
-    
+    logger.info('Starting file processing', { filePath })
+
     try {
-      // ファイル存在チェック
+      // Check file existence
       if (!this.fileExists(filePath)) {
-        throw new FileProcessError('ファイルが見つかりません')
+        throw new FileProcessError('File not found')
       }
-      
-      // ファイル処理
+
+      // Process file
       const result = await this.doProcess(filePath)
-      logger.success('ファイル処理完了', { filePath, result })
-      
+      logger.success('File processing completed', { filePath, result })
+
       return result
     } catch (error) {
-      logger.error('ファイル処理エラー', { filePath, error })
-      
+      logger.error('File processing error', { filePath, error })
+
       if (error instanceof FileProcessError) {
         throw error
       }
-      
+
       throw new FileProcessError(error as Error)
     }
   }
-  
+
   private fileExists(filePath: string): boolean {
-    // ファイル存在チェックの実装
+    // Implementation for file existence check
     return true
   }
-  
+
   private async doProcess(filePath: string) {
-    // ファイル処理の実装
+    // Implementation for file processing
     return { processed: true }
   }
 }
 ```
 
-### 条件付きログ出力
+### Conditional Log Output
 
 ```typescript
 import { TinyLogger } from '@fastkit/tiny-logger'
@@ -229,41 +229,41 @@ import { TinyLogger } from '@fastkit/tiny-logger'
 class ConditionalLogger {
   private logger: TinyLogger
   private verbose: boolean
-  
+
   constructor(name: string, verbose = false) {
     this.logger = new TinyLogger(name)
     this.verbose = verbose
   }
-  
+
   debug(message: string, ...args: any[]) {
     if (this.verbose) {
       this.logger.debug(message, ...args)
     }
   }
-  
+
   info(message: string, ...args: any[]) {
     this.logger.info(message, ...args)
   }
-  
+
   warn(message: string, ...args: any[]) {
     this.logger.warn(message, ...args)
   }
-  
+
   error(message: string, ...args: any[]) {
     this.logger.error(message, ...args)
   }
-  
+
   success(message: string, ...args: any[]) {
     this.logger.success(message, ...args)
   }
 }
 
-// 本番環境ではverboseを無効にする
+// Disable verbose in production environment
 const isDevelopment = process.env.NODE_ENV === 'development'
 const appLogger = new ConditionalLogger('App', isDevelopment)
 ```
 
-### ログ集約システムとの連携
+### Integration with Log Aggregation Systems
 
 ```typescript
 import { TinyLogger } from '@fastkit/tiny-logger'
@@ -278,16 +278,16 @@ interface LogEntry {
 
 class AggregatedLogger extends TinyLogger {
   private logBuffer: LogEntry[] = []
-  
+
   constructor(name: string) {
     super(name)
   }
-  
+
   log(type: any, message: string, ...args: any[]) {
-    // 標準出力に出力
+    // Output to standard output
     super.log(type, message, ...args)
-    
-    // ログバッファに記録
+
+    // Record to log buffer
     this.logBuffer.push({
       timestamp: new Date().toISOString(),
       level: type,
@@ -295,75 +295,75 @@ class AggregatedLogger extends TinyLogger {
       message,
       args
     })
-    
-    // バッファが満杯になったら外部に送信
+
+    // Send to external system when buffer is full
     if (this.logBuffer.length >= 100) {
       this.flushLogs()
     }
   }
-  
+
   private async flushLogs() {
     const logs = [...this.logBuffer]
     this.logBuffer = []
-    
+
     try {
-      // 外部ログシステムに送信
+      // Send to external log system
       await this.sendToLogSystem(logs)
     } catch (error) {
-      // 送信失敗時は標準出力にフォールバック
-      console.error('ログ送信に失敗しました', error)
+      // Fallback to standard output on send failure
+      console.error('Failed to send logs', error)
     }
   }
-  
+
   private async sendToLogSystem(logs: LogEntry[]) {
-    // 外部ログサービスへの送信実装
+    // Implementation for sending to external log service
     // await fetch('/api/logs', { method: 'POST', body: JSON.stringify(logs) })
   }
 }
 ```
 
-## API リファレンス
+## API Reference
 
-### TinyLogger クラス
+### TinyLogger Class
 
-#### コンストラクタ
+#### Constructor
 ```typescript
 constructor(loggerName: string)
 ```
-- `loggerName`: ロガーの名前（ログ出力時に表示される）
+- `loggerName`: Logger name (displayed during log output)
 
-#### 静的メソッド
-- `TinyLogger.colorEnable(enable: boolean)`: 色出力の有効/無効を設定
+#### Static Methods
+- `TinyLogger.colorEnable(enable: boolean)`: Enable/disable color output
 
-#### インスタンスプロパティ
-- `name: string`: ロガーの名前（読み取り専用）
+#### Instance Properties
+- `name: string`: Logger name (read-only)
 
-#### ログ出力メソッド
+#### Log Output Methods
 ```typescript
 debug(message: string, ...args: any[]): void
-info(message: string, ...args: any[]): void  
+info(message: string, ...args: any[]): void
 warn(message: string, ...args: any[]): void
 error(message: string, ...args: any[]): void
 success(message: string, ...args: any[]): void
 ```
 
-#### 汎用ログメソッド
+#### Generic Log Method
 ```typescript
 log(type: TinyLoggerLogType, message: string, ...args: any[]): void
 ```
 
-### createTinyError 関数
+### createTinyError Function
 
 ```typescript
 function createTinyError(name: string): typeof TinyError
 ```
 
-カスタムエラークラスを生成します。生成されたクラスは：
-- `Error` クラスを継承
-- 名前空間付きのエラーメッセージを自動生成
-- エラーチェーンに対応
+Generates custom error classes. The generated class:
+- Inherits from `Error` class
+- Automatically generates namespaced error messages
+- Supports error chaining
 
-### 型定義
+### Type Definitions
 
 #### TinyLoggerLogType
 ```typescript
@@ -375,22 +375,22 @@ type TinyLoggerLogType = 'debug' | 'info' | 'warn' | 'error' | 'success'
 type ConsoleColorPaletteName = 'red' | 'green' | 'yellow' | 'magenta' | 'cyan' | 'reset'
 ```
 
-## 色とANSIエスケープシーケンス
+## Colors and ANSI Escape Sequences
 
-内部で使用されるANSIエスケープシーケンス：
+ANSI escape sequences used internally:
 
-| 色 | エスケープシーケンス |
-|----|--------------------|
-| 赤 | `\u001b[31m` |
-| 緑 | `\u001b[32m` |
-| 黄 | `\u001b[33m` |
-| 紫 | `\u001b[35m` |
-| シアン | `\u001b[36m` |
-| リセット | `\u001b[0m` |
+| Color | Escape Sequence |
+|-------|-----------------|
+| Red | `\u001b[31m` |
+| Green | `\u001b[32m` |
+| Yellow | `\u001b[33m` |
+| Purple | `\u001b[35m` |
+| Cyan | `\u001b[36m` |
+| Reset | `\u001b[0m` |
 
 ## Related Packages
 
-- `@fastkit/helpers` - ヘルパー関数（内部依存）
+- `@fastkit/helpers` - Helper functions (internal dependency)
 
 ## License
 

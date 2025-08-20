@@ -1,20 +1,20 @@
 
 # @fastkit/vue-visibility
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-visibility/README-ja.md)
 
-VueアプリケーションでPage Visibility APIを活用したブラウザタブの表示状態監視ライブラリ。ユーザーがタブを切り替えたり、別のアプリケーションに移動した際の表示状態変化をリアクティブに追跡できます。
+A browser tab visibility monitoring library that utilizes the Page Visibility API in Vue applications. Reactively tracks display state changes when users switch tabs or move to other applications.
 
 ## Features
 
-- **Page Visibility API統合**: 標準のPage Visibility APIをVueで使いやすく提供
-- **リアクティブな状態管理**: Vueのリアクティブシステムとの完全統合
-- **クロスブラウザ対応**: 主要ブラウザの各種プレフィックスに対応
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **軽量設計**: 最小限の依存関係とオーバーヘッド
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **自動クリーンアップ**: コンポーネントのライフサイクルに連動したリスナー管理
-- **柔軟なコールバック**: 状態変化や特定の状態に対するコールバック
+- **Page Visibility API Integration**: Provides the standard Page Visibility API in an easy-to-use format for Vue
+- **Reactive State Management**: Complete integration with Vue's reactive system
+- **Cross-Browser Support**: Supports various prefixes for major browsers
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Lightweight Design**: Minimal dependencies and overhead
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Automatic Cleanup**: Listener management linked to component lifecycle
+- **Flexible Callbacks**: Callbacks for state changes and specific states
 
 ## Installation
 
@@ -24,50 +24,50 @@ npm install @fastkit/vue-visibility
 
 ## Basic Usage
 
-### シンプルな状態監視
+### Simple State Monitoring
 
 ```vue
 <template>
   <div class="visibility-demo">
-    <h2>Page Visibility状態監視</h2>
-    
-    <!-- 現在の状態表示 -->
+    <h2>Page Visibility State Monitoring</h2>
+
+    <!-- Current state display -->
     <div class="status-display">
-      <h3>現在の状態</h3>
+      <h3>Current Status</h3>
       <div class="status-item" :class="{ active: visibility.visible }">
         <span class="status-icon">👁️</span>
-        <span class="status-label">表示中 (Visible)</span>
+        <span class="status-label">Visible</span>
         <span class="status-value">{{ visibility.visible ? 'YES' : 'NO' }}</span>
       </div>
       <div class="status-item" :class="{ active: visibility.hidden }">
         <span class="status-icon">🙈</span>
-        <span class="status-label">非表示 (Hidden)</span>
+        <span class="status-label">Hidden</span>
         <span class="status-value">{{ visibility.hidden ? 'YES' : 'NO' }}</span>
       </div>
     </div>
-    
-    <!-- 詳細情報 -->
+
+    <!-- Detailed information -->
     <div class="details">
-      <h3>詳細情報</h3>
+      <h3>Detailed Information</h3>
       <div class="detail-item">
-        <strong>状態:</strong> {{ visibility.state }}
+        <strong>State:</strong> {{ visibility.state }}
       </div>
       <div class="detail-item">
-        <strong>最後の変更:</strong> {{ lastChangeTime }}
+        <strong>Last Change:</strong> {{ lastChangeTime }}
       </div>
       <div class="detail-item">
-        <strong>変更回数:</strong> {{ changeCount }}
+        <strong>Change Count:</strong> {{ changeCount }}
       </div>
     </div>
-    
-    <!-- 使用方法の説明 -->
+
+    <!-- Usage instructions -->
     <div class="instructions">
-      <h3>使用方法</h3>
+      <h3>How to Use</h3>
       <ul>
-        <li>他のタブに切り替えると「非表示」になります</li>
-        <li>このタブに戻ると「表示中」になります</li>
-        <li>ブラウザを最小化しても「非表示」になります</li>
-        <li>他のアプリケーションをアクティブにしても「非表示」になります</li>
+        <li>Switching to another tab will make it "Hidden"</li>
+        <li>Returning to this tab will make it "Visible"</li>
+        <li>Minimizing the browser will also make it "Hidden"</li>
+        <li>Activating other applications will also make it "Hidden"</li>
       </ul>
     </div>
   </div>
@@ -77,25 +77,25 @@ npm install @fastkit/vue-visibility
 import { ref } from 'vue'
 import { useVisibility } from '@fastkit/vue-visibility'
 
-const lastChangeTime = ref('まだ変更されていません')
+const lastChangeTime = ref('No changes yet')
 const changeCount = ref(0)
 
-// Visibility状態を監視
+// Monitor Visibility state
 const visibility = useVisibility({
   change: (state, event) => {
-    console.log('状態が変更されました:', state, event)
+    console.log('State changed:', state, event)
     lastChangeTime.value = new Date().toLocaleTimeString()
     changeCount.value++
   },
   visible: (event) => {
-    console.log('ページが表示されました:', event)
+    console.log('Page became visible:', event)
   },
   hidden: (event) => {
-    console.log('ページが非表示になりました:', event)
+    console.log('Page became hidden:', event)
   }
 })
 
-console.log('初期状態:', {
+console.log('Initial state:', {
   state: visibility.state,
   visible: visibility.visible,
   hidden: visibility.hidden
@@ -189,24 +189,24 @@ console.log('初期状態:', {
 </style>
 ```
 
-### 実用的なアプリケーション例
+### Practical Application Examples
 
 ```vue
 <template>
   <div class="practical-demo">
-    <h2>実用的なPage Visibility活用例</h2>
-    
-    <!-- オンラインステータス -->
+    <h2>Practical Page Visibility Usage Examples</h2>
+
+    <!-- Online status -->
     <div class="online-status" :class="statusClasses">
       <div class="status-indicator"></div>
       <span class="status-text">{{ statusText }}</span>
     </div>
-    
-    <!-- 動画プレイヤー -->
+
+    <!-- Video player -->
     <div class="video-section">
-      <h3>自動一時停止動画プレイヤー</h3>
+      <h3>Auto-Pause Video Player</h3>
       <div class="video-player">
-        <video 
+        <video
           ref="videoRef"
           :src="videoSrc"
           controls
@@ -215,39 +215,39 @@ console.log('初期状態:', {
           @pause="handleVideoPause"
         ></video>
         <div class="video-status">
-          <p>ステータス: {{ videoStatus }}</p>
-          <p>自動一時停止: {{ autoPaused ? 'ON' : 'OFF' }}</p>
+          <p>Status: {{ videoStatus }}</p>
+          <p>Auto-Pause: {{ autoPaused ? 'ON' : 'OFF' }}</p>
         </div>
       </div>
     </div>
-    
-    <!-- タイマー -->
+
+    <!-- Timer -->
     <div class="timer-section">
-      <h3>一時停止対応タイマー</h3>
+      <h3>Pause-Aware Timer</h3>
       <div class="timer-display">
         <div class="timer-time">{{ formatTime(elapsedTime) }}</div>
         <div class="timer-controls">
-          <button @click="startTimer" :disabled="timerRunning">開始</button>
-          <button @click="stopTimer" :disabled="!timerRunning">停止</button>
-          <button @click="resetTimer">リセット</button>
+          <button @click="startTimer" :disabled="timerRunning">Start</button>
+          <button @click="stopTimer" :disabled="!timerRunning">Stop</button>
+          <button @click="resetTimer">Reset</button>
         </div>
         <div class="timer-info">
-          <p>タイマー状態: {{ timerRunning ? '実行中' : '停止中' }}</p>
-          <p>バックグラウンド一時停止: {{ backgroundPaused ? 'ON' : 'OFF' }}</p>
+          <p>Timer Status: {{ timerRunning ? 'Running' : 'Stopped' }}</p>
+          <p>Background Pause: {{ backgroundPaused ? 'ON' : 'OFF' }}</p>
         </div>
       </div>
     </div>
-    
-    <!-- 通知システム -->
+
+    <!-- Notification system -->
     <div class="notification-section">
-      <h3>タブ復帰時通知</h3>
+      <h3>Tab Return Notifications</h3>
       <div class="notification-controls">
-        <button @click="simulateNotification">通知を生成</button>
-        <button @click="clearNotifications">通知をクリア</button>
+        <button @click="simulateNotification">Generate Notification</button>
+        <button @click="clearNotifications">Clear Notifications</button>
       </div>
       <div class="notification-list">
-        <div 
-          v-for="notification in notifications" 
+        <div
+          v-for="notification in notifications"
           :key="notification.id"
           class="notification-item"
           :class="{ unread: !notification.read }"
@@ -257,12 +257,12 @@ console.log('初期状態:', {
             <p>{{ notification.message }}</p>
             <small>{{ formatDate(notification.timestamp) }}</small>
           </div>
-          <button 
+          <button
             v-if="!notification.read"
             @click="markAsRead(notification.id)"
             class="mark-read-btn"
           >
-            既読にする
+            Mark as Read
           </button>
         </div>
       </div>
@@ -274,39 +274,39 @@ console.log('初期状態:', {
 import { ref, computed, onMounted } from 'vue'
 import { useVisibility } from '@fastkit/vue-visibility'
 
-// 基本的なVisibility監視
+// Basic Visibility monitoring
 const visibility = useVisibility({
   visible: handleTabVisible,
   hidden: handleTabHidden,
   change: handleVisibilityChange
 })
 
-// オンラインステータス
+// Online status
 const statusClasses = computed(() => ({
   'status-online': visibility.visible,
   'status-offline': visibility.hidden
 }))
 
-const statusText = computed(() => 
-  visibility.visible ? 'オンライン（アクティブ）' : 'オフライン（非アクティブ）'
+const statusText = computed(() =>
+  visibility.visible ? 'Online (Active)' : 'Offline (Inactive)'
 )
 
-// 動画プレイヤー
+// Video player
 const videoRef = ref<HTMLVideoElement>()
 const videoSrc = ref('https://www.w3schools.com/html/mov_bbb.mp4')
-const videoStatus = ref('停止中')
+const videoStatus = ref('Stopped')
 const autoPaused = ref(false)
 
 const handleVideoPlay = () => {
-  videoStatus.value = '再生中'
+  videoStatus.value = 'Playing'
   autoPaused.value = false
 }
 
 const handleVideoPause = () => {
-  videoStatus.value = '一時停止中'
+  videoStatus.value = 'Paused'
 }
 
-// タイマー機能
+// Timer functionality
 const elapsedTime = ref(0)
 const timerRunning = ref(false)
 const backgroundPaused = ref(false)
@@ -320,7 +320,7 @@ const formatTime = (seconds: number) => {
 
 const startTimer = () => {
   if (timerInterval) return
-  
+
   timerRunning.value = true
   timerInterval = setInterval(() => {
     if (!backgroundPaused.value) {
@@ -343,7 +343,7 @@ const resetTimer = () => {
   elapsedTime.value = 0
 }
 
-// 通知システム
+// Notification system
 interface Notification {
   id: string
   title: string
@@ -359,8 +359,8 @@ const simulateNotification = () => {
   notificationCount++
   const notification: Notification = {
     id: `notification-${notificationCount}`,
-    title: `新着通知 #${notificationCount}`,
-    message: `これは ${new Date().toLocaleTimeString()} に生成された通知です。`,
+    title: `New Notification #${notificationCount}`,
+    message: `This notification was generated at ${new Date().toLocaleTimeString()}.`,
     timestamp: new Date(),
     read: false
   }
@@ -382,20 +382,20 @@ const formatDate = (date: Date) => {
   return date.toLocaleString()
 }
 
-// Visibilityイベントハンドラー
+// Visibility event handlers
 function handleTabVisible() {
-  console.log('タブが表示されました')
-  
-  // タイマーの再開
+  console.log('Tab became visible')
+
+  // Resume timer
   if (timerRunning.value && backgroundPaused.value) {
     backgroundPaused.value = false
-    console.log('タイマーを再開しました')
+    console.log('Timer resumed')
   }
-  
-  // 未読通知があればタイトルで通知
+
+  // Show unread count in title if there are unread notifications
   const unreadCount = notifications.value.filter(n => !n.read).length
   if (unreadCount > 0) {
-    // ブラウザタイトルに未読数を表示
+    // Display unread count in browser title
     document.title = `(${unreadCount}) Vue Visibility Demo`
   } else {
     document.title = 'Vue Visibility Demo'
@@ -403,33 +403,33 @@ function handleTabVisible() {
 }
 
 function handleTabHidden() {
-  console.log('タブが非表示になりました')
-  
-  // 動画の自動一時停止
+  console.log('Tab became hidden')
+
+  // Auto-pause video
   if (videoRef.value && !videoRef.value.paused) {
     videoRef.value.pause()
     autoPaused.value = true
-    console.log('動画を自動一時停止しました')
+    console.log('Video auto-paused')
   }
-  
-  // タイマーの一時停止
+
+  // Pause timer
   if (timerRunning.value) {
     backgroundPaused.value = true
-    console.log('タイマーを一時停止しました')
+    console.log('Timer paused')
   }
 }
 
 function handleVisibilityChange(state: string) {
-  console.log('Visibility状態が変更されました:', state)
-  
-  // アナリティクスへの送信（実際の実装では）
+  console.log('Visibility state changed:', state)
+
+  // Send to analytics (in actual implementation)
   // analytics.track('page_visibility_change', { state })
 }
 
-// コンポーネントマウント時の初期化
+// Initialization on component mount
 onMounted(() => {
-  console.log('コンポーネントがマウントされました')
-  console.log('初期Visibility状態:', visibility.state)
+  console.log('Component mounted')
+  console.log('Initial Visibility state:', visibility.state)
 })
 </script>
 
@@ -440,7 +440,7 @@ onMounted(() => {
   margin: 0 auto;
 }
 
-/* オンラインステータス */
+/* Online status */
 .online-status {
   display: flex;
   align-items: center;
@@ -479,7 +479,7 @@ onMounted(() => {
   background: #f44336;
 }
 
-/* 動画プレイヤー */
+/* Video player */
 .video-section {
   margin: 30px 0;
   padding: 20px;
@@ -505,7 +505,7 @@ onMounted(() => {
   font-size: 0.9em;
 }
 
-/* タイマー */
+/* Timer */
 .timer-section {
   margin: 30px 0;
   padding: 20px;
@@ -568,7 +568,7 @@ onMounted(() => {
   color: #666;
 }
 
-/* 通知システム */
+/* Notification system */
 .notification-section {
   margin: 30px 0;
   padding: 20px;
@@ -658,7 +658,7 @@ onMounted(() => {
 
 ## Advanced Usage Examples
 
-### カスタムフック実装
+### Custom Hook Implementation
 
 ```typescript
 // composables/useAppVisibility.ts
@@ -667,27 +667,27 @@ import { useVisibility } from '@fastkit/vue-visibility'
 
 export interface AppVisibilityOptions {
   /**
-   * バックグラウンド時の自動一時停止機能
+   * Auto-pause functionality when in background
    */
   autoPause?: boolean
-  
+
   /**
-   * アクティビティ追跡
+   * Activity tracking
    */
   trackActivity?: boolean
-  
+
   /**
-   * 通知管理
+   * Notification management
    */
   manageNotifications?: boolean
-  
+
   /**
-   * タイトル更新
+   * Title updates
    */
   updateTitle?: boolean
-  
+
   /**
-   * カスタムコールバック
+   * Custom callbacks
    */
   onVisible?: () => void
   onHidden?: () => void
@@ -705,33 +705,33 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
     onChange
   } = options
 
-  // 内部状態
+  // Internal state
   const hiddenAt = ref<Date | null>(null)
   const visibleAt = ref<Date | null>(null)
   const totalHiddenTime = ref(0)
   const sessionDuration = ref(0)
   const isAutoPaused = ref(false)
-  
-  // 一時停止可能な要素の管理
+
+  // Management of pausable elements
   const pausableElements = ref<Array<{
     element: HTMLVideoElement | HTMLAudioElement
     wasPaused: boolean
   }>>([])
 
-  // ベースのvisibility機能
+  // Base visibility functionality
   const visibility = useVisibility({
     visible: handleVisible,
     hidden: handleHidden,
     change: (state) => {
       onChange?.(state)
-      
+
       if (trackActivity) {
         updateActivityMetrics(state)
       }
     }
   })
 
-  // 計算プロパティ
+  // Computed properties
   const engagementScore = computed(() => {
     if (sessionDuration.value === 0) return 100
     const activeTime = sessionDuration.value - totalHiddenTime.value
@@ -740,10 +740,10 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
 
   const isEngaged = computed(() => engagementScore.value > 70)
 
-  // アクティビティメトリクス更新
+  // Update activity metrics
   function updateActivityMetrics(state: 'visible' | 'hidden') {
     const now = new Date()
-    
+
     if (state === 'hidden') {
       hiddenAt.value = now
     } else if (state === 'visible' && hiddenAt.value) {
@@ -754,46 +754,46 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
     }
   }
 
-  // 表示時のハンドラー
+  // Handler for when visible
   function handleVisible() {
-    console.log('アプリケーションが表示されました')
-    
-    // 自動一時停止されたメディアを再開
+    console.log('Application became visible')
+
+    // Resume auto-paused media
     if (autoPause && isAutoPaused.value) {
       resumeMediaElements()
       isAutoPaused.value = false
     }
-    
-    // タイトル復元
+
+    // Restore title
     if (updateTitle) {
       restoreTitle()
     }
-    
-    // カスタムコールバック
+
+    // Custom callback
     onVisible?.()
   }
 
-  // 非表示時のハンドラー
+  // Handler for when hidden
   function handleHidden() {
-    console.log('アプリケーションが非表示になりました')
-    
-    // メディア要素の自動一時停止
+    console.log('Application became hidden')
+
+    // Auto-pause media elements
     if (autoPause) {
       pauseMediaElements()
       isAutoPaused.value = true
     }
-    
-    // カスタムコールバック
+
+    // Custom callback
     onHidden?.()
   }
 
-  // メディア要素の一時停止
+  // Pause media elements
   function pauseMediaElements() {
     pausableElements.value = []
-    
+
     const videos = document.querySelectorAll('video')
     const audios = document.querySelectorAll('audio')
-    
+
     ;[...videos, ...audios].forEach(element => {
       if (!element.paused) {
         pausableElements.value.push({
@@ -805,21 +805,21 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
     })
   }
 
-  // メディア要素の再開
+  // Resume media elements
   function resumeMediaElements() {
     pausableElements.value.forEach(({ element, wasPaused }) => {
       if (!wasPaused) {
         element.play().catch(err => {
-          console.warn('メディア要素の自動再生に失敗:', err)
+          console.warn('Failed to auto-resume media element:', err)
         })
       }
     })
     pausableElements.value = []
   }
 
-  // タイトル管理
+  // Title management
   const originalTitle = ref('')
-  
+
   function updateTitleWithNotification(count: number) {
     if (updateTitle) {
       if (count > 0) {
@@ -829,16 +829,16 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
       }
     }
   }
-  
+
   function restoreTitle() {
     if (updateTitle && originalTitle.value) {
       document.title = originalTitle.value
     }
   }
 
-  // セッション時間の追跡
+  // Session time tracking
   let sessionInterval: number | null = null
-  
+
   function startSessionTracking() {
     if (trackActivity) {
       sessionInterval = setInterval(() => {
@@ -854,7 +854,7 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
     }
   }
 
-  // ライフサイクル管理
+  // Lifecycle management
   onMounted(() => {
     originalTitle.value = document.title
     if (trackActivity) {
@@ -868,10 +868,10 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
 
   // Public API
   return {
-    // 基本状態
+    // Basic state
     ...visibility,
-    
-    // 拡張状態
+
+    // Extended state
     isAutoPaused,
     hiddenAt,
     visibleAt,
@@ -879,14 +879,14 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
     sessionDuration,
     engagementScore,
     isEngaged,
-    
-    // ユーティリティ
+
+    // Utilities
     updateTitleWithNotification,
     restoreTitle,
     pauseMediaElements,
     resumeMediaElements,
-    
-    // メトリクス
+
+    // Metrics
     getActivityMetrics: () => ({
       sessionDuration: sessionDuration.value,
       totalHiddenTime: totalHiddenTime.value,
@@ -897,53 +897,53 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
 }
 ```
 
-### 実践的なアプリケーション統合
+### Practical Application Integration
 
 ```vue
 <template>
   <div class="app-visibility-integration">
     <header class="app-header">
-      <h1>実践的なPage Visibility統合</h1>
+      <h1>Practical Page Visibility Integration</h1>
       <div class="header-stats">
         <span class="stat">
-          <strong>エンゲージメント:</strong> {{ appVisibility.engagementScore }}%
+          <strong>Engagement:</strong> {{ appVisibility.engagementScore }}%
         </span>
         <span class="stat" :class="{ engaged: appVisibility.isEngaged }">
-          {{ appVisibility.isEngaged ? '📈 集中中' : '📉 散漫' }}
+          {{ appVisibility.isEngaged ? '📈 Focused' : '📉 Distracted' }}
         </span>
       </div>
     </header>
 
-    <!-- ダッシュボード -->
+    <!-- Dashboard -->
     <div class="dashboard">
       <div class="metric-card">
-        <h3>セッション時間</h3>
+        <h3>Session Time</h3>
         <div class="metric-value">{{ formatDuration(appVisibility.sessionDuration) }}</div>
       </div>
-      
+
       <div class="metric-card">
-        <h3>アクティブ時間</h3>
+        <h3>Active Time</h3>
         <div class="metric-value">
           {{ formatDuration(appVisibility.sessionDuration - appVisibility.totalHiddenTime) }}
         </div>
       </div>
-      
+
       <div class="metric-card">
-        <h3>非表示時間</h3>
+        <h3>Hidden Time</h3>
         <div class="metric-value">{{ formatDuration(appVisibility.totalHiddenTime) }}</div>
       </div>
-      
+
       <div class="metric-card">
-        <h3>現在の状態</h3>
+        <h3>Current State</h3>
         <div class="metric-value" :class="`status-${appVisibility.state}`">
-          {{ appVisibility.state === 'visible' ? '表示中' : '非表示' }}
+          {{ appVisibility.state === 'visible' ? 'Visible' : 'Hidden' }}
         </div>
       </div>
     </div>
 
-    <!-- メディアプレイヤー -->
+    <!-- Media player -->
     <div class="media-section">
-      <h2>自動制御メディアプレイヤー</h2>
+      <h2>Auto-Control Media Player</h2>
       <div class="media-controls">
         <video controls preload="metadata" width="100%" style="max-width: 600px;">
           <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
@@ -957,32 +957,32 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
       </div>
       <div class="media-info">
         <p>
-          <strong>自動制御:</strong> 
-          {{ appVisibility.isAutoPaused ? '一時停止中' : '自動制御待機中' }}
+          <strong>Auto Control:</strong>
+          {{ appVisibility.isAutoPaused ? 'Paused' : 'Standby for Auto Control' }}
         </p>
         <p>
           <small>
-            タブを切り替えると動画・音声が自動で一時停止され、
-            タブに戻ると自動で再開されます。
+            Video and audio are automatically paused when switching tabs,
+            and automatically resumed when returning to the tab.
           </small>
         </p>
       </div>
     </div>
 
-    <!-- 通知システム -->
+    <!-- Notification system -->
     <div class="notification-system">
-      <h2>通知システム</h2>
+      <h2>Notification System</h2>
       <div class="notification-controls">
         <button @click="addNotification" class="primary-btn">
-          通知を追加
+          Add Notification
         </button>
         <button @click="clearAllNotifications" class="secondary-btn">
-          全てクリア
+          Clear All
         </button>
       </div>
-      
+
       <div class="notification-display">
-        <p>未読通知: {{ unreadNotifications.length }}件</p>
+        <p>Unread notifications: {{ unreadNotifications.length }}</p>
         <div class="notification-list">
           <div
             v-for="notification in notifications"
@@ -1000,16 +1000,16 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
               @click="markNotificationAsRead(notification.id)"
               class="read-btn"
             >
-              既読
+              Mark as Read
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- アクティビティログ -->
+    <!-- Activity log -->
     <div class="activity-log">
-      <h2>アクティビティログ</h2>
+      <h2>Activity Log</h2>
       <div class="log-entries">
         <div
           v-for="entry in activityLog"
@@ -1029,7 +1029,7 @@ export function useAppVisibility(options: AppVisibilityOptions = {}) {
 import { ref, computed, watch } from 'vue'
 import { useAppVisibility } from './composables/useAppVisibility'
 
-// 通知管理
+// Notification management
 interface Notification {
   id: string
   title: string
@@ -1041,11 +1041,11 @@ interface Notification {
 const notifications = ref<Notification[]>([])
 let notificationIdCounter = 0
 
-const unreadNotifications = computed(() => 
+const unreadNotifications = computed(() =>
   notifications.value.filter(n => !n.read)
 )
 
-// アクティビティログ
+// Activity log
 interface LogEntry {
   id: string
   type: 'visible' | 'hidden' | 'notification' | 'system'
@@ -1056,39 +1056,39 @@ interface LogEntry {
 const activityLog = ref<LogEntry[]>([])
 let logIdCounter = 0
 
-// アプリケーションのVisibility管理
+// Application Visibility management
 const appVisibility = useAppVisibility({
   autoPause: true,
   trackActivity: true,
   manageNotifications: true,
   updateTitle: true,
   onVisible: () => {
-    addLogEntry('visible', 'アプリケーションが表示状態になりました')
-    
-    // タイトルを更新
+    addLogEntry('visible', 'Application became visible')
+
+    // Update title
     updateDocumentTitle()
   },
   onHidden: () => {
-    addLogEntry('hidden', 'アプリケーションが非表示状態になりました')
+    addLogEntry('hidden', 'Application became hidden')
   },
   onChange: (state) => {
-    addLogEntry('system', `状態が ${state} に変更されました`)
+    addLogEntry('system', `State changed to ${state}`)
   }
 })
 
-// 通知管理関数
+// Notification management functions
 function addNotification() {
   const notification: Notification = {
     id: `notification-${++notificationIdCounter}`,
-    title: `新着通知 #${notificationIdCounter}`,
-    message: `これは ${new Date().toLocaleTimeString()} に作成された通知です。`,
+    title: `New Notification #${notificationIdCounter}`,
+    message: `This notification was created at ${new Date().toLocaleTimeString()}.`,
     timestamp: Date.now(),
     read: false
   }
-  
+
   notifications.value.unshift(notification)
-  addLogEntry('notification', `新しい通知が追加されました: ${notification.title}`)
-  
+  addLogEntry('notification', `New notification added: ${notification.title}`)
+
   // タイトルを更新
   updateDocumentTitle()
 }
@@ -1097,7 +1097,7 @@ function markNotificationAsRead(id: string) {
   const notification = notifications.value.find(n => n.id === id)
   if (notification) {
     notification.read = true
-    addLogEntry('notification', `通知を既読にしました: ${notification.title}`)
+    addLogEntry('notification', `Marked notification as read: ${notification.title}`)
     updateDocumentTitle()
   }
 }
@@ -1105,11 +1105,11 @@ function markNotificationAsRead(id: string) {
 function clearAllNotifications() {
   const count = notifications.value.length
   notifications.value = []
-  addLogEntry('system', `${count}件の通知をクリアしました`)
+  addLogEntry('system', `Cleared ${count} notifications`)
   updateDocumentTitle()
 }
 
-// ログ管理
+// Log management
 function addLogEntry(type: LogEntry['type'], message: string) {
   const entry: LogEntry = {
     id: `log-${++logIdCounter}`,
@@ -1117,21 +1117,21 @@ function addLogEntry(type: LogEntry['type'], message: string) {
     message,
     timestamp: Date.now()
   }
-  
+
   activityLog.value.unshift(entry)
-  
-  // ログは最新50件まで
+
+  // Keep logs to the latest 50 entries
   if (activityLog.value.length > 50) {
     activityLog.value = activityLog.value.slice(0, 50)
   }
 }
 
-// ユーティリティ関数
+// Utility functions
 function formatDuration(ms: number): string {
   const seconds = Math.floor(ms / 1000)
   const minutes = Math.floor(seconds / 60)
   const hours = Math.floor(minutes / 60)
-  
+
   if (hours > 0) {
     return `${hours}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`
   }
@@ -1143,8 +1143,8 @@ function updateDocumentTitle() {
   appVisibility.updateTitleWithNotification(unreadCount)
 }
 
-// 初期化
-addLogEntry('system', 'アプリケーションが初期化されました')
+// Initialization
+addLogEntry('system', 'Application initialized')
 </script>
 
 <style scoped>
@@ -1383,58 +1383,58 @@ addLogEntry('system', 'アプリケーションが初期化されました')
 
 ### `useVisibility(options?)`
 
-Page Visibility APIをVueで使用するためのComposable関数。
+Composable function for using the Page Visibility API in Vue.
 
 ```typescript
 function useVisibility(options?: UseVisibilityOptions): UseVisibilityRef
 ```
 
-**パラメータ:**
-- `options` (UseVisibilityOptions, optional): コールバック設定
+**Parameters:**
+- `options` (UseVisibilityOptions, optional): Callback configuration
 
-**戻り値:**
-- `UseVisibilityRef`: リアクティブなVisibility状態
+**Return Value:**
+- `UseVisibilityRef`: Reactive Visibility state
 
 ### `UseVisibilityOptions`
 
-Visibilityコールバック設定オプション。
+Visibility callback configuration options.
 
 ```typescript
 interface UseVisibilityOptions {
-  change?: VisibilityStateListener     // 状態変化時のコールバック
-  visible?: VisibilityTypedCallback    // 表示時のコールバック
-  hidden?: VisibilityTypedCallback     // 非表示時のコールバック
+  change?: VisibilityStateListener     // Callback for state changes
+  visible?: VisibilityTypedCallback    // Callback when visible
+  hidden?: VisibilityTypedCallback     // Callback when hidden
 }
 ```
 
 ### `UseVisibilityRef`
 
-リアクティブなVisibility状態オブジェクト。
+Reactive Visibility state object.
 
 ```typescript
 interface UseVisibilityRef {
-  readonly state: VisibilityState      // 現在の状態 ('visible' | 'hidden')
-  readonly visible: boolean            // 表示中かどうか
-  readonly hidden: boolean             // 非表示かどうか
+  readonly state: VisibilityState      // Current state ('visible' | 'hidden')
+  readonly visible: boolean            // Whether currently visible
+  readonly hidden: boolean             // Whether currently hidden
 }
 ```
 
-### 型定義
+### Type Definitions
 
 ```typescript
-// Visibility状態
+// Visibility state
 type VisibilityState = 'visible' | 'hidden'
 
-// 状態変化コールバック
+// State change callback
 type VisibilityStateListener = (
   state: VisibilityState,
   event: Event
 ) => any
 
-// 状態固有コールバック
+// State-specific callback
 type VisibilityTypedCallback = (event: Event) => any
 
-// Visibility状態オブジェクト
+// Visibility stateオブジェクト
 interface VisibilityState {
   state: VisibilityState
   visible: boolean
@@ -1444,61 +1444,61 @@ interface VisibilityState {
 
 ## Usage Examples
 
-### 基本的な状態監視
+### Basic State Monitoring
 
 ```typescript
 import { useVisibility } from '@fastkit/vue-visibility'
 
 const visibility = useVisibility()
 
-// 現在の状態
+// Current state
 console.log(visibility.state)    // 'visible' | 'hidden'
 console.log(visibility.visible)  // true | false
 console.log(visibility.hidden)   // true | false
 ```
 
-### コールバック付き監視
+### Monitoring with Callbacks
 
 ```typescript
 const visibility = useVisibility({
   change: (state, event) => {
-    console.log('状態変化:', state)
-    // アナリティクスへの送信など
+    console.log('State change:', state)
+    // Send to analytics, etc.
   },
   visible: (event) => {
-    console.log('表示されました')
-    // 動画の再開、タイマーの再開など
+    console.log('Became visible')
+    // Resume video, timer, etc.
   },
   hidden: (event) => {
-    console.log('非表示になりました')
-    // 動画の一時停止、タイマーの一時停止など
+    console.log('Became hidden')
+    // Pause video, timer, etc.
   }
 })
 ```
 
-### 実用的な統合例
+### Practical Integration Examples
 
 ```typescript
-// アプリケーション全体でのVisibility管理
+// Application-wide Visibility management
 const { visible, hidden } = useVisibility({
   visible: () => {
-    // バックグラウンドタスクの再開
+    // Resume background tasks
     resumeBackgroundTasks()
-    
-    // 通知の表示
+
+    // Show notifications
     showPendingNotifications()
-    
-    // アナリティクス
+
+    // Analytics
     analytics.track('app_focus')
   },
   hidden: () => {
-    // バックグラウンドタスクの一時停止
+    // Pause background tasks
     pauseBackgroundTasks()
-    
-    // データの保存
+
+    // Save data
     saveCurrentState()
-    
-    // アナリティクス
+
+    // Analytics
     analytics.track('app_blur')
   }
 })

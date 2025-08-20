@@ -1,7 +1,7 @@
 
 # @fastkit/vue-color-scheme
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-color-scheme/README-ja.md)
 
 A library for using type-safe color schemes in Vue.js applications. Integrates @fastkit/color-scheme with Vue 3 Composition API, providing dynamic theme switching, CSS Variables integration, and type-safe color access.
 
@@ -31,29 +31,29 @@ npm install @fastkit/color-scheme vue @unhead/vue
 
 ## Basic Usage
 
-### プラグイン設定
+### Plugin Configuration
 
 ```typescript
 // main.ts
 import { createApp } from 'vue';
 import { createHead } from '@unhead/vue';
 import { VueColorSchemeService } from '@fastkit/vue-color-scheme';
-import colorScheme from './color-scheme'; // カラースキーム定義
+import colorScheme from './color-scheme'; // Color scheme definition
 
 const app = createApp(App);
 
-// Head プラグイン
+// Head plugin
 const head = createHead();
 app.use(head);
 
-// カラースキームサービス
+// Color scheme service
 const colorSchemeService = new VueColorSchemeService(colorScheme);
 colorSchemeService.provide(app);
 
 app.mount('#app');
 ```
 
-### カラースキーム定義
+### Color Scheme Definition
 
 ```typescript
 // color-scheme.ts
@@ -70,42 +70,42 @@ export default createSimpleColorScheme({
 });
 ```
 
-### Vue コンポーネントでの使用
+### Using in Vue Components
 
 ```vue
 <template>
   <div :class="themeClass">
-    <!-- プライマリカラーのボタン -->
+    <!-- Primary color button -->
     <button :class="primaryClasses">
-      プライマリボタン
+      Primary Button
     </button>
-    
-    <!-- セカンダリカラーのアウトラインボタン -->
+
+    <!-- Secondary color outline button -->
     <button :class="secondaryClasses">
-      セカンダリボタン
+      Secondary Button
     </button>
-    
-    <!-- テーマ切り替えボタン -->
+
+    <!-- Theme toggle button -->
     <button @click="toggleTheme">
-      {{ isDark ? 'ライト' : 'ダーク' }}テーマに切り替え
+      Switch to {{ isDark ? 'Light' : 'Dark' }} Theme
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { 
-  useColorScheme, 
-  useColorClasses, 
-  useThemeClass 
+import {
+  useColorScheme,
+  useColorClasses,
+  useThemeClass
 } from '@fastkit/vue-color-scheme';
 
-// カラースキームサービス
+// Color scheme service
 const colorScheme = useColorScheme();
 
-// テーマクラス管理
+// Theme class management
 const { themeClass, currentTheme, toggleTheme, isDark } = useThemeClass({});
 
-// カラークラス生成
+// Color class generation
 const primaryClasses = useColorClasses({ color: 'primary', variant: 'contained' });
 const secondaryClasses = useColorClasses({ color: 'secondary', variant: 'outlined' });
 </script>
@@ -115,50 +115,50 @@ const secondaryClasses = useColorClasses({ color: 'secondary', variant: 'outline
 
 ### useColorScheme
 
-カラースキームサービスへのアクセス：
+Access to the color scheme service:
 
 ```typescript
 import { useColorScheme } from '@fastkit/vue-color-scheme';
 
 const colorSchemeService = useColorScheme();
 
-// サービス情報
+// Service information
 console.log(colorSchemeService.defaultTheme);    // 'light'
 console.log(colorSchemeService.themeNames);      // ['light', 'dark']
 console.log(colorSchemeService.paletteNames);    // ['primary', 'secondary', ...]
 console.log(colorSchemeService.scopeNames);      // ['primary', 'secondary', ...]
 
-// 現在のテーマ
+// Current theme
 console.log(colorSchemeService.rootTheme);       // 'light' | 'dark'
-colorSchemeService.rootTheme = 'dark';           // テーマ変更
+colorSchemeService.rootTheme = 'dark';           // Change theme
 ```
 
 ### useThemeClass
 
-テーマクラスの管理：
+Theme class management:
 
 ```typescript
 import { useThemeClass } from '@fastkit/vue-color-scheme';
 
-// 基本的な使用
+// Basic usage
 const themeResult = useThemeClass({});
 console.log(themeResult.value); // { value: 'light', className: 'light-theme' }
 
-// 特定のテーマを指定
+// Specify a specific theme
 const themeResult = useThemeClass({ theme: 'dark' });
 console.log(themeResult.value); // { value: 'dark', className: 'dark-theme' }
 
-// リアクティブなテーマ
+// Reactive theme
 const theme = ref('light');
 const themeResult = useThemeClass({ theme });
 
-// ルートテーマをデフォルトに使用
+// Use root theme as default
 const themeResult = useThemeClass({}, true);
 ```
 
 ### useColorClasses
 
-包括的なカラークラス管理：
+Comprehensive color class management:
 
 ```typescript
 import { useColorClasses } from '@fastkit/vue-color-scheme';
@@ -171,21 +171,21 @@ const colorClassesResult = useColorClasses({
   borderColor: 'primary'
 });
 
-// 結果の構造
+// Result structure
 console.log(colorClassesResult.theme.value);        // { value: 'light', className: 'light-theme' }
 console.log(colorClassesResult.color.value);        // { value: 'primary', className: 'primary-scope' }
 console.log(colorClassesResult.variant.value);      // { value: 'contained', className: 'contained' }
 console.log(colorClassesResult.textColor.value);    // { value: 'white', className: 'white-text' }
 console.log(colorClassesResult.borderColor.value);  // { value: 'primary', className: 'primary-border' }
 
-// 全てのクラスを配列で取得
-console.log(colorClassesResult.colorClasses.value); 
+// Get all classes as an array
+console.log(colorClassesResult.colorClasses.value);
 // ['light-theme', 'primary-scope', 'contained', 'white-text', 'primary-border']
 ```
 
 ### useScopeColorClass
 
-スコープカラークラス専用：
+Dedicated scope color class:
 
 ```typescript
 import { useScopeColorClass } from '@fastkit/vue-color-scheme';
@@ -193,15 +193,15 @@ import { useScopeColorClass } from '@fastkit/vue-color-scheme';
 const scopeResult = useScopeColorClass({ color: 'primary' });
 console.log(scopeResult.value); // { value: 'primary', className: 'primary-scope' }
 
-// 動的カラー
+// Dynamic color
 const color = ref('secondary');
 const scopeResult = useScopeColorClass({ color });
-// colorが変更されると自動的にクラス名も変更される
+// Class name automatically changes when color changes
 ```
 
 ### useTextColorClass
 
-テキストカラークラス専用：
+Dedicated text color class:
 
 ```typescript
 import { useTextColorClass } from '@fastkit/vue-color-scheme';
@@ -209,15 +209,15 @@ import { useTextColorClass } from '@fastkit/vue-color-scheme';
 const textResult = useTextColorClass({ textColor: 'primary' });
 console.log(textResult.value); // { value: 'primary', className: 'primary-text' }
 
-// 関数ベースの動的カラー
-const textResult = useTextColorClass({ 
-  textColor: () => isDark.value ? 'white' : 'black' 
+// Function-based dynamic color
+const textResult = useTextColorClass({
+  textColor: () => isDark.value ? 'white' : 'black'
 });
 ```
 
 ### useBorderColorClass
 
-ボーダーカラークラス専用：
+Dedicated border color class:
 
 ```typescript
 import { useBorderColorClass } from '@fastkit/vue-color-scheme';
@@ -228,7 +228,7 @@ console.log(borderResult.value); // { value: 'primary', className: 'primary-bord
 
 ### useColorVariantClasses
 
-バリアントクラス専用：
+Dedicated variant class:
 
 ```typescript
 import { useColorVariantClasses } from '@fastkit/vue-color-scheme';
@@ -239,31 +239,31 @@ console.log(variantResult.value); // { value: 'outlined', className: 'outlined' 
 
 ### useInjectTheme
 
-HTMLクラスへのテーマ自動適用：
+Automatic theme application to HTML class:
 
 ```typescript
 import { useInjectTheme } from '@fastkit/vue-color-scheme';
 
-// このcomposableを呼び出すと、
-// HTMLのclass属性にテーマクラスが自動的に追加される
+// When this composable is called,
+// theme classes are automatically added to the HTML class attribute
 const colorSchemeService = useInjectTheme();
 
-// HTML例: <html class="light-theme">
-// テーマが変更されると自動的にクラスも変更される
+// HTML example: <html class="light-theme">
+// Class automatically changes when theme changes
 ```
 
-## Props統合
+## Props Integration
 
 ### colorSchemeProps
 
-標準化されたカラースキームpropsの定義：
+Standardized color scheme props definition:
 
 ```typescript
 import { colorSchemeProps } from '@fastkit/vue-color-scheme';
 
-// デフォルトprop名
+// Default prop names
 const props = colorSchemeProps();
-// 生成されるprops:
+// Generated props:
 // {
 //   variant: String,
 //   theme: String,
@@ -272,14 +272,14 @@ const props = colorSchemeProps();
 //   borderColor: String
 // }
 
-// カスタムprop名
+// Custom prop names
 const customProps = colorSchemeProps({
   theme: 'appTheme',
   color: 'brandColor',
   textColor: 'fontColor',
   borderColor: 'edgeColor'
 });
-// 生成されるprops:
+// Generated props:
 // {
 //   variant: String,
 //   appTheme: String,
@@ -288,7 +288,7 @@ const customProps = colorSchemeProps({
 //   edgeColor: String
 // }
 
-// 使用例
+// Usage example
 export default defineComponent({
   props: {
     ...colorSchemeProps(),
@@ -297,7 +297,7 @@ export default defineComponent({
   },
   setup(props) {
     const colorClasses = useColorClasses(props);
-    
+
     return {
       colorClasses
     };
@@ -307,13 +307,13 @@ export default defineComponent({
 
 ## Advanced Usage Examples
 
-### コンポーネントライブラリ統合
+### Component Library Integration
 
 ```vue
 <!-- Button.vue -->
 <template>
-  <button 
-    :class="buttonClasses" 
+  <button
+    :class="buttonClasses"
     :disabled="disabled"
     @click="$emit('click', $event)"
   >
@@ -342,10 +342,10 @@ defineEmits<{
   click: [event: MouseEvent];
 }>();
 
-// カラークラス生成
+// Color class generation
 const colorClasses = useColorClasses(props);
 
-// 最終的なクラス名計算
+// Final class name calculation
 const buttonClasses = computed(() => [
   'button',
   `button--${props.size}`,
@@ -358,7 +358,7 @@ const buttonClasses = computed(() => [
 
 <style scoped>
 .button {
-  /* ベーススタイル */
+  /* Base styles */
   padding: var(--spacing-md);
   border-radius: var(--border-radius);
   font-weight: 500;
@@ -375,7 +375,7 @@ const buttonClasses = computed(() => [
   cursor: not-allowed;
 }
 
-/* カラースキームのCSS変数を使用 */
+/* Using color scheme CSS variables */
 .button.primary-scope.contained {
   background: var(--main-color);
   color: var(--text-color);
@@ -394,13 +394,13 @@ const buttonClasses = computed(() => [
 </style>
 ```
 
-### テーマ切り替えコンポーネント
+### Theme Toggle Component
 
 ```vue
 <!-- ThemeSwitcher.vue -->
 <template>
   <div class="theme-switcher">
-    <button 
+    <button
       v-for="themeName in availableThemes"
       :key="themeName"
       :class="themeButtonClass(themeName)"
@@ -417,18 +417,18 @@ import { useColorScheme } from '@fastkit/vue-color-scheme';
 
 const colorSchemeService = useColorScheme();
 
-// 利用可能なテーマ
+// Available themes
 const availableThemes = computed(() => colorSchemeService.themeNames);
 
-// 現在のテーマ
+// Current theme
 const currentTheme = computed(() => colorSchemeService.rootTheme);
 
-// テーマ設定
+// Theme setting
 const setTheme = (themeName: string) => {
   colorSchemeService.rootTheme = themeName;
 };
 
-// テーマボタンのクラス
+// Theme button class
 const themeButtonClass = (themeName: string) => [
   'theme-button',
   {
@@ -436,12 +436,12 @@ const themeButtonClass = (themeName: string) => [
   }
 ];
 
-// テーマ表示名
+// Theme display name
 const getThemeDisplayName = (themeName: string) => {
   const displayNames: Record<string, string> = {
-    light: 'ライト',
-    dark: 'ダーク',
-    auto: '自動'
+    light: 'Light',
+    dark: 'Dark',
+    auto: 'Auto'
   };
   return displayNames[themeName] || themeName;
 };
@@ -475,28 +475,28 @@ const getThemeDisplayName = (themeName: string) => {
 </style>
 ```
 
-### システム設定連携
+### System Settings Integration
 
 ```vue
 <!-- AutoThemeManager.vue -->
 <template>
   <div class="auto-theme-manager">
     <label>
-      <input 
-        type="checkbox" 
+      <input
+        type="checkbox"
         :checked="followSystem"
         @change="toggleSystemFollow"
       >
-      システム設定に従う
+      Follow system settings
     </label>
-    
+
     <div v-if="!followSystem" class="manual-controls">
       <ThemeSwitcher />
     </div>
-    
+
     <div class="current-info">
-      現在のテーマ: {{ currentTheme }}
-      <span v-if="followSystem">(システム: {{ systemTheme }})</span>
+      Current theme: {{ currentTheme }}
+      <span v-if="followSystem">(System: {{ systemTheme }})</span>
     </div>
   </div>
 </template>
@@ -509,10 +509,10 @@ const colorSchemeService = useColorScheme();
 const followSystem = ref(true);
 const systemTheme = ref<'light' | 'dark'>('light');
 
-// 現在のテーマ
+// Current theme
 const currentTheme = computed(() => colorSchemeService.rootTheme);
 
-// システム設定の監視
+// System settings monitoring
 let mediaQuery: MediaQueryList | null = null;
 
 const updateSystemTheme = () => {
@@ -527,18 +527,18 @@ const updateSystemTheme = () => {
 const toggleSystemFollow = (event: Event) => {
   const target = event.target as HTMLInputElement;
   followSystem.value = target.checked;
-  
+
   if (followSystem.value) {
-    // システム設定に従う場合、現在のシステムテーマを適用
+    // When following system settings, apply current system theme
     colorSchemeService.rootTheme = systemTheme.value;
   }
 };
 
 onMounted(() => {
-  // システムのダークモード設定を監視
+  // Monitor system dark mode settings
   mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
   updateSystemTheme();
-  
+
   mediaQuery.addEventListener('change', updateSystemTheme);
 });
 
@@ -550,7 +550,7 @@ onUnmounted(() => {
 </script>
 ```
 
-### 動的カラー生成
+### Dynamic Color Generation
 
 ```vue
 <!-- DynamicColorGenerator.vue -->
@@ -558,27 +558,27 @@ onUnmounted(() => {
   <div class="color-generator">
     <div class="controls">
       <label>
-        ベースカラー:
-        <input 
-          type="color" 
+        Base Color:
+        <input
+          type="color"
           v-model="baseColor"
           @input="generateColors"
         >
       </label>
-      
+
       <label>
-        カラーモード:
+        Color Mode:
         <select v-model="colorMode" @change="generateColors">
-          <option value="monochromatic">単色調</option>
-          <option value="analogous">類似色</option>
-          <option value="complementary">補色</option>
-          <option value="triadic">三色調</option>
+          <option value="monochromatic">Monochromatic</option>
+          <option value="analogous">Analogous</option>
+          <option value="complementary">Complementary</option>
+          <option value="triadic">Triadic</option>
         </select>
       </label>
     </div>
-    
+
     <div class="color-preview">
-      <div 
+      <div
         v-for="(color, index) in generatedColors"
         :key="index"
         class="color-swatch"
@@ -600,38 +600,38 @@ const colorMode = ref('monochromatic');
 const generatedColors = ref<string[]>([]);
 
 const generateColors = () => {
-  // カラー生成ロジック（実際の実装では @fastkit/color を使用）
+  // Color generation logic (use @fastkit/color in actual implementation)
   const colors: string[] = [];
-  
+
   switch (colorMode.value) {
     case 'monochromatic':
-      // 明度違いの単色調パレット
+      // Monochromatic palette with different brightness
       colors.push(
         baseColor.value,
         adjustBrightness(baseColor.value, 0.2),
         adjustBrightness(baseColor.value, -0.2)
       );
       break;
-      
+
     case 'analogous':
-      // 類似色パレット
+      // Analogous color palette
       colors.push(
         baseColor.value,
         rotateHue(baseColor.value, 30),
         rotateHue(baseColor.value, -30)
       );
       break;
-      
+
     case 'complementary':
-      // 補色パレット
+      // Complementary color palette
       colors.push(
         baseColor.value,
         rotateHue(baseColor.value, 180)
       );
       break;
-      
+
     case 'triadic':
-      // 三色調パレット
+      // Triadic color palette
       colors.push(
         baseColor.value,
         rotateHue(baseColor.value, 120),
@@ -639,18 +639,18 @@ const generateColors = () => {
       );
       break;
   }
-  
+
   generatedColors.value = colors;
 };
 
-// カラー操作ヘルパー関数（簡易版）
+// Color manipulation helper functions (simplified version)
 const adjustBrightness = (color: string, amount: number): string => {
-  // 実装は @fastkit/color のColor.lighten/darken メソッドを使用
+  // Use @fastkit/color Color.lighten/darken methods in implementation
   return color;
 };
 
 const rotateHue = (color: string, degrees: number): string => {
-  // 実装は @fastkit/color のColor.rotate メソッドを使用  
+  // Use @fastkit/color Color.rotate method in implementation
   return color;
 };
 
@@ -697,36 +697,36 @@ onMounted(() => {
 
 ## VueColorSchemeService
 
-サービスクラスの詳細な使用：
+Detailed usage of service class:
 
 ```typescript
 import { VueColorSchemeService } from '@fastkit/vue-color-scheme';
 import colorScheme from './color-scheme';
 
-// サービス作成
+// Service creation
 const service = new VueColorSchemeService(colorScheme);
 
-// プロパティアクセス
-console.log(service.scheme);          // ColorSchemeインスタンス
-console.log(service.defaultTheme);    // デフォルトテーマ名
-console.log(service.themeNames);      // 全テーマ名
-console.log(service.paletteNames);    // 全パレット名
-console.log(service.scopeNames);      // 全スコープ名
+// Property access
+console.log(service.scheme);          // ColorScheme instance
+console.log(service.defaultTheme);    // Default theme name
+console.log(service.themeNames);      // All theme names
+console.log(service.paletteNames);    // All palette names
+console.log(service.scopeNames);      // All scope names
 
-// テーマ管理
-console.log(service.rootTheme);       // 現在のテーマ
-service.rootTheme = 'dark';          // テーマ変更
+// Theme management
+console.log(service.rootTheme);       // Current theme
+service.rootTheme = 'dark';          // Theme change
 
-// Vueアプリへの提供
+// Provide to Vue app
 service.provide(app);
 ```
 
-## SSR対応
+## SSR Support
 
-サーバーサイドレンダリングでの使用：
+Usage in server-side rendering:
 
 ```typescript
-// server.ts (Node.js サーバー)
+// server.ts (Node.js server)
 import { createSSRApp } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { createHead, renderHeadToString } from '@unhead/vue';
@@ -734,20 +734,20 @@ import { VueColorSchemeService } from '@fastkit/vue-color-scheme';
 
 export async function render(url: string, theme = 'light') {
   const app = createSSRApp(App);
-  
-  // Head設定
+
+  // Head setup
   const head = createHead();
   app.use(head);
-  
-  // カラースキーム設定
+
+  // Color scheme setup
   const colorSchemeService = new VueColorSchemeService(colorScheme);
-  colorSchemeService.rootTheme = theme; // サーバー側でテーマ設定
+  colorSchemeService.rootTheme = theme; // Set theme on server side
   colorSchemeService.provide(app);
-  
-  // レンダリング
+
+  // Rendering
   const appHtml = await renderToString(app);
   const { headTags, htmlAttrs, bodyAttrs } = await renderHeadToString(head);
-  
+
   return {
     html: `
       <!DOCTYPE html>
@@ -764,31 +764,31 @@ export async function render(url: string, theme = 'light') {
 }
 ```
 
-## TypeScript型拡張
+## TypeScript Type Extensions
 
-型情報の拡張：
+Extending type information:
 
 ```typescript
 // types/vue-color-scheme.d.ts
 declare module '@fastkit/vue-color-scheme' {
   interface ColorSchemeHooksProps {
-    // カスタムpropの追加
+    // Add custom props
     brand?: string;
     accent?: string;
   }
 }
 
-// 使用例
+// Usage example
 const customColorClasses = useColorClasses({
   color: 'primary',
-  brand: 'corporate',  // カスタムprop
-  accent: 'highlight'  // カスタムprop
+  brand: 'corporate',  // Custom prop
+  accent: 'highlight'  // Custom prop
 });
 ```
 
-## テストとデバッグ
+## Testing and Debugging
 
-### ユニットテスト
+### Unit Tests
 
 ```typescript
 import { describe, test, expect, beforeEach } from 'vitest';
@@ -799,7 +799,7 @@ import { createSimpleColorScheme } from '@fastkit/color-scheme-gen';
 describe('VueColorScheme', () => {
   let colorScheme: any;
   let service: VueColorSchemeService;
-  
+
   beforeEach(() => {
     colorScheme = createSimpleColorScheme({
       primary: '#1976d2',
@@ -807,19 +807,19 @@ describe('VueColorScheme', () => {
     });
     service = new VueColorSchemeService(colorScheme);
   });
-  
+
   test('service creation', () => {
     expect(service.defaultTheme).toBe('light');
     expect(service.themeNames).toContain('light');
     expect(service.themeNames).toContain('dark');
   });
-  
+
   test('theme switching', () => {
     expect(service.rootTheme).toBe('light');
     service.rootTheme = 'dark';
     expect(service.rootTheme).toBe('dark');
   });
-  
+
   test('component integration', () => {
     const TestComponent = {
       template: '<div :class="colorClasses.colorClasses.value"></div>',
@@ -831,7 +831,7 @@ describe('VueColorScheme', () => {
         return { colorClasses };
       }
     };
-    
+
     const wrapper = mount(TestComponent, {
       global: {
         provide: {
@@ -839,21 +839,21 @@ describe('VueColorScheme', () => {
         }
       }
     });
-    
+
     expect(wrapper.classes()).toContain('primary-scope');
     expect(wrapper.classes()).toContain('contained');
   });
 });
 ```
 
-## 依存関係
+## Dependencies
 
 ```json
 {
   "dependencies": {
-    "@fastkit/color-scheme": "カラースキーム基盤ライブラリ",
-    "@fastkit/tiny-logger": "軽量ログ機能",
-    "@fastkit/vue-utils": "Vue.js ユーティリティ"
+    "@fastkit/color-scheme": "Color scheme foundation library",
+    "@fastkit/tiny-logger": "Lightweight logging functionality",
+    "@fastkit/vue-utils": "Vue.js utilities"
   },
   "peerDependencies": {
     "vue": "^3.4.0",
@@ -862,7 +862,7 @@ describe('VueColorScheme', () => {
 }
 ```
 
-## ドキュメント
+## Documentation
 
 https://dadajam4.github.io/fastkit/vue-color-scheme/
 

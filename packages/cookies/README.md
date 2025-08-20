@@ -1,7 +1,7 @@
 
 # @fastkit/cookies
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/cookies/README-ja.md)
 
 A helper library for universally controlling Cookie headers on both server and browser. Designed TypeScript-first and provides a consistent API for both Node.js server environments and browser environments.
 
@@ -52,40 +52,40 @@ cookies.delete('username')
 console.log(cookies.bucket) // All current cookies
 ```
 
-### サーバー（Node.js）での使用
+### Using on Server (Node.js)
 
 ```typescript
 import { Cookies } from '@fastkit/cookies'
 import type { IncomingMessage, ServerResponse } from 'http'
 
-// Express.jsでの使用例
+// Express.js usage example
 app.get('/api/user', (req: IncomingMessage, res: ServerResponse) => {
   const cookies = new Cookies({ req, res })
-  
-  // リクエストからCookieを読み取り
+
+  // Read Cookie from request
   const sessionId = cookies.get('session_id')
-  
+
   if (!sessionId) {
-    // 新しいセッションIDを生成して設定
+    // Generate and set new session ID
     const newSessionId = generateSessionId()
     cookies.set('session_id', newSessionId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000 // 24時間
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
     })
   }
-  
-  // ユーザー設定のCookieを設定
+
+  // Set user settings Cookie
   cookies.set('last_visit', new Date().toISOString(), {
-    expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1年後
+    expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year later
   })
-  
-  res.end('Cookie設定完了')
+
+  res.end('Cookie setup completed')
 })
 ```
 
-### Next.jsでの使用例
+### Usage Example with Next.js
 
 ```typescript
 // pages/api/auth/login.ts
@@ -94,29 +94,29 @@ import { Cookies } from '@fastkit/cookies'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const cookies = new Cookies({ req, res })
-  
+
   if (req.method === 'POST') {
     const { username, password } = req.body
-    
-    // 認証処理（仮）
+
+    // Authentication process (placeholder)
     if (authenticate(username, password)) {
-      // 認証トークンをCookieに設定
+      // Set authentication token to Cookie
       cookies.set('auth_token', generateToken(username), {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         path: '/',
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7日間
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
       })
-      
-      // ユーザー設定をCookieに保存
+
+      // Save user settings to Cookie
       cookies.set('user_prefs', JSON.stringify({
         theme: 'light',
         language: 'ja'
       }), {
-        expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1年間
+        expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year
       })
-      
+
       res.status(200).json({ success: true })
     } else {
       res.status(401).json({ error: 'Invalid credentials' })
@@ -127,61 +127,61 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 function authenticate(username: string, password: string): boolean {
-  // 実際の認証ロジック
+  // Actual authentication logic
   return username === 'admin' && password === 'password'
 }
 
 function generateToken(username: string): string {
-  // 実際のトークン生成ロジック
+  // Actual token generation logic
   return `token_${username}_${Date.now()}`
 }
 ```
 
 ## Advanced Usage Examples
 
-### Cookie変更のリアルタイム監視
+### Real-time Monitoring of Cookie Changes
 
 ```typescript
 import { Cookies } from '@fastkit/cookies'
 
 const cookies = new Cookies()
 
-// Cookie変更イベントのリスナー登録
+// Register Cookie change event listener
 cookies.on('change', (event) => {
   console.log(`Cookie "${event.name}" changed:`, event.value)
-  
-  // 特定のCookieの変更を監視
+
+  // Monitor specific Cookie changes
   if (event.name === 'theme') {
     updateTheme(event.value)
   }
-  
+
   if (event.name === 'language') {
     updateLanguage(event.value)
   }
 })
 
-// テーマ変更処理
+// Theme change processing
 function updateTheme(theme: string | undefined) {
   if (theme) {
     document.body.className = `theme-${theme}`
-    console.log(`テーマを ${theme} に変更しました`)
+    console.log(`Changed theme to ${theme}`)
   }
 }
 
-// 言語変更処理
+// Language change processing
 function updateLanguage(language: string | undefined) {
   if (language) {
     document.documentElement.lang = language
-    console.log(`言語を ${language} に変更しました`)
+    console.log(`Changed language to ${language}`)
   }
 }
 
-// 動的なCookie設定
-cookies.set('theme', 'dark')  // changeイベントが発生
-cookies.set('language', 'ja') // changeイベントが発生
+// Dynamic Cookie setting
+cookies.set('theme', 'dark')  // change event occurs
+cookies.set('language', 'ja') // change event occurs
 ```
 
-### カスタムCookieユーティリティクラス
+### Custom Cookie Utility Class
 
 ```typescript
 import { Cookies } from '@fastkit/cookies'
@@ -202,64 +202,64 @@ interface SessionData {
 
 class CookieManager {
   private cookies: Cookies
-  
+
   constructor(context?: CookiesContext) {
     this.cookies = new Cookies(context)
   }
-  
-  // ユーザー設定の管理
+
+  // User settings management
   setUserPreferences(prefs: UserPreferences) {
     const options: CookieSerializeOptions = {
-      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1年間
+      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
       path: '/',
       sameSite: 'strict'
     }
-    
+
     this.cookies.set('user_prefs', JSON.stringify(prefs), options)
   }
-  
+
   getUserPreferences(): UserPreferences | null {
     const prefsStr = this.cookies.get('user_prefs')
     if (!prefsStr) return null
-    
+
     try {
       return JSON.parse(prefsStr) as UserPreferences
     } catch (error) {
-      console.error('ユーザー設定の解析エラー:', error)
+      console.error('User settings parsing error:', error)
       return null
     }
   }
-  
-  // セッション管理
+
+  // Session management
   setSession(sessionData: SessionData) {
     const options: CookieSerializeOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       path: '/',
-      maxAge: 24 * 60 * 60 * 1000 // 24時間
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
-    
+
     this.cookies.set('session', JSON.stringify(sessionData), options)
   }
-  
+
   getSession(): SessionData | null {
     const sessionStr = this.cookies.get('session')
     if (!sessionStr) return null
-    
+
     try {
       return JSON.parse(sessionStr) as SessionData
     } catch (error) {
-      console.error('セッションデータの解析エラー:', error)
+      console.error('Session data parsing error:', error)
       return null
     }
   }
-  
+
   clearSession() {
     this.cookies.delete('session')
   }
-  
-  // CSRF トークン管理
+
+  // CSRF token management
   setCSRFToken(token: string) {
     this.cookies.set('csrf_token', token, {
       httpOnly: true,
@@ -268,27 +268,27 @@ class CookieManager {
       path: '/'
     })
   }
-  
+
   getCSRFToken(): string | undefined {
     return this.cookies.get('csrf_token')
   }
-  
-  // 同意Cookie管理
+
+  // Consent Cookie management
   setConsent(accepted: boolean) {
     this.cookies.set('cookie_consent', accepted.toString(), {
-      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1年間
+      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
       path: '/',
       sameSite: 'strict'
     })
   }
-  
+
   getConsent(): boolean | null {
     const consent = this.cookies.get('cookie_consent')
     if (consent === undefined) return null
     return consent === 'true'
   }
-  
-  // 追跡無効化
+
+  // Tracking opt-out
   setTrackingPreference(enabled: boolean) {
     this.cookies.set('tracking_enabled', enabled.toString(), {
       expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
@@ -296,13 +296,13 @@ class CookieManager {
       sameSite: 'strict'
     })
   }
-  
+
   isTrackingEnabled(): boolean {
     const tracking = this.cookies.get('tracking_enabled')
     return tracking === 'true'
   }
-  
-  // 全Cookie削除（ログアウト時など）
+
+  // Delete all Cookies (for logout, etc.)
   clearAllCookies() {
     const cookieNames = Object.keys(this.cookies.bucket)
     cookieNames.forEach(name => {
@@ -311,10 +311,10 @@ class CookieManager {
   }
 }
 
-// 使用例
+// Usage example
 const cookieManager = new CookieManager()
 
-// ユーザー設定の保存
+// Save user settings
 cookieManager.setUserPreferences({
   theme: 'dark',
   language: 'ja',
@@ -322,30 +322,30 @@ cookieManager.setUserPreferences({
   notifications: true
 })
 
-// セッション作成
+// Create session
 cookieManager.setSession({
   userId: 'user123',
   role: 'admin',
   permissions: ['read', 'write', 'delete']
 })
 
-// Cookie同意の処理
+// Handle Cookie consent
 if (cookieManager.getConsent() === null) {
-  // 同意確認ダイアログを表示
+  // Show consent confirmation dialog
   showConsentDialog().then(accepted => {
     cookieManager.setConsent(accepted)
   })
 }
 ```
 
-### Express.jsミドルウェアでの統合
+### Integration with Express.js Middleware
 
 ```typescript
 import express from 'express'
 import { Cookies } from '@fastkit/cookies'
 import type { Request, Response, NextFunction } from 'express'
 
-// Cookiesインスタンスをリクエストオブジェクトに追加
+// Add Cookies instance to request object
 declare global {
   namespace Express {
     interface Request {
@@ -354,78 +354,78 @@ declare global {
   }
 }
 
-// Cookiesミドルウェア
+// Cookies middleware
 export function cookiesMiddleware(req: Request, res: Response, next: NextFunction) {
   req.cookies = new Cookies({ req, res })
   next()
 }
 
-// アプリケーション設定
+// Application setup
 const app = express()
 
 app.use(cookiesMiddleware)
 
-// 認証が必要なルートの保護
+// Protect routes that require authentication
 app.use('/protected', (req: Request, res: Response, next: NextFunction) => {
   const sessionToken = req.cookies.get('session_token')
-  
+
   if (!sessionToken || !isValidToken(sessionToken)) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
-  
+
   next()
 })
 
-// ログイン エンドポイント
+// Login endpoint
 app.post('/auth/login', async (req: Request, res: Response) => {
   const { username, password } = req.body
-  
+
   try {
     const user = await authenticateUser(username, password)
-    
+
     if (user) {
       const sessionToken = generateSessionToken(user.id)
-      
-      // セッションCookieを設定
+
+      // Set session Cookie
       req.cookies.set('session_token', sessionToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 24 * 60 * 60 * 1000 // 24時間
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
       })
-      
-      // ユーザー情報Cookieを設定
+
+      // Set user info Cookie
       req.cookies.set('user_info', JSON.stringify({
         id: user.id,
         name: user.name,
         role: user.role
       }), {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7日間
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
       })
-      
+
       res.json({ success: true, user })
     } else {
       res.status(401).json({ error: 'Invalid credentials' })
     }
   } catch (error) {
-    console.error('ログインエラー:', error)
+    console.error('Login error:', error)
     res.status(500).json({ error: 'Internal server error' })
   }
 })
 
-// ログアウト エンドポイント
+// Logout endpoint
 app.post('/auth/logout', (req: Request, res: Response) => {
-  // セッション関連のCookieを削除
+  // Delete session-related Cookies
   req.cookies.delete('session_token')
   req.cookies.delete('user_info')
-  
+
   res.json({ success: true })
 })
 
-// 保護されたリソース
+// Protected resource
 app.get('/protected/profile', (req: Request, res: Response) => {
   const userInfo = req.cookies.get('user_info')
-  
+
   if (userInfo) {
     try {
       const user = JSON.parse(userInfo)
@@ -439,106 +439,106 @@ app.get('/protected/profile', (req: Request, res: Response) => {
 })
 
 async function authenticateUser(username: string, password: string) {
-  // 実際の認証ロジック
-  // データベースからユーザーを検索し、パスワードを検証
+  // Actual authentication logic
+  // Search for user from database and verify password
   return { id: '123', name: username, role: 'user' }
 }
 
 function generateSessionToken(userId: string): string {
-  // 実際のトークン生成ロジック
+  // Actual token generation logic
   return `session_${userId}_${Date.now()}`
 }
 
 function isValidToken(token: string): boolean {
-  // 実際のトークン検証ロジック
+  // Actual token verification logic
   return token.startsWith('session_')
 }
 
 app.listen(3000, () => {
-  console.log('サーバーが起動しました: http://localhost:3000')
+  console.log('Server started: http://localhost:3000')
 })
 ```
 
-## Cookie設定オプション
+## Cookie Setting Options
 
-### 基本オプション
+### Basic Options
 
 ```typescript
 import { Cookies } from '@fastkit/cookies'
 
 const cookies = new Cookies()
 
-// 基本的な設定
+// Basic setting
 cookies.set('simple_cookie', 'value')
 
-// 詳細な設定
+// Detailed settings
 cookies.set('advanced_cookie', 'value', {
-  // 有効期限（日付指定）
-  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7日後
-  
-  // 有効期限（秒数指定）
-  maxAge: 60 * 60 * 24 * 7, // 7日間（秒）
-  
-  // パス指定
-  path: '/admin', // /adminパス以下でのみ有効
-  
-  // ドメイン指定
-  domain: '.example.com', // example.comとそのサブドメインで有効
-  
-  // HTTPS必須
+  // Expiration date (date specification)
+  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days later
+
+  // Expiration date (seconds specification)
+  maxAge: 60 * 60 * 24 * 7, // 7 days (seconds)
+
+  // Path specification
+  path: '/admin', // Valid only under /admin path
+
+  // Domain specification
+  domain: '.example.com', // Valid on example.com and its subdomains
+
+  // HTTPS required
   secure: true,
-  
-  // JavaScript からアクセス不可（サーバーのみ）
+
+  // JavaScript inaccessible (server only)
   httpOnly: true,
-  
-  // SameSite属性（CSRF攻撃防止）
+
+  // SameSite attribute (CSRF attack prevention)
   sameSite: 'strict' // 'strict' | 'lax' | 'none'
 })
 ```
 
-### SameSite属性の詳細
+### SameSite Attribute Details
 
 ```typescript
-// Strict: 同一サイトからのリクエストでのみCookieを送信
+// Strict: Send Cookie only for requests from the same site
 cookies.set('strict_cookie', 'value', { sameSite: 'strict' })
 
-// Lax: 同一サイト + 安全なクロスサイトナビゲーション（GET）でCookieを送信
+// Lax: Send Cookie for same site + safe cross-site navigation (GET)
 cookies.set('lax_cookie', 'value', { sameSite: 'lax' })
 
-// None: すべてのクロスサイトリクエストでCookieを送信（secureが必須）
-cookies.set('none_cookie', 'value', { 
+// None: Send Cookie for all cross-site requests (secure required)
+cookies.set('none_cookie', 'value', {
   sameSite: 'none',
-  secure: true // sameSite: 'none'の場合は必須
+  secure: true // Required when sameSite: 'none'
 })
 ```
 
 ## API Specification
 
-### `Cookies`クラス
+### `Cookies` Class
 
 ```typescript
 class Cookies extends EV<CookiesEventMap> {
   constructor(ctx?: CookiesContext, options?: CookiesOptions)
-  
-  // Cookie操作
+
+  // Cookie operations
   get(name: string): string | undefined
   set(name: string, value: string, options?: CookieSerializeOptions): void
   delete(name: string, options?: CookieSerializeOptions): void
-  
-  // Cookieの解析
+
+  // Cookie parsing
   parse(options?: CookieParseOptions): CookiesBucket
-  
-  // プロパティ
+
+  // Properties
   readonly ctx: CookiesContext
   readonly options?: CookiesOptions
-  readonly bucket: CookiesBucket  // 現在のCookie一覧
+  readonly bucket: CookiesBucket  // Current Cookie list
 }
 ```
 
-### 型定義
+### Type Definitions
 
 ```typescript
-// コンテキスト型
+// Context type
 type CookiesContext = CookiesBrowserContext | CookiesServerContext
 
 interface CookiesBrowserContext extends Document {}
@@ -548,10 +548,10 @@ interface CookiesServerContext {
   res?: ServerResponse
 }
 
-// Cookie格納型
+// Cookie storage type
 type CookiesBucket = Record<string, string>
 
-// イベント型
+// Event type
 interface OnCookiesChangeEvent {
   name: string
   value: string | undefined
@@ -561,12 +561,12 @@ interface CookiesEventMap {
   change: OnCookiesChangeEvent
 }
 
-// オプション型
+// Option type
 interface CookiesOptions extends CookieParseOptions {
   bucket?: CookiesBucket
 }
 
-// Cookieシリアライズオプション
+// Cookie serialize options
 interface CookieSerializeOptions {
   expires?: Date
   maxAge?: number
@@ -579,40 +579,40 @@ interface CookieSerializeOptions {
 }
 ```
 
-### ヘルパー関数
+### Helper Functions
 
 ```typescript
-// コンテキスト判定
+// Context determination
 function isCookiesBrowserContext(source: any): source is CookiesBrowserContext
 function isIncomingMessage(source: any): source is IncomingMessage
 function isServerResponse(source: any): source is ServerResponse
 
-// Cookie操作
+// Cookie operations
 function createCookie(name: string, value: string, options?: CookieSerializeOptions): Cookie
 function areCookiesEqual(a: Cookie, b: Cookie): boolean
 ```
 
 ## Considerations
 
-### ブラウザ制限
-- ブラウザではhttpOnlyオプションは使用不可
-- Cookieサイズ制限（4KB程度）に注意
-- ドメインあたりのCookie数制限に注意
+### Browser Limitations
+- httpOnly option cannot be used in browsers
+- Note Cookie size limit (approximately 4KB)
+- Note Cookie count limit per domain
 
-### サーバー環境
-- レスポンス送信後のCookie設定は警告が表示
-- 重複したSet-Cookieヘッダーは自動的に排除
-- HTTPSでない場合はsecureオプションを使用しない
+### Server Environment
+- Warning displayed when setting Cookie after sending response
+- Duplicate Set-Cookie headers are automatically excluded
+- Do not use secure option when not HTTPS
 
-### セキュリティ
-- 機密情報はhttpOnlyとsecureオプションを使用
-- CSRF攻撃防止にはsameSite属性を適切に設定
-- XSS攻撃対策として入力値の検証とサニタイゼーションを実施
+### Security
+- Use httpOnly and secure options for sensitive information
+- Set sameSite attribute appropriately to prevent CSRF attacks
+- Implement input validation and sanitization as XSS attack countermeasures
 
-### パフォーマンス
-- Cookie数とサイズを最小限に抑制
-- 頻繁な更新によるパフォーマンス影響を考慮
-- 大きなデータはCookieではなくセッションストレージを使用
+### Performance
+- Minimize Cookie count and size
+- Consider performance impact from frequent updates
+- Use session storage instead of Cookies for large data
 
 ## License
 
@@ -620,6 +620,6 @@ MIT
 
 ## Related Packages
 
-- [@fastkit/ev](../ev/README.md): イベントエミッター基盤
-- [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数
-- [@fastkit/tiny-logger](../tiny-logger/README.md): ログ出力機能
+- [@fastkit/ev](../ev/README.md): Event emitter foundation
+- [@fastkit/helpers](../helpers/README.md): Basic utility functions
+- [@fastkit/tiny-logger](../tiny-logger/README.md): Log output functionality

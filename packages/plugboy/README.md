@@ -1,19 +1,19 @@
 
 # @fastkit/plugboy
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README-ja.md)
 
-モノレポ対応のモジュールバンドラー・プロジェクト管理ツールです。esbuild、tsup等をベースとした高速ビルドシステムを提供します。
+A monorepo-compatible module bundler and project management tool. Provides a high-speed build system based on esbuild, tsup, and other tools.
 
-## 特徴
+## Features
 
-- **高速ビルド**: esbuild、tsupベースの超高速バンドリング
-- **モノレポ対応**: マルチパッケージプロジェクトの統合管理
-- **TypeScript完全対応**: 自動型定義生成・最適化
-- **プラグインシステム**: 拡張可能なアーキテクチャ
-- **CSS統合**: Sass、Vanilla Extract、CSS最適化サポート
-- **開発効率**: stub機能による高速開発サイクル
-- **自動化**: package.json、exports自動生成
+- **High-Speed Build**: Ultra-fast bundling based on esbuild and tsup
+- **Monorepo Support**: Integrated management of multi-package projects
+- **Full TypeScript Support**: Automatic type definition generation and optimization
+- **Plugin System**: Extensible architecture
+- **CSS Integration**: Sass, Vanilla Extract, and CSS optimization support
+- **Development Efficiency**: Fast development cycle with stub functionality
+- **Automation**: Automatic generation of package.json and exports
 
 ## Installation
 
@@ -23,30 +23,30 @@ npm install @fastkit/plugboy
 pnpm add @fastkit/plugboy
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### CLI コマンド
+### CLI Commands
 
 ```bash
-# プロジェクト全体のビルド
+# Build entire project
 plugboy build
 
-# 開発用stub生成（高速開発）
+# Generate development stub (fast development)
 plugboy stub
 
-# package.json設定の同期
+# Sync package.json settings
 plugboy json
 
-# ディストリビューション削除
+# Delete distribution
 plugboy clean
 
-# 新しいワークスペース生成
+# Generate new workspace
 plugboy generate [workspaceName]
-# または
+# or
 plugboy gen [workspaceName]
 ```
 
-### ワークスペース設定
+### Workspace Configuration
 
 **`plugboy.workspace.ts`**:
 ```typescript
@@ -58,16 +58,16 @@ export default defineWorkspaceConfig({
     './utils': './src/utils.ts'
   },
   plugins: [
-    // プラグイン設定
+    // Plugin configuration
   ],
   dts: {
-    // TypeScript型定義設定
+    // TypeScript type definition configuration
   },
   optimizeCSS: true
 });
 ```
 
-### プロジェクト設定
+### Project Configuration
 
 **`plugboy.project.ts`**:
 ```typescript
@@ -95,14 +95,14 @@ export default defineProjectConfig({
 
 ### defineWorkspaceConfig
 
-#### エントリーポイント設定
+#### Entry Point Configuration
 
 ```typescript
 export default defineWorkspaceConfig({
   entries: {
-    '.': './src/index.ts',              // メインエントリー
-    './components': './src/components.ts', // サブエントリー
-    './styles': {                        // CSS付きエントリー
+    '.': './src/index.ts',              // Main entry
+    './components': './src/components.ts', // Sub entry
+    './styles': {                        // Entry with CSS
       src: './src/styles.ts',
       css: true
     }
@@ -110,7 +110,7 @@ export default defineWorkspaceConfig({
 });
 ```
 
-#### プラグイン設定
+#### Plugin Configuration
 
 ```typescript
 import { createSassPlugin } from '@fastkit/plugboy-sass-plugin';
@@ -124,16 +124,16 @@ export default defineWorkspaceConfig({
 });
 ```
 
-#### TypeScript型定義設定
+#### TypeScript Type Definition Configuration
 
 ```typescript
 export default defineWorkspaceConfig({
   dts: {
     preserveType: [
-      // カスタム型保持設定
+      // Custom type preservation configuration
     ],
     normalizers: [
-      // 型定義正規化関数
+      // Type definition normalization functions
       (dts) => dts.replace(/unwanted-pattern/g, '')
     ]
   }
@@ -142,7 +142,7 @@ export default defineWorkspaceConfig({
 
 ### defineProjectConfig
 
-#### ワークスペース管理
+#### Workspace Management
 
 ```typescript
 export default defineProjectConfig({
@@ -154,7 +154,7 @@ export default defineProjectConfig({
 });
 ```
 
-#### スクリプトテンプレート
+#### Script Templates
 
 ```typescript
 export default defineProjectConfig({
@@ -178,15 +178,15 @@ export default defineProjectConfig({
 });
 ```
 
-## プラグインシステム
+## Plugin System
 
-### 内蔵プラグイン
+### Built-in Plugins
 
-- **@fastkit/plugboy-sass-plugin**: Sass/SCSS サポート
-- **@fastkit/plugboy-vanilla-extract-plugin**: Vanilla Extract サポート
-- **@fastkit/plugboy-vue-jsx-plugin**: Vue JSX サポート
+- **@fastkit/plugboy-sass-plugin**: Sass/SCSS support
+- **@fastkit/plugboy-vanilla-extract-plugin**: Vanilla Extract support
+- **@fastkit/plugboy-vue-jsx-plugin**: Vue JSX support
 
-### カスタムプラグイン
+### Custom Plugins
 
 ```typescript
 import type { Plugin } from '@fastkit/plugboy';
@@ -194,7 +194,7 @@ import type { Plugin } from '@fastkit/plugboy';
 const customPlugin = (): Plugin => ({
   name: 'custom-plugin',
   setup(workspace) {
-    // プラグイン初期化
+    // Plugin initialization
     workspace.hooks.buildStart?.tap('custom-plugin', () => {
       console.log('Build started');
     });
@@ -206,38 +206,38 @@ export default defineWorkspaceConfig({
 });
 ```
 
-## 開発ワークフロー
+## Development Workflow
 
-### 高速開発サイクル
+### Fast Development Cycle
 
 ```bash
-# 1. 初回ビルド
+# 1. Initial build
 pnpm build
 
-# 2. 開発モード（高速）
+# 2. Development mode (fast)
 pnpm stub
 
-# 3. 開発サーバー起動
+# 3. Start development server
 pnpm dev
 ```
 
-### モノレポ管理
+### Monorepo Management
 
 ```bash
-# 新しいパッケージ作成
+# Create new package
 plugboy gen my-new-package
 
-# プロジェクト全体ビルド
+# Build entire project
 plugboy build
 
-# 特定パッケージのみ
+# Specific package only
 cd packages/my-package
 plugboy build
 ```
 
-## 設定例
+## Configuration Examples
 
-### CSS統合プロジェクト
+### CSS Integration Project
 
 ```typescript
 // plugboy.workspace.ts
@@ -262,7 +262,7 @@ export default defineWorkspaceConfig({
 });
 ```
 
-### Vue.jsプロジェクト
+### Vue.js Project
 
 ```typescript
 // plugboy.workspace.ts
@@ -282,9 +282,9 @@ export default defineWorkspaceConfig({
 });
 ```
 
-## フック システム
+## Hook System
 
-### ビルドフック
+### Build Hooks
 
 ```typescript
 export default defineWorkspaceConfig({
@@ -302,19 +302,19 @@ export default defineWorkspaceConfig({
 });
 ```
 
-## 型定義管理
+## Type Definition Management
 
-### 自動型定義生成
+### Automatic Type Definition Generation
 
 ```typescript
 export default defineWorkspaceConfig({
   dts: {
     preserveType: [
-      // 外部パッケージ型の保持
+      // Preserve external package types
       'external-package-types'
     ],
     normalizers: [
-      // 型定義の正規化・最適化
+      // Normalization and optimization of type definitions
       (dts) => dts
         .replace(/unnecessary-types/g, '')
         .replace(/import\("complex-path"\)/g, 'SimpleType')
@@ -323,29 +323,29 @@ export default defineWorkspaceConfig({
 });
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### ビルド最適化
+### Build Optimization
 
-- **並列処理**: 複数エントリーの同時ビルド
-- **インクリメンタル**: 変更部分のみ再ビルド
-- **キャッシュ**: ビルド結果のキャッシュ利用
-- **Tree Shaking**: 未使用コードの除去
+- **Parallel Processing**: Simultaneous building of multiple entries
+- **Incremental**: Rebuild only changed parts
+- **Cache**: Utilize cached build results
+- **Tree Shaking**: Remove unused code
 
-### 開発最適化
+### Development Optimization
 
-- **Stub モード**: 実ファイルへのシンボリックリンク
-- **Hot Reload**: ファイル変更の即座反映
-- **TypeScript**: 高速型チェック
+- **Stub Mode**: Symbolic links to actual files
+- **Hot Reload**: Immediate reflection of file changes
+- **TypeScript**: Fast type checking
 
-## 依存関係
+## Dependencies
 
-### 主要依存
-- `esbuild`: 高速JavaScriptビルダー
-- `tsup`: TypeScriptビルドツール
-- `cac`: CLI作成ライブラリ
-- `glob`: ファイルマッチング
-- `cssnano`: CSS最適化
+### Main Dependencies
+- `esbuild`: High-speed JavaScript builder
+- `tsup`: TypeScript build tool
+- `cac`: CLI creation library
+- `glob`: File matching
+- `cssnano`: CSS optimization
 
 ## License
 

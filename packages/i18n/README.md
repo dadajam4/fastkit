@@ -1,7 +1,7 @@
 
 # @fastkit/i18n
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/i18n/README-ja.md)
 
 A comprehensive library for internationalizing applications to multiple languages without depending on server/browser execution environments.
 
@@ -56,9 +56,9 @@ interface Translations {
 // Format definition
 const dateTimeFormats = {
   short: { year: 'numeric', month: 'short', day: 'numeric' },
-  long: { 
-    year: 'numeric', 
-    month: 'long', 
+  long: {
+    year: 'numeric',
+    month: 'long',
     day: 'numeric',
     weekday: 'long'
   }
@@ -83,8 +83,8 @@ const scheme = Space.defineScheme({
 // Japanese
 const ja = scheme.defineLocale.strict({
   translations: {
-    greeting: 'こんにちは',
-    farewell: 'さようなら',
+    greeting: 'Hello',
+    farewell: 'Goodbye',
     itemCount: '{count}個のアイテム'
   },
   dateTimeFormats: {
@@ -99,7 +99,7 @@ const ja = scheme.defineLocale.strict({
 const en = scheme.defineLocale.strict({
   translations: {
     greeting: 'Hello',
-    farewell: 'Goodbye', 
+    farewell: 'Goodbye',
     itemCount: '{count} items'
   },
   numberFormats: {
@@ -123,7 +123,7 @@ const i18n = Component.createInstance();
 await i18n.setLocale('ja');
 
 // Get translation
-const greeting = i18n.t.greeting; // → 'こんにちは'
+const greeting = i18n.t.greeting; // → 'Hello'
 
 // Translation with parameters
 const count = i18n.t.itemCount.replace('{count}', '5'); // → '5個のアイテム'
@@ -226,7 +226,7 @@ Defines a component schema.
 const scheme = Space.defineScheme({
   translations: (t: T) => boolean,            // Translation type definition
   dateTimeFormats?: DateTimeFormats,          // Date/time formats
-  relativeTimeFormats?: RelativeTimeFormats,  // Relative time formats  
+  relativeTimeFormats?: RelativeTimeFormats,  // Relative time formats
   numberFormats?: NumberFormats,              // Number formats
   listFormats?: ListFormats,                  // List formats
   dependencies?: Dependencies                 // Dependent components
@@ -310,8 +310,8 @@ const Space = defineI18nSpace({
   locales: ['ja', 'en', 'zh'],
   baseLocale: 'ja',
   fallbackLocale: {
-    en: 'ja',      // 英語→日本語
-    zh: ['en', 'ja'] // 中国語→英語→日本語
+    en: 'ja',      // English → Japanese
+    zh: ['en', 'ja'] // Chinese → English → Japanese
   }
 });
 ```

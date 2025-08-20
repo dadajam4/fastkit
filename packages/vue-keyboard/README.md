@@ -1,20 +1,20 @@
 # @fastkit/vue-keyboard
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-keyboard/README-ja.md)
 
-Vue.jsアプリケーションでキーボードイベントを効率的に管理するためのComposition APIライブラリ。複雑なキーボードショートカット、キーボードナビゲーション、アクセシビリティ対応を簡単に実装できます。
+A Composition API library for efficiently managing keyboard events in Vue.js applications. Easily implement complex keyboard shortcuts, keyboard navigation, and accessibility features.
 
 ## Features
 
-- **Vue Composition API**: Vue 3のComposition APIと完全統合
-- **自動ライフサイクル管理**: コンポーネントのマウント/アンマウントに自動対応
-- **型安全なキー判定**: TypeScriptによる厳密なキー型定義
-- **柔軟なイベント処理**: keydown、keypress、keyupイベント対応
-- **マルチターゲット対応**: document、特定要素へのイベント登録
-- **キーカテゴリ分類**: 修飾キー、ナビゲーション、編集キーなどの分類
-- **国際化対応**: 日本語、韓国語IMEキーに対応
-- **パフォーマンス最適化**: 効率的なイベントハンドリングとメモリ管理
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
+- **Vue Composition API**: Full integration with Vue 3 Composition API
+- **Automatic Lifecycle Management**: Automatic handling of component mount/unmount
+- **Type-safe Key Detection**: Strict key type definitions with TypeScript
+- **Flexible Event Handling**: Support for keydown, keypress, and keyup events
+- **Multi-target Support**: Event registration for document and specific elements
+- **Key Category Classification**: Classification of modifier keys, navigation keys, editing keys, etc.
+- **Internationalization Support**: Support for Japanese and Korean IME keys
+- **Performance Optimization**: Efficient event handling and memory management
+- **SSR Support**: Safe operation in server-side rendering environments
 
 ## Installation
 
@@ -24,23 +24,23 @@ npm install @fastkit/vue-keyboard
 
 ## Basic Usage
 
-### シンプルなキーハンドリング
+### Simple Key Handling
 
 ```vue
 <template>
   <div>
-    <h1>キーボードショートカット例</h1>
-    <p>以下のキーを試してください：</p>
+    <h1>Keyboard Shortcut Examples</h1>
+    <p>Try the following keys:</p>
     <ul>
-      <li>Enter: フォーム送信</li>
-      <li>Escape: モーダルを閉じる</li>
-      <li>Ctrl+S: 保存</li>
-      <li>Ctrl+Z: 元に戻す</li>
+      <li>Enter: Submit form</li>
+      <li>Escape: Close modal</li>
+      <li>Ctrl+S: Save</li>
+      <li>Ctrl+Z: Undo</li>
     </ul>
-    
+
     <div class="status">
-      <p>最後に押されたキー: {{ lastKey }}</p>
-      <p>保存状態: {{ saveStatus }}</p>
+      <p>Last pressed key: {{ lastKey }}</p>
+      <p>Save status: {{ saveStatus }}</p>
     </div>
   </div>
 </template>
@@ -50,14 +50,14 @@ import { ref } from 'vue'
 import { useKeyboard } from '@fastkit/vue-keyboard'
 
 const lastKey = ref<string>('')
-const saveStatus = ref<string>('未保存')
+const saveStatus = ref<string>('Unsaved')
 
-// 基本的なキーボードショートカット設定
+// Basic keyboard shortcut settings
 useKeyboard([
   {
     key: 'Enter',
     handler: (ev) => {
-      console.log('フォーム送信')
+      console.log('Submit form')
       lastKey.value = 'Enter'
       ev.preventDefault()
     }
@@ -65,7 +65,7 @@ useKeyboard([
   {
     key: 'Escape',
     handler: (ev) => {
-      console.log('モーダルを閉じる')
+      console.log('Close modal')
       lastKey.value = 'Escape'
     }
   },
@@ -73,8 +73,8 @@ useKeyboard([
     key: 's',
     handler: (ev) => {
       if (ev.ctrlKey || ev.metaKey) {
-        console.log('保存実行')
-        saveStatus.value = '保存済み'
+        console.log('Save executed')
+        saveStatus.value = 'Saved'
         lastKey.value = 'Ctrl+S'
         ev.preventDefault()
       }
@@ -84,7 +84,7 @@ useKeyboard([
     key: 'z',
     handler: (ev) => {
       if (ev.ctrlKey || ev.metaKey) {
-        console.log('元に戻す')
+        console.log('Undo')
         lastKey.value = 'Ctrl+Z'
         ev.preventDefault()
       }
@@ -94,20 +94,20 @@ useKeyboard([
 </script>
 ```
 
-### 手動でキーボードサービスを制御
+### Manual Keyboard Service Control
 
 ```vue
 <template>
   <div>
-    <h2>手動制御例</h2>
+    <h2>Manual Control Example</h2>
     <div class="controls">
-      <button @click="startKeyboard">キーボード監視開始</button>
-      <button @click="stopKeyboard">キーボード監視停止</button>
+      <button @click="startKeyboard">Start Keyboard Monitoring</button>
+      <button @click="stopKeyboard">Stop Keyboard Monitoring</button>
     </div>
-    
+
     <div class="status">
-      <p>監視状態: {{ isActive ? 'アクティブ' : '停止中' }}</p>
-      <p>矢印キーでナビゲーション（監視中のみ）</p>
+      <p>Monitoring status: {{ isActive ? 'Active' : 'Stopped' }}</p>
+      <p>Navigate with arrow keys (only when monitoring)</p>
     </div>
   </div>
 </template>
@@ -122,25 +122,25 @@ const keyboardRef = useKeyboard([
   {
     key: 'ArrowUp',
     handler: () => {
-      console.log('上へ移動')
+      console.log('Move up')
     }
   },
   {
     key: 'ArrowDown',
     handler: () => {
-      console.log('下へ移動')
+      console.log('Move down')
     }
   },
   {
     key: 'ArrowLeft',
     handler: () => {
-      console.log('左へ移動')
+      console.log('Move left')
     }
   },
   {
     key: 'ArrowRight',
     handler: () => {
-      console.log('右へ移動')
+      console.log('Move right')
     }
   }
 ])
@@ -157,24 +157,24 @@ function stopKeyboard() {
 </script>
 ```
 
-### キータイプ分類の活用
+### Key Type Classification Usage
 
 ```vue
 <template>
   <div>
-    <h2>キータイプ分類例</h2>
+    <h2>Key Type Classification Example</h2>
     <div class="key-display">
       <div class="key-category">
-        <h3>修飾キー</h3>
-        <p>{{ modifierKeys.join(', ') || 'なし' }}</p>
+        <h3>Modifier Keys</h3>
+        <p>{{ modifierKeys.join(', ') || 'None' }}</p>
       </div>
       <div class="key-category">
-        <h3>ナビゲーションキー</h3>
-        <p>{{ navigationKeys.join(', ') || 'なし' }}</p>
+        <h3>Navigation Keys</h3>
+        <p>{{ navigationKeys.join(', ') || 'None' }}</p>
       </div>
       <div class="key-category">
-        <h3>編集キー</h3>
-        <p>{{ editingKeys.join(', ') || 'なし' }}</p>
+        <h3>Editing Keys</h3>
+        <p>{{ editingKeys.join(', ') || 'None' }}</p>
       </div>
     </div>
   </div>
@@ -188,7 +188,7 @@ const modifierKeys = ref<string[]>([])
 const navigationKeys = ref<string[]>([])
 const editingKeys = ref<string[]>([])
 
-// キータイプ別の分類定義
+// Key type classification definition
 const { Key } = useKeyboard
 
 useKeyboard([
@@ -221,7 +221,7 @@ useKeyboard([
   }
 ], { autorun: true })
 
-// キーアップでmodifierKeysをクリア
+// Clear modifierKeys on keyup
 useKeyboard([
   {
     key: Key.Modifier(['Alt', 'Control', 'Shift', 'Meta']),
@@ -237,28 +237,28 @@ useKeyboard([
 </script>
 ```
 
-## 実用的な使用例
+## Practical Usage Examples
 
-### モーダルダイアログでのキーボード制御
+### Keyboard Control in Modal Dialogs
 
 ```vue
 <template>
   <div>
-    <!-- モーダルトリガー -->
-    <button @click="showModal = true">モーダルを開く</button>
-    
-    <!-- モーダルダイアログ -->
+    <!-- Modal trigger -->
+    <button @click="showModal = true">Open Modal</button>
+
+    <!-- Modal dialog -->
     <div v-if="showModal" class="modal-overlay" @click="closeModal">
       <div class="modal-content" @click.stop ref="modalRef">
-        <h3>確認ダイアログ</h3>
-        <p>この操作を実行しますか？</p>
-        
+        <h3>Confirmation Dialog</h3>
+        <p>Do you want to execute this operation?</p>
+
         <div class="modal-actions">
           <button ref="confirmBtnRef" @click="confirmAction">
-            確認 (Enter)
+            Confirm (Enter)
           </button>
           <button @click="closeModal">
-            キャンセル (Escape)
+            Cancel (Escape)
           </button>
         </div>
       </div>
@@ -274,7 +274,7 @@ const showModal = ref(false)
 const modalRef = ref<HTMLElement>()
 const confirmBtnRef = ref<HTMLButtonElement>()
 
-// モーダル用キーボード制御
+// Modal keyboard control
 const modalKeyboard = useKeyboard([
   {
     key: 'Escape',
@@ -287,16 +287,16 @@ const modalKeyboard = useKeyboard([
   {
     key: 'Tab',
     handler: (ev) => {
-      // フォーカストラップの実装
+      // Focus trap implementation
       const focusableElements = modalRef.value?.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       )
-      
+
       if (!focusableElements?.length) return
-      
+
       const firstElement = focusableElements[0] as HTMLElement
       const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
-      
+
       if (ev.shiftKey) {
         if (document.activeElement === firstElement) {
           lastElement.focus()
@@ -312,7 +312,7 @@ const modalKeyboard = useKeyboard([
   }
 ])
 
-// モーダル表示状態に応じてキーボード制御を切り替え
+// Switch keyboard control based on modal display state
 watch(showModal, async (isShow) => {
   if (isShow) {
     modalKeyboard.run()
@@ -328,20 +328,20 @@ function closeModal() {
 }
 
 function confirmAction() {
-  console.log('操作を確認しました')
+  console.log('Operation confirmed')
   closeModal()
 }
 </script>
 ```
 
-### リスト要素のキーボードナビゲーション
+### Keyboard Navigation for List Elements
 
 ```vue
 <template>
   <div>
-    <h2>キーボードナビゲーション付きリスト</h2>
-    <p>矢印キーでナビゲーション、Enterで選択、Escapeでクリア</p>
-    
+    <h2>List with Keyboard Navigation</h2>
+    <p>Navigate with arrow keys, select with Enter, clear with Escape</p>
+
     <div class="list-container" ref="listRef">
       <div
         v-for="(item, index) in items"
@@ -352,9 +352,9 @@ function confirmAction() {
         {{ item.name }}
       </div>
     </div>
-    
+
     <div class="selected-info">
-      <p>選択されたアイテム: {{ selectedItem?.name || 'なし' }}</p>
+      <p>Selected Item: {{ selectedItem?.name || 'None' }}</p>
     </div>
   </div>
 </template>
@@ -369,11 +369,11 @@ interface ListItem {
 }
 
 const items = ref<ListItem[]>([
-  { id: 1, name: 'アイテム 1' },
-  { id: 2, name: 'アイテム 2' },
-  { id: 3, name: 'アイテム 3' },
-  { id: 4, name: 'アイテム 4' },
-  { id: 5, name: 'アイテム 5' }
+  { id: 1, name: 'Item 1' },
+  { id: 2, name: 'Item 2' },
+  { id: 3, name: 'Item 3' },
+  { id: 4, name: 'Item 4' },
+  { id: 5, name: 'Item 5' }
 ])
 
 const activeIndex = ref(0)
@@ -382,7 +382,7 @@ const listRef = ref<HTMLElement>()
 
 const maxIndex = computed(() => items.value.length - 1)
 
-// キーボードナビゲーション設定
+// Keyboard navigation settings
 useKeyboard([
   {
     key: 'ArrowUp',
@@ -469,27 +469,27 @@ function selectItem(index: number) {
 </style>
 ```
 
-### グローバルアプリケーションショートカット
+### Global Application Shortcuts
 
 ```vue
 <template>
   <div>
-    <h2>グローバルショートカット例</h2>
+    <h2>Global Shortcuts Example</h2>
     <div class="shortcut-info">
-      <h3>利用可能なショートカット:</h3>
+      <h3>Available Shortcuts:</h3>
       <ul>
-        <li>Ctrl/Cmd + N: 新規作成</li>
-        <li>Ctrl/Cmd + O: ファイルを開く</li>
-        <li>Ctrl/Cmd + S: 保存</li>
-        <li>Ctrl/Cmd + Shift + S: 名前を付けて保存</li>
-        <li>Ctrl/Cmd + Z: 元に戻す</li>
-        <li>Ctrl/Cmd + Y: やり直し</li>
-        <li>F11: フルスクリーン切り替え</li>
+        <li>Ctrl/Cmd + N: New</li>
+        <li>Ctrl/Cmd + O: Open File</li>
+        <li>Ctrl/Cmd + S: Save</li>
+        <li>Ctrl/Cmd + Shift + S: Save As</li>
+        <li>Ctrl/Cmd + Z: Undo</li>
+        <li>Ctrl/Cmd + Y: Redo</li>
+        <li>F11: Toggle Fullscreen</li>
       </ul>
     </div>
-    
+
     <div class="action-log">
-      <h3>実行されたアクション:</h3>
+      <h3>Executed Actions:</h3>
       <ul>
         <li v-for="(action, index) in actionLog" :key="index">
           {{ action }}
@@ -512,14 +512,14 @@ function addAction(action: string) {
   }
 }
 
-// グローバルショートカット設定
+// Global shortcuts settings
 useKeyboard([
   {
     key: 'n',
     handler: (ev) => {
       if (ev.ctrlKey || ev.metaKey) {
         ev.preventDefault()
-        addAction('新規作成')
+        addAction('New')
       }
     }
   },
@@ -528,7 +528,7 @@ useKeyboard([
     handler: (ev) => {
       if (ev.ctrlKey || ev.metaKey) {
         ev.preventDefault()
-        addAction('ファイルを開く')
+        addAction('Open File')
       }
     }
   },
@@ -538,9 +538,9 @@ useKeyboard([
       if (ev.ctrlKey || ev.metaKey) {
         ev.preventDefault()
         if (ev.shiftKey) {
-          addAction('名前を付けて保存')
+          addAction('Save As')
         } else {
-          addAction('保存')
+          addAction('Save')
         }
       }
     }
@@ -550,7 +550,7 @@ useKeyboard([
     handler: (ev) => {
       if (ev.ctrlKey || ev.metaKey) {
         ev.preventDefault()
-        addAction('元に戻す')
+        addAction('Undo')
       }
     }
   },
@@ -559,7 +559,7 @@ useKeyboard([
     handler: (ev) => {
       if (ev.ctrlKey || ev.metaKey) {
         ev.preventDefault()
-        addAction('やり直し')
+        addAction('Redo')
       }
     }
   },
@@ -569,10 +569,10 @@ useKeyboard([
       ev.preventDefault()
       if (document.fullscreenElement) {
         document.exitFullscreen()
-        addAction('フルスクリーン終了')
+        addAction('Exit Fullscreen')
       } else {
         document.documentElement.requestFullscreen()
-        addAction('フルスクリーン開始')
+        addAction('Enter Fullscreen')
       }
     }
   }
@@ -580,39 +580,39 @@ useKeyboard([
 </script>
 ```
 
-### 特定要素へのキーボードイベント登録
+### Keyboard Event Registration for Specific Elements
 
 ```vue
 <template>
   <div>
-    <h2>特定要素でのキーボード制御</h2>
-    
+    <h2>Keyboard Control for Specific Elements</h2>
+
     <div class="input-areas">
       <div class="input-area">
-        <h3>テキストエリア 1</h3>
+        <h3>Text Area 1</h3>
         <textarea
           ref="textarea1Ref"
           v-model="text1"
           placeholder="Ctrl+Enter で送信"
           class="textarea"
         ></textarea>
-        <button @click="submitText1">送信</button>
+        <button @click="submitText1">Submit</button>
       </div>
-      
+
       <div class="input-area">
-        <h3>テキストエリア 2</h3>
+        <h3>Text Area 2</h3>
         <textarea
           ref="textarea2Ref"
           v-model="text2"
           placeholder="Ctrl+Enter で送信"
           class="textarea"
         ></textarea>
-        <button @click="submitText2">送信</button>
+        <button @click="submitText2">Submit</button>
       </div>
     </div>
-    
+
     <div class="submission-log">
-      <h3>送信ログ:</h3>
+      <h3>Submission Log:</h3>
       <ul>
         <li v-for="(submission, index) in submissions" :key="index">
           {{ submission }}
@@ -717,44 +717,44 @@ onMounted(() => {
 
 ### `useKeyboard(settings, options?)`
 
-キーボードイベントハンドリングを設定し、Vue.jsコンポーネントのライフサイクルに統合します。
+Configures keyboard event handling and integrates with Vue.js component lifecycle.
 
-**パラメータ:**
-- `settings` (UseKeyboardSettings): キーボード設定の配列または単一設定
-- `options` (UseKeyboardOptions, optional): 追加オプション
+**Parameters:**
+- `settings` (UseKeyboardSettings): Array of keyboard settings or single setting
+- `options` (UseKeyboardOptions, optional): Additional options
 
-**戻り値:**
-- `UseKeyboardRef`: キーボードサービスの参照
+**Returns:**
+- `UseKeyboardRef`: Keyboard service reference
 
 ```typescript
 interface UseKeyboardSettings extends RawKBSetting {
-  target?: GlobalEventHandlers;     // イベントターゲット（デフォルト: document）
-  key?: KeyType | KeyType[];        // 対象キー
-  event?: 'keydown' | 'keypress' | 'keyup'; // イベントタイプ（デフォルト: 'keydown'）
-  handler: (ev: KeyboardEvent) => void;      // イベントハンドラ
-  capture?: boolean;                // キャプチャーフェーズ使用フラグ
+  target?: GlobalEventHandlers;     // Event target (default: document)
+  key?: KeyType | KeyType[];        // Target key
+  event?: 'keydown' | 'keypress' | 'keyup'; // Event type (default: 'keydown')
+  handler: (ev: KeyboardEvent) => void;      // Event handler
+  capture?: boolean;                // Capture phase usage flag
 }
 
 interface UseKeyboardOptions {
-  autorun?: boolean; // 自動実行フラグ（デフォルト: false）
+  autorun?: boolean; // Auto-run flag (default: false)
 }
 
 interface UseKeyboardRef {
-  run(): void;  // キーボード監視開始
-  stop(): void; // キーボード監視停止
+  run(): void;  // Start keyboard monitoring
+  stop(): void; // Stop keyboard monitoring
 }
 ```
 
-### `Key` ヘルパー
+### `Key` Helper
 
-キーの型安全な定義とカテゴリ分類を提供します。
+Provides type-safe key definitions and category classification.
 
 ```typescript
-// 基本的な使用
-Key('Enter')           // 単一キー
-Key(['Enter', 'Tab'])  // 複数キー
+// Basic usage
+Key('Enter')           // Single key
+Key(['Enter', 'Tab'])  // Multiple keys
 
-// カテゴリ別キー定義
+// Category-based key definitions
 Key.Modifier(['Alt', 'Control', 'Shift', 'Meta'])
 Key.Navigation(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'])
 Key.Editing(['Backspace', 'Delete', 'Cut', 'Copy', 'Paste'])
@@ -762,32 +762,32 @@ Key.Function(['F1', 'F2', 'F3', 'F4'])
 Key.Whitespace(['Enter', 'Tab', ' '])
 Key.UI(['Escape', 'ContextMenu', 'Help'])
 
-// 国際化キー
+// Internationalization keys
 Key.Japanese(['Hiragana', 'Katakana', 'Romaji'])
 Key.Korean(['HangulMode', 'HanjaMode'])
 
-// キー判定
-Key.is(event.key, 'Enter')                    // 単一キー判定
-Key.is(event.key, ['Enter', 'Tab'])          // 複数キー判定
-Key.is(event.key, Key.Navigation(['ArrowUp', 'ArrowDown'])) // カテゴリ判定
+// Key validation
+Key.is(event.key, 'Enter')                    // Single key validation
+Key.is(event.key, ['Enter', 'Tab'])          // Multiple key validation
+Key.is(event.key, Key.Navigation(['ArrowUp', 'ArrowDown'])) // Category validation
 ```
 
 ## Advanced Usage Examples
 
-### ゲーム風キーボード制御
+### Game-style Keyboard Control
 
 ```vue
 <template>
   <div>
-    <h2>ゲーム風制御例</h2>
+    <h2>Game-style Control Example</h2>
     <div class="game-area">
       <div class="player" :style="playerStyle"></div>
     </div>
-    
+
     <div class="controls-info">
-      <p>WASD または矢印キーで移動</p>
-      <p>Spaceでジャンプ</p>
-      <p>位置: ({{ player.x }}, {{ player.y }})</p>
+      <p>Move with WASD or arrow keys</p>
+      <p>Jump with Space</p>
+      <p>Position: ({{ player.x }}, {{ player.y }})</p>
     </div>
   </div>
 </template>
@@ -815,7 +815,7 @@ const playerStyle = computed(() => ({
   transition: 'background-color 0.2s'
 }))
 
-// キー押下時の処理
+// Key press handling
 useKeyboard([
   {
     key: ['w', 'W', 'ArrowUp'],
@@ -854,7 +854,7 @@ useKeyboard([
   }
 ], { autorun: true })
 
-// キー離上時の処理
+// Key release handling
 useKeyboard([
   {
     key: ['w', 'W', 'ArrowUp'],
@@ -880,18 +880,18 @@ useKeyboard([
 
 function jump() {
   if (player.value.isJumping) return
-  
+
   player.value.isJumping = true
   setTimeout(() => {
     player.value.isJumping = false
   }, 500)
 }
 
-// ゲームループ
+// Game loop
 onMounted(() => {
   const gameLoop = () => {
     const speed = 2
-    
+
     if (pressedKeys.value.has('up')) {
       player.value.y = Math.max(0, player.value.y - speed)
     }
@@ -904,10 +904,10 @@ onMounted(() => {
     if (pressedKeys.value.has('right')) {
       player.value.x = Math.min(380, player.value.x + speed)
     }
-    
+
     requestAnimationFrame(gameLoop)
   }
-  
+
   gameLoop()
 })
 </script>
@@ -932,23 +932,23 @@ onMounted(() => {
 
 ## Considerations
 
-### パフォーマンス考慮事項
+### Performance Considerations
 
-- 不要になったキーボードイベントリスナーは自動的に削除されます
-- 大量のキーハンドラーを登録する場合は、パフォーマンスへの影響を考慮してください
-- autorunオプションを使用する場合、コンポーネントのライフサイクルと自動同期されます
+- Unnecessary keyboard event listeners are automatically removed
+- When registering many key handlers, consider the impact on performance
+- When using the autorun option, it automatically syncs with component lifecycle
 
-### ブラウザ対応
+### Browser Support
 
-- モダンブラウザすべてでサポート
-- Internet Explorer 11以降で動作
-- キーイベントはブラウザ固有の制限に従います
+- Supported in all modern browsers
+- Works with Internet Explorer 11 and later
+- Key events follow browser-specific limitations
 
-### アクセシビリティ
+### Accessibility
 
-- キーボードナビゲーションを実装する際は、フォーカス管理に注意してください
-- スクリーンリーダーとの互換性を考慮してARIA属性を適切に設定してください
-- 視覚的なフィードバックを提供して、現在のフォーカス位置を明確にしてください
+- When implementing keyboard navigation, pay attention to focus management
+- Set ARIA attributes appropriately for screen reader compatibility
+- Provide visual feedback to clearly indicate current focus position
 
 ## License
 
@@ -956,5 +956,5 @@ MIT
 
 ## Related Packages
 
-- [@fastkit/keyboard](../keyboard/README.md): コアキーボード処理ライブラリ
-- [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数
+- [@fastkit/keyboard](../keyboard/README.md): Core keyboard processing library
+- [@fastkit/helpers](../helpers/README.md): Basic utility functions

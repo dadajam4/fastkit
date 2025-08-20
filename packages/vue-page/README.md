@@ -1,20 +1,20 @@
 
 # @fastkit/vue-page
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-page/README-ja.md)
 
-Vueアプリケーションのルーティングをより便利にコントロールするためのミドルウェア。データのプリフェッチ、エラーハンドリング、ページ状態管理、プログレス表示などの高度なルーティング機能を提供します。
+Middleware for convenient control of routing in Vue applications. Provides advanced routing features including data prefetching, error handling, page state management, and progress display.
 
 ## Features
 
-- **データプリフェッチ**: ページ遷移前の自動データ取得
-- **エラーハンドリング**: 統一されたエラーページ表示システム
-- **プログレス表示**: ページローディング状態の可視化
-- **状態管理**: ページ間でのデータ共有と管理
-- **SSR対応**: サーバーサイドレンダリング完全対応
-- **クエリ監視**: URLクエリパラメータの変更監視
-- **ミドルウェア**: ページアクセス前の処理実行
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
+- **Data Prefetching**: Automatic data retrieval before page transitions
+- **Error Handling**: Unified error page display system
+- **Progress Display**: Visualization of page loading status
+- **State Management**: Data sharing and management between pages
+- **SSR Support**: Full server-side rendering support
+- **Query Watching**: Monitoring URL query parameter changes
+- **Middleware**: Execution of processing before page access
+- **Full TypeScript Support**: Type safety through strict type definitions
 
 ## Installation
 
@@ -24,7 +24,7 @@ npm install @fastkit/vue-page
 
 ## Basic Usage
 
-### アプリケーションの設定
+### Application Setup
 
 ```typescript
 // main.ts
@@ -38,19 +38,19 @@ const app = createApp(App)
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    // ルート定義
+    // Route definitions
   ]
 })
 
-// VuePageControl の設定
+// VuePageControl setup
 const pageControl = new VuePageControl({
   app,
   router,
-  
-  // エラーページコンポーネント
+
+  // Error page component
   errorComponent: () => import('./components/ErrorPage.vue'),
-  
-  // グローバルローディング設定
+
+  // Global loading settings
   loading: {
     component: () => import('./components/Loading.vue'),
     delay: 200
@@ -61,16 +61,16 @@ app.use(router)
 app.mount('#app')
 ```
 
-### ルートコンポーネントの設定
+### Root Component Setup
 
 ```vue
 <!-- App.vue -->
 <template>
   <div class="app">
-    <!-- ページプログレス表示 -->
+    <!-- Page progress display -->
     <VPageProgress />
-    
-    <!-- ページルート -->
+
+    <!-- Page root -->
     <VPageRoot>
       <router-view />
     </VPageRoot>
@@ -82,9 +82,9 @@ import { VPageProgress, VPageRoot } from '@fastkit/vue-page'
 </script>
 ```
 
-## データプリフェッチ
+## Data Prefetching
 
-### 基本的なプリフェッチ
+### Basic Prefetch
 
 ```vue
 <!-- UserProfile.vue -->
@@ -98,22 +98,22 @@ import { VPageProgress, VPageRoot } from '@fastkit/vue-page'
 <script setup lang="ts">
 import { definePageOptions } from '@fastkit/vue-page'
 
-// ページデータの定義
+// Page data definition
 const user = ref(null)
 
-// プリフェッチ関数の定義
+// Prefetch function definition
 definePageOptions({
   async prefetch({ route, pageControl }) {
-    // ユーザーIDをルートパラメータから取得
+    // Get user ID from route parameters
     const userId = route.params.id
-    
-    // APIからユーザーデータを取得
+
+    // Retrieve user data from API
     const response = await fetch(`/api/users/${userId}`)
     const userData = await response.json()
-    
-    // リアクティブな状態に設定
+
+    // Set to reactive state
     user.value = userData
-    
+
     return {
       user: userData
     }
@@ -122,7 +122,7 @@ definePageOptions({
 </script>
 ```
 
-### 条件付きプリフェッチ
+### Conditional Prefetch
 
 ```vue
 <script setup lang="ts">
@@ -130,57 +130,57 @@ import { definePageOptions, useVuePageControl } from '@fastkit/vue-page'
 
 definePageOptions({
   async prefetch({ route, pageControl, isClient, isServer }) {
-    // クライアントサイドでのみ実行
+    // Execute only on client side
     if (isClient) {
       const analytics = await import('./analytics')
       analytics.trackPageView(route.path)
     }
-    
-    // サーバーサイドでのみ実行
+
+    // Execute only on server side
     if (isServer) {
       const seoData = await generateSEOData(route)
       return { seoData }
     }
-    
-    // 認証状態に基づく条件分岐
+
+    // Conditional logic based on authentication state
     const { user } = pageControl.state
     if (user.isAuthenticated) {
       const privateData = await fetchPrivateData()
       return { privateData }
     }
-    
+
     return {}
   }
 })
 </script>
 ```
 
-### 依存関係のあるプリフェッチ
+### Prefetch with Dependencies
 
 ```vue
 <script setup lang="ts">
 definePageOptions({
   async prefetch({ route, pageControl }) {
-    // 順次実行
+    // Sequential execution
     const category = await fetchCategory(route.params.categoryId)
     const products = await fetchProducts(category.id)
     const reviews = await fetchReviews(products.map(p => p.id))
-    
+
     return {
       category,
       products,
       reviews
     }
   },
-  
-  // 並行実行
+
+  // Parallel execution
   async prefetch({ route }) {
     const [category, tags, brands] = await Promise.all([
       fetchCategory(route.params.categoryId),
       fetchTags(),
       fetchBrands()
     ])
-    
+
     return {
       category,
       tags,
@@ -191,9 +191,9 @@ definePageOptions({
 </script>
 ```
 
-## エラーハンドリング
+## Error Handling
 
-### カスタムエラーページ
+### Custom Error Page
 
 ```vue
 <!-- ErrorPage.vue -->
@@ -201,8 +201,8 @@ definePageOptions({
   <div class="error-page">
     <h1>{{ errorTitle }}</h1>
     <p>{{ errorMessage }}</p>
-    <button @click="retry">再試行</button>
-    <router-link to="/">ホームに戻る</router-link>
+    <button @click="retry">Retry</button>
+    <router-link to="/">Back to Home</router-link>
   </div>
 </template>
 
@@ -213,18 +213,18 @@ const pageControl = useVuePageControl()
 const error = computed(() => pageControl.error)
 
 const errorTitle = computed(() => {
-  if (!error.value) return 'エラー'
-  
+  if (!error.value) return 'Error'
+
   switch (error.value.statusCode) {
-    case 404: return 'ページが見つかりません'
-    case 403: return 'アクセスが拒否されました'
-    case 500: return 'サーバーエラー'
-    default: return 'エラーが発生しました'
+    case 404: return 'Page Not Found'
+    case 403: return 'Access Denied'
+    case 500: return 'Server Error'
+    default: return 'An Error Occurred'
   }
 })
 
 const errorMessage = computed(() => {
-  return error.value?.message || '予期しないエラーが発生しました'
+  return error.value?.message || 'An unexpected error occurred'
 })
 
 const retry = () => {
@@ -233,7 +233,7 @@ const retry = () => {
 </script>
 ```
 
-### プリフェッチエラーの処理
+### Handling Prefetch Errors
 
 ```vue
 <script setup lang="ts">
@@ -243,21 +243,21 @@ definePageOptions({
       const data = await fetchData(route.params.id)
       return { data }
     } catch (error) {
-      // カスタムエラーを投げる
+      // Throw custom error
       if (error.status === 404) {
-        throw new VuePageControlError('データが見つかりません', 404)
+        throw new VuePageControlError('Data not found', 404)
       }
-      
-      // エラーを再スロー
+
+      // Re-throw error
       throw error
     }
   },
-  
-  // エラー時のフォールバック
+
+  // Fallback on error
   onError({ error, route, pageControl }) {
-    console.error('プリフェッチエラー:', error)
-    
-    // デフォルトデータを返す
+    console.error('Prefetch error:', error)
+
+    // Return default data
     return {
       data: getDefaultData()
     }
@@ -266,27 +266,27 @@ definePageOptions({
 </script>
 ```
 
-## ページ状態管理
+## Page State Management
 
-### グローバル状態の管理
+### Global State Management
 
 ```typescript
 // pageControl.ts
 import { VuePageControl } from '@fastkit/vue-page'
 
 export const pageControl = new VuePageControl({
-  // 初期状態
+  // Initial state
   initialState: {
     user: null,
     theme: 'light',
-    locale: 'ja'
+    locale: 'en'
   },
-  
-  // 状態の永続化
+
+  // State persistence
   persistentKeys: ['theme', 'locale']
 })
 
-// 状態の更新
+// Update state
 pageControl.setState({
   user: {
     id: 1,
@@ -295,83 +295,83 @@ pageControl.setState({
   }
 })
 
-// 状態の取得
+// Get state
 const user = pageControl.getState('user')
 const theme = pageControl.getState('theme')
 ```
 
-### ページ固有の状態
+### Page-specific State
 
 ```vue
 <script setup lang="ts">
 import { usePageState } from '@fastkit/vue-page'
 
-// ページ固有の状態
+// Page-specific state
 const pageState = usePageState({
   selectedTab: 'overview',
   searchQuery: '',
   filterOptions: {}
 })
 
-// 状態の更新
+// Update state
 const updateTab = (tab: string) => {
   pageState.selectedTab = tab
 }
 
-// 状態の監視
+// Watch state
 watch(() => pageState.searchQuery, (query) => {
   performSearch(query)
 })
 </script>
 ```
 
-## ミドルウェア
+## Middleware
 
-### 認証ミドルウェア
+### Authentication Middleware
 
 ```typescript
 // middleware/auth.ts
 import { VuePageControlMiddlewareFn } from '@fastkit/vue-page'
 
-export const authMiddleware: VuePageControlMiddlewareFn = async ({ 
-  route, 
+export const authMiddleware: VuePageControlMiddlewareFn = async ({
+  route,
   pageControl,
-  redirect 
+  redirect
 }) => {
   const user = pageControl.getState('user')
-  
-  // 認証が必要なページかチェック
+
+  // Check if page requires authentication
   if (route.meta.requiresAuth && !user) {
-    // ログインページにリダイレクト
+    // Redirect to login page
     return redirect('/login', {
       query: { redirect: route.fullPath }
     })
   }
-  
-  // 管理者権限が必要かチェック
+
+  // Check if admin privileges are required
   if (route.meta.requiresAdmin && !user?.isAdmin) {
-    throw new VuePageControlError('管理者権限が必要です', 403)
+    throw new VuePageControlError('Admin privileges required', 403)
   }
 }
 ```
 
-### ページアクセスログ
+### Page Access Logging
 
 ```typescript
 // middleware/analytics.ts
-export const analyticsMiddleware: VuePageControlMiddlewareFn = async ({ 
-  route, 
-  pageControl 
+export const analyticsMiddleware: VuePageControlMiddlewareFn = async ({
+  route,
+  pageControl
 }) => {
-  // ページビューをトラッキング
+  // Track page views
   if (typeof window !== 'undefined') {
     gtag('config', 'GA_MEASUREMENT_ID', {
       page_title: route.meta.title,
       page_location: window.location.href
     })
   }
-  
-  // ユーザー行動を記録
+
+  // Record user behavior
   const user = pageControl.getState('user')
   if (user) {
     await trackUserPageVisit(user.id, route.path)
@@ -379,21 +379,21 @@ export const analyticsMiddleware: VuePageControlMiddlewareFn = async ({
 }
 ```
 
-### ミドルウェアの登録
+### Middleware Registration
 
 ```typescript
 // router/index.ts
 import { authMiddleware, analyticsMiddleware } from './middleware'
 
 const pageControl = new VuePageControl({
-  // グローバルミドルウェア
+  // Global middleware
   middleware: [
     authMiddleware,
     analyticsMiddleware
   ]
 })
 
-// ルート固有のミドルウェア
+// Route-specific middleware
 const routes = [
   {
     path: '/admin',
@@ -407,20 +407,20 @@ const routes = [
 ]
 ```
 
-## プログレス表示
+## Progress Display
 
-### カスタムプログレス
+### Custom Progress
 
 ```vue
 <!-- CustomProgress.vue -->
 <template>
-  <div 
-    v-if="isProgressing" 
+  <div
+    v-if="isProgressing"
     class="page-progress"
     :class="{ 'progress-error': hasError }"
   >
-    <div 
-      class="progress-bar" 
+    <div
+      class="progress-bar"
       :style="{ width: `${progress}%` }"
     ></div>
     <div class="progress-message">
@@ -439,8 +439,8 @@ const hasError = computed(() => !!pageControl.error)
 const progress = computed(() => pageControl.progress)
 
 const progressMessage = computed(() => {
-  if (hasError.value) return 'エラーが発生しました'
-  if (isProgressing.value) return 'ページを読み込み中...'
+  if (hasError.value) return 'An error occurred'
+  if (isProgressing.value) return 'Loading page...'
   return ''
 })
 </script>
@@ -468,9 +468,9 @@ const progressMessage = computed(() => {
 </style>
 ```
 
-## SSR対応
+## SSR Support
 
-### サーバーサイドでの設定
+### Server-side Setup
 
 ```typescript
 // server.ts
@@ -478,22 +478,22 @@ import { VuePageControl } from '@fastkit/vue-page/server'
 
 export async function renderPage(url: string) {
   const pageControl = new VuePageControl({
-    // サーバーサイド設定
+    // Server-side settings
     ssrContext: {
       url,
       userAgent: req.headers['user-agent']
     }
   })
-  
-  // プリフェッチの実行
+
+  // Execute prefetch
   await pageControl.prefetchRoute(url)
-  
-  // アプリケーションのレンダリング
+
+  // Render application
   const html = await renderToString(app)
-  
-  // 状態の抽出
+
+  // Extract state
   const state = pageControl.extractState()
-  
+
   return {
     html,
     state
@@ -501,86 +501,86 @@ export async function renderPage(url: string) {
 }
 ```
 
-### クライアントサイドでの復元
+### Client-side Restoration
 
 ```typescript
 // entry-client.ts
 import { VuePageControl } from '@fastkit/vue-page'
 
-// サーバーから渡された状態を復元
+// Restore state passed from server
 const initialState = window.__INITIAL_STATE__
 
 const pageControl = new VuePageControl({
   initialState,
-  
-  // ハイドレーション設定
+
+  // Hydration settings
   hydration: true
 })
 
-// アプリケーションをマウント
+// Mount application
 app.mount('#app')
 ```
 
 ## Advanced Usage Examples
 
-### 動的ルーティング
+### Dynamic Routing
 
 ```vue
 <script setup lang="ts">
 definePageOptions({
   async prefetch({ route, pageControl, redirect }) {
     const slug = route.params.slug
-    
-    // スラッグから実際のページを解決
+
+    // Resolve actual page from slug
     const page = await resolvePageBySlug(slug)
-    
+
     if (!page) {
-      throw new VuePageControlError('ページが見つかりません', 404)
+      throw new VuePageControlError('Page not found', 404)
     }
-    
-    // 動的にコンポーネントを決定
+
+    // Dynamically determine component
     if (page.type === 'product') {
       return redirect(`/products/${page.id}`)
     }
-    
+
     return { page }
   }
 })
 </script>
 ```
 
-### キャッシュ戦略
+### Cache Strategy
 
 ```vue
 <script setup lang="ts">
 definePageOptions({
   async prefetch({ route, pageControl }) {
     const cacheKey = `page:${route.path}`
-    
-    // キャッシュから取得を試行
+
+    // Try to get from cache
     let data = pageControl.cache.get(cacheKey)
-    
+
     if (!data) {
-      // APIから取得
+      // Fetch from API
       data = await fetchPageData(route.params.id)
-      
-      // キャッシュに保存（5分間）
+
+      // Save to cache (5 minutes)
       pageControl.cache.set(cacheKey, data, 5 * 60 * 1000)
     }
-    
+
     return { data }
   },
-  
-  // ページ離脱時のクリーンアップ
+
+  // Cleanup on page leave
   onLeave({ pageControl }) {
-    // リソースの解放
+    // Release resources
     pageControl.cache.clear()
   }
 })
 </script>
 ```
 
-### リアルタイム更新
+### Real-time Updates
 
 ```vue
 <script setup lang="ts">
@@ -594,23 +594,23 @@ definePageOptions({
     data.value = await fetchData(route.params.id)
     return { data: data.value }
   },
-  
-  // ページマウント後の処理
+
+  // Processing after page mount
   onMounted({ route }) {
-    // WebSocket接続
+    // WebSocket connection
     const ws = new WebSocket(`ws://localhost/updates/${route.params.id}`)
-    
+
     ws.onmessage = (event) => {
       const update = JSON.parse(event.data)
-      
-      // データを更新
+
+      // Update data
       data.value = { ...data.value, ...update }
-      
-      // 状態を同期
+
+      // Sync state
       pageControl.setState({ data: data.value })
     }
-    
-    // クリーンアップの登録
+
+    // Register cleanup
     pageControl.onCleanup(() => {
       ws.close()
     })
@@ -619,37 +619,37 @@ definePageOptions({
 </script>
 ```
 
-## API リファレンス
+## API Reference
 
 ### VuePageControl
 
 ```typescript
 class VuePageControl {
   constructor(options: VuePageControlOptions)
-  
-  // 状態管理
+
+  // State management
   getState<T>(key: string): T
   setState(state: Record<string, any>): void
-  
-  // ナビゲーション
+
+  // Navigation
   push(location: RouteLocationRaw): Promise<void>
   replace(location: RouteLocationRaw): Promise<void>
   go(delta: number): void
   back(): void
   forward(): void
-  
-  // プリフェッチ
+
+  // Prefetch
   prefetch(location: RouteLocationRaw): Promise<any>
-  
-  // エラーハンドリング
+
+  // Error handling
   error: Ref<VuePageControlError | null>
   clearError(): void
-  
-  // プログレス
+
+  // Progress
   isProgressing: Ref<boolean>
   progress: Ref<number>
-  
-  // クリーンアップ
+
+  // Cleanup
   onCleanup(fn: () => void): void
 }
 ```
@@ -671,23 +671,23 @@ interface PageOptions {
 function definePageOptions(options: PageOptions): void
 ```
 
-### コンポーネント
+### Components
 
-- `VPageRoot`: ページルートコンテナ
-- `VPageProgress`: プログレス表示
-- `VErrorPage`: デフォルトエラーページ
-- `VPage`: ページラッパー
-- `VPageLink`: ページリンク
+- `VPageRoot`: Page root container
+- `VPageProgress`: Progress display
+- `VErrorPage`: Default error page
+- `VPage`: Page wrapper
+- `VPageLink`: Page link
 
 ## Related Packages
 
-- `@fastkit/vue-utils` - Vue ユーティリティ関数
-- `@fastkit/cookies` - Cookie 管理
-- `@fastkit/ev` - イベントシステム
-- `@fastkit/helpers` - ヘルパー関数
-- `@fastkit/tiny-logger` - ロガー
-- `vue` - Vue.js フレームワーク（ピア依存関係）
-- `vue-router` - Vue Router（ピア依存関係）
+- `@fastkit/vue-utils` - Vue utility functions
+- `@fastkit/cookies` - Cookie management
+- `@fastkit/ev` - Event system
+- `@fastkit/helpers` - Helper functions
+- `@fastkit/tiny-logger` - Logger
+- `vue` - Vue.js framework (peer dependency)
+- `vue-router` - Vue Router (peer dependency)
 
 ## License
 

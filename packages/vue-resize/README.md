@@ -1,20 +1,20 @@
 
 # @fastkit/vue-resize
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-resize/README-ja.md)
 
-Vue.jsアプリケーションでウィンドウリサイズや要素サイズ変更を効率的に監視するためのライブラリ。ResizeObserver APIとwindowリサイズイベントを統合し、デバウンス機能とリアクティブな状態管理を提供します。
+A library for efficiently monitoring window resizes and element size changes in Vue.js applications. Integrates ResizeObserver API and window resize events, providing debounce functionality and reactive state management.
 
 ## Features
 
-- **ウィンドウリサイズ監視**: ブラウザウィンドウサイズのリアクティブ追跡
-- **要素リサイズ監視**: ResizeObserver APIを使った個別要素の監視
-- **v-resizeディレクティブ**: 簡単なディレクティブによる要素監視
-- **デバウンス対応**: パフォーマンス最適化のための遅延実行
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **Vue 3 Composition API**: リアクティブシステムとの完全統合
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **軽量実装**: 最小限の依存関係と効率的なメモリ使用
+- **Window Resize Monitoring**: Reactive tracking of browser window size
+- **Element Resize Monitoring**: Individual element monitoring using ResizeObserver API
+- **v-resize Directive**: Simple directive for element monitoring
+- **Debounce Support**: Delayed execution for performance optimization
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Vue 3 Composition API**: Complete integration with reactive system
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Lightweight Implementation**: Minimal dependencies and efficient memory usage
 
 ## Installation
 
@@ -24,20 +24,20 @@ npm install @fastkit/vue-resize
 
 ## Basic Usage
 
-### ウィンドウサイズの監視
+### Window Size Monitoring
 
 ```vue
 <template>
   <div>
-    <h2>ウィンドウサイズ監視</h2>
+    <h2>Window Size Monitoring</h2>
     <div v-if="window.available" class="window-info">
-      <p>幅: {{ window.width }}px</p>
-      <p>高さ: {{ window.height }}px</p>
-      <p>アスペクト比: {{ aspectRatio }}</p>
-      <p>画面サイズ: {{ screenSize }}</p>
+      <p>Width: {{ window.width }}px</p>
+      <p>Height: {{ window.height }}px</p>
+      <p>Aspect Ratio: {{ aspectRatio }}</p>
+      <p>Screen Size: {{ screenSize }}</p>
     </div>
     <div v-else class="no-window">
-      ウィンドウ情報が利用できません（SSR環境）
+      Window information unavailable (SSR environment)
     </div>
   </div>
 </template>
@@ -55,7 +55,7 @@ const aspectRatio = computed(() => {
 
 const screenSize = computed(() => {
   if (!window.available) return 'Unknown'
-  
+
   if (window.width >= 1200) return 'Large (Desktop)'
   if (window.width >= 768) return 'Medium (Tablet)'
   return 'Small (Mobile)'
@@ -82,29 +82,29 @@ const screenSize = computed(() => {
 </style>
 ```
 
-### v-resizeディレクティブ - 要素監視
+### v-resize Directive - Element Monitoring
 
 ```vue
 <template>
   <div>
-    <h2>要素リサイズ監視</h2>
-    
-    <!-- 基本的な要素監視 -->
-    <div 
+    <h2>Element Resize Monitoring</h2>
+
+    <!-- Basic element monitoring -->
+    <div
       v-resize="handleResize"
       class="resizable-box"
       :style="{ width: boxWidth + 'px', height: boxHeight + 'px' }"
     >
-      <p>リサイズ可能なボックス</p>
-      <p>サイズ: {{ elementSize.width }} x {{ elementSize.height }}px</p>
+      <p>Resizable Box</p>
+      <p>Size: {{ elementSize.width }} x {{ elementSize.height }}px</p>
       <div class="resize-handle"></div>
     </div>
-    
-    <!-- コントロール -->
+
+    <!-- Controls -->
     <div class="controls">
-      <button @click="changeSize(300, 200)">小さく</button>
-      <button @click="changeSize(500, 300)">中くらい</button>
-      <button @click="changeSize(700, 400)">大きく</button>
+      <button @click="changeSize(300, 200)">Small</button>
+      <button @click="changeSize(500, 300)">Medium</button>
+      <button @click="changeSize(700, 400)">Large</button>
     </div>
   </div>
 </template>
@@ -124,7 +124,7 @@ const elementSize = reactive({
 const handleResize = (payload: ResizeDirectivePayload) => {
   elementSize.width = Math.round(payload.width)
   elementSize.height = Math.round(payload.height)
-  console.log('要素がリサイズされました:', payload)
+  console.log('Element resized:', payload)
 }
 
 const changeSize = (width: number, height: number) => {
@@ -184,43 +184,43 @@ const changeSize = (width: number, height: number) => {
 </style>
 ```
 
-### デバウンス付きリサイズ監視
+### Resize Monitoring with Debounce
 
 ```vue
 <template>
   <div>
-    <h2>デバウンス付きリサイズ監視</h2>
-    
+    <h2>Resize Monitoring with Debounce</h2>
+
     <div class="settings">
       <label>
-        デバウンス時間: 
+        Debounce Time:
         <select v-model="debounceTime">
-          <option :value="0">なし (0ms)</option>
+          <option :value="0">None (0ms)</option>
           <option :value="100">100ms</option>
           <option :value="300">300ms</option>
           <option :value="500">500ms</option>
         </select>
       </label>
     </div>
-    
-    <div 
+
+    <div
       v-resize="{ handler: handleDebouncedResize, debounce: debounceTime }"
       class="monitored-area"
     >
-      <h3>監視エリア</h3>
-      <p>リサイズイベント回数: {{ eventCount }}</p>
-      <p>最後の更新: {{ lastUpdate }}</p>
-      <p>現在のサイズ: {{ currentSize.width }} x {{ currentSize.height }}px</p>
-      
+      <h3>Monitoring Area</h3>
+      <p>Resize Event Count: {{ eventCount }}</p>
+      <p>Last Update: {{ lastUpdate }}</p>
+      <p>Current Size: {{ currentSize.width }} x {{ currentSize.height }}px</p>
+
       <div class="size-controls">
-        <input 
-          v-model.number="areaWidth" 
-          type="range" 
-          min="300" 
-          max="800" 
+        <input
+          v-model.number="areaWidth"
+          type="range"
+          min="300"
+          max="800"
           step="10"
         >
-        <label>幅: {{ areaWidth }}px</label>
+        <label>Width: {{ areaWidth }}px</label>
       </div>
     </div>
   </div>
@@ -314,59 +314,59 @@ const monitoredAreaStyle = computed(() => ({
 
 ## Advanced Usage Examples
 
-### レスポンシブレイアウトシステム
+### Responsive Layout System
 
 ```vue
 <template>
   <div class="responsive-layout">
     <header class="header">
-      <h1>レスポンシブヘッダー</h1>
+      <h1>Responsive Header</h1>
       <nav :class="['nav', { 'nav--mobile': isMobile }]">
         <button v-if="isMobile" @click="toggleMenu" class="menu-toggle">
           ≡
         </button>
         <ul v-show="!isMobile || isMenuOpen" class="nav-list">
-          <li><a href="#home">ホーム</a></li>
-          <li><a href="#about">について</a></li>
-          <li><a href="#contact">お問い合わせ</a></li>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
     </header>
-    
+
     <main class="main">
       <aside v-show="!isMobile" class="sidebar">
-        <h3>サイドバー</h3>
+        <h3>Sidebar</h3>
         <ul>
-          <li>メニュー項目 1</li>
-          <li>メニュー項目 2</li>
-          <li>メニュー項目 3</li>
+          <li>Menu Item 1</li>
+          <li>Menu Item 2</li>
+          <li>Menu Item 3</li>
         </ul>
       </aside>
-      
+
       <section class="content">
-        <h2>メインコンテンツ</h2>
+        <h2>Main Content</h2>
         <div class="stats">
           <div class="stat-card">
-            <h4>画面幅</h4>
+            <h4>Screen Width</h4>
             <p>{{ window.width }}px</p>
           </div>
           <div class="stat-card">
-            <h4>レイアウト</h4>
+            <h4>Layout</h4>
             <p>{{ layoutType }}</p>
           </div>
           <div class="stat-card">
-            <h4>カラム数</h4>
+            <h4>Column Count</h4>
             <p>{{ columnCount }}</p>
           </div>
         </div>
-        
-        <div 
+
+        <div
           v-resize="handleContentResize"
           :class="['content-grid', `content-grid--${columnCount}col`]"
         >
           <div v-for="i in 12" :key="i" class="grid-item">
-            <h5>アイテム {{ i }}</h5>
-            <p>コンテンツエリア: {{ contentSize.width }}px</p>
+            <h5>Item {{ i }}</h5>
+            <p>Content Area: {{ contentSize.width }}px</p>
           </div>
         </div>
       </section>
@@ -387,7 +387,7 @@ const contentSize = reactive({
   height: 0
 })
 
-// レスポンシブブレークポイント
+// Responsive breakpoints
 const isMobile = computed(() => window.width < 768)
 const isTablet = computed(() => window.width >= 768 && window.width < 1024)
 const isDesktop = computed(() => window.width >= 1024)
@@ -581,16 +581,16 @@ const handleContentResize = (payload: ResizeDirectivePayload) => {
   font-family: monospace;
 }
 
-/* モバイル調整 */
+/* Mobile adjustments */
 @media (max-width: 767px) {
   .header {
     padding: 1rem;
   }
-  
+
   .content {
     padding: 1rem;
   }
-  
+
   .stats {
     grid-template-columns: 1fr;
   }
@@ -598,36 +598,36 @@ const handleContentResize = (payload: ResizeDirectivePayload) => {
 </style>
 ```
 
-### ウィンドウサイズによる動的コンポーネント
+### Dynamic Components Based on Window Size
 
 ```vue
 <template>
   <div class="dynamic-components">
-    <h2>動的コンポーネント表示</h2>
-    
+    <h2>Dynamic Component Display</h2>
+
     <div class="component-container">
-      <!-- デスクトップ用のテーブル表示 -->
-      <DataTable 
-        v-if="isDesktop" 
+      <!-- Desktop table display -->
+      <DataTable
+        v-if="isDesktop"
         :data="tableData"
         :columns="tableColumns"
       />
-      
-      <!-- タブレット用のカード表示 -->
-      <CardList 
+
+      <!-- Tablet card display -->
+      <CardList
         v-else-if="isTablet"
         :items="tableData"
       />
-      
-      <!-- モバイル用のリスト表示 -->
-      <MobileList 
+
+      <!-- Mobile list display -->
+      <MobileList
         v-else
         :items="tableData"
       />
     </div>
-    
+
     <div class="window-debug">
-      <h4>ウィンドウ情報</h4>
+      <h4>Window Information</h4>
       <pre>{{ windowDebugInfo }}</pre>
     </div>
   </div>
@@ -639,24 +639,24 @@ import { useWindow } from '@fastkit/vue-resize'
 
 const window = useWindow()
 
-// レスポンシブブレークポイント
+// Responsive breakpoints
 const isMobile = computed(() => window.width < 768)
 const isTablet = computed(() => window.width >= 768 && window.width < 1200)
 const isDesktop = computed(() => window.width >= 1200)
 
-// サンプルデータ
+// Sample data
 const tableData = [
-  { id: 1, name: '田中太郎', email: 'tanaka@example.com', department: '営業部' },
-  { id: 2, name: '佐藤花子', email: 'sato@example.com', department: '開発部' },
-  { id: 3, name: '鈴木次郎', email: 'suzuki@example.com', department: '人事部' },
-  { id: 4, name: '山田美香', email: 'yamada@example.com', department: 'マーケティング部' }
+  { id: 1, name: 'Taro Tanaka', email: 'tanaka@example.com', department: 'Sales' },
+  { id: 2, name: 'Hanako Sato', email: 'sato@example.com', department: 'Development' },
+  { id: 3, name: 'Jiro Suzuki', email: 'suzuki@example.com', department: 'HR' },
+  { id: 4, name: 'Mika Yamada', email: 'yamada@example.com', department: 'Marketing' }
 ]
 
 const tableColumns = [
   { key: 'id', label: 'ID', width: '80px' },
-  { key: 'name', label: '名前', width: '150px' },
-  { key: 'email', label: 'メール', width: '200px' },
-  { key: 'department', label: '部署', width: '150px' }
+  { key: 'name', label: 'Name', width: '150px' },
+  { key: 'email', label: 'Email', width: '200px' },
+  { key: 'department', label: 'Department', width: '150px' }
 ]
 
 const windowDebugInfo = computed(() => ({
@@ -666,19 +666,19 @@ const windowDebugInfo = computed(() => ({
   componentUsed: isMobile.value ? 'MobileList' : isTablet.value ? 'CardList' : 'DataTable'
 }))
 
-// デスクトップ用テーブルコンポーネント
+// Desktop table component
 const DataTable = defineComponent({
   props: ['data', 'columns'],
   setup(props) {
     return () => h('div', { class: 'data-table' }, [
       h('table', { class: 'table' }, [
         h('thead', [
-          h('tr', props.columns.map((col: any) => 
+          h('tr', props.columns.map((col: any) =>
             h('th', { style: { width: col.width } }, col.label)
           ))
         ]),
-        h('tbody', props.data.map((row: any) => 
-          h('tr', { key: row.id }, props.columns.map((col: any) => 
+        h('tbody', props.data.map((row: any) =>
+          h('tr', { key: row.id }, props.columns.map((col: any) =>
             h('td', row[col.key])
           ))
         ))
@@ -687,12 +687,12 @@ const DataTable = defineComponent({
   }
 })
 
-// タブレット用カードコンポーネント
+// Tablet card component
 const CardList = defineComponent({
   props: ['items'],
   setup(props) {
-    return () => h('div', { class: 'card-list' }, 
-      props.items.map((item: any) => 
+    return () => h('div', { class: 'card-list' },
+      props.items.map((item: any) =>
         h('div', { key: item.id, class: 'card' }, [
           h('h4', item.name),
           h('p', item.email),
@@ -703,12 +703,12 @@ const CardList = defineComponent({
   }
 })
 
-// モバイル用リストコンポーネント
+// Mobile list component
 const MobileList = defineComponent({
   props: ['items'],
   setup(props) {
-    return () => h('div', { class: 'mobile-list' }, 
-      props.items.map((item: any) => 
+    return () => h('div', { class: 'mobile-list' },
+      props.items.map((item: any) =>
         h('div', { key: item.id, class: 'list-item' }, [
           h('div', { class: 'item-header' }, [
             h('span', { class: 'name' }, item.name),
@@ -732,7 +732,7 @@ const MobileList = defineComponent({
   min-height: 300px;
 }
 
-/* テーブルスタイル（デスクトップ） */
+/* Table styles (Desktop) */
 .data-table {
   overflow-x: auto;
 }
@@ -762,7 +762,7 @@ const MobileList = defineComponent({
   background: #f8f9fa;
 }
 
-/* カードスタイル（タブレット） */
+/* Card styles (Tablet) */
 .card-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -804,7 +804,7 @@ const MobileList = defineComponent({
   font-weight: 500;
 }
 
-/* リストスタイル（モバイル） */
+/* List styles (Mobile) */
 .mobile-list {
   background: white;
   border-radius: 8px;
@@ -847,7 +847,7 @@ const MobileList = defineComponent({
   font-size: 0.9rem;
 }
 
-/* デバッグ情報 */
+/* Debug information */
 .window-debug {
   margin-top: 2rem;
   padding: 1rem;
@@ -872,32 +872,32 @@ const MobileList = defineComponent({
 </style>
 ```
 
-## ディレクティブオプション
+## Directive Options
 
-### v-resizeディレクティブの設定
+### v-resize Directive Configuration
 
 ```vue
 <template>
   <div>
-    <!-- 関数を直接指定 -->
-    <div v-resize="handleResize">基本的な監視</div>
-    
-    <!-- オプション付きで指定 -->
-    <div v-resize="{ 
-      handler: handleResize, 
+    <!-- Direct function specification -->
+    <div v-resize="handleResize">Basic monitoring</div>
+
+    <!-- Configuration with options -->
+    <div v-resize="{
+      handler: handleResize,
       debounce: 300,
-      rootMode: false 
+      rootMode: false
     }">
-      高度な監視設定
+      Advanced monitoring settings
     </div>
-    
-    <!-- ウィンドウリサイズモード -->
-    <div v-resize="{ 
-      handler: handleWindowResize, 
+
+    <!-- Window resize mode -->
+    <div v-resize="{
+      handler: handleWindowResize,
       rootMode: true,
       debounce: 100
     }">
-      ウィンドウリサイズ監視
+      Window resize monitoring
     </div>
   </div>
 </template>
@@ -906,16 +906,16 @@ const MobileList = defineComponent({
 import type { ResizeDirectivePayload } from '@fastkit/vue-resize'
 
 const handleResize = (payload: ResizeDirectivePayload) => {
-  console.log('要素リサイズ:', payload)
+  console.log('Element resize:', payload)
 }
 
 const handleWindowResize = (payload: ResizeDirectivePayload) => {
-  console.log('ウィンドウリサイズ:', payload)
+  console.log('Window resize:', payload)
 }
 </script>
 ```
 
-### プラグインインストール
+### Plugin Installation
 
 ```typescript
 // main.ts
@@ -925,48 +925,48 @@ import App from './App.vue'
 
 const app = createApp(App)
 
-// v-resizeディレクティブをグローバルにインストール
+// Install v-resize directive globally
 installResizeDirective(app)
 
 app.mount('#app')
 ```
 
-## API リファレンス
+## API Reference
 
 ### useWindow
 
 ```typescript
 interface UseWindowRef {
-  readonly available: boolean  // ウィンドウが利用可能かどうか
-  readonly width: number      // ウィンドウ幅
-  readonly height: number     // ウィンドウ高さ
+  readonly available: boolean  // Whether window is available
+  readonly width: number      // Window width
+  readonly height: number     // Window height
 }
 
 function useWindow(): UseWindowRef
 ```
 
-### v-resizeディレクティブ
+### v-resize Directive
 
 ```typescript
 interface ResizeDirectivePayload {
-  width: number   // 要素の幅
-  height: number  // 要素の高さ
+  width: number   // Element width
+  height: number  // Element height
 }
 
 type ResizeDirectiveHandler = (payload: ResizeDirectivePayload) => any
 
 interface ResizeDirectiveBindingValue {
-  handler: ResizeDirectiveHandler  // リサイズイベントハンドラー
-  debounce?: number               // デバウンス時間（ミリ秒）
-  rootMode?: boolean              // ウィンドウリサイズ監視モード
+  handler: ResizeDirectiveHandler  // Resize event handler
+  debounce?: number               // Debounce time (milliseconds)
+  rootMode?: boolean              // Window resize monitoring mode
 }
 
-type RawResizeDirectiveBindingValue = 
-  | ResizeDirectiveHandler 
+type RawResizeDirectiveBindingValue =
+  | ResizeDirectiveHandler
   | ResizeDirectiveBindingValue
 ```
 
-### インストール関数
+### Installation Functions
 
 ```typescript
 function installResizeDirective(app: App): App
@@ -976,36 +976,36 @@ function resizeDirectiveArgument(
 ): [ResizeDirective, RawResizeDirectiveBindingValue]
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### デバウンスの適切な設定
+### Appropriate Debounce Configuration
 
 ```typescript
-// 用途別の推奨デバウンス時間
+// Recommended debounce times by use case
 const DEBOUNCE_SETTINGS = {
-  // UI更新が必要な場合（レスポンシブレイアウト等）
+  // When UI updates are needed (responsive layouts, etc.)
   UI_UPDATE: 100,
-  
-  // 計算処理が必要な場合
+
+  // When calculation processing is required
   CALCULATION: 300,
-  
-  // API呼び出しなど重い処理
+
+  // Heavy operations like API calls
   HEAVY_OPERATION: 500,
-  
-  // リアルタイム性が重要な場合
+
+  // When real-time performance is important
   REAL_TIME: 0
 }
 ```
 
-### メモリリークの防止
+### Memory Leak Prevention
 
 ```vue
 <script setup lang="ts">
 import { onBeforeUnmount } from 'vue'
 
-// カスタムリサイズハンドラーを使用する場合は適切にクリーンアップ
+// Proper cleanup when using custom resize handlers
 const resizeObserver = new ResizeObserver(() => {
-  // リサイズ処理
+  // Resize processing
 })
 
 onBeforeUnmount(() => {
@@ -1016,9 +1016,9 @@ onBeforeUnmount(() => {
 
 ## Related Packages
 
-- `@fastkit/debounce` - デバウンス機能
-- `@fastkit/helpers` - ユーティリティ関数（`IN_WINDOW`等）
-- `@fastkit/vue-utils` - Vue.js開発ユーティリティ
+- `@fastkit/debounce` - Debounce functionality
+- `@fastkit/helpers` - Utility functions (`IN_WINDOW`, etc.)
+- `@fastkit/vue-utils` - Vue.js development utilities
 
 ## License
 

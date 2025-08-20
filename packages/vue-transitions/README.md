@@ -1,19 +1,19 @@
 
 # @fastkit/vue-transitions
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-transitions/README-ja.md)
 
-Vue.jsアプリケーションで高品質なトランジションとアニメーション効果を簡単に実装するためのライブラリ。カスタムJavaScriptトランジション生成器とビルトインコンポーネントを提供し、滑らかで自然なユーザーインターフェースを構築できます。
+A library for easily implementing high-quality transitions and animation effects in Vue.js applications. Provides custom JavaScript transition generators and built-in components to build smooth and natural user interfaces.
 
 ## Features
 
-- **JavaScriptトランジション生成器**: カスタムトランジションコンポーネントの簡単作成
-- **VExpandTransition**: 高さ・幅の開閉アニメーション
-- **フェード効果**: 透明度変化との組み合わせアニメーション
-- **Vue 3完全対応**: Composition APIとの完全統合
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **CSSトランジション統合**: DOM操作とCSSアニメーションの協調
-- **柔軟なカスタマイズ**: プロパティとフックによる細かい制御
+- **JavaScript Transition Generator**: Easy creation of custom transition components
+- **VExpandTransition**: Height and width expand/collapse animations
+- **Fade Effects**: Animation combinations with opacity changes
+- **Vue 3 Full Support**: Complete integration with Composition API
+- **Complete TypeScript Support**: Type safety through strict type definitions
+- **CSS Transition Integration**: Coordination of DOM manipulation and CSS animations
+- **Flexible Customization**: Fine control through properties and hooks
 
 ## Installation
 
@@ -23,18 +23,18 @@ npm install @fastkit/vue-transitions
 
 ## Basic Usage
 
-### VExpandTransition - 開閉アニメーション
+### VExpandTransition - Expand/Collapse Animation
 
 ```vue
 <template>
   <div>
-    <button @click="toggle">コンテンツを{{ isOpen ? '閉じる' : '開く' }}</button>
-    
-    <!-- 基本的な高さアニメーション -->
+    <button @click="toggle">{{ isOpen ? 'Close' : 'Open' }} content</button>
+
+    <!-- Basic height animation -->
     <VExpandTransition>
       <div v-show="isOpen" class="content">
-        <p>このコンテンツは滑らかに開閉します。</p>
-        <p>CSSトランジションと組み合わせて自然なアニメーションを実現します。</p>
+        <p>This content opens and closes smoothly.</p>
+        <p>Achieves natural animations in combination with CSS transitions.</p>
       </div>
     </VExpandTransition>
   </div>
@@ -58,35 +58,35 @@ const toggle = () => {
   margin: 10px 0;
   border-radius: 8px;
   border: 1px solid #4a90e2;
-  
-  /* トランジションプロパティが必須 */
+
+  /* Transition properties are required */
   transition: height 0.3s ease, margin 0.3s ease;
 }
 </style>
 ```
 
-### 幅方向の展開アニメーション
+### Width Direction Expand Animation
 
 ```vue
 <template>
   <div>
-    <button @click="toggleWidth">サイドバーを{{ isWidthOpen ? '閉じる' : '開く' }}</button>
-    
+    <button @click="toggleWidth">{{ isWidthOpen ? 'Close' : 'Open' }} sidebar</button>
+
     <div class="container">
       <VExpandTransition expand="width">
         <div v-show="isWidthOpen" class="sidebar">
-          <h3>サイドバー</h3>
+          <h3>Sidebar</h3>
           <ul>
-            <li>メニュー項目 1</li>
-            <li>メニュー項目 2</li>
-            <li>メニュー項目 3</li>
+            <li>Menu Item 1</li>
+            <li>Menu Item 2</li>
+            <li>Menu Item 3</li>
           </ul>
         </div>
       </VExpandTransition>
-      
+
       <div class="main-content">
-        <h2>メインコンテンツ</h2>
-        <p>サイドバーが横方向にアニメーションします。</p>
+        <h2>Main Content</h2>
+        <p>The sidebar animates horizontally.</p>
       </div>
     </div>
   </div>
@@ -116,8 +116,8 @@ const toggleWidth = () => {
   background: #2c3e50;
   color: white;
   padding: 20px;
-  
-  /* 幅のトランジションを設定 */
+
+  /* Set width transition */
   transition: width 0.4s ease, margin 0.4s ease;
 }
 
@@ -143,19 +143,19 @@ const toggleWidth = () => {
 </style>
 ```
 
-### フェード効果付きアニメーション
+### Animation with Fade Effect
 
 ```vue
 <template>
   <div>
-    <button @click="toggleFade">フェード付きで{{ isFadeOpen ? '閉じる' : '開く' }}</button>
-    
+    <button @click="toggleFade">{{ isFadeOpen ? 'Close' : 'Open' }} with fade</button>
+
     <VExpandTransition fade>
       <div v-show="isFadeOpen" class="fade-content">
-        <h3>フェード効果付きコンテンツ</h3>
-        <p>高さの変化と同時に透明度も変化します。</p>
+        <h3>Content with Fade Effect</h3>
+        <p>Opacity changes simultaneously with height changes.</p>
         <div class="image-placeholder">
-          🖼️ 画像プレースホルダー
+          🖼️ Image placeholder
         </div>
       </div>
     </VExpandTransition>
@@ -180,8 +180,8 @@ const toggleFade = () => {
   padding: 30px;
   margin: 15px 0;
   border-radius: 12px;
-  
-  /* 高さと透明度の両方をアニメーション */
+
+  /* Animate both height and opacity */
   transition: height 0.5s ease, margin 0.5s ease, opacity 0.5s ease;
 }
 
@@ -198,17 +198,17 @@ const toggleFade = () => {
 
 ## Advanced Usage Examples
 
-### アコーディオンメニューの実装
+### Accordion Menu Implementation
 
 ```vue
 <template>
   <div class="accordion">
-    <div 
-      v-for="(item, index) in accordionItems" 
+    <div
+      v-for="(item, index) in accordionItems"
       :key="item.id"
       class="accordion-item"
     >
-      <button 
+      <button
         @click="toggleItem(index)"
         class="accordion-header"
         :class="{ active: openItems.has(index) }"
@@ -216,7 +216,7 @@ const toggleFade = () => {
         <span>{{ item.title }}</span>
         <span class="icon" :class="{ rotated: openItems.has(index) }">▼</span>
       </button>
-      
+
       <VExpandTransition>
         <div v-show="openItems.has(index)" class="accordion-content">
           <div class="accordion-body">
@@ -241,18 +241,18 @@ interface AccordionItem {
 const accordionItems: AccordionItem[] = [
   {
     id: 1,
-    title: 'セクション 1',
-    content: 'セクション 1 の詳細内容がここに表示されます。このアコーディオンは滑らかにアニメーションします。'
+    title: 'Section 1',
+    content: 'Detailed content of Section 1 is displayed here. This accordion animates smoothly.'
   },
   {
     id: 2,
-    title: 'セクション 2', 
-    content: 'セクション 2 の詳細内容。複数のセクションを同時に開くことができます。'
+    title: 'Section 2',
+    content: 'Detailed content of Section 2. Multiple sections can be opened simultaneously.'
   },
   {
     id: 3,
-    title: 'セクション 3',
-    content: 'セクション 3 の詳細内容。CSSトランジションと組み合わせることで自然なアニメーションを実現します。'
+    title: 'Section 3',
+    content: 'Detailed content of Section 3. Natural animations are achieved by combining with CSS transitions.'
   }
 ]
 
@@ -327,12 +327,12 @@ const toggleItem = (index: number) => {
 </style>
 ```
 
-### カードの詳細表示
+### Card Detail Display
 
 ```vue
 <template>
   <div class="card-grid">
-    <div 
+    <div
       v-for="card in cards"
       :key="card.id"
       class="card"
@@ -344,27 +344,27 @@ const toggleItem = (index: number) => {
           +
         </span>
       </div>
-      
+
       <p class="card-summary">{{ card.summary }}</p>
-      
+
       <VExpandTransition fade>
         <div v-show="expandedCards.has(card.id)" class="card-details">
           <div class="detail-content">
-            <p><strong>詳細説明:</strong></p>
+            <p><strong>Detailed Description:</strong></p>
             <p>{{ card.details }}</p>
-            
+
             <div class="card-features">
-              <h4>特徴:</h4>
+              <h4>Features:</h4>
               <ul>
                 <li v-for="feature in card.features" :key="feature">
                   {{ feature }}
                 </li>
               </ul>
             </div>
-            
+
             <div class="card-actions">
-              <button class="btn btn-primary">詳細を見る</button>
-              <button class="btn btn-secondary">お気に入り</button>
+              <button class="btn btn-primary">View Details</button>
+              <button class="btn btn-secondary">Favorite</button>
             </div>
           </div>
         </div>
@@ -388,17 +388,17 @@ interface Card {
 const cards: Card[] = [
   {
     id: 1,
-    title: 'Vue 3 コンポーネント',
-    summary: 'モダンなVue.jsコンポーネントライブラリ',
-    details: 'Vue 3のComposition APIを活用した高性能なコンポーネントライブラリです。TypeScriptフルサポートで開発効率を向上させます。',
-    features: ['Composition API', 'TypeScript対応', '高性能', 'カスタマイズ可能']
+    title: 'Vue 3 Components',
+    summary: 'Modern Vue.js component library',
+    details: 'A high-performance component library utilizing Vue 3\'s Composition API. Improves development efficiency with full TypeScript support.',
+    features: ['Composition API', 'TypeScript Support', 'High Performance', 'Customizable']
   },
   {
     id: 2,
-    title: 'アニメーションシステム',
-    summary: '滑らかなトランジション効果',
-    details: 'CSSトランジションとJavaScriptを組み合わせた高品質なアニメーションシステムです。',
-    features: ['CSS統合', 'パフォーマンス最適化', '柔軟な設定', 'クロスブラウザ対応']
+    title: 'Animation System',
+    summary: 'Smooth transition effects',
+    details: 'A high-quality animation system combining CSS transitions and JavaScript.',
+    features: ['CSS Integration', 'Performance Optimization', 'Flexible Configuration', 'Cross-browser Support']
   }
 ]
 
@@ -528,16 +528,16 @@ const toggleCard = (cardId: number) => {
 </style>
 ```
 
-## カスタムトランジションの作成
+## Creating Custom Transitions
 
 ### generateJavaScriptTransition
 
-独自のトランジションコンポーネントを作成できます。
+You can create custom transition components.
 
 ```typescript
 import { generateJavaScriptTransition } from '@fastkit/vue-transitions'
 
-// スライドトランジションの作成
+// Creating slide transition
 export const VSlideTransition = generateJavaScriptTransition({
   displayName: 'VSlideTransition',
   props: {
@@ -555,7 +555,7 @@ export const VSlideTransition = generateJavaScriptTransition({
       onBeforeEnter(el: HTMLElement) {
         const { direction, distance } = props
         el.style.transition = 'none'
-        
+
         switch (direction) {
           case 'left':
             el.style.transform = `translateX(-${distance})`
@@ -570,26 +570,26 @@ export const VSlideTransition = generateJavaScriptTransition({
             el.style.transform = `translateY(${distance})`
             break
         }
-        
+
         el.style.opacity = '0'
       },
-      
+
       onEnter(el: HTMLElement, done: () => void) {
         // Force reflow
         void el.offsetHeight
-        
+
         el.style.transition = 'transform 0.3s ease, opacity 0.3s ease'
         el.style.transform = 'translate(0, 0)'
         el.style.opacity = '1'
-        
+
         el.addEventListener('transitionend', done, { once: true })
       },
-      
+
       onLeave(el: HTMLElement, done: () => void) {
         const { direction, distance } = props
-        
+
         el.style.transition = 'transform 0.3s ease, opacity 0.3s ease'
-        
+
         switch (direction) {
           case 'left':
             el.style.transform = `translateX(-${distance})`
@@ -604,7 +604,7 @@ export const VSlideTransition = generateJavaScriptTransition({
             el.style.transform = `translateY(${distance})`
             break
         }
-        
+
         el.style.opacity = '0'
         el.addEventListener('transitionend', done, { once: true })
       }
@@ -613,28 +613,28 @@ export const VSlideTransition = generateJavaScriptTransition({
 })
 ```
 
-### カスタムトランジションの使用
+### Using Custom Transitions
 
 ```vue
 <template>
   <div>
     <div class="controls">
-      <button @click="changeDirection('left')">左スライド</button>
-      <button @click="changeDirection('right')">右スライド</button>
-      <button @click="changeDirection('up')">上スライド</button>
-      <button @click="changeDirection('down')">下スライド</button>
+      <button @click="changeDirection('left')">Left Slide</button>
+      <button @click="changeDirection('right')">Right Slide</button>
+      <button @click="changeDirection('up')">Up Slide</button>
+      <button @click="changeDirection('down')">Down Slide</button>
     </div>
-    
+
     <button @click="toggle" class="toggle-btn">
-      {{ isVisible ? '非表示' : '表示' }}
+      {{ isVisible ? 'Hide' : 'Show' }}
     </button>
-    
+
     <div class="slide-container">
       <VSlideTransition :direction="currentDirection" distance="200px">
         <div v-show="isVisible" class="slide-content">
-          <h3>スライドコンテンツ</h3>
-          <p>方向: {{ currentDirection }}</p>
-          <p>このコンテンツは {{ currentDirection }} 方向からスライドインします。</p>
+          <h3>Slide Content</h3>
+          <p>Direction: {{ currentDirection }}</p>
+          <p>This content slides in from the {{ currentDirection }} direction.</p>
         </div>
       </VSlideTransition>
     </div>
@@ -643,7 +643,7 @@ export const VSlideTransition = generateJavaScriptTransition({
 
 <script setup lang="ts">
 import { ref } from 'vue'
-// import { VSlideTransition } from './VSlideTransition' // 上記で作成したコンポーネント
+// import { VSlideTransition } from './VSlideTransition' // Component created above
 
 const isVisible = ref(false)
 const currentDirection = ref<'left' | 'right' | 'up' | 'down'>('left')
@@ -654,7 +654,7 @@ const toggle = () => {
 
 const changeDirection = (direction: 'left' | 'right' | 'up' | 'down') => {
   currentDirection.value = direction
-  // 方向変更時に一度非表示にして再表示
+  // Hide once and re-display when changing direction
   if (isVisible.value) {
     isVisible.value = false
     setTimeout(() => {
@@ -721,7 +721,7 @@ const changeDirection = (direction: 'left' | 'right' | 'up' | 'down') => {
 </style>
 ```
 
-## API リファレンス
+## API Reference
 
 ### generateJavaScriptTransition
 
@@ -756,64 +756,64 @@ type JavaScriptTransitionHooks<HostElement = HTMLElement> = {
 
 ```typescript
 interface VExpandTransitionProps {
-  expand?: 'width' | 'height'  // 展開方向（デフォルト: 'height'）
-  fade?: boolean               // フェード効果の有効/無効（デフォルト: false）
+  expand?: 'width' | 'height'  // Expansion direction (default: 'height')
+  fade?: boolean               // Enable/disable fade effect (default: false)
 }
 ```
 
-#### プロパティ
+#### Properties
 
-- **expand**: `'width' | 'height'` (デフォルト: `'height'`)
-  - トランジションの方向を指定
-  - `'height'`: 縦方向の開閉アニメーション
-  - `'width'`: 横方向の開閉アニメーション
+- **expand**: `'width' | 'height'` (default: `'height'`)
+  - Specifies the transition direction
+  - `'height'`: Vertical expand/collapse animation
+  - `'width'`: Horizontal expand/collapse animation
 
-- **fade**: `boolean` (デフォルト: `false`)
-  - フェードイン/アウト効果の有効化
-  - `true`: サイズ変化と同時に透明度も変化
-  - `false`: サイズのみの変化
+- **fade**: `boolean` (default: `false`)
+  - Enable fade in/out effect
+  - `true`: Opacity changes simultaneously with size changes
+  - `false`: Size changes only
 
-#### 使用上の注意
+#### Usage Notes
 
-1. **CSSトランジション必須**: 対象要素にCSSの`transition`プロパティを設定する必要があります
-2. **必要なプロパティ**: 
-   - `expand="height"`の場合: `height`, `margin-top`, `margin-bottom`
-   - `expand="width"`の場合: `width`, `margin-left`, `margin-right`
-   - `fade=true`の場合: 上記に加えて`opacity`
+1. **CSS Transition Required**: CSS `transition` property must be set on the target element
+2. **Required Properties**:
+   - For `expand="height"`: `height`, `margin-top`, `margin-bottom`
+   - For `expand="width"`: `width`, `margin-left`, `margin-right`
+   - For `fade=true`: `opacity` in addition to the above
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### CSSトランジションの最適化
+### CSS Transition Optimization
 
 ```css
-/* 良い例：変化するプロパティのみを指定 */
+/* Good: Specify only changing properties */
 .expand-content {
   transition: height 0.3s ease, margin 0.3s ease;
 }
 
-/* 悪い例：all を使うとパフォーマンスが低下 */
+/* Bad: Using 'all' decreases performance */
 .expand-content-bad {
   transition: all 0.3s ease;
 }
 
-/* GPU加速を活用 */
+/* Utilize GPU acceleration */
 .gpu-optimized {
   transition: height 0.3s ease, margin 0.3s ease;
-  will-change: height, margin; /* 事前にブラウザに最適化を指示 */
+  will-change: height, margin; /* Instruct browser to optimize in advance */
 }
 ```
 
-### 大量の要素でのパフォーマンス
+### Performance with Large Numbers of Elements
 
 ```vue
 <template>
   <div class="large-list">
-    <!-- v-showよりもv-ifを使用して不要なDOM要素を削除 -->
+    <!-- Use v-if instead of v-show to remove unnecessary DOM elements -->
     <div v-for="item in items" :key="item.id" class="list-item">
       <button @click="toggleItem(item.id)">
         {{ item.title }}
       </button>
-      
+
       <VExpandTransition>
         <div v-if="openItems.has(item.id)" class="item-content">
           {{ item.content }}
@@ -829,38 +829,38 @@ import { VExpandTransition } from '@fastkit/vue-transitions'
 
 const openItems = reactive(new Set<number>())
 
-// パフォーマンス向上のため、デバウンスを実装
+// Implement debouncing for performance improvement
 let toggleTimeout: number | undefined
 
 const toggleItem = (itemId: number) => {
   if (toggleTimeout) {
     clearTimeout(toggleTimeout)
   }
-  
+
   toggleTimeout = setTimeout(() => {
     if (openItems.has(itemId)) {
       openItems.delete(itemId)
     } else {
       openItems.add(itemId)
     }
-  }, 50) // 短時間での連続クリックを防ぐ
+  }, 50) // Prevent continuous clicks in a short time
 }
 </script>
 
 <style>
 .item-content {
-  /* パフォーマンス向上のためにtransform-styleを指定 */
+  /* Specify transform-style for performance improvement */
   transform-style: preserve-3d;
-  transition: height 0.25s ease; /* アニメーション時間を短縮 */
+  transition: height 0.25s ease; /* Shorten animation time */
 }
 </style>
 ```
 
 ## Related Packages
 
-- `@fastkit/dom` - DOM操作とトランジションイベント監視
-- `@fastkit/helpers` - ユーティリティ関数（capitalize等）
-- `@fastkit/vue-utils` - Vue.js開発ユーティリティ
+- `@fastkit/dom` - DOM manipulation and transition event monitoring
+- `@fastkit/helpers` - Utility functions (capitalize, etc.)
+- `@fastkit/vue-utils` - Vue.js development utilities
 
 ## License
 

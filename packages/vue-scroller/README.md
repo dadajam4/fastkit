@@ -1,7 +1,7 @@
 
 # @fastkit/vue-scroller
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-scroller/README-ja.md)
 
 A comprehensive library for precisely controlling scroll functionality in Vue.js applications. Easily implement advanced scroll experiences including reactive scroll state monitoring, animated scrolling, guide display features, and element scrolling.
 
@@ -32,8 +32,8 @@ npm install @fastkit/vue-scroller
   <div>
     <button @click="scrollToTop">To Top</button>
     <button @click="scrollToBottom">To Bottom</button>
-    <div 
-      ref="scrollerRef" 
+    <div
+      ref="scrollerRef"
       style="height: 300px; overflow: auto;"
     >
       <div style="height: 1000px; background: linear-gradient(to bottom, red, blue);">
@@ -70,7 +70,7 @@ const scrollToBottom = () => {
 
 ```vue
 <template>
-  <VScroller 
+  <VScroller
     ref="scrollerComponent"
     :guide="20"
     container-class="custom-container"
@@ -80,15 +80,15 @@ const scrollToBottom = () => {
     <div class="content">
       <h2>Section 1</h2>
       <p>Lorem ipsum dolor sit amet...</p>
-      
+
       <h2 ref="section2">Section 2</h2>
       <p>Consectetur adipiscing elit...</p>
-      
+
       <h2>Section 3</h2>
       <p>Sed do eiusmod tempor incididunt...</p>
     </div>
   </VScroller>
-  
+
   <button @click="scrollToSection2">Go to Section 2</button>
 </template>
 
@@ -134,19 +134,19 @@ const scrollToSection2 = () => {
       <button @click="scrollToSection('about')">About</button>
       <button @click="scrollToSection('contact')">Contact</button>
     </nav>
-    
+
     <section id="hero" style="height: 100vh; background: #ff6b6b;">
       <h1>Hero Section</h1>
     </section>
-    
+
     <section id="about" style="height: 100vh; background: #4ecdc4;">
       <h1>About Section</h1>
     </section>
-    
+
     <section id="contact" style="height: 100vh; background: #45b7d1;">
       <h1>Contact Section</h1>
     </section>
-    
+
     <div class="scroll-info">
       <p>Scroll Position: {{ documentScroller.scrollTop }}px</p>
       <p>Scrolling: {{ documentScroller.nowScrolling ? 'Yes' : 'No' }}</p>
@@ -215,8 +215,8 @@ const scrollToSection = (sectionId: string) => {
       <button @click="addVerticalOnlyFilter">Vertical Only</button>
       <button @click="clearFilters">Clear Filters</button>
     </div>
-    
-    <VScroller 
+
+    <VScroller
       ref="scroller"
       :guide="true"
       style="height: 300px; width: 500px; border: 1px solid #ccc;"
@@ -238,7 +238,7 @@ const currentStoppers: ScrollStopper[] = []
 
 const toggleScrollLock = () => {
   if (!scroller.value) return
-  
+
   if (isScrollLocked.value) {
     // Unlock
     currentStoppers.forEach(stopper => {
@@ -257,18 +257,18 @@ const toggleScrollLock = () => {
 
 const addVerticalOnlyFilter = () => {
   if (!scroller.value) return
-  
+
   const stopper: ScrollStopper = (axis) => {
     return axis === 'x' // Stop only X-axis scrolling (disable horizontal scroll)
   }
-  
+
   scroller.value.scroller.pushScrollStopper(stopper)
   currentStoppers.push(stopper)
 }
 
 const clearFilters = () => {
   if (!scroller.value) return
-  
+
   currentStoppers.forEach(stopper => {
     scroller.value!.scroller.removeScrollStopper(stopper)
   })
@@ -302,20 +302,20 @@ const clearFilters = () => {
 
 ```vue
 <template>
-  <VScroller 
+  <VScroller
     ref="scrollerRef"
     style="height: 400px;"
     :settings="{ throttle: 16 }"
   >
     <div class="infinite-list">
-      <div 
-        v-for="item in items" 
+      <div
+        v-for="item in items"
         :key="item.id"
         class="list-item"
       >
         {{ item.title }}
       </div>
-      
+
       <div v-if="loading" class="loading">
         Loading...
       </div>
@@ -351,17 +351,17 @@ watch(() => scrollerRef.value?.scroller.scrollBottom, (scrollBottom) => {
 
 const loadMoreItems = async () => {
   if (loading.value) return
-  
+
   loading.value = true
-  
+
   // Simulate API request
   await new Promise(resolve => setTimeout(resolve, 1000))
-  
+
   const newItems: ListItem[] = Array.from({ length: 20 }, (_, index) => ({
     id: (currentPage.value - 1) * 20 + index + 1,
     title: `Item ${(currentPage.value - 1) * 20 + index + 1}`
   }))
-  
+
   items.value.push(...newItems)
   currentPage.value++
   loading.value = false
@@ -403,8 +403,8 @@ const loadMoreItems = async () => {
       <button @click="restorePosition">Restore Position</button>
       <button @click="clearSavedPosition">Clear Saved Data</button>
     </div>
-    
-    <VScroller 
+
+    <VScroller
       ref="scrollerRef"
       style="height: 300px;"
     >
@@ -414,7 +414,7 @@ const loadMoreItems = async () => {
         </div>
       </div>
     </VScroller>
-    
+
     <div v-if="savedPosition" class="saved-info">
       Saved Position: Top={{ savedPosition.scrollTop }}px, Left={{ savedPosition.scrollLeft }}px
     </div>
@@ -430,20 +430,20 @@ const savedPosition = ref<ScrollPosition | null>(null)
 
 const savePosition = () => {
   if (!scrollerRef.value) return
-  
+
   const scroller = scrollerRef.value.scroller
   savedPosition.value = {
     scrollTop: scroller.scrollTop,
     scrollLeft: scroller.scrollLeft
   }
-  
+
   // Save to localStorage
   localStorage.setItem('scrollPosition', JSON.stringify(savedPosition.value))
 }
 
 const restorePosition = () => {
   if (!scrollerRef.value || !savedPosition.value) return
-  
+
   scrollerRef.value.scroller.to(savedPosition.value, {
     duration: 500,
     easing: 'ease-out'
@@ -499,27 +499,27 @@ onMounted(() => {
 
 ```vue
 <template>
-  <VScroller 
+  <VScroller
     ref="scrollerRef"
     style="height: 100vh; position: relative; overflow: hidden;"
   >
     <div class="parallax-container">
       <!-- Background layer (moves slowly) -->
-      <div 
+      <div
         class="parallax-layer background"
         :style="{ transform: `translateY(${backgroundOffset}px)` }"
       >
         <div class="bg-pattern"></div>
       </div>
-      
+
       <!-- Middle layer (medium speed) -->
-      <div 
+      <div
         class="parallax-layer midground"
         :style="{ transform: `translateY(${midgroundOffset}px)` }"
       >
         <div class="floating-shapes"></div>
       </div>
-      
+
       <!-- Foreground (normal speed) -->
       <div class="parallax-layer foreground">
         <div class="content">
@@ -657,7 +657,7 @@ interface UseScroller {
   destroy(): void
   update(): void
   cancel(): void
-  
+
   // スクロール制御
   by(diffX: number, diffY: number, options?: ScrollerScrollOptions): Promise<void>
   to(scrollPosition: Partial<ScrollPosition>, options?: ScrollerScrollOptions): Promise<void>
@@ -671,11 +671,11 @@ interface UseScroller {
   toLeftBottom(options?: ScrollerScrollOptions): Promise<void>
   toRightTop(options?: ScrollerScrollOptions): Promise<void>
   toRightBottom(options?: ScrollerScrollOptions): Promise<void>
-  
+
   // スクロール停止
   pushScrollStopper(stopper: ScrollStopper): void
   removeScrollStopper(stopper: ScrollStopper): void
-  
+
   // オフセット設定
   setScrollToElementAdditionalOffset(offset: ScrollToElementAdditionalOffset): void
   deleteScrollToElementAdditionalOffset(): void

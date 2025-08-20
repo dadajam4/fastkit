@@ -1,19 +1,19 @@
 # @fastkit/vot
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vot/README-ja.md)
 
-Vueアプリケーションを構築するための包括的なオーケストレーションツール・フレームワーク。SSR (Server-Side Rendering)、静的サイト生成、プラグインシステム、開発サーバーなどの統合された開発体験を提供します。
+A comprehensive orchestration tool and framework for building Vue applications. Provides an integrated development experience including SSR (Server-Side Rendering), static site generation, plugin system, development server, and more.
 
 ## Features
 
-- **SSR & 静的生成**: Server-Side Rendering と静的サイト生成の両方をサポート
-- **統合開発サーバー**: Vite ベースの高速開発サーバー
-- **プラグインシステム**: 拡張可能なプラグインアーキテクチャ
-- **ファイルベースルーティング**: 自動的なページルート生成
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **Vue 3 + Vue Router 4**: 最新のVueエコシステム対応
-- **Head管理**: Unheadによるメタタグ・SEO最適化
-- **プロキシサポート**: 開発時のAPIプロキシ機能
+- **SSR & Static Generation**: Supports both Server-Side Rendering and static site generation
+- **Integrated Development Server**: Fast development server based on Vite
+- **Plugin System**: Extensible plugin architecture
+- **File-based Routing**: Automatic page route generation
+- **Full TypeScript Support**: Type safety with strict type definitions
+- **Vue 3 + Vue Router 4**: Compatible with the latest Vue ecosystem
+- **Head Management**: Meta tag and SEO optimization with Unhead
+- **Proxy Support**: API proxy functionality during development
 
 ## Installation
 
@@ -21,23 +21,23 @@ Vueアプリケーションを構築するための包括的なオーケスト�
 npm install @fastkit/vot
 ```
 
-## CLI使用方法
+## CLI Usage
 
 ```bash
-# 開発サーバー起動
+# Start development server
 npx vot dev
 
-# 本番ビルド
+# Production build
 npx vot build
 
-# 静的サイト生成
+# Static site generation
 npx vot generate
 
-# その他のオプション
+# Other options
 npx vot --help
 ```
 
-## 基本的な設定
+## Basic Configuration
 
 ### vot.config.ts
 
@@ -45,46 +45,46 @@ npx vot --help
 import { defineVotConfig } from '@fastkit/vot/tool'
 
 export default defineVotConfig({
-  // アプリケーション設定
+  // Application configuration
   app: {
-    // アプリケーション名
+    // Application name
     name: 'My Vue App',
-    
-    // ベースURL
+
+    // Base URL
     base: '/',
-    
-    // 出力ディレクトリ
+
+    // Output directory
     outDir: 'dist',
-    
-    // 開発サーバー設定
+
+    // Development server configuration
     dev: {
       port: 3000,
       host: 'localhost'
     }
   },
 
-  // SSR設定
+  // SSR configuration
   ssr: {
-    // SSRを有効にする
+    // Enable SSR
     enabled: true,
-    
-    // サーバーエントリーポイント
+
+    // Server entry point
     ssrEntry: 'src/entry-server.ts',
-    
-    // プラグイン設定
+
+    // Plugin configuration
     plugin: 'src/plugins/ssr.ts'
   },
 
-  // ビルド設定
+  // Build configuration
   build: {
-    // クライアント用Vite設定
+    // Client Vite configuration
     clientOptions: {
       build: {
         sourcemap: true
       }
     },
-    
-    // サーバー用Vite設定
+
+    // Server Vite configuration
     serverOptions: {
       build: {
         minify: false
@@ -92,77 +92,77 @@ export default defineVotConfig({
     }
   },
 
-  // Viteプラグイン
+  // Vite plugins
   vite: {
     plugins: [
-      // カスタムプラグイン
+      // Custom plugins
     ]
   }
 })
 ```
 
-## エントリーポイントの設定
+## Entry Point Configuration
 
-### src/main.ts (クライアント & サーバー共通)
+### src/main.ts (Client & Server Common)
 
 ```typescript
 import { createVotApp } from '@fastkit/vot'
 import { createHead } from '@unhead/vue'
 import App from './App.vue'
 
-// Votアプリケーションの作成
+// Create Vot application
 export const { createApp } = createVotApp({
-  // メインコンポーネント
+  // Main component
   App,
-  
-  // Vueアプリケーション設定
+
+  // Vue application setup
   async setupApp(ctx) {
     const { app, router } = ctx
-    
-    // Head管理の設定
+
+    // Setup head management
     const head = createHead()
     app.use(head)
-    
-    // グローバルコンポーネントの登録
+
+    // Register global components
     // app.component('MyComponent', MyComponent)
-    
-    // プラグインの設定
+
+    // Setup plugins
     // app.use(myPlugin)
   },
 
-  // ルーター設定
+  // Router setup
   async setupRouter(ctx) {
     const { router } = ctx
-    
-    // ルートガード設定
+
+    // Setup route guards
     router.beforeEach((to, from, next) => {
-      // 認証チェックなど
+      // Authentication check, etc.
       next()
     })
   },
 
-  // プラグイン
+  // Plugins
   plugins: [
-    // カスタムプラグイン
+    // Custom plugins
   ]
 })
 ```
 
-### src/entry-client.ts (クライアント用)
+### src/entry-client.ts (Client)
 
 ```typescript
 import { createApp } from './main'
 
 createApp().then(({ app, router }) => {
-  // ルーターの準備完了まで待機
+  // Wait for router to be ready
   router.isReady().then(() => {
-    // DOMにマウント
+    // Mount to DOM
     app.mount('#app')
   })
 })
 ```
 
-### src/entry-server.ts (サーバー用)
+### src/entry-server.ts (Server)
 
 ```typescript
 import { createApp } from './main'
@@ -170,56 +170,56 @@ import type { VotServerRenderContext } from '@fastkit/vot/server'
 
 export async function render(ctx: VotServerRenderContext) {
   const { app, router } = await createApp()
-  
-  // サーバーサイドでのルーティング
+
+  // Server-side routing
   await router.push(ctx.url)
   await router.isReady()
-  
+
   return { app }
 }
 ```
 
-## プラグインシステム
+## Plugin System
 
-### プラグインの作成
+### Creating Plugins
 
 ```typescript
 import { createVotPlugin } from '@fastkit/vot'
 import type { VuePageControl } from '@fastkit/vue-page'
 
-// シンプルなプラグイン
+// Simple plugin
 export const mySimplePlugin = createVotPlugin((ctx: VuePageControl) => {
-  // プラグイン初期化処理
+  // Plugin initialization
   console.log('Plugin initialized:', ctx.app)
 })
 
-// フックを使用したプラグイン
+// Plugin with hooks
 export const myAdvancedPlugin = createVotPlugin({
   setup(ctx: VuePageControl) {
-    // セットアップ処理
+    // Setup process
     console.log('Advanced plugin setup')
   },
-  
-  // ルーター設定前のフック
+
+  // Hook before router setup
   beforeRouterSetup(params) {
     console.log('Before router setup:', params)
   },
-  
-  // ルーター設定後のフック
+
+  // Hook after router setup
   afterRouterSetup(params) {
     console.log('After router setup:', params)
   }
 })
 ```
 
-### プラグインの使用
+### Using Plugins
 
 ```typescript
 import { createVotApp } from '@fastkit/vot'
 import { mySimplePlugin, myAdvancedPlugin } from './plugins'
 
 export const { createApp } = createVotApp({
-  // プラグインの登録
+  // Register plugins
   plugins: [
     mySimplePlugin,
     myAdvancedPlugin
@@ -227,7 +227,7 @@ export const { createApp } = createVotApp({
 })
 ```
 
-## ページコンポーネント
+## Page Components
 
 ### src/pages/index.vue
 
@@ -242,26 +242,26 @@ export const { createApp } = createVotApp({
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
 
-// ページメタデータ
+// Page metadata
 useHead({
-  title: 'ホームページ',
+  title: 'Home Page',
   meta: [
-    { name: 'description', content: 'サイトのホームページです' }
+    { name: 'description', content: 'This is the home page of the site' }
   ]
 })
 
-// ページデータ
-const title = 'ようこそ'
-const description = 'Votフレームワークへようこそ！'
+// Page data
+const title = 'Welcome'
+const description = 'Welcome to the Vot framework!'
 </script>
 ```
 
-### 動的ルート: src/pages/users/[id].vue
+### Dynamic Routes: src/pages/users/[id].vue
 
 ```vue
 <template>
   <div>
-    <h1>ユーザー: {{ user?.name }}</h1>
+    <h1>User: {{ user?.name }}</h1>
     <p>{{ user?.email }}</p>
   </div>
 </template>
@@ -274,14 +274,14 @@ const route = useRoute()
 const user = ref<{ name: string; email: string } | null>(null)
 
 onMounted(async () => {
-  // ユーザーデータの取得
+  // Fetch user data
   const response = await fetch(`/api/users/${route.params.id}`)
   user.value = await response.json()
 })
 </script>
 ```
 
-## 開発サーバーのカスタマイズ
+## Development Server Customization
 
 ### src/server/dev.ts
 
@@ -290,9 +290,9 @@ import type { VotConfigureServerFn } from '@fastkit/vot'
 import express from 'express'
 
 export const configureServer: VotConfigureServerFn = ({ use }) => {
-  // APIエンドポイントの追加
+  // Add API endpoints
   const apiRouter = express.Router()
-  
+
   apiRouter.get('/users/:id', (req, res) => {
     res.json({
       id: req.params.id,
@@ -300,60 +300,60 @@ export const configureServer: VotConfigureServerFn = ({ use }) => {
       email: `user${req.params.id}@example.com`
     })
   })
-  
+
   use('/api', apiRouter)
-  
-  // 静的ファイルの配信
+
+  // Serve static files
   use('/uploads', express.static('uploads'))
-  
-  // クリーンアップ関数を返す
+
+  // Return cleanup function
   return () => {
     console.log('Development server cleanup')
   }
 }
 ```
 
-## 静的サイト生成
+## Static Site Generation
 
-### generate設定
+### Generate Configuration
 
 ```typescript
 // vot.config.ts
 export default defineVotConfig({
   generate: {
-    // 生成するルート
+    // Routes to generate
     routes: [
       '/',
       '/about',
       '/users/1',
       '/users/2'
     ],
-    
-    // 動的ルート生成
+
+    // Dynamic route generation
     async generateRoutes() {
       const users = await fetchUsers()
       return users.map(user => `/users/${user.id}`)
     },
-    
-    // 出力ディレクトリ
+
+    // Output directory
     outDir: 'dist-static'
   }
 })
 ```
 
-### 生成実行
+### Running Generation
 
 ```bash
-# 静的サイト生成
+# Generate static site
 npx vot generate
 
-# 特定のルートのみ生成
+# Generate specific routes only
 npx vot generate --routes="/" "/about"
 ```
 
 ## Advanced Usage Examples
 
-### 認証プラグイン
+### Authentication Plugin
 
 ```typescript
 import { createVotPlugin } from '@fastkit/vot'
@@ -363,13 +363,13 @@ export const authPlugin = createVotPlugin({
   setup(ctx) {
     const user = ref(null)
     const isAuthenticated = computed(() => !!user.value)
-    
-    // 認証状態をプロバイド
+
+    // Provide authentication state
     provide('auth', {
       user: readonly(user),
       isAuthenticated: readonly(isAuthenticated),
       login: async (credentials) => {
-        // ログイン処理
+        // Login process
         const response = await fetch('/api/login', {
           method: 'POST',
           body: JSON.stringify(credentials)
@@ -381,9 +381,9 @@ export const authPlugin = createVotPlugin({
       }
     })
   },
-  
+
   afterRouterSetup({ router }) {
-    // 認証が必要なルートの保護
+    // Protect routes that require authentication
     router.beforeEach((to, from, next) => {
       if (to.meta.requiresAuth && !user.value) {
         next('/login')
@@ -395,7 +395,7 @@ export const authPlugin = createVotPlugin({
 })
 ```
 
-### 国際化プラグイン
+### Internationalization Plugin
 
 ```typescript
 import { createVotPlugin } from '@fastkit/vot'
@@ -404,12 +404,12 @@ import { createI18n } from 'vue-i18n'
 export const i18nPlugin = createVotPlugin({
   setup(ctx) {
     const i18n = createI18n({
-      locale: 'ja',
+      locale: 'en',
       fallbackLocale: 'en',
       messages: {
         ja: {
-          hello: 'こんにちは',
-          welcome: 'ようこそ'
+          hello: 'Hello',
+          welcome: 'Welcome'
         },
         en: {
           hello: 'Hello',
@@ -417,13 +417,13 @@ export const i18nPlugin = createVotPlugin({
         }
       }
     })
-    
+
     ctx.app.use(i18n)
   }
 })
 ```
 
-### 状態管理プラグイン
+### State Management Plugin
 
 ```typescript
 import { createVotPlugin } from '@fastkit/vot'
@@ -437,9 +437,9 @@ export const storePlugin = createVotPlugin({
 })
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### プリロード設定
+### Preload Configuration
 
 ```typescript
 // vot.config.ts
@@ -461,7 +461,7 @@ export default defineVotConfig({
 })
 ```
 
-### レイジーローディング
+### Lazy Loading
 
 ```typescript
 // src/router/routes.ts
@@ -475,39 +475,39 @@ export default [
 ]
 ```
 
-## デバッグとテスト
+## Debugging and Testing
 
-### 開発モードでのデバッグ
+### Debugging in Development Mode
 
 ```typescript
 // vot.config.ts
 export default defineVotConfig({
   dev: {
-    // ソースマップを有効にする
+    // Enable source maps
     sourcemap: true,
-    
+
     // Hot Module Replacement
     hmr: true,
-    
-    // デバッグログ
+
+    // Debug logging
     logLevel: 'info'
   }
 })
 ```
 
-### E2Eテスト統合
+### E2E Test Integration
 
 ```typescript
 // tests/e2e/basic.spec.ts
 import { test, expect } from '@playwright/test'
 
-test('ホームページが正しく表示される', async ({ page }) => {
+test('Home page displays correctly', async ({ page }) => {
   await page.goto('/')
-  await expect(page.locator('h1')).toContainText('ようこそ')
+  await expect(page.locator('h1')).toContainText('Welcome')
 })
 ```
 
-## API リファレンス
+## API Reference
 
 ### createVotApp
 
@@ -515,7 +515,7 @@ test('ホームページが正しく表示される', async ({ page }) => {
 function createVotApp(options: VotAppOptions): { createApp: () => Promise<VotAppInstance> }
 ```
 
-メインのVotアプリケーションを作成します。
+Creates the main Vot application.
 
 ### createVotPlugin
 
@@ -523,7 +523,7 @@ function createVotApp(options: VotAppOptions): { createApp: () => Promise<VotApp
 function createVotPlugin(plugin: RawVotPlugin): VotPlugin
 ```
 
-Votプラグインを作成します。
+Creates a Vot plugin.
 
 ### defineVotConfig
 
@@ -531,9 +531,9 @@ Votプラグインを作成します。
 function defineVotConfig(config: VotConfig): VotConfig
 ```
 
-Vot設定を定義します。
+Defines Vot configuration.
 
-### 主要な型定義
+### Key Type Definitions
 
 ```typescript
 interface VotAppOptions {
@@ -552,57 +552,57 @@ interface VotConfig {
 }
 ```
 
-## CLIコマンド
+## CLI Commands
 
-| コマンド | 説明 |
-|----------|------|
-| `vot dev` | 開発サーバーを起動 |
-| `vot build` | 本番用にビルド |
-| `vot generate` | 静的サイトを生成 |
-| `vot preview` | ビルド結果をプレビュー |
+| Command | Description |
+|---------|-------------|
+| `vot dev` | Start development server |
+| `vot build` | Build for production |
+| `vot generate` | Generate static site |
+| `vot preview` | Preview build result |
 
-### CLIオプション
+### CLI Options
 
 ```bash
-# ポート指定
+# Specify port
 vot dev --port 8080
 
-# ホスト指定
+# Specify host
 vot dev --host 0.0.0.0
 
-# 設定ファイル指定
+# Specify config file
 vot build --config vot.prod.config.ts
 
-# ログレベル指定
+# Specify log level
 vot dev --log-level debug
 ```
 
-## ディレクトリ構造
+## Directory Structure
 
 ```
 my-vot-app/
 ├── src/
-│   ├── pages/           # ページコンポーネント
-│   ├── components/      # 再利用可能コンポーネント
-│   ├── layouts/         # レイアウトコンポーネント
-│   ├── plugins/         # Votプラグイン
-│   ├── server/          # サーバー設定
-│   ├── main.ts          # メインエントリー
-│   ├── entry-client.ts  # クライアントエントリー
-│   └── entry-server.ts  # サーバーエントリー
-├── vot.config.ts        # Vot設定
+│   ├── pages/           # Page components
+│   ├── components/      # Reusable components
+│   ├── layouts/         # Layout components
+│   ├── plugins/         # Vot plugins
+│   ├── server/          # Server configuration
+│   ├── main.ts          # Main entry
+│   ├── entry-client.ts  # Client entry
+│   └── entry-server.ts  # Server entry
+├── vot.config.ts        # Vot configuration
 └── package.json
 ```
 
 ## Related Packages
 
-- `@fastkit/vue-page` - Vue ページ管理システム
-- `@fastkit/vue-utils` - Vue ユーティリティ関数
-- `@fastkit/helpers` - ヘルパー関数
-- `vite` - ビルドツール
-- `vue` - Vue.js フレームワーク
+- `@fastkit/vue-page` - Vue page management system
+- `@fastkit/vue-utils` - Vue utility functions
+- `@fastkit/helpers` - Helper functions
+- `vite` - Build tool
+- `vue` - Vue.js framework
 - `vue-router` - Vue Router
-- `@unhead/vue` - Head 管理
+- `@unhead/vue` - Head management
 
 ## License
 

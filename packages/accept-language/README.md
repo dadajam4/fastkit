@@ -1,6 +1,6 @@
 # @fastkit/accept-language
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/accept-language/README-ja.md)
 
 A lightweight parser library that analyzes HTTP Accept-Language headers and sorts them by quality order. Used in multilingual web applications to properly determine the language preferred by clients.
 
@@ -107,18 +107,18 @@ const DEFAULT_LANGUAGE = 'en-US'
 // Language detection middleware
 app.use((req, res, next) => {
   const acceptLanguage = req.headers['accept-language']
-  
+
   // Determine the optimal language
   const preferredLanguage = pick(
     SUPPORTED_LANGUAGES,
     acceptLanguage,
     { loose: true }
   ) || DEFAULT_LANGUAGE
-  
+
   // Add language information to request
   req.locale = preferredLanguage
   res.locals.locale = preferredLanguage
-  
+
   next()
 })
 
@@ -150,7 +150,7 @@ export function middleware(request: NextRequest) {
     acceptLanguage,
     { loose: true }
   ) || DEFAULT_LOCALE
-  
+
   // Redirect if path doesn't include language code
   const pathname = request.nextUrl.pathname
   if (!SUPPORTED_LOCALES.some(locale => pathname.startsWith(`/${locale}`))) {
@@ -249,13 +249,13 @@ class LanguageDetector {
    */
   analyzeLanguagePreferences(acceptLanguageHeader: string) {
     const parsed = parse(acceptLanguageHeader)
-    
+
     return {
       languages: parsed,
       hasHighQuality: parsed.some(lang => lang.quality >= 0.8),
       primaryLanguage: parsed[0]?.code,
-      supportedMatches: parsed.filter(lang => 
-        this.supportedLanguages.some(supported => 
+      supportedMatches: parsed.filter(lang =>
+        this.supportedLanguages.some(supported =>
           supported.toLowerCase().startsWith(lang.code.toLowerCase())
         )
       )
@@ -341,19 +341,19 @@ const regionalLanguages = {
 
 function getRegionalLanguage(acceptLanguage: string) {
   const supportedLanguages = Object.keys(regionalLanguages)
-  
+
   // Try strict matching first
   let selected = pick(supportedLanguages, acceptLanguage)
-  
+
   if (!selected) {
     // Retry with loose matching
     selected = pick(supportedLanguages, acceptLanguage, { loose: true })
   }
-  
+
   return selected ? {
     code: selected,
     name: regionalLanguages[selected as keyof typeof regionalLanguages],
-    isExactMatch: !parse(acceptLanguage).some(lang => 
+    isExactMatch: !parse(acceptLanguage).some(lang =>
       `${lang.code}-${lang.region}` === selected
     )
   } : null
@@ -396,7 +396,7 @@ class OptimizedLanguageDetector {
 
     // Cache result
     this.cache.set(acceptLanguageHeader, detected)
-    
+
     return detected || this.defaultLanguage
   }
 

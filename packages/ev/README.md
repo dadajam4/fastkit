@@ -1,20 +1,20 @@
 
 # @fastkit/ev
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/ev/README-ja.md)
 
-TypeScriptで実装された軽量でタイプセーフなイベントエミッター&オブザーバーライブラリです。Fastkitエコシステムのコアパッケージとして、シンプルで型安全なイベント処理システムを提供します。
+A lightweight and type-safe event emitter & observer library implemented in TypeScript. As a core package of the Fastkit ecosystem, it provides a simple and type-safe event handling system.
 
-## 特徴
+## Features
 
-- **TypeScript完全対応**: ジェネリクスを使用した厳密な型チェック
-- **軽量設計**: 最小限の依存関係で高いパフォーマンス
-- **柔軟なAPI**: 複数のオーバーロードと豊富なオプション
-- **タグシステム**: リスナーのグループ管理機能
-- **ワンタイムリスナー**: 一度だけ実行される自動削除機能
-- **即座実行**: 登録時に即座に実行されるリスナー
-- **メモリ効率**: 適切なクリーンアップと循環参照の防止
-- **チェーンメソッド**: ビルダーパターンによる直感的なAPI
+- **Complete TypeScript Support**: Strict type checking using generics
+- **Lightweight Design**: High performance with minimal dependencies
+- **Flexible API**: Multiple overloads and rich options
+- **Tag System**: Group management functionality for listeners
+- **One-time Listeners**: Auto-removal functionality that executes only once
+- **Immediate Execution**: Listeners that execute immediately upon registration
+- **Memory Efficiency**: Proper cleanup and prevention of circular references
+- **Chain Methods**: Intuitive API through builder pattern
 
 ## Installation
 
@@ -24,32 +24,32 @@ npm install @fastkit/ev
 pnpm add @fastkit/ev
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### シンプルなイベントエミッター
+### Simple Event Emitter
 
 ```typescript
 import { EV } from '@fastkit/ev';
 
-// 基本的なイベントエミッター
+// Basic event emitter
 const ev = new EV();
 
-// リスナー登録
+// Register listener
 ev.on('message', (data) => {
-  console.log('受信:', data);
+  console.log('Received:', data);
 });
 
-// イベント発行
+// Emit event
 ev.emit('message', 'Hello World!');
-// => "受信: Hello World!"
+// => "Received: Hello World!"
 ```
 
-### 型安全なイベントマップ
+### Type-safe Event Map
 
 ```typescript
 import { EV } from '@fastkit/ev';
 
-// イベントマップの定義
+// Define event map
 interface MyEvents {
   userLogin: { userId: string; timestamp: Date };
   dataUpdate: { records: any[]; total: number };
@@ -57,23 +57,23 @@ interface MyEvents {
   statusChange: { from: string; to: string };
 }
 
-// 型安全なイベントエミッター
+// Type-safe event emitter
 class UserManager extends EV<MyEvents> {
   login(userId: string) {
-    // 型安全なイベント発行
+    // Type-safe event emission
     this.emit('userLogin', {
       userId,
       timestamp: new Date()
     });
   }
-  
+
   updateData(records: any[]) {
     this.emit('dataUpdate', {
       records,
       total: records.length
     });
   }
-  
+
   handleError(error: Error) {
     this.emit('error', error);
   }
@@ -81,35 +81,35 @@ class UserManager extends EV<MyEvents> {
 
 const userManager = new UserManager();
 
-// 型安全なリスナー登録
+// Type-safe listener registration
 userManager.on('userLogin', (data) => {
-  // data は { userId: string; timestamp: Date } 型
-  console.log(`ユーザー ${data.userId} がログインしました`);
+  // data is of type { userId: string; timestamp: Date }
+  console.log(`User ${data.userId} has logged in`);
 });
 
 userManager.on('error', (error) => {
-  // error は Error 型
-  console.error('エラーが発生:', error.message);
+  // error is of type Error
+  console.error('An error occurred:', error.message);
 });
 ```
 
 ## API
 
-### イベントリスナー登録
+### Event Listener Registration
 
-#### on() - 通常のリスナー
+#### on() - Regular Listener
 
 ```typescript
-// 基本形
+// Basic form
 ev.on('eventName', handler);
 
-// オプション付き
+// With options
 ev.on('eventName', handler, {
-  tag: 'myTag',        // タグでグループ化
-  once: false          // 一度だけ実行するか
+  tag: 'myTag',        // Group by tag
+  once: false          // Execute only once
 });
 
-// 複数イベントを一度に登録
+// Register multiple events at once
 ev.on({
   event1: handler1,
   event2: handler2,
@@ -117,67 +117,67 @@ ev.on({
 });
 ```
 
-#### once() - ワンタイムリスナー
+#### once() - One-time Listener
 
 ```typescript
-// 一度だけ実行されるリスナー
+// Listener that executes only once
 ev.once('initialize', () => {
-  console.log('初期化完了');
+  console.log('Initialization completed');
 });
 
-// 複数のワンタイムリスナー
+// Multiple one-time listeners
 ev.once({
-  ready: () => console.log('準備完了'),
-  loaded: () => console.log('読み込み完了')
+  ready: () => console.log('Ready'),
+  loaded: () => console.log('Loaded')
 });
 ```
 
-#### immediate() - 即座実行リスナー
+#### immediate() - Immediate Execution Listener
 
 ```typescript
-// 登録時に即座に実行 + 以降のイベントにも反応
+// Execute immediately upon registration + respond to subsequent events
 ev.immediate('status', (status) => {
-  console.log('現在のステータス:', status);
+  console.log('Current status:', status);
 });
 
-// 最後に発行されたイベントがあれば即座に実行
+// Execute immediately if there's a last emitted event
 ev.emit('status', 'ready');
 ev.immediate('status', (status) => {
-  console.log(status); // => "ready" (即座に実行)
+  console.log(status); // => "ready" (executed immediately)
 });
 ```
 
-### イベント発行
+### Event Emission
 
-#### emit() - イベント発行
+#### emit() - Event Emission
 
 ```typescript
-// 基本的なイベント発行
+// Basic event emission
 ev.emit('eventName', data);
 
-// 複数の引数
+// Multiple arguments
 ev.emit('process', 'start', { id: 123 });
 
-// ペイロードなし
+// No payload
 ev.emit('complete');
 ```
 
-### リスナー削除
+### Listener Removal
 
-#### off() - リスナー削除
+#### off() - Listener Removal
 
 ```typescript
-// 特定のハンドラーを削除
+// Remove specific handler
 ev.off('eventName', handler);
 
-// イベントタイプの全リスナーを削除
+// Remove all listeners for event type
 ev.off('eventName');
 
-// タグで一括削除
+// Batch removal by tag
 const TAG_USER = Symbol('user');
 ev.off({ tag: TAG_USER });
 
-// 複数条件での削除
+// Removal with multiple conditions
 ev.off({
   type: 'eventName',
   tag: TAG_USER,
@@ -185,19 +185,19 @@ ev.off({
 });
 ```
 
-#### offAll() - 全リスナー削除
+#### offAll() - Remove All Listeners
 
 ```typescript
-// 全てのリスナーを削除
+// Remove all listeners
 ev.offAll();
 
-// 特定タグのリスナーを全削除
+// Remove all listeners with specific tag
 ev.offAll(TAG_USER);
 ```
 
 ## Usage Examples
 
-### ユーザー認証システム
+### User Authentication System
 
 ```typescript
 interface AuthEvents {
@@ -209,66 +209,66 @@ interface AuthEvents {
 
 class AuthService extends EV<AuthEvents> {
   private currentUser: User | null = null;
-  
+
   async login(email: string, password: string) {
     try {
       const { user, token } = await api.login(email, password);
       this.currentUser = user;
-      
-      // ログインイベントを発行
+
+      // Emit login event
       this.emit('login', { user, token });
-      
+
     } catch (error) {
-      this.emit('authError', { 
-        error: error as Error, 
-        action: 'login' 
+      this.emit('authError', {
+        error: error as Error,
+        action: 'login'
       });
     }
   }
-  
+
   logout() {
     if (this.currentUser) {
       const userId = this.currentUser.id;
       this.currentUser = null;
-      
+
       this.emit('logout', { userId });
     }
   }
-  
+
   async refreshToken() {
     try {
       const { token } = await api.refreshToken();
       this.emit('tokenRefresh', { newToken: token });
     } catch (error) {
-      this.emit('authError', { 
-        error: error as Error, 
-        action: 'tokenRefresh' 
+      this.emit('authError', {
+        error: error as Error,
+        action: 'tokenRefresh'
       });
     }
   }
 }
 
-// 使用例
+// Usage example
 const auth = new AuthService();
 
-// 認証イベントのリスナー登録
+// Register authentication event listeners
 auth.on('login', ({ user, token }) => {
-  console.log(`${user.name}さんがログインしました`);
+  console.log(`${user.name} has logged in`);
   localStorage.setItem('token', token);
 });
 
 auth.on('logout', ({ userId }) => {
-  console.log('ログアウトしました');
+  console.log('Logged out');
   localStorage.removeItem('token');
 });
 
 auth.on('authError', ({ error, action }) => {
-  console.error(`認証エラー (${action}):`, error.message);
-  // エラー通知の表示など
+  console.error(`Authentication error (${action}):`, error.message);
+  // Display error notifications, etc.
 });
 ```
 
-### データストア
+### Data Store
 
 ```typescript
 interface StoreEvents<T> {
@@ -279,33 +279,33 @@ interface StoreEvents<T> {
 
 class DataStore<T> extends EV<StoreEvents<T>> {
   private _data: T;
-  
+
   constructor(initialData: T) {
     super();
     this._data = initialData;
   }
-  
+
   get data(): T {
     return this._data;
   }
-  
+
   set(newData: Partial<T>) {
     const previous = { ...this._data };
     this._data = { ...this._data, ...newData };
-    
-    this.emit('change', { 
-      data: this._data, 
-      previous 
+
+    this.emit('change', {
+      data: this._data,
+      previous
     });
   }
-  
+
   reset(data: T) {
     this._data = data;
     this.emit('reset', { data });
   }
 }
 
-// 使用例
+// Usage example
 interface UserState {
   name: string;
   email: string;
@@ -318,26 +318,26 @@ const userStore = new DataStore<UserState>({
   isActive: false
 });
 
-// データ変更の監視
+// Monitor data changes
 userStore.on('change', ({ data, previous }) => {
-  console.log('ユーザーデータが変更されました');
-  console.log('前:', previous);
-  console.log('後:', data);
+  console.log('User data has been changed');
+  console.log('Before:', previous);
+  console.log('After:', data);
 });
 
-// データ更新
-userStore.set({ 
-  name: '田中太郎', 
-  email: 'tanaka@example.com' 
+// Update data
+userStore.set({
+  name: 'Taro Tanaka',
+  email: 'tanaka@example.com'
 });
 ```
 
-### Vue.js コンポーネントとの統合
+### Integration with Vue.js Components
 
 ```vue
 <template>
   <div>
-    <h2>通知システム</h2>
+    <h2>Notification System</h2>
     <div v-for="notification in notifications" :key="notification.id">
       {{ notification.message }}
     </div>
@@ -354,7 +354,7 @@ interface NotificationEvents {
   clear: void;
 }
 
-// グローバル通知サービス
+// Global notification service
 const notificationService = new EV<NotificationEvents>();
 
 interface Notification {
@@ -365,41 +365,41 @@ interface Notification {
 
 const notifications = ref<Notification[]>([]);
 
-// リスナー登録
+// Register listeners
 const TAG_COMPONENT = Symbol('notification-component');
 
 onMounted(() => {
   notificationService.on('show', ({ id, message, type }) => {
     notifications.value.push({ id, message, type });
   }, { tag: TAG_COMPONENT });
-  
+
   notificationService.on('hide', ({ id }) => {
     const index = notifications.value.findIndex(n => n.id === id);
     if (index !== -1) {
       notifications.value.splice(index, 1);
     }
   }, { tag: TAG_COMPONENT });
-  
+
   notificationService.on('clear', () => {
     notifications.value = [];
   }, { tag: TAG_COMPONENT });
 });
 
-// コンポーネント破棄時にリスナー削除
+// Remove listeners when component is destroyed
 onUnmounted(() => {
   notificationService.off({ tag: TAG_COMPONENT });
 });
 
-// 外部からの使用
+// Usage from external sources
 // notificationService.emit('show', {
 //   id: 'msg1',
-//   message: '保存が完了しました',
+//   message: 'Save completed',
 //   type: 'info'
 // });
 </script>
 ```
 
-### リアルタイム通信
+### Real-time Communication
 
 ```typescript
 interface SocketEvents {
@@ -415,32 +415,32 @@ class WebSocketManager extends EV<SocketEvents> {
   private socket: WebSocket | null = null;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
-  
+
   connect(url: string) {
     try {
       this.socket = new WebSocket(url);
-      
+
       this.socket.onopen = () => {
         this.reconnectAttempts = 0;
         this.emit('connect');
       };
-      
+
       this.socket.onclose = (event) => {
-        this.emit('disconnect', { 
-          reason: event.reason || 'Connection closed' 
+        this.emit('disconnect', {
+          reason: event.reason || 'Connection closed'
         });
-        
-        // 自動再接続
+
+        // Auto-reconnect
         if (this.reconnectAttempts < this.maxReconnectAttempts) {
           this.reconnectAttempts++;
           setTimeout(() => this.connect(url), 1000 * this.reconnectAttempts);
         }
       };
-      
+
       this.socket.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          
+
           switch (data.type) {
             case 'message':
               this.emit('message', {
@@ -449,14 +449,14 @@ class WebSocketManager extends EV<SocketEvents> {
                 timestamp: new Date(data.timestamp)
               });
               break;
-              
+
             case 'userJoin':
               this.emit('userJoin', {
                 userId: data.userId,
                 userName: data.userName
               });
               break;
-              
+
             case 'userLeave':
               this.emit('userLeave', {
                 userId: data.userId
@@ -467,16 +467,16 @@ class WebSocketManager extends EV<SocketEvents> {
           this.emit('error', error as Error);
         }
       };
-      
+
       this.socket.onerror = (error) => {
         this.emit('error', new Error('WebSocket error'));
       };
-      
+
     } catch (error) {
       this.emit('error', error as Error);
     }
   }
-  
+
   sendMessage(content: string) {
     if (this.socket?.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify({
@@ -486,7 +486,7 @@ class WebSocketManager extends EV<SocketEvents> {
       }));
     }
   }
-  
+
   disconnect() {
     if (this.socket) {
       this.socket.close();
@@ -495,62 +495,62 @@ class WebSocketManager extends EV<SocketEvents> {
   }
 }
 
-// 使用例
+// Usage example
 const socketManager = new WebSocketManager();
 
-// 接続イベント
+// Connection event
 socketManager.on('connect', () => {
-  console.log('WebSocket接続が確立されました');
+  console.log('WebSocket connection established');
 });
 
-// メッセージ受信
+// Message reception
 socketManager.on('message', ({ from, content, timestamp }) => {
   console.log(`[${timestamp.toLocaleTimeString()}] ${from}: ${content}`);
 });
 
-// ユーザー参加・退出
+// User join/leave
 socketManager.on('userJoin', ({ userName }) => {
-  console.log(`${userName}さんが参加しました`);
+  console.log(`${userName} has joined`);
 });
 
 socketManager.on('userLeave', ({ userId }) => {
-  console.log(`ユーザーが退出しました (ID: ${userId})`);
+  console.log(`User left (ID: ${userId})`);
 });
 
-// エラーハンドリング
+// Error handling
 socketManager.on('error', (error) => {
-  console.error('WebSocketエラー:', error.message);
+  console.error('WebSocket error:', error.message);
 });
 
-// 接続開始
+// Start connection
 socketManager.connect('wss://example.com/websocket');
 ```
 
 ## Advanced Usage Examples
 
-### タグを使ったグループ管理
+### Group Management Using Tags
 
 ```typescript
 const ev = new EV();
 
-// タグの定義
+// Tag definitions
 const TAG_UI = Symbol('ui');
 const TAG_API = Symbol('api');
 const TAG_DEBUG = Symbol('debug');
 
-// グループごとにリスナー登録
+// Register listeners by group
 ev.on('event', uiHandler, { tag: TAG_UI });
 ev.on('event', apiHandler, { tag: TAG_API });
 ev.on('event', debugHandler, { tag: TAG_DEBUG });
 
-// 特定グループのリスナーのみ削除
-ev.off({ tag: TAG_DEBUG }); // デバッグ用リスナーのみ削除
+// Remove only listeners from specific group
+ev.off({ tag: TAG_DEBUG }); // Remove only debug listeners
 
-// 複数グループを同時に削除
+// Remove multiple groups simultaneously
 ev.off({ tag: [TAG_UI, TAG_API] });
 ```
 
-### 条件付きリスナー
+### Conditional Listeners
 
 ```typescript
 interface AppEvents {
@@ -560,15 +560,15 @@ interface AppEvents {
 
 const app = new EV<AppEvents>();
 
-// 条件を満たす場合のみ処理
+// Process only when conditions are met
 app.on('dataUpdate', ({ type, data }) => {
   if (type === 'user') {
-    // ユーザーデータの場合のみ処理
+    // Process only for user data
     updateUserInterface(data);
   }
 });
 
-// ワンタイムかつ条件付きリスナー
+// One-time and conditional listener
 app.once('stateChange', ({ state }) => {
   if (state === 'ready') {
     initializeApplication();
@@ -576,7 +576,7 @@ app.once('stateChange', ({ state }) => {
 });
 ```
 
-### プラグインシステム
+### Plugin System
 
 ```typescript
 interface PluginEvents {
@@ -587,113 +587,113 @@ interface PluginEvents {
 
 class PluginManager extends EV<PluginEvents> {
   private plugins = new Map<string, Function>();
-  
+
   register(name: string, plugin: Function) {
     this.plugins.set(name, plugin);
   }
-  
+
   async execute(name: string, ...args: any[]) {
     const plugin = this.plugins.get(name);
     if (!plugin) {
       throw new Error(`Plugin "${name}" not found`);
     }
-    
+
     try {
-      // 実行前イベント
+      // Before execution event
       this.emit('beforeExecute', { pluginName: name, args });
-      
-      // プラグイン実行
+
+      // Execute plugin
       const result = await plugin(...args);
-      
-      // 実行後イベント
+
+      // After execution event
       this.emit('afterExecute', { pluginName: name, result });
-      
+
       return result;
     } catch (error) {
-      this.emit('error', { 
-        pluginName: name, 
-        error: error as Error 
+      this.emit('error', {
+        pluginName: name,
+        error: error as Error
       });
       throw error;
     }
   }
 }
 
-// 使用例
+// Usage example
 const pluginManager = new PluginManager();
 
-// プラグイン実行の監視
+// Monitor plugin execution
 pluginManager.on('beforeExecute', ({ pluginName, args }) => {
-  console.log(`プラグイン "${pluginName}" を実行します`, args);
+  console.log(`Executing plugin "${pluginName}"`, args);
 });
 
 pluginManager.on('afterExecute', ({ pluginName, result }) => {
-  console.log(`プラグイン "${pluginName}" の実行が完了しました`, result);
+  console.log(`Plugin "${pluginName}" execution completed`, result);
 });
 
 pluginManager.on('error', ({ pluginName, error }) => {
-  console.error(`プラグイン "${pluginName}" でエラーが発生:`, error.message);
+  console.error(`Error occurred in plugin "${pluginName}":`, error.message);
 });
 ```
 
-## TypeScript型定義
+## TypeScript Type Definitions
 
-### EVListener型
+### EVListener Type
 
 ```typescript
 interface EVListener<T = any> {
-  /** リスナー関数 */
+  /** Listener function */
   handler: (...args: T[]) => void;
-  /** タグ（グループ化用） */
+  /** Tag (for grouping) */
   tag?: any;
-  /** 一度だけ実行するか */
+  /** Execute only once */
   once?: boolean;
 }
 ```
 
-### イベントマップの型
+### Event Map Types
 
 ```typescript
-// カスタムイベントマップの定義
+// Custom event map definition
 interface CustomEvents {
-  // イベント名: ペイロード型
+  // Event name: Payload type
   create: { id: string; data: any };
   update: { id: string; changes: Partial<any> };
   delete: { id: string };
   batch: { operations: Array<{ type: string; data: any }> };
 }
 
-// 使用時の型チェック
+// Type checking during usage
 class MyEmitter extends EV<CustomEvents> {
   create(id: string, data: any) {
-    // 型安全：正しいペイロード型が要求される
+    // Type-safe: correct payload type required
     this.emit('create', { id, data });
   }
 }
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### メモリ使用量の最適化
+### Memory Usage Optimization
 
 ```typescript
 class OptimizedEventManager extends EV {
   private cleanup() {
-    // 定期的なクリーンアップ
+    // Periodic cleanup
     setInterval(() => {
-      // 未使用のリスナーを削除
+      // Remove unused listeners
       this.offAll();
-    }, 60000); // 1分ごと
+    }, 60000); // Every minute
   }
-  
+
   addTemporaryListener(event: string, handler: Function) {
-    // 一時的なリスナーは自動的に削除
+    // Temporary listeners are automatically removed
     const timeoutId = setTimeout(() => {
       this.off(event, handler);
-    }, 30000); // 30秒後に自動削除
-    
+    }, 30000); // Auto-remove after 30 seconds
+
     this.on(event, handler);
-    
+
     return () => {
       clearTimeout(timeoutId);
       this.off(event, handler);
@@ -702,32 +702,32 @@ class OptimizedEventManager extends EV {
 }
 ```
 
-### 大量イベント処理の最適化
+### High-Volume Event Processing Optimization
 
 ```typescript
 class BatchEventProcessor extends EV {
   private batchQueue: Array<{ event: string; data: any }> = [];
   private batchTimer: NodeJS.Timeout | null = null;
-  
+
   emitBatch(event: string, data: any) {
     this.batchQueue.push({ event, data });
-    
+
     if (!this.batchTimer) {
       this.batchTimer = setTimeout(() => {
         this.processBatch();
-      }, 16); // 約60FPS
+      }, 16); // Approximately 60FPS
     }
   }
-  
+
   private processBatch() {
     const batch = [...this.batchQueue];
     this.batchQueue = [];
     this.batchTimer = null;
-    
-    // バッチ処理イベントを発行
+
+    // Emit batch processing event
     this.emit('batch', batch);
-    
-    // 個別イベントも発行
+
+    // Also emit individual events
     batch.forEach(({ event, data }) => {
       this.emit(event, data);
     });
@@ -735,56 +735,56 @@ class BatchEventProcessor extends EV {
 }
 ```
 
-## テストパターン
+## Testing Patterns
 
-### ユニットテスト例
+### Unit Test Examples
 
 ```typescript
 import { describe, test, expect, vi } from 'vitest';
 import { EV } from '@fastkit/ev';
 
 describe('EV', () => {
-  test('基本的なイベント発行とリスニング', () => {
+  test('Basic event emission and listening', () => {
     const ev = new EV();
     const handler = vi.fn();
-    
+
     ev.on('test', handler);
     ev.emit('test', 'data');
-    
+
     expect(handler).toHaveBeenCalledWith('data');
     expect(handler).toHaveBeenCalledTimes(1);
   });
-  
-  test('ワンタイムリスナー', () => {
+
+  test('One-time listener', () => {
     const ev = new EV();
     const handler = vi.fn();
-    
+
     ev.once('test', handler);
     ev.emit('test', 'data1');
     ev.emit('test', 'data2');
-    
+
     expect(handler).toHaveBeenCalledTimes(1);
     expect(handler).toHaveBeenCalledWith('data1');
   });
-  
-  test('タグベースの削除', () => {
+
+  test('Tag-based removal', () => {
     const ev = new EV();
     const handler1 = vi.fn();
     const handler2 = vi.fn();
     const tag = Symbol('test');
-    
+
     ev.on('test', handler1, { tag });
     ev.on('test', handler2);
     ev.off({ tag });
     ev.emit('test', 'data');
-    
+
     expect(handler1).not.toHaveBeenCalled();
     expect(handler2).toHaveBeenCalledWith('data');
   });
 });
 ```
 
-## 依存関係
+## Dependencies
 
 ```json
 {
@@ -797,9 +797,9 @@ describe('EV', () => {
 }
 ```
 
-## ドキュメント
+## Documentation
 
-詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/ev/)をご覧ください。
+For detailed documentation, please visit [here](https://dadajam4.github.io/fastkit/ev/).
 
 ## License
 

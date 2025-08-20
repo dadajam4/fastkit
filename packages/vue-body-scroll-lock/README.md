@@ -1,21 +1,21 @@
 
 # @fastkit/vue-body-scroll-lock
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-body-scroll-lock/README-ja.md)
 
-Vue.jsアプリケーションでモーダル、ドロワー、オーバーレイ表示時にbodyスクロールを無効化するためのライブラリ。複数要素の同時管理、ネストした要素の対応、iOS Safariでの特殊な動作への対策を提供します。
+A library for disabling body scroll when modals, drawers, and overlays are displayed in Vue.js applications. Provides simultaneous management of multiple elements, support for nested elements, and countermeasures for special behavior in iOS Safari.
 
 ## Features
 
-- **bodyスクロール無効化**: モーダルやドロワー表示時のbodyスクロール防止
-- **v-body-scroll-lockディレクティブ**: 簡単なディレクティブによるスクロール制御
-- **スタック管理**: 複数のオーバーレイ要素の同時管理
-- **ネスト対応**: モーダル内モーダルなどの複雑な構造に対応
-- **iOS Safari対応**: iOSの特殊なスクロール動作への対策
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **Vue 3 Composition API**: リアクティブシステムとの完全統合
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **軽量実装**: 最小限の依存関係と効率的なメモリ使用
+- **Body Scroll Disable**: Prevent body scroll when modals or drawers are displayed
+- **v-body-scroll-lock Directive**: Simple directive-based scroll control
+- **Stack Management**: Simultaneous management of multiple overlay elements
+- **Nested Support**: Support for complex structures like modals within modals
+- **iOS Safari Support**: Countermeasures for iOS special scroll behavior
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Vue 3 Composition API**: Complete integration with reactive system
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Lightweight Implementation**: Minimal dependencies and efficient memory usage
 
 ## Installation
 
@@ -25,17 +25,17 @@ npm install @fastkit/vue-body-scroll-lock
 
 ## Basic Usage
 
-### モーダルダイアログでの使用
+### Using with Modal Dialogs
 
 ```vue
 <template>
   <div>
     <button @click="showModal = true" class="open-button">
-      モーダルを開く
+      Open Modal
     </button>
-    
-    <!-- モーダルオーバーレイ -->
-    <div 
+
+    <!-- Modal overlay -->
+    <div
       v-if="showModal"
       v-body-scroll-lock="showModal"
       class="modal-overlay"
@@ -43,27 +43,27 @@ npm install @fastkit/vue-body-scroll-lock
     >
       <div class="modal-content" @click.stop>
         <header class="modal-header">
-          <h2>モーダルダイアログ</h2>
+          <h2>Modal Dialog</h2>
           <button @click="closeModal" class="close-button">×</button>
         </header>
-        
+
         <div class="modal-body">
-          <p>このモーダルが表示されている間、背景のスクロールは無効化されます。</p>
-          
-          <!-- モーダル内でスクロール可能なコンテンツ -->
+          <p>While this modal is displayed, background scrolling is disabled.</p>
+
+          <!-- Scrollable content within the modal -->
           <div class="scrollable-content" data-scroll-lock-scroller>
             <p v-for="i in 20" :key="i">
-              スクロール可能なコンテンツ {{ i }}
+              Scrollable content {{ i }}
             </p>
           </div>
         </div>
-        
+
         <footer class="modal-footer">
           <button @click="closeModal" class="cancel-button">
-            キャンセル
+            Cancel
           </button>
           <button @click="confirmAction" class="confirm-button">
-            確認
+            Confirm
           </button>
         </footer>
       </div>
@@ -81,7 +81,7 @@ const closeModal = () => {
 }
 
 const confirmAction = () => {
-  alert('確認されました')
+  alert('Confirmed')
   closeModal()
 }
 </script>
@@ -217,20 +217,20 @@ const confirmAction = () => {
 </style>
 ```
 
-### サイドドロワーでの使用
+### Using with Side Drawer
 
 ```vue
 <template>
   <div>
     <header class="header">
       <button @click="showDrawer = true" class="menu-button">
-        ≡ メニュー
+        ≡ Menu
       </button>
-      <h1>アプリケーション</h1>
+      <h1>Application</h1>
     </header>
-    
-    <!-- サイドドロワー -->
-    <div 
+
+    <!-- Side drawer -->
+    <div
       v-if="showDrawer"
       v-body-scroll-lock="showDrawer"
       class="drawer-overlay"
@@ -238,44 +238,44 @@ const confirmAction = () => {
     >
       <nav class="drawer" @click.stop>
         <header class="drawer-header">
-          <h2>ナビゲーション</h2>
+          <h2>Navigation</h2>
           <button @click="closeDrawer" class="close-button">×</button>
         </header>
-        
+
         <ul class="nav-list">
-          <li><a href="#" @click="navigateTo('home')">ホーム</a></li>
-          <li><a href="#" @click="navigateTo('products')">商品一覧</a></li>
-          <li><a href="#" @click="navigateTo('about')">会社について</a></li>
-          <li><a href="#" @click="navigateTo('contact')">お問い合わせ</a></li>
+          <li><a href="#" @click="navigateTo('home')">Home</a></li>
+          <li><a href="#" @click="navigateTo('products')">Products</a></li>
+          <li><a href="#" @click="navigateTo('about')">About Us</a></li>
+          <li><a href="#" @click="navigateTo('contact')">Contact</a></li>
         </ul>
-        
+
         <div class="drawer-footer">
           <button @click="showSettings = true" class="settings-button">
-            設定
+            Settings
           </button>
         </div>
       </nav>
     </div>
-    
-    <!-- メインコンテンツ -->
+
+    <!-- Main content -->
     <main class="main-content">
-      <h2>メインコンテンツ</h2>
+      <h2>Main Content</h2>
       <p v-for="i in 50" :key="i">
-        ページコンテンツ {{ i }} - ドロワーが開いている間はスクロールできません。
+        Page content {{ i }} - Cannot scroll while drawer is open.
       </p>
     </main>
-    
-    <!-- 設定モーダル（ネストした例） -->
-    <div 
+
+    <!-- Settings modal (nested example) -->
+    <div
       v-if="showSettings"
       v-body-scroll-lock="showSettings"
       class="settings-overlay"
       @click="closeSettings"
     >
       <div class="settings-modal" @click.stop>
-        <h3>設定</h3>
-        <p>ネストしたモーダルの例です。</p>
-        <button @click="closeSettings">閉じる</button>
+        <h3>Settings</h3>
+        <p>This is an example of a nested modal.</p>
+        <button @click="closeSettings">Close</button>
       </div>
     </div>
   </div>
@@ -499,16 +499,16 @@ const navigateTo = (page: string) => {
 </style>
 ```
 
-### フルスクリーンオーバーレイでの使用
+### Using with Fullscreen Overlay
 
 ```vue
 <template>
   <div>
     <div class="page-content">
-      <h1>画像ギャラリー</h1>
-      
+      <h1>Image Gallery</h1>
+
       <div class="image-grid">
-        <div 
+        <div
           v-for="(image, index) in images"
           :key="index"
           class="image-item"
@@ -521,9 +521,9 @@ const navigateTo = (page: string) => {
         </div>
       </div>
     </div>
-    
-    <!-- ライトボックス -->
-    <div 
+
+    <!-- Lightbox -->
+    <div
       v-if="lightboxOpen"
       v-body-scroll-lock="lightboxOpen"
       class="lightbox-overlay"
@@ -531,17 +531,17 @@ const navigateTo = (page: string) => {
     >
       <div class="lightbox-content">
         <button @click="closeLightbox" class="lightbox-close">×</button>
-        
-        <button 
+
+        <button
           v-if="currentImageIndex > 0"
           @click="previousImage"
           class="lightbox-nav lightbox-prev"
         >
           ‹
         </button>
-        
+
         <div class="lightbox-image-container">
-          <img 
+          <img
             :src="currentImage.full"
             :alt="currentImage.title"
             class="lightbox-image"
@@ -554,8 +554,8 @@ const navigateTo = (page: string) => {
             </span>
           </div>
         </div>
-        
-        <button 
+
+        <button
           v-if="currentImageIndex < images.length - 1"
           @click="nextImage"
           class="lightbox-nav lightbox-next"
@@ -582,26 +582,26 @@ const currentImageIndex = ref(0)
 
 const images: ImageData[] = [
   {
-    title: '美しい風景 1',
-    description: '山々に囲まれた湖の風景です。',
+    title: 'Beautiful Landscape 1',
+    description: 'A lake surrounded by mountains.',
     thumbnail: 'https://picsum.photos/300/200?random=1',
     full: 'https://picsum.photos/800/600?random=1'
   },
   {
-    title: '美しい風景 2',
-    description: '夕日に染まる海岸線の風景です。',
+    title: 'Beautiful Landscape 2',
+    description: 'A coastline colored by the sunset.',
     thumbnail: 'https://picsum.photos/300/200?random=2',
     full: 'https://picsum.photos/800/600?random=2'
   },
   {
-    title: '美しい風景 3',
-    description: '森の中の小さな川の風景です。',
+    title: 'Beautiful Landscape 3',
+    description: 'A small stream in the forest.',
     thumbnail: 'https://picsum.photos/300/200?random=3',
     full: 'https://picsum.photos/800/600?random=3'
   },
   {
-    title: '美しい風景 4',
-    description: '雪山の頂上から見る絶景です。',
+    title: 'Beautiful Landscape 4',
+    description: 'A magnificent view from the mountaintop.'
     thumbnail: 'https://picsum.photos/300/200?random=4',
     full: 'https://picsum.photos/800/600?random=4'
   }
@@ -633,7 +633,7 @@ const nextImage = () => {
 // キーボードナビゲーション
 const handleKeydown = (event: KeyboardEvent) => {
   if (!lightboxOpen.value) return
-  
+
   switch (event.key) {
     case 'Escape':
       closeLightbox()
@@ -826,15 +826,15 @@ if (typeof window !== 'undefined') {
     height: 50px;
     font-size: 30px;
   }
-  
+
   .lightbox-prev {
     left: -60px;
   }
-  
+
   .lightbox-next {
     right: -60px;
   }
-  
+
   .lightbox-close {
     top: -40px;
     font-size: 25px;
@@ -851,8 +851,8 @@ if (typeof window !== 'undefined') {
 <template>
   <div>
     <button @click="showModal = true">カスタムスクロールモーダル</button>
-    
-    <div 
+
+    <div
       v-if="showModal"
       v-body-scroll-lock="showModal"
       class="modal-overlay"
@@ -863,7 +863,7 @@ if (typeof window !== 'undefined') {
           <h2>カスタムスクロール領域</h2>
           <button @click="closeModal">×</button>
         </header>
-        
+
         <!-- data-scroll-lock-scroller属性でスクロール可能領域を指定 -->
         <div class="modal-body" data-scroll-lock-scroller>
           <div class="content-section">
@@ -872,14 +872,14 @@ if (typeof window !== 'undefined') {
               セクション1のコンテンツ {{ i }}
             </p>
           </div>
-          
+
           <div class="content-section">
             <h3>セクション 2</h3>
             <p v-for="i in 10" :key="`section2-${i}`">
               セクション2のコンテンツ {{ i }}
             </p>
           </div>
-          
+
           <div class="content-section">
             <h3>セクション 3</h3>
             <p v-for="i in 10" :key="`section3-${i}`">
@@ -949,7 +949,7 @@ const closeModal = () => {
 </style>
 ```
 
-### プログラムによるインストール
+### Programmatic Installation
 
 ```typescript
 // main.ts
@@ -973,13 +973,13 @@ app.mount('#app')
     <div class="controls">
       <label>
         <input v-model="enableScrollLock" type="checkbox">
-        スクロールロックを有効にする
+        Enable scroll lock
       </label>
     </div>
-    
+
     <button @click="showModal = true">モーダルを開く</button>
-    
-    <div 
+
+    <div
       v-if="showModal"
       v-body-scroll-lock="enableScrollLock && showModal"
       class="modal-overlay"
@@ -988,19 +988,19 @@ app.mount('#app')
       <div class="modal" @click.stop>
         <h2>条件付きスクロールロック</h2>
         <p>
-          スクロールロックが{{ enableScrollLock ? '有効' : '無効' }}です。
+          Scroll lock is {{ enableScrollLock ? 'enabled' : 'disabled' }}.
         </p>
         <p>
-          背景をスクロールして動作を確認してください。
+          Please scroll the background to verify the functionality.
         </p>
-        <button @click="closeModal">閉じる</button>
+        <button @click="closeModal">Close</button>
       </div>
     </div>
-    
+
     <!-- 背景コンテンツ -->
     <div class="background-content">
       <p v-for="i in 50" :key="i">
-        背景コンテンツ {{ i }} - スクロールロックの状態に応じてスクロール可能/不可能が切り替わります。
+        Background content {{ i }} - Scrolling becomes enabled/disabled based on scroll lock state.
       </p>
     </div>
   </div>
@@ -1100,7 +1100,7 @@ interface BodyScrollLockDirectiveAttrs {
 <!-- カスタムスクロール領域の指定 -->
 <div v-body-scroll-lock="true">
   <div data-scroll-lock-scroller>
-    <!-- この領域はスクロール可能 -->
+    <!-- This area is scrollable -->
   </div>
 </div>
 ```
@@ -1111,7 +1111,7 @@ interface BodyScrollLockDirectiveAttrs {
 function installBodyScrollLockDirective(app: App): App
 ```
 
-Vueアプリケーションにv-body-scroll-lockディレクティブをグローバルにインストールします。
+Globally installs the v-body-scroll-lock directive in a Vue application.
 
 ### ディレクティブヘルパー
 
@@ -1121,26 +1121,26 @@ function bodyScrollLockDirectiveArgument(
 ): [BodyScrollLockDirective, BodyScrollLockDirectiveBindingValue]
 ```
 
-プログラムでディレクティブを使用する際のヘルパー関数です。
+A helper function for using the directive programmatically.
 
 ### 特別な属性
 
 #### data-scroll-lock-scroller
 
-スクロールロック対象要素内で、スクロール可能な領域を指定するために使用します。
+Used to specify scrollable areas within scroll lock target elements.
 
 ```html
 <div v-body-scroll-lock="true">
   <!-- bodyスクロールは無効 -->
   <div data-scroll-lock-scroller>
-    <!-- この領域内はスクロール可能 -->
+    <!-- This area is scrollable -->
   </div>
 </div>
 ```
 
 #### data-body-scroll-lock
 
-スクロールロックが有効な場合に、`document.documentElement`に自動的に設定される属性です。CSSでの制御に使用できます。
+An attribute automatically set on `document.documentElement` when scroll lock is enabled. Can be used for CSS control.
 
 ```css
 [data-body-scroll-lock] {
@@ -1152,7 +1152,7 @@ function bodyScrollLockDirectiveArgument(
 
 ### スタック管理
 
-複数のオーバーレイ要素が同時に存在する場合、内部的にスタックで管理されます。最後にアクティブになった要素が削除されるまで、bodyスクロールは無効のままです。
+When multiple overlay elements exist simultaneously, they are managed internally with a stack. Body scroll remains disabled until the last active element is removed.
 
 ```vue
 <template>
@@ -1160,7 +1160,7 @@ function bodyScrollLockDirectiveArgument(
   <div v-if="modal1" v-body-scroll-lock="modal1">
     <!-- モーダル2（ネスト） -->
     <div v-if="modal2" v-body-scroll-lock="modal2">
-      <!-- 両方が閉じられるまでbodyスクロールは無効 -->
+      <!-- Body scroll is disabled until both are closed -->
     </div>
   </div>
 </template>
@@ -1168,11 +1168,11 @@ function bodyScrollLockDirectiveArgument(
 
 ### iOS Safari対応
 
-iOS Safariの特殊なスクロール動作に対応しており、適切にbodyスクロールが無効化されます。
+Handles iOS Safari's special scroll behavior appropriately, properly disabling body scroll.
 
 ### メモリ管理
 
-コンポーネントがアンマウントされる際に、自動的にスクロールロックが解除されます。手動でのクリーンアップは不要です。
+Scroll lock is automatically released when a component is unmounted. Manual cleanup is not required.
 
 ## Related Packages
 

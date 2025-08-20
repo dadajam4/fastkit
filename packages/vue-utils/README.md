@@ -1,20 +1,20 @@
 
 # @fastkit/vue-utils
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-utils/README-ja.md)
 
-Vueアプリケーションを効率的に開発するための包括的なユーティリティライブラリ。コンポーネント開発、ルーティング、プロパティ管理、スロット処理、ディレクティブなどの開発効率化ツールを提供します。
+A comprehensive utility library for efficient Vue application development. Provides development efficiency tools including component development, routing, property management, slot processing, and directives.
 
 ## Features
 
-- **コンポーネントユーティリティ**: コンポーネント開発を効率化するヘルパー関数
-- **プロパティ管理**: 型安全なプロパティ定義とバリデーション
-- **スロットユーティリティ**: スロット定義とTSX対応のヘルパー
-- **ルーターユーティリティ**: Vue Routerとの統合ヘルパー
-- **カスタムディレクティブ**: 便利なディレクティブ集
-- **VNode操作**: 仮想ノードの操作とレンダリング支援
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **ClientOnlyコンポーネント**: SSR対応のクライアント専用レンダリング
+- **Component Utilities**: Helper functions to streamline component development
+- **Property Management**: Type-safe property definitions and validation
+- **Slot Utilities**: Slot definition and TSX-compatible helpers
+- **Router Utilities**: Integration helpers with Vue Router
+- **Custom Directives**: Collection of useful directives
+- **VNode Operations**: Virtual node manipulation and rendering support
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **ClientOnly Component**: SSR-compatible client-only rendering
 
 ## Installation
 
@@ -47,7 +47,7 @@ export const MyComponent = defineComponent({
       <div class="my-component">
         {slots.header?.({ title: 'Header Title' })}
         <main>
-          {items.map((item, index) => 
+          {items.map((item, index) =>
             slots.default?.({ item, index })
           )}
         </main>
@@ -66,7 +66,7 @@ import { withCtx } from '@fastkit/vue-utils'
 export const DataTable = defineComponent({
   setup() {
     const data = ref([])
-    
+
     return () => (
       <table>
         {data.value.map((row, index) => (
@@ -110,7 +110,7 @@ export const createColorProps = () => createPropsOptions({
   }
 })
 
-// コンポーネントでの使用
+// Usage in components
 export const Button = defineComponent({
   name: 'Button',
   props: {
@@ -130,30 +130,30 @@ export const Button = defineComponent({
         'button--loading': props.loading
       }
     ])
-    
+
     return { classes }
   }
 })
 ```
 
-### extractRouteMatchedItems - ルート解析
+### extractRouteMatchedItems - Route Analysis
 
 ```typescript
 import { extractRouteMatchedItems } from '@fastkit/vue-utils'
 
 export const useBreadcrumb = () => {
   const route = useRoute()
-  
+
   const breadcrumbItems = computed(() => {
     const matchedItems = extractRouteMatchedItems(route)
-    
+
     return matchedItems.map(item => ({
       name: item.meta?.title || item.name,
       path: item.path,
       component: item.component
     }))
   })
-  
+
   return { breadcrumbItems }
 }
 ```
@@ -168,12 +168,12 @@ import { getRouteQuery, RouteQueryType } from '@fastkit/vue-utils'
 export const useSearchParams = () => {
   const route = useRoute()
   const router = useRouter()
-  
+
   // 型安全なクエリパラメータ取得
   const search = computed(() => getRouteQuery(route, 'search', RouteQueryType.String))
   const page = computed(() => getRouteQuery(route, 'page', RouteQueryType.Number) || 1)
   const filters = computed(() => getRouteQuery(route, 'filters', RouteQueryType.Array))
-  
+
   const updateQuery = (params: Record<string, any>) => {
     router.push({
       query: {
@@ -182,7 +182,7 @@ export const useSearchParams = () => {
       }
     })
   }
-  
+
   return {
     search,
     page,
@@ -200,20 +200,20 @@ import { RouteLocationNormalized } from 'vue-router'
 export const createAuthGuard = (requiredRole?: string) => {
   return (to: RouteLocationNormalized) => {
     const user = getCurrentUser()
-    
+
     if (!user) {
       return { name: 'Login', query: { redirect: to.fullPath } }
     }
-    
+
     if (requiredRole && !user.roles.includes(requiredRole)) {
       throw new Error('Access denied')
     }
-    
+
     return true
   }
 }
 
-// ルート定義での使用
+// Usage in route definitions
 const routes = [
   {
     path: '/admin',
@@ -223,9 +223,9 @@ const routes = [
 ]
 ```
 
-## VNodeユーティリティ
+## VNode Utilities
 
-### 動的コンポーネントレンダリング
+### Dynamic Component Rendering
 
 ```typescript
 import { renderVNodeChild } from '@fastkit/vue-utils'
@@ -243,18 +243,18 @@ export const DynamicRenderer = defineComponent({
   }
 })
 
-// 使用例
-<DynamicRenderer 
-  :content="MyComponent" 
-  :props="{ title: 'Dynamic Title' }" 
+// Usage examples
+<DynamicRenderer
+  :content="MyComponent"
+  :props="{ title: 'Dynamic Title' }"
 />
 
-<DynamicRenderer 
-  :content="() => h('div', 'Dynamic content')" 
+<DynamicRenderer
+  :content="() => h('div', 'Dynamic content')"
 />
 
-<DynamicRenderer 
-  content="Simple text content" 
+<DynamicRenderer
+  content="Simple text content"
 />
 ```
 
@@ -278,24 +278,24 @@ export const ConditionalComponent = defineComponent({
 })
 ```
 
-## ClientOnlyコンポーネント
+## ClientOnly Component
 
-### SSR対応のクライアント専用レンダリング
+### SSR-compatible Client-only Rendering
 
 ```vue
 <template>
   <div>
-    <h1>サーバーでもレンダリングされるコンテンツ</h1>
-    
-    <!-- クライアントでのみレンダリング -->
+    <h1>Content rendered on server too</h1>
+
+    <!-- Client-only rendering -->
     <ClientOnly>
       <template #default>
         <InteractiveChart :data="chartData" />
       </template>
-      
+
       <template #fallback>
         <div class="chart-placeholder">
-          チャートを読み込み中...
+          Loading chart...
         </div>
       </template>
     </ClientOnly>
@@ -310,7 +310,7 @@ const chartData = ref([])
 </script>
 ```
 
-### 遅延ローディング
+### Lazy Loading
 
 ```vue
 <template>
@@ -325,7 +325,7 @@ const chartData = ref([])
         </template>
       </Suspense>
     </template>
-    
+
     <template #fallback>
       <div>クライアント側で読み込み中...</div>
     </template>
@@ -336,7 +336,7 @@ const chartData = ref([])
 import { defineAsyncComponent } from 'vue'
 import { ClientOnly } from '@fastkit/vue-utils'
 
-const AsyncHeavyComponent = defineAsyncComponent(() => 
+const AsyncHeavyComponent = defineAsyncComponent(() =>
   import('./HeavyComponent.vue')
 )
 </script>
@@ -350,15 +350,15 @@ const AsyncHeavyComponent = defineAsyncComponent(() =>
 <template>
   <div>
     <!-- 要素の可視性監視 -->
-    <div 
+    <div
       v-visibility="onVisibilityChange"
       class="observed-element"
     >
       観視されている要素
     </div>
-    
-    <!-- オプション付き -->
-    <div 
+
+    <!-- With options -->
+    <div
       v-visibility="{
         handler: onIntersect,
         options: {
@@ -367,7 +367,7 @@ const AsyncHeavyComponent = defineAsyncComponent(() =>
         }
       }"
     >
-      50%以上表示されたときに発火
+      Triggers when 50% or more is visible
     </div>
   </div>
 </template>
@@ -376,18 +376,18 @@ const AsyncHeavyComponent = defineAsyncComponent(() =>
 import { vVisibility } from '@fastkit/vue-utils'
 
 const onVisibilityChange = (isVisible: boolean, entry: IntersectionObserverEntry) => {
-  console.log('要素の可視性:', isVisible)
-  
+  console.log('Element visibility:', isVisible)
+
   if (isVisible) {
-    // 要素が表示された時の処理
-    console.log('要素が表示されました')
+    // Process when element becomes visible
+    console.log('Element became visible')
   }
 }
 
 const onIntersect = (isVisible: boolean) => {
   if (isVisible) {
-    // 遅延ローディングやアニメーション開始
-    console.log('50%以上表示されました')
+    // Start lazy loading or animation
+    console.log('50% or more visible')
   }
 }
 </script>
@@ -395,13 +395,13 @@ const onIntersect = (isVisible: boolean) => {
 
 ## Advanced Usage Examples
 
-### コンポーネントファクトリ
+### Component Factory
 
 ```typescript
 import { defineComponent, PropType } from 'vue'
 import { createPropsOptions } from '@fastkit/vue-utils'
 
-// 基本プロパティの定義
+// Define base properties
 const createBaseProps = () => createPropsOptions({
   id: String,
   class: [String, Array, Object] as PropType<any>,
@@ -478,19 +478,19 @@ import { getRouteQuery, RouteQueryType } from '@fastkit/vue-utils'
 export function useAdvancedRouter() {
   const route = useRoute()
   const router = useRouter()
-  
-  // 履歴管理
+
+  // History management
   const history = ref<string[]>([])
-  
+
   watch(() => route.path, (newPath) => {
     history.value.push(newPath)
-    // 履歴は最大50件まで
+    // History up to 50 entries maximum
     if (history.value.length > 50) {
       history.value = history.value.slice(-50)
     }
   }, { immediate: true })
-  
-  // クエリパラメータの型安全な管理
+
+  // Type-safe query parameter management
   const createQueryManager = <T extends Record<string, RouteQueryType>>(
     schema: T
   ) => {
@@ -501,10 +501,10 @@ export function useAdvancedRouter() {
       }
       return result
     })
-    
+
     const updateQuery = (updates: Partial<Record<keyof T, any>>) => {
       const newQuery = { ...route.query }
-      
+
       for (const [key, value] of Object.entries(updates)) {
         if (value === null || value === undefined) {
           delete newQuery[key]
@@ -512,14 +512,14 @@ export function useAdvancedRouter() {
           newQuery[key] = String(value)
         }
       }
-      
+
       router.replace({ query: newQuery })
     }
-    
+
     return { queryValues, updateQuery }
   }
-  
-  // ナビゲーションヘルパー
+
+  // Navigation helper
   const goBack = () => {
     if (history.value.length > 1) {
       router.back()
@@ -527,9 +527,9 @@ export function useAdvancedRouter() {
       router.push('/')
     }
   }
-  
+
   const canGoBack = computed(() => history.value.length > 1)
-  
+
   return {
     history: readonly(history),
     canGoBack,
@@ -541,7 +541,7 @@ export function useAdvancedRouter() {
 // 使用例
 export function useProductFilters() {
   const { createQueryManager } = useAdvancedRouter()
-  
+
   const { queryValues, updateQuery } = createQueryManager({
     search: RouteQueryType.String,
     category: RouteQueryType.String,
@@ -550,11 +550,11 @@ export function useProductFilters() {
     tags: RouteQueryType.Array,
     page: RouteQueryType.Number
   })
-  
+
   const applyFilters = (filters: Partial<typeof queryValues.value>) => {
     updateQuery({ ...filters, page: 1 }) // フィルタ変更時はページをリセット
   }
-  
+
   return {
     filters: queryValues,
     applyFilters,
@@ -571,12 +571,12 @@ import { renderVNodeChild } from '@fastkit/vue-utils'
 
 export function useDynamicComponents() {
   const componentCache = new Map()
-  
+
   const loadComponent = async (componentPath: string) => {
     if (componentCache.has(componentPath)) {
       return componentCache.get(componentPath)
     }
-    
+
     try {
       const module = await import(/* @vite-ignore */ componentPath)
       const component = module.default || module
@@ -587,7 +587,7 @@ export function useDynamicComponents() {
       return null
     }
   }
-  
+
   const createDynamicComponent = (componentPath: string) => {
     return defineAsyncComponent({
       loader: () => loadComponent(componentPath),
@@ -597,7 +597,7 @@ export function useDynamicComponents() {
       timeout: 3000
     })
   }
-  
+
   return {
     loadComponent,
     createDynamicComponent,
@@ -618,22 +618,22 @@ export function useOptimizedList<T>(
   keyFn: (item: T) => string | number = (item, index) => index
 ) {
   const itemCache = new Map()
-  
+
   const optimizedItems = computed(() => {
     const result = []
     const newCache = new Map()
-    
+
     for (let i = 0; i < items.value.length; i++) {
       const item = items.value[i]
       const key = keyFn(item, i)
-      
+
       if (itemCache.has(key)) {
-        // キャッシュされたアイテムを再利用
+        // Reuse cached item
         const cached = itemCache.get(key)
         newCache.set(key, cached)
         result.push(cached)
       } else {
-        // 新しいアイテムを作成
+        // Create new item
         const processedItem = {
           key,
           data: item,
@@ -643,16 +643,16 @@ export function useOptimizedList<T>(
         result.push(processedItem)
       }
     }
-    
-    // キャッシュを更新
+
+    // Update cache
     itemCache.clear()
     newCache.forEach((value, key) => {
       itemCache.set(key, value)
     })
-    
+
     return result
   })
-  
+
   return {
     optimizedItems,
     clearCache: () => itemCache.clear()

@@ -1,20 +1,20 @@
 
 # @fastkit/vue-media-match
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-media-match/README-ja.md)
 
-VueアプリケーションでTypeセーフなメディアクエリブレイクポイントスキーマを扱うためのライブラリ。リアクティブなメディアクエリ状態管理により、レスポンシブデザインを効率的に実装できます。
+A library for handling type-safe media query breakpoint schemas in Vue applications. Efficiently implement responsive design through reactive media query state management.
 
 ## Features
 
-- **TypeSafeなメディアクエリ**: 型安全なブレイクポイント管理
-- **リアクティブな状態管理**: Vueのリアクティブシステムとの完全統合
-- **高いパフォーマンス**: 効率的なMediaQueryListイベント処理
-- **柔軟なブレイクポイント設定**: カスタムメディアクエリ条件の登録
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **自動セットアップ**: onMountedでの自動初期化
-- **メモリ効率**: 適切なリスナーの管理とクリーンアップ
-- **デバッグサポート**: 開発時の状態確認機能
+- **Type-safe Media Queries**: Type-safe breakpoint management
+- **Reactive State Management**: Complete integration with Vue's reactive system
+- **High Performance**: Efficient MediaQueryList event processing
+- **Flexible Breakpoint Settings**: Registration of custom media query conditions
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Automatic Setup**: Automatic initialization with onMounted
+- **Memory Efficiency**: Proper listener management and cleanup
+- **Debug Support**: State verification features during development
 
 ## Installation
 
@@ -24,13 +24,13 @@ npm install @fastkit/vue-media-match
 
 ## Basic Usage
 
-### ブレイクポイントの定義
+### Defining Breakpoints
 
 ```typescript
 // breakpoints.ts
 import { registerMediaMatchConditions } from '@fastkit/vue-media-match'
 
-// カスタムブレイクポイントを定義
+// Define custom breakpoints
 declare module '@fastkit/media-match' {
   interface MediaMatchKeyMap {
     xs: true
@@ -47,7 +47,7 @@ declare module '@fastkit/media-match' {
   }
 }
 
-// メディアクエリ条件を登録
+// Register media query conditions
 registerMediaMatchConditions([
   {
     key: 'xs',
@@ -107,29 +107,29 @@ registerMediaMatchConditions([
 ])
 ```
 
-### 基本的なレスポンシブコンポーネント
+### Basic Responsive Component
 
 ```vue
 <template>
   <div class="responsive-layout">
-    <h2>レスポンシブレイアウト</h2>
-    
-    <!-- デバイスタイプ表示 -->>
+    <h2>Responsive Layout</h2>
+
+    <!-- Device type display -->
     <div class="device-info">
-      <h3>現在のデバイス</h3>
+      <h3>Current Device</h3>
       <div class="device-badges">
-        <span v-if="mediaMatch('mobile')" class="badge mobile">📱 モバイル</span>
-        <span v-if="mediaMatch('tablet')" class="badge tablet">📊 タブレット</span>
-        <span v-if="mediaMatch('desktop')" class="badge desktop">🖥️ デスクトップ</span>
+        <span v-if="mediaMatch('mobile')" class="badge mobile">📱 Mobile</span>
+        <span v-if="mediaMatch('tablet')" class="badge tablet">📊 Tablet</span>
+        <span v-if="mediaMatch('desktop')" class="badge desktop">🖥️ Desktop</span>
       </div>
     </div>
-    
-    <!-- ブレイクポイント表示 -->
+
+    <!-- Breakpoint display -->
     <div class="breakpoint-info">
-      <h3>ブレイクポイント状態</h3>
+      <h3>Breakpoint Status</h3>
       <div class="breakpoint-grid">
-        <div 
-          v-for="(active, breakpoint) in breakpoints" 
+        <div
+          v-for="(active, breakpoint) in breakpoints"
           :key="breakpoint"
           class="breakpoint-item"
           :class="{ active }"
@@ -139,86 +139,86 @@ registerMediaMatchConditions([
         </div>
       </div>
     </div>
-    
-    <!-- アクセシビリティ設定 -->
+
+    <!-- Accessibility settings -->
     <div class="accessibility-info">
-      <h3>アクセシビリティ設定</h3>
+      <h3>Accessibility Settings</h3>
       <div class="accessibility-list">
         <div class="accessibility-item" :class="{ active: mediaMatch('dark-mode') }">
-          🌙 ダークモード: {{ mediaMatch('dark-mode') ? 'ON' : 'OFF' }}
+          🌙 Dark Mode: {{ mediaMatch('dark-mode') ? 'ON' : 'OFF' }}
         </div>
         <div class="accessibility-item" :class="{ active: mediaMatch('high-contrast') }">
-          🔆 ハイコントラスト: {{ mediaMatch('high-contrast') ? 'ON' : 'OFF' }}
+          🔆 High Contrast: {{ mediaMatch('high-contrast') ? 'ON' : 'OFF' }}
         </div>
         <div class="accessibility-item" :class="{ active: mediaMatch('reduced-motion') }">
-          🏃 モーション軽減: {{ mediaMatch('reduced-motion') ? 'ON' : 'OFF' }}
+          🏃 Reduced Motion: {{ mediaMatch('reduced-motion') ? 'ON' : 'OFF' }}
         </div>
       </div>
     </div>
-    
-    <!-- レスポンシブコンテンツ -->
+
+    <!-- Responsive content -->
     <div class="content-area">
       <div v-if="mediaMatch('mobile')" class="mobile-content">
-        <h3>モバイル向けコンテンツ</h3>
+        <h3>Mobile Content</h3>
         <div class="mobile-nav">
-          <button class="nav-button">☰ メニュー</button>
-          <button class="nav-button">🔍 検索</button>
+          <button class="nav-button">☰ Menu</button>
+          <button class="nav-button">🔍 Search</button>
         </div>
         <div class="mobile-cards">
-          <div class="card">カード 1</div>
-          <div class="card">カード 2</div>
+          <div class="card">Card 1</div>
+          <div class="card">Card 2</div>
         </div>
       </div>
-      
+
       <div v-else-if="mediaMatch('tablet')" class="tablet-content">
-        <h3>タブレット向けコンテンツ</h3>
+        <h3>Tablet Content</h3>
         <div class="tablet-layout">
           <aside class="sidebar">
             <nav>
               <ul>
-                <li>ホーム</li>
-                <li>カテゴリ</li>
-                <li>検索</li>
+                <li>Home</li>
+                <li>Category</li>
+                <li>Search</li>
               </ul>
             </nav>
           </aside>
           <main class="main-content">
             <div class="card-grid">
-              <div class="card">カード 1</div>
-              <div class="card">カード 2</div>
-              <div class="card">カード 3</div>
-              <div class="card">カード 4</div>
+              <div class="card">Card 1</div>
+              <div class="card">Card 2</div>
+              <div class="card">Card 3</div>
+              <div class="card">Card 4</div>
             </div>
           </main>
         </div>
       </div>
-      
+
       <div v-else class="desktop-content">
-        <h3>デスクトップ向けコンテンツ</h3>
+        <h3>Desktop Content</h3>
         <div class="desktop-layout">
           <aside class="sidebar">
             <nav>
               <ul>
-                <li>ダッシュボード</li>
-                <li>プロジェクト</li>
-                <li>チーム</li>
-                <li>設定</li>
+                <li>Dashboard</li>
+                <li>Projects</li>
+                <li>Team</li>
+                <li>Settings</li>
               </ul>
             </nav>
           </aside>
           <main class="main-content">
             <div class="desktop-grid">
-              <div class="card large">大きなカード</div>
-              <div class="card">カード 1</div>
-              <div class="card">カード 2</div>
-              <div class="card">カード 3</div>
-              <div class="card">カード 4</div>
-              <div class="card">カード 5</div>
+              <div class="card large">Large Card</div>
+              <div class="card">Card 1</div>
+              <div class="card">Card 2</div>
+              <div class="card">Card 3</div>
+              <div class="card">Card 4</div>
+              <div class="card">Card 5</div>
             </div>
           </main>
           <aside class="right-sidebar">
-            <div class="widget">ウィジェット 1</div>
-            <div class="widget">ウィジェット 2</div>
+            <div class="widget">Widget 1</div>
+            <div class="widget">Widget 2</div>
           </aside>
         </div>
       </div>
@@ -232,16 +232,16 @@ import { useMediaMatch } from '@fastkit/vue-media-match'
 
 const mediaMatch = useMediaMatch()
 
-// 全ブレイクポイントの状態を取得
+// Get all breakpoint states
 const breakpoints = computed(() => mediaMatch.state())
 
-// 便利なヘルパー
+// Convenient helpers
 const isMobile = computed(() => mediaMatch('mobile'))
 const isTablet = computed(() => mediaMatch('tablet'))
 const isDesktop = computed(() => mediaMatch('desktop'))
 const isDarkMode = computed(() => mediaMatch('dark-mode'))
 
-// デバイスタイプを判定
+// Determine device type
 const deviceType = computed(() => {
   if (isMobile.value) return 'mobile'
   if (isTablet.value) return 'tablet'
@@ -350,7 +350,7 @@ console.log('Current device type:', deviceType.value)
   border-radius: 8px;
 }
 
-/* モバイルレイアウト */
+/* Mobile layout */
 .mobile-content .mobile-nav {
   display: flex;
   gap: 10px;
@@ -373,7 +373,7 @@ console.log('Current device type:', deviceType.value)
   gap: 10px;
 }
 
-/* タブレットレイアウト */
+/* Tablet layout */
 .tablet-layout {
   display: flex;
   gap: 20px;
@@ -396,7 +396,7 @@ console.log('Current device type:', deviceType.value)
   gap: 15px;
 }
 
-/* デスクトップレイアウト */
+/* Desktop layout */
 .desktop-layout {
   display: grid;
   grid-template-columns: 200px 1fr 200px;
@@ -459,18 +459,18 @@ console.log('Current device type:', deviceType.value)
 </style>
 ```
 
-## 実用的な使用例
+## Practical Usage Examples
 
-### レスポンシブナビゲーション
+### Responsive Navigation
 
 ```vue
 <template>
   <nav class="responsive-nav" :class="navClasses">
-    <!-- モバイル用ハンバーガーメニュー -->
+    <!-- Mobile hamburger menu -->
     <div v-if="mediaMatch('mobile')" class="mobile-nav">
       <div class="nav-header">
         <h1 class="logo">MyApp</h1>
-        <button 
+        <button
           class="hamburger-btn"
           @click="toggleMobileMenu"
           :class="{ active: showMobileMenu }"
@@ -480,36 +480,36 @@ console.log('Current device type:', deviceType.value)
           <span></span>
         </button>
       </div>
-      
+
       <div class="mobile-menu" :class="{ open: showMobileMenu }">
         <ul class="nav-list">
-          <li><a href="#" @click="closeMobileMenu">ホーム</a></li>
-          <li><a href="#" @click="closeMobileMenu">サービス</a></li>
-          <li><a href="#" @click="closeMobileMenu">会社概要</a></li>
-          <li><a href="#" @click="closeMobileMenu">お問い合わせ</a></li>
+          <li><a href="#" @click="closeMobileMenu">Home</a></li>
+          <li><a href="#" @click="closeMobileMenu">Services</a></li>
+          <li><a href="#" @click="closeMobileMenu">About Us</a></li>
+          <li><a href="#" @click="closeMobileMenu">Contact</a></li>
         </ul>
-        
+
         <div class="mobile-actions">
-          <button class="btn-login">ログイン</button>
-          <button class="btn-signup">登録</button>
+          <button class="btn-login">Login</button>
+          <button class="btn-signup">Sign Up</button>
         </div>
       </div>
     </div>
-    
-    <!-- タブレット・デスクトップ用ナビゲーション -->
+
+    <!-- Tablet/Desktop navigation -->
     <div v-else class="desktop-nav">
       <h1 class="logo">MyApp</h1>
-      
+
       <ul class="nav-list">
-        <li><a href="#">ホーム</a></li>
-        <li><a href="#">サービス</a></li>
-        <li><a href="#">会社概要</a></li>
-        <li><a href="#">お問い合わせ</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact</a></li>
       </ul>
-      
+
       <div class="nav-actions">
-        <button class="btn-login">ログイン</button>
-        <button class="btn-signup">登録</button>
+        <button class="btn-login">Login</button>
+        <button class="btn-signup">Sign Up</button>
       </div>
     </div>
   </nav>
@@ -552,7 +552,7 @@ const closeMobileMenu = () => {
   color: white;
 }
 
-/* モバイルナビゲーション */
+/* Mobile navigation */
 .mobile-nav {
   padding: 0 16px;
 }
@@ -637,7 +637,7 @@ const closeMobileMenu = () => {
   gap: 10px;
 }
 
-/* デスクトップナビゲーション */
+/* Desktop navigation */
 .desktop-nav {
   display: flex;
   align-items: center;
@@ -670,7 +670,7 @@ const closeMobileMenu = () => {
   gap: 12px;
 }
 
-/* ボタンスタイル */
+/* Button styles */
 .btn-login, .btn-signup {
   padding: 8px 16px;
   border: 1px solid #007acc;
@@ -698,7 +698,7 @@ const closeMobileMenu = () => {
   background: #0056a3;
 }
 
-/* タブレット用調整 */
+/* Tablet adjustments */
 .responsive-nav.tablet-mode .desktop-nav {
   padding: 0 24px;
 }
@@ -709,33 +709,33 @@ const closeMobileMenu = () => {
 </style>
 ```
 
-### アダプティブコンポーネント
+### Adaptive Components
 
 ```vue
 <template>
   <div class="adaptive-dashboard">
-    <h2>アダプティブダッシュボード</h2>
-    
-    <!-- レイアウト切り替えコントロール -->
+    <h2>Adaptive Dashboard</h2>
+
+    <!-- Layout switch controls -->
     <div class="layout-controls">
       <div class="current-layout">
-        現在のレイアウト: {{ currentLayoutName }}
+        Current Layout: {{ currentLayoutName }}
       </div>
       <div class="breakpoint-debug" v-if="isDevelopment">
         <details>
-          <summary>ブレイクポイント詳細</summary>
+          <summary>Breakpoint Details</summary>
           <pre>{{ JSON.stringify(mediaMatch.state(), null, 2) }}</pre>
         </details>
       </div>
     </div>
-    
-    <!-- 動的レイアウト -->
+
+    <!-- Dynamic layout -->
     <div class="dashboard-content" :class="layoutClasses">
-      <!-- カードリスト -->
+      <!-- Card list -->
       <div class="cards-section">
-        <h3>統計カード</h3>
+        <h3>Statistics Cards</h3>
         <div class="cards-container">
-          <div 
+          <div
             v-for="card in visibleCards"
             :key="card.id"
             class="stat-card"
@@ -752,23 +752,23 @@ const closeMobileMenu = () => {
           </div>
         </div>
       </div>
-      
-      <!-- チャートセクション -->
+
+      <!-- Chart section -->
       <div class="chart-section" v-if="showCharts">
-        <h3>チャート</h3>
+        <h3>Charts</h3>
         <div class="chart-container" :style="chartContainerStyle">
           <div class="chart" v-for="chart in visibleCharts" :key="chart.id">
             <h4>{{ chart.title }}</h4>
             <div class="chart-placeholder">
-              📊 {{ chart.type }}チャート
+              📊 {{ chart.type }} Chart
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- データテーブル -->
+
+      <!-- Data table -->
       <div class="table-section" v-if="showTable">
-        <h3>データテーブル</h3>
+        <h3>Data Table</h3>
         <div class="table-wrapper">
           <table class="data-table">
             <thead>
@@ -799,7 +799,7 @@ import { useMediaMatch } from '@fastkit/vue-media-match'
 const mediaMatch = useMediaMatch()
 const isDevelopment = ref(process.env.NODE_ENV === 'development')
 
-// レイアウト設定
+// Layout settings
 const layoutClasses = computed(() => ({
   'layout-mobile': mediaMatch('mobile'),
   'layout-tablet': mediaMatch('tablet'),
@@ -809,25 +809,25 @@ const layoutClasses = computed(() => ({
 }))
 
 const currentLayoutName = computed(() => {
-  if (mediaMatch('mobile')) return 'モバイル'
-  if (mediaMatch('tablet')) return 'タブレット'
-  if (mediaMatch('desktop')) return 'デスクトップ'
-  if (mediaMatch('xl')) return '大画面'
-  return '不明'
+  if (mediaMatch('mobile')) return 'Mobile'
+  if (mediaMatch('tablet')) return 'Tablet'
+  if (mediaMatch('desktop')) return 'Desktop'
+  if (mediaMatch('xl')) return 'Large Screen'
+  return 'Unknown'
 })
 
-// 表示する要素の制御
+// Control element display
 const showCharts = computed(() => !mediaMatch('xs'))
 const showTable = computed(() => mediaMatch('desktop') || mediaMatch('xl'))
 
-// カードの表示数制御
+// Control card display count
 const allCards = ref([
-  { id: 1, title: '売上', value: '¥1,234,567', change: '+12%', trend: 'up', icon: '💰', type: 'revenue' },
-  { id: 2, title: 'ユーザー数', value: '12,345', change: '+5%', trend: 'up', icon: '👥', type: 'users' },
-  { id: 3, title: '注文数', value: '789', change: '-2%', trend: 'down', icon: '📦', type: 'orders' },
-  { id: 4, title: 'コンバージョン', value: '3.4%', change: '+0.2%', trend: 'up', icon: '📈', type: 'conversion' },
-  { id: 5, title: 'セッション', value: '45,678', change: '+8%', trend: 'up', icon: '🔍', type: 'sessions' },
-  { id: 6, title: '離脱率', value: '23%', change: '-1%', trend: 'up', icon: '🚪', type: 'bounce' }
+  { id: 1, title: 'Revenue', value: '$1,234,567', change: '+12%', trend: 'up', icon: '💰', type: 'revenue' },
+  { id: 2, title: 'Users', value: '12,345', change: '+5%', trend: 'up', icon: '👥', type: 'users' },
+  { id: 3, title: 'Orders', value: '789', change: '-2%', trend: 'down', icon: '📦', type: 'orders' },
+  { id: 4, title: 'Conversion', value: '3.4%', change: '+0.2%', trend: 'up', icon: '📈', type: 'conversion' },
+  { id: 5, title: 'Sessions', value: '45,678', change: '+8%', trend: 'up', icon: '🔍', type: 'sessions' },
+  { id: 6, title: 'Bounce Rate', value: '23%', change: '-1%', trend: 'up', icon: '🚪', type: 'bounce' }
 ])
 
 const visibleCards = computed(() => {
@@ -836,12 +836,12 @@ const visibleCards = computed(() => {
   return allCards.value
 })
 
-// チャートの設定
+// Chart settings
 const allCharts = ref([
-  { id: 1, title: '売上推移', type: 'ライン' },
-  { id: 2, title: 'ユーザー分析', type: 'バー' },
-  { id: 3, title: '地域別売上', type: 'パイ' },
-  { id: 4, title: 'トレンド分析', type: 'エリア' }
+  { id: 1, title: 'Revenue Trend', type: 'Line' },
+  { id: 2, title: 'User Analytics', type: 'Bar' },
+  { id: 3, title: 'Regional Sales', type: 'Pie' },
+  { id: 4, title: 'Trend Analysis', type: 'Area' }
 ])
 
 const visibleCharts = computed(() => {
@@ -860,8 +860,8 @@ const chartContainerStyle = computed(() => {
   return { gridTemplateColumns: 'repeat(2, 1fr)' }
 })
 
-// テーブルの設定
-const allColumns = ['名前', '売上', '注文数', '地域', 'ステータス', '更新日']
+// Table settings
+const allColumns = ['Name', 'Sales', 'Orders', 'Region', 'Status', 'Updated']
 
 const visibleColumns = computed(() => {
   if (mediaMatch('tablet')) return allColumns.slice(0, 4)
@@ -869,9 +869,9 @@ const visibleColumns = computed(() => {
 })
 
 const tableData = ref([
-  { id: 1, 名前: '田中太郎', 売上: '¥123,456', 注文数: '45', 地域: '東京', ステータス: 'アクティブ', 更新日: '2024-01-15' },
-  { id: 2, 名前: '佐藤花子', 売上: '¥234,567', 注文数: '67', 地域: '大阪', ステータス: 'アクティブ', 更新日: '2024-01-14' },
-  { id: 3, 名前: '鈴木一郎', 売上: '¥345,678', 注文数: '89', 地域: '名古屋', ステータス: '保留', 更新日: '2024-01-13' }
+  { id: 1, name: 'John Tanaka', sales: '$123,456', orders: '45', region: 'Tokyo', status: 'Active', updated: '2024-01-15' },
+  { id: 2, name: 'Hanako Sato', sales: '$234,567', orders: '67', region: 'Osaka', status: 'Active', updated: '2024-01-14' },
+  { id: 3, name: 'Ichiro Suzuki', sales: '$345,678', orders: '89', region: 'Nagoya', status: 'Pending', updated: '2024-01-13' }
 ])
 </script>
 
@@ -911,22 +911,22 @@ const tableData = ref([
   gap: 24px;
 }
 
-/* モバイルレイアウト */
+/* Mobile layout */
 .dashboard-content.layout-mobile {
   grid-template-columns: 1fr;
 }
 
-/* タブレットレイアウト */
+/* Tablet layout */
 .dashboard-content.layout-tablet {
   grid-template-columns: 1fr;
 }
 
-/* デスクトップレイアウト */
+/* Desktop layout */
 .dashboard-content.layout-desktop {
   grid-template-columns: 1fr;
 }
 
-/* 大画面レイアウト */
+/* Large screen layout */
 .dashboard-content.layout-xl {
   grid-template-columns: 2fr 1fr;
 }
@@ -938,7 +938,7 @@ const tableData = ref([
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* カードスタイル */
+/* Card styles */
 .cards-container {
   display: grid;
   gap: 16px;
@@ -1010,7 +1010,7 @@ const tableData = ref([
   color: #f44336;
 }
 
-/* チャートスタイル */
+/* Chart styles */
 .chart-container {
   display: grid;
   gap: 16px;
@@ -1039,7 +1039,7 @@ const tableData = ref([
   font-size: 1.2rem;
 }
 
-/* テーブルスタイル */
+/* Table styles */
 .table-wrapper {
   margin-top: 16px;
   overflow-x: auto;
@@ -1071,12 +1071,12 @@ const tableData = ref([
   background: inherit;
 }
 
-/* レスポンシブ調整 */
+/* Responsive adjustments */
 @media (max-width: 599px) {
   .adaptive-dashboard {
     padding: 12px;
   }
-  
+
   .cards-section, .chart-section, .table-section {
     padding: 16px;
   }
@@ -1084,32 +1084,32 @@ const tableData = ref([
 </style>
 ```
 
-### メディアクエリベースのスタイリング
+### Media Query-Based Styling
 
 ```vue
 <template>
   <div class="media-aware-component">
-    <h2>メディアクエリ対応コンポーネント</h2>
-    
-    <!-- 動的スタイリング例 -->
+    <h2>Media Query-Aware Component</h2>
+
+    <!-- Dynamic styling example -->
     <div class="dynamic-styles" :style="dynamicStyles">
-      <h3>動的スタイル</h3>
-      <p>このボックスはブレイクポイントに応じてスタイルが変化します</p>
+      <h3>Dynamic Styles</h3>
+      <p>This box changes styles according to breakpoints</p>
     </div>
-    
-    <!-- フォントサイズ調整 -->
+
+    <!-- Font size adjustments -->
     <div class="typography-section">
-      <h3 class="responsive-heading">レスポンシブタイポグラフィ</h3>
+      <h3 class="responsive-heading">Responsive Typography</h3>
       <p class="responsive-text">
-        このテキストは画面サイズに応じて最適化されます。
-        モバイルでは読みやすさを、デスクトップでは情報密度を重視します。
+        This text is optimized according to screen size.
+        Mobile prioritizes readability, desktop prioritizes information density.
       </p>
     </div>
-    
-    <!-- 条件付きアニメーション -->
+
+    <!-- Conditional animations -->
     <div class="animation-section">
-      <h3>条件付きアニメーション</h3>
-      <div 
+      <h3>Conditional Animations</h3>
+      <div
         class="animated-box"
         :class="animationClasses"
         @click="triggerAnimation"
@@ -1117,7 +1117,7 @@ const tableData = ref([
         クリックしてアニメーション
       </div>
     </div>
-    
+
     <!-- パフォーマンス最適化表示 -->
     <div class="performance-section">
       <h3>パフォーマンス最適化</h3>
@@ -1143,7 +1143,7 @@ const animationTriggered = ref(false)
 // 動的スタイル計算
 const dynamicStyles = computed(() => {
   const styles: Record<string, string> = {}
-  
+
   // 背景色をブレイクポイントに応じて変更
   if (mediaMatch('mobile')) {
     styles.backgroundColor = '#e3f2fd'
@@ -1158,13 +1158,13 @@ const dynamicStyles = computed(() => {
     styles.padding = '24px'
     styles.borderRadius = '12px'
   }
-  
+
   // ダークモード対応
   if (mediaMatch('dark-mode')) {
     styles.backgroundColor = '#333'
     styles.color = 'white'
   }
-  
+
   return styles
 })
 
@@ -1294,7 +1294,7 @@ const triggerAnimation = () => {
   .media-aware-component {
     padding: 12px;
   }
-  
+
   .animated-box {
     width: 100%;
     max-width: 300px;
@@ -1318,7 +1318,7 @@ const triggerAnimation = () => {
   .media-aware-component {
     color: #e0e0e0;
   }
-  
+
   .heavy-item {
     background: #424242;
     border-color: #666;
@@ -1331,7 +1331,7 @@ const triggerAnimation = () => {
   .animated-box {
     border: 2px solid white;
   }
-  
+
   .heavy-item {
     border-width: 2px;
     border-color: #000;
@@ -1461,19 +1461,19 @@ declare module '@fastkit/media-match' {
     'laptop': true
     'desktop': true
     'ultrawide': true
-    
+
     // 機能ベース
     'touch': true
     'hover': true
     'retina': true
-    
+
     // アクセシビリティ
     'dark-mode': true
     'light-mode': true
     'high-contrast': true
     'reduced-motion': true
     'reduced-data': true
-    
+
     // 印刷
     'print': true
     'screen': true
@@ -1513,7 +1513,7 @@ export const customBreakpoints = [
     condition: '(min-width: 1920px)',
     description: 'Ultrawide screens'
   },
-  
+
   // 機能ベース
   {
     key: 'touch' as const,
@@ -1530,7 +1530,7 @@ export const customBreakpoints = [
     condition: '(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)',
     description: 'High-DPI displays'
   },
-  
+
   // アクセシビリティ
   {
     key: 'dark-mode' as const,
@@ -1557,7 +1557,7 @@ export const customBreakpoints = [
     condition: '(prefers-reduced-data: reduce)',
     description: 'Reduced data usage preference'
   },
-  
+
   // メディアタイプ
   {
     key: 'print' as const,

@@ -1,22 +1,22 @@
 
 # @fastkit/vue-scoped-loading
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-scoped-loading/README-ja.md)
 
-Vue.jsアプリケーションでスコープ化されたローディング状態を管理するためのHeadless UIライブラリ。非同期処理のローディング表示、進捗率の追跡、スコープ化されたローディング管理を簡単に実現できます。
+A Headless UI library for managing scoped loading states in Vue.js applications. Easily implement loading displays for asynchronous processing, progress tracking, and scoped loading management.
 
 ## Features
 
-- **スコープ化ローディング**: コンポーネント単位で独立したローディング状態管理
-- **進捗率追跡**: リアルタイムな進捗状況の監視と表示
-- **自動ライフサイクル管理**: 関数実行の開始から終了まで自動管理
-- **ルート連動**: Vue Routerとの統合でナビゲーション時の自動終了
-- **ディレイ設定**: 短時間の処理でのフリッカー防止
-- **バックドロップ制御**: オーバーレイ表示とスクロールロック
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **Vue 3 Composition API**: リアクティブシステムとの完全統合
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **Headless UI**: UIデザインに依存しないロジックのみ提供
+- **Scoped Loading**: Independent loading state management per component
+- **Progress Tracking**: Real-time progress monitoring and display
+- **Automatic Lifecycle Management**: Automatic management from function execution start to end
+- **Route Integration**: Integration with Vue Router for automatic termination during navigation
+- **Delay Settings**: Flicker prevention for short-duration processing
+- **Backdrop Control**: Overlay display and scroll locking
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Vue 3 Composition API**: Complete integration with reactive system
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Headless UI**: Provides logic only, independent of UI design
 
 ## Installation
 
@@ -26,7 +26,7 @@ npm install @fastkit/vue-scoped-loading
 
 ## Basic Usage
 
-### プラグインのセットアップ
+### Plugin Setup
 
 ```typescript
 // main.ts
@@ -38,7 +38,7 @@ import App from './App.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    // ルート定義
+    // Route definitions
   ]
 })
 
@@ -46,75 +46,75 @@ const app = createApp(App)
 
 app.use(router)
 
-// グローバルローディングスコープをインストール
+// Install global loading scope
 installVueScopedLoading(app)
 
 app.mount('#app')
 ```
 
-### 基本的なローディング表示
+### Basic Loading Display
 
 ```vue
 <template>
   <div>
-    <h1>基本的なローディング例</h1>
-    
-    <!-- グローバルローディング表示 -->
+    <h1>Basic Loading Example</h1>
+
+    <!-- Global loading display -->
     <div v-if="loading.isDisplaying" class="global-loading">
       <div class="loading-overlay">
         <div class="loading-spinner"></div>
-        <p>読み込み中... {{ Math.round(loading.progress) }}%</p>
+        <p>Loading... {{ Math.round(loading.progress) }}%</p>
       </div>
     </div>
-    
-    <!-- コンテンツエリア -->
+
+    <!-- Content area -->
     <div class="content" :class="{ disabled: loading.isDisplaying }">
       <div class="actions">
-        <h2>アクションボタン</h2>
+        <h2>Action Buttons</h2>
         <div class="button-group">
           <button @click="fetchData" :disabled="loading.isActive">
-            データを取得
+            Fetch Data
           </button>
           <button @click="processData" :disabled="loading.isActive">
-            データを処理
+            Process Data
           </button>
           <button @click="uploadFile" :disabled="loading.isActive">
-            ファイルをアップロード
+            Upload File
           </button>
           <button @click="longRunningTask" :disabled="loading.isActive">
-            長時間タスク
+            Long Task
           </button>
         </div>
       </div>
-      
-      <!-- ローディング状態表示 -->
+
+      <!-- Loading status display -->
       <div class="status">
-        <h3>ローディング状態</h3>
+        <h3>Loading Status</h3>
         <div class="status-grid">
           <div class="status-item">
-            <strong>状態:</strong>
+            <strong>Status:</strong>
             <span :class="getStatusClass()">
               {{ getStatusText() }}
             </span>
           </div>
           <div class="status-item">
-            <strong>アクティブリクエスト数:</strong>
+            <strong>Active Requests:</strong>
             <span>{{ loading.requests.length }}</span>
           </div>
           <div class="status-item">
-            <strong>進捗率:</strong>
+            <strong>Progress:</strong>
             <span>{{ Math.round(loading.progress) }}%</span>
           </div>
           <div class="status-item">
-            <strong>バックドロップ:</strong>
-            <span>{{ loading.currentDisplaySettings?.backdrop ? '有効' : '無効' }}</span>
+            <strong>Backdrop:</strong>
+            <span>{{ loading.currentDisplaySettings?.backdrop ? 'Enabled' : 'Disabled' }}</span>
           </div>
         </div>
       </div>
-      
-      <!-- 結果表示 -->
+
+      <!-- Results display -->
       <div v-if="results.length > 0" class="results">
-        <h3>実行結果</h3>
+        <h3>Execution Results</h3>
         <ul>
           <li v-for="(result, index) in results" :key="index">
             <strong>{{ result.timestamp }}:</strong> {{ result.message }}
@@ -132,7 +132,7 @@ import { useLoading } from '@fastkit/vue-scoped-loading'
 const loading = useLoading()
 const results = ref<{ timestamp: string; message: string }[]>([])
 
-// 結果を追加するヘルパー関数
+// Helper function to add results
 const addResult = (message: string) => {
   results.value.push({
     timestamp: new Date().toLocaleTimeString(),
@@ -140,13 +140,13 @@ const addResult = (message: string) => {
   })
 }
 
-// シンプルなデータ取得
+// Simple data fetching
 const fetchData = loading.create(async () => {
   await new Promise(resolve => setTimeout(resolve, 2000))
-  addResult('データ取得が完了しました')
+  addResult('Data fetch completed')
 })
 
-// データ処理（進捗率付き）
+// Data processing (with progress)
 const processData = loading.createProgressHandler(
   (request) => async () => {
     const steps = 5
@@ -154,48 +154,48 @@ const processData = loading.createProgressHandler(
       await new Promise(resolve => setTimeout(resolve, 800))
       request.progress = ((i + 1) / steps) * 100
     }
-    addResult('データ処理が完了しました')
+    addResult('Data processing completed')
   }
 )
 
-// ファイルアップロード（ディレイあり）
+// File upload (with delay)
 const uploadFile = loading.create(async () => {
   await new Promise(resolve => setTimeout(resolve, 3000))
-  addResult('ファイルアップロードが完了しました')
+  addResult('File upload completed')
 }, {
-  delay: 500, // 500ms遅延でフリッカー防止
+  delay: 500, // 500ms delay to prevent flicker
   backdrop: true
 })
 
-// 長時間タスク（request関数使用）
+// Long running task (using request function)
 const longRunningTask = () => {
   loading.request(async (request) => {
     const tasks = [
-      'タスク1を実行中...',
-      'タスク2を実行中...',
-      'タスク3を実行中...',
-      'タスク4を実行中...',
-      'すべてのタスクが完了しました'
+      'Executing task 1...',
+      'Executing task 2...',
+      'Executing task 3...',
+      'Executing task 4...',
+      'All tasks completed'
     ]
-    
+
     for (let i = 0; i < tasks.length; i++) {
       await new Promise(resolve => setTimeout(resolve, 1000))
       request.progress = ((i + 1) / tasks.length) * 100
-      
+
       if (i < tasks.length - 1) {
         addResult(tasks[i])
       }
     }
-    
+
     addResult(tasks[tasks.length - 1])
   })
 }
 
-// 状態テキストとスタイル
+// Status text and styles
 const getStatusText = () => {
-  if (loading.isDisplaying) return '表示中'
-  if (loading.isPending) return '待機中'
-  return 'アイドル'
+  if (loading.isDisplaying) return 'Displaying'
+  if (loading.isPending) return 'Pending'
+  return 'Idle'
 }
 
 const getStatusClass = () => {
@@ -363,20 +363,20 @@ const getStatusClass = () => {
 </style>
 ```
 
-### スコープ化されたローディング
+### Scoped Loading
 
 ```vue
 <template>
   <div>
-    <h1>スコープ化ローディングの例</h1>
-    
-    <!-- グローバルローディング状態 -->
+    <h1>Scoped Loading Example</h1>
+
+    <!-- Global loading state -->
     <div class="global-status">
-      <h2>グローバルローディング状態</h2>
+      <h2>Global Loading State</h2>
       <p>Active: {{ globalLoading.isActive ? 'Yes' : 'No' }} | Progress: {{ Math.round(globalLoading.progress) }}%</p>
     </div>
-    
-    <!-- ローカルスコープのコンポーネント -->
+
+    <!-- Local scoped components -->
     <div class="components-container">
       <UserListComponent />
       <ProductListComponent />
@@ -422,36 +422,36 @@ const globalLoading = useLoading()
 ```vue
 <template>
   <div class="component-card">
-    <h3>ユーザーリスト</h3>
-    
-    <!-- ローカルローディング表示 -->
+    <h3>User List</h3>
+
+    <!-- Local loading display -->
     <div v-if="localLoading.isDisplaying" class="local-loading">
       <div class="loading-bar">
-        <div 
-          class="loading-progress" 
+        <div
+          class="loading-progress"
           :style="{ width: localLoading.progress + '%' }"
         ></div>
       </div>
-      <p>ユーザーデータを読み込み中... {{ Math.round(localLoading.progress) }}%</p>
+      <p>Loading user data... {{ Math.round(localLoading.progress) }}%</p>
     </div>
-    
-    <!-- ユーザーリスト -->
+
+    <!-- User list -->
     <div v-else class="user-list">
       <div v-if="users.length === 0" class="empty-state">
-        ユーザーがありません
+        No users available
       </div>
       <div v-for="user in users" :key="user.id" class="user-item">
         <h4>{{ user.name }}</h4>
         <p>{{ user.email }}</p>
       </div>
     </div>
-    
+
     <div class="actions">
       <button @click="loadUsers" :disabled="localLoading.isActive">
-        ユーザーを読み込み
+        Load Users
       </button>
       <button @click="refreshUsers" :disabled="localLoading.isActive">
-        更新
+        Refresh
       </button>
     </div>
   </div>
@@ -461,7 +461,7 @@ const globalLoading = useLoading()
 import { ref } from 'vue'
 import { initLoadingScope } from '@fastkit/vue-scoped-loading'
 
-// ローカルスコープを作成
+// Create local scope
 const localLoading = initLoadingScope()
 
 interface User {
@@ -472,19 +472,19 @@ interface User {
 
 const users = ref<User[]>([])
 
-// ユーザーデータを取得（進捗率付き）
+// Load user data (with progress)
 const loadUsers = localLoading.createProgressHandler(
   (request) => async () => {
     const mockUsers = [
-      { id: 1, name: '田中太郎', email: 'tanaka@example.com' },
-      { id: 2, name: '佐藤花子', email: 'sato@example.com' },
-      { id: 3, name: '鈴木一郎', email: 'suzuki@example.com' },
-      { id: 4, name: '高橋美香', email: 'takahashi@example.com' },
-      { id: 5, name: '田中二郎', email: 'tanaka2@example.com' }
+      { id: 1, name: 'John Doe', email: 'john@example.com' },
+      { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
+      { id: 3, name: 'Mike Johnson', email: 'mike@example.com' },
+      { id: 4, name: 'Sarah Wilson', email: 'sarah@example.com' },
+      { id: 5, name: 'Tom Brown', email: 'tom@example.com' }
     ]
-    
+
     users.value = []
-    
+
     for (let i = 0; i < mockUsers.length; i++) {
       await new Promise(resolve => setTimeout(resolve, 400))
       users.value.push(mockUsers[i])
@@ -493,7 +493,7 @@ const loadUsers = localLoading.createProgressHandler(
   }
 )
 
-// ユーザーデータを更新
+// Refresh user data
 const refreshUsers = localLoading.create(async () => {
   await new Promise(resolve => setTimeout(resolve, 1500))
   users.value = users.value.map(user => ({
@@ -609,52 +609,52 @@ const refreshUsers = localLoading.create(async () => {
 </style>
 ```
 
-### ルート連動ローディング
+### Route-linked Loading
 
 ```vue
 <template>
   <div>
-    <h1>ルート連動ローディング</h1>
-    
-    <!-- グローバルローディングインジケーター -->
+    <h1>Route-linked Loading</h1>
+
+    <!-- Global loading indicator -->
     <div v-if="loading.isDisplaying" class="route-loading">
       <div class="loading-banner">
         <div class="loading-spinner"></div>
-        <span>ページを読み込み中...</span>
+        <span>Loading page...</span>
       </div>
     </div>
-    
-    <!-- ナビゲーション -->
+
+    <!-- Navigation -->
     <nav class="navigation">
-      <router-link to="/" class="nav-link">ホーム</router-link>
-      <router-link to="/users" class="nav-link">ユーザー一覧</router-link>
-      <router-link to="/products" class="nav-link">商品一覧</router-link>
-      <router-link to="/dashboard" class="nav-link">ダッシュボード</router-link>
+      <router-link to="/" class="nav-link">Home</router-link>
+      <router-link to="/users" class="nav-link">User List</router-link>
+      <router-link to="/products" class="nav-link">Product List</router-link>
+      <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
     </nav>
-    
-    <!-- APIテストエリア -->
+
+    <!-- API test area -->
     <div class="api-test">
-      <h2>APIテスト</h2>
+      <h2>API Test</h2>
       <div class="test-buttons">
         <button @click="testApiCall" :disabled="loading.isActive">
-          API呼び出しテスト
+          API Call Test
         </button>
         <button @click="testLongApiCall" :disabled="loading.isActive">
-          長時間APIテスト
+          Long API Test
         </button>
         <button @click="testNavigationWithApi" :disabled="loading.isActive">
-          ナビゲーション+APIテスト
+          Navigation + API Test
         </button>
       </div>
-      
+
       <div class="test-info">
-        <h3>テスト情報</h3>
-        <p><strong>注意:</strong> APIテスト実行中にページを切り替えると、ローディングが自動的に終了します。</p>
-        <p><strong>endOnNavigation: false</strong> を設定すると、ナビゲーション後もローディングが継続します。</p>
+        <h3>Test Information</h3>
+        <p><strong>Note:</strong> If you switch pages while an API test is running, loading will automatically terminate.</p>
+        <p><strong>endOnNavigation: false</strong> setting allows loading to continue after navigation.</p>
       </div>
     </div>
-    
-    <!-- ルータービュー -->
+
+    <!-- Router view -->
     <div class="router-view">
       <router-view />
     </div>
@@ -668,43 +668,43 @@ import { useLoading } from '@fastkit/vue-scoped-loading'
 const router = useRouter()
 const loading = useLoading()
 
-// 通常のAPI呼び出し（ナビゲーションで自動終了）
+// Regular API call (automatically terminates on navigation)
 const testApiCall = loading.create(async () => {
-  console.log('API呼び出し開始')
+  console.log('API call started')
   await new Promise(resolve => setTimeout(resolve, 2000))
-  console.log('API呼び出し完了')
+  console.log('API call completed')
 }, {
   delay: 200,
-  endOnNavigation: true // デフォルト
+  endOnNavigation: true // Default
 })
 
-// 長時間API呼び出し（ナビゲーションで自動終了しない）
+// Long API call (does not automatically terminate on navigation)
 const testLongApiCall = loading.create(async () => {
-  console.log('長時間API呼び出し開始')
+  console.log('Long API call started')
   await new Promise(resolve => setTimeout(resolve, 5000))
-  console.log('長時間API呼び出し完了')
+  console.log('Long API call completed')
 }, {
   delay: 500,
-  endOnNavigation: false // ナビゲーションで終了しない
+  endOnNavigation: false // Does not terminate on navigation
 })
 
-// ナビゲーションとAPI呼び出しを組み合わせたテスト
+// Test combining navigation and API call
 const testNavigationWithApi = async () => {
-  // API呼び出しを開始
+  // Start API call
   const apiPromise = loading.create(async () => {
     await new Promise(resolve => setTimeout(resolve, 3000))
-    console.log('API呼び出しが完了しました')
+    console.log('API call completed')
   })()
-  
-  // 1秒後にページ移動
+
+  // Navigate to another page after 1 second
   setTimeout(() => {
     router.push('/users')
   }, 1000)
-  
+
   try {
     await apiPromise
   } catch (error) {
-    console.log('API呼び出しがキャンセルされました')
+    console.log('API call was cancelled')
   }
 }
 </script>
@@ -833,40 +833,40 @@ const testNavigationWithApi = async () => {
 
 ## Advanced Usage Examples
 
-### 複数のAPI呼び出しの統合管理
+### Integrated Management of Multiple API Calls
 
 ```vue
 <template>
   <div>
-    <h2>複数APIの統合管理</h2>
-    
-    <!-- 統合ローディング表示 -->
+    <h2>Integrated Multiple API Management</h2>
+
+    <!-- Integrated loading display -->
     <div v-if="loading.isDisplaying" class="integrated-loading">
       <div class="loading-header">
-        <h3>データを読み込み中...</h3>
+        <h3>Loading data...</h3>
         <div class="overall-progress">
           <div class="progress-bar">
-            <div 
-              class="progress-fill" 
+            <div
+              class="progress-fill"
               :style="{ width: loading.progress + '%' }"
             ></div>
           </div>
           <span class="progress-text">{{ Math.round(loading.progress) }}%</span>
         </div>
       </div>
-      
-      <!-- 個別のリクエストの進捗 -->
+
+      <!-- Individual request progress -->
       <div class="request-details">
-        <div 
-          v-for="(request, index) in loading.requests" 
+        <div
+          v-for="(request, index) in loading.requests"
           :key="index"
           class="request-item"
         >
           <span class="request-name">{{ getRequestName(index) }}</span>
           <div class="request-progress">
             <div class="mini-progress-bar">
-              <div 
-                class="mini-progress-fill" 
+              <div
+                class="mini-progress-fill"
                 :style="{ width: request.progress + '%' }"
               ></div>
             </div>
@@ -875,40 +875,40 @@ const testNavigationWithApi = async () => {
         </div>
       </div>
     </div>
-    
-    <!-- コントロール -->
+
+    <!-- Controls -->
     <div class="controls">
       <button @click="loadAllData" :disabled="loading.isActive">
-        すべてのデータを読み込み
+        Load All Data
       </button>
       <button @click="loadDataSequentially" :disabled="loading.isActive">
-        順次読み込み
+        Load Sequentially
       </button>
       <button @click="loading.endAll()" :disabled="!loading.isActive">
-        すべてキャンセル
+        Cancel All
       </button>
     </div>
-    
-    <!-- 結果表示 -->
+
+    <!-- Results display -->
     <div class="results">
       <div class="result-section">
-        <h4>ユーザーデータ ({{ userData.length }}件)</h4>
+        <h4>User Data ({{ userData.length }} items)</h4>
         <div class="data-preview">
           {{ userData.slice(0, 3).map(u => u.name).join(', ') }}
           {{ userData.length > 3 ? '...' : '' }}
         </div>
       </div>
-      
+
       <div class="result-section">
-        <h4>商品データ ({{ productData.length }}件)</h4>
+        <h4>Product Data ({{ productData.length }} items)</h4>
         <div class="data-preview">
           {{ productData.slice(0, 3).map(p => p.name).join(', ') }}
           {{ productData.length > 3 ? '...' : '' }}
         </div>
       </div>
-      
+
       <div class="result-section">
-        <h4>注文データ ({{ orderData.length }}件)</h4>
+        <h4>Order Data ({{ orderData.length }} items)</h4>
         <div class="data-preview">
           {{ orderData.slice(0, 3).map(o => `#${o.id}`).join(', ') }}
           {{ orderData.length > 3 ? '...' : '' }}
@@ -946,13 +946,13 @@ const userData = ref<User[]>([])
 const productData = ref<Product[]>([])
 const orderData = ref<Order[]>([])
 
-// リクエスト名を取得
+// Get request name
 const getRequestName = (index: number) => {
-  const names = ['ユーザーデータ', '商品データ', '注文データ']
-  return names[index] || `リクエスト ${index + 1}`
+  const names = ['User Data', 'Product Data', 'Order Data']
+  return names[index] || `Request ${index + 1}`
 }
 
-// ユーザーデータの読み込み
+// User data loading
 const loadUserData = loading.createProgressHandler(
   (request) => async () => {
     const users: User[] = []
@@ -960,7 +960,7 @@ const loadUserData = loading.createProgressHandler(
       await new Promise(resolve => setTimeout(resolve, 50))
       users.push({
         id: i,
-        name: `ユーザー${i}`,
+        name: `User${i}`,
         email: `user${i}@example.com`
       })
       request.progress = (i / 50) * 100
@@ -969,7 +969,7 @@ const loadUserData = loading.createProgressHandler(
   }
 )
 
-// 商品データの読み込み
+// Product data loading
 const loadProductData = loading.createProgressHandler(
   (request) => async () => {
     const products: Product[] = []
@@ -977,7 +977,7 @@ const loadProductData = loading.createProgressHandler(
       await new Promise(resolve => setTimeout(resolve, 80))
       products.push({
         id: i,
-        name: `商品${i}`,
+        name: `Product${i}`,
         price: Math.floor(Math.random() * 10000) + 1000
       })
       request.progress = (i / 30) * 100
@@ -986,7 +986,7 @@ const loadProductData = loading.createProgressHandler(
   }
 )
 
-// 注文データの読み込み
+// Order data loading
 const loadOrderData = loading.createProgressHandler(
   (request) => async () => {
     const orders: Order[] = []
@@ -1004,7 +1004,7 @@ const loadOrderData = loading.createProgressHandler(
   }
 )
 
-// すべてのデータを並列で読み込み
+// Load all data in parallel
 const loadAllData = async () => {
   await Promise.all([
     loadUserData(),
@@ -1013,7 +1013,7 @@ const loadAllData = async () => {
   ])
 }
 
-// 順次読み込み
+// Sequential loading
 const loadDataSequentially = async () => {
   await loadUserData()
   await loadProductData()
@@ -1189,43 +1189,43 @@ const loadDataSequentially = async () => {
 </style>
 ```
 
-### カスタムローディングUIコンポーネント
+### Custom Loading UI Components
 
 ```vue
 <template>
   <div>
-    <h2>カスタムローディングUI</h2>
-    
-    <!-- カスタムローディングコンポーネント -->
+    <h2>Custom Loading UI</h2>
+
+    <!-- Custom loading component -->
     <CustomLoadingOverlay />
-    
+
     <div class="demo-content">
       <div class="demo-section">
-        <h3>スタイルバリエーション</h3>
+        <h3>Style Variations</h3>
         <div class="style-buttons">
           <button @click="setLoadingStyle('minimal')" :class="{ active: loadingStyle === 'minimal' }">
-            ミニマル
+            Minimal
           </button>
           <button @click="setLoadingStyle('detailed')" :class="{ active: loadingStyle === 'detailed' }">
-            詳細
+            Detailed
           </button>
           <button @click="setLoadingStyle('creative')" :class="{ active: loadingStyle === 'creative' }">
-            クリエイティブ
+            Creative
           </button>
         </div>
       </div>
-      
+
       <div class="demo-section">
-        <h3>ローディングテスト</h3>
+        <h3>Loading Tests</h3>
         <div class="test-buttons">
           <button @click="quickTest" :disabled="loading.isActive">
-            短時間テスト
+            Quick Test
           </button>
           <button @click="progressTest" :disabled="loading.isActive">
-            進捗テスト
+            Progress Test
           </button>
           <button @click="longTest" :disabled="loading.isActive">
-            長時間テスト
+            Long Test
           </button>
         </div>
       </div>
@@ -1241,19 +1241,19 @@ import CustomLoadingOverlay from './components/CustomLoadingOverlay.vue'
 const loading = useLoading()
 const loadingStyle = ref<'minimal' | 'detailed' | 'creative'>('minimal')
 
-// スタイルを子コンポーネントに提供
+// Provide style to child components
 provide('loadingStyle', loadingStyle)
 
 const setLoadingStyle = (style: typeof loadingStyle.value) => {
   loadingStyle.value = style
 }
 
-// 短時間テスト
+// Quick test
 const quickTest = loading.create(async () => {
   await new Promise(resolve => setTimeout(resolve, 1500))
 }, { delay: 100 })
 
-// 進捗テスト
+// Progress test
 const progressTest = loading.createProgressHandler(
   (request) => async () => {
     for (let i = 0; i <= 100; i += 10) {
@@ -1263,7 +1263,7 @@ const progressTest = loading.createProgressHandler(
   }
 )
 
-// 長時間テスト
+// Long test
 const longTest = loading.create(async () => {
   await new Promise(resolve => setTimeout(resolve, 8000))
 }, { delay: 300 })
@@ -1335,18 +1335,18 @@ const longTest = loading.create(async () => {
 
 ```vue
 <template>
-  <!-- ミニマルスタイル -->
+  <!-- Minimal style -->
   <div v-if="loading.isDisplaying && currentStyle === 'minimal'" class="loading-overlay minimal">
     <div class="loading-content">
       <div class="simple-spinner"></div>
     </div>
   </div>
-  
-  <!-- 詳細スタイル -->
+
+  <!-- Detailed style -->
   <div v-else-if="loading.isDisplaying && currentStyle === 'detailed'" class="loading-overlay detailed">
     <div class="loading-content">
       <div class="detailed-spinner"></div>
-      <h3>処理中...</h3>
+      <h3>Processing...</h3>
       <div class="progress-container">
         <div class="progress-bar">
           <div class="progress-fill" :style="{ width: loading.progress + '%' }"></div>
@@ -1358,8 +1358,8 @@ const longTest = loading.create(async () => {
       </p>
     </div>
   </div>
-  
-  <!-- クリエイティブスタイル -->
+
+  <!-- Creative style -->
   <div v-else-if="loading.isDisplaying && currentStyle === 'creative'" class="loading-overlay creative">
     <div class="loading-content">
       <div class="creative-animation">
@@ -1373,11 +1373,11 @@ const longTest = loading.create(async () => {
           <div class="planet planet-3"></div>
         </div>
       </div>
-      <h3>魔法をかけています...</h3>
+      <h3>Working some magic...</h3>
       <div class="creative-progress">
         <div class="progress-orbs">
-          <div 
-            v-for="i in 10" 
+          <div
+            v-for="i in 10"
             :key="i"
             class="progress-orb"
             :class="{ active: (loading.progress / 10) >= i }"
@@ -1397,11 +1397,11 @@ const currentStyle = inject('loadingStyle', () => 'minimal')
 
 const getLoadingDescription = () => {
   const progress = loading.progress
-  if (progress < 25) return '初期化中...'
-  if (progress < 50) return 'データを読み込み中...'
-  if (progress < 75) return '処理中...'
-  if (progress < 95) return '最終処理中...'
-  return '完了直前...'
+  if (progress < 25) return 'Initializing...'
+  if (progress < 50) return 'Loading data...'
+  if (progress < 75) return 'Processing...'
+  if (progress < 95) return 'Finalizing...'
+  return 'Almost done...'
 }
 </script>
 
@@ -1418,7 +1418,7 @@ const getLoadingDescription = () => {
   justify-content: center;
 }
 
-/* ミニマルスタイル */
+/* Minimal style */
 .minimal {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(2px);
@@ -1433,7 +1433,7 @@ const getLoadingDescription = () => {
   animation: spin 1s linear infinite;
 }
 
-/* 詳細スタイル */
+/* Detailed style */
 .detailed {
   background: rgba(0, 0, 0, 0.8);
   color: white;
@@ -1494,7 +1494,7 @@ const getLoadingDescription = () => {
   opacity: 0.8;
 }
 
-/* クリエイティブスタイル */
+/* Creative style */
 .creative {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -1607,7 +1607,7 @@ const getLoadingDescription = () => {
 </style>
 ```
 
-## API リファレンス
+## API Reference
 
 ### LoadingScope
 
@@ -1622,7 +1622,7 @@ interface LoadingScope {
   readonly isDisplaying: boolean
   readonly isActive: boolean
   readonly progress: number
-  
+
   create<Fn extends Callable>(fn: Fn, options?: LoadingRequestOptions): WithLoadingRequest<Fn>
   createProgressHandler<Fn extends Callable>(handler: (request: LoadingRequest) => Fn, options?: LoadingRequestOptions): Fn
   request<Fn extends (request: LoadingRequest) => any>(fn: Fn, options?: LoadingRequestOptions): ReturnType<Fn>
@@ -1640,7 +1640,7 @@ interface LoadingRequest extends LoadingDisplaySettings {
   readonly isDisplaying: boolean
   readonly isActive: boolean
   progress: number
-  
+
   start(): void
   end(): void
 }
@@ -1648,13 +1648,13 @@ interface LoadingRequest extends LoadingDisplaySettings {
 type LoadingRequestState = 'idle' | 'pending' | 'displaying'
 ```
 
-### オプション
+### Options
 
 ```typescript
 interface LoadingDisplayOptions {
-  backdrop?: MaybeRefOrGetter<boolean>  // オーバーレイ表示 (デフォルト: true)
-  delay?: number                        // 表示遅延時間ミリ秒 (デフォルト: 0)
-  endOnNavigation?: boolean            // ルート遷移時の自動終了 (デフォルト: true)
+  backdrop?: MaybeRefOrGetter<boolean>  // Overlay display (default: true)
+  delay?: number                        // Display delay time in milliseconds (default: 0)
+  endOnNavigation?: boolean            // Automatic termination on route transition (default: true)
 }
 
 interface LoadingDisplaySettings {
@@ -1662,21 +1662,21 @@ interface LoadingDisplaySettings {
 }
 ```
 
-### 関数
+### Functions
 
 ```typescript
-// スコープ作成
+// Scope creation
 function createLoadingScope(app?: App): LoadingScope
 function initLoadingScope(app?: App): LoadingScope
 
-// スコープ取得
+// Scope retrieval
 function useLoading(): LoadingScope
 function useScopedLoading(): LoadingScope
 
-// プラグイン
+// Plugin
 function installVueScopedLoading(app: App): LoadingScope
 
-// ラッピング関数
+// Wrapping function
 function withLoadingRequest<Fn extends Callable>(
   scope: LoadingScope,
   fn: Fn,
@@ -1684,39 +1684,39 @@ function withLoadingRequest<Fn extends Callable>(
 ): WithLoadingRequest<Fn>
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### メモリリークの防止
+### Memory Leak Prevention
 
 ```typescript
-// コンポーネントアンマウント時の自動クリーンアップ
-// withLoadingRequest関数で作成された関数は自動的にクリーンアップされる
+// Automatic cleanup on component unmount
+// Functions created with withLoadingRequest function are automatically cleaned up
 import { onBeforeUnmount } from 'vue'
 
 const myLoadingFunction = loading.create(async () => {
-  // 処理
+  // Processing
 })
 
-// 手動でクリーンアップする場合
+// For manual cleanup
 onBeforeUnmount(() => {
   myLoadingFunction[LOADING_REQUEST_SYMBOL].end()
 })
 ```
 
-### フリッカー防止
+### Flicker Prevention
 
 ```typescript
-// 短時間の処理では遅延を設定してフリッカーを防止
+// Set delay for short-duration processing to prevent flicker
 const quickApiCall = loading.create(async () => {
   await fetch('/api/quick')
 }, {
-  delay: 300 // 300ms未満の処理ではローディングを表示しない
+  delay: 300 // Don't show loading for processes under 300ms
 })
 ```
 
 ## Related Packages
 
-- `@fastkit/helpers` - ユーティリティ関数
+- `@fastkit/helpers` - Utility functions
 - `vue-router` - Vue Router 4.x (オプション)
 
 ## License

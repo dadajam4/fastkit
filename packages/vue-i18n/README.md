@@ -1,22 +1,22 @@
 
 # @fastkit/vue-i18n
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-i18n/README-ja.md)
 
-Vue.jsアプリケーションに型安全で強力な国際化(i18n)機能を提供するライブラリ。@fastkit/i18nコアライブラリをベースに、Vue 3とVue Routerとのシームレスな統合を実現します。
+A library that provides type-safe and powerful internationalization (i18n) features for Vue.js applications. Built on top of the @fastkit/i18n core library, it enables seamless integration with Vue 3 and Vue Router.
 
 ## Features
 
-- **Vue 3完全統合**: Composition APIとOptions API両方をサポート
-- **型安全性**: TypeScriptによる厳密な型定義とコンパイル時検証
-- **Vue Router統合**: ルーティングベースの言語切り替えとナビゲーション
-- **サーバーサイドレンダリング**: SSR環境での完全対応
-- **柔軟なストラテジー**: カスタム言語検出・切り替え戦略
-- **リアクティブストレージ**: Vueのリアクティブシステムと連携
-- **階層化翻訳**: ネストした翻訳コンポーネントの管理
-- **クライアント言語検出**: ブラウザ設定やAccept-Languageヘッダー対応
-- **サブスペース**: コンポーネント単位の独立した翻訳スコープ
-- **カスタムストレージ**: Cookie、LocalStorage、カスタムストレージ対応
+- **Full Vue 3 Integration**: Supports both Composition API and Options API
+- **Type Safety**: Strict type definitions and compile-time validation with TypeScript
+- **Vue Router Integration**: Routing-based language switching and navigation
+- **Server-Side Rendering**: Complete support for SSR environments
+- **Flexible Strategies**: Custom language detection and switching strategies
+- **Reactive Storage**: Integration with Vue's reactive system
+- **Hierarchical Translation**: Management of nested translation components
+- **Client Language Detection**: Support for browser settings and Accept-Language headers
+- **Sub-spaces**: Independent translation scopes per component
+- **Custom Storage**: Support for Cookie, LocalStorage, and custom storage solutions
 
 ## Installation
 
@@ -26,26 +26,26 @@ npm install @fastkit/vue-i18n @fastkit/i18n
 
 ## Basic Usage
 
-### 多言語スペースの定義
+### Defining Multilingual Spaces
 
 ```typescript
 // i18n/space.ts
 import { defineI18nSpace } from '@fastkit/i18n'
 
-// 利用可能な言語を定義
+// Define available languages
 export type AppLocaleName = 'ja' | 'en' | 'es'
 
-// ベース言語（開発言語）を指定
+// Specify base language (development language)
 export type AppBaseLocale = 'ja'
 
-// 翻訳コンポーネントの定義
+// Define translation components
 export const AppComponents = {
   common: () => import('./common'),
   user: () => import('./user'),
   product: () => import('./product')
 } as const
 
-// 国際化スペースを作成
+// Create internationalization space
 export const AppSpace = defineI18nSpace<AppLocaleName, AppBaseLocale>({
   locales: ['ja', 'en', 'es'],
   baseLocale: 'ja',
@@ -53,7 +53,7 @@ export const AppSpace = defineI18nSpace<AppLocaleName, AppBaseLocale>({
 })
 ```
 
-### 翻訳リソースの作成
+### Creating Translation Resources
 
 ```typescript
 // i18n/common.ts
@@ -63,19 +63,19 @@ export default defineI18nComponent({
   ja: {
     title: 'マイアプリケーション',
     navigation: {
-      home: 'ホーム',
-      about: '会社情報',
-      contact: 'お問い合わせ'
+      home: 'Home',
+      about: 'About',
+      contact: 'Contact'
     },
     buttons: {
-      save: '保存',
-      cancel: 'キャンセル',
-      delete: '削除'
+      save: 'Save',
+      cancel: 'Cancel',
+      delete: 'Delete'
     },
     messages: {
-      loading: '読み込み中...',
-      success: '正常に処理されました',
-      error: 'エラーが発生しました'
+      loading: 'Loading...',
+      success: 'Successfully processed',
+      error: 'An error occurred'
     }
   },
   en: {
@@ -117,7 +117,7 @@ export default defineI18nComponent({
 })
 ```
 
-### Vue.jsアプリケーションの設定
+### Setting up Vue.js Application
 
 ```typescript
 // main.ts
@@ -127,13 +127,13 @@ import { createVueI18n } from '@fastkit/vue-i18n'
 import App from './App.vue'
 import { AppSpace, AppComponents, type AppLocaleName, type AppBaseLocale } from './i18n/space'
 
-// Vue I18nサービスを作成
+// Create Vue I18n service
 const i18n = createVueI18n(AppSpace, {
   components: AppComponents,
   defaultLocale: 'ja'
 })
 
-// ルーターを作成
+// Create router
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -142,17 +142,17 @@ const router = createRouter({
   ]
 })
 
-// アプリケーション初期化
+// Initialize application
 const app = createApp(App)
 
-// I18nスペースをセットアップ
+// Setup I18n space
 const { space, install } = i18n.setup()
 
-// Vue.jsアプリケーションにインストール
+// Install into Vue.js application
 app.use(router)
 install(app)
 
-// TypeScript型拡張
+// TypeScript type extension
 declare module 'vue' {
   interface ComponentCustomProperties {
     $i18n: typeof space
@@ -162,13 +162,13 @@ declare module 'vue' {
 app.mount('#app')
 ```
 
-### コンポーネントでの使用
+### Using in Components
 
 ```vue
 <template>
   <div>
     <h1>{{ $i18n.at.common.trans.title }}</h1>
-    
+
     <nav>
       <router-link :to="localePath('/')">
         {{ $i18n.at.common.trans.navigation.home }}
@@ -177,9 +177,9 @@ app.mount('#app')
         {{ $i18n.at.common.trans.navigation.about }}
       </router-link>
     </nav>
-    
+
     <div class="language-switcher">
-      <h3>言語切り替え</h3>
+      <h3>Language Switcher</h3>
       <button
         v-for="locale in availableLocales"
         :key="locale"
@@ -189,7 +189,7 @@ app.mount('#app')
         {{ getLocaleName(locale) }}
       </button>
     </div>
-    
+
     <div class="actions">
       <button @click="save">
         {{ $i18n.at.common.trans.buttons.save }}
@@ -198,7 +198,7 @@ app.mount('#app')
         {{ $i18n.at.common.trans.buttons.cancel }}
       </button>
     </div>
-    
+
     <div v-if="isLoading" class="message">
       {{ $i18n.at.common.trans.messages.loading }}
     </div>
@@ -215,13 +215,13 @@ const i18n = useI18nSpace()
 
 const isLoading = ref(false)
 
-// 現在の言語を取得
+// Get current language
 const currentLocale = computed(() => i18n.locale)
 
-// 利用可能な言語リスト
+// Available languages list
 const availableLocales = computed(() => i18n.availableLocales)
 
-// 言語名の表示用マッピング
+// Language name mapping for display
 const getLocaleName = (locale: string) => {
   const names = {
     ja: '日本語',
@@ -231,24 +231,24 @@ const getLocaleName = (locale: string) => {
   return names[locale as keyof typeof names] || locale
 }
 
-// 言語切り替え
+// Language switching
 const changeLanguage = async (locale: string) => {
   await i18n.setLocale(locale)
-  // 現在のパスを新しい言語で更新
+  // Update current path with new language
   const currentPath = router.currentRoute.value.path
   const newPath = currentPath.replace(/^\/[a-z]{2}/, `/${locale}`)
   router.push(newPath)
 }
 
-// ローカライズされたパスを生成
+// Generate localized path
 const localePath = (path: string) => {
   return `/${currentLocale.value}${path}`
 }
 
-// アクション例
+// Action example
 const save = () => {
   isLoading.value = true
-  // 保存処理...
+  // Save process...
   setTimeout(() => {
     isLoading.value = false
     alert(i18n.at.common.trans.messages.success)
@@ -256,7 +256,7 @@ const save = () => {
 }
 
 const cancel = () => {
-  // キャンセル処理...
+  // Cancel process...
 }
 </script>
 
@@ -301,9 +301,9 @@ const cancel = () => {
 </style>
 ```
 
-## 実用的な使用例
+## Practical Usage Examples
 
-### サブスペース（コンポーネント固有の翻訳）
+### Sub-spaces (Component-specific Translation)
 
 ```typescript
 // components/UserProfile/i18n.ts
@@ -320,8 +320,8 @@ export default defineI18nComponent({
       save: '保存'
     },
     validation: {
-      required: '{field}は必須です',
-      email: '有効なメールアドレスを入力してください'
+      required: '{field} is required',
+      email: 'Please enter a valid email address'
     }
   },
   en: {
@@ -346,23 +346,23 @@ export default defineI18nComponent({
 <template>
   <div class="user-profile">
     <h2>{{ subSpace.at.UserProfile.trans.profile.title }}</h2>
-    
+
     <form @submit.prevent="handleSubmit">
       <div class="field">
         <label>{{ subSpace.at.UserProfile.trans.profile.name }}</label>
-        <input 
-          v-model="form.name" 
+        <input
+          v-model="form.name"
           :placeholder="subSpace.at.UserProfile.trans.profile.name"
         />
         <span v-if="errors.name" class="error">
           {{ subSpace.at.UserProfile.trans.validation.required.replace('{field}', subSpace.at.UserProfile.trans.profile.name) }}
         </span>
       </div>
-      
+
       <div class="field">
         <label>{{ subSpace.at.UserProfile.trans.profile.email }}</label>
-        <input 
-          v-model="form.email" 
+        <input
+          v-model="form.email"
           type="email"
           :placeholder="subSpace.at.UserProfile.trans.profile.email"
         />
@@ -370,7 +370,7 @@ export default defineI18nComponent({
           {{ subSpace.at.UserProfile.trans.validation.email }}
         </span>
       </div>
-      
+
       <button type="submit">
         {{ subSpace.at.UserProfile.trans.profile.save }}
       </button>
@@ -384,7 +384,7 @@ import { createVueI18n } from '@fastkit/vue-i18n'
 import { AppSpace } from '../../i18n/space'
 import UserProfileI18n from './i18n'
 
-// サブスペースを定義
+// Define sub-space
 const i18n = createVueI18n(AppSpace, {
   components: { UserProfile: UserProfileI18n }
 })
@@ -402,10 +402,10 @@ const errors = ref<{ name?: boolean; email?: boolean }>({})
 
 const handleSubmit = () => {
   errors.value = {}
-  
+
   if (!form.name) errors.value.name = true
   if (!form.email || !/\S+@\S+\.\S+/.test(form.email)) errors.value.email = true
-  
+
   if (!Object.keys(errors.value).length) {
     console.log('Profile saved:', form)
   }
@@ -413,53 +413,53 @@ const handleSubmit = () => {
 </script>
 ```
 
-### Vue Router統合戦略
+### Vue Router Integration Strategy
 
 ```typescript
 // i18n/router-strategy.ts
 import { defineVueI18nStrategy } from '@fastkit/vue-i18n'
 
 export const routerStrategy = defineVueI18nStrategy({
-  // ルートパスから言語を検出
+  // Detect language from route path
   detectLocaleFromRoute: (route) => {
     const segments = route.path.split('/').filter(Boolean)
     const locale = segments[0]
     return ['ja', 'en', 'es'].includes(locale) ? locale : null
   },
-  
-  // 言語変更時のルート更新
+
+  // Route update on language change
   updateRouteOnLocaleChange: async (to, locale, router) => {
     const segments = to.path.split('/').filter(Boolean)
     const currentLocale = segments[0]
-    
+
     if (['ja', 'en', 'es'].includes(currentLocale)) {
       segments[0] = locale
     } else {
       segments.unshift(locale)
     }
-    
+
     const newPath = '/' + segments.join('/')
     await router.push(newPath)
   },
-  
-  // 初期言語の決定
+
+  // Determine initial language
   getInitialLocale: (availableLocales, clientLanguage) => {
-    // クライアント言語を優先し、サポートしていない場合はデフォルト言語
+    // Prioritize client language, fall back to default if not supported
     if (clientLanguage && availableLocales.includes(clientLanguage)) {
       return clientLanguage
     }
-    return 'ja' // デフォルト言語
+    return 'ja' // Default language
   }
 })
 
-// メインアプリケーションで使用
+// Use in main application
 const i18n = createVueI18n(AppSpace, {
   components: AppComponents,
   strategy: routerStrategy
 })
 ```
 
-### SSR（サーバーサイドレンダリング）対応
+### SSR (Server-Side Rendering) Support
 
 ```typescript
 // server/i18n-setup.ts
@@ -473,42 +473,42 @@ export function createI18nForSSR(
   return createVueI18n(AppSpace, {
     components: AppComponents,
     client: {
-      // Accept-Languageヘッダーから言語を検出
+      // Detect language from Accept-Language header
       getClientLanguage: (availableLocales) => {
         if (!acceptLanguage) return null
-        
-        // Accept-Languageヘッダーをパース
+
+        // Parse Accept-Language header
         const languages = acceptLanguage
           .split(',')
           .map(lang => lang.split(';')[0].trim())
-          .map(lang => lang.split('-')[0]) // 地域コードを除去
-        
-        // サポートしている言語を優先順位順で検索
+          .map(lang => lang.split('-')[0]) // Remove region code
+
+        // Search for supported languages in priority order
         for (const lang of languages) {
           if (availableLocales.includes(lang)) {
             return lang
           }
         }
-        
+
         return null
       },
-      
-      // SSR時のリダイレクト処理
+
+      // Redirect handling during SSR
       serverRedirect: (redirectTo) => {
-        // Express.jsの例
+        // Express.js example
         if (typeof globalThis !== 'undefined' && globalThis.ssrContext) {
           globalThis.ssrContext.redirect = redirectTo
         }
       },
-      
-      // 初期パスの設定
+
+      // Initial path configuration
       initialPath: () => initialPath
     }
   })
 }
 ```
 
-### Cookieストレージの実装
+### Cookie Storage Implementation
 
 ```typescript
 // utils/cookie-storage.ts
@@ -517,7 +517,7 @@ import { StrategyStorage } from '@fastkit/vue-i18n'
 export class CookieStorage implements StrategyStorage {
   get(key: string): string | null {
     if (typeof document === 'undefined') return null
-    
+
     const cookies = document.cookie.split(';')
     for (const cookie of cookies) {
       const [name, value] = cookie.trim().split('=')
@@ -527,18 +527,18 @@ export class CookieStorage implements StrategyStorage {
     }
     return null
   }
-  
+
   set(key: string, value: string): void {
     if (typeof document === 'undefined') return
-    
+
     const expires = new Date()
     expires.setFullYear(expires.getFullYear() + 1) // 1年間有効
-    
+
     document.cookie = `${key}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=/`
   }
 }
 
-// 使用例
+// Usage example
 const i18n = createVueI18n(AppSpace, {
   components: AppComponents,
   client: {
@@ -547,7 +547,7 @@ const i18n = createVueI18n(AppSpace, {
 })
 ```
 
-### 動的翻訳の読み込み
+### Dynamic Translation Loading
 
 ```typescript
 // composables/useAsyncTranslation.ts
@@ -561,12 +561,12 @@ export function useAsyncTranslation<T>(
   const data = ref<T | null>(null)
   const loading = ref(false)
   const error = ref<Error | null>(null)
-  
+
   const load = async (locale?: string) => {
     const targetLocale = locale || i18n.locale
     loading.value = true
     error.value = null
-    
+
     try {
       data.value = await loader(targetLocale)
     } catch (err) {
@@ -575,10 +575,10 @@ export function useAsyncTranslation<T>(
       loading.value = false
     }
   }
-  
-  // 言語変更時に自動再読み込み
+
+  // Automatic reload on language change
   watch(() => i18n.locale, load, { immediate: true })
-  
+
   return {
     data,
     loading,
@@ -587,7 +587,7 @@ export function useAsyncTranslation<T>(
   }
 }
 
-// 使用例
+// Usage example
 export default {
   setup() {
     const { data: productCategories, loading } = useAsyncTranslation(
@@ -596,7 +596,7 @@ export default {
         return response.json()
       }
     )
-    
+
     return {
       productCategories,
       loading
@@ -609,64 +609,64 @@ export default {
 
 ### `createVueI18n(Space, options?)`
 
-Vue.jsアプリケーション用の国際化サービスを作成します。
+Creates an internationalization service for Vue.js applications.
 
-**パラメータ:**
-- `Space` (I18nSpaceStatic): 国際化スペース定義
-- `options` (VueI18nSpaceOptions, optional): 初期化オプション
+**Parameters:**
+- `Space` (I18nSpaceStatic): Internationalization space definition
+- `options` (VueI18nSpaceOptions, optional): Initialization options
 
-**戻り値:**
-- `VueI18n`: Vue I18nサービスインスタンス
+**Returns:**
+- `VueI18n`: Vue I18n service instance
 
 ```typescript
 interface VueI18nSpaceOptions {
-  components?: I18nDependencies;          // 翻訳コンポーネントマッピング
-  defaultLocale?: string;                 // デフォルト言語
-  strategy?: VueI18nStrategyFactory;      // 言語切り替え戦略
-  client?: VueI18nClientSettings;         // クライアント設定
-  storage?: I18nStorageFactory;           // ストレージファクトリー
+  components?: I18nDependencies;          // Translation component mapping
+  defaultLocale?: string;                 // Default language
+  strategy?: VueI18nStrategyFactory;      // Language switching strategy
+  client?: VueI18nClientSettings;         // Client settings
+  storage?: I18nStorageFactory;           // Storage factory
 }
 
 interface VueI18n {
-  Space: I18nSpaceStatic;                 // スペース定義
+  Space: I18nSpaceStatic;                 // Space definition
   setup(): { space: I18nSpace; install: (app: App) => void };
-  use(): I18nSpace;                       // 現在のスペースを取得
+  use(): I18nSpace;                       // Get current space
   defineSubSpace(components): SubSpaceProvider;
-  setupRouter(router: Router): void;      // ルーター初期化
+  setupRouter(router: Router): void;      // Router initialization
   extendRouterOptions(options: RouterOptions): void;
 }
 ```
 
 ### `useI18nSpace()`
 
-現在の国際化スペースを取得するComposition API関数。
+Composition API function to get the current internationalization space.
 
 ```typescript
 function useI18nSpace(): I18nSpace
 
 interface I18nSpace {
-  locale: string;                         // 現在の言語
-  availableLocales: string[];             // 利用可能な言語リスト
-  at: ComponentTranslations;              // 翻訳アクセサー
-  setLocale(locale: string): Promise<void>; // 言語変更
+  locale: string;                         // Current language
+  availableLocales: string[];             // Available languages list
+  at: ComponentTranslations;              // Translation accessor
+  setLocale(locale: string): Promise<void>; // Language change
   isLocaleAvailable(locale: string): boolean;
 }
 ```
 
 ### `defineVueI18nStrategy(strategy)`
 
-カスタム言語切り替え戦略を定義します。
+Defines a custom language switching strategy.
 
 ```typescript
 interface VueI18nStrategy {
   detectLocaleFromRoute?(route: RouteLocation): string | null;
   updateRouteOnLocaleChange?(
-    route: RouteLocation, 
-    locale: string, 
+    route: RouteLocation,
+    locale: string,
     router: Router
   ): Promise<void>;
   getInitialLocale?(
-    availableLocales: string[], 
+    availableLocales: string[],
     clientLanguage?: string
   ): string;
   setupRouter?(router: Router): void;
@@ -676,7 +676,7 @@ interface VueI18nStrategy {
 
 ## Advanced Usage Examples
 
-### マルチテナント対応
+### Multi-tenant Support
 
 ```typescript
 // multi-tenant-i18n.ts
@@ -692,7 +692,7 @@ interface TenantConfig {
 
 export function createMultiTenantI18n(tenants: Record<string, TenantConfig>) {
   const currentTenant = ref<string>('')
-  
+
   const i18nInstances = computed(() => {
     return Object.fromEntries(
       Object.entries(tenants).map(([id, config]) => [
@@ -704,11 +704,11 @@ export function createMultiTenantI18n(tenants: Record<string, TenantConfig>) {
       ])
     )
   })
-  
+
   const currentI18n = computed(() => {
     return i18nInstances.value[currentTenant.value]
   })
-  
+
   return {
     setTenant: (tenantId: string) => {
       currentTenant.value = tenantId
@@ -719,7 +719,7 @@ export function createMultiTenantI18n(tenants: Record<string, TenantConfig>) {
 }
 ```
 
-### プラグイン式翻訳拡張
+### Plugin-based Translation Extension
 
 ```typescript
 // plugins/i18n-formatter.ts
@@ -739,7 +739,7 @@ export interface FormatPluginOptions {
 export function createFormatPlugin(options: FormatPluginOptions = {}) {
   return {
     install(space: I18nSpace) {
-      // 通貨フォーマット
+      // Currency formatting
       space.addFormatter('currency', (value: number) => {
         const { code = 'USD', locale } = options.currency || {}
         return new Intl.NumberFormat(locale || space.locale, {
@@ -747,24 +747,24 @@ export function createFormatPlugin(options: FormatPluginOptions = {}) {
           currency: code
         }).format(value)
       })
-      
-      // 日付フォーマット
+
+      // Date formatting
       space.addFormatter('date', (value: Date | string) => {
         const { locale, format } = options.date || {}
         const date = typeof value === 'string' ? new Date(value) : value
         return new Intl.DateTimeFormat(
-          locale || space.locale, 
+          locale || space.locale,
           format || { year: 'numeric', month: 'long', day: 'numeric' }
         ).format(date)
       })
-      
-      // 相対時間フォーマット
+
+      // Relative time formatting
       space.addFormatter('relativeTime', (value: Date | string) => {
         const date = typeof value === 'string' ? new Date(value) : value
         const now = new Date()
         const diffMs = now.getTime() - date.getTime()
         const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-        
+
         const rtf = new Intl.RelativeTimeFormat(space.locale)
         return rtf.format(-diffDays, 'day')
       })
@@ -775,23 +775,23 @@ export function createFormatPlugin(options: FormatPluginOptions = {}) {
 
 ## Considerations
 
-### パフォーマンス考慮事項
+### Performance Considerations
 
-- 翻訳コンポーネントは動的インポートを使用して遅延読み込み
-- 大きな翻訳ファイルは分割して必要な部分のみ読み込み
-- キャッシュ戦略を適切に設定してネットワーク要求を最小限に
+- Use dynamic imports for translation components to enable lazy loading
+- Split large translation files and load only necessary parts
+- Configure cache strategies appropriately to minimize network requests
 
-### SSR/SSG対応
+### SSR/SSG Support
 
-- サーバー側で言語検出を適切に実装
-- ハイドレーション時の言語不整合を回避
-- SEO用のhreflang属性を適切に設定
+- Properly implement language detection on the server side
+- Avoid language inconsistencies during hydration
+- Properly configure hreflang attributes for SEO
 
-### アクセシビリティ
+### Accessibility
 
-- lang属性を動的に更新
-- 右から左へ（RTL）の言語に対応
-- スクリーンリーダー向けの言語切り替え通知
+- Dynamically update lang attributes
+- Support right-to-left (RTL) languages
+- Provide language switching notifications for screen readers
 
 ## License
 
@@ -799,6 +799,6 @@ MIT
 
 ## Related Packages
 
-- [@fastkit/i18n](../i18n/README.md): コア国際化ライブラリ
-- [@fastkit/accept-language](../accept-language/README.md): Accept-Languageヘッダー解析
-- [@fastkit/vue-utils](../vue-utils/README.md): Vue.jsユーティリティ関数
+- [@fastkit/i18n](../i18n/README.md): Core internationalization library
+- [@fastkit/accept-language](../accept-language/README.md): Accept-Language header parsing
+- [@fastkit/vue-utils](../vue-utils/README.md): Vue.js utility functions

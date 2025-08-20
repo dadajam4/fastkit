@@ -1,18 +1,18 @@
 
 # @fastkit/json
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/json/README-ja.md)
 
-JSON操作のためのセーフなユーティリティライブラリ。循環参照を含むオブジェクトでも安全にシリアライゼーションを行い、`JSON.stringify`で発生するエラーを回避しながら、カスタマイズ可能なシリアライゼーション機能を提供します。
+A safe utility library for JSON operations. It provides secure serialization for objects containing circular references, avoiding errors that occur with `JSON.stringify` while offering customizable serialization functionality.
 
 ## Features
 
-- **循環参照対応**: 循環参照を含むオブジェクトの安全なシリアライゼーション
-- **カスタムリプレーサー**: 値の変換・フィルタリング機能
-- **型安全性**: TypeScriptによるJSON型定義と型安全な操作
-- **柔軟な設定**: インデント・循環参照処理のカスタマイズ
-- **軽量**: 依存関係なしの軽量ライブラリ
-- **エラー回避**: `JSON.stringify`の典型的なエラーを予防
+- **Circular Reference Support**: Safe serialization of objects containing circular references
+- **Custom Replacer**: Value transformation and filtering functionality
+- **Type Safety**: JSON type definitions and type-safe operations with TypeScript
+- **Flexible Configuration**: Customizable indentation and circular reference handling
+- **Lightweight**: Lightweight library with no dependencies
+- **Error Prevention**: Prevents typical errors from `JSON.stringify`
 
 ## Installation
 
@@ -22,12 +22,12 @@ npm install @fastkit/json
 
 ## Basic Usage
 
-### 循環参照の安全な処理
+### Safe Handling of Circular References
 
 ```typescript
 import { safeJSONStringify } from '@fastkit/json'
 
-// 循環参照を含むオブジェクト
+// Object containing circular references
 const user = {
   id: 1,
   name: 'Alice',
@@ -37,19 +37,19 @@ const user = {
 const friend = {
   id: 2,
   name: 'Bob',
-  friends: [user] // 循環参照
+  friends: [user] // circular reference
 }
 
 user.friends.push(friend)
 
-// 通常のJSON.stringifyではエラーが発生
+// Regular JSON.stringify will cause an error
 try {
   JSON.stringify(user)
 } catch (error) {
-  console.error('エラー:', error.message) // Converting circular structure to JSON
+  console.error('Error:', error.message) // Converting circular structure to JSON
 }
 
-// safeJSONStringifyを使用すると安全に処理
+// Safe processing with safeJSONStringify
 const safeJson = safeJSONStringify(user, null, 2)
 console.log(safeJson)
 /*
@@ -69,7 +69,7 @@ console.log(safeJson)
 */
 ```
 
-### カスタムリプレーサーの使用
+### Using Custom Replacer
 
 ```typescript
 import { safeJSONStringify } from '@fastkit/json'
@@ -86,18 +86,18 @@ const data = {
   }
 }
 
-// パスワードを除外し、日付をISO文字列に変換
+// Exclude password and convert dates to ISO strings
 const jsonString = safeJSONStringify(data, function(key, value) {
-  // パスワードフィールドを除外
+  // Exclude password field
   if (key === 'password') {
     return undefined
   }
-  
-  // 日付をISO文字列に変換
+
+  // Convert dates to ISO strings
   if (value instanceof Date) {
     return value.toISOString()
   }
-  
+
   return value
 }, 2)
 
@@ -118,7 +118,7 @@ console.log(jsonString)
 
 ## Advanced Usage Examples
 
-### API レスポンスの安全なログ出力
+### Safe API Response Logging
 
 ```typescript
 import { safeJSONStringify } from '@fastkit/json'
@@ -128,7 +128,7 @@ class APILogger {
     'password', 'token', 'secret', 'apiKey', 'privateKey',
     'accessToken', 'refreshToken', 'sessionId', 'ssn', 'creditCard'
   ])
-  
+
   logRequest(url: string, method: string, data?: any, headers?: any): void {
     const logData = {
       timestamp: new Date().toISOString(),
@@ -138,14 +138,14 @@ class APILogger {
       headers: this.sanitizeHeaders(headers),
       body: data
     }
-    
+
     const logString = safeJSONStringify(logData, (key, value) => {
       return this.sanitizeValue(key, value)
     }, 2)
-    
+
     console.log('API Request:', logString)
   }
-  
+
   logResponse(url: string, status: number, data?: any, headers?: any): void {
     const logData = {
       timestamp: new Date().toISOString(),
@@ -155,39 +155,39 @@ class APILogger {
       headers: this.sanitizeHeaders(headers),
       body: data
     }
-    
+
     const logString = safeJSONStringify(logData, (key, value) => {
       return this.sanitizeValue(key, value)
     }, 2)
-    
+
     console.log('API Response:', logString)
   }
-  
+
   private sanitizeValue(key: string, value: any): any {
-    // 機密フィールドをマスク
+    // Mask sensitive fields
     if (typeof key === 'string' && this.isSensitiveField(key)) {
       return '[REDACTED]'
     }
-    
-    // 大きな文字列を切り詰め
+
+    // Truncate large strings
     if (typeof value === 'string' && value.length > 1000) {
       return value.substring(0, 1000) + '...[TRUNCATED]'
     }
-    
-    // 大きな配列を切り詰め
+
+    // Truncate large arrays
     if (Array.isArray(value) && value.length > 50) {
       return [
         ...value.slice(0, 50),
         `...[${value.length - 50} more items]`
       ]
     }
-    
-    // 日付オブジェクトをISO文字列に変換
+
+    // Convert Date objects to ISO strings
     if (value instanceof Date) {
       return value.toISOString()
     }
-    
-    // エラーオブジェクトをシリアライズ可能な形式に変換
+
+    // Convert Error objects to serializable format
     if (value instanceof Error) {
       return {
         name: value.name,
@@ -195,20 +195,20 @@ class APILogger {
         stack: value.stack
       }
     }
-    
+
     return value
   }
-  
+
   private isSensitiveField(key: string): boolean {
     const lowerKey = key.toLowerCase()
-    return Array.from(this.sensitiveFields).some(field => 
+    return Array.from(this.sensitiveFields).some(field =>
       lowerKey.includes(field.toLowerCase())
     )
   }
-  
+
   private sanitizeHeaders(headers?: any): any {
     if (!headers) return undefined
-    
+
     const sanitized: any = {}
     for (const [key, value] of Object.entries(headers)) {
       if (this.isSensitiveField(key)) {
@@ -221,21 +221,21 @@ class APILogger {
   }
 }
 
-// 使用例
+// Usage example
 async function apiExample() {
   const logger = new APILogger()
-  
-  // リクエストログ
+
+  // Request log
   logger.logRequest('/api/users', 'POST', {
     name: 'John Doe',
     email: 'john@example.com',
-    password: 'secret123' // これはマスクされる
+    password: 'secret123' // This will be masked
   }, {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer token123' // これはマスクされる
+    'Authorization': 'Bearer token123' // This will be masked
   })
-  
-  // レスポンスログ
+
+  // Response log
   logger.logResponse('/api/users', 201, {
     id: 123,
     name: 'John Doe',
@@ -245,7 +245,7 @@ async function apiExample() {
 }
 ```
 
-### 設定ファイルの安全な保存
+### Safe Configuration File Storage
 
 ```typescript
 import { safeJSONStringify } from '@fastkit/json'
@@ -277,39 +277,39 @@ interface AppConfig {
 
 class ConfigManager {
   private configPath: string
-  
+
   constructor(configPath: string) {
     this.configPath = configPath
   }
-  
+
   async saveConfig(config: AppConfig, includePasswords = false): Promise<void> {
-    const replacer = includePasswords 
-      ? null 
+    const replacer = includePasswords
+      ? null
       : function(key: string, value: any) {
-          // パスワード関連のフィールドを除外
+          // Exclude password-related fields
           if (key.toLowerCase().includes('password')) {
             return '[PROTECTED]'
           }
           return value
         }
-    
+
     const configJson = safeJSONStringify(config, replacer, 2)
-    
+
     await fs.writeFile(this.configPath, configJson, 'utf-8')
   }
-  
+
   async loadConfig(): Promise<AppConfig> {
     const configJson = await fs.readFile(this.configPath, 'utf-8')
     return JSON.parse(configJson)
   }
-  
+
   async createBackup(): Promise<string> {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
     const backupPath = `${this.configPath}.backup.${timestamp}`
-    
+
     const config = await this.loadConfig()
-    
-    // バックアップには機密情報を含めない
+
+    // Don't include sensitive information in backup
     const backupJson = safeJSONStringify(config, function(key, value) {
       if (key.toLowerCase().includes('password')) {
         return '[REDACTED]'
@@ -319,19 +319,19 @@ class ConfigManager {
       }
       return value
     }, 2)
-    
+
     await fs.writeFile(backupPath, backupJson, 'utf-8')
-    
+
     return backupPath
   }
-  
+
   exportConfig(excludeSecrets = true): string {
-    // 実行中の設定をエクスポート
+    // Export runtime configuration
     const runtimeConfig = this.getCurrentConfig()
-    
-    const replacer = excludeSecrets 
+
+    const replacer = excludeSecrets
       ? function(key: string, value: any) {
-          if (key.toLowerCase().includes('password') || 
+          if (key.toLowerCase().includes('password') ||
               key.toLowerCase().includes('secret') ||
               key.toLowerCase().includes('token')) {
             return '[EXCLUDED]'
@@ -339,12 +339,12 @@ class ConfigManager {
           return value
         }
       : null
-    
+
     return safeJSONStringify(runtimeConfig, replacer, 2)
   }
-  
+
   private getCurrentConfig(): AppConfig {
-    // 実際のアプリケーションでは実行中の設定を取得
+    // In actual application, get runtime configuration
     return {
       database: {
         host: 'localhost',
@@ -373,10 +373,10 @@ class ConfigManager {
   }
 }
 
-// 使用例
+// Usage example
 async function configExample() {
   const configManager = new ConfigManager('./app-config.json')
-  
+
   const config: AppConfig = {
     database: {
       host: 'localhost',
@@ -401,21 +401,21 @@ async function configExample() {
       betaFeature: false
     }
   }
-  
-  // パスワードを除外して保存
+
+  // Save excluding passwords
   await configManager.saveConfig(config, false)
-  
-  // バックアップ作成
+
+  // Create backup
   const backupPath = await configManager.createBackup()
-  console.log('バックアップ作成:', backupPath)
-  
-  // 設定のエクスポート
+  console.log('Backup created:', backupPath)
+
+  // Export configuration
   const exportedConfig = configManager.exportConfig(true)
-  console.log('エクスポートされた設定:', exportedConfig)
+  console.log('Exported configuration:', exportedConfig)
 }
 ```
 
-### デバッグ用のオブジェクトダンプ
+### Debug Object Dump
 
 ```typescript
 import { safeJSONStringify } from '@fastkit/json'
@@ -424,7 +424,7 @@ class DebugDumper {
   private static readonly MAX_DEPTH = 10
   private static readonly MAX_ARRAY_LENGTH = 100
   private static readonly MAX_STRING_LENGTH = 500
-  
+
   static dump(obj: any, options: {
     maxDepth?: number
     includeTypes?: boolean
@@ -437,56 +437,56 @@ class DebugDumper {
       includeFunctions = false,
       customReplacer
     } = options
-    
+
     let currentDepth = 0
-    
+
     const replacer = function(key: string, value: any): any {
-      // カスタムリプレーサーを最初に適用
+      // Apply custom replacer first
       if (customReplacer) {
         const customResult = customReplacer(key, value)
         if (customResult !== value) {
           return customResult
         }
       }
-      
-      // 深度制限
+
+      // Depth limitation
       if (key && currentDepth > maxDepth) {
         return '[Max Depth Exceeded]'
       }
-      
+
       if (key) currentDepth++
-      
-      // 関数の処理
+
+      // Function handling
       if (typeof value === 'function') {
         if (includeFunctions) {
           return `[Function: ${value.name || 'anonymous'}]`
         }
         return undefined
       }
-      
-      // Symbol の処理
+
+      // Symbol handling
       if (typeof value === 'symbol') {
         return value.toString()
       }
-      
-      // undefined の処理
+
+      // undefined handling
       if (value === undefined) {
         return '[undefined]'
       }
-      
-      // 大きな文字列の切り詰め
+
+      // Truncate large strings
       if (typeof value === 'string' && value.length > this.MAX_STRING_LENGTH) {
         return value.substring(0, this.MAX_STRING_LENGTH) + '...[TRUNCATED]'
       }
-      
-      // 大きな配列の切り詰め
+
+      // Truncate large arrays
       if (Array.isArray(value) && value.length > this.MAX_ARRAY_LENGTH) {
         const truncated = value.slice(0, this.MAX_ARRAY_LENGTH)
         truncated.push(`...[${value.length - this.MAX_ARRAY_LENGTH} more items]`)
         return truncated
       }
-      
-      // 型情報の追加
+
+      // Add type information
       if (includeTypes && value !== null && typeof value === 'object') {
         if (value.constructor && value.constructor.name !== 'Object') {
           return {
@@ -495,22 +495,22 @@ class DebugDumper {
           }
         }
       }
-      
-      // Date オブジェクトの処理
+
+      // Date object handling
       if (value instanceof Date) {
-        return includeTypes 
+        return includeTypes
           ? { __type: 'Date', __value: value.toISOString() }
           : value.toISOString()
       }
-      
-      // RegExp オブジェクトの処理
+
+      // RegExp object handling
       if (value instanceof RegExp) {
-        return includeTypes 
+        return includeTypes
           ? { __type: 'RegExp', __value: value.toString() }
           : value.toString()
       }
-      
-      // Error オブジェクトの処理
+
+      // Error object handling
       if (value instanceof Error) {
         return {
           __type: 'Error',
@@ -519,16 +519,16 @@ class DebugDumper {
           stack: value.stack
         }
       }
-      
+
       return value
     }
-    
+
     return safeJSONStringify(obj, replacer, 2)
   }
-  
+
   static dumpToConsole(obj: any, label?: string, options?: Parameters<typeof DebugDumper.dump>[1]): void {
     const dump = this.dump(obj, options)
-    
+
     if (label) {
       console.group(`🔍 Debug Dump: ${label}`)
       console.log(dump)
@@ -537,31 +537,31 @@ class DebugDumper {
       console.log('🔍 Debug Dump:', dump)
     }
   }
-  
+
   static compare(obj1: any, obj2: any, label1 = 'Object 1', label2 = 'Object 2'): void {
     console.group('🔍 Object Comparison')
-    
+
     console.group(label1)
     console.log(this.dump(obj1))
     console.groupEnd()
-    
+
     console.group(label2)
     console.log(this.dump(obj2))
     console.groupEnd()
-    
-    // 簡単な等価性チェック
+
+    // Simple equality check
     const json1 = this.dump(obj1, { includeTypes: false })
     const json2 = this.dump(obj2, { includeTypes: false })
-    
+
     console.log('Equal:', json1 === json2)
-    
+
     console.groupEnd()
   }
 }
 
-// 使用例
+// Usage example
 function debugExample() {
-  // 複雑なオブジェクト
+  // Complex object
   const complexObject = {
     id: 123,
     name: 'Test Object',
@@ -577,14 +577,14 @@ function debugExample() {
     symbolValue: Symbol('test'),
     errorValue: new Error('Test error')
   }
-  
-  // 循環参照を追加
+
+  // Add circular reference
   complexObject.metadata['self'] = complexObject
-  
-  // 基本的なダンプ
+
+  // Basic dump
   DebugDumper.dumpToConsole(complexObject, 'Complex Object')
-  
-  // オプション付きダンプ
+
+  // Dump with options
   DebugDumper.dumpToConsole(complexObject, 'With Functions', {
     includeFunctions: true,
     maxDepth: 3,
@@ -595,8 +595,8 @@ function debugExample() {
       return value
     }
   })
-  
-  // オブジェクト比較
+
+  // Object comparison
   const modifiedObject = { ...complexObject, name: 'Modified Object' }
   DebugDumper.compare(complexObject, modifiedObject, 'Original', 'Modified')
 }
@@ -604,26 +604,26 @@ function debugExample() {
 
 ## API Specification
 
-### 型定義
+### Type Definitions
 
 ```typescript
-// プリミティブな JSON 値
+// Primitive JSON values
 type JSONPrimitiveValue = string | number | boolean | null | undefined
 
-// JSON データ型
+// JSON data type
 type JSONData = JSONPrimitiveValue | JSONPrimitiveValue[] | JSONMapValue
 
-// JSON オブジェクト型
+// JSON object type
 type JSONMapValue = { [key: string]: JSONData }
 
-// リプレーサー関数型
+// Replacer function type
 type Replacer = (this: any, key: string, value: any) => any
 
-// シリアライザー関数型
+// Serializer function type
 type Serializer = (this: any, key: string, value: any) => any
 ```
 
-### 主要関数
+### Main Functions
 
 #### `safeJSONStringify`
 
@@ -636,15 +636,15 @@ function safeJSONStringify<T>(
 ): string
 ```
 
-安全なJSON文字列化を行います。
+Performs safe JSON stringification.
 
-**パラメーター:**
-- `obj`: シリアライズするオブジェクト
-- `replacer`: 値の変換・フィルタリング関数（オプション）
-- `spaces`: インデント文字列または数値（オプション）
-- `cycleReplacer`: 循環参照検出時の処理関数（オプション）
+**Parameters:**
+- `obj`: Object to serialize
+- `replacer`: Value transformation/filtering function (optional)
+- `spaces`: Indent string or number (optional)
+- `cycleReplacer`: Processing function when circular reference is detected (optional)
 
-**戻り値:** JSON文字列
+**Returns:** JSON string
 
 #### `safeJSONSerializer`
 
@@ -655,47 +655,47 @@ function safeJSONSerializer(
 ): Serializer
 ```
 
-循環参照に対応したシリアライザー関数を生成します。
+Generates a serializer function that handles circular references.
 
-**パラメーター:**
-- `replacer`: 値の変換・フィルタリング関数（オプション）
-- `cycleReplacer`: 循環参照検出時の処理関数（オプション）
+**Parameters:**
+- `replacer`: Value transformation/filtering function (optional)
+- `cycleReplacer`: Processing function when circular reference is detected (optional)
 
-**戻り値:** シリアライザー関数
+**Returns:** Serializer function
 
-### 循環参照の処理
+### Handling Circular References
 
-デフォルトの循環参照処理では以下の形式で置き換えられます：
+Default circular reference handling replaces them with the following format:
 
 ```typescript
-// ルートオブジェクトへの循環参照
+// Circular reference to root object
 "[Circular ~]"
 
-// 特定のパスへの循環参照
+// Circular reference to specific path
 "[Circular ~.path.to.object]"
 ```
 
 ## Considerations
 
-### パフォーマンス考慮事項
-- 大きなオブジェクトや深いネストのオブジェクトでは処理時間が増加
-- 循環参照の検出にはスタック管理のオーバーヘッドがある
-- カスタムリプレーサーの複雑さが性能に影響
+### Performance Considerations
+- Processing time increases with large objects or deeply nested objects
+- Circular reference detection has stack management overhead
+- Custom replacer complexity affects performance
 
-### メモリ使用量
-- 循環参照検出のためのスタック管理でメモリを使用
-- 大量のオブジェクトを同時処理する際はメモリ使用量に注意
+### Memory Usage
+- Uses memory for stack management for circular reference detection
+- Be mindful of memory usage when processing large amounts of objects simultaneously
 
-### セキュリティ考慮事項
-- 機密情報を含むオブジェクトのシリアライズ時は適切なリプレーサーを使用
-- ログ出力時は機密フィールドのマスキングを実装
-- エラーオブジェクトのスタック情報が意図せず出力される可能性に注意
+### Security Considerations
+- Use appropriate replacers when serializing objects containing sensitive information
+- Implement masking of sensitive fields during log output
+- Be aware that error object stack information may be output unintentionally
 
-### 使用場面
-- APIリクエスト・レスポンスのログ出力
-- 設定ファイルの安全な保存
-- デバッグ用のオブジェクト出力
-- 循環参照を含むデータ構造の処理
+### Use Cases
+- API request/response log output
+- Safe storage of configuration files
+- Debug object output
+- Processing data structures containing circular references
 
 ## License
 

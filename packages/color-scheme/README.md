@@ -1,22 +1,22 @@
 
 # @fastkit/color-scheme
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/color-scheme/README-ja.md)
 
-アプリケーションのカラーテーマとスキームを管理するための包括的なカラーシステムライブラリです。TypeScriptで構築され、型安全性、動的テーマ切り替え、アクセシビリティ対応を重視したカラー管理システムを提供します。
+A comprehensive color system library for managing application color themes and schemes. Built with TypeScript, it provides a color management system that emphasizes type safety, dynamic theme switching, and accessibility support.
 
-## 特徴
+## Features
 
-- **厳密な型安全性**: TypeScriptジェネリクスによる完全な型チェック
-- **動的テーマ切り替え**: ライト/ダークモードの自動判定と切り替え
-- **柔軟なパレット管理**: 関数ベースの動的カラー生成
-- **Vue.js完全統合**: 専用composablesとディレクティブ
-- **CSS Variables自動生成**: 効率的なCSSカスタムプロパティ管理
-- **アクセシビリティ対応**: コントラスト自動計算とフォーカス管理
-- **コンテキスト対応**: 背景に応じた自動カラー調整
-- **拡張可能設計**: カスタムテーマとスコープの簡単な追加
-- **パフォーマンス最適化**: 遅延評価とキャッシュ機構
-- **ビルドツール統合**: Plugboyとの完全統合
+- **Strict Type Safety**: Complete type checking through TypeScript generics
+- **Dynamic Theme Switching**: Automatic detection and switching of light/dark modes
+- **Flexible Palette Management**: Function-based dynamic color generation
+- **Complete Vue.js Integration**: Dedicated composables and directives
+- **Automatic CSS Variables Generation**: Efficient CSS custom property management
+- **Accessibility Support**: Automatic contrast calculation and focus management
+- **Context-Aware**: Automatic color adjustment based on background
+- **Extensible Design**: Easy addition of custom themes and scopes
+- **Performance Optimization**: Lazy evaluation and caching mechanisms
+- **Build Tool Integration**: Complete integration with Plugboy
 
 ## Installation
 
@@ -25,25 +25,25 @@ npm install @fastkit/color-scheme
 # or
 pnpm add @fastkit/color-scheme
 
-# Vue.js統合が必要な場合
+# If Vue.js integration is needed
 npm install @fastkit/vue-color-scheme
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### シンプルなカラースキーム作成
+### Creating a Simple Color Scheme
 
 ```typescript
 import { createColorScheme } from '@fastkit/color-scheme';
 
 const colorScheme = createColorScheme({
-  // カラーバリアント定義
+  // Color variant definitions
   variants: ['contained', 'outlined', 'inverted', 'plain'],
-  
-  // オプショナルカラー定義
+
+  // Optional color definitions
   optionals: ['light', 'deep', 'text', 'border', 'focus'],
-  
-  // テーマ定義
+
+  // Theme definitions
   themes: [
     {
       name: 'light',
@@ -70,30 +70,30 @@ const colorScheme = createColorScheme({
         ['background', '#121212'],
         ['surface', '#1e1e1e']
       ],
-      // 未定義のスコープはlightテーマから継承
+      // Undefined scopes inherit from light theme
     }
   ]
 });
 ```
 
-### Vue.js での使用
+### Using with Vue.js
 
 ```vue
 <template>
   <div :class="themeClass">
-    <!-- プライマリカラーのボタン -->
+    <!-- Primary color button -->
     <button :class="primaryClasses.contained">
-      プライマリボタン
+      Primary Button
     </button>
-    
-    <!-- セカンダリカラーのアウトラインボタン -->
+
+    <!-- Secondary color outline button -->
     <button :class="secondaryClasses.outlined">
-      セカンダリボタン
+      Secondary Button
     </button>
-    
-    <!-- テーマ切り替えボタン -->
+
+    <!-- Theme toggle button -->
     <button @click="toggleTheme">
-      {{ currentTheme === 'dark' ? 'ライト' : 'ダーク' }}テーマに切り替え
+      Switch to {{ currentTheme === 'dark' ? 'Light' : 'Dark' }} theme
     </button>
   </div>
 </template>
@@ -101,68 +101,68 @@ const colorScheme = createColorScheme({
 <script setup lang="ts">
 import { useColorScheme, useColorClasses, useThemeClass } from '@fastkit/vue-color-scheme';
 
-// カラースキームサービス
+// Color scheme service
 const colorScheme = useColorScheme();
 
-// テーマクラス管理
+// Theme class management
 const { themeClass, currentTheme, toggleTheme } = useThemeClass();
 
-// カラークラス生成
+// Color class generation
 const primaryClasses = useColorClasses('primary');
 const secondaryClasses = useColorClasses('secondary');
 </script>
 ```
 
-## カラースキーム定義
+## Color Scheme Definition
 
-### パレット定義
+### Palette Definition
 
 ```typescript
-// 静的カラー定義
+// Static color definition
 palette: [
   ['primary', '#1976d2'],
   ['secondary', '#424242']
 ]
 
-// 動的カラー定義
+// Dynamic color definition
 palette: [
   ['primary', '#1976d2'],
   ['primaryLight', ({ palette }) => palette('primary').lighten(0.2)],
   ['primaryDark', ({ palette }) => palette('primary').darken(0.2)],
   ['onPrimary', ({ palette }) => {
-    // 背景色の明度に応じてテキストカラーを自動選択
+    // Automatically select text color based on background brightness
     const bg = palette('primary');
     return bg.brightness() > 0.5 ? '#000000' : '#ffffff';
   }]
 ]
 ```
 
-### スコープ定義
+### Scope Definition
 
 ```typescript
 scopes: [
-  // 基本スコープ
+  // Basic scope
   ['primary', ({ palette }) => palette('primary')],
-  
-  // コンテキスト対応スコープ
+
+  // Context-aware scope
   ['error', ({ palette, theme }) => {
     const base = palette('error');
-    // ダークテーマでは少し明るく調整
+    // Adjust slightly brighter in dark theme
     return theme.isDark ? base.lighten(0.1) : base;
   }],
-  
-  // 条件付きスコープ
+
+  // Conditional scope
   ['accent', ({ palette, theme }) => {
     return theme.name === 'dark' ? palette('secondary') : palette('primary');
   }]
 ]
 ```
 
-### スコープデフォルト
+### Scope Defaults
 
 ```typescript
 scopeDefaults: ({ palette, theme }) => ({
-  // デフォルトスコープの自動生成
+  // Automatic default scope generation
   default: [
     'transparent',
     {
@@ -172,8 +172,8 @@ scopeDefaults: ({ palette, theme }) => ({
       focusShadow: palette('primary').alpha(0.3)
     }
   ],
-  
-  // 各カラーの自動バリエーション生成
+
+  // Automatic variation generation for each color
   primary: [
     ({ palette }) => palette('primary'),
     {
@@ -188,90 +188,90 @@ scopeDefaults: ({ palette, theme }) => ({
 })
 ```
 
-## テーマ管理
+## Theme Management
 
-### 自動ライト/ダーク判定
+### Automatic Light/Dark Detection
 
 ```typescript
 const scheme = createColorScheme({
   themes: [
     {
       name: 'light',
-      // 明度0.5以上で自動的にライトテーマと判定
+      // Automatically detected as light theme with brightness >= 0.5
       palette: [['background', '#ffffff']]
     },
     {
-      name: 'dark', 
-      // 明度0.5未満で自動的にダークテーマと判定
+      name: 'dark',
+      // Automatically detected as dark theme with brightness < 0.5
       palette: [['background', '#121212']]
     }
   ]
 });
 
-// テーマの判定結果を取得
+// Get theme detection results
 console.log(scheme.theme('light').isLight); // true
 console.log(scheme.theme('dark').isDark);   // true
 ```
 
-### 動的テーマ切り替え
+### Dynamic Theme Switching
 
 ```typescript
-// Vue.js composable使用例
-const { 
-  currentTheme,     // 現在のテーマ名
-  setTheme,         // テーマ設定
-  toggleTheme,      // テーマ切り替え
-  isDark,          // ダークテーマかどうか
-  isLight          // ライトテーマかどうか
+// Vue.js composable usage example
+const {
+  currentTheme,     // Current theme name
+  setTheme,         // Theme setting
+  toggleTheme,      // Theme switching
+  isDark,          // Whether it's dark theme
+  isLight          // Whether it's light theme
 } = useThemeClass();
 
-// プログラマティックなテーマ切り替え
+// Programmatic theme switching
 setTheme('dark');
 
-// システム設定に追従
+// Follow system settings
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 setTheme(prefersDark.matches ? 'dark' : 'light');
 
-// 自動切り替え監視
+// Monitor automatic switching
 prefersDark.addEventListener('change', (e) => {
   setTheme(e.matches ? 'dark' : 'light');
 });
 ```
 
-## カラーバリアント
+## Color Variants
 
-### 組み込みバリアント
+### Built-in Variants
 
 ```typescript
 const variants = ['contained', 'outlined', 'inverted', 'plain'];
 
-// CSS クラス例:
-// - primary-contained: 塗りつぶしスタイル
-// - primary-outlined: アウトラインスタイル  
-// - primary-inverted: 反転スタイル
-// - primary-plain: プレーンスタイル
+// CSS class examples:
+// - primary-contained: Filled style
+// - primary-outlined: Outline style
+// - primary-inverted: Inverted style
+// - primary-plain: Plain style
 ```
 
-### カスタムバリアント定義
+### Custom Variant Definition
 
 ```typescript
 const colorScheme = createColorScheme({
   variants: ['contained', 'outlined', 'inverted', 'plain', 'gradient', 'shadow'],
-  
-  // カスタムバリアントのCSS定義は別途必要
+
+  // CSS definitions for custom variants need to be provided separately
   themes: [/* ... */]
 });
 ```
 
 ## Advanced Usage Examples
 
-### レスポンシブカラーシステム
+### Responsive Color System
 
 ```typescript
 const responsiveColorScheme = createColorScheme({
   variants: ['contained', 'outlined', 'text'],
   optionals: ['light', 'deep', 'hover', 'active', 'disabled'],
-  
+
   themes: [
     {
       name: 'light',
@@ -280,19 +280,19 @@ const responsiveColorScheme = createColorScheme({
         ['secondary', '#424242'],
         ['background', '#ffffff'],
         ['surface', '#f5f5f5'],
-        
-        // レスポンシブ対応
+
+        // Responsive support
         ['mobile-primary', ({ palette }) => palette('primary').saturate(0.1)],
         ['tablet-primary', ({ palette }) => palette('primary')],
         ['desktop-primary', ({ palette }) => palette('primary').desaturate(0.05)]
       ],
-      
+
       scopes: [
         ['primary', ({ palette }) => {
-          // メディアクエリに応じたカラー選択
+          // Color selection based on media queries
           const isMobile = window.innerWidth < 768;
           const isTablet = window.innerWidth < 1024;
-          
+
           if (isMobile) return palette('mobile-primary');
           if (isTablet) return palette('tablet-primary');
           return palette('desktop-primary');
@@ -303,13 +303,13 @@ const responsiveColorScheme = createColorScheme({
 });
 ```
 
-### アニメーション対応カラーシステム
+### Animation-Compatible Color System
 
 ```typescript
 const animatedColorScheme = createColorScheme({
   variants: ['contained', 'outlined'],
   optionals: ['hover', 'active', 'focus', 'disabled'],
-  
+
   themes: [
     {
       name: 'light',
@@ -320,7 +320,7 @@ const animatedColorScheme = createColorScheme({
         ['primary-focus', ({ palette }) => palette('primary').alpha(0.12)],
         ['primary-disabled', ({ palette }) => palette('primary').alpha(0.38)]
       ],
-      
+
       scopes: [
         ['primary', ({ palette }) => palette('primary')],
         ['primary-interactive', ({ palette }) => ({
@@ -336,7 +336,7 @@ const animatedColorScheme = createColorScheme({
 });
 ```
 
-### コンポーネントライブラリ統合
+### Component Library Integration
 
 ```vue
 <template>
@@ -363,10 +363,10 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false
 });
 
-// カラークラス生成
+// Color class generation
 const colorClasses = useColorClasses(props.color);
 
-// 最終的なクラス名計算
+// Final class name calculation
 const buttonClasses = computed(() => [
   'button',
   `button--${props.size}`,
@@ -379,7 +379,7 @@ const buttonClasses = computed(() => [
 
 <style scoped>
 .button {
-  /* ベーススタイル */
+  /* Base styles */
   padding: var(--spacing-md);
   border-radius: var(--border-radius);
   font-weight: 500;
@@ -396,7 +396,7 @@ const buttonClasses = computed(() => [
   cursor: not-allowed;
 }
 
-/* カラースキームのCSS変数を使用 */
+/* Use CSS variables from color scheme */
 .button.primary-contained {
   background-color: var(--color-primary);
   color: var(--color-primary-text);
@@ -415,13 +415,13 @@ const buttonClasses = computed(() => [
 </style>
 ```
 
-## CSS Variables統合
+## CSS Variables Integration
 
-### 自動生成されるCSS変数
+### Auto-generated CSS Variables
 
 ```css
 :root.light-theme {
-  /* プライマリカラー */
+  /* Primary colors */
   --color-primary: #1976d2;
   --color-primary-light: rgba(25, 118, 210, 0.04);
   --color-primary-deep: rgba(25, 118, 210, 0.1);
@@ -429,14 +429,14 @@ const buttonClasses = computed(() => [
   --color-primary-border: rgba(25, 118, 210, 0.5);
   --color-primary-focus: #1565c0;
   --color-primary-focus-shadow: rgba(25, 118, 210, 0.5);
-  
-  /* セカンダリカラー */
+
+  /* Secondary colors */
   --color-secondary: #424242;
   --color-secondary-light: rgba(66, 66, 66, 0.04);
   --color-secondary-deep: rgba(66, 66, 66, 0.1);
   --color-secondary-text: #ffffff;
-  
-  /* システムカラー */
+
+  /* System colors */
   --color-background: #ffffff;
   --color-surface: #f5f5f5;
   --color-on-background: #000000;
@@ -453,32 +453,32 @@ const buttonClasses = computed(() => [
 }
 ```
 
-### SCSS統合
+### SCSS Integration
 
 ```scss
-// _variables.scss (自動生成)
+// _variables.scss (auto-generated)
 $color-primary: var(--color-primary);
 $color-primary-light: var(--color-primary-light);
 $color-primary-deep: var(--color-primary-deep);
 
-// コンポーネントスタイル
+// Component styles
 .my-component {
   background-color: $color-primary;
   color: $color-primary-text;
-  
+
   &:hover {
     background-color: $color-primary-deep;
   }
-  
+
   &:focus {
     box-shadow: 0 0 0 2px $color-primary-focus-shadow;
   }
 }
 ```
 
-## Plugboy統合
+## Plugboy Integration
 
-### プラグイン設定
+### Plugin Configuration
 
 ```typescript
 // plugboy.workspace.ts
@@ -491,13 +491,13 @@ export default defineWorkspaceConfig({
   },
   plugins: [
     colorSchemePlugin({
-      // カラースキーム定義ファイル
+      // Color scheme definition file
       input: './src/color-scheme.ts',
-      // CSS出力パス
+      // CSS output path
       output: './dist/colors.css',
-      // SCSS変数出力
+      // SCSS variable output
       scssOutput: './src/styles/_colors.scss',
-      // 追加設定
+      // Additional settings
       generateCssVars: true,
       generateScssVars: true,
       minify: true
@@ -506,7 +506,7 @@ export default defineWorkspaceConfig({
 });
 ```
 
-### ビルド時カラー生成
+### Build-time Color Generation
 
 ```typescript
 // src/color-scheme.ts
@@ -536,9 +536,9 @@ export const colorScheme = createSimpleColorScheme({
 });
 ```
 
-## アクセシビリティ対応
+## Accessibility Support
 
-### コントラスト自動計算
+### Automatic Contrast Calculation
 
 ```typescript
 const accessibleColorScheme = createColorScheme({
@@ -547,16 +547,16 @@ const accessibleColorScheme = createColorScheme({
       name: 'light',
       palette: [
         ['primary', '#1976d2'],
-        // 背景色の明度に応じて自動的にテキストカラーを選択
+        // Automatically select text color based on background brightness
         ['primary-text', ({ palette }) => {
           const bg = palette('primary');
           const brightness = bg.brightness();
-          
-          // WCAG AA基準に基づくコントラスト確保
+
+          // Ensure contrast based on WCAG AA standards
           if (brightness > 0.5) {
-            return '#000000'; // 明るい背景には黒テキスト
+            return '#000000'; // Black text for bright backgrounds
           } else {
-            return '#ffffff'; // 暗い背景には白テキスト
+            return '#ffffff'; // White text for dark backgrounds
           }
         }]
       ]
@@ -565,18 +565,18 @@ const accessibleColorScheme = createColorScheme({
 });
 ```
 
-### フォーカス管理
+### Focus Management
 
 ```typescript
 scopeDefaults: ({ palette, theme }) => ({
   primary: [
     ({ palette }) => palette('primary'),
     {
-      // フォーカス時の視認性確保
+      // Ensure focus visibility
       focus: ({ main }) => main.darken(0.1),
       focusShadow: ({ main }) => main.alpha(0.3),
-      
-      // キーボードナビゲーション対応
+
+      // Keyboard navigation support
       focusVisible: ({ main }) => main.alpha(0.12),
       focusRing: ({ main }) => main.alpha(0.5)
     }
@@ -584,35 +584,35 @@ scopeDefaults: ({ palette, theme }) => ({
 })
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### 遅延評価
+### Lazy Evaluation
 
 ```typescript
-// カラー値は必要になるまで計算されない
+// Color values are not calculated until needed
 const lazyColor = ({ palette }) => palette('primary').lighten(0.2);
 
-// アクセス時に初めて計算される
+// Calculated only when accessed
 const actualColor = scheme.scope('primary').light;
 ```
 
-### キャッシュ機構
+### Caching Mechanism
 
 ```typescript
-// 一度計算された値はキャッシュされる
+// Once calculated values are cached
 const cachedScheme = createColorScheme({
-  cache: true, // キャッシュ有効化
+  cache: true, // Enable caching
   themes: [/* ... */]
 });
 
-// 同じテーマ・スコープへの再アクセスは高速
+// Re-access to same theme/scope is fast
 const color1 = cachedScheme.scope('primary').main;
-const color2 = cachedScheme.scope('primary').main; // キャッシュから取得
+const color2 = cachedScheme.scope('primary').main; // Retrieved from cache
 ```
 
-## 型安全性と拡張
+## Type Safety and Extension
 
-### モジュール拡張
+### Module Extension
 
 ```typescript
 // types/color-scheme.d.ts
@@ -622,7 +622,7 @@ declare module '@fastkit/color-scheme' {
     dark: 'dark';
     auto: 'auto';
   }
-  
+
   interface PaletteSettings {
     primary: 'primary';
     secondary: 'secondary';
@@ -632,14 +632,14 @@ declare module '@fastkit/color-scheme' {
     error: 'error';
     info: 'info';
   }
-  
+
   interface ScopeSettings {
     primary: 'primary';
     secondary: 'secondary';
     surface: 'surface';
     background: 'background';
   }
-  
+
   interface VariantSettings {
     contained: 'contained';
     outlined: 'outlined';
@@ -649,21 +649,21 @@ declare module '@fastkit/color-scheme' {
 }
 ```
 
-### 型安全なカラーアクセス
+### Type-safe Color Access
 
 ```typescript
-// 型安全なスキームアクセス
-const color: string = scheme.scope('primary').main; // ✓ 正常
-const invalid = scheme.scope('invalid'); // ✗ TypeScriptエラー
+// Type-safe scheme access
+const color: string = scheme.scope('primary').main; // ✓ Valid
+const invalid = scheme.scope('invalid'); // ✗ TypeScript error
 
-// 型安全なテーマアクセス
-const lightTheme = scheme.theme('light'); // ✓ 正常
-const invalidTheme = scheme.theme('invalid'); // ✗ TypeScriptエラー
+// Type-safe theme access
+const lightTheme = scheme.theme('light'); // ✓ Valid
+const invalidTheme = scheme.theme('invalid'); // ✗ TypeScript error
 ```
 
-## テストとデバッグ
+## Testing and Debugging
 
-### ユニットテスト例
+### Unit Test Examples
 
 ```typescript
 import { describe, test, expect } from 'vitest';
@@ -680,35 +680,35 @@ describe('ColorScheme', () => {
       }
     ]
   });
-  
-  test('テーマアクセス', () => {
+
+  test('theme access', () => {
     const theme = scheme.theme('light');
     expect(theme.name).toBe('light');
     expect(theme.isLight).toBe(true);
   });
-  
-  test('スコープアクセス', () => {
+
+  test('scope access', () => {
     const scope = scheme.scope('primary');
     expect(scope.main).toBe('#1976d2');
   });
-  
-  test('パレットアクセス', () => {
+
+  test('palette access', () => {
     const palette = scheme.theme('light').palette;
     expect(palette('primary')).toBe('#1976d2');
   });
 });
 ```
 
-### デバッグ機能
+### Debug Features
 
 ```typescript
-// デバッグモード有効化
+// Enable debug mode
 const debugScheme = createColorScheme({
   debug: true,
   themes: [/* ... */]
 });
 
-// カラー情報の詳細出力
+// Detailed color information output
 console.log(debugScheme.debug.info());
 // {
 //   themes: ['light', 'dark'],
@@ -718,13 +718,13 @@ console.log(debugScheme.debug.info());
 // }
 ```
 
-## 依存関係
+## Dependencies
 
 ```json
 {
   "dependencies": {
-    "@fastkit/color": "カラー操作ライブラリ",
-    "@fastkit/tiny-logger": "ログ機能"
+    "@fastkit/color": "Color manipulation library",
+    "@fastkit/tiny-logger": "Logging functionality"
   },
   "peerDependencies": {
     "vue": "^3.4.0"
@@ -736,9 +736,9 @@ console.log(debugScheme.debug.info());
 }
 ```
 
-## ドキュメント
+## Documentation
 
-詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/color-scheme/)をご覧ください。
+For detailed documentation, please visit [here](https://dadajam4.github.io/fastkit/color-scheme/).
 
 ## License
 

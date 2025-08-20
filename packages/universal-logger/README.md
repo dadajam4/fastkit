@@ -1,18 +1,18 @@
 
 # @fastkit/universal-logger
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/universal-logger/README-ja.md)
 
-サーバー/ブラウザの実行環境を問わないプラグイン可能でユニバーサルなログ出力用ライブラリです。
+A pluggable and universal logging library that works regardless of server/browser execution environment.
 
-## 特徴
+## Features
 
-- **ユニバーサル対応**: Node.js、ブラウザ環境で同じAPIを使用可能
-- **プラグイン設計**: Transformer、Transport で自由にカスタマイズ
-- **TypeScript完全対応**: 厳密な型定義でタイプセーフなログ操作
-- **レベル制御**: trace、debug、info、warn、error の5段階レベル対応
-- **複数出力**: コンソール、Datadog等への同時出力をサポート
-- **名前付きロガー**: 用途別にロガーを分離して管理可能
+- **Universal Support**: Same API can be used in Node.js and browser environments
+- **Plugin Design**: Freely customizable with Transformer and Transport
+- **Full TypeScript Support**: Type-safe log operations with strict type definitions
+- **Level Control**: 5-level support: trace, debug, info, warn, error
+- **Multiple Outputs**: Supports simultaneous output to console, Datadog, etc.
+- **Named Loggers**: Loggers can be separated and managed by purpose
 
 ## Installation
 
@@ -22,14 +22,14 @@ npm install @fastkit/universal-logger
 pnpm add @fastkit/universal-logger
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### シンプルなロガー
+### Simple Logger
 
 ```typescript
 import { loggerBuilder, ConsoleTransport } from '@fastkit/universal-logger';
 
-// ロガーを構築
+// Build logger
 const { getLogger } = loggerBuilder({
   defaultSettings: {
     level: 'info',
@@ -37,14 +37,14 @@ const { getLogger } = loggerBuilder({
   }
 });
 
-// ロガーを取得して使用
+// Get and use logger
 const logger = getLogger();
 logger.info('Hello, world!');
 logger.warn('Warning message');
 logger.error('Error occurred', new Error('Sample error'));
 ```
 
-### 名前付きロガー
+### Named Loggers
 
 ```typescript
 const { getLogger } = loggerBuilder({
@@ -64,7 +64,7 @@ apiLogger.debug('API request received');
 dbLogger.error('Database connection failed');
 ```
 
-### Datadogとの連携
+### Datadog Integration
 
 ```typescript
 import { datadogLogs } from '@datadog/browser-logs';
@@ -89,12 +89,12 @@ const logger = getLogger();
 logger.info('User action', { userId: 123, action: 'login' });
 ```
 
-### カスタムTransformer
+### Custom Transformer
 
 ```typescript
 import { Transformer, loggerBuilder } from '@fastkit/universal-logger';
 
-// タイムスタンプを追加するTransformer
+// Transformer that adds timestamp
 const timestampTransformer: Transformer = (payload) => {
   payload.meta.timestamp = new Date().toISOString();
   return payload;
@@ -110,86 +110,86 @@ const { getLogger } = loggerBuilder({
 
 ## API
 
-### Logger クラス
+### Logger Class
 
 #### `log(level: LogLevel, ...args: any[]): Promise<any[]>`
-指定されたログレベルでログを出力
+Output log at specified log level
 
 #### `trace(...args: any[]): Promise<any[]>`
-traceレベルでログを出力
+Output log at trace level
 
 #### `debug(...args: any[]): Promise<any[]>`
-debugレベルでログを出力
+Output log at debug level
 
 #### `info(...args: any[]): Promise<any[]>`
-infoレベルでログを出力
+Output log at info level
 
 #### `warn(...args: any[]): Promise<any[]>`
-warnレベルでログを出力
+Output log at warn level
 
 #### `error(...args: any[]): Promise<any[]>`
-errorレベルでログを出力
+Output log at error level
 
-### loggerBuilder 関数
+### loggerBuilder Function
 
 #### `loggerBuilder(opts?: LoggerBuilderOptions): LoggerBuilderResult`
-指定されたオプションに対応するロガーを生成
+Generate logger corresponding to specified options
 
 #### LoggerBuilderOptions
 ```typescript
 interface LoggerBuilderOptions {
-  defaultSettings?: LoggerOptions;  // 全ロガーのベース設定
-  namedSettings?: LoggerNamedSettings;  // 名前付きロガーの設定
+  defaultSettings?: LoggerOptions;  // Base settings for all loggers
+  namedSettings?: LoggerNamedSettings;  // Settings for named loggers
 }
 ```
 
 #### LoggerOptions
 ```typescript
 interface LoggerOptions {
-  level?: LogLevelThreshold;  // ログレベル閾値
-  transformers?: Transformer[];  // 変換関数のリスト
-  transports?: RawTransport[];  // 出力先のリスト
+  level?: LogLevelThreshold;  // Log level threshold
+  transformers?: Transformer[];  // List of transformation functions
+  transports?: RawTransport[];  // List of output destinations
 }
 ```
 
-### 内蔵Transport
+### Built-in Transport
 
 #### `ConsoleTransport(settings?: ConsoleTransportSettings): Transport`
-JavaScript コンソールへの出力
+Output to JavaScript console
 
-- `level`: ログレベル閾値
-- `pretty`: ログレベル別の色付け
+- `level`: Log level threshold
+- `pretty`: Color coding by log level
 
 #### `DDTransport(settings: DDTransportSettings): Transport`
-Datadog への送信（ブラウザ環境）
+Send to Datadog (browser environment)
 
-- `dd`: datadogLogs オブジェクト
-- `config`: Datadog初期化設定
-- `clone`: クローン変換設定
+- `dd`: datadogLogs object
+- `config`: Datadog initialization settings
+- `clone`: Clone transformation settings
 
 #### `StdoTransport(settings?: StdoTransportSettings): Transport`
-標準出力への出力（Node.js環境）
+Output to standard output (Node.js environment)
 
-### 内蔵Transformer
+### Built-in Transformer
 
 #### `CloneTransformer(options?: CloneOptions): Transformer`
-ペイロードのディープクローンを作成
+Create deep clone of payload
 
 #### `SanitizerTransformer(options?: SanitizerOptions): Transformer`
-機密データのサニタイズを実行
+Execute sanitization of sensitive data
 
-### ログレベル
+### Log Levels
 
-- `error`: エラーレベル（最高優先度）
-- `warn`: 警告レベル
-- `info`: 情報レベル
-- `debug`: デバッグレベル
-- `trace`: トレースレベル（最低優先度）
-- `silent`: 出力を無効化
+- `error`: Error level (highest priority)
+- `warn`: Warning level
+- `info`: Information level
+- `debug`: Debug level
+- `trace`: Trace level (lowest priority)
+- `silent`: Disable output
 
 ## Advanced Usage Examples
 
-### 環境別設定
+### Environment-specific Configuration
 
 ```typescript
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -198,22 +198,22 @@ const { getLogger } = loggerBuilder({
   defaultSettings: {
     level: isDevelopment ? 'debug' : 'info',
     transformers: [
-      // 本番環境では機密情報をサニタイズ
+      // Sanitize sensitive information in production environment
       !isDevelopment && SanitizerTransformer()
     ].filter(Boolean),
     transports: [
       ConsoleTransport({ pretty: isDevelopment }),
-      // 本番環境でのみDatadog送信
+      // Send to Datadog only in production environment
       !isDevelopment && DDTransport({
         dd: datadogLogs,
-        config: { /* Datadog設定 */ }
+        config: { /* Datadog settings */ }
       })
     ].filter(Boolean)
   }
 });
 ```
 
-### カスタムTransport
+### Custom Transport
 
 ```typescript
 const FileTransport = (filePath: string): Transport => ({
@@ -225,20 +225,20 @@ const FileTransport = (filePath: string): Transport => ({
 });
 ```
 
-## 依存関係
+## Dependencies
 
-- `@fastkit/cloner`: オブジェクトクローン機能
-- `@fastkit/helpers`: ヘルパーユーティリティ
-- `@fastkit/json`: JSON処理
-- `@fastkit/tiny-logger`: 軽量ログユーティリティ
+- `@fastkit/cloner`: Object clone functionality
+- `@fastkit/helpers`: Helper utilities
+- `@fastkit/json`: JSON processing
+- `@fastkit/tiny-logger`: Lightweight log utilities
 
 ### Peer Dependencies
 
-- `@datadog/browser-logs`: Datadog連携（オプション）
+- `@datadog/browser-logs`: Datadog integration (optional)
 
-## ドキュメント
+## Documentation
 
-詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/universal-logger/)をご覧ください。
+For detailed documentation, please see [here](https://dadajam4.github.io/fastkit/universal-logger/).
 
 ## License
 

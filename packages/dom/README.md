@@ -1,20 +1,20 @@
 
 # @fastkit/dom
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/dom/README-ja.md)
 
-ブラウザ環境でのDOM操作を安全かつ効率的に行うためのユーティリティライブラリ。フォーカス管理、スタイル操作、スクリプト読み込み、CSS トランジション監視、ウィンドウ操作、画像読み込みなどの機能を提供します。
+A utility library for safe and efficient DOM manipulation in browser environments. Provides functionality including focus management, style manipulation, script loading, CSS transition monitoring, window operations, and image loading.
 
 ## Features
 
-- **フォーカス管理**: 要素のフォーカス可能性判定とフォーカス制御
-- **動的スタイル**: 実行時でのスタイル追加とCSS操作
-- **スクリプト読み込み**: 外部スクリプトの動的読み込みとキャッシュ管理
-- **CSS トランジション**: トランジションイベントの高度な監視機能
-- **ウィンドウ操作**: Node所有者ドキュメント・ウィンドウの取得
-- **画像読み込み**: Promise ベースの画像読み込み
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
+- **Focus Management**: Element focusability detection and focus control
+- **Dynamic Styling**: Runtime style addition and CSS manipulation
+- **Script Loading**: Dynamic loading of external scripts with cache management
+- **CSS Transitions**: Advanced monitoring of transition events
+- **Window Operations**: Retrieving owner document and window of nodes
+- **Image Loading**: Promise-based image loading
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Complete TypeScript Support**: Type safety through strict type definitions
 
 ## Installation
 
@@ -22,45 +22,45 @@
 npm install @fastkit/dom
 ```
 
-## フォーカス管理
+## Focus Management
 
-### 基本的なフォーカス制御
+### Basic Focus Control
 
 ```typescript
-import { 
-  isFocusable, 
-  attemptFocus, 
-  focusFirstDescendant, 
-  blurActiveElement 
+import {
+  isFocusable,
+  attemptFocus,
+  focusFirstDescendant,
+  blurActiveElement
 } from '@fastkit/dom'
 
-// フォーカス可能性の判定
+// Check focusability
 const button = document.querySelector('button')
 if (isFocusable(button)) {
-  console.log('この要素はフォーカス可能です')
+  console.log('This element is focusable')
 }
 
-// 安全なフォーカス設定
+// Safe focus setting
 const success = attemptFocus(button)
 if (success) {
-  console.log('フォーカスが設定されました')
+  console.log('Focus has been set')
 }
 
-// 子要素の中で最初にフォーカス可能な要素にフォーカス
+// Focus on first focusable element among child elements
 const container = document.querySelector('.form-container')
 const focused = focusFirstDescendant(container)
 if (focused) {
-  console.log('子要素にフォーカスが設定されました')
+  console.log('Focus has been set on child element')
 }
 
-// アクティブ要素のフォーカスを解除
+// Remove focus from active element
 const previousActive = blurActiveElement()
 if (previousActive) {
-  console.log('フォーカスが解除されました:', previousActive)
+  console.log('Focus has been removed:', previousActive)
 }
 ```
 
-### モーダルダイアログでのフォーカス管理
+### Focus Management in Modal Dialogs
 
 ```typescript
 import { focusFirstDescendant, blurActiveElement } from '@fastkit/dom'
@@ -68,49 +68,49 @@ import { focusFirstDescendant, blurActiveElement } from '@fastkit/dom'
 class ModalDialog {
   private previousActiveElement: HTMLElement | SVGElement | undefined
   private modalElement: HTMLElement
-  
+
   constructor(modalElement: HTMLElement) {
     this.modalElement = modalElement
   }
-  
+
   open() {
-    // 現在のフォーカスを記憶してクリア
+    // Remember and clear current focus
     this.previousActiveElement = blurActiveElement()
-    
-    // モーダルを表示
+
+    // Show modal
     this.modalElement.style.display = 'block'
-    
-    // モーダル内の最初のフォーカス可能要素にフォーカス
+
+    // Focus on first focusable element in modal
     setTimeout(() => {
       if (!focusFirstDescendant(this.modalElement)) {
-        // フォーカス可能な子要素がない場合はモーダル自体にフォーカス
+        // If no focusable child element, focus on modal itself
         this.modalElement.setAttribute('tabindex', '-1')
         this.modalElement.focus()
       }
     }, 100)
   }
-  
+
   close() {
-    // モーダルを非表示
+    // Hide modal
     this.modalElement.style.display = 'none'
-    
-    // 前のフォーカスを復元
+
+    // Restore previous focus
     if (this.previousActiveElement) {
       try {
         this.previousActiveElement.focus()
       } catch (e) {
-        // 前の要素が削除されている場合は何もしない
+        // Do nothing if previous element was removed
       }
     }
   }
 }
 
-// 使用例
+// Usage example
 const modal = new ModalDialog(document.querySelector('#my-modal'))
 modal.open()
 ```
 
-### アクセシビリティ対応のフォーカストラップ
+### Accessibility-Compatible Focus Trap
 
 ```typescript
 import { isFocusable, attemptFocus } from '@fastkit/dom'
@@ -118,20 +118,20 @@ import { isFocusable, attemptFocus } from '@fastkit/dom'
 class FocusTrap {
   private container: HTMLElement
   private focusableElements: HTMLElement[] = []
-  
+
   constructor(container: HTMLElement) {
     this.container = container
     this.updateFocusableElements()
     this.setupEventListeners()
   }
-  
+
   private updateFocusableElements() {
     const all = this.container.querySelectorAll('*')
-    this.focusableElements = Array.from(all).filter(el => 
+    this.focusableElements = Array.from(all).filter(el =>
       isFocusable(el as HTMLElement)
     ) as HTMLElement[]
   }
-  
+
   private setupEventListeners() {
     this.container.addEventListener('keydown', (e) => {
       if (e.key === 'Tab') {
@@ -139,48 +139,48 @@ class FocusTrap {
       }
     })
   }
-  
+
   private handleTabKey(e: KeyboardEvent) {
     if (this.focusableElements.length === 0) return
-    
+
     const firstElement = this.focusableElements[0]
     const lastElement = this.focusableElements[this.focusableElements.length - 1]
-    
+
     if (e.shiftKey) {
-      // Shift + Tab (逆方向)
+      // Shift + Tab (reverse direction)
       if (document.activeElement === firstElement) {
         e.preventDefault()
         attemptFocus(lastElement)
       }
     } else {
-      // Tab (順方向)
+      // Tab (forward direction)
       if (document.activeElement === lastElement) {
         e.preventDefault()
         attemptFocus(firstElement)
       }
     }
   }
-  
+
   focusFirst() {
     if (this.focusableElements.length > 0) {
       attemptFocus(this.focusableElements[0])
     }
   }
-  
+
   destroy() {
-    // イベントリスナーのクリーンアップ
+    // Event listener cleanup
   }
 }
 ```
 
-## 動的スタイル操作
+## Dynamic Style Manipulation
 
-### 実行時スタイル注入
+### Runtime Style Injection
 
 ```typescript
 import { pushDynamicStyle } from '@fastkit/dom'
 
-// CSS をヘッダーに動的に追加
+// Dynamically add CSS to header
 pushDynamicStyle(`
   .dynamic-button {
     background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
@@ -192,31 +192,31 @@ pushDynamicStyle(`
     cursor: pointer;
     transition: transform 0.2s ease;
   }
-  
+
   .dynamic-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
 `)
 
-// 動的にボタンを作成
+// Dynamically create button
 const button = document.createElement('button')
 button.className = 'dynamic-button'
 button.textContent = 'Dynamic Button'
 document.body.appendChild(button)
 ```
 
-### テーマ切り替えシステム
+### Theme Switching System
 
 ```typescript
 import { pushDynamicStyle } from '@fastkit/dom'
 
 class ThemeManager {
   private currentTheme = 'light'
-  
+
   applyTheme(theme: 'light' | 'dark') {
     this.currentTheme = theme
-    
+
     const styles = theme === 'dark' ? `
       :root {
         --bg-color: #1a1a1a;
@@ -224,13 +224,13 @@ class ThemeManager {
         --border-color: #333333;
         --accent-color: #4ECDC4;
       }
-      
+
       body {
         background-color: var(--bg-color);
         color: var(--text-color);
         transition: background-color 0.3s ease, color 0.3s ease;
       }
-      
+
       .card {
         background: #2d2d2d;
         border: 1px solid var(--border-color);
@@ -244,13 +244,13 @@ class ThemeManager {
         --border-color: #e0e0e0;
         --accent-color: #2196F3;
       }
-      
+
       body {
         background-color: var(--bg-color);
         color: var(--text-color);
         transition: background-color 0.3s ease, color 0.3s ease;
       }
-      
+
       .card {
         background: #ffffff;
         border: 1px solid var(--border-color);
@@ -259,10 +259,10 @@ class ThemeManager {
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       }
     `
-    
+
     pushDynamicStyle(styles)
   }
-  
+
   toggle() {
     this.applyTheme(this.currentTheme === 'light' ? 'dark' : 'light')
   }
@@ -272,32 +272,32 @@ const themeManager = new ThemeManager()
 themeManager.applyTheme('dark')
 ```
 
-## スクリプト読み込み
+## Script Loading
 
-### 基本的なスクリプト読み込み
+### Basic Script Loading
 
 ```typescript
 import { loadScript, ensureScript } from '@fastkit/dom'
 
-// 単発のスクリプト読み込み
+// One-time script loading
 try {
   const scriptElement = await loadScript('https://cdn.example.com/library.js', {
     crossorigin: 'anonymous',
     integrity: 'sha384-...',
     type: 'text/javascript'
   })
-  console.log('スクリプトが読み込まれました:', scriptElement)
+  console.log('Script loaded:', scriptElement)
 } catch (error) {
-  console.error('スクリプトの読み込みに失敗:', error)
+  console.error('Script loading failed:', error)
 }
 
-// キャッシュ機能付きスクリプト読み込み
-// 同じURLのスクリプトは重複して読み込まれない
+// Script loading with cache functionality
+// Scripts with the same URL won't be loaded twice
 await ensureScript('https://cdn.example.com/analytics.js')
-await ensureScript('https://cdn.example.com/analytics.js') // キャッシュから取得
+await ensureScript('https://cdn.example.com/analytics.js') // Retrieved from cache
 ```
 
-### 動的ライブラリローダー
+### Dynamic Library Loader
 
 ```typescript
 import { ensureScript } from '@fastkit/dom'
@@ -308,30 +308,30 @@ class LibraryLoader {
     maps: 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY',
     animations: 'https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js'
   }
-  
+
   static async loadCharts() {
     await ensureScript(this.libraries.charts)
-    // @ts-ignore - Chart.js が読み込まれた後
+    // @ts-ignore - After Chart.js is loaded
     return window.Chart
   }
-  
+
   static async loadMaps() {
     await ensureScript(this.libraries.maps)
-    // @ts-ignore - Google Maps が読み込まれた後
+    // @ts-ignore - After Google Maps is loaded
     return window.google.maps
   }
-  
+
   static async loadAnimations() {
     await ensureScript(this.libraries.animations)
-    // @ts-ignore - GSAP が読み込まれた後
+    // @ts-ignore - After GSAP is loaded
     return window.gsap
   }
 }
 
-// 使用例
+// Usage example
 async function createChart() {
   const Chart = await LibraryLoader.loadCharts()
-  
+
   const ctx = document.querySelector('#myChart') as HTMLCanvasElement
   new Chart(ctx, {
     type: 'bar',
@@ -347,7 +347,7 @@ async function createChart() {
 }
 ```
 
-### 複数スクリプトの並列読み込み
+### Parallel Loading of Multiple Scripts
 
 ```typescript
 import { ensureScript } from '@fastkit/dom'
@@ -365,57 +365,57 @@ class ScriptBundleLoader {
       throw error
     }
   }
-  
+
   static async loadPolyfills() {
     const polyfills = [
       'https://polyfill.io/v3/polyfill.min.js?features=fetch',
       'https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver'
     ]
-    
+
     return this.loadBundle(polyfills)
   }
-  
+
   static async loadAnalytics() {
     const analytics = [
       'https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID',
       'https://cdn.example.com/custom-analytics.js'
     ]
-    
+
     return this.loadBundle(analytics)
   }
 }
 ```
 
-## CSS トランジション監視
+## CSS Transition Monitoring
 
-### 基本的なトランジション監視
+### Basic Transition Monitoring
 
 ```typescript
 import { addTransitionEvent, addTransitionendEvent } from '@fastkit/dom'
 
 const element = document.querySelector('.animated-element') as HTMLElement
 
-// 特定のプロパティのトランジション終了を監視
+// Monitor transition end for specific properties
 const { clear } = addTransitionendEvent(
   element,
   (event) => {
-    console.log(`${event.propertyName} のトランジションが完了しました`)
+    console.log(`Transition for ${event.propertyName} completed`)
   },
   {
-    properties: ['opacity', 'transform'], // 特定プロパティのみ監視
-    once: true // 一度だけ実行
+    properties: ['opacity', 'transform'], // Monitor only specific properties
+    once: true // Execute only once
   }
 )
 
-// アニメーション開始
+// Start animation
 element.style.opacity = '0'
 element.style.transform = 'translateX(100px)'
 
-// 必要に応じて監視をクリア
+// Clear monitoring when necessary
 // clear()
 ```
 
-### 高度なトランジション制御
+### Advanced Transition Control
 
 ```typescript
 import { addTransitionEvent } from '@fastkit/dom'
@@ -423,44 +423,44 @@ import { addTransitionEvent } from '@fastkit/dom'
 class AnimationController {
   private element: HTMLElement
   private transitionWatcher: any
-  
+
   constructor(element: HTMLElement) {
     this.element = element
   }
-  
+
   async slideIn() {
     return new Promise<void>((resolve) => {
-      // すべてのトランジションイベントを監視
+      // Monitor all transition events
       this.transitionWatcher = addTransitionEvent(
         ['transitionstart', 'transitionend', 'transitioncancel'],
         this.element,
         (event) => {
           console.log(`${event.type}: ${event.propertyName}`)
-          
+
           if (event.type === 'transitionend' && event.propertyName === 'transform') {
             resolve()
           }
-          
+
           if (event.type === 'transitioncancel') {
-            console.warn('アニメーションがキャンセルされました')
+            console.warn('Animation was cancelled')
             resolve()
           }
         },
         {
           properties: (propertyName) => {
-            // カスタムフィルター関数
+            // Custom filter function
             return ['transform', 'opacity'].includes(propertyName)
           }
         }
       )
-      
-      // アニメーション開始
+
+      // Start animation
       this.element.style.transition = 'transform 0.5s ease, opacity 0.3s ease'
       this.element.style.transform = 'translateX(0)'
       this.element.style.opacity = '1'
     })
   }
-  
+
   destroy() {
     if (this.transitionWatcher) {
       this.transitionWatcher.clear()
@@ -468,13 +468,13 @@ class AnimationController {
   }
 }
 
-// 使用例
+// Usage example
 const animator = new AnimationController(document.querySelector('.slide-element'))
 await animator.slideIn()
-console.log('アニメーション完了')
+console.log('Animation completed')
 ```
 
-### 複数要素の同期アニメーション
+### Synchronized Animation of Multiple Elements
 
 ```typescript
 import { addTransitionendEvent } from '@fastkit/dom'
@@ -482,15 +482,15 @@ import { addTransitionendEvent } from '@fastkit/dom'
 class SynchronizedAnimation {
   private elements: HTMLElement[]
   private completedCount = 0
-  
+
   constructor(elements: HTMLElement[]) {
     this.elements = elements
   }
-  
+
   async fadeInAll() {
     return new Promise<void>((resolve) => {
       this.completedCount = 0
-      
+
       this.elements.forEach((element, index) => {
         addTransitionendEvent(
           element,
@@ -505,8 +505,8 @@ class SynchronizedAnimation {
             once: true
           }
         )
-        
-        // 段階的に開始（カスケード効果）
+
+        // Start gradually (cascade effect)
         setTimeout(() => {
           element.style.transition = 'opacity 0.5s ease'
           element.style.opacity = '1'
@@ -516,39 +516,39 @@ class SynchronizedAnimation {
   }
 }
 
-// 使用例
+// Usage example
 const elements = Array.from(document.querySelectorAll('.fade-item')) as HTMLElement[]
 const animation = new SynchronizedAnimation(elements)
 await animation.fadeInAll()
-console.log('すべての要素のフェードインが完了')
+console.log('Fade-in completed for all elements')
 ```
 
-## ウィンドウ・ドキュメント操作
+## Window and Document Operations
 
-### 所有者ドキュメント・ウィンドウの取得
+### Getting Owner Document and Window
 
 ```typescript
 import { ownerDocument, ownerWindow } from '@fastkit/dom'
 
-// iframe内の要素でも正しいドキュメント・ウィンドウを取得
+// Get correct document and window even for elements inside iframe
 function setupElementInFrame(element: HTMLElement) {
   const doc = ownerDocument(element)
   const win = ownerWindow(element)
-  
-  // そのドキュメントのスタイル要素を作成
+
+  // Create style element for that document
   const style = doc.createElement('style')
   style.textContent = `
     .highlight { background: yellow; }
   `
   doc.head.appendChild(style)
-  
-  // そのウィンドウのイベントを監視
+
+  // Monitor events for that window
   win.addEventListener('resize', () => {
-    console.log('ウィンドウがリサイズされました')
+    console.log('Window was resized')
   })
 }
 
-// iframe 対応のユーティリティ
+// iframe-compatible utilities
 class CrossFrameHelper {
   static getScrollPosition(element?: HTMLElement) {
     const win = ownerWindow(element)
@@ -557,7 +557,7 @@ class CrossFrameHelper {
       y: win.pageYOffset || win.scrollY
     }
   }
-  
+
   static getViewportSize(element?: HTMLElement) {
     const win = ownerWindow(element)
     return {
@@ -565,7 +565,7 @@ class CrossFrameHelper {
       height: win.innerHeight
     }
   }
-  
+
   static scrollTo(x: number, y: number, element?: HTMLElement) {
     const win = ownerWindow(element)
     win.scrollTo(x, y)
@@ -573,26 +573,26 @@ class CrossFrameHelper {
 }
 ```
 
-## 画像読み込み
+## Image Loading
 
-### Promise ベースの画像読み込み
+### Promise-based Image Loading
 
 ```typescript
 import { loadImage } from '@fastkit/dom'
 
-// 単一画像の読み込み
+// Single image loading
 try {
   const image = await loadImage('https://example.com/image.jpg')
-  console.log('画像が読み込まれました:', image.width, 'x', image.height)
-  
-  // DOM に追加
+  console.log('Image loaded:', image.width, 'x', image.height)
+
+  // Add to DOM
   document.body.appendChild(image)
 } catch (error) {
-  console.error('画像の読み込みに失敗:', error)
+  console.error('Image loading failed:', error)
 }
 ```
 
-### 画像ギャラリーローダー
+### Image Gallery Loader
 
 ```typescript
 import { loadImage } from '@fastkit/dom'
@@ -600,26 +600,26 @@ import { loadImage } from '@fastkit/dom'
 class ImageGallery {
   private container: HTMLElement
   private imageUrls: string[]
-  
+
   constructor(container: HTMLElement, imageUrls: string[]) {
     this.container = container
     this.imageUrls = imageUrls
   }
-  
+
   async loadAll() {
     const loadingElement = document.createElement('div')
-    loadingElement.textContent = '画像を読み込み中...'
+    loadingElement.textContent = 'Loading images...'
     this.container.appendChild(loadingElement)
-    
+
     try {
       const images = await Promise.all(
         this.imageUrls.map(url => loadImage(url))
       )
-      
-      // ローディング表示を削除
+
+      // Remove loading display
       this.container.removeChild(loadingElement)
-      
-      // 画像を表示
+
+      // Display images
       images.forEach((image, index) => {
         image.style.cssText = `
           max-width: 300px;
@@ -630,18 +630,18 @@ class ImageGallery {
         image.alt = `Image ${index + 1}`
         this.container.appendChild(image)
       })
-      
-      console.log(`${images.length} 枚の画像を読み込みました`)
+
+      console.log(`Loaded ${images.length} images`)
     } catch (error) {
-      loadingElement.textContent = '画像の読み込みに失敗しました'
+      loadingElement.textContent = 'Failed to load images'
       console.error('Gallery loading failed:', error)
     }
   }
-  
+
   async loadWithProgress() {
     const progressBar = this.createProgressBar()
     let loaded = 0
-    
+
     const promises = this.imageUrls.map(async (url) => {
       try {
         const image = await loadImage(url)
@@ -653,11 +653,11 @@ class ImageGallery {
         throw error
       }
     })
-    
+
     try {
       const images = await Promise.all(promises)
       this.container.removeChild(progressBar)
-      
+
       images.forEach(image => {
         image.style.cssText = 'max-width: 300px; margin: 8px;'
         this.container.appendChild(image)
@@ -666,7 +666,7 @@ class ImageGallery {
       console.error('Some images failed to load:', error)
     }
   }
-  
+
   private createProgressBar() {
     const progress = document.createElement('div')
     progress.style.cssText = `
@@ -677,7 +677,7 @@ class ImageGallery {
       overflow: hidden;
       margin: 20px 0;
     `
-    
+
     const bar = document.createElement('div')
     bar.style.cssText = `
       width: 0%;
@@ -685,19 +685,19 @@ class ImageGallery {
       background: #4ECDC4;
       transition: width 0.3s ease;
     `
-    
+
     progress.appendChild(bar)
     this.container.appendChild(progress)
     return progress
   }
-  
+
   private updateProgress(progressBar: HTMLElement, ratio: number) {
     const bar = progressBar.firstElementChild as HTMLElement
     bar.style.width = `${ratio * 100}%`
   }
 }
 
-// 使用例
+// Usage example
 const gallery = new ImageGallery(
   document.querySelector('#gallery'),
   [
@@ -710,14 +710,14 @@ const gallery = new ImageGallery(
 gallery.loadWithProgress()
 ```
 
-### 遅延読み込み画像システム
+### Lazy Loading Image System
 
 ```typescript
 import { loadImage } from '@fastkit/dom'
 
 class LazyImageLoader {
   private observer: IntersectionObserver
-  
+
   constructor() {
     this.observer = new IntersectionObserver(
       this.handleIntersection.bind(this),
@@ -727,63 +727,63 @@ class LazyImageLoader {
       }
     )
   }
-  
+
   private async handleIntersection(entries: IntersectionObserverEntry[]) {
     for (const entry of entries) {
       if (entry.isIntersecting) {
         const img = entry.target as HTMLImageElement
         const src = img.dataset.src
-        
+
         if (src) {
           try {
-            // プレースホルダーを表示
+            // Show placeholder
             img.style.filter = 'blur(5px)'
-            
-            // 実際の画像を読み込み
+
+            // Load actual image
             const loadedImage = await loadImage(src)
-            
-            // 読み込み完了後に差し替え
+
+            // Replace after loading completion
             img.src = loadedImage.src
             img.style.filter = 'none'
             img.style.transition = 'filter 0.3s ease'
-            
-            // 監視を停止
+
+            // Stop monitoring
             this.observer.unobserve(img)
           } catch (error) {
             console.error('Lazy load failed:', error)
-            img.alt = '画像の読み込みに失敗しました'
+            img.alt = 'Failed to load image'
           }
         }
       }
     }
   }
-  
+
   observe(img: HTMLImageElement) {
     this.observer.observe(img)
   }
-  
+
   disconnect() {
     this.observer.disconnect()
   }
 }
 
-// 使用例
+// Usage example
 const lazyLoader = new LazyImageLoader()
 
-// 遅延読み込み画像を設定
+// Set up lazy loading images
 document.querySelectorAll('img[data-src]').forEach(img => {
   lazyLoader.observe(img as HTMLImageElement)
 })
 ```
 
-## 統合例: モーダルダイアログシステム
+## Integration Example: Modal Dialog System
 
 ```typescript
-import { 
-  focusFirstDescendant, 
-  blurActiveElement, 
+import {
+  focusFirstDescendant,
+  blurActiveElement,
   addTransitionendEvent,
-  pushDynamicStyle 
+  pushDynamicStyle
 } from '@fastkit/dom'
 
 class Modal {
@@ -791,14 +791,14 @@ class Modal {
   private overlay: HTMLElement
   private previousActiveElement?: HTMLElement | SVGElement
   private transitionWatcher?: any
-  
+
   constructor(element: HTMLElement) {
     this.element = element
     this.setupStyles()
     this.setupOverlay()
     this.setupEventListeners()
   }
-  
+
   private setupStyles() {
     pushDynamicStyle(`
       .modal-overlay {
@@ -816,12 +816,12 @@ class Modal {
         transition: opacity 0.3s ease, visibility 0.3s ease;
         z-index: 1000;
       }
-      
+
       .modal-overlay.visible {
         opacity: 1;
         visibility: visible;
       }
-      
+
       .modal {
         background: white;
         border-radius: 8px;
@@ -832,13 +832,13 @@ class Modal {
         transform: scale(0.9);
         transition: transform 0.3s ease;
       }
-      
+
       .modal-overlay.visible .modal {
         transform: scale(1);
       }
     `)
   }
-  
+
   private setupOverlay() {
     this.overlay = document.createElement('div')
     this.overlay.className = 'modal-overlay'
@@ -846,25 +846,25 @@ class Modal {
     this.overlay.appendChild(this.element)
     document.body.appendChild(this.overlay)
   }
-  
+
   private setupEventListeners() {
     this.overlay.addEventListener('click', (e) => {
       if (e.target === this.overlay) {
         this.close()
       }
     })
-    
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.isOpen()) {
         this.close()
       }
     })
   }
-  
+
   async open() {
     return new Promise<void>((resolve) => {
       this.previousActiveElement = blurActiveElement()
-      
+
       this.transitionWatcher = addTransitionendEvent(
         this.overlay,
         () => {
@@ -873,11 +873,11 @@ class Modal {
         },
         { once: true, properties: 'opacity' }
       )
-      
+
       this.overlay.classList.add('visible')
     })
   }
-  
+
   async close() {
     return new Promise<void>((resolve) => {
       this.transitionWatcher = addTransitionendEvent(
@@ -887,22 +887,22 @@ class Modal {
             try {
               this.previousActiveElement.focus()
             } catch (e) {
-              // 前の要素が削除されている場合は無視
+              // Ignore if previous element was removed
             }
           }
           resolve()
         },
         { once: true, properties: 'opacity' }
       )
-      
+
       this.overlay.classList.remove('visible')
     })
   }
-  
+
   isOpen() {
     return this.overlay.classList.contains('visible')
   }
-  
+
   destroy() {
     if (this.transitionWatcher) {
       this.transitionWatcher.clear()
@@ -913,42 +913,42 @@ class Modal {
   }
 }
 
-// 使用例
+// Usage example
 const modalContent = document.createElement('div')
 modalContent.innerHTML = `
-  <h2>モーダルタイトル</h2>
-  <p>モーダルの内容です。</p>
+  <h2>Modal Title</h2>
+  <p>This is the modal content.</p>
   <button type="button">OK</button>
-  <button type="button">キャンセル</button>
+  <button type="button">Cancel</button>
 `
 
 const modal = new Modal(modalContent)
 await modal.open()
 ```
 
-## API リファレンス
+## API Reference
 
-### フォーカス管理
+### Focus Management
 
 ```typescript
-// フォーカス可能性の判定
+// Check focusability
 function isFocusableElement(element: Element | null | undefined): element is SVGElement | HTMLElement
 function isFocusable(element: HTMLElement): boolean
 
-// フォーカス制御
+// Focus control
 function attemptFocus(element: HTMLElement): boolean
 function focusFirstDescendant(element: HTMLElement): boolean
 function blurActiveElement(): SVGElement | HTMLElement | undefined
 ```
 
-### スタイル操作
+### Style Operations
 
 ```typescript
-// 動的スタイル追加
+// Add dynamic styles
 function pushDynamicStyle(styleContent: string): void
 ```
 
-### スクリプト読み込み
+### Script Loading
 
 ```typescript
 interface LoadScriptAttrs {
@@ -968,7 +968,7 @@ function loadScript(
 function ensureScript(src: string): Promise<HTMLScriptElement>
 ```
 
-### CSS トランジション
+### CSS Transitions
 
 ```typescript
 type TransitionEventType = 'transitioncancel' | 'transitionend' | 'transitionrun' | 'transitionstart'
@@ -1000,14 +1000,14 @@ function addTransitionendEvent(
 ): AddTransitionEventResult
 ```
 
-### ウィンドウ・ドキュメント
+### Window and Document
 
 ```typescript
 function ownerDocument(node: Node | null | undefined): Document
 function ownerWindow(node: Node | undefined): Window
 ```
 
-### 画像読み込み
+### Image Loading
 
 ```typescript
 function loadImage(url: string): Promise<HTMLImageElement>
@@ -1015,7 +1015,7 @@ function loadImage(url: string): Promise<HTMLImageElement>
 
 ## Related Packages
 
-- `@fastkit/helpers` - 汎用ヘルパー関数（`IN_DOCUMENT`定数など）
+- `@fastkit/helpers` - General helper functions (like `IN_DOCUMENT` constant)
 
 ## License
 

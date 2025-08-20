@@ -1,20 +1,20 @@
 
 # @fastkit/vue-tiny-meta
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-tiny-meta/README-ja.md)
 
-Vueコンポーネントの型情報とメタデータを自動抽出・解析するライブラリ。TypeScriptのコンパイラAPIを使用してVueコンポーネントのProps、Events、Slotsなどの詳細な型情報を抽出し、ドキュメント生成やStorybookの自動設定に活用できます。
+A library for automatically extracting and analyzing type information and metadata from Vue components. Uses the TypeScript Compiler API to extract detailed type information such as Props, Events, and Slots from Vue components, enabling automatic documentation generation and Storybook configuration.
 
 ## Features
 
-- **自動型抽出**: TypeScriptコンパイラAPIによるVueコンポーネントの型情報抽出
-- **包括的なメタデータ**: Props、Events、Slots、JSDocコメントの完全サポート
-- **Viteプラグイン**: 開発時の自動メタデータ注入
-- **Storybook統合**: Storybook Controlsの自動生成
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **カスタマイズ可能**: フィルタリング、解決処理、ソート機能
-- **高いパフォーマンス**: 効率的な解析とキャッシュ機能
-- **開発者体験**: 詳細なJSDocコメントの自動抽出
+- **Automatic Type Extraction**: Vue component type information extraction using TypeScript Compiler API
+- **Comprehensive Metadata**: Complete support for Props, Events, Slots, and JSDoc comments
+- **Vite Plugin**: Automatic metadata injection during development
+- **Storybook Integration**: Automatic generation of Storybook Controls
+- **Complete TypeScript Support**: Type safety through strict type definitions
+- **Customizable**: Filtering, resolution processing, and sorting functionality
+- **High Performance**: Efficient analysis and caching capabilities
+- **Developer Experience**: Automatic extraction of detailed JSDoc comments
 
 ## Installation
 
@@ -24,7 +24,7 @@ npm install @fastkit/vue-tiny-meta
 
 ## Basic Usage
 
-### Vueコンポーネントの型アノテーション
+### Vue Component Type Annotations
 
 ```typescript
 // components/MyButton.tsx
@@ -32,41 +32,41 @@ import { defineComponent } from 'vue'
 
 interface Props {
   /**
-   * ボタンのラベルテキスト
+   * Button label text
    * @default "Click me"
    */
   label?: string
-  
+
   /**
-   * ボタンのサイズ
+   * Button size
    */
   size?: 'small' | 'medium' | 'large'
-  
+
   /**
-   * ボタンの種類
+   * Button type
    */
   variant?: 'primary' | 'secondary' | 'danger'
-  
+
   /**
-   * 無効状態
+   * Disabled state
    */
   disabled?: boolean
-  
+
   /**
-   * ローディング状態
+   * Loading state
    */
   loading?: boolean
 }
 
 /**
  * @vue-tiny-meta
- * カスタマイズ可能なボタンコンポーネント
- * 
+ * Customizable button component
+ *
  * @example
  * ```vue
- * <MyButton 
- *   label="保存"
- *   size="large" 
+ * <MyButton
+ *   label="Save"
+ *   size="large"
  *   variant="primary"
  *   @click="handleSave"
  * />
@@ -74,7 +74,7 @@ interface Props {
  */
 export default defineComponent<Props>({
   name: 'MyButton',
-  
+
   props: {
     label: {
       type: String,
@@ -97,64 +97,64 @@ export default defineComponent<Props>({
       default: false
     }
   },
-  
+
   emits: {
     /**
-     * ボタンがクリックされた時に発行
-     * @param event - マウスイベント
+     * Emitted when button is clicked
+     * @param event - Mouse event
      */
     click: (event: MouseEvent) => true,
-    
+
     /**
-     * フォーカスが当たった時に発行
-     * @param event - フォーカスイベント
+     * Emitted when button receives focus
+     * @param event - Focus event
      */
     focus: (event: FocusEvent) => true,
-    
+
     /**
-     * フォーカスが外れた時に発行
-     * @param event - ブラーイベント
+     * Emitted when button loses focus
+     * @param event - Blur event
      */
     blur: (event: FocusEvent) => true
   },
-  
+
   slots: {
     /**
-     * ボタンのコンテンツ
-     * デフォルトでlabelプロパティが表示される
+     * Button content
+     * By default, the label property is displayed
      */
     default: (props: {}) => any,
-    
+
     /**
-     * ボタンの左側に表示されるアイコン
+     * Icon displayed on the left side of the button
      */
     'v-slot:prefix': (props: {}) => any,
-    
+
     /**
-     * ボタンの右側に表示されるアイコン
+     * Icon displayed on the right side of the button
      */
     'v-slot:suffix': (props: {}) => any,
-    
+
     /**
-     * ローディング時に表示されるアイコン
+     * Icon displayed during loading
      */
     'v-slot:loading': (props: {}) => any
   },
-  
+
   setup(props, { emit, slots }) {
     const handleClick = (event: MouseEvent) => {
       if (props.disabled || props.loading) return
       emit('click', event)
     }
-    
+
     const handleFocus = (event: FocusEvent) => {
       emit('focus', event)
     }
-    
+
     const handleBlur = (event: FocusEvent) => {
       emit('blur', event)
     }
-    
+
     return () => (
       <button
         class={[
@@ -176,17 +176,17 @@ export default defineComponent<Props>({
             {slots.loading?.() || '⟳'}
           </span>
         )}
-        
+
         {slots.prefix?.() && (
           <span class="my-button__prefix">
             {slots.prefix()}
           </span>
         )}
-        
+
         <span class="my-button__content">
           {slots.default?.() || props.label}
         </span>
-        
+
         {slots.suffix?.() && (
           <span class="my-button__suffix">
             {slots.suffix()}
@@ -198,47 +198,47 @@ export default defineComponent<Props>({
 })
 ```
 
-### プログラムによるメタデータ抽出
+### Programmatic Metadata Extraction
 
 ```typescript
 // scripts/extract-components.ts
 import { extractAll } from '@fastkit/vue-tiny-meta'
 
-// コンポーネントファイルからメタデータを抽出
+// Extract metadata from component files
 async function extractComponentMeta() {
   const componentPath = './src/components/MyButton.tsx'
-  
+
   const metadata = extractAll(componentPath, {
-    // 特定のpropsを無視
+    // Ignore specific props
     ignoreProps: ['class', 'style', 'key'],
-    
-    // 特定のeventsを無視
+
+    // Ignore specific events
     ignoreEvents: ['onVnodeBeforeMount', 'onVnodeMounted'],
-    
-    // propsの解決処理
+
+    // Props resolution processing
     resolvers: {
       prop: (prop) => {
-        // デフォルト値の形式を統一
+        // Standardize default value format
         if (prop.defaultValue) {
           prop.defaultValue.value = prop.defaultValue.value.replace(/['"]/g, '"')
         }
         return prop
       }
     },
-    
-    // ソート順序の指定
+
+    // Specify sort order
     sort: ['label', 'size', 'variant', 'disabled', 'loading']
   })
-  
-  console.log('抽出されたメタデータ:', JSON.stringify(metadata, null, 2))
-  
+
+  console.log('Extracted metadata:', JSON.stringify(metadata, null, 2))
+
   return metadata
 }
 
 extractComponentMeta()
 ```
 
-### Viteプラグインでの自動注入
+### Automatic Injection with Vite Plugin
 
 ```typescript
 // vite.config.ts
@@ -250,28 +250,28 @@ export default defineConfig({
   plugins: [
     vue(),
     ViteVueTinyMeta({
-      // TypeScript/TSXファイルのみを対象
+      // Target only TypeScript/TSX files
       include: /\.(ts|tsx)$/,
-      
-      // node_modulesを除外
+
+      // Exclude node_modules
       exclude: /node_modules/,
-      
-      // メタデータを注入するプロパティ名
+
+      // Property name to inject metadata
       injectProperty: '__docgenInfo',
-      
-      // コンポーネント解析オプション
+
+      // Component analysis options
       ignoreProps: (baseRules) => [
         ...baseRules,
         'class',
         'style',
         /^data-/
       ],
-      
+
       resolvers: {
         prop: (prop) => {
-          // カスタム解決処理
+          // Custom resolution processing
           if (prop.name.startsWith('_')) {
-            return false // 非表示
+            return false // Hide
           }
           return prop
         }
@@ -281,23 +281,23 @@ export default defineConfig({
 })
 ```
 
-### 実行時メタデータアクセス
+### Runtime Metadata Access
 
 ```vue
 <template>
   <div class="component-docs">
-    <h2>{{ componentName }} コンポーネント</h2>
-    
+    <h2>{{ componentName }} Component</h2>
+
     <div class="description">
       {{ description }}
     </div>
-    
-    <!-- Props一覧 -->
+
+    <!-- Props list -->
     <section class="props-section">
       <h3>Props</h3>
       <div class="props-table">
-        <div 
-          v-for="prop in props" 
+        <div
+          v-for="prop in props"
           :key="prop.name"
           class="prop-row"
         >
@@ -315,13 +315,13 @@ export default defineConfig({
         </div>
       </div>
     </section>
-    
-    <!-- Events一覧 -->
+
+    <!-- Events list -->
     <section class="events-section">
       <h3>Events</h3>
       <div class="events-table">
-        <div 
-          v-for="event in events" 
+        <div
+          v-for="event in events"
           :key="event.name"
           class="event-row"
         >
@@ -333,13 +333,13 @@ export default defineConfig({
         </div>
       </div>
     </section>
-    
-    <!-- Slots一覧 -->
+
+    <!-- Slots list -->
     <section class="slots-section">
       <h3>Slots</h3>
       <div class="slots-table">
-        <div 
-          v-for="slot in slots" 
+        <div
+          v-for="slot in slots"
           :key="slot.name"
           class="slot-row"
         >
@@ -360,7 +360,7 @@ export default defineConfig({
 import { computed } from 'vue'
 import MyButton from './MyButton'
 
-// Viteプラグインによって注入されたメタデータを取得
+// Get metadata injected by Vite plugin
 const componentMeta = computed(() => {
   return (MyButton as any).__docgenInfo || {}
 })
@@ -456,9 +456,9 @@ const slots = computed(() => componentMeta.value.slots || [])
 </style>
 ```
 
-## Storybook統合
+## Storybook Integration
 
-### Storybook Controls自動生成
+### Automatic Storybook Controls Generation
 
 ```typescript
 // .storybook/main.ts
@@ -475,7 +475,7 @@ const config: StorybookConfig = {
     options: {}
   },
   async viteFinal(config) {
-    // vue-tiny-metaのViteプラグインを追加
+    // Add vue-tiny-meta Vite plugin
     config.plugins?.push(
       ViteVueTinyMeta({
         include: /\.(ts|tsx)$/,
@@ -495,7 +495,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { generateControls } from '@fastkit/vue-tiny-meta/storybook'
 import MyButton from './MyButton'
 
-// コンポーネントのメタデータから自動でcontrolsを生成
+// Automatically generate controls from component metadata
 const controls = generateControls(MyButton.__docgenInfo)
 
 const meta: Meta<typeof MyButton> = {
@@ -510,18 +510,18 @@ const meta: Meta<typeof MyButton> = {
   },
   argTypes: {
     ...controls,
-    
-    // カスタム制御の追加
+
+    // Add custom controls
     size: {
       control: 'select',
       options: ['small', 'medium', 'large']
     },
     variant: {
-      control: 'select', 
+      control: 'select',
       options: ['primary', 'secondary', 'danger']
     },
-    
-    // イベントハンドラ
+
+    // Event handlers
     onClick: { action: 'clicked' },
     onFocus: { action: 'focused' },
     onBlur: { action: 'blurred' }
@@ -531,7 +531,7 @@ const meta: Meta<typeof MyButton> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// デフォルトストーリー
+// Default story
 export const Default: Story = {
   args: {
     label: 'Click me',
@@ -540,45 +540,45 @@ export const Default: Story = {
   }
 }
 
-// バリエーションストーリー
+// Variation stories
 export const Primary: Story = {
   args: {
-    label: '保存',
+    label: 'Save',
     variant: 'primary'
   }
 }
 
 export const Secondary: Story = {
   args: {
-    label: 'キャンセル',
+    label: 'Cancel',
     variant: 'secondary'
   }
 }
 
 export const Danger: Story = {
   args: {
-    label: '削除',
+    label: 'Delete',
     variant: 'danger'
   }
 }
 
 export const Loading: Story = {
   args: {
-    label: '処理中...',
+    label: 'Processing...',
     loading: true
   }
 }
 
 export const Disabled: Story = {
   args: {
-    label: '無効',
+    label: 'Disabled',
     disabled: true
   }
 }
 
 export const WithSlots: Story = {
   args: {
-    label: 'アイコン付きボタン'
+    label: 'Button with Icon'
   },
   render: (args) => ({
     components: { MyButton },
@@ -597,27 +597,27 @@ export const WithSlots: Story = {
 
 ## Advanced Usage Examples
 
-### カスタムリゾルバーの実装
+### Custom Resolver Implementation
 
 ```typescript
 // utils/component-resolvers.ts
 import type { PropResolver, EventResolver, SlotResolver } from '@fastkit/vue-tiny-meta'
 
-// Props解決処理
+// Props resolution processing
 export const propResolvers: PropResolver[] = [
-  // デフォルト値の正規化
+  // Default value normalization
   (prop) => {
     if (prop.defaultValue) {
-      // 不要な引用符を削除
+      // Remove unnecessary quotes
       prop.defaultValue.value = prop.defaultValue.value
         .replace(/^['"]|['"]$/g, '')
     }
     return prop
   },
-  
-  // 型情報の拡張
+
+  // Type information extension
   (prop) => {
-    // Union型の値を配列として抽出
+    // Extract Union type values as array
     if (prop.type.name.includes('|')) {
       const values = prop.type.name
         .split('|')
@@ -626,8 +626,8 @@ export const propResolvers: PropResolver[] = [
     }
     return prop
   },
-  
-  // 非表示プロパティのフィルタリング
+
+  // Filter hidden properties
   (prop) => {
     if (prop.name.startsWith('_') || prop.name.startsWith('$')) {
       return false
@@ -636,11 +636,11 @@ export const propResolvers: PropResolver[] = [
   }
 ]
 
-// Events解決処理
+// Events resolution processing
 export const eventResolvers: EventResolver[] = [
-  // イベント名の正規化
+  // Event name normalization
   (event) => {
-    // onClickをclickに変換
+    // Convert onClick to click
     if (event.name.startsWith('on') && event.name.length > 2) {
       const simpleName = event.name.slice(2).toLowerCase()
       event.name = `on${event.name.slice(2)}` as `on${string}`
@@ -649,11 +649,11 @@ export const eventResolvers: EventResolver[] = [
   }
 ]
 
-// Slots解決処理
+// Slots resolution processing
 export const slotResolvers: SlotResolver[] = [
-  // スロット名の正規化
+  // Slot name normalization
   (slot) => {
-    // v-slot:プレフィックスを除去して表示
+    // Remove v-slot: prefix for display
     if (slot.name.startsWith('v-slot:')) {
       const displayName = slot.name.replace('v-slot:', '')
       return {
@@ -667,7 +667,7 @@ export const slotResolvers: SlotResolver[] = [
 ]
 ```
 
-### バッチ処理での複数ファイル解析
+### Multiple File Analysis with Batch Processing
 
 ```typescript
 // scripts/generate-docs.ts
@@ -683,13 +683,13 @@ interface ComponentDocumentation {
 async function generateComponentDocs() {
   const componentFiles = await glob('./src/components/**/*.{ts,tsx}')
   const documentation: ComponentDocumentation = {}
-  
+
   for (const filePath of componentFiles) {
     try {
       console.log(`Processing: ${filePath}`)
-      
+
       const metadata = extractAll(filePath, {
-        // カスタムフィルタ
+        // Custom filters
         ignoreProps: (baseRules) => [
           ...baseRules,
           'class',
@@ -697,74 +697,74 @@ async function generateComponentDocs() {
           /^data-/,
           /^aria-/
         ],
-        
+
         ignoreEvents: (baseRules) => [
           ...baseRules,
           /^onVnode/
         ],
-        
+
         ignoreSlots: ['v-slot:_'],
-        
-        // カスタムリゾルバー
+
+        // Custom resolvers
         resolvers: {
           prop: propResolvers,
           event: eventResolvers,
           slot: slotResolvers
         },
-        
-        // ソート設定
+
+        // Sort settings
         sort: (a, b) => {
           const order = ['modelValue', 'onUpdate:modelValue', 'v-slot:default']
           const aIndex = order.indexOf(a.name)
           const bIndex = order.indexOf(b.name)
-          
+
           if (aIndex !== -1 && bIndex !== -1) {
             return aIndex - bIndex
           }
           if (aIndex !== -1) return -1
           if (bIndex !== -1) return 1
-          
+
           return a.name.localeCompare(b.name)
         }
       })
-      
+
       metadata.forEach(component => {
         documentation[component.exportName] = component
       })
-      
+
     } catch (error) {
       console.error(`Error processing ${filePath}:`, error)
     }
   }
-  
-  // JSONファイルとして出力
+
+  // Output as JSON file
   writeFileSync(
     './docs/components-meta.json',
     JSON.stringify(documentation, null, 2)
   )
-  
-  // TypeScript定義ファイルとして出力
+
+  // Output as TypeScript definition file
   generateTypeDefinitions(documentation)
-  
+
   console.log(`Generated documentation for ${Object.keys(documentation).length} components`)
-  
+
   return documentation
 }
 
 function generateTypeDefinitions(documentation: ComponentDocumentation) {
   let content = `// Generated component type definitions\n\n`
-  
+
   for (const [componentName, meta] of Object.entries(documentation)) {
     content += `export interface ${componentName}Props {\n`
-    
+
     meta.props.forEach((prop: any) => {
       const optional = prop.required ? '' : '?'
       const description = prop.description ? ` /** ${prop.description} */\n  ` : '  '
       content += `${description}${prop.name}${optional}: ${prop.type.name}\n`
     })
-    
+
     content += `}\n\n`
-    
+
     content += `export interface ${componentName}Events {\n`
     meta.events.forEach((event: any) => {
       const description = event.description ? ` /** ${event.description} */\n  ` : '  '
@@ -772,7 +772,7 @@ function generateTypeDefinitions(documentation: ComponentDocumentation) {
     })
     content += `}\n\n`
   }
-  
+
   writeFileSync('./src/types/components.d.ts', content)
 }
 
@@ -783,7 +783,7 @@ generateComponentDocs()
 
 ### `extractAll(filePath, options?)`
 
-指定されたファイルからVueコンポーネントのメタデータを抽出する関数。
+Function to extract Vue component metadata from a specified file.
 
 ```typescript
 function extractAll(
@@ -792,48 +792,48 @@ function extractAll(
 ): Promise<ComponentMeta[]>
 ```
 
-**パラメータ:**
-- `filePath`: 解析対象のファイルパス
-- `options`: 解析オプション
+**Parameters:**
+- `filePath`: File path to analyze
+- `options`: Analysis options
 
-**戻り値:**
-- `ComponentMeta[]`: 抽出されたコンポーネントメタデータの配列
+**Return Value:**
+- `ComponentMeta[]`: Array of extracted component metadata
 
 ### `SerializeVueOptions`
 
-メタデータ抽出のオプション設定。
+Configuration options for metadata extraction.
 
 ```typescript
 interface SerializeVueOptions {
-  ignoreProps?: UserFilter              // 無視するProps
-  ignoreEvents?: UserFilter             // 無視するEvents  
-  ignoreSlots?: UserFilter              // 無視するSlots
-  resolvers?: Resolvers | Resolvers[]   // カスタム解決処理
-  sort?: SortOption                     // ソート設定
+  ignoreProps?: UserFilter              // Props to ignore
+  ignoreEvents?: UserFilter             // Events to ignore
+  ignoreSlots?: UserFilter              // Slots to ignore
+  resolvers?: Resolvers | Resolvers[]   // Custom resolution processing
+  sort?: SortOption                     // Sort configuration
 }
 ```
 
 ### `ComponentMeta`
 
-抽出されたコンポーネントメタデータの型定義。
+Type definition for extracted component metadata.
 
 ```typescript
 interface ComponentMeta {
-  displayName: string                   // 表示名
-  exportName: string                    // エクスポート名
-  description?: string                  // 説明文
-  props: PropMeta[]                     // Props情報
-  slots: SlotMeta[]                     // Slots情報  
-  events: EventMeta[]                   // Events情報
-  docs: MetaDoc[]                       // JSDocコメント
-  sourceFile: {                        // ソースファイル情報
+  displayName: string                   // Display name
+  exportName: string                    // Export name
+  description?: string                  // Description text
+  props: PropMeta[]                     // Props information
+  slots: SlotMeta[]                     // Slots information
+  events: EventMeta[]                   // Events information
+  docs: MetaDoc[]                       // JSDoc comments
+  sourceFile: {                        // Source file information
     path: string
     line: number
   }
 }
 ```
 
-### Viteプラグイン
+### Vite Plugin
 
 ```typescript
 function ViteVueTinyMeta(
@@ -841,30 +841,30 @@ function ViteVueTinyMeta(
 ): PluginOption
 ```
 
-**オプション:**
-- `include`: 対象ファイルパターン
-- `exclude`: 除外ファイルパターン
-- `injectProperty`: 注入プロパティ名（デフォルト: `__docgenInfo`）
+**Options:**
+- `include`: Target file patterns
+- `exclude`: Exclude file patterns
+- `injectProperty`: Inject property name (default: `__docgenInfo`)
 
 ## Considerations
 
-### TypeScript設定
+### TypeScript Configuration
 
-- TypeScriptの厳密モードが推奨
-- `strict: true`の設定が必要
-- JSDocコメントの正確な抽出には適切な型注釈が重要
+- TypeScript strict mode is recommended
+- `strict: true` setting is required
+- Proper type annotations are important for accurate JSDoc comment extraction
 
-### パフォーマンス考慮事項
+### Performance Considerations
 
-- 大量のファイルを一度に解析する場合はバッチ処理を推奨
-- 開発時のホットリロードでは変更されたファイルのみを解析
-- プロダクションビルドでは必要に応じてメタデータを除外
+- Batch processing is recommended when analyzing large numbers of files at once
+- During development hot reloads, analyze only changed files
+- In production builds, exclude metadata as needed
 
-### 制限事項
+### Limitations
 
-- `defineComponent`で定義されたコンポーネントのみサポート
-- 動的に生成されるProps/Eventsは解析対象外
-- ファイル間の依存関係が複雑な場合は解析に時間がかかる場合あり
+- Only supports components defined with `defineComponent`
+- Dynamically generated Props/Events are not subject to analysis
+- Analysis may take time when file dependencies are complex
 
 ## License
 
@@ -872,5 +872,5 @@ MIT
 
 ## Related Packages
 
-- [@fastkit/ts-tiny-meta](../ts-tiny-meta/README.md): TypeScriptメタデータ抽出コア機能
-- [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数
+- [@fastkit/ts-tiny-meta](../ts-tiny-meta/README.md): TypeScript metadata extraction core functionality
+- [@fastkit/helpers](../helpers/README.md): Basic utility functions

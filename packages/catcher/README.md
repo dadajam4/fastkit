@@ -1,7 +1,7 @@
 
 # @fastkit/catcher
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/catcher/README-ja.md)
 
 A custom class library for implementing type-safe exception handling within applications. Provides unified processing of various exception types (Native Error, Axios Error, Fetch Error) while maintaining type safety and offering detailed error information extraction and normalization.
 
@@ -49,7 +49,7 @@ try {
   throw new Error('Some error')
 } catch (error) {
   const caughtError = MyCatcher.from(error)
-  
+
   console.log(caughtError.name)        // 'ApplicationError'
   console.log(caughtError.message)     // 'Error message'
   console.log(caughtError.timestamp)   // '2024-01-01T00:00:00.000Z'
@@ -60,10 +60,10 @@ try {
 ### Using Custom Resolvers
 
 ```typescript
-import { 
-  build, 
-  createCatcherResolver, 
-  createCatcherNormalizer 
+import {
+  build,
+  createCatcherResolver,
+  createCatcherNormalizer
 } from '@fastkit/catcher'
 
 // Defining custom error types
@@ -74,10 +74,10 @@ interface APIError {
 }
 
 function isAPIError(source: unknown): source is APIError {
-  return typeof source === 'object' && 
-         source !== null && 
-         'code' in source && 
-         'detail' in source && 
+  return typeof source === 'object' &&
+         source !== null &&
+         'code' in source &&
+         'detail' in source &&
          'statusCode' in source
 }
 
@@ -103,7 +103,7 @@ const normalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo) => 
       type: 'API_ERROR'
     }
   }
-  
+
   return {
     code: 'UNKNOWN_ERROR',
     message: 'An unexpected error occurred',
@@ -137,10 +137,10 @@ console.log(caught.type)        // 'API_ERROR'
 ### Axios Error Handling
 
 ```typescript
-import { 
-  build, 
+import {
+  build,
   createCatcherNormalizer,
-  axiosErrorResolver 
+  axiosErrorResolver
 } from '@fastkit/catcher'
 import axios from 'axios'
 
@@ -161,7 +161,7 @@ const axiosNormalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo
       type: 'HTTP_ERROR'
     }
   }
-  
+
   return {
     message: 'A communication error occurred',
     type: 'NETWORK_ERROR'
@@ -182,16 +182,16 @@ async function fetchUserData(userId: string) {
     return response.data
   } catch (error) {
     const httpError = HttpCatcher.from(error)
-    
+
     console.log('Error type:', httpError.type)      // 'HTTP_ERROR'
     console.log('HTTP method:', httpError.method)    // 'GET'
     console.log('URL:', httpError.url)               // '/api/users/123'
     console.log('Status:', httpError.statusCode) // 404
     console.log('Response:', httpError.responseData)
-    
+
     // JSON format output
     console.log(httpError.toJSONString(true))
-    
+
     throw httpError
   }
 }
@@ -200,10 +200,10 @@ async function fetchUserData(userId: string) {
 ### Fetch API Error Handling
 
 ```typescript
-import { 
-  build, 
+import {
+  build,
   createCatcherNormalizer,
-  fetchResponseResolver 
+  fetchResponseResolver
 } from '@fastkit/catcher'
 
 // Custom Fetch error extraction function
@@ -211,7 +211,7 @@ const extractFetchError = (source: unknown) => {
   if (source instanceof Response) {
     return { response: source }
   }
-  
+
   // Custom error format
   if (source instanceof Error && 'response' in source) {
     return {
@@ -241,7 +241,7 @@ const fetchNormalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo
       type: 'FETCH_ERROR'
     }
   }
-  
+
   return {
     message: 'A network error occurred',
     type: 'NETWORK_ERROR'
@@ -259,21 +259,21 @@ const FetchCatcher = build({
 async function safeFetch(url: string, options?: RequestInit) {
   try {
     const response = await fetch(url, options)
-    
+
     if (!response.ok) {
       // Throw response error as exception
       throw response
     }
-    
+
     return response
   } catch (error) {
     const fetchError = FetchCatcher.from(error)
-    
+
     console.log('Fetch error:', fetchError.message)
     console.log('URL:', fetchError.url)
     console.log('Status:', fetchError.status)
     console.log('Response headers:', fetchError.headers)
-    
+
     throw fetchError
   }
 }
@@ -295,9 +295,9 @@ async function loadApiData() {
 ### Multiple Resolvers and Error History Management
 
 ```typescript
-import { 
-  build, 
-  createCatcherResolver, 
+import {
+  build,
+  createCatcherResolver,
   createCatcherNormalizer,
   axiosErrorResolver,
   fetchResponseResolver
@@ -308,7 +308,7 @@ const genericErrorResolver = createCatcherResolver((source, ctx) => {
   if (typeof source === 'string') {
     return { errorMessage: source }
   }
-  
+
   if (source && typeof source === 'object' && 'message' in source) {
     return { errorMessage: String(source.message) }
   }
@@ -326,7 +326,7 @@ const unifiedNormalizer = createCatcherNormalizer((resolvedData) => (exceptionIn
       method: resolvedData.axiosError.config.method
     }
   }
-  
+
   // For Fetch errors
   if (resolvedData.fetchError) {
     return {
@@ -336,7 +336,7 @@ const unifiedNormalizer = createCatcherNormalizer((resolvedData) => (exceptionIn
       url: resolvedData.fetchError.response.url
     }
   }
-  
+
   // For Native errors
   if (resolvedData.nativeError) {
     return {
@@ -346,7 +346,7 @@ const unifiedNormalizer = createCatcherNormalizer((resolvedData) => (exceptionIn
       stack: resolvedData.nativeError.stack
     }
   }
-  
+
   // For generic errors
   if (resolvedData.errorMessage) {
     return {
@@ -354,7 +354,7 @@ const unifiedNormalizer = createCatcherNormalizer((resolvedData) => (exceptionIn
       message: resolvedData.errorMessage
     }
   }
-  
+
   return {
     type: 'UNKNOWN_ERROR',
     message: 'An unknown error occurred'
@@ -379,7 +379,7 @@ async function processWithErrorHandling() {
     throw new Error('Processing failed')
   } catch (originalError) {
     const primaryError = UnifiedCatcher.from(originalError)
-    
+
     try {
       // Retry processing
       throw new Error('Retry also failed')
@@ -389,16 +389,16 @@ async function processWithErrorHandling() {
         message: 'All processing failed',
         originalError: primaryError.message
       })
-      
+
       // Check error history
       console.log('Error history:')
       finalError.histories.forEach((history, index) => {
         console.log(`  ${index + 1}. ${history.message}`)
       })
-      
+
       // Get all messages
       console.log('All messages:', finalError.messages)
-      
+
       throw finalError
     }
   }
@@ -417,12 +417,12 @@ function handleAnyError(error: unknown) {
     console.log('Detailed information:', error.toJSONString(true))
     return
   }
-  
+
   if (error instanceof Error) {
     console.log('Native error:', error.message)
     return
   }
-  
+
   console.log('Other error:', error)
 }
 
@@ -433,7 +433,7 @@ function restoreErrorFromData(data: unknown) {
     const restoredError = UnifiedCatcher.from(data)
     return restoredError
   }
-  
+
   throw new Error('Not valid catcher data')
 }
 
@@ -443,15 +443,15 @@ function saveAndRestoreError() {
     throw new Error('Test error')
   } catch (originalError) {
     const caughtError = UnifiedCatcher.from(originalError)
-    
+
     // Save as JSON string
     const jsonString = caughtError.toJSONString()
     console.log('JSON for saving:', jsonString)
-    
+
     // Restore from JSON string
     const parsedData = JSON.parse(jsonString)
     const restoredError = restoreErrorFromData(parsedData)
-    
+
     console.log('Restored error:', restoredError.message)
     console.log('Same as original error?:', caughtError.message === restoredError.message)
   }
@@ -479,10 +479,10 @@ Generates a catcher class.
 interface CatcherBuilderOptions<Resolvers, Normalizer> {
   // Default error name
   defaultName?: string
-  
+
   // Resolver array
   resolvers?: Resolvers
-  
+
   // Normalizer function
   normalizer: Normalizer
 }
@@ -505,7 +505,7 @@ function createCatcherNormalizer<
   Normalizer extends AnyNormalizer<Resolvers>,
   Resolvers extends AnyResolvers
 >(
-  normalizer: Normalizer, 
+  normalizer: Normalizer,
   _resolvers?: Resolvers
 ): Normalizer
 ```
@@ -518,25 +518,25 @@ Creates a custom normalizer.
 interface Catcher<Resolvers, T> extends Error {
   // Catcher flag
   readonly isCatcher: true
-  
+
   // Processed data
   readonly data: CatcherData<T>
-  
+
   // Data extracted by resolvers
   readonly resolvedData: ResolvedCatcherData<Resolvers>
-  
+
   // Original source error (only when overridden)
   readonly source?: Catcher<Resolvers, T>
-  
+
   // Error history
   readonly histories: Catcher<Resolvers, T>[]
-  
+
   // All messages
   readonly messages: string[]
-  
+
   // JSON output
   toJSON(): ErrorImplements & CatcherData<T> & { messages: string[] }
-  
+
   // JSON string output
   toJSONString(indent?: number | boolean): string
 }

@@ -1,7 +1,7 @@
 
 # @fastkit/helpers
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/helpers/README-ja.md)
 
 A collection of small helper implementations for processing primitive values and objects.
 
@@ -26,108 +26,108 @@ pnpm add @fastkit/helpers
 ### String Processing
 
 ```typescript
-import { 
-  capitalize, 
-  toHalfWidth, 
-  stripIndent, 
-  removeSpace 
+import {
+  capitalize,
+  toHalfWidth,
+  stripIndent,
+  removeSpace
 } from '@fastkit/helpers';
 
-// 最初の文字を大文字化
+// Capitalize the first character
 capitalize('helloWorld'); // → 'HelloWorld'
 
-// 全角文字を半角に変換
+// Convert full-width characters to half-width
 toHalfWidth('ＨＥＬＬＯ　ＷＯＲＬＤ'); // → 'HELLO WORLD'
 
-// インデントを正規化
+// Normalize indentation
 const code = stripIndent(`
   const message = 'Hello';
   console.log(message);
 `);
 
-// スペースを除去
+// Remove spaces
 removeSpace('Hello World'); // → 'HelloWorld'
 ```
 
-### 配列操作
+### Array Operations
 
 ```typescript
-import { 
-  arrayUnique, 
-  arrayRemove, 
-  range, 
-  flattenRecursiveArray 
+import {
+  arrayUnique,
+  arrayRemove,
+  range,
+  flattenRecursiveArray
 } from '@fastkit/helpers';
 
-// 重複を除去
+// Remove duplicates
 arrayUnique([1, 2, 2, 3, 3]); // → [1, 2, 3]
 
-// 要素を削除（元の配列を変更）
+// Remove element (modifies original array)
 const arr = [1, 2, 3];
-arrayRemove(arr, 2); // arr は [1, 3] になる
+arrayRemove(arr, 2); // arr becomes [1, 3]
 
-// 範囲配列を生成
+// Generate range array
 range(3); // → [0, 1, 2]
 range(3, 5); // → [5, 6, 7]
 
-// 再帰配列を平坦化
+// Flatten recursive array
 flattenRecursiveArray([1, [2, [3, 4]]]); // → [1, 2, 3, 4]
 ```
 
-### オブジェクト操作
+### Object Operations
 
 ```typescript
-import { 
-  isPlainObject, 
-  pickProperties, 
-  omitProperties, 
+import {
+  isPlainObject,
+  pickProperties,
+  omitProperties,
   removeUndef,
-  mixin 
+  mixin
 } from '@fastkit/helpers';
 
-// プレーンオブジェクトかチェック
+// Check if plain object
 isPlainObject({}); // → true
 isPlainObject(new Date()); // → false
 
-// プロパティを選択
+// Select properties
 const obj = { a: 1, b: 2, c: 3 };
 pickProperties(obj, ['a', 'c']); // → { a: 1, c: 3 }
 
-// プロパティを除外
+// Exclude properties
 omitProperties(obj, ['b']); // → { a: 1, c: 3 }
 
-// undefined プロパティを除去
+// Remove undefined properties
 removeUndef({ a: 1, b: undefined, c: 3 }); // → { a: 1, c: 3 }
 
-// オブジェクトをミックスイン
+// Mixin objects
 const base = { a: 1 };
 const trait = { b: 2 };
 const mixed = mixin(base, trait); // { a: 1, b: 2 }
 ```
 
-### 型チェック・ユーティリティ
+### Type Checking & Utilities
 
 ```typescript
-import { 
-  isEmpty, 
-  notEmptyValue, 
+import {
+  isEmpty,
+  notEmptyValue,
   inNonNullable,
-  toNumber 
+  toNumber
 } from '@fastkit/helpers';
 
-// 空値チェック
+// Empty value check
 isEmpty(''); // → true
 isEmpty([]); // → true
 isEmpty(null); // → true
 isEmpty('hello'); // → false
 
-// 最初の非空値を取得
+// Get first non-empty value
 notEmptyValue(['', null, 'hello']); // → 'hello'
 
-// null/undefined チェック
+// null/undefined check
 inNonNullable(value); // value is not null | undefined
 
-// 数値変換
+// Number conversion
 toNumber('123'); // → 123
 toNumber('123.45'); // → 123.45
 ```

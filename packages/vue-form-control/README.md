@@ -1,20 +1,20 @@
 
 # @fastkit/vue-form-control
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-form-control/README-ja.md)
 
-Vueアプリケーションのためのフォームの基礎実装ライブラリです。バリデーション、マスク入力、セレクター機能などを提供します。
+A fundamental form implementation library for Vue applications. Provides validation, masked input, selector functionality, and more.
 
-## 特徴
+## Features
 
-- **Composition API完全対応**: Vue 3の最新機能をフル活用
-- **型安全性**: TypeScript完全対応で型安全なフォーム開発
-- **バリデーション統合**: @fastkit/rulesとの連携による包括的検証
-- **IMask統合**: 高度なマスク入力機能（imaskライブラリ連携）
-- **セレクター機能**: ラジオボタン、チェックボックス、セレクトボックス統合
-- **自動サイズ調整**: VTextareaAutosizeによる動的テキストエリア
-- **リアルタイム検証**: 入力中のリアルタイムバリデーション
-- **カスタマイズ可能**: 柔軟なコントロール拡張とカスタマイズ
+- **Full Composition API Support**: Leverages the latest Vue 3 features
+- **Type Safety**: Complete TypeScript support for type-safe form development
+- **Validation Integration**: Comprehensive validation through @fastkit/rules integration
+- **IMask Integration**: Advanced masked input functionality (imask library integration)
+- **Selector Functionality**: Radio button, checkbox, and select box integration
+- **Auto-sizing**: Dynamic textarea with VTextareaAutosize
+- **Real-time Validation**: Real-time validation during input
+- **Customizable**: Flexible control extension and customization
 
 ## Installation
 
@@ -24,9 +24,9 @@ npm install @fastkit/vue-form-control
 pnpm add @fastkit/vue-form-control
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### プラグイン設定
+### Plugin Setup
 
 ```typescript
 import { createApp } from 'vue';
@@ -34,40 +34,40 @@ import { installVueFormPlugin } from '@fastkit/vue-form-control';
 
 const app = createApp(App);
 
-// フォームプラグインをインストール
+// Install form plugin
 installVueFormPlugin(app, {
-  // オプション設定
+  // Option settings
 });
 ```
 
-### シンプルなフォーム
+### Simple Form
 
 ```vue
 <template>
   <form @submit="form.submit">
-    <!-- テキスト入力 -->
-    <input 
+    <!-- Text input -->
+    <input
       v-model="form.name.value"
       :class="{ error: form.name.invalid }"
       @blur="form.name.validate()"
     />
     <div v-if="form.name.invalid">{{ form.name.errorMessage }}</div>
 
-    <!-- 数値入力 -->
-    <input 
+    <!-- Number input -->
+    <input
       type="number"
       v-model.number="form.age.value"
       :class="{ error: form.age.invalid }"
     />
 
-    <!-- セレクト -->
+    <!-- Select -->
     <select v-model="form.category.value">
-      <option value="">選択してください</option>
-      <option value="a">カテゴリA</option>
-      <option value="b">カテゴリB</option>
+      <option value="">Please select</option>
+      <option value="a">Category A</option>
+      <option value="b">Category B</option>
     </select>
 
-    <button type="submit" :disabled="form.invalid">送信</button>
+    <button type="submit" :disabled="form.invalid">Submit</button>
   </form>
 </template>
 
@@ -75,7 +75,7 @@ installVueFormPlugin(app, {
 import { useForm } from '@fastkit/vue-form-control';
 import { required, minLength, between } from '@fastkit/rules';
 
-// フォーム定義
+// Form definition
 const form = useForm({
   name: {
     value: '',
@@ -92,33 +92,33 @@ const form = useForm({
 }, {
   onSubmit: async (values) => {
     console.log('Submit:', values);
-    // API送信処理
+    // API submission processing
     await api.submit(values);
   }
 });
 </script>
 ```
 
-### テキスト入力コントロール
+### Text Input Control
 
 ```vue
 <template>
   <div>
-    <!-- 基本的なテキスト入力 -->
-    <input 
+    <!-- Basic text input -->
+    <input
       v-model="textControl.value"
       @input="textControl.handleInput"
       @blur="textControl.handleBlur"
     />
-    
-    <!-- マスク入力 -->
-    <input 
+
+    <!-- Masked input -->
+    <input
       v-model="phoneControl.value"
       v-imask="phoneControl.maskOptions"
       @input="phoneControl.handleMaskInput"
     />
-    
-    <!-- バリデーション表示 -->
+
+    <!-- Validation display -->
     <div v-if="textControl.invalid" class="error">
       {{ textControl.errorMessage }}
     </div>
@@ -129,13 +129,13 @@ const form = useForm({
 import { useTextInputNodeControl } from '@fastkit/vue-form-control';
 import { required, pattern } from '@fastkit/rules';
 
-// 基本テキスト入力
+// Basic text input
 const textControl = useTextInputNodeControl({
   value: '',
   rules: [required(), pattern(/^[a-zA-Z]+$/)]
 });
 
-// 電話番号マスク入力
+// Phone number masked input
 const phoneControl = useTextInputNodeControl({
   value: '',
   mask: '000-0000-0000',
@@ -144,15 +144,15 @@ const phoneControl = useTextInputNodeControl({
 </script>
 ```
 
-### セレクターコントロール
+### Selector Control
 
 ```vue
 <template>
   <div>
-    <!-- ラジオボタン -->
+    <!-- Radio buttons -->
     <div v-for="item in radioItems" :key="item.value">
       <label>
-        <input 
+        <input
           type="radio"
           :value="item.value"
           v-model="radioControl.value"
@@ -162,10 +162,10 @@ const phoneControl = useTextInputNodeControl({
       </label>
     </div>
 
-    <!-- チェックボックス（複数選択） -->
+    <!-- Checkboxes (multiple selection) -->
     <div v-for="item in checkboxItems" :key="item.value">
       <label>
-        <input 
+        <input
           type="checkbox"
           :value="item.value"
           v-model="checkboxControl.value"
@@ -181,41 +181,41 @@ const phoneControl = useTextInputNodeControl({
 import { useFormSelectorControl } from '@fastkit/vue-form-control';
 import { required } from '@fastkit/rules';
 
-// ラジオボタン制御
+// Radio button control
 const radioControl = useFormSelectorControl({
   value: '',
   items: [
-    { value: 'option1', label: 'オプション1' },
-    { value: 'option2', label: 'オプション2' },
-    { value: 'option3', label: 'オプション3' }
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' }
   ],
   rules: [required()]
 });
 
-// チェックボックス制御（複数選択）
+// Checkbox control (multiple selection)
 const checkboxControl = useFormSelectorControl({
   value: [] as string[],
   multiple: true,
   items: [
-    { value: 'item1', label: 'アイテム1' },
-    { value: 'item2', label: 'アイテム2' },
-    { value: 'item3', label: 'アイテム3' }
+    { value: 'item1', label: 'Item 1' },
+    { value: 'item2', label: 'Item 2' },
+    { value: 'item3', label: 'Item 3' }
   ]
 });
 </script>
 ```
 
-### VTextareaAutosizeコンポーネント
+### VTextareaAutosize Component
 
-自動サイズ調整機能付きのテキストエリアコンポーネントです。内容に応じて高さが動的に調整されます。
+A textarea component with auto-sizing functionality. The height dynamically adjusts based on the content.
 
 ```vue
 <template>
   <div>
-    <!-- 基本的な自動サイズ調整テキストエリア -->
+    <!-- Basic auto-sizing textarea -->
     <VTextareaAutosize
       v-model="content"
-      placeholder="メッセージを入力してください..."
+      placeholder="Please enter your message..."
       :min-rows="3"
       :max-rows="10"
       @input="handleInput"
@@ -223,7 +223,7 @@ const checkboxControl = useFormSelectorControl({
       @blur="handleBlur"
     />
 
-    <!-- プロパティ付きの例 -->
+    <!-- Example with properties -->
     <VTextareaAutosize
       v-model="comment"
       name="comment"
@@ -231,7 +231,7 @@ const checkboxControl = useFormSelectorControl({
       :maxlength="500"
       :readonly="isReadonly"
       :disabled="isDisabled"
-      placeholder="コメントを入力..."
+      placeholder="Enter comment..."
       :min-rows="2"
       :max-rows="8"
       class="custom-textarea"
@@ -249,15 +249,15 @@ const isReadonly = ref(false);
 const isDisabled = ref(false);
 
 const handleInput = (event: Event) => {
-  console.log('入力されました:', (event.target as HTMLTextAreaElement).value);
+  console.log('Input received:', (event.target as HTMLTextAreaElement).value);
 };
 
 const handleFocus = (event: FocusEvent) => {
-  console.log('フォーカスされました');
+  console.log('Focused');
 };
 
 const handleBlur = (event: FocusEvent) => {
-  console.log('フォーカスが外れました');
+  console.log('Focus lost');
 };
 </script>
 
@@ -281,57 +281,57 @@ const handleBlur = (event: FocusEvent) => {
 </style>
 ```
 
-#### VTextareaAutosizeの高度な使用例
+#### Advanced Usage Examples for VTextareaAutosize
 
 ```vue
 <template>
   <div>
-    <!-- チャットメッセージ入力 -->
+    <!-- Chat message input -->
     <div class="chat-input-container">
       <VTextareaAutosize
         ref="chatInput"
         v-model="message"
-        placeholder="メッセージを入力... (Shift+Enterで改行、Enterで送信)"
+        placeholder="Enter message... (Shift+Enter for new line, Enter to send)"
         :min-rows="1"
         :max-rows="5"
         class="chat-input"
         @keydown="handleKeydown"
         @input="handleInput"
       />
-      <button 
+      <button
         :disabled="!message.trim()"
         @click="sendMessage"
         class="send-button"
       >
-        送信
+        Send
       </button>
     </div>
 
-    <!-- 動的なフォームフィールド -->
+    <!-- Dynamic form field -->
     <div class="form-field">
-      <label for="description">説明文</label>
+      <label for="description">Description</label>
       <VTextareaAutosize
         id="description"
         v-model="description"
         :min-rows="2"
         :max-rows="15"
         :maxlength="1000"
-        placeholder="商品の詳細説明を入力してください..."
+        placeholder="Please enter detailed product description..."
         class="description-input"
       />
       <div class="char-count">
-        {{ description.length }}/1000文字
+        {{ description.length }}/1000 characters
       </div>
     </div>
 
-    <!-- JSONエディター風 -->
+    <!-- JSON editor style -->
     <div class="json-editor">
-      <label>JSON設定</label>
+      <label>JSON Settings</label>
       <VTextareaAutosize
         v-model="jsonConfig"
         :min-rows="5"
         :max-rows="20"
-        placeholder="JSON形式で設定を入力..."
+        placeholder="Enter settings in JSON format..."
         class="json-input"
         autocomplete="off"
         spellcheck="false"
@@ -340,7 +340,7 @@ const handleBlur = (event: FocusEvent) => {
         {{ jsonError }}
       </div>
       <div v-else class="success">
-        ✓ 有効なJSON形式です
+        ✓ Valid JSON format
       </div>
     </div>
   </div>
@@ -355,19 +355,19 @@ const message = ref('');
 const description = ref('');
 const jsonConfig = ref('{\n  "theme": "dark",\n  "autoSave": true\n}');
 
-// JSON バリデーション
+// JSON validation
 const jsonError = computed(() => {
   if (!jsonConfig.value.trim()) return null;
-  
+
   try {
     JSON.parse(jsonConfig.value);
     return null;
   } catch (error) {
-    return `JSON構文エラー: ${(error as Error).message}`;
+    return `JSON syntax error: ${(error as Error).message}`;
   }
 });
 
-// チャット入力のキーボードハンドリング
+// Chat input keyboard handling
 const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
@@ -376,34 +376,34 @@ const handleKeydown = (event: KeyboardEvent) => {
 };
 
 const handleInput = (event: Event) => {
-  // 入力時の処理（例：入力中表示の更新など）
-  console.log('入力中...');
+  // Processing during input (e.g., updating typing indicator)
+  console.log('Typing...');
 };
 
 const sendMessage = () => {
   if (!message.value.trim()) return;
-  
-  // メッセージ送信処理
-  console.log('メッセージ送信:', message.value);
-  
-  // 入力欄をクリア
+
+  // Message sending process
+  console.log('Send message:', message.value);
+
+  // Clear input field
   message.value = '';
-  
-  // フォーカスを戻す
+
+  // Return focus
   chatInput.value?.focus();
 };
 
-// JSON設定の自動フォーマット（オプション）
+// Auto-format JSON settings (optional)
 const formatJson = () => {
   try {
     const parsed = JSON.parse(jsonConfig.value);
     jsonConfig.value = JSON.stringify(parsed, null, 2);
   } catch (error) {
-    // エラー時は何もしない
+    // Do nothing on error
   }
 };
 
-// 説明文の文字数監視
+// Monitor description character count
 watch(description, (newValue) => {
   if (newValue.length > 1000) {
     description.value = newValue.substring(0, 1000);
@@ -514,18 +514,18 @@ watch(description, (newValue) => {
 
 ## Advanced Usage Examples
 
-### カスタムバリデーション
+### Custom Validation
 
 ```typescript
 import { useTextInputNodeControl } from '@fastkit/vue-form-control';
 import { required } from '@fastkit/rules';
 
-// カスタムバリデーション関数
+// Custom validation function
 const uniqueEmail = (value: string) => {
   return new Promise((resolve) => {
-    // API呼び出しでメール重複チェック
+    // Check email uniqueness via API call
     api.checkEmailUnique(value).then(isUnique => {
-      resolve(isUnique ? true : 'このメールアドレスは既に使用されています');
+      resolve(isUnique ? true : 'This email address is already in use');
     });
   });
 };
@@ -534,19 +534,19 @@ const emailControl = useTextInputNodeControl({
   value: '',
   rules: [
     required(),
-    uniqueEmail  // 非同期バリデーション
+    uniqueEmail  // Asynchronous validation
   ],
-  validateTiming: ['blur', 'change']  // バリデーションタイミング
+  validateTiming: ['blur', 'change']  // Validation timing
 });
 ```
 
-### IMaskによるマスク入力
+### Masked Input with IMask
 
 ```typescript
 import { useTextInputNodeControl } from '@fastkit/vue-form-control';
 import IMask from 'imask';
 
-// 日付マスク
+// Date mask
 const dateControl = useTextInputNodeControl({
   value: '',
   mask: {
@@ -557,7 +557,7 @@ const dateControl = useTextInputNodeControl({
   }
 });
 
-// 通貨マスク
+// Currency mask
 const currencyControl = useTextInputNodeControl({
   value: '',
   mask: {
@@ -570,21 +570,21 @@ const currencyControl = useTextInputNodeControl({
   }
 });
 
-// 郵便番号マスク
+// Postal code mask
 const zipControl = useTextInputNodeControl({
   value: '',
   mask: '000-0000'
 });
 ```
 
-### フォームグループ
+### Form Groups
 
 ```vue
 <script setup lang="ts">
 import { useFormGroup } from '@fastkit/vue-form-control';
 import { required, email } from '@fastkit/rules';
 
-// ネストしたフォーム構造
+// Nested form structure
 const userForm = useFormGroup({
   personal: useFormGroup({
     firstName: useTextInputNodeControl({
@@ -600,31 +600,31 @@ const userForm = useFormGroup({
       rules: [required(), email()]
     })
   }),
-  
+
   preferences: useFormGroup({
     newsletter: useFormSelectorControl({
       value: false,
       items: [
-        { value: true, label: '購読する' },
-        { value: false, label: '購読しない' }
+        { value: true, label: 'Subscribe' },
+        { value: false, label: 'Do not subscribe' }
       ]
     }),
     categories: useFormSelectorControl({
       value: [] as string[],
       multiple: true,
       items: [
-        { value: 'tech', label: 'テクノロジー' },
-        { value: 'business', label: 'ビジネス' },
-        { value: 'lifestyle', label: 'ライフスタイル' }
+        { value: 'tech', label: 'Technology' },
+        { value: 'business', label: 'Business' },
+        { value: 'lifestyle', label: 'Lifestyle' }
       ]
     })
   })
 });
 
-// フォーム全体の値取得
+// Get entire form values
 const formValues = computed(() => userForm.value);
 
-// フォーム全体のバリデーション
+// Validate entire form
 const isFormValid = computed(() => userForm.valid);
 </script>
 ```
@@ -633,22 +633,22 @@ const isFormValid = computed(() => userForm.valid);
 
 ### useForm
 
-フォーム全体を管理するcomposable。
+Composable for managing the entire form.
 
 ```typescript
 const form = useForm(fields, options);
 ```
 
-**パラメーター:**
-- `fields`: フィールド定義オブジェクト
-- `options`: フォームオプション
+**Parameters:**
+- `fields`: Field definition object
+- `options`: Form options
 
-**戻り値:**
-- フォームコントロールインスタンス
+**Return Value:**
+- Form control instance
 
 ### useTextInputNodeControl
 
-テキスト入力制御用composable。
+Composable for text input control.
 
 ```typescript
 const control = useTextInputNodeControl({
@@ -662,7 +662,7 @@ const control = useTextInputNodeControl({
 
 ### useFormSelectorControl
 
-セレクター制御用composable。
+Composable for selector control.
 
 ```typescript
 const control = useFormSelectorControl({
@@ -675,7 +675,7 @@ const control = useFormSelectorControl({
 
 ### useFormGroup
 
-フォームグループ制御用composable。
+Composable for form group control.
 
 ```typescript
 const group = useFormGroup(controls);
@@ -683,7 +683,7 @@ const group = useFormGroup(controls);
 
 ### VTextareaAutosize
 
-自動サイズ調整機能付きテキストエリアコンポーネント。
+Textarea component with auto-sizing functionality.
 
 ```typescript
 interface VTextareaAutosizeRef {
@@ -692,52 +692,52 @@ interface VTextareaAutosizeRef {
   blur(): void;
 }
 
-// プロパティ
+// Properties
 interface VTextareaAutosizeProps {
-  modelValue?: string;           // v-model値
-  minRows?: number | string;     // 最小行数（デフォルト: 1）
-  maxRows?: number | string;     // 最大行数
-  autocomplete?: string;         // オートコンプリート
-  autofocus?: boolean;           // オートフォーカス
-  disabled?: boolean;            // 無効状態
-  readonly?: boolean;            // 読み取り専用
-  required?: boolean;            // 必須フィールド
-  name?: string;                 // フィールド名
-  placeholder?: string;          // プレースホルダー
-  maxlength?: number | string;   // 最大文字数
-  minlength?: number | string;   // 最小文字数
-  form?: string;                 // 関連するフォームID
+  modelValue?: string;           // v-model value
+  minRows?: number | string;     // Minimum rows (default: 1)
+  maxRows?: number | string;     // Maximum rows
+  autocomplete?: string;         // Autocomplete
+  autofocus?: boolean;           // Auto focus
+  disabled?: boolean;            // Disabled state
+  readonly?: boolean;            // Read-only
+  required?: boolean;            // Required field
+  name?: string;                 // Field name
+  placeholder?: string;          // Placeholder
+  maxlength?: number | string;   // Maximum character count
+  minlength?: number | string;   // Minimum character count
+  form?: string;                 // Associated form ID
 }
 
-// イベント
+// Events
 interface VTextareaAutosizeEmits {
-  'update:modelValue': (value: string) => void;  // v-model更新
-  input: (event: Event) => void;                 // 入力イベント
-  focus: (event: FocusEvent) => void;            // フォーカスイベント
-  blur: (event: FocusEvent) => void;             // ブラーイベント
+  'update:modelValue': (value: string) => void;  // v-model update
+  input: (event: Event) => void;                 // Input event
+  focus: (event: FocusEvent) => void;            // Focus event
+  blur: (event: FocusEvent) => void;             // Blur event
 }
 ```
 
-**機能:**
-- 内容に応じた自動的な高さ調整
-- 最小・最大行数の制限
-- ResizeObserverによるレスポンシブ対応
-- デバウンス処理による高パフォーマンス
-- 無限レンダリング防止機能
-- 標準的なHTMLテキストエリア属性サポート
+**Features:**
+- Automatic height adjustment based on content
+- Minimum and maximum row limits
+- Responsive support with ResizeObserver
+- High performance with debounce processing
+- Infinite rendering prevention
+- Standard HTML textarea attribute support
 
-## バリデーション
+## Validation
 
-### 基本ルール（@fastkit/rules連携）
+### Basic Rules (@fastkit/rules integration)
 
 ```typescript
-import { 
-  required, 
-  email, 
-  minLength, 
-  maxLength, 
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
   pattern,
-  between 
+  between
 } from '@fastkit/rules';
 
 const control = useTextInputNodeControl({
@@ -753,12 +753,12 @@ const control = useTextInputNodeControl({
 });
 ```
 
-### カスタムルール
+### Custom Rules
 
 ```typescript
 const customRule = (value: any) => {
   if (value !== 'expected') {
-    return '期待される値ではありません';
+    return 'Not the expected value';
   }
   return true;
 };
@@ -769,25 +769,25 @@ const control = useTextInputNodeControl({
 });
 ```
 
-## IMask統合
+## IMask Integration
 
-### 基本マスク
+### Basic Masks
 
 ```typescript
-// 電話番号
+// Phone number
 mask: '000-0000-0000'
 
-// 郵便番号
+// Postal code
 mask: '000-0000'
 
-// クレジットカード
+// Credit card
 mask: '0000 0000 0000 0000'
 ```
 
-### 高度なマスク
+### Advanced Masks
 
 ```typescript
-// 日付
+// Date
 mask: {
   mask: Date,
   pattern: 'YYYY-MM-DD',
@@ -798,7 +798,7 @@ mask: {
   }
 }
 
-// 数値
+// Number
 mask: {
   mask: Number,
   scale: 2,
@@ -807,37 +807,37 @@ mask: {
 }
 ```
 
-## テキストファイナライザー
+## Text Finalizers
 
 ```typescript
-import { 
+import {
   useTextInputNodeControl,
-  BUILTIN_TEXT_FINALIZERS 
+  BUILTIN_TEXT_FINALIZERS
 } from '@fastkit/vue-form-control';
 
 const control = useTextInputNodeControl({
   value: '',
   finalizers: [
-    BUILTIN_TEXT_FINALIZERS.trim,      // 前後空白除去
-    BUILTIN_TEXT_FINALIZERS.upper,     // 大文字変換
-    BUILTIN_TEXT_FINALIZERS.removeSpace, // 全空白除去
-    // カスタムファイナライザー
+    BUILTIN_TEXT_FINALIZERS.trim,      // Remove leading/trailing whitespace
+    BUILTIN_TEXT_FINALIZERS.upper,     // Convert to uppercase
+    BUILTIN_TEXT_FINALIZERS.removeSpace, // Remove all whitespace
+    // Custom finalizer
     (value) => value.replace(/[^\w]/g, '')
   ]
 });
 ```
 
-## 依存関係
+## Dependencies
 
 - `vue`: ^3.4.0 (Peer Dependency)
-- `@fastkit/rules`: バリデーションルール
-- `@fastkit/helpers`: ヘルパーユーティリティ
-- `@fastkit/vue-utils`: Vue用ユーティリティ
-- `imask`: マスク入力ライブラリ
+- `@fastkit/rules`: Validation rules
+- `@fastkit/helpers`: Helper utilities
+- `@fastkit/vue-utils`: Vue utilities
+- `imask`: Masked input library
 
-## ドキュメント
+## Documentation
 
-詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/vue-form-control/)をご覧ください。
+For detailed documentation, please see [here](https://dadajam4.github.io/fastkit/vue-form-control/).
 
 ## License
 

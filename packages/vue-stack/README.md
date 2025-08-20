@@ -1,24 +1,23 @@
-
 # @fastkit/vue-stack
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-stack/README-ja.md)
 
-Vue.js アプリケーションでダイアログ、ツールチップ、メニューなどのスタック可能なUI要素を管理するための包括的なライブラリです。動的コンポーネント表示、フォーカス管理、アニメーション、キーボード操作など、モーダル系UIに必要な全ての機能を提供します。
+A comprehensive library for managing stackable UI elements such as dialogs, tooltips, and menus in Vue.js applications. Provides all the features needed for modal-type UIs including dynamic component display, focus management, animations, and keyboard operations.
 
-## 特徴
+## Features
 
-- **統合スタック管理**: 複数のダイアログ、ツールチップ、メニューの一元管理
-- **動的コンポーネント表示**: プログラマティックなコンポーネント起動
-- **フォーカス管理**: 自動フォーカストラップとリストア機能
-- **キーボード操作**: ESC、Tab、矢印キーなどのキーボード制御
-- **アニメーション統合**: Vue Transitionとの完全統合
-- **z-index管理**: 自動スタック順序制御
-- **アクセシビリティ**: ARIA属性とスクリーンリーダー対応
-- **ルーター統合**: Vue Routerナビゲーションガード
-- **ボディスクロール制御**: モーダル表示時のスクロール制限
-- **遅延表示/非表示**: タイムアウトベースの自動制御
-- **Outside Click検知**: スタック外クリック監視
-- **永続化モード**: 強制的な表示維持機能
+- **Integrated Stack Management**: Centralized management of multiple dialogs, tooltips, and menus
+- **Dynamic Component Display**: Programmatic component launching
+- **Focus Management**: Automatic focus trap and restore functionality
+- **Keyboard Operations**: Keyboard control with ESC, Tab, arrow keys, etc.
+- **Animation Integration**: Complete integration with Vue Transitions
+- **z-index Management**: Automatic stack order control
+- **Accessibility**: ARIA attributes and screen reader support
+- **Router Integration**: Vue Router navigation guards
+- **Body Scroll Control**: Scroll restriction when modals are displayed
+- **Delayed Show/Hide**: Timeout-based automatic control
+- **Outside Click Detection**: Monitoring clicks outside the stack
+- **Persistent Mode**: Forced display maintenance functionality
 
 ## Installation
 
@@ -27,13 +26,13 @@ npm install @fastkit/vue-stack
 # or
 pnpm add @fastkit/vue-stack
 
-# 依存関係
+# Dependencies
 npm install vue vue-router
 ```
 
-## 基本的な使い方
+## Basic Usage
 
-### プラグイン設定
+### Plugin Setup
 
 ```typescript
 // main.ts
@@ -44,34 +43,34 @@ import '@fastkit/vue-stack/vue-stack.css';
 
 const app = createApp(App);
 
-// ルーター設定
+// Router setup
 const router = createRouter({
   history: createWebHistory(),
-  routes: [/* ルート定義 */]
+  routes: [/* Route definitions */]
 });
 
-// スタックサービス
+// Stack service
 const stackService = new VueStackService({
-  zIndex: 32767,                    // ベースz-index
-  snackbarDefaultPosition: 'top'    // スナックバーデフォルト位置
+  zIndex: 32767,                    // Base z-index
+  snackbarDefaultPosition: 'top'    // Snackbar default position
 });
 
-// プラグインとして提供
+// Provide as plugin
 app.provide(VueStackInjectionKey, stackService);
 
 app.use(router);
 app.mount('#app');
 ```
 
-### 基本的なダイアログ
+### Basic Dialog
 
 ```vue
 <template>
   <div>
-    <!-- ダイアログトリガー -->
-    <button @click="showDialog">ダイアログを開く</button>
-    
-    <!-- ダイアログコンポーネント -->
+    <!-- Dialog trigger -->
+    <button @click="showDialog">Open Dialog</button>
+
+    <!-- Dialog component -->
     <VDialog
       v-model="dialogVisible"
       transition="v-stack-slide-down"
@@ -83,11 +82,11 @@ app.mount('#app');
       @close="onDialogClose"
     >
       <div class="dialog">
-        <h2>確認ダイアログ</h2>
-        <p>この操作を実行しますか？</p>
+        <h2>Confirmation Dialog</h2>
+        <p>Do you want to execute this operation?</p>
         <div class="dialog-actions">
           <button @click="confirm">OK</button>
-          <button @click="cancel">キャンセル</button>
+          <button @click="cancel">Cancel</button>
         </div>
       </div>
     </VDialog>
@@ -106,27 +105,27 @@ const showDialog = () => {
 };
 
 const confirm = () => {
-  console.log('確認されました');
+  console.log('Confirmed');
   dialogVisible.value = false;
 };
 
 const cancel = () => {
-  console.log('キャンセルされました');
+  console.log('Cancelled');
   dialogVisible.value = false;
 };
 
 const onDialogShow = (control) => {
-  console.log('ダイアログが表示されました', control);
+  console.log('Dialog shown', control);
 };
 
 const onDialogClose = (control) => {
-  console.log('ダイアログが閉じられました', control);
-  console.log('クローズ理由:', control._.state.closeReason);
+  console.log('Dialog closed', control);
+  console.log('Close reason:', control._.state.closeReason);
 };
 </script>
 ```
 
-### アクティベーター付きメニュー
+### Menu with Activator
 
 ```vue
 <template>
@@ -138,14 +137,14 @@ const onDialogClose = (control) => {
   >
     <template #activator="{ attrs }">
       <button v-bind="attrs">
-        ホバーでメニュー表示
+        Hover to Show Menu
       </button>
     </template>
-    
+
     <div class="menu">
-      <div class="menu-item">アイテム1</div>
-      <div class="menu-item">アイテム2</div>
-      <div class="menu-item">アイテム3</div>
+      <div class="menu-item">Item 1</div>
+      <div class="menu-item">Item 2</div>
+      <div class="menu-item">Item 3</div>
     </div>
   </VMenu>
 </template>
@@ -179,11 +178,11 @@ import { VMenu } from '@fastkit/vue-stack';
 </style>
 ```
 
-## 利用可能なコンポーネント
+## Available Components
 
-### VDialog - ダイアログコンポーネント
+### VDialog - Dialog Component
 
-モーダルダイアログを表示するためのコンポーネントです。
+A component for displaying modal dialogs.
 
 ```vue
 <template>
@@ -195,17 +194,17 @@ import { VMenu } from '@fastkit/vue-stack';
     transition="v-stack-slide-down"
   >
     <div class="dialog-content">
-      <h2>ダイアログタイトル</h2>
-      <p>ダイアログの内容</p>
-      <button @click="visible = false">閉じる</button>
+      <h2>Dialog Title</h2>
+      <p>Dialog content</p>
+      <button @click="visible = false">Close</button>
     </div>
   </VDialog>
 </template>
 ```
 
-### VSnackbar - スナックバーコンポーネント
+### VSnackbar - Snackbar Component
 
-通知メッセージを表示するためのコンポーネントです。
+A component for displaying notification messages.
 
 ```vue
 <template>
@@ -222,34 +221,34 @@ import { VMenu } from '@fastkit/vue-stack';
 </template>
 ```
 
-### VMenu - メニューコンポーネント
+### VMenu - Menu Component
 
-ドロップダウンメニューやコンテキストメニューを表示するためのコンポーネントです。
+A component for displaying dropdown menus and context menus.
 
 ```vue
 <template>
   <VMenu open-on-click>
     <template #activator="{ attrs }">
-      <button v-bind="attrs">メニューを開く</button>
+      <button v-bind="attrs">Open Menu</button>
     </template>
-    
+
     <div class="menu-content">
-      <div class="menu-item" @click="handleAction('action1')">アクション1</div>
-      <div class="menu-item" @click="handleAction('action2')">アクション2</div>
+      <div class="menu-item" @click="handleAction('action1')">Action 1</div>
+      <div class="menu-item" @click="handleAction('action2')">Action 2</div>
     </div>
   </VMenu>
 </template>
 ```
 
-### VDynamicStacks - 動的スタック管理
+### VDynamicStacks - Dynamic Stack Management
 
-プログラマティックにスタック要素を管理するためのコンポーネントです。
+A component for programmatically managing stack elements.
 
 ```vue
 <template>
   <div>
-    <button @click="showProgrammaticDialog">プログラマティックダイアログ</button>
-    <button @click="showSnackbar">スナックバー表示</button>
+    <button @click="showProgrammaticDialog">Programmatic Dialog</button>
+    <button @click="showSnackbar">Show Snackbar</button>
     <VDynamicStacks />
   </div>
 </template>
@@ -270,24 +269,24 @@ const showProgrammaticDialog = async () => {
       },
       slots: {
         default: () => h('div', { class: 'p-4' }, [
-          h('h2', 'プログラマティックダイアログ'),
-          h('p', 'このダイアログはJavaScriptから表示されました'),
-          h('button', { 
+          h('h2', 'Programmatic Dialog'),
+          h('p', 'This dialog was displayed from JavaScript'),
+          h('button', {
             onClick: () => $vstack.resolve('confirmed'),
             class: 'btn btn-primary'
-          }, '確認')
+          }, 'Confirm')
         ])
       }
     });
-    console.log('ダイアログ結果:', result);
+    console.log('Dialog result:', result);
   } catch (error) {
-    console.log('ダイアログがキャンセルされました');
+    console.log('Dialog was cancelled');
   }
 };
 
 const showSnackbar = () => {
   $vstack.snackbar({
-    message: 'スナックバーメッセージ',
+    message: 'Snackbar message',
     timeout: 3000,
     transition: 'v-stack-slide-up'
   });
@@ -297,133 +296,133 @@ const showSnackbar = () => {
 
 ## VStackControl API
 
-### プロパティ
+### Properties
 
 ```typescript
 interface VStackControl {
-  // 状態
-  readonly isActive: boolean;              // 表示状態
-  readonly transitioning: boolean;         // アニメーション中
-  readonly isResolved: boolean;           // 解決済み
-  readonly isCanceled: boolean;           // キャンセル済み
-  readonly isDestroyed: boolean;          // 破棄済み
-  
-  // 値
-  value: any;                             // 入力値
-  
-  // 設定
-  readonly timeout: number;               // タイムアウト
-  readonly persistent: boolean;           // 永続表示
+  // State
+  readonly isActive: boolean;              // Display state
+  readonly transitioning: boolean;         // Animating
+  readonly isResolved: boolean;           // Resolved
+  readonly isCanceled: boolean;           // Cancelled
+  readonly isDestroyed: boolean;          // Destroyed
+
+  // Value
+  value: any;                             // Input value
+
+  // Settings
+  readonly timeout: number;               // Timeout
+  readonly persistent: boolean;           // Persistent display
   readonly zIndex: number;                // z-index
-  readonly activateOrder: number;         // 活性化順序
-  
-  // フォーカス・キーボード
-  readonly focusRestorable: boolean;      // フォーカスリストア
-  readonly closeOnEsc: boolean;           // ESCで閉じる
-  readonly closeOnTab: false | string;    // Tabで閉じる
-  readonly closeOnNavigation: boolean;    // ナビゲーションで閉じる
-  readonly closeOnOutsideClick: boolean;  // 外側クリックで閉じる
-  
-  // 遅延
-  readonly openDelay: number;             // 表示遅延
-  readonly closeDelay: number;            // 非表示遅延
-  
-  // 要素参照
-  readonly contentRef: Ref<HTMLElement>;  // コンテンツ要素
-  readonly backdropRef: Ref<HTMLElement>; // バックドロップ要素
-  readonly activator: HTMLElement;        // アクティベーター要素
-  
-  // スタイル
-  readonly classes: any[];                // クラス一覧
-  readonly styles: StyleValue[];          // スタイル一覧
-  
-  // その他
-  readonly $service: VueStackService;     // スタックサービス
-  readonly stackType?: string | symbol;   // スタックタイプ
-  readonly disabled: boolean;             // 無効状態
-  readonly guardInProgress: boolean;      // ガード実行中
+  readonly activateOrder: number;         // Activation order
+
+  // Focus & Keyboard
+  readonly focusRestorable: boolean;      // Focus restore
+  readonly closeOnEsc: boolean;           // Close on ESC
+  readonly closeOnTab: false | string;    // Close on Tab
+  readonly closeOnNavigation: boolean;    // Close on navigation
+  readonly closeOnOutsideClick: boolean;  // Close on outside click
+
+  // Delays
+  readonly openDelay: number;             // Show delay
+  readonly closeDelay: number;            // Hide delay
+
+  // Element refs
+  readonly contentRef: Ref<HTMLElement>;  // Content element
+  readonly backdropRef: Ref<HTMLElement>; // Backdrop element
+  readonly activator: HTMLElement;        // Activator element
+
+  // Styles
+  readonly classes: any[];                // Class list
+  readonly styles: StyleValue[];          // Style list
+
+  // Others
+  readonly $service: VueStackService;     // Stack service
+  readonly stackType?: string | symbol;   // Stack type
+  readonly disabled: boolean;             // Disabled state
+  readonly guardInProgress: boolean;      // Guard in progress
 }
 ```
 
-### メソッド
+### Methods
 
 ```typescript
 interface VStackControl {
-  // 表示制御
-  show(): Promise<void>;                           // 表示
-  toggle(): Promise<void>;                         // 表示切り替え
-  close(opts?: VStackCloseOptions): Promise<void>; // 非表示
-  
-  // 解決・キャンセル
-  resolve(payload?: any): Promise<void | false>;   // 解決
-  cancel(force?: boolean): Promise<void>;          // キャンセル
-  
-  // 設定
-  setActivator(query: VStackActivatorQuery): this; // アクティベーター設定
-  toFront(): void;                                 // 最前面へ
-  resetValue(): void;                              // 値リセット
-  
-  // 状態確認
-  isFront(filter?: Function): boolean;             // 最前面か確認
-  containsOrSameElement(el: Element): boolean;     // 要素包含確認
-  
-  // レンダリング
-  render(fn: Function, opts?: object): VNode;      // レンダリング
-  
-  // エフェクト
-  guardEffect(): void;                             // ガードエフェクト実行
+  // Display control
+  show(): Promise<void>;                           // Show
+  toggle(): Promise<void>;                         // Toggle display
+  close(opts?: VStackCloseOptions): Promise<void>; // Hide
+
+  // Resolve & Cancel
+  resolve(payload?: any): Promise<void | false>;   // Resolve
+  cancel(force?: boolean): Promise<void>;          // Cancel
+
+  // Configuration
+  setActivator(query: VStackActivatorQuery): this; // Set activator
+  toFront(): void;                                 // Bring to front
+  resetValue(): void;                              // Reset value
+
+  // State check
+  isFront(filter?: Function): boolean;             // Check if front
+  containsOrSameElement(el: Element): boolean;     // Element containment check
+
+  // Rendering
+  render(fn: Function, opts?: object): VNode;      // Render
+
+  // Effects
+  guardEffect(): void;                             // Execute guard effect
 }
 ```
 
 ## VueStackService
 
-### サービス管理
+### Service Management
 
 ```typescript
 import { VueStackService, useStack } from '@fastkit/vue-stack';
 
-// サービス作成
+// Create service
 const service = new VueStackService({
   zIndex: 32767,
   snackbarDefaultPosition: 'top'
 });
 
-// コンポーザブルでアクセス
+// Access via composable
 const stack = useStack();
 
-// サービス情報
-console.log(service.controls);          // 全スタックコントロール
-console.log(service.zIndex);           // ベースz-index
-console.log(service.dynamicSettings);  // 動的設定一覧
+// Service information
+console.log(service.controls);          // All stack controls
+console.log(service.zIndex);           // Base z-index
+console.log(service.dynamicSettings);  // Dynamic settings list
 
-// スタック管理
-const activeStacks = service.getActiveStacks();     // アクティブスタック取得
-const frontStack = service.getFront();              // 最前面スタック取得
-const isTransitioning = service.someTransitioning(); // アニメーション中か確認
+// Stack management
+const activeStacks = service.getActiveStacks();     // Get active stacks
+const frontStack = service.getFront();              // Get front stack
+const isTransitioning = service.someTransitioning(); // Check if animating
 ```
 
-### 動的スタック表示
+### Dynamic Stack Display
 
 ```typescript
-// 動的ダイアログ表示
+// Display dynamic dialog
 const result = await service.dynamic(
   DialogComponent,
   {
-    title: '確認',
-    message: 'この操作を実行しますか？'
+    title: 'Confirmation',
+    message: 'Do you want to execute this operation?'
   },
   {
-    default: () => h('p', 'カスタムコンテンツ')
+    default: () => h('p', 'Custom content')
   }
 );
 
 if (result) {
-  console.log('ユーザーが確認しました:', result);
+  console.log('User confirmed:', result);
 } else {
-  console.log('ユーザーがキャンセルしました');
+  console.log('User cancelled');
 }
 
-// ランチャー作成
+// Create launcher
 const showConfirmDialog = service.createLauncher(
   ConfirmDialogComponent,
   (props) => ({
@@ -432,16 +431,16 @@ const showConfirmDialog = service.createLauncher(
   })
 );
 
-// ランチャー使用
+// Use launcher
 const confirmed = await showConfirmDialog({
-  title: '削除確認',
-  message: 'このアイテムを削除しますか？'
+  title: 'Delete Confirmation',
+  message: 'Do you want to delete this item?'
 });
 ```
 
 ## Advanced Usage Examples
 
-### カスタムダイアログコンポーネント
+### Custom Dialog Component
 
 ```vue
 <!-- ConfirmDialog.vue -->
@@ -458,27 +457,27 @@ const confirmed = await showConfirmDialog({
     @close="onClose"
   >
     <div class="confirm-dialog" :class="variantClass">
-      <!-- ヘッダー -->
+      <!-- Header -->
       <div class="dialog-header">
         <h3 class="dialog-title">{{ title }}</h3>
-        <button 
-          v-if="!persistent && !loading" 
+        <button
+          v-if="!persistent && !loading"
           class="dialog-close"
           @click="cancel"
         >
           ×
         </button>
       </div>
-      
-      <!-- コンテンツ -->
+
+      <!-- Content -->
       <div class="dialog-content">
         <p v-if="message" class="dialog-message">{{ message }}</p>
         <slot />
       </div>
-      
-      <!-- アクション -->
+
+      <!-- Actions -->
       <div class="dialog-actions">
-        <button 
+        <button
           v-if="showCancel"
           class="dialog-button dialog-button--secondary"
           :disabled="loading"
@@ -486,7 +485,7 @@ const confirmed = await showConfirmDialog({
         >
           {{ cancelText }}
         </button>
-        <button 
+        <button
           class="dialog-button dialog-button--primary"
           :class="variantClass"
           :disabled="loading"
@@ -520,9 +519,9 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: false,
-  title: '確認',
+  title: 'Confirmation',
   confirmText: 'OK',
-  cancelText: 'キャンセル',
+  cancelText: 'Cancel',
   variant: 'primary',
   showCancel: true,
   persistent: false,
@@ -541,23 +540,23 @@ const loading = ref(false);
 
 const variantClass = computed(() => `dialog--${props.variant}`);
 
-// 外部からの表示状態同期
+// Sync display state from external
 watch(() => props.modelValue, (newValue) => {
   internalVisible.value = newValue;
 });
 
-// 内部表示状態の外部同期
+// Sync internal display state to external
 watch(internalVisible, (newValue) => {
   emit('update:modelValue', newValue);
 });
 
 const confirm = async () => {
   if (loading.value) return;
-  
+
   loading.value = true;
-  
+
   try {
-    // beforeConfirmハンドラー実行
+    // Execute beforeConfirm handler
     if (props.beforeConfirm) {
       const result = await props.beforeConfirm();
       if (result === false) {
@@ -565,16 +564,16 @@ const confirm = async () => {
         return;
       }
     }
-    
+
     const control = stackRef.value;
     if (control) {
       await control.resolve('confirmed');
       emit('confirm', control);
     }
-    
+
     internalVisible.value = false;
   } catch (error) {
-    console.error('確認処理でエラーが発生しました:', error);
+    console.error('Error occurred during confirmation:', error);
   } finally {
     loading.value = false;
   }
@@ -582,32 +581,32 @@ const confirm = async () => {
 
 const cancel = async () => {
   if (loading.value) return;
-  
+
   try {
-    // beforeCancelハンドラー実行
+    // Execute beforeCancel handler
     if (props.beforeCancel) {
       const result = await props.beforeCancel();
       if (result === false) return;
     }
-    
+
     const control = stackRef.value;
     if (control) {
       await control.cancel();
       emit('cancel', control);
     }
-    
+
     internalVisible.value = false;
   } catch (error) {
-    console.error('キャンセル処理でエラーが発生しました:', error);
+    console.error('Error occurred during cancellation:', error);
   }
 };
 
 const onShow = (control: VStackControl) => {
-  console.log('ダイアログが表示されました');
+  console.log('Dialog shown');
 };
 
 const onClose = (control: VStackControl) => {
-  console.log('ダイアログが閉じられました');
+  console.log('Dialog closed');
   loading.value = false;
 };
 </script>
@@ -718,7 +717,7 @@ const onClose = (control: VStackControl) => {
 </style>
 ```
 
-### メニューコンポーネント
+### Menu Component
 
 ```vue
 <!-- ContextMenu.vue -->
@@ -735,7 +734,7 @@ const onClose = (control: VStackControl) => {
     @close="onClose"
   >
     <div class="context-menu" ref="menuRef">
-      <div 
+      <div
         v-for="(item, index) in menuItems"
         :key="index"
         class="menu-item"
@@ -790,14 +789,14 @@ const menuItems = computed(() => props.items);
 
 const handleItemClick = async (item: MenuItem) => {
   if (item.disabled || item.separator) return;
-  
+
   try {
     if (item.action) {
       await item.action();
     }
     emit('item-click', item);
   } catch (error) {
-    console.error('メニューアクション実行エラー:', error);
+    console.error('Menu action execution error:', error);
   } finally {
     internalVisible.value = false;
   }
@@ -805,8 +804,8 @@ const handleItemClick = async (item: MenuItem) => {
 
 const onShow = async (control: VStackControl) => {
   await nextTick();
-  
-  // メニュー位置調整
+
+  // Adjust menu position
   if (menuRef.value) {
     const menu = menuRef.value;
     const rect = menu.getBoundingClientRect();
@@ -814,12 +813,12 @@ const onShow = async (control: VStackControl) => {
       width: window.innerWidth,
       height: window.innerHeight
     };
-    
-    // 画面外に出る場合の調整
+
+    // Adjust when going off screen
     if (rect.right > viewport.width) {
       menu.style.left = `${viewport.width - rect.width - 10}px`;
     }
-    
+
     if (rect.bottom > viewport.height) {
       menu.style.top = `${viewport.height - rect.height - 10}px`;
     }
@@ -827,7 +826,7 @@ const onShow = async (control: VStackControl) => {
 };
 
 const onClose = (control: VStackControl) => {
-  console.log('コンテキストメニューが閉じられました');
+  console.log('Context menu closed');
 };
 </script>
 
@@ -891,7 +890,7 @@ const onClose = (control: VStackControl) => {
 </style>
 ```
 
-### スナックバー通知システム
+### Snackbar Notification System
 
 ```typescript
 // snackbar.ts
@@ -934,47 +933,47 @@ export function createSnackbarSystem(stackService: VueStackService) {
   return {
     info: (message: string, options?: Partial<SnackbarOptions>) =>
       showSnackbar({ ...options, message, type: 'info' }),
-      
+
     success: (message: string, options?: Partial<SnackbarOptions>) =>
       showSnackbar({ ...options, message, type: 'success' }),
-      
+
     warning: (message: string, options?: Partial<SnackbarOptions>) =>
       showSnackbar({ ...options, message, type: 'warning' }),
-      
+
     error: (message: string, options?: Partial<SnackbarOptions>) =>
       showSnackbar({ ...options, message, type: 'error' }),
-      
+
     custom: showSnackbar
   };
 }
 
-// 使用例
+// Usage example
 const snackbar = createSnackbarSystem(stackService);
 
-// 各種通知
-snackbar.info('情報メッセージ');
-snackbar.success('操作が完了しました');
-snackbar.warning('注意が必要です');
-snackbar.error('エラーが発生しました');
+// Various notifications
+snackbar.info('Information message');
+snackbar.success('Operation completed');
+snackbar.warning('Attention required');
+snackbar.error('An error occurred');
 
-// アクション付き通知
+// Notification with action
 snackbar.custom({
-  message: 'ファイルが削除されました',
+  message: 'File was deleted',
   type: 'info',
   duration: 5000,
   action: {
-    label: '元に戻す',
-    handler: () => console.log('元に戻す処理')
+    label: 'Undo',
+    handler: () => console.log('Undo processing')
   }
 });
 ```
 
-## アニメーション
+## Animations
 
-### 組み込みトランジション
+### Built-in Transitions
 
 ```scss
-/* 使用可能なトランジション */
+/* Available transitions */
 .v-stack-fade-enter-active,
 .v-stack-fade-leave-active {
   transition: opacity 0.3s ease;
@@ -1012,7 +1011,7 @@ snackbar.custom({
 }
 ```
 
-### カスタムトランジション
+### Custom Transitions
 
 ```vue
 <template>
@@ -1022,7 +1021,7 @@ snackbar.custom({
       props: { duration: 500 }
     }"
   >
-    <!-- コンテンツ -->
+    <!-- Content -->
   </VDialog>
 </template>
 
@@ -1044,9 +1043,9 @@ snackbar.custom({
 </style>
 ```
 
-## アクセシビリティ
+## Accessibility
 
-### ARIA属性
+### ARIA Attributes
 
 ```vue
 <template>
@@ -1060,7 +1059,7 @@ snackbar.custom({
     <div class="dialog">
       <h2 :id="titleId">{{ title }}</h2>
       <p :id="descId">{{ description }}</p>
-      <!-- コンテンツ -->
+      <!-- Content -->
     </div>
   </VDialog>
 </template>
@@ -1073,21 +1072,21 @@ const descId = 'dialog-desc';
 </script>
 ```
 
-### キーボードナビゲーション
+### Keyboard Navigation
 
 ```typescript
-// キーボード操作の設定例
+// Keyboard operation configuration example
 const stackProps = {
-  closeOnEsc: true,           // ESCキーで閉じる
-  closeOnTab: 'not-focused',  // フォーカス外でTabキーを押すと閉じる
-  focusTrap: true,           // フォーカストラップ有効
-  focusRestorable: true      // フォーカス復元有効
+  closeOnEsc: true,           // Close with ESC key
+  closeOnTab: 'not-focused',  // Close when Tab is pressed outside focus
+  focusTrap: true,           // Enable focus trap
+  focusRestorable: true      // Enable focus restore
 };
 ```
 
-## テストとデバッグ
+## Testing and Debugging
 
-### ユニットテスト
+### Unit Tests
 
 ```typescript
 import { describe, test, expect, beforeEach } from 'vitest';
@@ -1096,11 +1095,11 @@ import { VueStackService, VDialog } from '@fastkit/vue-stack';
 
 describe('VueStack', () => {
   let stackService: VueStackService;
-  
+
   beforeEach(() => {
     stackService = new VueStackService();
   });
-  
+
   test('show and hide dialog', async () => {
     const wrapper = mount(VDialog, {
       props: {
@@ -1112,45 +1111,45 @@ describe('VueStack', () => {
         }
       }
     });
-    
+
     expect(wrapper.vm.isActive).toBe(false);
-    
+
     await wrapper.setProps({ modelValue: true });
     expect(wrapper.vm.isActive).toBe(true);
   });
-  
+
   test('dynamic stack creation', async () => {
     const TestComponent = {
       template: '<div>Test Content</div>'
     };
-    
+
     const promise = stackService.dynamic(TestComponent, 'Test Content');
     expect(stackService.dynamicSettings).toHaveLength(1);
-    
+
     // Promise resolve
     const setting = stackService.dynamicSettings[0];
     setting.resolve('test-result');
-    
+
     const result = await promise;
     expect(result).toBe('test-result');
   });
 });
 ```
 
-## 依存関係
+## Dependencies
 
 ```json
 {
   "dependencies": {
-    "@fastkit/dom": "DOM操作ユーティリティ",
-    "@fastkit/helpers": "ヘルパー関数",
-    "@fastkit/tiny-logger": "軽量ログ機能",
-    "@fastkit/vue-body-scroll-lock": "ボディスクロール制御",
-    "@fastkit/vue-click-outside": "外側クリック検知",
-    "@fastkit/vue-keyboard": "キーボード操作",
-    "@fastkit/vue-resize": "リサイズ監視",
-    "@fastkit/vue-transitions": "トランジション機能",
-    "@fastkit/vue-utils": "Vue.js ユーティリティ"
+    "@fastkit/dom": "DOM manipulation utilities",
+    "@fastkit/helpers": "Helper functions",
+    "@fastkit/tiny-logger": "Lightweight logging",
+    "@fastkit/vue-body-scroll-lock": "Body scroll control",
+    "@fastkit/vue-click-outside": "Outside click detection",
+    "@fastkit/vue-keyboard": "Keyboard operations",
+    "@fastkit/vue-resize": "Resize monitoring",
+    "@fastkit/vue-transitions": "Transition functionality",
+    "@fastkit/vue-utils": "Vue.js utilities"
   },
   "peerDependencies": {
     "vue": "^3.4.0",
@@ -1159,7 +1158,7 @@ describe('VueStack', () => {
 }
 ```
 
-## ドキュメント
+## Documentation
 
 https://dadajam4.github.io/fastkit/vue-stack/
 

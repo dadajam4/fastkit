@@ -1,7 +1,7 @@
 
 # @fastkit/color
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/color/README-ja.md)
 
 A comprehensive value object implementation for controlling "color". Provides mutual conversion between RGB, HSL, and HEX formats, color manipulation (brightness/saturation adjustment, color mixing, etc.), and W3C X11 color name support.
 
@@ -58,7 +58,7 @@ const color = new Color('#ff6b35')
 
 // Get RGB values
 console.log(color.red())    // 255
-console.log(color.green())  // 107  
+console.log(color.green())  // 107
 console.log(color.blue())   // 53
 
 // Get HSL values
@@ -205,19 +205,19 @@ console.log(color.blackness()) // 0 to 1
 function generatePalette(baseColor: string, steps: number = 5) {
   const color = new Color(baseColor)
   const palette = []
-  
+
   for (let i = 0; i < steps; i++) {
     const ratio = i / (steps - 1)
     const lightVariant = color.clone().lighten(ratio * 0.4)
     const darkVariant = color.clone().darken(ratio * 0.4)
-    
+
     palette.push({
       light: lightVariant.hex(),
       base: color.hex(),
       dark: darkVariant.hex()
     })
   }
-  
+
   return palette
 }
 
@@ -229,7 +229,7 @@ const bluePalette = generatePalette('#3498db', 5)
 ```typescript
 function generateThemeColors(primaryColor: string) {
   const primary = new Color(primaryColor)
-  
+
   return {
     primary: primary.hex(),
     primaryLight: primary.clone().lighten(0.3).hex(),
@@ -250,20 +250,20 @@ const theme = generateThemeColors('#2196f3')
 
 ```typescript
 function generateGradient(
-  startColor: string, 
-  endColor: string, 
+  startColor: string,
+  endColor: string,
   steps: number
 ): string[] {
   const start = new Color(startColor)
   const end = new Color(endColor)
   const gradient = []
-  
+
   for (let i = 0; i < steps; i++) {
     const ratio = i / (steps - 1)
     const interpolated = start.clone().mix(end, ratio)
     gradient.push(interpolated.hex())
   }
-  
+
   return gradient
 }
 
@@ -276,27 +276,27 @@ const blueToRed = generateGradient('#3498db', '#e74c3c', 10)
 function getContrastColor(backgroundColor: string): string {
   const bg = new Color(backgroundColor)
   const brightness = bg.brightness()
-  
+
   // Return white if brightness is 0.5 or less, otherwise return black
   return brightness < 0.5 ? '#ffffff' : '#000000'
 }
 
 function ensureContrast(
-  textColor: string, 
-  backgroundColor: string, 
+  textColor: string,
+  backgroundColor: string,
   minContrast: number = 0.7
 ): string {
   const text = new Color(textColor)
   const bg = new Color(backgroundColor)
-  
+
   const textBrightness = text.brightness()
   const bgBrightness = bg.brightness()
   const contrast = Math.abs(textBrightness - bgBrightness)
-  
+
   if (contrast >= minContrast) {
     return text.hex()
   }
-  
+
   // Adjust if contrast is insufficient
   if (bgBrightness > 0.5) {
     // If background is bright, darken the text
@@ -326,52 +326,52 @@ const vintageColor = new Color('#3498db', {
 console.log(vintageColor.hex()) // Color with vintage effect applied
 ```
 
-## API リファレンス
+## API Reference
 
-### Color クラス
+### Color Class
 
-#### コンストラクタ
+#### Constructor
 ```typescript
 constructor(source?: ColorSource, opts?: ColorOptions)
 ```
 
-#### 色の設定・取得メソッド
-- `red(r?: number)`: 赤色値の設定・取得
-- `green(g?: number)`: 緑色値の設定・取得  
-- `blue(b?: number)`: 青色値の設定・取得
-- `hue(h?: number | string)`: 色相の設定・取得
-- `saturation(s?: number)`: 彩度の設定・取得
-- `lightness(l?: number)`: 明度の設定・取得
-- `alpha(a?: number)`: アルファ値の設定・取得
+#### Color Setting and Retrieval Methods
+- `red(r?: number)`: Set/get red color value
+- `green(g?: number)`: Set/get green color value
+- `blue(b?: number)`: Set/get blue color value
+- `hue(h?: number | string)`: Set/get hue value
+- `saturation(s?: number)`: Set/get saturation value
+- `lightness(l?: number)`: Set/get lightness value
+- `alpha(a?: number)`: Set/get alpha value
 
-#### 色変換メソッド
-- `rgb()`: RGB文字列の取得
-- `rgba()`: RGBA文字列の取得
-- `hex()`: HEX文字列の取得
-- `toString()`: HEX文字列の取得（デフォルト）
+#### Color Conversion Methods
+- `rgb()`: Get RGB string
+- `rgba()`: Get RGBA string
+- `hex()`: Get HEX string
+- `toString()`: Get HEX string (default)
 
-#### 色操作メソッド
-- `lighten(per: number)`: 明度を上げる
-- `darken(per: number)`: 明度を下げる
-- `saturate(per: number)`: 彩度を上げる
-- `desaturate(per: number)`: 彩度を下げる
-- `grayscale()`: グレースケール変換
-- `mix(mixSource: ColorSource, options?: RawMixOptions)`: 色の混合
+#### Color Manipulation Methods
+- `lighten(per: number)`: Increase lightness
+- `darken(per: number)`: Decrease lightness
+- `saturate(per: number)`: Increase saturation
+- `desaturate(per: number)`: Decrease saturation
+- `grayscale()`: Convert to grayscale
+- `mix(mixSource: ColorSource, options?: RawMixOptions)`: Mix colors
 
-#### ユーティリティメソッド
-- `clone()`: インスタンスの複製
-- `brightness()`: HSP明度の取得
-- `whiteness()`: HWB白さの取得
-- `value()`: HSV明度の取得
-- `blackness()`: HWB黒さの取得
+#### Utility Methods
+- `clone()`: Clone instance
+- `brightness()`: Get HSP brightness
+- `whiteness()`: Get HWB whiteness
+- `value()`: Get HSV brightness
+- `blackness()`: Get HWB blackness
 
-#### データ取得メソッド
-- `rgbaJSON()`: RGBA情報の取得
-- `hslaJSON()`: HSLA情報の取得
-- `info()`: 完全な色情報の取得
-- `toJSON()`: JSON.stringify対応
+#### Data Retrieval Methods
+- `rgbaJSON()`: Get RGBA information
+- `hslaJSON()`: Get HSLA information
+- `info()`: Get complete color information
+- `toJSON()`: JSON.stringify support
 
-### 型定義
+### Type Definitions
 
 #### ColorSource
 ```typescript
@@ -380,9 +380,9 @@ type ColorSource =
   | ColorModelInfo        // { model: 'rgb'|'hsl', channels: [...] }
   | Partial<RGBA>         // { r?, g?, b?, a? }
   | Partial<HSLA>         // { h?, s?, l?, a? }
-  | ColorInfo             // 完全な色情報
-  | ColorImplements       // Colorインスタンス
-  | string                // HEX, RGB, HSL, W3C X11色名
+  | ColorInfo             // Complete color information
+  | ColorImplements       // Color instance
+  | string                // HEX, RGB, HSL, W3C X11 color names
 ```
 
 #### RGBA / HSLA
@@ -402,9 +402,9 @@ interface HSLA {
 }
 ```
 
-## W3C X11 色名サポート
+## W3C X11 Color Name Support
 
-140以上のW3C X11色名をサポート：
+Supports 140+ W3C X11 color names:
 
 ```typescript
 const red = new Color('red')
@@ -413,10 +413,10 @@ const green = new Color('forestgreen')
 const purple = new Color('mediumorchid')
 ```
 
-サポートされる色名の例：
-- 基本色: `red`, `green`, `blue`, `yellow`, `cyan`, `magenta`
-- グレー系: `lightgray`, `darkgray`, `silver`, `dimgray`
-- 特殊色: `tomato`, `cornflowerblue`, `mediumseagreen`, `goldenrod`
+Examples of supported color names:
+- Basic colors: `red`, `green`, `blue`, `yellow`, `cyan`, `magenta`
+- Gray colors: `lightgray`, `darkgray`, `silver`, `dimgray`
+- Special colors: `tomato`, `cornflowerblue`, `mediumseagreen`, `goldenrod`
 
 ## Related Packages
 

@@ -1,6 +1,6 @@
 # @fastkit/async-control
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/async-control/README-ja.md)
 
 A helper library for efficient control and management of asynchronous processing. It prevents duplicate execution of consecutive asynchronous processes with the same arguments and provides advanced features such as caching and background updates. Written in TypeScript with strict type safety guarantees.
 
@@ -43,10 +43,10 @@ async function example() {
   const promise1 = handler.handler('user123')
   const promise2 = handler.handler('user123')
   const promise3 = handler.handler('user123')
-  
+
   // All receive the same result
   const [result1, result2, result3] = await Promise.all([promise1, promise2, promise3])
-  
+
   console.log(result1 === result2 && result2 === result3) // true
 }
 ```
@@ -64,14 +64,14 @@ class ApiService {
     const response = await fetch(`/api/users/${userId}`)
     return response.json()
   }
-  
+
   @AsyncHandle({ delay: 500 }) // 500ms delay
   async searchUsers(query: string) {
     console.log(`Executing search: ${query}`)
     const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
     return response.json()
   }
-  
+
   @AsyncHandle({
     hashArgs: (productId: string, _timestamp: number) => [productId] // ignore timestamp
   })
@@ -110,13 +110,13 @@ const handler = new AsyncHandler(fetchUserData, {
   cache: {
     controller: cacheController,
     ttl: 60 * 1000, // Valid for 60 seconds
-    
+
     // Background update settings
     revalidate: (details) => {
       // Execute background update if remaining valid time is 10 seconds or less
       return details.remainingTimes.ttl <= 10 * 1000
     },
-    
+
     errorHandlers: {
       get: (error) => console.warn('Cache retrieval error:', error),
       set: (error) => console.warn('Cache save error:', error)
@@ -134,10 +134,10 @@ async function fetchUserData(userId: string) {
 async function cacheExample() {
   // First call: API call is executed
   const user1 = await handler.handler('user123')
-  
+
   // Second call: Retrieved from cache (no API call)
   const user2 = await handler.handler('user123')
-  
+
   // Background update is executed when cache expiration is near
   console.log(user1, user2)
 }
@@ -157,10 +157,10 @@ interface SearchResult {
 class SearchService {
   @AsyncHandle({
     delay: 300, // 300ms delay (debounce effect)
-    
+
     // Disable control if search query is empty
     enabled: (query: string) => query.trim().length > 0,
-    
+
     cache: {
       ttl: 5 * 60 * 1000, // Cache for 5 minutes
       revalidate: 'always' // Always background update
@@ -168,15 +168,15 @@ class SearchService {
   })
   async searchProducts(query: string): Promise<SearchResult[]> {
     console.log(`Executing search: "${query}"`)
-    
+
     const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
     if (!response.ok) {
       throw new Error(`Search error: ${response.status}`)
     }
-    
+
     return response.json()
   }
-  
+
   // Search cancellation feature
   cancelSearch() {
     const handler = getAsyncHandler(this.searchProducts)
@@ -193,15 +193,15 @@ const searchService = new SearchService()
 // Real-time search implementation
 function setupRealTimeSearch() {
   const searchInput = document.querySelector('#search') as HTMLInputElement
-  
+
   searchInput.addEventListener('input', async () => {
     const query = searchInput.value
-    
+
     if (query.length < 2) {
       searchService.cancelSearch()
       return
     }
-    
+
     try {
       const results = await searchService.searchProducts(query)
       displaySearchResults(results)
@@ -229,7 +229,7 @@ import { AsyncHandler } from '@fastkit/async-control'
 class OptimizedApiClient {
   private userHandler: AsyncHandler<typeof this.fetchUser>
   private postsHandler: AsyncHandler<typeof this.fetchUserPosts>
-  
+
   constructor() {
     // User information retrieval (long-term cache)
     this.userHandler = new AsyncHandler(this.fetchUser.bind(this), {
@@ -241,7 +241,7 @@ class OptimizedApiClient {
         console.error('User retrieval error:', error)
       }
     })
-    
+
     // Post list retrieval (short-term cache + debounce)
     this.postsHandler = new AsyncHandler(this.fetchUserPosts.bind(this), {
       delay: 100, // 100ms delay
@@ -251,26 +251,26 @@ class OptimizedApiClient {
       }
     })
   }
-  
+
   private async fetchUser(userId: string) {
     const response = await fetch(`/api/users/${userId}`)
     return response.json()
   }
-  
+
   private async fetchUserPosts(userId: string, page: number = 1) {
     const response = await fetch(`/api/users/${userId}/posts?page=${page}`)
     return response.json()
   }
-  
+
   // Public methods
   async getUser(userId: string) {
     return this.userHandler.handler(userId)
   }
-  
+
   async getUserPosts(userId: string, page: number = 1) {
     return this.postsHandler.handler(userId, page)
   }
-  
+
   // Batch data retrieval
   async getUserWithPosts(userId: string) {
     // Execute in parallel (cache and duplicate control are effective)
@@ -278,7 +278,7 @@ class OptimizedApiClient {
       this.getUser(userId),
       this.getUserPosts(userId, 1)
     ])
-    
+
     return { user, posts }
   }
 }
@@ -331,7 +331,7 @@ const handler = new AsyncHandler(
         version: options.version || '1.0'
       }
     ],
-    
+
     cache: {
       ttl: 5 * 60 * 1000 // Cache for 5 minutes
     }
@@ -345,7 +345,7 @@ async function resourceExample() {
   const resource2 = handler.handler('resource123', {})
   const resource3 = handler.handler('resource123', { format: 'json' })
   const resource4 = handler.handler('resource123', { version: '1.0' })
-  
+
   const results = await Promise.all([resource1, resource2, resource3, resource4])
   // All same results
 }
@@ -358,37 +358,37 @@ import { AsyncHandle } from '@fastkit/async-control'
 
 class ConditionalService {
   private isProductionMode = process.env.NODE_ENV === 'production'
-  
+
   @AsyncHandle({
     // Enable async control only in production environment
     enabled: function(this: ConditionalService) {
       return this.isProductionMode
     },
-    
+
     cache: {
       ttl: 30 * 1000, // 30 seconds cache
     }
   })
   async getAnalyticsData(eventType: string, dateRange: string) {
     console.log(`Getting analytics data: ${eventType}, ${dateRange}`)
-    
+
     // Heavy analysis processing
     const response = await fetch(`/api/analytics/${eventType}?range=${dateRange}`)
     return response.json()
   }
-  
+
   @AsyncHandle({
     // Enable control based on data size
     enabled: (data: any[]) => data.length > 100, // Control only when over 100 items
-    
+
     delay: 50, // Slight delay
   })
   async processLargeDataset(data: any[]) {
     console.log(`Starting large data processing: ${data.length} items`)
-    
+
     // Heavy processing simulation
     await new Promise(resolve => setTimeout(resolve, 1000))
-    
+
     return data.map(item => ({
       ...item,
       processed: true,
@@ -403,11 +403,11 @@ const service = new ConditionalService()
 async function conditionalExample() {
   // Small dataset (no control)
   const smallResult = await service.processLargeDataset([1, 2, 3])
-  
+
   // Large dataset (with control)
   const largeData = Array.from({ length: 200 }, (_, i) => ({ id: i }))
   const largeResult = await service.processLargeDataset(largeData)
-  
+
   console.log({ smallResult, largeResult })
 }
 ```
@@ -426,22 +426,22 @@ const handler = new AsyncHandler(async (id: string) => {
 async function requestStateExample() {
   // Get request object
   const request = handler.getRequestByArgs(['test123'])
-  
+
   console.log('Initial state:', request.state) // 'pending'
   console.log('Is pending?:', request.isPending) // true
-  
+
   // Start processing
   const resultPromise = handler.handler('test123')
-  
+
   // Wait a bit and check state
   setTimeout(() => {
     console.log('Running state:', request.state) // 'running'
     console.log('Is running?:', request.isRunning) // true
   }, 100)
-  
+
   // Wait for result
   const result = await resultPromise
-  
+
   console.log('Completed state:', request.state) // 'resolved'
   console.log('Is resolved?:', request.isResolved) // true
   console.log('Result:', result)
@@ -455,16 +455,16 @@ async function requestStateExample() {
 ```typescript
 class AsyncHandler<Fn extends AsyncFn> {
   constructor(func: Fn, options?: AsyncHandlerOptions<Fn>)
-  
+
   // Controlled async function
   readonly handler: Fn
-  
+
   // Direct call to original function
   call(...args: Parameters<Fn>): Promise<Awaited<ReturnType<Fn>>>
-  
+
   // Check if specified arguments are controlled
   isEnabled(...args: Parameters<Fn>): boolean
-  
+
   // Get request object corresponding to arguments
   getRequestByArgs(args: Parameters<Fn>): AsyncHandlerRequest<Fn>
 }
@@ -476,19 +476,19 @@ class AsyncHandler<Fn extends AsyncFn> {
 interface AsyncHandlerOptions<Fn extends AsyncFn> {
   // Error log function
   errorLogger?: (error: unknown) => any
-  
+
   // Function's this object
   thisObj?: any
-  
+
   // Execution delay time (milliseconds)
   delay?: number
-  
+
   // Customize argument hashing
   hashArgs?: (...args: Parameters<Fn>) => any
-  
+
   // Cache settings
   cache?: RawAsyncHandlerCacheBehavior<AwaitedReturnType<Fn>>
-  
+
   // Enable/disable control
   enabled?: boolean | ((...args: Parameters<Fn>) => boolean)
 }
@@ -500,13 +500,13 @@ interface AsyncHandlerOptions<Fn extends AsyncFn> {
 interface AsyncHandlerCacheBehavior<T> {
   // TTL (Time To Live)
   ttl?: number | Duration
-  
+
   // Maximum number of entries
   max?: number
-  
+
   // Background update condition
   revalidate?: 'always' | number | Duration | ((details) => boolean)
-  
+
   // Error handlers
   errorHandlers?: {
     get?: (error: unknown) => any
@@ -531,17 +531,17 @@ function getAsyncHandler<Fn extends AsyncFn>(func: Fn): AsyncHandler<Fn>
 interface AsyncHandlerRequest<Fn extends AsyncFn> {
   // Execution state
   readonly state: 'pending' | 'running' | 'resolved' | 'rejected' | 'destroyed'
-  
+
   // State checks
   readonly isPending: boolean
   readonly isRunning: boolean
   readonly isResolved: boolean
   readonly isRejected: boolean
   readonly isDestroyed: boolean
-  
+
   // Result retrieval
   getResolvedValue(): Awaited<ReturnType<Fn>>
-  
+
   // Destroy request
   destroy(): void
 }

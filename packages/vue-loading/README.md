@@ -1,21 +1,21 @@
 
 # @fastkit/vue-loading
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-loading/README-ja.md)
 
-Vue.jsアプリケーション用の美しく柔軟なローディング・進捗表示コンポーネントライブラリ。円形とリニア形式の進捗インジケーターを提供し、アクセシビリティ対応とカスタマイズ性を重視した設計になっています。
+A beautiful and flexible loading and progress display component library for Vue.js applications. Provides circular and linear progress indicators with a design focused on accessibility and customizability.
 
 ## Features
 
-- **円形進捗表示**: カスタマイズ可能な円形プログレスインジケーター
-- **リニア進捗表示**: 水平線形のプログレスバー
-- **アクセシビリティ対応**: WAI-ARIA準拠の実装
-- **不定期アニメーション**: 進捗が不明な場合のアニメーション表示
-- **カラーテーマ対応**: @fastkit/vue-color-schemeとの統合
-- **TypeScript完全サポート**: 厳密な型定義
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **軽量設計**: 最小限の依存関係
-- **高いカスタマイズ性**: サイズ、色、アニメーション等の調整可能
+- **Circular Progress Display**: Customizable circular progress indicators
+- **Linear Progress Display**: Horizontal linear progress bars
+- **Accessibility Support**: WAI-ARIA compliant implementation
+- **Indeterminate Animation**: Animation display when progress is unknown
+- **Color Theme Support**: Integration with @fastkit/vue-color-scheme
+- **Full TypeScript Support**: Strict type definitions
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Lightweight Design**: Minimal dependencies
+- **High Customizability**: Adjustable size, color, animation, etc.
 
 ## Installation
 
@@ -23,7 +23,7 @@ Vue.jsアプリケーション用の美しく柔軟なローディング・進�
 npm install @fastkit/vue-loading
 ```
 
-CSSも含める場合:
+To include CSS:
 
 ```typescript
 import '@fastkit/vue-loading/vue-loading.css'
@@ -31,63 +31,63 @@ import '@fastkit/vue-loading/vue-loading.css'
 
 ## Basic Usage
 
-### 円形進捗表示（VProgressCircular）
+### Circular Progress Display (VProgressCircular)
 
 ```vue
 <template>
   <div>
-    <h2>円形進捗表示の例</h2>
-    
-    <!-- 基本的な円形進捗 -->
+    <h2>Circular Progress Display Examples</h2>
+
+    <!-- Basic circular progress -->
     <div class="progress-section">
-      <h3>基本例</h3>
+      <h3>Basic Example</h3>
       <VProgressCircular :value="progress" />
-      <p>進捗: {{ progress }}%</p>
+      <p>Progress: {{ progress }}%</p>
     </div>
-    
-    <!-- カスタムサイズと色 -->
+
+    <!-- Custom size and color -->
     <div class="progress-section">
-      <h3>カスタマイズ例</h3>
-      <VProgressCircular 
-        :value="progress" 
+      <h3>Customization Example</h3>
+      <VProgressCircular
+        :value="progress"
         :size="64"
         :width="4"
         color="primary"
       />
     </div>
-    
-    <!-- 不定期進捗 -->
+
+    <!-- Indeterminate progress -->
     <div class="progress-section">
-      <h3>不定期進捗</h3>
+      <h3>Indeterminate Progress</h3>
       <VProgressCircular indeterminate color="secondary" />
     </div>
-    
-    <!-- ボタン用スタイル -->
+
+    <!-- Button style -->
     <div class="progress-section">
-      <h3>ボタン内ローディング</h3>
+      <h3>Button Loading</h3>
       <button class="loading-button" :disabled="isLoading">
-        <VProgressCircular 
+        <VProgressCircular
           v-if="isLoading"
-          indeterminate 
+          indeterminate
           button
           :size="16"
         />
-        {{ isLoading ? '処理中...' : '実行' }}
+        {{ isLoading ? 'Processing...' : 'Execute' }}
       </button>
     </div>
-    
-    <!-- テキスト付き -->
+
+    <!-- With text -->
     <div class="progress-section">
-      <h3>テキスト付き</h3>
+      <h3>With Text</h3>
       <VProgressCircular :value="progress" :size="100">
         <span class="progress-text">{{ Math.round(progress) }}%</span>
       </VProgressCircular>
     </div>
-    
+
     <div class="controls">
-      <button @click="startProgress">進捗開始</button>
-      <button @click="resetProgress">リセット</button>
-      <button @click="toggleLoading">ローディング切り替え</button>
+      <button @click="startProgress">Start Progress</button>
+      <button @click="resetProgress">Reset</button>
+      <button @click="toggleLoading">Toggle Loading</button>
     </div>
   </div>
 </template>
@@ -102,7 +102,7 @@ let intervalId: number | null = null
 
 const startProgress = () => {
   if (intervalId) clearInterval(intervalId)
-  
+
   progress.value = 0
   intervalId = setInterval(() => {
     progress.value += 5
@@ -182,87 +182,87 @@ onUnmounted(() => {
 </style>
 ```
 
-### リニア進捗表示（VProgressLinear）
+### Linear Progress Display (VProgressLinear)
 
 ```vue
 <template>
   <div>
-    <h2>リニア進捗表示の例</h2>
-    
-    <!-- 基本的なリニア進捗 -->
+    <h2>Linear Progress Display Examples</h2>
+
+    <!-- Basic linear progress -->
     <div class="progress-section">
-      <h3>基本例</h3>
+      <h3>Basic Example</h3>
       <VProgressLinear :value="progress" active />
-      <p>進捗: {{ progress }}%</p>
+      <p>Progress: {{ progress }}%</p>
     </div>
-    
-    <!-- カスタムの高さと色 -->
+
+    <!-- Custom height and color -->
     <div class="progress-section">
-      <h3>カスタマイズ例</h3>
-      <VProgressLinear 
-        :value="progress" 
+      <h3>Customization Example</h3>
+      <VProgressLinear
+        :value="progress"
         :height="8"
         color="success"
         active
       />
     </div>
-    
-    <!-- 不定期進捗 -->
+
+    <!-- Indeterminate progress -->
     <div class="progress-section">
-      <h3>不定期進捗</h3>
+      <h3>Indeterminate Progress</h3>
       <VProgressLinear indeterminate active color="warning" />
     </div>
-    
-    <!-- バッファ付き進捗 -->
+
+    <!-- Buffered progress -->
     <div class="progress-section">
-      <h3>バッファ付き進捗</h3>
-      <VProgressLinear 
+      <h3>Buffered Progress</h3>
+      <VProgressLinear
         :value="progress"
         :buffer-value="bufferValue"
         active
         color="info"
       />
-      <p>進捗: {{ progress }}% / バッファ: {{ bufferValue }}%</p>
+      <p>Progress: {{ progress }}% / Buffer: {{ bufferValue }}%</p>
     </div>
-    
-    <!-- クエリモード -->
+
+    <!-- Query mode -->
     <div class="progress-section">
-      <h3>クエリモード</h3>
+      <h3>Query Mode</h3>
       <VProgressLinear query active />
     </div>
-    
-    <!-- テキスト付き -->
+
+    <!-- With text -->
     <div class="progress-section">
-      <h3>テキスト付き</h3>
+      <h3>With Text</h3>
       <VProgressLinear :value="progress" active :height="24">
         <span class="progress-label">
           {{ fileName }} ({{ Math.round(progress) }}%)
         </span>
       </VProgressLinear>
     </div>
-    
-    <!-- ページトップローディング -->
+
+    <!-- Page top loading -->
     <div class="progress-section">
-      <h3>ページトップローディング</h3>
+      <h3>Page Top Loading</h3>
       <div class="page-loading-demo">
-        <VProgressLinear 
+        <VProgressLinear
           :active="pageLoading"
           indeterminate
           color="primary"
           :height="3"
         />
         <div class="page-content">
-          <h4>ページコンテンツ</h4>
-          <p>ページの読み込み状態を上部に表示</p>
+          <h4>Page Content</h4>
+          <p>Display page loading state at the top</p>
         </div>
       </div>
     </div>
-    
+
     <div class="controls">
-      <button @click="startProgress">進捗開始</button>
-      <button @click="startBufferProgress">バッファ付き開始</button>
-      <button @click="togglePageLoading">ページ読み込み切り替え</button>
-      <button @click="resetProgress">リセット</button>
+      <button @click="startProgress">Start Progress</button>
+      <button @click="startBufferProgress">Start Buffered</button>
+      <button @click="togglePageLoading">Toggle Page Loading</button>
+      <button @click="resetProgress">Reset</button>
     </div>
   </div>
 </template>
@@ -281,7 +281,7 @@ let bufferInterval: number | null = null
 
 const startProgress = () => {
   if (progressInterval) clearInterval(progressInterval)
-  
+
   progress.value = 0
   progressInterval = setInterval(() => {
     progress.value += 2
@@ -295,11 +295,11 @@ const startProgress = () => {
 const startBufferProgress = () => {
   if (progressInterval) clearInterval(progressInterval)
   if (bufferInterval) clearInterval(bufferInterval)
-  
+
   progress.value = 0
   bufferValue.value = 0
-  
-  // バッファを先に進める
+
+  // Advance buffer first
   bufferInterval = setInterval(() => {
     bufferValue.value += 5
     if (bufferValue.value >= 100) {
@@ -307,8 +307,8 @@ const startBufferProgress = () => {
       bufferInterval = null
     }
   }, 50)
-  
-  // 少し遅れて実際の進捗を進める
+
+  // Advance actual progress with slight delay
   setTimeout(() => {
     progressInterval = setInterval(() => {
       progress.value += 3
@@ -394,33 +394,33 @@ onUnmounted(() => {
 </style>
 ```
 
-## 実用的な使用例
+## Practical Usage Examples
 
-### ファイルアップロード進捗
+### File Upload Progress
 
 ```vue
 <template>
   <div class="file-upload">
-    <h3>ファイルアップロード</h3>
-    
+    <h3>File Upload</h3>
+
     <div class="upload-area">
-      <input 
+      <input
         ref="fileInput"
-        type="file" 
+        type="file"
         @change="handleFileSelect"
         multiple
         style="display: none"
       />
       <button @click="fileInput?.click()" :disabled="isUploading">
-        ファイルを選択
+        Select Files
       </button>
     </div>
-    
+
     <div v-if="uploadQueue.length > 0" class="upload-queue">
-      <h4>アップロード進捗</h4>
-      
-      <div 
-        v-for="file in uploadQueue" 
+      <h4>Upload Progress</h4>
+
+      <div
+        v-for="file in uploadQueue"
         :key="file.id"
         class="upload-item"
       >
@@ -428,7 +428,7 @@ onUnmounted(() => {
           <span class="file-name">{{ file.name }}</span>
           <span class="file-size">({{ formatFileSize(file.size) }})</span>
         </div>
-        
+
         <div class="progress-container">
           <VProgressLinear
             :value="file.progress"
@@ -445,10 +445,10 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-      
-      <!-- 全体進捗 -->
+
+      <!-- Overall progress -->
       <div class="overall-progress">
-        <h5>全体進捗</h5>
+        <h5>Overall Progress</h5>
         <VProgressLinear
           :value="overallProgress"
           :active="isUploading"
@@ -456,7 +456,7 @@ onUnmounted(() => {
           :height="8"
         >
           <span class="overall-text">
-            {{ completedFiles }}/{{ uploadQueue.length }} 完了
+            {{ completedFiles }}/{{ uploadQueue.length }} Completed
           </span>
         </VProgressLinear>
       </div>
@@ -479,8 +479,8 @@ interface UploadFile {
 const fileInput = ref<HTMLInputElement>()
 const uploadQueue = ref<UploadFile[]>([])
 
-const isUploading = computed(() => 
-  uploadQueue.value.some(file => 
+const isUploading = computed(() =>
+  uploadQueue.value.some(file =>
     file.status === 'preparing' || file.status === 'uploading'
   )
 )
@@ -491,20 +491,20 @@ const completedFiles = computed(() =>
 
 const overallProgress = computed(() => {
   if (uploadQueue.value.length === 0) return 0
-  
+
   const totalProgress = uploadQueue.value.reduce((sum, file) => {
     if (file.status === 'completed') return sum + 100
     if (file.status === 'uploading') return sum + file.progress
     return sum
   }, 0)
-  
+
   return totalProgress / uploadQueue.value.length
 })
 
 const handleFileSelect = (event: Event) => {
   const target = event.target as HTMLInputElement
   const files = Array.from(target.files || [])
-  
+
   for (const file of files) {
     const uploadFile: UploadFile = {
       id: Math.random().toString(36).substr(2, 9),
@@ -513,26 +513,26 @@ const handleFileSelect = (event: Event) => {
       progress: 0,
       status: 'preparing'
     }
-    
+
     uploadQueue.value.push(uploadFile)
     uploadFile(uploadFile, file)
   }
-  
+
   target.value = ''
 }
 
 const uploadFile = async (uploadFile: UploadFile, file: File) => {
   try {
-    // 準備段階のシミュレーション
+    // Preparation stage simulation
     await new Promise(resolve => setTimeout(resolve, 500))
-    
+
     uploadFile.status = 'uploading'
-    
-    // アップロード進捗のシミュレーション
+
+    // Upload progress simulation
     const uploadPromise = new Promise<void>((resolve) => {
       const interval = setInterval(() => {
         uploadFile.progress += Math.random() * 10
-        
+
         if (uploadFile.progress >= 100) {
           uploadFile.progress = 100
           uploadFile.status = 'completed'
@@ -541,7 +541,7 @@ const uploadFile = async (uploadFile: UploadFile, file: File) => {
         }
       }, 200)
     })
-    
+
     await uploadPromise
   } catch (error) {
     uploadFile.status = 'error'
@@ -561,21 +561,21 @@ const getProgressColor = (status: UploadFile['status']) => {
 
 const getStatusText = (status: UploadFile['status']) => {
   switch (status) {
-    case 'preparing': return '準備中...'
-    case 'uploading': return 'アップロード中'
-    case 'completed': return '完了'
-    case 'error': return 'エラー'
+    case 'preparing': return 'Preparing...'
+    case 'uploading': return 'Uploading'
+    case 'completed': return 'Completed'
+    case 'error': return 'Error'
     default: return ''
   }
 }
 
 const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return '0 Bytes'
-  
+
   const k = 1024
   const sizes = ['Bytes', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
-  
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 </script>
@@ -661,19 +661,19 @@ const formatFileSize = (bytes: number): string => {
 </style>
 ```
 
-### ダッシュボード統計表示
+### Dashboard Statistics Display
 
 ```vue
 <template>
   <div class="dashboard">
-    <h2>ダッシュボード統計</h2>
-    
+    <h2>Dashboard Statistics</h2>
+
     <div class="stats-grid">
-      <!-- CPU使用率 -->
+      <!-- CPU Usage -->
       <div class="stat-card">
-        <h3>CPU使用率</h3>
+        <h3>CPU Usage</h3>
         <div class="stat-visual">
-          <VProgressCircular 
+          <VProgressCircular
             :value="stats.cpu"
             :size="80"
             :width="6"
@@ -683,12 +683,12 @@ const formatFileSize = (bytes: number): string => {
           </VProgressCircular>
         </div>
       </div>
-      
-      <!-- メモリ使用量 -->
+
+      <!-- Memory Usage -->
       <div class="stat-card">
-        <h3>メモリ使用量</h3>
+        <h3>Memory Usage</h3>
         <div class="stat-visual">
-          <VProgressCircular 
+          <VProgressCircular
             :value="stats.memory"
             :size="80"
             :width="6"
@@ -698,12 +698,12 @@ const formatFileSize = (bytes: number): string => {
           </VProgressCircular>
         </div>
       </div>
-      
-      <!-- ディスク使用量 -->
+
+      <!-- Disk Usage -->
       <div class="stat-card">
-        <h3>ディスク使用量</h3>
+        <h3>Disk Usage</h3>
         <div class="stat-visual">
-          <VProgressCircular 
+          <VProgressCircular
             :value="stats.disk"
             :size="80"
             :width="6"
@@ -713,13 +713,13 @@ const formatFileSize = (bytes: number): string => {
           </VProgressCircular>
         </div>
       </div>
-      
-      <!-- ネットワーク -->
+
+      <!-- Network -->
       <div class="stat-card">
-        <h3>ネットワーク帯域</h3>
+        <h3>Network Bandwidth</h3>
         <div class="network-stats">
           <div class="bandwidth-item">
-            <span class="label">アップロード</span>
+            <span class="label">Upload</span>
             <VProgressLinear
               :value="stats.networkUp"
               active
@@ -729,7 +729,7 @@ const formatFileSize = (bytes: number): string => {
             <span class="value">{{ formatBandwidth(stats.networkUp) }}</span>
           </div>
           <div class="bandwidth-item">
-            <span class="label">ダウンロード</span>
+            <span class="label">Download</span>
             <VProgressLinear
               :value="stats.networkDown"
               active
@@ -741,22 +741,22 @@ const formatFileSize = (bytes: number): string => {
         </div>
       </div>
     </div>
-    
-    <!-- タスク進捗 -->
+
+    <!-- Task Progress -->
     <div class="tasks-section">
-      <h3>実行中のタスク</h3>
+      <h3>Running Tasks</h3>
       <div v-if="tasks.length === 0" class="no-tasks">
-        実行中のタスクはありません
+        No running tasks
       </div>
       <div v-else class="task-list">
-        <div 
-          v-for="task in tasks" 
+        <div
+          v-for="task in tasks"
           :key="task.id"
           class="task-item"
         >
           <div class="task-header">
             <span class="task-name">{{ task.name }}</span>
-            <span class="task-eta">残り時間: {{ formatTime(task.eta) }}</span>
+            <span class="task-eta">Time remaining: {{ formatTime(task.eta) }}</span>
           </div>
           <VProgressLinear
             :value="task.progress"
@@ -765,17 +765,17 @@ const formatFileSize = (bytes: number): string => {
             :height="6"
           >
             <span class="task-progress-text">
-              {{ Math.round(task.progress) }}% 完了
+              {{ Math.round(task.progress) }}% Complete
             </span>
           </VProgressLinear>
         </div>
       </div>
     </div>
-    
+
     <div class="controls">
-      <button @click="refreshStats">統計を更新</button>
-      <button @click="addRandomTask">ランダムタスク追加</button>
-      <button @click="clearTasks">タスクをクリア</button>
+      <button @click="refreshStats">Refresh Statistics</button>
+      <button @click="addRandomTask">Add Random Task</button>
+      <button @click="clearTasks">Clear Tasks</button>
     </div>
   </div>
 </template>
@@ -825,20 +825,20 @@ onUnmounted(() => {
 
 const startStatsUpdates = () => {
   statsInterval = setInterval(() => {
-    // リアルなシステム統計のシミュレーション
-    stats.value.cpu = Math.max(0, Math.min(100, 
+    // Realistic system statistics simulation
+    stats.value.cpu = Math.max(0, Math.min(100,
       stats.value.cpu + (Math.random() - 0.5) * 10
     ))
-    stats.value.memory = Math.max(0, Math.min(100, 
+    stats.value.memory = Math.max(0, Math.min(100,
       stats.value.memory + (Math.random() - 0.5) * 5
     ))
-    stats.value.disk = Math.max(0, Math.min(100, 
+    stats.value.disk = Math.max(0, Math.min(100,
       stats.value.disk + (Math.random() - 0.5) * 2
     ))
-    stats.value.networkUp = Math.max(0, Math.min(100, 
+    stats.value.networkUp = Math.max(0, Math.min(100,
       stats.value.networkUp + (Math.random() - 0.5) * 15
     ))
-    stats.value.networkDown = Math.max(0, Math.min(100, 
+    stats.value.networkDown = Math.max(0, Math.min(100,
       stats.value.networkDown + (Math.random() - 0.5) * 20
     ))
   }, 2000)
@@ -849,7 +849,7 @@ const startTaskUpdates = () => {
     tasks.value.forEach(task => {
       task.progress += Math.random() * 5
       task.eta = Math.max(0, task.eta - 2)
-      
+
       if (task.progress >= 100) {
         const index = tasks.value.indexOf(task)
         tasks.value.splice(index, 1)
@@ -887,13 +887,13 @@ const refreshStats = () => {
 
 const addRandomTask = () => {
   const taskNames = [
-    'データベースバックアップ',
-    'ログファイル圧縮',
-    'キャッシュクリア',
-    'システムアップデート',
-    'セキュリティスキャン'
+    'Database Backup',
+    'Log File Compression',
+    'Cache Clear',
+    'System Update',
+    'Security Scan'
   ]
-  
+
   const task: Task = {
     id: Math.random().toString(36).substr(2, 9),
     name: taskNames[Math.floor(Math.random() * taskNames.length)],
@@ -901,7 +901,7 @@ const addRandomTask = () => {
     priority: Math.random() > 0.7 ? 'high' : 'normal',
     eta: Math.random() * 300 + 60 // 1-5 minutes
   }
-  
+
   tasks.value.push(task)
 }
 
@@ -1036,22 +1036,22 @@ const clearTasks = () => {
 
 ### `VProgressCircular`
 
-円形の進捗表示コンポーネント。
+Circular progress display component.
 
 **Props:**
-- `value` (number, optional): 進捗値（0-100）
-- `size` (number | string, optional): サイズ（デフォルト: 32）
-- `width` (number | string, optional): 線の太さ（デフォルト: 2）
-- `color` (string, optional): 色テーマ
-- `indeterminate` (boolean, optional): 不定期アニメーション
-- `rotate` (number | string, optional): 回転角度（デフォルト: 0）
-- `button` (boolean, optional): ボタン用スタイル
+- `value` (number, optional): Progress value (0-100)
+- `size` (number | string, optional): Size (default: 32)
+- `width` (number | string, optional): Line thickness (default: 2)
+- `color` (string, optional): Color theme
+- `indeterminate` (boolean, optional): Indeterminate animation
+- `rotate` (number | string, optional): Rotation angle (default: 0)
+- `button` (boolean, optional): Button style
 
 **Slots:**
-- `default`: 中央に表示するコンテンツ
+- `default`: Content to display in the center
 
 ```vue
-<VProgressCircular 
+<VProgressCircular
   :value="75"
   :size="64"
   :width="4"
@@ -1064,20 +1064,20 @@ const clearTasks = () => {
 
 ### `VProgressLinear`
 
-リニア（水平線形）の進捗表示コンポーネント。
+Linear (horizontal) progress display component.
 
 **Props:**
-- `value` (number, optional): 進捗値（0-100）
-- `height` (number | string, optional): 高さ（デフォルト: 4）
-- `color` (string, optional): 色テーマ
-- `active` (boolean, optional): アクティブ状態
-- `indeterminate` (boolean, optional): 不定期アニメーション
-- `query` (boolean, optional): クエリモード
-- `bufferValue` (number, optional): バッファ値（0-100、デフォルト: 100）
-- `backgroundOpacity` (number, optional): 背景の透明度（デフォルト: 0.3）
+- `value` (number, optional): Progress value (0-100)
+- `height` (number | string, optional): Height (default: 4)
+- `color` (string, optional): Color theme
+- `active` (boolean, optional): Active state
+- `indeterminate` (boolean, optional): Indeterminate animation
+- `query` (boolean, optional): Query mode
+- `bufferValue` (number, optional): Buffer value (0-100, default: 100)
+- `backgroundOpacity` (number, optional): Background opacity (default: 0.3)
 
 **Slots:**
-- `default`: プログレスバー内に表示するコンテンツ
+- `default`: Content to display within the progress bar
 
 ```vue
 <VProgressLinear
@@ -1087,49 +1087,49 @@ const clearTasks = () => {
   color="success"
   active
 >
-  <span>ダウンロード中...</span>
+  <span>Downloading...</span>
 </VProgressLinear>
 ```
 
-## カラーテーマ
+## Color Themes
 
-@fastkit/vue-color-schemeとの統合により、以下のカラーテーマが利用可能です：
+Through integration with @fastkit/vue-color-scheme, the following color themes are available:
 
-- `primary`: プライマリーカラー
-- `secondary`: セカンダリーカラー
-- `success`: 成功色（緑系）
-- `warning`: 警告色（オレンジ系）
-- `error`: エラー色（赤系）
-- `info`: 情報色（青系）
+- `primary`: Primary color
+- `secondary`: Secondary color
+- `success`: Success color (green-based)
+- `warning`: Warning color (orange-based)
+- `error`: Error color (red-based)
+- `info`: Info color (blue-based)
 
-## アクセシビリティ
+## Accessibility
 
-両コンポーネントはWAI-ARIA仕様に準拠しています：
+Both components comply with WAI-ARIA specifications:
 
-- `role="progressbar"`: 進捗バーとしての役割を明示
-- `aria-valuemin="0"`: 最小値
-- `aria-valuemax="100"`: 最大値
-- `aria-valuenow`: 現在値（不定期の場合は未設定）
+- `role="progressbar"`: Clearly indicates role as progress bar
+- `aria-valuemin="0"`: Minimum value
+- `aria-valuemax="100"`: Maximum value
+- `aria-valuenow`: Current value (not set for indeterminate cases)
 
 ## Considerations
 
-### パフォーマンス考慮事項
+### Performance Considerations
 
-- アニメーションはCSS transformsを使用して効率的に実装
-- 大量の進捗インジケーターを同時表示する場合は、更新頻度に注意
-- `indeterminate`モードは継続的なアニメーションを使用するため、不要な場合は無効化
+- Animations are efficiently implemented using CSS transforms
+- When displaying many progress indicators simultaneously, pay attention to update frequency
+- `indeterminate` mode uses continuous animations, so disable when unnecessary
 
-### スタイルカスタマイズ
+### Style Customization
 
-- CSS変数を使用してテーマのカスタマイズが可能
-- SCSSファイルを直接インポートして詳細なカスタマイズも可能
-- カラーテーマは@fastkit/vue-color-schemeの設定に従う
+- Theme customization is possible using CSS variables
+- Detailed customization is also possible by directly importing SCSS files
+- Color themes follow @fastkit/vue-color-scheme settings
 
-### ブラウザ対応
+### Browser Support
 
-- モダンブラウザすべてでサポート
-- Internet Explorer 11以降で動作
-- CSS Flexboxとtransformsを使用
+- Supported in all modern browsers
+- Works with Internet Explorer 11 and later
+- Uses CSS Flexbox and transforms
 
 ## License
 
@@ -1137,6 +1137,6 @@ MIT
 
 ## Related Packages
 
-- [@fastkit/vue-color-scheme](../vue-color-scheme/README.md): カラーテーマシステム
-- [@fastkit/vue-utils](../vue-utils/README.md): Vue.jsユーティリティ関数
-- [@fastkit/helpers](../helpers/README.md): 基本的なユーティリティ関数
+- [@fastkit/vue-color-scheme](../vue-color-scheme/README.md): Color theme system
+- [@fastkit/vue-utils](../vue-utils/README.md): Vue.js utility functions
+- [@fastkit/helpers](../helpers/README.md): Basic utility functions

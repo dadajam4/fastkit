@@ -1,21 +1,21 @@
 # @fastkit/vue-sortable
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vue-sortable/README-ja.md)
 
-Vue.jsアプリケーションでドラッグ＆ドロップによる要素並び替え機能を提供するライブラリ。SortableJSのVue統合実装で、コンポーネント、ディレクティブ、Composable APIの3つの使用方法をサポートします。
+A library that provides drag & drop element sorting functionality for Vue.js applications. A Vue integration implementation of SortableJS, supporting three usage methods: components, directives, and Composable API.
 
 ## Features
 
-- **ドラッグ＆ドロップ並び替え**: 直感的なマウス・タッチ操作による要素順序変更
-- **3つの使用方法**: コンポーネント、ディレクティブ、Composable APIから選択可能
-- **マルチドラッグ対応**: 複数要素の同時選択・移動
-- **グループ間移動**: 異なるSortableリスト間での要素移動
-- **更新前ガード機能**: 並び替え前の検証・キャンセル処理
-- **アニメーション対応**: スムーズな並び替えアニメーション
-- **TypeScript完全サポート**: 厳密な型定義による型安全性
-- **Vue 3 Composition API**: リアクティブシステムとの完全統合
-- **SSR対応**: サーバーサイドレンダリング環境での安全な動作
-- **カスタマイズ可能**: SortableJSの全オプションに対応
+- **Drag & Drop Sorting**: Intuitive mouse and touch operation for changing element order
+- **Three Usage Methods**: Choose from components, directives, or Composable API
+- **Multi-drag Support**: Simultaneous selection and movement of multiple elements
+- **Inter-group Movement**: Element movement between different Sortable lists
+- **Pre-update Guard Function**: Validation and cancellation processing before sorting
+- **Animation Support**: Smooth sorting animations
+- **Full TypeScript Support**: Type safety through strict type definitions
+- **Vue 3 Composition API**: Complete integration with reactive system
+- **SSR Support**: Safe operation in server-side rendering environments
+- **Customizable**: Support for all SortableJS options
 
 ## Installation
 
@@ -25,13 +25,13 @@ npm install @fastkit/vue-sortable
 
 ## Basic Usage
 
-### コンポーネントによる使用
+### Usage with Components
 
 ```vue
 <template>
   <div>
-    <h2>タスクリスト</h2>
-    
+    <h2>Task List</h2>
+
     <Sortable
       v-model="tasks"
       item-key="id"
@@ -42,7 +42,7 @@ npm install @fastkit/vue-sortable
           <component :is="children" />
         </ul>
       </template>
-      
+
       <template #item="{ data, attrs }">
         <li v-bind="attrs" class="task-item">
           <div class="task-content">
@@ -55,16 +55,16 @@ npm install @fastkit/vue-sortable
               </span>
             </div>
             <div class="task-actions">
-              <button @click="editTask(data)" class="edit-button">編集</button>
-              <button @click="deleteTask(data.id)" class="delete-button">削除</button>
+              <button @click="editTask(data)" class="edit-button">Edit</button>
+              <button @click="deleteTask(data.id)" class="delete-button">Delete</button>
             </div>
           </div>
         </li>
       </template>
     </Sortable>
-    
+
     <div class="add-task">
-      <button @click="addTask" class="add-button">+ 新しいタスクを追加</button>
+      <button @click="addTask" class="add-button">+ Add New Task</button>
     </div>
   </div>
 </template>
@@ -84,29 +84,29 @@ interface Task {
 const tasks = ref<Task[]>([
   {
     id: '1',
-    title: 'プロジェクト企画書作成',
-    description: '新プロジェクトの企画書を作成する',
+    title: 'Create Project Proposal',
+    description: 'Create proposal for new project',
     priority: 'high',
     completed: false
   },
   {
     id: '2',
-    title: 'ミーティング資料準備',
-    description: '来週のミーティング用資料を準備する',
+    title: 'Prepare Meeting Materials',
+    description: 'Prepare materials for next week\'s meeting',
     priority: 'medium',
     completed: false
   },
   {
     id: '3',
-    title: 'バグ修正',
-    description: '報告されたバグを調査・修正する',
+    title: 'Bug Fix',
+    description: 'Investigate and fix reported bugs',
     priority: 'high',
     completed: false
   },
   {
     id: '4',
-    title: 'ドキュメント更新',
-    description: 'APIドキュメントを最新版に更新する',
+    title: 'Update Documentation',
+    description: 'Update API documentation to latest version',
     priority: 'low',
     completed: false
   }
@@ -114,9 +114,9 @@ const tasks = ref<Task[]>([
 
 const getPriorityLabel = (priority: Task['priority']) => {
   const labels = {
-    low: '低',
-    medium: '中',
-    high: '高'
+    low: 'Low',
+    medium: 'Medium',
+    high: 'High'
   }
   return labels[priority]
 }
@@ -124,8 +124,8 @@ const getPriorityLabel = (priority: Task['priority']) => {
 const addTask = () => {
   const newTask: Task = {
     id: Date.now().toString(),
-    title: '新しいタスク',
-    description: 'タスクの説明を入力してください',
+    title: 'New Task',
+    description: 'Please enter task description',
     priority: 'medium',
     completed: false
   }
@@ -133,8 +133,8 @@ const addTask = () => {
 }
 
 const editTask = (task: Task) => {
-  console.log('編集:', task)
-  // 編集処理を実装
+  console.log('Edit:', task)
+  // Implement edit functionality
 }
 
 const deleteTask = (taskId: string) => {
@@ -281,14 +281,14 @@ const deleteTask = (taskId: string) => {
 </style>
 ```
 
-### ディレクティブによる使用
+### Usage with Directives
 
 ```vue
 <template>
   <div>
-    <h2>画像ギャラリー並び替え</h2>
-    
-    <div 
+    <h2>Image Gallery Sorting</h2>
+
+    <div
       v-sortable="{
         animation: 300,
         ghostClass: 'sortable-ghost',
@@ -298,7 +298,7 @@ const deleteTask = (taskId: string) => {
       }"
       class="image-gallery"
     >
-      <div 
+      <div
         v-for="(image, index) in images"
         :key="image.id"
         :data-sortable-key="image.id"
@@ -310,22 +310,22 @@ const deleteTask = (taskId: string) => {
           <p>{{ image.description }}</p>
           <div class="image-actions">
             <button @click="editImage(index)" class="action-button edit">
-              編集
+              Edit
             </button>
             <button @click="deleteImage(index)" class="action-button delete">
-              削除
+              Delete
             </button>
           </div>
         </div>
       </div>
     </div>
-    
+
     <div class="gallery-controls">
       <button @click="addImage" class="control-button">
-        + 画像を追加
+        + Add Image
       </button>
       <button @click="resetOrder" class="control-button">
-        順序をリセット
+        Reset Order
       </button>
     </div>
   </div>
@@ -345,26 +345,26 @@ interface ImageItem {
 const images = ref<ImageItem[]>([
   {
     id: '1',
-    title: '美しい夕日',
-    description: '海に沈む美しい夕日の風景',
+    title: 'Beautiful Sunset',
+    description: 'Beautiful sunset scenery over the ocean',
     url: 'https://picsum.photos/300/200?random=1'
   },
   {
     id: '2',
-    title: '山の風景',
-    description: '雄大な山々の景色',
+    title: 'Mountain Landscape',
+    description: 'Magnificent mountain scenery',
     url: 'https://picsum.photos/300/200?random=2'
   },
   {
     id: '3',
-    title: '都市の夜景',
-    description: 'きらめく都市の夜景',
+    title: 'City Night View',
+    description: 'Sparkling city nightscape',
     url: 'https://picsum.photos/300/200?random=3'
   },
   {
     id: '4',
-    title: '自然の緑',
-    description: '生き生きとした緑の自然',
+    title: 'Natural Greenery',
+    description: 'Vibrant green nature',
     url: 'https://picsum.photos/300/200?random=4'
   }
 ])
@@ -373,28 +373,28 @@ const originalOrder = [...images.value]
 
 const handleSortEnd = (event: SortableEvent) => {
   const { oldIndex, newIndex } = event
-  
+
   if (oldIndex !== undefined && newIndex !== undefined && oldIndex !== newIndex) {
     const item = images.value.splice(oldIndex, 1)[0]
     images.value.splice(newIndex, 0, item)
-    
-    console.log(`画像を ${oldIndex} から ${newIndex} に移動しました`)
+
+    console.log(`Moved image from ${oldIndex} to ${newIndex}`)
   }
 }
 
 const addImage = () => {
   const newImage: ImageItem = {
     id: Date.now().toString(),
-    title: '新しい画像',
-    description: '追加された画像',
+    title: 'New Image',
+    description: 'Added image',
     url: `https://picsum.photos/300/200?random=${Date.now()}`
   }
   images.value.push(newImage)
 }
 
 const editImage = (index: number) => {
-  console.log('編集:', images.value[index])
-  // 編集処理を実装
+  console.log('Edit:', images.value[index])
+  // Implement edit functionality
 }
 
 const deleteImage = (index: number) => {
@@ -518,7 +518,7 @@ const resetOrder = () => {
   background: #545b62;
 }
 
-/* SortableJSスタイル */
+/* SortableJS styles */
 .sortable-ghost {
   opacity: 0.4;
 }
@@ -534,23 +534,23 @@ const resetOrder = () => {
 </style>
 ```
 
-### Composable APIによる使用
+### Usage with Composable API
 
 ```vue
 <template>
   <div>
-    <h2>グループ間でのタスク移動</h2>
-    
+    <h2>Task Movement Between Groups</h2>
+
     <div class="kanban-board">
-      <!-- TODO列 -->
+      <!-- TODO column -->
       <div class="kanban-column">
         <h3 class="column-header todo">TODO</h3>
-        <div 
+        <div
           v-sortable="todoSortable.directiveValue"
           v-bind="todoSortable.wrapperAttrs"
           class="task-list"
         >
-          <div 
+          <div
             v-for="item in todoSortable.items"
             :key="item.key"
             v-bind="item.attrs"
@@ -572,16 +572,16 @@ const resetOrder = () => {
           </div>
         </div>
       </div>
-      
-      <!-- DOING列 -->
+
+      <!-- DOING column -->
       <div class="kanban-column">
         <h3 class="column-header doing">DOING</h3>
-        <div 
+        <div
           v-sortable="doingSortable.directiveValue"
           v-bind="doingSortable.wrapperAttrs"
           class="task-list"
         >
-          <div 
+          <div
             v-for="item in doingSortable.items"
             :key="item.key"
             v-bind="item.attrs"
@@ -603,16 +603,16 @@ const resetOrder = () => {
           </div>
         </div>
       </div>
-      
-      <!-- DONE列 -->
+
+      <!-- DONE column -->
       <div class="kanban-column">
         <h3 class="column-header done">DONE</h3>
-        <div 
+        <div
           v-sortable="doneSortable.directiveValue"
           v-bind="doneSortable.wrapperAttrs"
           class="task-list"
         >
-          <div 
+          <div
             v-for="item in doneSortable.items"
             :key="item.key"
             v-bind="item.attrs"
@@ -635,13 +635,13 @@ const resetOrder = () => {
         </div>
       </div>
     </div>
-    
+
     <div class="board-actions">
       <button @click="addTask" class="action-button">
-        + 新しいタスクを追加
+        + Add New Task
       </button>
       <button @click="showStats" class="action-button">
-        統計を表示
+        Show Statistics
       </button>
     </div>
   </div>
@@ -663,16 +663,16 @@ interface KanbanTask {
 const todoTasks = ref<KanbanTask[]>([
   {
     id: '1',
-    title: 'APIエンドポイント設計',
-    description: 'ユーザー管理APIの設計を行う',
-    assignee: '田中',
+    title: 'API Endpoint Design',
+    description: 'Design user management API',
+    assignee: 'Tanaka',
     estimate: 8
   },
   {
-    id: '2', 
-    title: 'データベース設計',
-    description: 'ユーザーテーブルの設計を行う',
-    assignee: '佐藤',
+    id: '2',
+    title: 'Database Design',
+    description: 'Design user table',
+    assignee: 'Sato',
     estimate: 4
   }
 ])
@@ -680,9 +680,9 @@ const todoTasks = ref<KanbanTask[]>([
 const doingTasks = ref<KanbanTask[]>([
   {
     id: '3',
-    title: 'ログイン機能実装',
-    description: 'ユーザーログイン機能を実装',
-    assignee: '鈴木',
+    title: 'Login Feature Implementation',
+    description: 'Implement user login functionality',
+    assignee: 'Suzuki',
     estimate: 6
   }
 ])
@@ -690,30 +690,30 @@ const doingTasks = ref<KanbanTask[]>([
 const doneTasks = ref<KanbanTask[]>([
   {
     id: '4',
-    title: 'プロジェクト初期設定',
-    description: 'Git リポジトリと基本構成の設定',
-    assignee: '山田',
+    title: 'Project Initial Setup',
+    description: 'Set up Git repository and basic configuration',
+    assignee: 'Yamada',
     estimate: 2
   }
 ])
 
 const beforeUpdate = async (ctx: SortableUpdateContext<KanbanTask>) => {
   const { entries, oldValues, newValues } = ctx
-  
-  // 移動確認ダイアログ
+
+  // Move confirmation dialog
   const moveCount = entries.length
-  const message = moveCount === 1 
-    ? `タスク "${entries[0].data.title}" を移動しますか？`
-    : `${moveCount}個のタスクを移動しますか？`
-    
+  const message = moveCount === 1
+    ? `Move task "${entries[0].data.title}"?`
+    : `Move ${moveCount} tasks?`
+
   const confirmed = confirm(message)
-  
+
   if (!confirmed) {
     return false
   }
-  
-  // 移動ログ
-  console.log('タスク移動:', {
+
+  // Move log
+  console.log('Task moved:', {
     entries,
     oldValues: oldValues.map(t => t.title),
     newValues: newValues.map(t => t.title)
@@ -740,7 +740,7 @@ const todoSortable = useSortable(
 const doingSortable = useSortable(
   {
     modelValue: doingTasks,
-    itemKey: 'id', 
+    itemKey: 'id',
     group: 'kanban',
     animation: 200,
     multiDrag: true,
@@ -758,7 +758,7 @@ const doneSortable = useSortable(
   {
     modelValue: doneTasks,
     itemKey: 'id',
-    group: 'kanban', 
+    group: 'kanban',
     animation: 200,
     multiDrag: true,
     selectedClass: 'selected',
@@ -774,9 +774,9 @@ const doneSortable = useSortable(
 const addTask = () => {
   const newTask: KanbanTask = {
     id: Date.now().toString(),
-    title: '新しいタスク',
-    description: 'タスクの詳細を入力してください',
-    assignee: '未割り当て',
+    title: 'New Task',
+    description: 'Please enter task details',
+    assignee: 'Unassigned',
     estimate: 1
   }
   todoTasks.value.push(newTask)
@@ -793,8 +793,8 @@ const showStats = () => {
       done: doneTasks.value.reduce((sum, t) => sum + t.estimate, 0)
     }
   }
-  
-  alert(`タスク統計:\nTODO: ${stats.todo}件 (${stats.totalEstimate.todo}時間)\nDOING: ${stats.doing}件 (${stats.totalEstimate.doing}時間)\nDONE: ${stats.done}件 (${stats.totalEstimate.done}時間)`)
+
+  alert(`Task Statistics:\nTODO: ${stats.todo} items (${stats.totalEstimate.todo} hours)\nDOING: ${stats.doing} items (${stats.totalEstimate.doing} hours)\nDONE: ${stats.done} items (${stats.totalEstimate.done} hours)`)
 }
 </script>
 
@@ -959,20 +959,20 @@ const showStats = () => {
 
 ## Advanced Usage Examples
 
-### 更新前ガード機能
+### Pre-update Guard Functionality
 
 ```vue
 <template>
   <div>
-    <h2>承認が必要な並び替え</h2>
-    
+    <h2>Sorting That Requires Approval</h2>
+
     <div class="approval-settings">
       <label>
         <input v-model="requireApproval" type="checkbox">
-        並び替えに承認を必要とする
+        Require approval for sorting
       </label>
     </div>
-    
+
     <Sortable
       v-model="items"
       item-key="id"
@@ -984,7 +984,7 @@ const showStats = () => {
           <component :is="children" />
         </div>
       </template>
-      
+
       <template #item="{ data, attrs }">
         <div v-bind="attrs" class="approval-item">
           <div class="item-content">
@@ -1002,28 +1002,28 @@ const showStats = () => {
         </div>
       </template>
     </Sortable>
-    
-    <!-- 承認ダイアログ -->
+
+    <!-- Approval dialog -->
     <div v-if="pendingUpdate" class="approval-modal-overlay">
       <div class="approval-modal">
-        <h3>並び替えの承認</h3>
-        <p>以下の変更を適用しますか？</p>
-        
+        <h3>Sorting Approval</h3>
+        <p>Apply the following changes?</p>
+
         <div class="change-summary">
           <div v-for="entry in pendingUpdate.entries" :key="entry.data.id">
             <strong>{{ entry.data.title }}</strong>
             <span v-if="entry.oldIndex !== undefined && entry.newIndex !== undefined">
-              : {{ entry.oldIndex + 1 }}番目 → {{ entry.newIndex + 1 }}番目
+              : {{ entry.oldIndex + 1 }}th → {{ entry.newIndex + 1 }}th
             </span>
           </div>
         </div>
-        
+
         <div class="approval-actions">
           <button @click="rejectUpdate" class="reject-button">
-            キャンセル
+            Cancel
           </button>
           <button @click="approveUpdate" class="approve-button">
-            承認
+            Approve
           </button>
         </div>
       </div>
@@ -1050,35 +1050,35 @@ let updateResolver: ((result: boolean) => void) | null = null
 const items = ref<ApprovalItem[]>([
   {
     id: '1',
-    title: '予算申請書',
-    description: '来年度の予算申請書類',
+    title: 'Budget Application',
+    description: 'Next fiscal year budget application documents',
     status: 'pending'
   },
   {
     id: '2',
-    title: '人事評価シート',
-    description: '四半期人事評価の提出',
+    title: 'HR Evaluation Sheet',
+    description: 'Quarterly HR evaluation submission',
     status: 'approved'
   },
   {
     id: '3',
-    title: '経費精算書',
-    description: '出張費用の精算書類',
+    title: 'Expense Report',
+    description: 'Business trip expense report documents',
     status: 'pending'
   },
   {
     id: '4',
-    title: '企画提案書',
-    description: '新プロジェクトの企画提案',
+    title: 'Project Proposal',
+    description: 'New project proposal',
     status: 'rejected'
   }
 ])
 
 const getStatusLabel = (status: ApprovalItem['status']) => {
   const labels = {
-    pending: '承認待ち',
-    approved: '承認済み',
-    rejected: '却下'
+    pending: 'Pending Approval',
+    approved: 'Approved',
+    rejected: 'Rejected'
   }
   return labels[status]
 }
@@ -1087,10 +1087,10 @@ const beforeUpdate = async (ctx: SortableUpdateContext<ApprovalItem>) => {
   if (!requireApproval.value) {
     return true
   }
-  
-  // 承認ダイアログを表示
+
+  // Show approval dialog
   pendingUpdate.value = ctx
-  
+
   return new Promise<boolean>((resolve) => {
     updateResolver = resolve
   })
@@ -1270,7 +1270,7 @@ const rejectUpdate = () => {
 </style>
 ```
 
-### プラグインインストール
+### Plugin Installation
 
 ```typescript
 // main.ts
@@ -1280,32 +1280,32 @@ import App from './App.vue'
 
 const app = createApp(App)
 
-// v-sortableディレクティブをグローバルにインストール
+// Install v-sortable directive globally
 installSortableDirective(app)
 
 app.mount('#app')
 ```
 
-### CSSファイルのインポート
+### CSS File Import
 
 ```typescript
-// main.ts または対象のコンポーネント
+// main.ts or target component
 import '@fastkit/vue-sortable/vue-sortable.css'
 ```
 
-## API リファレンス
+## API Reference
 
-### Sortableコンポーネント
+### Sortable Component
 
 ```typescript
 interface SortableProps<T extends SortableData = SortableData> {
-  modelValue?: T[]                              // 並び替え対象のデータ配列
-  itemKey?: string | IterableKeyResolver<T>    // アイテムのキー検出方法
-  itemKeyCandidates?: IterableKeyDetectorCandidate[]  // キー自動検出の候補
-  clone?: (source: T) => T                     // アイテムのクローン関数
-  beforeUpdate?: SortableUpdateGuardFn<T>      // 更新前ガード関数
-  
-  // SortableJSのオプション
+  modelValue?: T[]                              // Data array to be sorted
+  itemKey?: string | IterableKeyResolver<T>    // Item key detection method
+  itemKeyCandidates?: IterableKeyDetectorCandidate[]  // Key auto-detection candidates
+  clone?: (source: T) => T                     // Item clone function
+  beforeUpdate?: SortableUpdateGuardFn<T>      // Pre-update guard function
+
+  // SortableJS options
   group?: string | GroupOptions
   sort?: boolean
   disabled?: boolean
@@ -1315,7 +1315,7 @@ interface SortableProps<T extends SortableData = SortableData> {
   ghostClass?: string
   chosenClass?: string
   dragClass?: string
-  // ... その他SortableJSオプション
+  // ... other SortableJS options
 }
 
 type SortableEmits<T> = {
@@ -1342,7 +1342,7 @@ interface SortableContext<T> {
   readonly guardInProgress: boolean
   readonly canOperation: boolean
   readonly wrapperAttrs: Record<string, any>
-  
+
   getIndexByData(data: T): number
   replace(data: T, index: number): Promise<void>
   getKeys(): string[]
@@ -1354,14 +1354,14 @@ interface SortableContext<T> {
 }
 ```
 
-### v-sortableディレクティブ
+### v-sortable Directive
 
 ```typescript
 interface SortableDirectiveValue<C = undefined> {
   onMounted?: (sortable: Sortable) => void
   inject?: () => C
-  
-  // SortableJSオプション
+
+  // SortableJS options
   group?: string | GroupOptions
   sort?: boolean
   disabled?: boolean
@@ -1371,19 +1371,19 @@ interface SortableDirectiveValue<C = undefined> {
   ghostClass?: string
   chosenClass?: string
   dragClass?: string
-  
-  // イベントハンドラー
+
+  // Event handlers
   onStart?: (event: ExtendedSortableEvent<SortableEvent>) => void
   onEnd?: (event: ExtendedSortableEvent<SortableEvent>) => void
   onAdd?: (event: ExtendedSortableEvent<SortableEvent>) => void
   onRemove?: (event: ExtendedSortableEvent<SortableEvent>) => void
   onSelect?: (event: ExtendedSortableEvent<SortableEvent>) => void
   onDeselect?: (event: ExtendedSortableEvent<SortableEvent>) => void
-  // ... その他イベント
+  // ... other events
 }
 ```
 
-### 更新前ガード
+### Pre-update Guard
 
 ```typescript
 type SortableUpdateGuardFn<T extends SortableData = SortableData> = (
@@ -1411,39 +1411,39 @@ interface SortableUpdateEntry<T> {
 }
 ```
 
-### インストール関数
+### Installation Functions
 
 ```typescript
 function installSortableDirective(app: App): App
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### 大量データの処理
+### Handling Large Data
 
 ```typescript
-// 仮想スクロールとの組み合わせ例
+// Example of combining with virtual scrolling
 const useLargeSortable = <T extends SortableData>(items: Ref<T[]>) => {
-  const visibleItems = computed(() => 
+  const visibleItems = computed(() =>
     items.value.slice(startIndex.value, endIndex.value)
   )
-  
+
   const sortable = useSortable({
     modelValue: visibleItems,
     itemKey: 'id',
     beforeUpdate: async (ctx) => {
-      // 大量データの場合は確認ダイアログを表示
+      // Show confirmation dialog for large data
       if (items.value.length > 1000) {
-        return confirm('大量データの並び替えを実行しますか？')
+        return confirm('Execute sorting for large data?')
       }
     }
   }, { emit })
-  
+
   return sortable
 }
 ```
 
-### メモリリークの防止
+### Memory Leak Prevention
 
 ```vue
 <script setup>
@@ -1451,16 +1451,16 @@ import { onBeforeUnmount } from 'vue'
 
 const sortable = useSortable(props, { emit })
 
-// コンポーネント破棄時の自動クリーンアップは内部で行われるため、
-// 通常は手動でのクリーンアップは不要
+// Automatic cleanup when component is destroyed is handled internally,
+// so manual cleanup is usually not necessary
 </script>
 ```
 
 ## Related Packages
 
-- `sortablejs` - コアのSortableJSライブラリ
-- `@fastkit/helpers` - ユーティリティ関数
-- `@fastkit/vue-utils` - Vue.js開発ユーティリティ
+- `sortablejs` - Core SortableJS library
+- `@fastkit/helpers` - Utility functions
+- `@fastkit/vue-utils` - Vue.js development utilities
 
 ## License
 

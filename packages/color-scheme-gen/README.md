@@ -1,20 +1,20 @@
 
 # @fastkit/color-scheme-gen
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/color-scheme-gen/README-ja.md)
 
-カラースキーマの定義から各種フォーマット（JSON、TypeScript、SCSS）のファイルを自動生成するためのジェネレータ。開発時のホットリロード対応により、カラースキーマの変更を即座にアプリケーションに反映できます。
+A generator for automatically creating files in various formats (JSON, TypeScript, SCSS) from color scheme definitions. With hot reload support during development, color scheme changes can be immediately reflected in applications.
 
 ## Features
 
-- **自動ファイル生成**: カラースキーマ定義から複数フォーマットのファイルを生成
-- **ホットリロード対応**: ファイル変更時の自動再生成とキャッシュ管理
-- **テンプレートエンジン**: Etaテンプレートエンジンによる柔軟なカスタマイズ
-- **SCSSサポート**: CSS変数とバリアントクラスの自動生成
-- **TypeScript型生成**: 型安全なカラー定義の自動生成
-- **ビルトインバリアント**: light、deep、text、border、focusなどの標準バリアント
-- **カスタムバリアント**: プロジェクト固有のバリアント定義
-- **依存関係追跡**: ファイル変更の検出と増分ビルド
+- **Automatic File Generation**: Generate files in multiple formats from color scheme definitions
+- **Hot Reload Support**: Automatic regeneration and cache management on file changes
+- **Template Engine**: Flexible customization using Eta template engine
+- **SCSS Support**: Automatic generation of CSS variables and variant classes
+- **TypeScript Type Generation**: Automatic generation of type-safe color definitions
+- **Built-in Variants**: Standard variants like light, deep, text, border, focus
+- **Custom Variants**: Project-specific variant definitions
+- **Dependency Tracking**: File change detection and incremental builds
 
 ## Installation
 
@@ -24,7 +24,7 @@ npm install @fastkit/color-scheme-gen
 
 ## Basic Usage
 
-### カラースキーマ定義ファイルの作成
+### Creating Color Scheme Definition Files
 
 ```typescript
 // color-scheme.ts
@@ -60,7 +60,7 @@ export default ColorScheme({
 })
 ```
 
-### ジェネレータの実行
+### Running the Generator
 
 ```typescript
 import { LoadColorSchemeRunner } from '@fastkit/color-scheme-gen'
@@ -68,7 +68,7 @@ import { LoadColorSchemeRunner } from '@fastkit/color-scheme-gen'
 const runner = new LoadColorSchemeRunner({
   entry: './color-scheme.ts',
   dest: './generated',
-  watch: true // 開発時はtrueに設定
+  watch: true // Set to true during development
 })
 
 runner.on('load', (result) => {
@@ -83,7 +83,7 @@ await runner.run()
 
 ## Advanced Usage Examples
 
-### カスタムバリアントの定義
+### Defining Custom Variants
 
 ```typescript
 // advanced-color-scheme.ts
@@ -119,11 +119,11 @@ export default ColorScheme({
         background: linear-gradient(135deg, ${scope.scheme.main} 0%, ${scope.scheme.main.lighten(0.2)} 100%);
         border: none;
         color: ${scope.scheme.text};
-        
+
         &:hover {
           background: linear-gradient(135deg, ${scope.scheme.focus} 0%, ${scope.scheme.focus.lighten(0.2)} 100%);
         }
-        
+
         &:active {
           background: linear-gradient(135deg, ${scope.scheme.active} 0%, ${scope.scheme.active.lighten(0.2)} 100%);
         }
@@ -136,7 +136,7 @@ export default ColorScheme({
         backdrop-filter: blur(10px);
         border: 1px solid ${scope.scheme.main.alpha(0.2)};
         color: ${scope.scheme.main};
-        
+
         &:hover {
           background: ${scope.scheme.main.alpha(0.15)};
           border-color: ${scope.scheme.main.alpha(0.3)};
@@ -148,7 +148,7 @@ export default ColorScheme({
     lightText: '#FFFFFF',
     darkText: '#1A1A1A',
     overrides: {
-      // カスタムリゾルバー
+      // Custom resolvers
       glass: ({ main }) => main.alpha(0.1),
       glassBorder: ({ main }) => main.alpha(0.2)
     }
@@ -156,7 +156,7 @@ export default ColorScheme({
 })
 ```
 
-### Viteプラグインとの統合
+### Integration with Vite Plugin
 
 ```typescript
 // vite.config.ts
@@ -173,13 +173,13 @@ export default defineConfig({
           dest: './src/theme/generated',
           watch: true
         })
-        
+
         runner.on('load', () => {
           server.ws.send({
             type: 'full-reload'
           })
         })
-        
+
         runner.run()
       }
     }
@@ -187,9 +187,9 @@ export default defineConfig({
 })
 ```
 
-## 生成されるファイル
+## Generated Files
 
-### JSON出力例
+### JSON Output Example
 
 ```json
 {
@@ -216,7 +216,7 @@ export default defineConfig({
 }
 ```
 
-### TypeScript型定義出力例
+### TypeScript Type Definition Output Example
 
 ```typescript
 // generated/color-scheme.info.ts
@@ -255,7 +255,7 @@ export interface DarkTheme {
 }
 ```
 
-### SCSS出力例
+### SCSS Output Example
 
 ```scss
 // generated/color-scheme.scss
@@ -266,7 +266,7 @@ export interface DarkTheme {
   --color-primary-text: #FFFFFF;
   --color-primary-focus: #1976D2;
   --color-primary-active: #1565C0;
-  
+
   --theme-background: #FFFFFF;
   --theme-surface: #F5F5F5;
   --theme-on-surface: #212121;
@@ -278,16 +278,16 @@ export interface DarkTheme {
   --theme-on-surface: #FFFFFF;
 }
 
-// バリアントクラス
+// Variant classes
 .color-primary-filled {
   background-color: var(--color-primary);
   color: var(--color-primary-text);
   border: none;
-  
+
   &:hover {
     background-color: var(--color-primary-focus);
   }
-  
+
   &:active {
     background-color: var(--color-primary-active);
   }
@@ -297,7 +297,7 @@ export interface DarkTheme {
   background-color: transparent;
   color: var(--color-primary);
   border: 1px solid var(--color-primary);
-  
+
   &:hover {
     background-color: var(--color-primary-light);
     border-color: var(--color-primary-focus);
@@ -308,7 +308,7 @@ export interface DarkTheme {
   background-color: transparent;
   color: var(--color-primary);
   border: none;
-  
+
   &:hover {
     background-color: var(--color-primary-light);
   }
@@ -318,14 +318,14 @@ export interface DarkTheme {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
   border: none;
   color: var(--color-primary-text);
-  
+
   &:hover {
     background: linear-gradient(135deg, var(--color-primary-focus) 0%, var(--color-primary-deep) 100%);
   }
 }
 ```
 
-## ビルトインリゾルバー
+## Built-in Resolvers
 
 ### scopeResolvers
 
@@ -333,16 +333,16 @@ export interface DarkTheme {
 import { scopeResolvers } from '@fastkit/color-scheme-gen'
 
 const resolvers = scopeResolvers({
-  // ライトテーマでのテキストカラー
+  // Text color for light theme
   lightText: '#FFFFFF',
-  
-  // ダークテーマでのテキストカラー
+
+  // Text color for dark theme
   darkText: '#000000',
-  
-  // テーマ反転の明度閾値（0-1）
+
+  // Brightness threshold for theme inversion (0-1)
   scopeInvertThreshold: 0.6,
-  
-  // カスタムリゾルバーで上書き
+
+  // Override with custom resolvers
   overrides: {
     light: ({ main }) => main.alpha(0.08),
     deep: ({ main }) => main.alpha(0.16),
@@ -353,42 +353,42 @@ const resolvers = scopeResolvers({
 })
 ```
 
-### 利用可能なリゾルバーキー
+### Available Resolver Keys
 
 ```typescript
-// 基本バリアント
-- light: 薄い背景色（通常はメインカラーの低透明度）
-- deep: 濃い背景色（通常はメインカラーの中透明度）
-- text: テキストカラー（明度に応じて自動選択）
-- border: ボーダーカラー
+// Basic variants
+- light: Light background color (usually main color with low opacity)
+- deep: Deep background color (usually main color with medium opacity)
+- text: Text color (automatically selected based on brightness)
+- border: Border color
 
-// インタラクション状態
-- focus: フォーカス時のカラー
-- focusBorder: フォーカス時のボーダーカラー
-- focusText: フォーカス時のテキストカラー
-- focusShadow: フォーカス時のシャドウカラー
-- active: アクティブ時のカラー
-- activeBorder: アクティブ時のボーダーカラー
-- activeText: アクティブ時のテキストカラー
+// Interaction states
+- focus: Focus state color
+- focusBorder: Focus state border color
+- focusText: Focus state text color
+- focusShadow: Focus state shadow color
+- active: Active state color
+- activeBorder: Active state border color
+- activeText: Active state text color
 
-// 特殊バリアント
-- outlineText: アウトラインスタイルのテキストカラー
-- outlineBorder: アウトラインスタイルのボーダーカラー
-- invert: 反転カラー
-- focusInvert: フォーカス時の反転カラー
-- activeInvert: アクティブ時の反転カラー
-- nav: ナビゲーション用カラー
-- navActive: アクティブなナビゲーション用カラー
-- caption: キャプション用カラー
-- pin: ピン留め用カラー
+// Special variants
+- outlineText: Outline style text color
+- outlineBorder: Outline style border color
+- invert: Inverted color
+- focusInvert: Focus state inverted color
+- activeInvert: Active state inverted color
+- nav: Navigation color
+- navActive: Active navigation color
+- caption: Caption color
+- pin: Pin color
 ```
 
-## テンプレートカスタマイズ
+## Template Customization
 
-### カスタムテンプレートの作成
+### Creating Custom Templates
 
 ```typescript
-// カスタムジェネレータ
+// Custom generator
 import { LoadColorSchemeRunner } from '@fastkit/color-scheme-gen'
 import { Eta } from 'eta'
 import fs from 'fs-extra'
@@ -419,28 +419,28 @@ export const theme = {
   }
 }
     `
-    
+
     const eta = new Eta()
     const result = await eta.renderStringAsync(template, { scheme })
-    
+
     await fs.writeFile('./theme.js', result)
   }
 }
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### キャッシュ戦略
+### Cache Strategy
 
 ```typescript
-// 効率的なキャッシュ管理
+// Efficient cache management
 const runner = new LoadColorSchemeRunner({
   entry: './color-scheme.ts',
   dest: './cache',
   watch: process.env.NODE_ENV === 'development'
 })
 
-// 依存関係の変更のみで再生成
+// Regenerate only on dependency changes
 runner.on('load', (result) => {
   if (result.dependencies.length > 0) {
     console.log('Dependencies changed:', result.dependencies)
@@ -448,10 +448,10 @@ runner.on('load', (result) => {
 })
 ```
 
-### 増分ビルド
+### Incremental Build
 
 ```typescript
-// 変更されたファイルのみ処理
+// Process only changed files
 import { watch } from 'chokidar'
 
 const watcher = watch('./src/theme/**/*.ts')
@@ -462,32 +462,32 @@ watcher.on('change', async (filePath) => {
 })
 ```
 
-## API リファレンス
+## API Reference
 
 ### LoadColorSchemeRunner
 
 ```typescript
 class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
   constructor(opts: LoadColorSchemeRunnerOptions)
-  
-  // メソッド
+
+  // Methods
   run(): Promise<void>
-  
-  // イベント
+
+  // Events
   on('load', (result: ESbuildRequireResult<LoadColorSchemeRunnerLoadResult>) => void)
 }
 
 interface LoadColorSchemeRunnerOptions {
-  entry: string      // カラースキーマ定義ファイルのパス
-  dest: string       // 出力先ディレクトリ
-  watch?: boolean    // ファイル監視の有効/無効
+  entry: string      // Path to color scheme definition file
+  dest: string       // Output directory
+  watch?: boolean    // Enable/disable file watching
 }
 
 interface LoadColorSchemeRunnerLoadResult {
   cachePaths: {
-    json: string     // JSON出力ファイルパス
-    info: string     // TypeScript型定義ファイルパス
-    scss: string     // SCSSファイルパス
+    json: string     // JSON output file path
+    info: string     // TypeScript type definition file path
+    scss: string     // SCSS file path
   }
 }
 ```
@@ -503,14 +503,14 @@ function scopeResolvers(opts?: {
 }): ColorScopeResolvers
 ```
 
-### テンプレートスコープ
+### Template Scope
 
 ```typescript
 interface TemplateScope {
   scheme: ColorScheme
   scssValues: Record<string, string>
-  
-  // ヘルパー関数
+
+  // Helper functions
   list(source: string[], divider?: string): string
   builtinVariantScss(variant: BuiltinColorVariant, selector?: string): Promise<string>
   variantScss(variant: string): Promise<string>
@@ -520,12 +520,12 @@ interface TemplateScope {
 
 ## Related Packages
 
-- `@fastkit/color-scheme` - カラースキーマ定義システム
-- `@fastkit/color` - カラー操作ライブラリ
-- `@fastkit/node-util` - Node.js開発ユーティリティ
-- `@fastkit/tiny-logger` - ロギングシステム
-- `eta` - テンプレートエンジン（外部依存関係）
-- `fs-extra` - ファイルシステム操作（外部依存関係）
+- `@fastkit/color-scheme` - Color scheme definition system
+- `@fastkit/color` - Color manipulation library
+- `@fastkit/node-util` - Node.js development utilities
+- `@fastkit/tiny-logger` - Logging system
+- `eta` - Template engine (external dependency)
+- `fs-extra` - File system operations (external dependency)
 
 ## License
 

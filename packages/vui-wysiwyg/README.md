@@ -1,22 +1,22 @@
 
 # @fastkit/vui-wysiwyg
 
-🌐 English | [日本語](./README-ja.md)
+🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/vui-wysiwyg/README-ja.md)
 
-Vue.js 3用の高機能WYSIWYGエディタコンポーネント。TiptapとProseMirrorをベースとした豊富な編集機能とカスタマイズ性を提供し、@fastkit/vuiデザインシステムと完全に統合されています。
+A high-featured WYSIWYG editor component for Vue.js 3. Built on Tiptap and ProseMirror, it provides rich editing capabilities and customizability, fully integrated with the @fastkit/vui design system.
 
 ## Features
 
-- **リッチテキスト編集**: テキストフォーマット、リスト、リンク、色付け等の包括的な編集機能
-- **@fastkit/vui統合**: vuiデザインシステムとの完全な統合とコンポーネント互換性
-- **カスタマイズ可能なツールバー**: 固定ツールバーとフローティングメニューの両対応
-- **拡張システム**: Tiptap/ProseMirrorベースの強力な拡張アーキテクチャ
-- **フォームコントロール**: 標準的なフォーム検証と入力制御機能
-- **TypeScript完全対応**: 厳密な型定義による型安全性
-- **アクセシビリティ**: キーボードナビゲーションとスクリーンリーダー対応
-- **SSR対応**: サーバーサイドレンダリング完全サポート
-- **高いパフォーマンス**: 効率的な仮想DOM操作と最適化された描画
-- **カスタムスタイリング**: Sass変数による詳細なスタイルカスタマイズ
+- **Rich Text Editing**: Comprehensive editing features including text formatting, lists, links, coloring, etc.
+- **@fastkit/vui Integration**: Complete integration with the vui design system and component compatibility
+- **Customizable Toolbar**: Support for both fixed toolbar and floating menu
+- **Extension System**: Powerful extension architecture based on Tiptap/ProseMirror
+- **Form Controls**: Standard form validation and input control functionality
+- **Complete TypeScript Support**: Type safety through strict type definitions
+- **Accessibility**: Keyboard navigation and screen reader support
+- **SSR Support**: Full server-side rendering support
+- **High Performance**: Efficient virtual DOM manipulation and optimized rendering
+- **Custom Styling**: Detailed style customization through Sass variables
 
 ## Installation
 
@@ -26,21 +26,21 @@ npm install @fastkit/vui-wysiwyg
 
 ## Basic Usage
 
-### 基本的なエディタ
+### Basic Editor
 
 ```vue
 <template>
   <div class="editor-container">
     <VWysiwygEditor
       v-model="content"
-      label="記事の内容"
-      placeholder="ここに内容を入力してください..."
+      label="Article Content"
+      placeholder="Enter content here..."
       :tools="defaultTools"
       :extensions="extensions"
     />
-    
+
     <div class="preview">
-      <h3>プレビュー</h3>
+      <h3>Preview</h3>
       <div v-html="content"></div>
     </div>
   </div>
@@ -59,9 +59,9 @@ import {
   WysiwygHistoryTool,
 } from '@fastkit/vui-wysiwyg'
 
-const content = ref('<p>初期コンテンツ</p>')
+const content = ref('<p>Initial content</p>')
 
-// 基本的なツールセット
+// Basic tool set
 const defaultTools = [
   WysiwygFormatBoldTool,
   WysiwygFormatItalicTool,
@@ -92,15 +92,15 @@ const extensions = []
 </style>
 ```
 
-### カスタマイズされたエディタ設定
+### Customized Editor Configuration
 
 ```vue
 <template>
   <div class="advanced-editor">
     <VWysiwygEditor
       v-model="articleContent"
-      label="記事エディタ"
-      hint="Markdownも使用できます"
+      label="Article Editor"
+      hint="Markdown can also be used"
       :tools="advancedTools"
       :extensions="customExtensions"
       :floating-toolbar="false"
@@ -136,10 +136,10 @@ import { Color } from '@tiptap/extension-color'
 
 const articleContent = ref('')
 
-// 高度なツールセット
+// Advanced tool set
 const advancedTools = [
   WysiwygFormatBoldTool,
-  WysiwygFormatItalicTool, 
+  WysiwygFormatItalicTool,
   WysiwygFormatUnderlineTool,
   WysiwygBulletListTool,
   WysiwygOrderedListTool,
@@ -150,7 +150,7 @@ const advancedTools = [
   WysiwygHistoryTool,
 ]
 
-// カスタム拡張機能
+// Custom extensions
 const customExtensions = [
   createWysiwygExtension(TextAlign.configure({
     types: ['heading', 'paragraph'],
@@ -171,7 +171,7 @@ const customExtensions = [
 </style>
 ```
 
-### コンポーネントAPIとイベント処理
+### Component API and Event Handling
 
 ```vue
 <template>
@@ -179,26 +179,26 @@ const customExtensions = [
     <VWysiwygEditor
       ref="editorRef"
       v-model="content"
-      label="API連携エディタ"
+      label="API-Integrated Editor"
       :tools="tools"
       @input="handleInput"
       @focus="handleFocus"
       @blur="handleBlur"
       @update:modelValue="handleUpdate"
     />
-    
+
     <div class="editor-controls">
-      <VButton @click="insertText">テキスト挿入</VButton>
-      <VButton @click="focusEditor">フォーカス</VButton>
-      <VButton @click="getContent">コンテンツ取得</VButton>
-      <VButton @click="clearContent">クリア</VButton>
-      <VButton @click="formatSelection">選択範囲をBold</VButton>
+      <VButton @click="insertText">Insert Text</VButton>
+      <VButton @click="focusEditor">Focus</VButton>
+      <VButton @click="getContent">Get Content</VButton>
+      <VButton @click="clearContent">Clear</VButton>
+      <VButton @click="formatSelection">Bold Selection</VButton>
     </div>
-    
+
     <div class="editor-stats">
-      <div>文字数: {{ textLength }}</div>
-      <div>HTML長: {{ htmlLength }}</div>
-      <div>フォーカス状態: {{ isFocused ? 'フォーカス中' : 'フォーカス外' }}</div>
+      <div>Character count: {{ textLength }}</div>
+      <div>HTML length: {{ htmlLength }}</div>
+      <div>Focus state: {{ isFocused ? 'Focused' : 'Unfocused' }}</div>
     </div>
   </div>
 </template>
@@ -215,7 +215,7 @@ import {
 import { VButton } from '@fastkit/vui'
 
 const editorRef = ref<VWysiwygEditorAPI>()
-const content = ref('<p>サンプルテキスト</p>')
+const content = ref('<p>Sample text</p>')
 const isFocused = ref(false)
 
 const tools = [
@@ -231,7 +231,7 @@ const textLength = computed(() => {
 
 const htmlLength = computed(() => content.value.length)
 
-// イベントハンドラ
+// Event handlers
 const handleInput = (value: string) => {
   console.log('Input changed:', value)
 }
@@ -250,11 +250,11 @@ const handleUpdate = (value: string) => {
   console.log('Content updated:', value)
 }
 
-// エディタ操作メソッド
+// Editor operation methods
 const insertText = () => {
   const editor = editorRef.value?.editor
   if (editor) {
-    editor.chain().focus().insertContent(' 挿入されたテキスト ').run()
+    editor.chain().focus().insertContent(' inserted text ').run()
   }
 }
 
@@ -319,9 +319,9 @@ const formatSelection = () => {
 </style>
 ```
 
-## カスタム拡張機能の作成
+## Creating Custom Extensions
 
-### カスタムマークの作成
+### Creating Custom Marks
 
 ```typescript
 // custom-extensions/highlight.ts
@@ -406,7 +406,7 @@ export const Highlight = Mark.create<HighlightOptions>({
   },
 })
 
-// カスタム拡張機能のファクトリ
+// Custom extensions factory
 export const CustomHighlightExtension: WysiwygExtensionFactory<HighlightOptions> = (ctx) => {
   return Highlight.configure({
     multicolor: true,
@@ -417,7 +417,7 @@ export const CustomHighlightExtension: WysiwygExtensionFactory<HighlightOptions>
 }
 ```
 
-### カスタムツールの作成
+### Creating Custom Tools
 
 ```typescript
 // custom-tools/highlight-tool.ts
@@ -433,7 +433,7 @@ export const CustomHighlightTool: WysiwygEditorToolFactory<HighlightToolOptions>
   options = {}
 ) => {
   const colors = options.colors || ['#ffeb3b', '#4caf50', '#2196f3', '#f44336']
-  
+
   const tools: WysiwygEditorTool[] = colors.map((color, index) => ({
     key: `highlight-${index}`,
     icon: ({ vui }) => vui.icon('palette'),
@@ -449,14 +449,14 @@ export const CustomHighlightTool: WysiwygEditorToolFactory<HighlightToolOptions>
 }
 ```
 
-### カスタム要素を使用したエディタ
+### Editor with Custom Elements
 
 ```vue
 <template>
   <div class="custom-editor">
     <VWysiwygEditor
       v-model="content"
-      label="カスタム機能付きエディタ"
+      label="Editor with Custom Features"
       :tools="customTools"
       :extensions="customExtensions"
     />
@@ -479,7 +479,7 @@ const content = ref('')
 const customTools = [
   WysiwygFormatBoldTool,
   WysiwygFormatItalicTool,
-  // カスタムハイライトツール
+  // Custom highlight tool
   CustomHighlightTool,
   WysiwygHistoryTool,
 ]
@@ -490,9 +490,9 @@ const customExtensions = [
 </script>
 ```
 
-## フォーム統合とバリデーション
+## Form Integration and Validation
 
-### バリデーション付きフォーム
+### Form with Validation
 
 ```vue
 <template>
@@ -500,8 +500,8 @@ const customExtensions = [
     <VForm @submit="handleSubmit" @invalid="handleInvalid">
       <VWysiwygEditor
         v-model="formData.content"
-        label="記事内容"
-        hint="最低100文字以上入力してください"
+        label="Article Content"
+        hint="Please enter at least 100 characters"
         :tools="tools"
         :min-length="100"
         :max-length="5000"
@@ -509,11 +509,11 @@ const customExtensions = [
         required
         :error-messages="errors.content"
       />
-      
+
       <VWysiwygEditor
         v-model="formData.summary"
-        label="記事要約"
-        hint="記事の要約を200文字以内で入力"
+        label="Article Summary"
+        hint="Enter article summary within 200 characters"
         :tools="basicTools"
         :max-length="200"
         counter
@@ -521,21 +521,21 @@ const customExtensions = [
         size="small"
         :error-messages="errors.summary"
       />
-      
+
       <div class="form-actions">
         <VButton type="submit" variant="contained" color="primary">
-          記事を保存
+          Save Article
         </VButton>
         <VButton type="button" @click="previewArticle">
-          プレビュー
+          Preview
         </VButton>
       </div>
     </VForm>
-    
-    <!-- プレビューモーダル -->
+
+    <!-- Preview modal -->
     <VDialog v-model="showPreview" max-width="800px">
       <VCard>
-        <VCardTitle>記事プレビュー</VCardTitle>
+        <VCardTitle>Article Preview</VCardTitle>
         <VCardContent>
           <div class="preview-content">
             <h3>{{ formData.title }}</h3>
@@ -544,7 +544,7 @@ const customExtensions = [
           </div>
         </VCardContent>
         <VCardActions>
-          <VButton @click="showPreview = false">閉じる</VButton>
+          <VButton @click="showPreview = false">Close</VButton>
         </VCardActions>
       </VCard>
     </VDialog>
@@ -603,18 +603,18 @@ const basicTools = [
 ]
 
 const handleSubmit = async () => {
-  // フォームバリデーション
+  // Form validation
   errors.content = []
   errors.summary = []
-  
+
   if (!formData.content || formData.content.length < 100) {
-    errors.content.push('記事内容は100文字以上入力してください')
+    errors.content.push('Article content must be at least 100 characters')
   }
-  
+
   if (!formData.summary) {
-    errors.summary.push('要約は必須です')
+    errors.summary.push('Summary is required')
   }
-  
+
   if (errors.content.length === 0 && errors.summary.length === 0) {
     try {
       // API投稿処理
@@ -644,11 +644,11 @@ const saveArticle = async (data: typeof formData) => {
     },
     body: JSON.stringify(data),
   })
-  
+
   if (!response.ok) {
     throw new Error('保存に失敗しました')
   }
-  
+
   return response.json()
 }
 </script>
@@ -733,79 +733,79 @@ const saveArticle = async (data: typeof formData) => {
   border: 1px solid var(--wysiwyg-editor-border);
   border-radius: 8px;
   transition: border-color 0.2s ease;
-  
+
   &:focus-within {
     border-color: var(--wysiwyg-editor-border-focus);
     box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
   }
-  
+
   // ツールバーのスタイル
   .v-wysiwyg-editor__toolbar {
     background-color: var(--wysiwyg-toolbar-bg);
     border-bottom: 1px solid var(--wysiwyg-toolbar-border);
     padding: 8px 12px;
-    
+
     .v-button {
       margin: 0 2px;
       transition: all 0.2s ease;
-      
+
       &:hover {
         background-color: var(--wysiwyg-button-hover);
       }
-      
+
       &.v-button--active {
         color: var(--wysiwyg-button-active);
         background-color: var(--wysiwyg-button-active-bg);
       }
     }
   }
-  
+
   // エディタコンテンツのスタイル
   .v-wysiwyg-editor__input__prose {
     color: var(--wysiwyg-editor-text);
     padding: 16px;
     min-height: 200px;
     line-height: 1.6;
-    
+
     &::placeholder {
       color: var(--wysiwyg-editor-placeholder);
     }
-    
+
     // プロージングスタイル
     h1, h2, h3, h4, h5, h6 {
       font-weight: bold;
       margin: 1em 0 0.5em 0;
-      
+
       &:first-child {
         margin-top: 0;
       }
     }
-    
+
     h1 { font-size: 2em; }
     h2 { font-size: 1.5em; }
     h3 { font-size: 1.25em; }
-    
+
     p {
       margin: 0.5em 0;
-      
+
       &:first-child {
         margin-top: 0;
       }
-      
+
       &:last-child {
         margin-bottom: 0;
       }
     }
-    
+
     ul, ol {
       padding-left: 1.5em;
       margin: 0.5em 0;
-      
+
       li {
         margin: 0.25em 0;
       }
     }
-    
+
     blockquote {
       border-left: 4px solid var(--wysiwyg-editor-border-focus);
       padding-left: 16px;
@@ -813,24 +813,24 @@ const saveArticle = async (data: typeof formData) => {
       font-style: italic;
       opacity: 0.8;
     }
-    
+
     code {
       background-color: rgba(0, 0, 0, 0.1);
       padding: 2px 4px;
       border-radius: 4px;
       font-family: 'Monaco', 'Menlo', monospace;
     }
-    
+
     a {
       color: var(--wysiwyg-button-active);
       text-decoration: underline;
-      
+
       &:hover {
         text-decoration: none;
       }
     }
   }
-  
+
   // フローティングメニューのスタイル
   .v-wysiwyg-editor__bubble-menu {
     background-color: var(--wysiwyg-toolbar-bg);
@@ -848,7 +848,7 @@ const saveArticle = async (data: typeof formData) => {
     min-height: 120px;
     font-size: 0.875em;
   }
-  
+
   .v-wysiwyg-editor__toolbar {
     padding: 6px 8px;
   }
@@ -860,7 +860,7 @@ const saveArticle = async (data: typeof formData) => {
     min-height: 300px;
     font-size: 1.125em;
   }
-  
+
   .v-wysiwyg-editor__toolbar {
     padding: 10px 16px;
   }
@@ -877,7 +877,7 @@ const saveArticle = async (data: typeof formData) => {
 // エラー状態
 .v-wysiwyg-editor--error {
   border-color: #f44336;
-  
+
   &:focus-within {
     border-color: #f44336;
     box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
@@ -896,7 +896,7 @@ interface VWysiwygEditorProps {
   label?: string                   // ラベルテキスト
   hint?: string                    // ヒントテキスト
   placeholder?: string             // プレースホルダー
-  
+
   // バリデーション
   required?: boolean               // 必須入力
   disabled?: boolean               // 無効状態
@@ -904,7 +904,7 @@ interface VWysiwygEditorProps {
   minLength?: number              // 最小文字数
   maxLength?: number              // 最大文字数
   counter?: boolean               // 文字数カウンター表示
-  
+
   // エディタ設定
   tools?: RawWysiwygEditorTool[]   // ツールバー設定
   extensions?: RawWysiwygExtension[] // 拡張機能
@@ -912,11 +912,11 @@ interface VWysiwygEditorProps {
   disabledMinHeight?: boolean      // 最小高さ無効化
   disabledMaxHeight?: boolean      // 最大高さ無効化
   removeDefaultWrapper?: boolean   // デフォルトラッパー除去
-  
+
   // フォーム統合
   size?: 'small' | 'medium' | 'large' // サイズ
   errorMessages?: string[]         // エラーメッセージ
-  
+
   // アドornment
   startAdornment?: VNodeChild      // 開始装飾
   endAdornment?: VNodeChild        // 終了装飾
