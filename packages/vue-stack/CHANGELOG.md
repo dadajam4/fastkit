@@ -1,5 +1,16 @@
 # @fastkit/vue-stack
 
+## 0.16.20
+
+### Patch Changes
+
+- When a Stack is active, an attribute is now added to its activator element.
+  The following attribute will be applied:
+
+  ```ts
+  export const V_STACK_ACTIVATED_ATTR = 'data-v-stack-activated';
+  ```
+
 ## 0.16.19
 
 ### Patch Changes

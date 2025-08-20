@@ -36,6 +36,7 @@ import {
 } from '../schemes';
 import { useVueStack } from './service';
 import { useTeleport } from './teleport';
+import { V_STACK_ACTIVATED_ATTR } from '../constants';
 
 export type VStackCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
@@ -955,7 +956,17 @@ export function useStackControl(
     }
   });
 
+  let _stopWatchActivatorActiveHandle: (() => void) | undefined;
+
+  const stopWatchActivatorActive = () => {
+    if (_stopWatchActivatorActiveHandle) {
+      _stopWatchActivatorActiveHandle();
+      _stopWatchActivatorActiveHandle = undefined;
+    }
+  };
+
   onBeforeUnmount(() => {
+    stopWatchActivatorActive();
     privateApi.clearDelay();
     privateApi.clearTimeoutId();
     privateApi.removeFocusTrapper();
@@ -993,6 +1004,29 @@ export function useStackControl(
       }
       privateApi.checkFocusTrap();
       onActivated?.(value);
+    },
+    { immediate: true },
+  );
+
+  watch(
+    activatorEl,
+    (el, beforeEl) => {
+      beforeEl?.removeAttribute(V_STACK_ACTIVATED_ATTR);
+      stopWatchActivatorActive();
+
+      if (!el || !IN_WINDOW) return;
+
+      _stopWatchActivatorActiveHandle = watch(
+        () => state.isActive,
+        (isActive) => {
+          if (isActive) {
+            el.setAttribute(V_STACK_ACTIVATED_ATTR, '');
+          } else {
+            el.removeAttribute(V_STACK_ACTIVATED_ATTR);
+          }
+        },
+        { immediate: true },
+      );
     },
     { immediate: true },
   );
