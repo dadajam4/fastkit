@@ -1,5 +1,28 @@
 # @fastkit/vue-stack
 
+## 0.17.0
+
+### Minor Changes
+
+- Various improvements were added for supporting nested Stack elements, as well as minor behavior fixes when using hover. This is mainly useful for implementing nested floating menus.
+
+  ### Fix for onMouseenter behavior
+
+  Fixed an issue where the stack content would not be shown if the mouse entered the activator element while the stack was in a hide transition animation.
+
+  ### Added parent, children, and allChildren properties
+
+  Properties were added to `VStackControl` for referencing parent-child relationships.
+
+  - `parent` The VStackControl instance in the parent hierarchy of the component tree.
+  - `children` List of VStackControl instances located below this component in the component tree.
+  - `allChildren` List of all nested VStackControl instances, including children.
+
+  ### Improved hide logic on onMouseleave
+
+  When the mouse leaves the activator or stack content, the stack will continue to be shown if the mouse is over the activator or stack content of any of its child stacks.
+  This allows nested floating menus to be implemented more naturally.
+
 ## 0.16.20
 
 ### Patch Changes

@@ -15,8 +15,13 @@ import {
   DirectiveArguments,
   cloneVNode,
   watchEffect,
+  inject,
+  provide,
+  markRaw,
+  type Ref,
+  type InjectionKey,
 } from 'vue';
-import { toInt, IN_WINDOW } from '@fastkit/helpers';
+import { toInt, IN_WINDOW, arrayRemove } from '@fastkit/helpers';
 import { attemptFocus, focusFirstDescendant } from '@fastkit/dom';
 import { StyleValue } from '@fastkit/vue-utils';
 import { clickOutsideDirectiveArgument } from '@fastkit/vue-click-outside';
@@ -49,6 +54,13 @@ export interface UseStackControlOptions {
   manualAttrs?: boolean;
 }
 
+const V_STACK_CONTROL_INJECTION_KEY: InjectionKey<VStackControl> =
+  Symbol('VStackControl');
+
+function flattenChildren(stacks: VStackControl[]): VStackControl[] {
+  return stacks.flatMap((stack) => [stack, ...flattenChildren(stack.children)]);
+}
+
 const outsideClickControlFilter = (control: VStackControl) =>
   control.closeOnOutsideClick;
 
@@ -57,63 +69,6 @@ const SUPPORTS_FOCUS_VISIBLE =
   typeof CSS !== 'undefined' &&
   typeof CSS.supports !== 'undefined' &&
   CSS.supports('selector(:focus-visible)');
-
-function StackMouseStates(acceptLeave: () => any) {
-  const delay = 100;
-  let activator = false;
-  let content = false;
-  let closeDelayTimerId: number | null = null;
-
-  const clearCloseDelayTimer = () => {
-    if (closeDelayTimerId !== null) {
-      clearTimeout(closeDelayTimerId);
-      closeDelayTimerId = null;
-    }
-  };
-
-  const startCloseDelayTimer = () => {
-    clearCloseDelayTimer();
-    closeDelayTimerId = window.setTimeout(() => {
-      clearCloseDelayTimer();
-      if (!activator && !content) {
-        acceptLeave();
-      }
-    }, delay);
-  };
-
-  const onEnterActivator = () => {
-    activator = true;
-    clearCloseDelayTimer();
-  };
-
-  const onLeaveActivator = () => {
-    activator = false;
-    startCloseDelayTimer();
-  };
-
-  const onEnterContent = () => {
-    content = true;
-    clearCloseDelayTimer();
-  };
-
-  const onLeaveContent = () => {
-    content = false;
-    startCloseDelayTimer();
-  };
-
-  onBeforeUnmount(clearCloseDelayTimer);
-
-  return {
-    get delay() {
-      return delay;
-    },
-    onEnterActivator,
-    onLeaveActivator,
-    onEnterContent,
-    onLeaveContent,
-    clear: clearCloseDelayTimer,
-  };
-}
 
 export function useStackControl(
   props: VStackProps,
@@ -165,6 +120,7 @@ export function useStackControl(
     { immediate: true },
   );
 
+  const parent = inject(V_STACK_CONTROL_INJECTION_KEY, undefined);
   const $vstack = useVueStack();
   const state = reactive<VStackControlState>({
     isActive: props.lazyBoot ? false : props.modelValue,
@@ -185,6 +141,8 @@ export function useStackControl(
     booted: false,
     guardInProgressType: null,
     isDestroyed: false,
+    isActivatorHovered: false,
+    isContentHovered: false,
   });
 
   const transitioning = computed(() => state.showing || state.closing);
@@ -320,6 +278,73 @@ export function useStackControl(
       undefined) as HTMLElement;
   };
 
+  const isHovered = () => state.isActivatorHovered || state.isContentHovered;
+
+  const isSelfOrNestedHovered = () =>
+    isHovered() || allChildren.value.some((c) => c.isHovered);
+  // const hasActiveChild = () => allChildren.value.some((c) => c.isActive);
+
+  function StackMouseStates(acceptLeave: () => any) {
+    const delay = 100;
+    let closeDelayTimerId: number | null = null;
+
+    const clearCloseDelayTimer = () => {
+      if (closeDelayTimerId !== null) {
+        clearTimeout(closeDelayTimerId);
+        closeDelayTimerId = null;
+      }
+    };
+
+    const startCloseDelayTimer = () => {
+      clearCloseDelayTimer();
+      closeDelayTimerId = window.setTimeout(() => {
+        clearCloseDelayTimer();
+        if (!isSelfOrNestedHovered()) {
+          acceptLeave();
+        }
+      }, delay);
+    };
+
+    const onEnterActivator = () => {
+      state.isActivatorHovered = true;
+      clearCloseDelayTimer();
+    };
+
+    const onLeaveActivator = () => {
+      state.isActivatorHovered = false;
+      startCloseDelayTimer();
+    };
+
+    const onEnterContent = () => {
+      state.isContentHovered = true;
+      clearCloseDelayTimer();
+    };
+
+    const onLeaveContent = () => {
+      state.isContentHovered = false;
+      startCloseDelayTimer();
+    };
+
+    onBeforeUnmount(clearCloseDelayTimer);
+
+    return {
+      get delay() {
+        return delay;
+      },
+      onEnterActivator,
+      onLeaveActivator,
+      onEnterContent,
+      onLeaveContent,
+      clear: clearCloseDelayTimer,
+    };
+  }
+
+  const contains = (el: Element): boolean => {
+    const activator = activatorEl.value;
+    const content = contentRef.value;
+    return !!activator?.contains(el) || !!content?.contains(el) || false;
+  };
+
   const mouseStates = StackMouseStates(() => {
     if (!control.isActive) return;
     const delay = closeDelay.value;
@@ -335,6 +360,7 @@ export function useStackControl(
   };
 
   const handleMouseleaveContent = () => {
+    // if (hasActiveChild()) return;
     privateApi.clearDelay();
     mouseStates.onLeaveContent();
   };
@@ -348,7 +374,9 @@ export function useStackControl(
     onMouseenter: (ev: MouseEvent) => {
       if (props.disabled) return;
       mouseStates.onEnterActivator();
-      if (control.transitioning) return;
+      if (state.showing) return;
+      // Show immediately when hovered during hide transition
+      // if (control.transitioning) return;
       privateApi.clearDelay();
       if (control.isActive) return;
       setActivatorByEvent(ev);
@@ -357,6 +385,7 @@ export function useStackControl(
       });
     },
     onMouseleave: (ev: MouseEvent) => {
+      // if (hasActiveChild()) return;
       privateApi.clearDelay();
       mouseStates.onLeaveActivator();
     },
@@ -616,6 +645,14 @@ export function useStackControl(
         return false;
       }
 
+      const target = ev.target as Element;
+      if (
+        contains(target) ||
+        allChildren.value.some((c) => c.contains(target))
+      ) {
+        return false;
+      }
+
       return control.isActive;
     },
     clearGuardEffect() {
@@ -623,6 +660,14 @@ export function useStackControl(
         clearTimeout(state.guardAnimateTimeId);
       }
       state.guardAnimating = false;
+    },
+    joinChild(child) {
+      nestedChildren.value.push(child);
+      const remover = () => {
+        arrayRemove(nestedChildren.value, child);
+      };
+      onBeforeUnmount(remover);
+      return remover;
     },
   };
 
@@ -664,9 +709,25 @@ export function useStackControl(
     }
   };
 
-  const control: VStackControl = {
+  const nestedChildren: Ref<VStackControl[]> = ref([]);
+
+  const allChildren = computed(() => flattenChildren(nestedChildren.value));
+
+  const control: VStackControl = markRaw({
     __isStackControl: true,
     _: privateApi,
+    get parent() {
+      return parent;
+    },
+    get children() {
+      return nestedChildren.value;
+    },
+    get allChildren() {
+      return allChildren.value;
+    },
+    get isHovered() {
+      return isHovered();
+    },
     get $service() {
       return $vstack;
     },
@@ -765,6 +826,7 @@ export function useStackControl(
     get disabled() {
       return props.disabled;
     },
+    contains,
     setActivator(query) {
       activatorEl.value = getActivator(query);
       return this;
@@ -862,6 +924,7 @@ export function useStackControl(
       // }
 
       let $child: VNode | undefined;
+
       if (booted) {
         if (needRender) {
           const children = defaultSlot && defaultSlot(control);
@@ -938,7 +1001,10 @@ export function useStackControl(
         </>
       );
     },
-  };
+  });
+
+  provide(V_STACK_CONTROL_INJECTION_KEY, control);
+  parent?._.joinChild(control);
 
   onBeforeMount(() => {
     $vstack.add(control);
@@ -995,6 +1061,13 @@ export function useStackControl(
   watch(
     () => state.isActive,
     (value) => {
+      if (!value) {
+        state.isContentHovered = false;
+        for (const child of allChildren.value) {
+          child.close();
+        }
+      }
+
       if (value) {
         privateApi.setNeedRender(true);
       } else if (state.activator) {
@@ -1014,7 +1087,12 @@ export function useStackControl(
       beforeEl?.removeAttribute(V_STACK_ACTIVATED_ATTR);
       stopWatchActivatorActive();
 
-      if (!el || !IN_WINDOW) return;
+      if (!el) {
+        state.isActivatorHovered = false;
+        return;
+      }
+
+      if (!IN_WINDOW) return;
 
       _stopWatchActivatorActiveHandle = watch(
         () => state.isActive,

@@ -118,6 +118,10 @@ export interface VStackControlState {
   booted: boolean;
   /** Component destroyed */
   isDestroyed: boolean;
+  /** Whether the activator element is being hovered. */
+  isActivatorHovered: boolean;
+  /** Whether the stack content is being hovered. */
+  isContentHovered: boolean;
 }
 
 /**
@@ -234,6 +238,27 @@ export interface VStackControl {
    * When true, it signifies that the guard is actively executing.
    */
   readonly guardInProgress: boolean;
+  /**
+   * The VStackControl instance in the parent hierarchy of the component tree.
+   */
+  readonly parent: VStackControl | undefined;
+  /**
+   * List of VStackControl instances located below this component in the component tree.
+   */
+  readonly children: VStackControl[];
+  /**
+   * List of all nested VStackControl instances, including children.
+   */
+  readonly allChildren: VStackControl[];
+  /**
+   * Whether the mouse pointer is hovering over its activator or stack content.
+   */
+  readonly isHovered: boolean;
+  /**
+   * Whether the specified element is part of its activator or stack element.
+   * @param el - Element
+   */
+  contains(el: Element): boolean;
 
   /** @private */
   readonly _: {
@@ -298,6 +323,7 @@ export interface VStackControl {
     outsideClickCloseConditional(ev: MouseEvent, pre?: boolean): boolean;
     /** Clear guard effect */
     clearGuardEffect(): void;
+    joinChild(child: VStackControl): (() => void);
   };
   /**
    * Set the activator

@@ -185,10 +185,52 @@ export default defineComponent({
 
         <VTooltip
           v-slots={{
-            activator: ({ attrs }) => <VButton {...attrs}>hober me!</VButton>,
-          }}>
-          これはツールチップです
-        </VTooltip>
+            activator: ({ attrs, control }) => (
+              <VButton {...attrs}>
+                hober me!{control.allChildren.length}
+              </VButton>
+            ),
+            default: (control) => (
+              <>
+                これはツールチップです
+                <VTooltip
+                  v-slots={{
+                    activator: ({ attrs }) => (
+                      <VButton {...attrs}>hober me!</VButton>
+                    ),
+                    default: () => (
+                      <>
+                        これはツールチップです
+                        <VTooltip
+                          v-slots={{
+                            activator: ({ attrs }) => (
+                              <VButton {...attrs}>hober me!</VButton>
+                            ),
+                          }}>
+                          これはツールチップです
+                          <VTooltip
+                            v-slots={{
+                              activator: ({ attrs }) => (
+                                <div>
+                                  <VButton {...attrs}>hober me!</VButton>
+                                  <VButton onClick={() => control.close()}>
+                                    Close Menu
+                                  </VButton>
+                                </div>
+                              ),
+                            }}>
+                            これはツールチップです
+                            <VButton onClick={() => control.close()}>
+                              Close Menu
+                            </VButton>
+                          </VTooltip>
+                        </VTooltip>
+                      </>
+                    ),
+                  }}></VTooltip>
+              </>
+            ),
+          }}></VTooltip>
 
         <VTextField label="hello" list={[2021, 2022, { value: '2023' }]} />
 
