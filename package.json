@@ -90,9 +90,9 @@
     "vue": "3.4.33",
     "vue-router": "^4.4.0"
   },
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@10.15.0",
   "engines": {
-    "node": ">=20.10.0",
+    "node": ">=22.18.0",
     "npm": "use pnpm",
     "pnpm": ">=9",
     "yarn": "use pnpm"
