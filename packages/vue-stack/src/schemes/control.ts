@@ -8,6 +8,7 @@ import {
   SetupContext,
   SlotsType,
   ComponentPublicInstance,
+  type HTMLAttributes,
 } from 'vue';
 import { RouteLocationNormalized } from 'vue-router';
 import { StyleValue, defineSlots, rawNumberProp } from '@fastkit/vue-utils';
@@ -564,6 +565,16 @@ export type VStackActivatorQuery =
   | ComponentPublicInstance
   | (() => Element | ComponentPublicInstance | void | undefined | null);
 
+export type VStackActivatorAttrsObject = HTMLAttributes & Record<string, any>;
+
+export type VStackActivatorAttrsFn = (ctx: {
+  control: VStackControl;
+}) => VStackActivatorAttrsObject | undefined;
+
+export type VStackActivatorAttrsSpec =
+  | VStackActivatorAttrsFn
+  | VStackActivatorAttrsObject;
+
 export function createStackableProps<T extends string | JavaScriptTransition>(
   opts: CreateStackablePropsOptions = {},
 ) {
@@ -766,6 +777,16 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
      * @see {@link StackableResolveHandler}
      */
     cancelHandler: Function as PropType<StackableResolveHandler>,
+    /**
+     * Additional attributes to apply to the element attributes of the activator slot parameters
+     *
+     * If set, the attributes will be added to the `attrs` property
+     * object of the activator slot.
+     *
+     * @see {@link VStackActivatorAttrsSpec}
+     */
+    activatorAttrs: [Function, Object] as PropType<VStackActivatorAttrsSpec>,
+
     ...V_STACK_SLOTS(),
   };
 }

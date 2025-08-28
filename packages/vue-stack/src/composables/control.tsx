@@ -38,10 +38,12 @@ import {
   VStackNavigationGuard,
   VStackActivatorQuery,
   StackableTabCloseSetting,
+  type VStackActivatorAttrsSpec,
+  type VStackActivatorAttrsObject,
 } from '../schemes';
 import { useVueStack } from './service';
 import { useTeleport } from './teleport';
-import { V_STACK_ACTIVATED_ATTR } from '../constants';
+import { V_STACK_ACTIVATED_ATTR, V_STACK_TYPE_ATTR } from '../constants';
 
 export type VStackCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
@@ -50,8 +52,23 @@ export interface UseStackControlOptions {
   onContentMounted?: (content: HTMLElement) => any;
   onContentDetached?: () => any;
   transitionResolver?: () => string;
+  /**
+   * A string or symbol used to identify the stack
+   *
+   * If set, the activator element will be given an attribute
+   * in the form of `data-v-stack-type="${stackType}"`.
+   */
   stackType?: string | symbol;
   manualAttrs?: boolean;
+  /**
+   * Additional attributes to apply to the element attributes of the activator slot parameters
+   *
+   * If set, the attributes will be added to the `attrs` property
+   * object of the activator slot.
+   *
+   * @see {@link VStackActivatorAttrsSpec}
+   */
+  activatorAttrs?: VStackActivatorAttrsSpec;
 }
 
 const V_STACK_CONTROL_INJECTION_KEY: InjectionKey<VStackControl> =
@@ -408,10 +425,42 @@ export function useStackControl(
     },
   };
 
+  const resolveActivatorAttrsSpec = (
+    spec: VStackActivatorAttrsSpec | undefined,
+  ): VStackActivatorAttrsObject | undefined => {
+    if (typeof spec === 'function') {
+      return spec({ control });
+    }
+    return spec;
+  };
+
+  const stackTypeName =
+    (typeof opts.stackType === 'string'
+      ? opts.stackType
+      : opts.stackType?.description) || undefined;
+
   const activatorAttrs = computed<VStackActivatorAttributes>(() => {
-    const attrs: VStackActivatorAttributes = {
+    const baseAttr: VStackActivatorAttrsObject = stackTypeName
+      ? {
+          [V_STACK_TYPE_ATTR]: stackTypeName,
+        }
+      : {};
+
+    const setupAttrs = resolveActivatorAttrsSpec(opts.activatorAttrs);
+    const propAttrs = resolveActivatorAttrsSpec(props.activatorAttrs);
+    const classNames: string[] = [];
+    setupAttrs?.class && classNames.push(setupAttrs?.class);
+    propAttrs?.class && classNames.push(propAttrs?.class);
+
+    const attrs: VStackActivatorAttributes & { class?: any } = {
+      ...baseAttr,
+      ...setupAttrs,
+      ...propAttrs,
       ref: activatorRef,
     };
+    if (classNames.length) {
+      attrs.class = classNames;
+    }
     if (openOnClick.value) {
       attrs.onClick = availableEvents.onClick;
     }

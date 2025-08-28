@@ -34,6 +34,7 @@ import {
   setupStackableComponent,
   StackableSetupContext,
   EmitsToPropOptions,
+  type UseStackControlOptions,
 } from '../composables';
 import { logger, VueStackError } from '../logger';
 import { getScrollParents } from '../utils';
@@ -369,7 +370,8 @@ export interface DefineMenuSettings<
       Slots,
       MenuAPI
     >,
-    CreateMenuSchemeOptions {
+    CreateMenuSchemeOptions,
+    Pick<UseStackControlOptions, 'activatorAttrs' | 'stackType'> {
   props?: Props;
   emits?: Emits;
   slots?: Slots;
@@ -386,7 +388,7 @@ export function defineMenuComponent<
   Slots extends SlotsType = SlotsType<{}>,
 >(settings: DefineMenuSettings<Props, Emits, Slots>) {
   const baseScheme = createMenuScheme(settings);
-  const { name, props, emits } = settings;
+  const { name, props, emits, activatorAttrs, stackType } = settings;
 
   const Component = defineComponent({
     name,
@@ -415,6 +417,8 @@ export function defineMenuComponent<
           updateRects();
         },
         transitionResolver,
+        stackType,
+        activatorAttrs,
       });
 
       // eslint-disable-next-line no-shadow

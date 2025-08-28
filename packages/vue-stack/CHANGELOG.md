@@ -1,5 +1,29 @@
 # @fastkit/vue-stack
 
+## 0.17.1
+
+### Patch Changes
+
+- Specifications and options have been added to identify stack activator elements.
+
+  ### `stackType` added to activator slot element attributes
+
+  When `stackType` is specified in `useStackControl()` or `defineMenuComponent()`, it will now be applied as a `data-v-stack-type` attribute.
+
+  ### New option for adding attributes to activator slot elements
+
+  A new option `activatorAttrs` has been added to `useStackControl()`, `defineMenuComponent()`, and the Stack component props.
+  By setting attributes or a function that returns attributes to this option, additional element attributes will be applied to the activator slot.
+
+  ```ts
+  export const menuComponent = defineMenuComponent({
+    stackType: 'MyMenu',
+    activatorAttrs: () => ({
+      class: 'this-is-my-menu-activator',
+    }),
+  });
+  ```
+
 ## 0.17.0
 
 ### Minor Changes
