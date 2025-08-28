@@ -1,5 +1,19 @@
 # @fastkit/vue-stack
 
+## 0.17.2
+
+### Patch Changes
+
+- Fixed an issue in the calculation process of menu element size and position.
+
+  Previously, when a menu element was resized, the correction process was triggered immediately upon detection by `ResizeObserver`. However, in certain cases, the following warning could occur:
+
+  ```
+  ResizeObserver loop completed with undelivered notifications
+  ```
+
+  To prevent this warning, the resize correction process is now deferred until the `requestAnimationFrame` callback timing after a resize is detected. This change has no visual impact on existing behavior.
+
 ## 0.17.1
 
 ### Patch Changes

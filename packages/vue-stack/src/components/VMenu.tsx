@@ -436,6 +436,20 @@ export function defineMenuComponent<
         pageYOffset: 0,
       });
 
+      const menuResizeHandler = (rect: ResizeDirectivePayload) => {
+        menuResizeHandler._clear();
+        menuResizeHandler._id = requestAnimationFrame(() => {
+          updateRects(rect);
+        });
+      };
+      menuResizeHandler._id = undefined as number | undefined;
+      menuResizeHandler._clear = () => {
+        if (menuResizeHandler._id !== undefined) {
+          cancelAnimationFrame(menuResizeHandler._id);
+          menuResizeHandler._id = undefined;
+        }
+      };
+
       function _disposeIntersectionObserver() {
         if (_intersectionObserver) {
           _intersectionObserver.disconnect();
@@ -1187,6 +1201,7 @@ export function defineMenuComponent<
       onBeforeUnmount(() => {
         _disposeIntersectionObserver();
         resetScrollerScroll();
+        menuResizeHandler._clear();
       });
 
       const stackMenuCtx: typeof baseCtx = {
@@ -1258,21 +1273,13 @@ export function defineMenuComponent<
       });
 
       return () =>
-        control.render((children) =>
-          withDirectives(
-            <div {...hostAttrs.value} style={_styles.value} ref={_scrollerRef}>
-              {withDirectives(render(children, stackMenuCtx as any), [
-                resizeDirectiveArgument(updateRects),
-              ])}
-            </div>,
-            [
-              resizeDirectiveArgument({
-                handler: updateRects,
-                rootMode: true,
-              }),
-            ],
-          ),
-        );
+        control.render((children) => (
+          <div {...hostAttrs.value} style={_styles.value} ref={_scrollerRef}>
+            {withDirectives(render(children, stackMenuCtx as any), [
+              resizeDirectiveArgument(menuResizeHandler),
+            ])}
+          </div>
+        ));
     },
   });
 

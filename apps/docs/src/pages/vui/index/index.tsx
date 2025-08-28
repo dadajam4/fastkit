@@ -14,8 +14,8 @@ import { range } from '@fastkit/helpers';
 function Test(attrs: any = {}) {
   return (
     <VSelect
-      items={range(5, 1).map((i) => ({
-        label: `オプション${i}`,
+      items={range(50, 1).map((i) => ({
+        label: `オプションオプションオプション${i}`,
         value: String(i),
       }))}
       {...attrs}
