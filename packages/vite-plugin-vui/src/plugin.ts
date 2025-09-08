@@ -8,8 +8,9 @@ import { Eta } from 'eta';
 import { VitePluginVuiError } from './logger';
 
 const COLOR_DUMP_STYLE = `${`
-@layer vui-normalize, vui-color-scheme, vue-loading, vue-app-layout, vui;
+@layer vui-normalize, vui-color-scheme, vue-disabled-reason, vue-loading, vue-app-layout, vui;
 @include dump-color-scheme(true, "vui-color-scheme");
+@import '@fastkit/vue-disabled-reason/vue-disabled-reason.css';
 @import '@fastkit/vue-stack/vue-stack.css';
 @import '@fastkit/vue-app-layout/vue-app-layout.css';
 @import '@fastkit/vue-loading/vue-loading.css';

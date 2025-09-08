@@ -5,6 +5,7 @@ export * from './VSnackbar';
 export * from './VTooltip';
 export * from './VSheetModal';
 export * from './VSkeltonLoader';
+export * from './VDisabledReason';
 export * from './VBusyImage';
 export * from './VGrid';
 export * from './VPaper';

@@ -1,5 +1,16 @@
 # @fastkit/vite-plugin-vui
 
+## 2.2.5
+
+### Patch Changes
+
+- Added `VDisabledReason` component.
+
+  This component allows you to display the reason why an interactive element (regardless of whether it is a built-in VUI component) is disabled when hovered or focused.
+
+- Updated dependencies []:
+  - @fastkit/vui@0.20.5
+
 ## 2.2.4
 
 ### Patch Changes

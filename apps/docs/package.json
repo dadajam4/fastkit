@@ -25,6 +25,7 @@
     "@fastkit/vite-plugin-vui": "workspace:^",
     "@fastkit/vot": "workspace:^",
     "@fastkit/vue-app-layout": "workspace:^",
+    "@fastkit/vue-disabled-reason": "workspace:^",
     "@fastkit/vue-loading": "workspace:^",
     "@fastkit/vue-scroller": "workspace:^",
     "@fastkit/vue-sortable": "workspace:^",

@@ -1,5 +1,12 @@
 # @fastkit/vue-location
 
+## 0.4.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.15.13
+
 ## 0.4.2
 
 ### Patch Changes

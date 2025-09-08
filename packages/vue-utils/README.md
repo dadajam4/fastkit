@@ -22,14 +22,14 @@ A comprehensive utility library for efficient Vue application development. Provi
 npm install @fastkit/vue-utils
 ```
 
-## コンポーネントユーティリティ
+## Component Utilities
 
-### defineSlots - スロット定義
+### defineSlots - Slot Definition
 
 ```typescript
 import { defineSlots } from '@fastkit/vue-utils'
 
-// スロットの型安全な定義
+// Type-safe slot definition
 const slots = defineSlots<{
   default?: (props: { item: any; index: number }) => any
   header?: (props: { title: string }) => any
@@ -58,7 +58,7 @@ export const MyComponent = defineComponent({
 })
 ```
 
-### withCtx - コンテキスト付きスロット
+### withCtx - Context-aware Slots
 
 ```typescript
 import { withCtx } from '@fastkit/vue-utils'
@@ -82,14 +82,14 @@ export const DataTable = defineComponent({
 })
 ```
 
-## プロパティ管理
+## Property Management
 
-### createPropsOptions - プロパティファクトリ
+### createPropsOptions - Property Factory
 
 ```typescript
 import { createPropsOptions } from '@fastkit/vue-utils'
 
-// 再利用可能なプロパティ定義
+// Reusable property definitions
 export const createSizeProps = () => createPropsOptions({
   size: {
     type: String as PropType<'small' | 'medium' | 'large'>,
@@ -158,9 +158,9 @@ export const useBreadcrumb = () => {
 }
 ```
 
-## ルーターユーティリティ
+## Router Utilities
 
-### ルートクエリ処理
+### Route Query Processing
 
 ```typescript
 import { getRouteQuery, RouteQueryType } from '@fastkit/vue-utils'
@@ -169,7 +169,7 @@ export const useSearchParams = () => {
   const route = useRoute()
   const router = useRouter()
 
-  // 型安全なクエリパラメータ取得
+  // Type-safe query parameter retrieval
   const search = computed(() => getRouteQuery(route, 'search', RouteQueryType.String))
   const page = computed(() => getRouteQuery(route, 'page', RouteQueryType.Number) || 1)
   const filters = computed(() => getRouteQuery(route, 'filters', RouteQueryType.Array))
@@ -192,7 +192,7 @@ export const useSearchParams = () => {
 }
 ```
 
-### ルートガード
+### Route Guards
 
 ```typescript
 import { RouteLocationNormalized } from 'vue-router'
@@ -258,7 +258,7 @@ export const DynamicRenderer = defineComponent({
 />
 ```
 
-### 条件付きレンダリング
+### Conditional Rendering
 
 ```typescript
 import { conditionalRender } from '@fastkit/vue-utils'
@@ -274,6 +274,124 @@ export const ConditionalComponent = defineComponent({
       () => slots.default?.(),
       () => renderVNodeChild(props.fallback)
     )
+  }
+})
+```
+
+### VNode DOM Element Detection
+
+#### isElementVNode - DOM Element VNode Detection
+
+Determines whether a VNode corresponds to an actual DOM element.
+
+```typescript
+import { isElementVNode } from '@fastkit/vue-utils'
+
+export const ComponentInspector = defineComponent({
+  setup() {
+    const myRef = ref<ComponentPublicInstance>()
+
+    const checkVNode = () => {
+      const instance = getCurrentInstance()
+      if (instance?.subTree) {
+        const isRealElement = isElementVNode(instance.subTree)
+        console.log('VNode corresponds to DOM element:', isRealElement)
+      }
+    }
+
+    return { myRef, checkVNode }
+  }
+})
+```
+
+#### findFirstDomVNode - First DOM Element VNode Search
+
+Recursively searches a VNode tree and finds the first VNode that corresponds to an actual DOM element.
+
+```typescript
+import { findFirstDomVNode, type VNodeSkipHandler } from '@fastkit/vue-utils'
+
+export const VNodeTraverser = defineComponent({
+  setup() {
+    const containerRef = ref<HTMLElement>()
+
+    const findTargetElement = () => {
+      const instance = getCurrentInstance()
+      if (instance?.subTree) {
+        // Basic usage
+        const firstDomVNode = findFirstDomVNode(instance.subTree.children)
+        console.log('First DOM VNode:', firstDomVNode)
+
+        // Usage with skip handler
+        const skipHandler: VNodeSkipHandler = (vnode, el) => {
+          // Skip elements with data-skip attribute
+          if (el.hasAttribute('data-skip')) {
+            return true // Skip
+          }
+          // Only target elements with class="target"
+          if (!el.classList.contains('target')) {
+            return true // Skip
+          }
+          // Continue processing when condition is met
+          return undefined
+        }
+
+        const targetVNode = findFirstDomVNode(
+          instance.subTree.children,
+          skipHandler
+        )
+        console.log('Matching condition VNode:', targetVNode)
+      }
+    }
+
+    return { containerRef, findTargetElement }
+  }
+})
+```
+
+### Practical VNode Search Example
+
+```typescript
+import { defineComponent, getCurrentInstance } from 'vue'
+import { findFirstDomVNode } from '@fastkit/vue-utils'
+
+export const AccessibilityHelper = defineComponent({
+  setup() {
+    const findFocusableElement = () => {
+      const instance = getCurrentInstance()
+      if (!instance?.subTree) return
+
+      // Search for focusable elements
+      const focusableVNode = findFirstDomVNode(
+        instance.subTree.children,
+        (vnode, el) => {
+          const tagName = el.tagName.toLowerCase()
+          
+          // Skip disabled or hidden elements
+          if (el.hasAttribute('disabled') || el.hasAttribute('hidden')) {
+            return true
+          }
+
+          // Check if element is focusable
+          const focusable = [
+            'button', 'input', 'select', 'textarea', 'a'
+          ].includes(tagName) || el.hasAttribute('tabindex')
+
+          if (!focusable) {
+            return true // Skip
+          }
+
+          // Condition met
+          return undefined
+        }
+      )
+
+      if (focusableVNode?.el instanceof HTMLElement) {
+        focusableVNode.el.focus()
+      }
+    }
+
+    return { findFocusableElement }
   }
 })
 ```
@@ -327,7 +445,7 @@ const chartData = ref([])
     </template>
 
     <template #fallback>
-      <div>クライアント側で読み込み中...</div>
+      <div>Loading on client side...</div>
     </template>
   </ClientOnly>
 </template>
@@ -342,19 +460,19 @@ const AsyncHeavyComponent = defineAsyncComponent(() =>
 </script>
 ```
 
-## カスタムディレクティブ
+## Custom Directives
 
-### v-visibility ディレクティブ
+### v-visibility Directive
 
 ```vue
 <template>
   <div>
-    <!-- 要素の可視性監視 -->
+    <!-- Element visibility monitoring -->
     <div
       v-visibility="onVisibilityChange"
       class="observed-element"
     >
-      観視されている要素
+      Observed element
     </div>
 
     <!-- With options -->
@@ -408,7 +526,7 @@ const createBaseProps = () => createPropsOptions({
   style: [String, Object] as PropType<any>
 })
 
-// 特定機能のプロパティ
+// Feature-specific properties
 const createFormFieldProps = () => createPropsOptions({
   ...createBaseProps(),
   name: String,
@@ -420,7 +538,7 @@ const createFormFieldProps = () => createPropsOptions({
   helperText: String
 })
 
-// コンポーネントファクトリ関数
+// Component factory function
 export function createFormField<T>(
   fieldType: string,
   extraProps: Record<string, any> = {},
@@ -438,7 +556,7 @@ export function createFormField<T>(
   })
 }
 
-// 具体的なフィールドコンポーネント
+// Specific field components
 export const FormInput = createFormField(
   'Input',
   {
@@ -468,7 +586,7 @@ export const FormInput = createFormField(
 )
 ```
 
-### 高度なルーターフック
+### Advanced Router Hooks
 
 ```typescript
 import { computed, ref, watch } from 'vue'
@@ -538,7 +656,7 @@ export function useAdvancedRouter() {
   }
 }
 
-// 使用例
+// Usage example
 export function useProductFilters() {
   const { createQueryManager } = useAdvancedRouter()
 
@@ -552,7 +670,7 @@ export function useProductFilters() {
   })
 
   const applyFilters = (filters: Partial<typeof queryValues.value>) => {
-    updateQuery({ ...filters, page: 1 }) // フィルタ変更時はページをリセット
+    updateQuery({ ...filters, page: 1 }) // Reset page when filters change
   }
 
   return {
@@ -563,7 +681,7 @@ export function useProductFilters() {
 }
 ```
 
-### 動的コンポーネントローダー
+### Dynamic Component Loader
 
 ```typescript
 import { defineAsyncComponent, ref, computed } from 'vue'
@@ -606,9 +724,9 @@ export function useDynamicComponents() {
 }
 ```
 
-## パフォーマンス最適化
+## Performance Optimization
 
-### メモ化とキャッシュ
+### Memoization and Caching
 
 ```typescript
 import { computed, ref, shallowRef } from 'vue'
@@ -660,45 +778,45 @@ export function useOptimizedList<T>(
 }
 ```
 
-## API リファレンス
+## API Reference
 
-### コンポーネントユーティリティ
+### Component Utilities
 
 ```typescript
-// スロット定義
+// Slot definition
 function defineSlots<T extends Record<string, (...args: any[]) => any>>(): PropType<T>
 
-// コンテキスト付きレンダリング
+// Context-aware rendering
 function withCtx<T>(fn: () => VNodeChild, ctx?: T): VNodeChild
 
-// コンポーネント型チェック
+// Component type checking
 function isComponentCustomOptions(Component: unknown): Component is ComponentCustomOptions
 ```
 
-### プロパティ管理
+### Property Management
 
 ```typescript
-// プロパティオプション作成
+// Property option creation
 function createPropsOptions<T extends Record<string, any>>(props: T): T
 
-// プロパティ型抽出
+// Component prop type extraction
 type ExtractComponentPropTypes<C extends { setup?: DefineComponent<any>['setup'] }>
 ```
 
-### ルーターユーティリティ
+### Router Utilities
 
 ```typescript
-// ルートクエリ取得
+// Route query retrieval
 function getRouteQuery(
   route: RouteLocationNormalizedLoaded,
   key: string,
   type: RouteQueryType
 ): any
 
-// ルートアイテム抽出
+// Route matched items extraction
 function extractRouteMatchedItems(route: RouteLocationNormalizedLoaded): RouteMatchedItem[]
 
-// クエリタイプ
+// Query types
 enum RouteQueryType {
   String,
   Number,
@@ -707,10 +825,29 @@ enum RouteQueryType {
 }
 ```
 
-### コンポーネント
+### VNode Utilities
 
 ```typescript
-// クライアント専用レンダリング
+// DOM element VNode detection
+function isElementVNode(vnode: VNode): boolean
+
+// Skip handler type
+type VNodeSkipHandler = (
+  currentVNode: VNode,
+  el: Element
+) => boolean | VNode | void
+
+// First DOM element VNode search
+function findFirstDomVNode(
+  children: VNode | VNodeNormalizedChildren | undefined,
+  skipVNode?: VNodeSkipHandler
+): VNode | undefined
+```
+
+### Components
+
+```typescript
+// Client-only rendering
 interface ClientOnlyProps {
   fallback?: VNodeChild
   placeholder?: VNodeChild
@@ -719,11 +856,11 @@ interface ClientOnlyProps {
 
 ## Related Packages
 
-- `@fastkit/helpers` - ヘルパー関数
-- `@fastkit/ts-type-utils` - TypeScript型ユーティリティ
-- `@fastkit/visibility` - 可視性検出
-- `vue` - Vue.js フレームワーク（ピア依存関係）
-- `vue-router` - Vue Router（ピア依存関係）
+- `@fastkit/helpers` - Helper functions
+- `@fastkit/ts-type-utils` - TypeScript type utilities
+- `@fastkit/visibility` - Visibility detection
+- `vue` - Vue.js framework (peer dependency)
+- `vue-router` - Vue Router (peer dependency)
 
 ## License
 

@@ -277,6 +277,124 @@ export const ConditionalComponent = defineComponent({
 })
 ```
 
+### VNode DOM要素判定とDOM要素検索
+
+#### isElementVNode - DOM要素に対応するVNode判定
+
+VNodeが実際のDOM要素に対応しているかを判定します。
+
+```typescript
+import { isElementVNode } from '@fastkit/vue-utils'
+
+export const ComponentInspector = defineComponent({
+  setup() {
+    const myRef = ref<ComponentPublicInstance>()
+
+    const checkVNode = () => {
+      const instance = getCurrentInstance()
+      if (instance?.subTree) {
+        const isRealElement = isElementVNode(instance.subTree)
+        console.log('VNodeがDOM要素に対応:', isRealElement)
+      }
+    }
+
+    return { myRef, checkVNode }
+  }
+})
+```
+
+#### findFirstDomVNode - 最初のDOM要素VNode検索
+
+VNodeツリーを再帰的に検索し、実際のDOM要素に対応する最初のVNodeを見つけます。
+
+```typescript
+import { findFirstDomVNode, type VNodeSkipHandler } from '@fastkit/vue-utils'
+
+export const VNodeTraverser = defineComponent({
+  setup() {
+    const containerRef = ref<HTMLElement>()
+
+    const findTargetElement = () => {
+      const instance = getCurrentInstance()
+      if (instance?.subTree) {
+        // 基本的な使用
+        const firstDomVNode = findFirstDomVNode(instance.subTree.children)
+        console.log('最初のDOM VNode:', firstDomVNode)
+
+        // スキップハンドラー付きの使用
+        const skipHandler: VNodeSkipHandler = (vnode, el) => {
+          // data-skip属性がある要素をスキップ
+          if (el.hasAttribute('data-skip')) {
+            return true // スキップ
+          }
+          // class="target"の要素のみを対象とする
+          if (!el.classList.contains('target')) {
+            return true // スキップ
+          }
+          // 条件に合致したら処理を続行
+          return undefined
+        }
+
+        const targetVNode = findFirstDomVNode(
+          instance.subTree.children,
+          skipHandler
+        )
+        console.log('条件に合致するVNode:', targetVNode)
+      }
+    }
+
+    return { containerRef, findTargetElement }
+  }
+})
+```
+
+### 実用的なVNode検索例
+
+```typescript
+import { defineComponent, getCurrentInstance } from 'vue'
+import { findFirstDomVNode } from '@fastkit/vue-utils'
+
+export const AccessibilityHelper = defineComponent({
+  setup() {
+    const findFocusableElement = () => {
+      const instance = getCurrentInstance()
+      if (!instance?.subTree) return
+
+      // フォーカス可能な要素を検索
+      const focusableVNode = findFirstDomVNode(
+        instance.subTree.children,
+        (vnode, el) => {
+          const tagName = el.tagName.toLowerCase()
+          
+          // 非活性状態やhidden属性がある要素をスキップ
+          if (el.hasAttribute('disabled') || el.hasAttribute('hidden')) {
+            return true
+          }
+
+          // フォーカス可能な要素かチェック
+          const focusable = [
+            'button', 'input', 'select', 'textarea', 'a'
+          ].includes(tagName) || el.hasAttribute('tabindex')
+
+          if (!focusable) {
+            return true // スキップ
+          }
+
+          // 条件に合致
+          return undefined
+        }
+      )
+
+      if (focusableVNode?.el instanceof HTMLElement) {
+        focusableVNode.el.focus()
+      }
+    }
+
+    return { findFocusableElement }
+  }
+})
+```
+
 ## ClientOnlyコンポーネント
 
 ### SSR対応のクライアント専用レンダリング
@@ -704,6 +822,25 @@ enum RouteQueryType {
   Boolean,
   Array
 }
+```
+
+### VNodeユーティリティ
+
+```typescript
+// DOM要素に対応するVNode判定
+function isElementVNode(vnode: VNode): boolean
+
+// スキップハンドラー型
+type VNodeSkipHandler = (
+  currentVNode: VNode,
+  el: Element
+) => boolean | VNode | void
+
+// 最初のDOM要素VNode検索
+function findFirstDomVNode(
+  children: VNode | VNodeNormalizedChildren | undefined,
+  skipVNode?: VNodeSkipHandler
+): VNode | undefined
 ```
 
 ### コンポーネント

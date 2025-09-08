@@ -1,0 +1,23 @@
+@use '../../styles/core.scss';
+
+@layer vui {
+  .v-disabled-reason {
+    @include core.remove-tap-highlight;
+
+    /* stylelint-disable-next-line no-duplicate-selectors */
+    & {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: block;
+      pointer-events: none;
+      cursor: default;
+      border-radius: inherit;
+    }
+
+    // Match elements with tabindex 0 or greater
+    &[tabindex]:not([tabindex^='-']) {
+      pointer-events: auto;
+    }
+  }
+}

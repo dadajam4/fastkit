@@ -1,5 +1,14 @@
 # @fastkit/vue-utils
 
+## 0.15.13
+
+### Patch Changes
+
+- Added VNode search utilities.
+
+  - `isElementVNode` - Utility function to check if a VNode corresponds to a real DOM element.
+  - `findFirstDomVNode` - Recursively searches a VNode tree and returns the first DOM-backed VNode.
+
 ## 0.15.12
 
 ### Patch Changes

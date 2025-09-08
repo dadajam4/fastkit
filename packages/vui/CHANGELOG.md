@@ -1,5 +1,29 @@
 # @fastkit/vui
 
+## 0.20.5
+
+### Patch Changes
+
+- Added `VDisabledReason` component.
+
+  This component allows you to display the reason why an interactive element (regardless of whether it is a built-in VUI component) is disabled when hovered or focused.
+
+- Updated dependencies []:
+  - @fastkit/vue-disabled-reason@0.0.1
+  - @fastkit/vue-utils@0.15.13
+  - @fastkit/vue-action@0.3.20
+  - @fastkit/vue-app-layout@0.16.3
+  - @fastkit/vue-body-scroll-lock@0.2.14
+  - @fastkit/vue-click-outside@0.2.13
+  - @fastkit/vue-color-scheme@0.15.16
+  - @fastkit/vue-form-control@0.21.1
+  - @fastkit/vue-loading@0.15.16
+  - @fastkit/vue-location@0.4.3
+  - @fastkit/vue-resize@0.2.13
+  - @fastkit/vue-scroller@0.15.13
+  - @fastkit/vue-stack@0.17.3
+  - @fastkit/vue-transitions@0.2.14
+
 ## 0.20.4
 
 ### Patch Changes

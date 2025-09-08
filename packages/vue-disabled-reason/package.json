@@ -1,18 +1,13 @@
 {
-  "name": "@fastkit/vue-i18n",
-  "version": "0.14.13",
-  "description": "@fastkit/vue-i18n",
+  "name": "@fastkit/vue-disabled-reason",
+  "version": "0.0.1",
+  "description": "A headless Vue utility that monitors disabled elements and provides a slot or render function to display the reason.",
   "keywords": [
     "fastkit",
-    "i18n",
-    "translation",
-    "localisation",
-    "localization",
-    "locale",
-    "intl",
-    "vue"
+    "vue",
+    "disabled"
   ],
-  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-i18n#readme",
+  "homepage": "https://github.com/dadajam4/fastkit/tree/dev/packages/vue-disabled-reason#readme",
   "bugs": {
     "url": "https://github.com/dadajam4/fastkit/issues"
   },
@@ -25,20 +20,21 @@
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
+    "./vue-disabled-reason.css": "./dist/vue-disabled-reason.css",
     ".": {
-      "types": "./dist/vue-i18n.d.ts",
+      "types": "./dist/vue-disabled-reason.d.ts",
       "import": {
-        "default": "./dist/vue-i18n.mjs"
+        "default": "./dist/vue-disabled-reason.mjs"
       }
     },
     "./*": "./dist/*"
   },
-  "main": "./dist/vue-i18n.mjs",
-  "types": "./dist/vue-i18n.d.ts",
+  "main": "./dist/vue-disabled-reason.mjs",
+  "types": "./dist/vue-disabled-reason.d.ts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-i18n.d.ts"
+        "./dist/vue-disabled-reason.d.ts"
       ]
     }
   },
@@ -57,25 +53,20 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:^",
-    "@fastkit/i18n": "workspace:^",
-    "@fastkit/tiny-logger": "workspace:^",
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.4.0",
-    "vue-router": "^4.4.0"
+    "vue": "^3.4.0"
   },
   "peerDependencies": {
-    "vue": "^3.4.0",
-    "vue-router": "^4.4.0"
+    "vue": "^3.4.0"
   },
   "_docs": {
     "scope": "vue",
-    "feature": "i18n",
+    "feature": "ui",
     "description": {
-      "en": "A library for convenient and type-safe handling of vue-router.",
-      "ja": "vue-routerを便利にTypeセーフに扱うためのライブラリ"
+      "en": "A headless Vue utility that monitors disabled elements and provides a slot or render function to display the reason.",
+      "ja": "無効状態の要素を監視し、理由をスロットやレンダー関数で表示できる Vue ユーティリティ"
     }
   }
 }
