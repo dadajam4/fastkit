@@ -21,8 +21,8 @@ export const DISABLED_REASON_CONTAINER_ATTR = 'data-disabled-reason-container';
  * Example usage: `<div v-bind="DISABLED_REASON_CONTAINER_BIND"></div>`
  */
 export const DISABLED_REASON_CONTAINER_BIND = {
-  [DISABLED_REASON_CONTAINER_ATTR]: ''
-}
+  [DISABLED_REASON_CONTAINER_ATTR]: '',
+};
 
 /**
  * List of standard HTML elements that can be disabled via the `disabled` attribute.

@@ -21,7 +21,9 @@ export function proxyMiddleware(
     if (typeof opts === 'string') {
       opts = { target: opts, changeOrigin: true } as ProxyOptions;
     }
-    const proxy = httpProxy.createProxyServer(opts as httpProxy.ServerOptions) as HttpProxy.ProxyServer;
+    const proxy = httpProxy.createProxyServer(
+      opts as httpProxy.ServerOptions,
+    ) as HttpProxy.ProxyServer;
 
     proxy.on('error', (err) => {
       config.logger.error(`${chalk.red(`http proxy error:`)}\n${err.stack}`, {

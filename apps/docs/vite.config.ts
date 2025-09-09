@@ -31,7 +31,7 @@ export default defineConfig({
       '/google': 'https://google.com',
     },
   },
-  plugins: ([
+  plugins: [
     tsconfigPaths(),
     ViteTSTinyMeta(),
     ViteVanillaExtractPlugin({
@@ -80,5 +80,5 @@ export default defineConfig({
         : undefined,
     }),
     ...viteVui.plugins,
-  ] as Plugin[]),
+  ] as Plugin[],
 });
