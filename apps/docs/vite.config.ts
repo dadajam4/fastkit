@@ -1,4 +1,5 @@
-import { defineConfig, splitVendorChunkPlugin } from 'vite';
+import { defineConfig } from 'vite';
+import type { Plugin } from 'vite';
 import { ViteVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plugin';
 import { viteVuiPlugin } from '@fastkit/vite-plugin-vui';
 import { votPlugin } from '@fastkit/vot/tool';
@@ -30,10 +31,9 @@ export default defineConfig({
       '/google': 'https://google.com',
     },
   },
-  plugins: [
+  plugins: ([
     tsconfigPaths(),
     ViteTSTinyMeta(),
-    splitVendorChunkPlugin(),
     ViteVanillaExtractPlugin({
       // @TODO
       // If set to short, the selector is not output correctly when Generate is used.
@@ -80,5 +80,5 @@ export default defineConfig({
         : undefined,
     }),
     ...viteVui.plugins,
-  ],
+  ] as Plugin[]),
 });
