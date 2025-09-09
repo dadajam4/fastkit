@@ -121,6 +121,7 @@ export async function generate(opts: SpriteImagesOptions) {
 
               const dict = `$${dir.name}-sprite: (\n${dictRows.join('\n')}\n);`;
 
+              rows.push("@use 'sass:map';");
               rows.push(dict);
 
               rows.push(
@@ -132,11 +133,11 @@ export async function generate(opts: SpriteImagesOptions) {
               );
 
               rows.push(
-                `\n@mixin ${dir.name}-sprite-background-position($name, $scale: 1) {\n  $info: map-get($${dir.name}-sprite, $name);\n\n  background-position: map-get($info, x) * $scale map-get($info, y) * $scale;\n\n}`,
+                `\n@mixin ${dir.name}-sprite-background-position($name, $scale: 1) {\n  $info: map.get($${dir.name}-sprite, $name);\n\n  background-position: map.get($info, x) * $scale map.get($info, y) * $scale;\n\n}`,
               );
 
               rows.push(
-                `\n@mixin ${dir.name}-sprite-size($name, $scale: 1) {\n  $info: map-get($${dir.name}-sprite, $name);\n\n  width: map-get($info, width) * $scale;\n  height: map-get($info, height) * $scale;\n}`,
+                `\n@mixin ${dir.name}-sprite-size($name, $scale: 1) {\n  $info: map.get($${dir.name}-sprite, $name);\n\n  width: map.get($info, width) * $scale;\n  height: map.get($info, height) * $scale;\n}`,
               );
 
               rows.push(

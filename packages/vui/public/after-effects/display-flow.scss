@@ -1,3 +1,7 @@
+@use 'sass:map';
+@use 'sass:string';
+@use 'sass:meta';
+
 $props-map: (
   (
     prop: 'display',
@@ -296,16 +300,16 @@ $props-map: (
 
 @mixin display-flow($breakpoint-suffix: '') {
   @each $prop-info in $props-map {
-    $prop: map-get($prop-info, prop);
-    $values: map-get($prop-info, values);
+    $prop: map.get($prop-info, prop);
+    $values: map.get($prop-info, values);
 
     @each $value-info in $values {
-      $selector: map-get($value-info, selector);
-      $value: map-get($value-info, value);
+      $selector: map.get($value-info, selector);
+      $value: map.get($value-info, value);
 
       .#{$selector}#{$breakpoint-suffix} {
         /* stylelint-disable-next-line scss/function-unquote-no-unquoted-strings-inside */
-        #{$prop}: unquote($value);
+        #{$prop}: string.unquote($value);
       }
     }
   }
@@ -341,6 +345,9 @@ $props-map: (
 
 @include display-flow;
 
-@include mq-each {
-  @include display-flow($breakpoint-suffix: '--' + $mq-each-target);
+// mq-eachミックスインが定義されている場合のみ実行
+@if meta.mixin-exists(mq-each) {
+  @include mq-each {
+    @include display-flow($breakpoint-suffix: '--' + $mq-each-target);
+  }
 }

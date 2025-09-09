@@ -8,6 +8,8 @@
 // * .my-0 : margin-top: 0; margin-bottom: 0;
 // * .mt-1--xs: margin-top: 8px; (only xs media)
 // *************************
+@use 'sass:map';
+@use 'sass:meta';
 
 $property-map: (
   (
@@ -72,14 +74,14 @@ $sides-map: (
 
 @mixin spacing($breakpoint-suffix: '') {
   @each $property-info in $property-map {
-    $prop-selector: map-get($property-info, selector);
-    $prop-name: map-get($property-info, prop);
-    $has-negative: map-get($property-info, has-negative);
-    $has-auto: map-get($property-info, has-auto);
+    $prop-selector: map.get($property-info, selector);
+    $prop-name: map.get($property-info, prop);
+    $has-negative: map.get($property-info, has-negative);
+    $has-auto: map.get($property-info, has-auto);
 
     @each $sides-info in $sides-map {
-      $sides-selector: map-get($sides-info, selector);
-      $sides-props: map-get($sides-info, props);
+      $sides-selector: map.get($sides-info, selector);
+      $sides-props: map.get($sides-info, props);
       $base-selector: '.' + #{$prop-selector}#{$sides-selector};
 
       @if $has-auto {
@@ -149,6 +151,9 @@ $sides-map: (
 
 @include spacing;
 
-@include mq-each {
-  @include spacing($breakpoint-suffix: '--' + $mq-each-target);
+// mq-eachミックスインが定義されている場合のみ実行
+@if meta.mixin-exists(mq-each) {
+  @include mq-each {
+    @include spacing($breakpoint-suffix: '--' + $mq-each-target);
+  }
 }

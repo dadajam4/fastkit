@@ -155,6 +155,8 @@ export type { MediaMatchKey } from '@fastkit/media-match';
   `.trim();
 
   const SCSS_SOURCE = `
+@use 'sass:map';
+
 /* stylelint-disable */
 ${BANNER}
 
@@ -206,7 +208,7 @@ $mq-each-prefix-org: null;
     $target: nth($targets, $i);
     $condition: null;
 
-    $condition: map-get($media-match-maps, $target);
+    $condition: map.get($media-match-maps, $target);
     $conditions: append($conditions, $condition);
   }
 
@@ -224,8 +226,8 @@ $mq-each-prefix-org: null;
   $is-first: true;
 
   @each $define in $media-matches {
-    $target: map-get($define, key);
-    $target-condition: map-get($define, condition);
+    $target: map.get($define, key);
+    $target-condition: map.get($define, condition);
 
     $mq-each-target: $target !global;
     $mq-each-prefix-org: #{$target + '-'} !global;
