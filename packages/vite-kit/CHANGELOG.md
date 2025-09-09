@@ -1,5 +1,18 @@
 # @fastkit/vite-kit
 
+## 1.0.0-next.0
+
+### Major Changes
+
+- [#153](https://github.com/dadajam4/fastkit/pull/153) [`c650b4a`](https://github.com/dadajam4/fastkit/commit/c650b4a3813c891b5e21c6dd68cac981ac01d465) Thanks [@nkenji09](https://github.com/nkenji09)! - Now supports Vite 7 series
+
+### Patch Changes
+
+- Updated dependencies [[`c650b4a`](https://github.com/dadajam4/fastkit/commit/c650b4a3813c891b5e21c6dd68cac981ac01d465)]:
+  - @fastkit/color-scheme-gen@1.0.0-next.0
+  - @fastkit/media-match-gen@1.0.0-next.0
+  - @fastkit/sprite-images@1.0.0-next.0
+
 ## 0.15.0
 
 ### Minor Changes
