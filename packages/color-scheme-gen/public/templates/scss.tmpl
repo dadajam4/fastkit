@@ -1,10 +1,10 @@
-@use 'sass:map';
+@use 'sass:map' as _color_scheme_gen_map;
 
 /* stylelint-disable */
 <%~ it.scssValues %>
 
 @function theme($theme) {
-  $result: map.get($themes, $theme);
+  $result: _color_scheme_gen_map.get($themes, $theme);
   @if ($result == null) {
     @error 'missing theme name "' + $theme + '"';
   }
@@ -47,9 +47,9 @@
     // $selector: if($default-resolved, $selector, ':root, ' + $selector);
     // $default-resolved: true;
 
-    $palette: map.get($theme, palette);
-    $scope-defaults: map.get($theme, scope-defaults);
-    $scopes: map.get($theme, scopes);
+    $palette: _color_scheme_gen_map.get($theme, palette);
+    $scope-defaults: _color_scheme_gen_map.get($theme, scope-defaults);
+    $scopes: _color_scheme_gen_map.get($theme, scopes);
 
     #{$selector} {
       --link-color: #{palette-color(link)};
@@ -66,7 +66,7 @@
         }
       }
 
-      $default-scope: map.get($scope-defaults, default);
+      $default-scope: _color_scheme_gen_map.get($scope-defaults, default);
       @if ($default-scope != null) {
         & {
           @each $key, $value in $default-scope {
@@ -86,7 +86,7 @@
         }
       }
 
-      $disabled-scope: map.get($scope-defaults, disabled);
+      $disabled-scope: _color_scheme_gen_map.get($scope-defaults, disabled);
       @if ($disabled-scope != null) {
         [disabled], .disabled {
           @each $key, $value in $disabled-scope {

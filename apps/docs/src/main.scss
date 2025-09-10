@@ -1,4 +1,4 @@
-@import '../.vui/setup';
+@use '../.vui/setup' as *;
 @import '@fastkit/vui-wysiwyg/vui-wysiwyg.css';
 
 .docs-theme-font {

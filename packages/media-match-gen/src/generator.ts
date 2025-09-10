@@ -155,10 +155,13 @@ export type { MediaMatchKey } from '@fastkit/media-match';
   `.trim();
 
   const SCSS_SOURCE = `
-@use 'sass:map';
 
 /* stylelint-disable */
 ${BANNER}
+
+@use "sass:list" as _media_match_gen_list;
+@use "sass:map" as _media_match_gen_map;
+@use "sass:meta" as _media_match_gen_meta;
 
 $media-matches: (
 ${mediaMatches
@@ -182,14 +185,14 @@ $mq-each-prefix-org: null;
 @function media-match-to-string($list, $glue: '', $is-nested: false) {
   $result: null;
 
-  @for $i from 1 through length($list) {
-    $e: nth($list, $i);
+  @for $i from 1 through _media_match_gen_list.length($list) {
+    $e: _media_match_gen_list.nth($list, $i);
 
-    @if type-of($e) == list {
+    @if _media_match_gen_meta.type-of($e) == list {
       $result: $result#{media-match-to-string($e, $glue, true)};
     } @else {
       $result: if(
-        $i != length($list) or $is-nested,
+        $i != _media_match_gen_list.length($list) or $is-nested,
         $result#{$e}#{$glue},
         $result#{$e}
       );
@@ -202,14 +205,14 @@ $mq-each-prefix-org: null;
 // Multiple conditions can be specified
 @mixin mq($targets...) {
   $conditions: ();
-  $len: length($targets);
+  $len: _media_match_gen_list.length($targets);
 
   @for $i from 1 through $len {
-    $target: nth($targets, $i);
+    $target: _media_match_gen_list.nth($targets, $i);
     $condition: null;
 
-    $condition: map.get($media-match-maps, $target);
-    $conditions: append($conditions, $condition);
+    $condition: _media_match_gen_map.get($media-match-maps, $target);
+    $conditions: _media_match_gen_list.append($conditions, $condition);
   }
 
   $conditionsStr: media-match-to-string($conditions, ', ');
@@ -226,8 +229,8 @@ $mq-each-prefix-org: null;
   $is-first: true;
 
   @each $define in $media-matches {
-    $target: map.get($define, key);
-    $target-condition: map.get($define, condition);
+    $target: _media_match_gen_map.get($define, key);
+    $target-condition: _media_match_gen_map.get($define, condition);
 
     $mq-each-target: $target !global;
     $mq-each-prefix-org: #{$target + '-'} !global;
