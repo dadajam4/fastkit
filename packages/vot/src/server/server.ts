@@ -7,6 +7,7 @@ import {
   Plugin,
   resolveConfig,
   ResolvedServerUrls,
+  MinimalPluginContextWithoutEnvironment,
 } from 'vite';
 import module from 'node:module';
 import type { Server } from 'node:http';
@@ -112,12 +113,19 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
       typeof configureServer === 'function'
         ? configureServer
         : configureServer.handler;
+
+    // 実際のサーバーとしては Vite ではなく、Express を使用しているため、Vite のコンテキストをモックアップ
+    const mockContext = {} as MinimalPluginContextWithoutEnvironment;
+
     const use = router.use.bind(router);
-    await handler({
+    // ViteDevServer partial mockでconfigureServerフックの最小限要求を満たす
+    const mockViteDevServer = {
       middlewares: {
         use,
       },
-    } as any);
+    } as any;
+
+    await handler.call(mockContext, mockViteDevServer);
   }
 
   // Serve every static asset route

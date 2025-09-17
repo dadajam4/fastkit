@@ -14,14 +14,16 @@ export function proxyMiddleware(
   const options = config.server.proxy!;
 
   // lazy require only when proxy is used
-  const proxies: Record<string, [HttpProxy.Server, ProxyOptions]> = {};
+  const proxies: Record<string, [HttpProxy.ProxyServer, ProxyOptions]> = {};
 
   Object.keys(options).forEach((context) => {
     let opts = options[context];
     if (typeof opts === 'string') {
       opts = { target: opts, changeOrigin: true } as ProxyOptions;
     }
-    const proxy = httpProxy.createProxyServer(opts) as HttpProxy.Server;
+    const proxy = httpProxy.createProxyServer(
+      opts as httpProxy.ServerOptions,
+    ) as HttpProxy.ProxyServer;
 
     proxy.on('error', (err) => {
       config.logger.error(`${chalk.red(`http proxy error:`)}\n${err.stack}`, {

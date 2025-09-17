@@ -47,5 +47,5 @@ export function PackageLoader(): Plugin {
 
       return loadPackage(pkgName);
     },
-  };
+  } as Plugin;
 }
