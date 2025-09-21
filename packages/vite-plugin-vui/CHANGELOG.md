@@ -12,6 +12,13 @@
   - @fastkit/vite-kit@1.0.0-next.0
   - @fastkit/vui@1.0.0-next.0
 
+## 2.2.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vui@0.20.6
+
 ## 2.2.5
 
 ### Patch Changes

@@ -1146,6 +1146,12 @@ export function useStackControl(
       _stopWatchActivatorActiveHandle = watch(
         () => state.isActive,
         (isActive) => {
+          // @TODO There are cases where el is not an Element, but this is probably due to an unexpected assignment occurring somewhere.
+          // Specifically, it has been confirmed that it is a Proxy instance.
+          if (!(el instanceof Element)) {
+            return;
+          }
+
           if (isActive) {
             el.setAttribute(V_STACK_ACTIVATED_ATTR, '');
           } else {

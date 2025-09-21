@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.17.4
+
+### Patch Changes
+
+- Fixed an edge case where an exception occurred during the attribute reset process on the activator element.
+
 ## 0.17.3
 
 ### Patch Changes

@@ -12,6 +12,13 @@
   - @fastkit/color-scheme-gen@1.0.0-next.0
   - @fastkit/media-match-gen@1.0.0-next.0
 
+## 0.20.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-stack@0.17.4
+
 ## 0.20.5
 
 ### Patch Changes
