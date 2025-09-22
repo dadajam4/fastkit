@@ -1,3 +1,3 @@
-@import './after-effects/display-flow';
-@import './after-effects/text';
-@import './after-effects/spacing';
+@use './after-effects/display-flow' as *;
+@use './after-effects/text' as *;
+@use './after-effects/spacing' as *;

@@ -1,4 +1,5 @@
-import { defineConfig, splitVendorChunkPlugin } from 'vite';
+import { defineConfig } from 'vite';
+import type { Plugin } from 'vite';
 import { ViteVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plugin';
 import { viteVuiPlugin } from '@fastkit/vite-plugin-vui';
 import { votPlugin } from '@fastkit/vot/tool';
@@ -30,10 +31,39 @@ export default defineConfig({
       '/google': 'https://google.com',
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // node_modules 配下ならパッケージごとに分割する
+          if (id.includes('node_modules')) {
+            // pnpmの場合は .pnpm ディレクトリ構造を考慮してパッケージ名を抽出する
+            const parts = id.split('node_modules/');
+            let pkgPath = parts[parts.length - 1]; // 最後のnode_modules以降を取得
+
+            // pnpmの .pnpm/pkg@version/node_modules/pkg 構造の場合
+            if (pkgPath.startsWith('.pnpm/')) {
+              const pnpmMatch = pkgPath.match(
+                /^\.pnpm\/([^/]+)\/node_modules\/(.+)/,
+              );
+              if (pnpmMatch) {
+                pkgPath = pnpmMatch[2]; // パッケージパスを取得
+              }
+            }
+
+            const segments = pkgPath.split('/');
+            const pkgName = segments[0].startsWith('@')
+              ? segments.slice(0, 2).join('/')
+              : segments[0];
+            return `vendor-${pkgName}`;
+          }
+        },
+      },
+    },
+  },
   plugins: [
     tsconfigPaths(),
     ViteTSTinyMeta(),
-    splitVendorChunkPlugin(),
     ViteVanillaExtractPlugin({
       // @TODO
       // If set to short, the selector is not output correctly when Generate is used.
@@ -80,5 +110,5 @@ export default defineConfig({
         : undefined,
     }),
     ...viteVui.plugins,
-  ],
+  ] as Plugin[],
 });

@@ -56,7 +56,7 @@ export class TinyLogger {
 }
 
 TINY_LOGGER_LOG_TYPES.forEach((type) => {
-  TinyLogger.prototype[type] = function (message, ...args) {
+  TinyLogger.prototype[type] = function logMethod(message, ...args) {
     this.log(type, message, ...args);
   };
 });

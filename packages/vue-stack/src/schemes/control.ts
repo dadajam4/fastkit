@@ -324,7 +324,7 @@ export interface VStackControl {
     outsideClickCloseConditional(ev: MouseEvent, pre?: boolean): boolean;
     /** Clear guard effect */
     clearGuardEffect(): void;
-    joinChild(child: VStackControl): (() => void);
+    joinChild(child: VStackControl): () => void;
   };
   /**
    * Set the activator

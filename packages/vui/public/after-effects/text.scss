@@ -1,3 +1,7 @@
+@use 'sass:map' as _vui_af_text_map;
+@use 'sass:string' as _vui_af_text_string;
+@use 'sass:meta' as _vui_af_text_meta;
+
 $props-map: (
   (
     prop: 'text-align',
@@ -61,16 +65,16 @@ $props-map: (
   }
 
   @each $prop-info in $props-map {
-    $prop: map-get($prop-info, prop);
-    $values: map-get($prop-info, values);
+    $prop: _vui_af_text_map.get($prop-info, prop);
+    $values: _vui_af_text_map.get($prop-info, values);
 
     @each $value-info in $values {
-      $selector: map-get($value-info, selector);
-      $value: map-get($value-info, value);
+      $selector: _vui_af_text_map.get($value-info, selector);
+      $value: _vui_af_text_map.get($value-info, value);
 
       .#{$selector}#{$breakpoint-suffix} {
         /* stylelint-disable-next-line scss/function-unquote-no-unquoted-strings-inside */
-        #{$prop}: unquote($value);
+        #{$prop}: _vui_af_text_string.unquote($value);
       }
     }
   }
@@ -86,6 +90,9 @@ $props-map: (
 
 @include text;
 
-@include mq-each {
-  @include text($breakpoint-suffix: '--' + $mq-each-target);
+// mq-eachミックスインが定義されている場合のみ実行
+@if _vui_af_text_meta.mixin-exists(mq-each) {
+  @include mq-each {
+    @include text($breakpoint-suffix: '--' + $mq-each-target);
+  }
 }
