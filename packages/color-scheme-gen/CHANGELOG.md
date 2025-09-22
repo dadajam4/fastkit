@@ -1,5 +1,11 @@
 # @fastkit/color-scheme-gen
 
+## 1.0.0
+
+### Major Changes
+
+- [#153](https://github.com/dadajam4/fastkit/pull/153) [`2a9ac68`](https://github.com/dadajam4/fastkit/commit/2a9ac68653d4335d761d958a4061098218faaa0e) Thanks [@nkenji09](https://github.com/nkenji09)! - Now supports Vite 7 series
+
 ## 1.0.0-next.0
 
 ### Major Changes
