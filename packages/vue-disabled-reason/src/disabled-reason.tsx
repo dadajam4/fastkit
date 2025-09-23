@@ -124,7 +124,7 @@ const slots = defineSlots<{
   reason?: (api: DisabledReasonAPI) => any;
 }>();
 
-const baseProps = createPropsOptions({
+export const DISABLED_REASON_BASE_PROPS = createPropsOptions({
   /** The content or slot that provides the disabled reason */
   reason: {} as PropType<VNodeChildOrSlot>,
 });
@@ -178,12 +178,14 @@ export function defineDisabledReasonComponent<
     inheritAttrs: false,
     props: {
       ...(options.props as Props),
-      ...baseProps,
+      ...DISABLED_REASON_BASE_PROPS,
       ...slots(),
     },
     slots,
     setup(_props, ctx) {
-      const props = _props as ExtractPropTypes<typeof baseProps>;
+      const props = _props as ExtractPropTypes<
+        typeof DISABLED_REASON_BASE_PROPS
+      >;
       const instance = getCurrentInstance();
       const disabled = ref(false);
       const api: DisabledReasonAPI<Props> = {
@@ -200,7 +202,7 @@ export function defineDisabledReasonComponent<
         resolveVNodeChildOrSlots(props.reason, ctx.slots.reason),
       );
 
-      let _reasonLayer: VNode | undefined;
+      let _reasonLayers: WeakMap<HTMLElement, VNode> | undefined;
 
       const renderReasonLayer = options.setup(setupCtx);
 
@@ -210,13 +212,15 @@ export function defineDisabledReasonComponent<
       };
 
       const setupDisabledLayer = (container: HTMLElement) => {
-        if (_reasonLayer) return;
+        if (_reasonLayers?.has(container)) return;
+        _reasonLayers = _reasonLayers || new WeakMap<HTMLElement, VNode>();
+        const layer = h(ReasonLayer);
+        layer.appContext = instance!.appContext;
+        _reasonLayers.set(container, layer);
 
-        _reasonLayer = h(ReasonLayer);
-        _reasonLayer.appContext = instance!.appContext;
         container.setAttribute(DISABLED_REASON_ACTIVATED_ATTR, '');
 
-        render(_reasonLayer, container);
+        render(layer, container);
       };
 
       const setup = async () => {
@@ -232,14 +236,16 @@ export function defineDisabledReasonComponent<
           return;
         }
 
-        let container = child.el as HTMLElement;
-        const containerSpec = container.querySelector<HTMLElement>(
-          `[${DISABLED_REASON_CONTAINER_ATTR}]`,
-        );
-        if (containerSpec) {
-          container = containerSpec;
+        const containers: HTMLElement[] = [];
+        const specifiedContainers = (
+          child.el as HTMLElement
+        ).querySelectorAll<HTMLElement>(`[${DISABLED_REASON_CONTAINER_ATTR}]`);
+        if (specifiedContainers.length) {
+          containers.push(...specifiedContainers);
+        } else {
+          containers.push(child.el as HTMLElement);
         }
-        let el = container;
+        let el = containers[0];
         if (!el.matches(DISABLEABLE_ELEMENT_QUERY)) {
           const disabledChild = el.querySelector<HTMLElement>(
             DISABLEABLE_ELEMENT_QUERY,
@@ -266,13 +272,13 @@ export function defineDisabledReasonComponent<
           }
         }
 
-        setupDisabledLayer(container);
+        containers.forEach(setupDisabledLayer);
       };
 
       onMounted(setup);
       onUpdated(setup);
       onBeforeUnmount(() => {
-        _reasonLayer = undefined;
+        _reasonLayers = undefined;
       });
 
       return () => {

@@ -1,5 +1,18 @@
 # @fastkit/vue-scroller
 
+## 0.16.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.16.0
+  - @fastkit/scroller@0.15.0
+  - @fastkit/tiny-logger@0.15.0
+
 ## 0.15.13
 
 ### Patch Changes
@@ -108,7 +121,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes

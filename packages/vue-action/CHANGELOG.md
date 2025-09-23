@@ -1,5 +1,74 @@
 # @fastkit/vue-action
 
+## 0.4.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+  This release also includes the following updates:
+
+  ### Improved typing for event handlers
+
+  The event object type passed to event handlers such as `onClick` has been changed from `MouseEvent` to `PointerEvent`.
+
+  ### Support for wrapping actionable elements with custom render logic
+
+  Actionable elements can now be wrapped with arbitrary render logic, including the addition of custom props. For example:
+
+  ```ts
+  // 1. Extend the '@fastkit/vue-action' interface
+  declare module '@fastkit/vue-action' {
+    interface ActionableCustomProps {
+      /**
+       * Reason why this element is disabled.
+       *
+       * If set, hovering over the disabled element will display the reason
+       * using `VDisabledReason`.
+       */
+      disabledReason: PropType<string | (() => VNodeChild) | DisabledReasonInput>;
+    }
+  }
+
+  // 2. Handle `disabledReason` as a custom attribute of '@fastkit/vue-action'
+  registerActionableAttrsResolver((attrs, ctx) => {
+    const disabledReason = ctx.getAttr('disabledReason');
+    if (disabledReason) {
+      // Remove disabledReason from the original attrs
+      // (to prevent adding unnecessary attributes to the element)
+      delete attrs.disabledReason;
+      return [
+        undefined,
+        {
+          disabledReason,
+        },
+      ];
+    }
+  });
+
+  // 3. Register a custom render wrapper for '@fastkit/vue-action'
+  registerActionableRenderWrapper((customProps, currentNode) => {
+    const { disabledReason } = customProps;
+    const disabledReasonInput =
+      typeof disabledReason === 'string' || typeof disabledReason === 'function'
+        ? { reason: disabledReason }
+        : disabledReason;
+
+    if (disabledReasonInput) {
+      return (
+        <VDisabledReason {...disabledReasonInput}>{currentNode}</VDisabledReason>
+      );
+    }
+    return currentNode;
+  });
+  ```
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.16.0
+  - @fastkit/helpers@0.15.0
+
 ## 0.3.20
 
 ### Patch Changes
@@ -148,7 +217,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes

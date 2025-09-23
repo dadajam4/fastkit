@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-transitions",
-  "version": "0.2.14",
+  "version": "0.3.0",
   "description": "vue-transitions",
   "keywords": [],
   "repository": {
@@ -47,6 +47,9 @@
     "@fastkit/dom": "workspace:^",
     "@fastkit/helpers": "workspace:^",
     "@fastkit/vue-utils": "workspace:^"
+  },
+  "devDependencies": {
+    "vue": "^3.5.21"
   },
   "peerDependencies": {
     "vue": "^3.4.0"

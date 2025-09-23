@@ -24,7 +24,7 @@ export function resolveFunctionableValue<T, ARGS extends any[]>(
   source: FunctionableValue<T, ARGS>,
   ...args: ARGS
 ): T extends Function ? never : T {
-  return typeof source === 'function' ? source(...args) : source;
+  return typeof source === 'function' ? source(...args) : (source as any);
 }
 
 /**

@@ -18,7 +18,10 @@ import type {
 } from './schema';
 import { resolveRelativeLocationRaw } from './utils';
 import { DEFAULT_ACTIVE_CLASS, DEFAULT_EXACT_ACTIVE_CLASS } from './constants';
-import { useActionableResolvedAttrs } from './resolver';
+import {
+  useActionableResolvedAttrs,
+  applyActionableRenderWrappers,
+} from './resolver';
 
 let _defaultRouterLink = RouterLink;
 
@@ -91,7 +94,7 @@ export function useActionable(
   const guardInProgress = ref(false);
   const states = computed<Omit<Actionable, 'guardInProgress' | 'router'>>(
     () => {
-      const ctxAttrs = getAttrs();
+      const [ctxAttrs, customProps] = getAttrs();
       const props: ActionableInheritProps = { ...ctxAttrs };
 
       const disabledClass = unWrapFn(opts.disabledClass);
@@ -146,6 +149,7 @@ export function useActionable(
         ariaDisabled === '' ||
         ariaDisabled === 'true'
       );
+
       let hasAction = !!(
         onClick ||
         to ||
@@ -156,9 +160,9 @@ export function useActionable(
       );
       const actionable = hasAction && !isDisabled;
 
-      let action: ((ev: MouseEvent) => void) | undefined;
+      let action: ((ev: PointerEvent) => void) | undefined;
 
-      const handleClick = async (ev: MouseEvent): Promise<void> => {
+      const handleClick = async (ev: PointerEvent): Promise<void> => {
         if (ev.defaultPrevented || isRightClick(ev)) return;
         if (href || to) {
           if (isWithControlKey(ev) || props.target) {
@@ -187,7 +191,7 @@ export function useActionable(
         }
 
         const finalEvent = ev.defaultPrevented
-          ? new MouseEvent(ev.type, ev)
+          ? new PointerEvent(ev.type, ev)
           : ev;
 
         if (onClick) {
@@ -326,7 +330,7 @@ export function useActionable(
         class: classes,
       });
 
-      if (!attrs.disabled) {
+      if (!attrs.disabled && attrs.disabled !== '') {
         delete attrs.disabled;
       }
 
@@ -339,16 +343,17 @@ export function useActionable(
       }
 
       const render: Actionable['render'] = (children) => {
-        if (routerLink) {
-          return (
-            <Tag
-              {...routerLink.props}
-              custom
-              v-slots={routerLink.slots(children)}
-            />
-          );
-        }
-        return <Tag {...attrs}>{children}</Tag>;
+        const vnode = routerLink ? (
+          <Tag
+            {...routerLink.props}
+            custom
+            v-slots={routerLink.slots(children)}
+          />
+        ) : (
+          <Tag {...attrs}>{children}</Tag>
+        );
+
+        return applyActionableRenderWrappers(customProps, vnode, props);
       };
 
       return {

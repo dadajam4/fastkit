@@ -2,7 +2,7 @@ import './color.scss';
 
 import { VNodeChild } from 'vue';
 import { type VuiService, VIcon } from '@fastkit/vui';
-import TextStyle from '@tiptap/extension-text-style';
+import { TextStyle } from '@tiptap/extension-text-style';
 import { WysiwygColorExtension } from '../extensions';
 import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
 

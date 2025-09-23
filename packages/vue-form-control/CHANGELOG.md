@@ -1,5 +1,20 @@
 # @fastkit/vue-form-control
 
+## 0.22.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.16.0
+  - @fastkit/helpers@0.15.0
+  - @fastkit/dom@0.3.0
+  - @fastkit/rules@0.15.0
+  - @fastkit/tiny-logger@0.15.0
+
 ## 0.21.1
 
 ### Patch Changes
@@ -14,7 +29,6 @@
 - [#151](https://github.com/dadajam4/fastkit/pull/151) [`515ad05`](https://github.com/dadajam4/fastkit/commit/515ad05b1f541e372815d63ddad46fe1e113df49) Thanks [@nkenji09](https://github.com/nkenji09)! - Fix preserveOrder behavior in FormSelectorControl
 
   The preserveOrder property behavior was inverted from the intended specification:
-
   - `preserveOrder: false` (default) now maintains user selection order
   - `preserveOrder: true` now sorts by items order
 
@@ -23,7 +37,6 @@
 - [#150](https://github.com/dadajam4/fastkit/pull/150) [`e9b7145`](https://github.com/dadajam4/fastkit/commit/e9b7145967bda75592dac5bc8102207575a160f5) Thanks [@nkenji09](https://github.com/nkenji09)! - Add preserveOrder option to FormSelectorControl
 
   This new option controls how selected items are ordered in multiple selection mode:
-
   - `preserveOrder: false` (default): Selected items are sorted according to the order they appear in the items array
   - `preserveOrder: true`: Selected items maintain the order in which they were selected by the user
 
@@ -34,7 +47,6 @@
 ### Patch Changes
 
 - 以下の改善が含まれます。
-
   - `resetValidates()` を呼び出した際に、バリデーションの状態が正常にリセットされない不具合を修正しました。
   - `skipValidation()` を呼び出してもバリデーションが実行される不具合を修正しました。
 
@@ -249,7 +261,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes
@@ -404,7 +415,6 @@
 ### Minor Changes
 
 - Added `Node` representation to types prone to collisions in the application, introducing breaking changes in this release.
-
   - DateInputControlPropsOptions → DateInputNodeControlPropsOptions
   - createDateInputProps → createDateInputNodeProps
   - createDateInputEmits → createDateInputNodeEmits
@@ -460,7 +470,6 @@
 ### Patch Changes
 
 - Changed specification to allow flexible configuration of `required` setting, now accepting not only boolean values but also based on components.
-
   - `BoundableInputControl` now allows detailed configuration of `required` conditions for start and end values.
 
 ## 0.17.0
@@ -468,7 +477,6 @@
 ### Minor Changes
 
 - This release includes various feature additions, improvements, and breaking changes.
-
   - The scroll helper configuration is now global and optional. By default, the [scrollIntoView](https://developer.mozilla.org/docs/Web/API/Element/scrollIntoView) method is utilized.
   - All nodes now internally hold the props passed to the component, eliminating unnecessary computed instances and improving performance.
   - The `isRequired` getter now takes into account mandatory conditions registered in the `rules`.

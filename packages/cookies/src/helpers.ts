@@ -5,7 +5,7 @@ import type {
 } from 'node:http';
 import type { Cookie } from 'set-cookie-parser';
 import { isObject } from '@fastkit/helpers';
-import { CookiesBrowserContext, CookieSerializeOptions } from './schemes';
+import { CookiesBrowserContext, SerializeOptions } from './schemes';
 
 export function isCookiesBrowserContext(
   source: any,
@@ -41,7 +41,7 @@ export function isServerResponse(source: any): source is ServerResponse {
 export function createCookie(
   name: string,
   value: string,
-  options: CookieSerializeOptions = {},
+  options: SerializeOptions = {},
 ): Cookie {
   let { sameSite } = options;
   if (sameSite === true) {

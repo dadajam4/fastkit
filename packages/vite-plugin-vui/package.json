@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-plugin-vui",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "vite-plugin-vui",
   "keywords": [
     "vite",
@@ -51,12 +51,12 @@
     "@fastkit/tiny-logger": "workspace:^",
     "@fastkit/vite-kit": "workspace:^",
     "@fastkit/vui": "workspace:^",
-    "eta": "^3.4.0",
-    "fs-extra": "^11.2.0"
+    "eta": "^4.0.1",
+    "fs-extra": "^11.3.2"
   },
   "devDependencies": {
     "@fastkit/icon-font-gen": "workspace:^",
-    "vite": "^7.1.4"
+    "vite": "^7.1.7"
   },
   "peerDependencies": {
     "@fastkit/icon-font-gen": "workspace:^",

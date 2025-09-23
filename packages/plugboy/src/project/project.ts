@@ -96,6 +96,9 @@ export async function getProject<
   const { dir, json } = hit;
   const resolvedWorkspaces: string[] = [];
   const { workspaces = [] } = json;
+  if (!Array.isArray(workspaces)) {
+    throw new Error('workspaces only supports arrays.');
+  }
   const workspacesPattern = workspaces.map(
     (workspace) => dir.join(workspace, PACKAGE_JSON_FILENAME).value,
   );

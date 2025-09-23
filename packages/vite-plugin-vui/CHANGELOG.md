@@ -1,5 +1,19 @@
 # @fastkit/vite-plugin-vui
 
+## 3.1.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/icon-font-gen@0.15.0
+  - @fastkit/vite-kit@1.1.0
+  - @fastkit/vui@1.1.0
+  - @fastkit/tiny-logger@0.15.0
+
 ## 3.0.0
 
 ### Major Changes
@@ -520,7 +534,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes

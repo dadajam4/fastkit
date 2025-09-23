@@ -1,3 +1,5 @@
+@use 'sass:string';
+
 @mixin hidden-input-element {
   position: absolute;
   width: 1px;
@@ -25,7 +27,8 @@
   box-shadow:
     var(--shadow-key-umbra-#{$z}),
     var(--shadow-key-penumbra-#{$z}),
-    var(--shadow-key-ambient-#{$z}) if($important, unquote('!important'), null);
+    var(--shadow-key-ambient-#{$z})
+      if($important, string.unquote('!important'), null);
 }
 
 @mixin elevation-transition(

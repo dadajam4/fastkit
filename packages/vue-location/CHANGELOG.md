@@ -1,5 +1,16 @@
 # @fastkit/vue-location
 
+## 0.5.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.16.0
+
 ## 0.4.3
 
 ### Patch Changes
@@ -39,7 +50,6 @@
 ### Patch Changes
 
 - **Improved Query Submission Behavior**
-
   - Added `watchKey` to monitor the current query conditions.
   - Fixed an issue where submitting `undefined` did not update the query.
   - Queries now remove parameters if they match the default value during submission.
@@ -154,7 +164,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes

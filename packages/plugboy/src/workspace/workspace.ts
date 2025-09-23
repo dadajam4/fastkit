@@ -80,7 +80,7 @@ export function syncWorkspacePackageFields(
   for (const field of WORKSPACE_PACKAGE_SYNC_FIELDS) {
     const value = projectJSON[field];
     if (value && !workspaceJSON[field]) {
-      workspaceJSON[field] = value;
+      workspaceJSON[field] = value as any;
     }
   }
 }
@@ -286,7 +286,11 @@ export class PlugboyWorkspace {
           const version = deps[dep];
           if (version.startsWith(WORKSPACE_SPEC_PREFIX)) {
             deps[dep] = `${WORKSPACE_SPEC_PREFIX}^`;
-          } else if (projectPeerDependencies && projectPeerDependencies[dep]) {
+          } else if (
+            projectPeerDependencies &&
+            projectPeerDependencies[dep] &&
+            !deps[dep]
+          ) {
             deps[dep] = projectPeerDependencies[dep];
           }
         });

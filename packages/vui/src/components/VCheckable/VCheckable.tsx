@@ -2,6 +2,7 @@ import './VCheckable.scss';
 import { computed, defineComponent } from 'vue';
 import { defineSlots } from '@fastkit/vue-utils';
 import { FormNodeErrorSlotsSource } from '@fastkit/vue-form-control';
+import { DISABLED_REASON_CONTAINER_BIND } from '@fastkit/vue-disabled-reason';
 import { useVuiColorProvider } from '../../injections';
 
 export const CHECKABLE_SLOTS = defineSlots<
@@ -44,7 +45,9 @@ export const VCheckable = defineComponent({
     ]);
 
     return () => (
-      <label class={['v-checkable', classes.value]}>
+      <label
+        class={['v-checkable', classes.value]}
+        {...DISABLED_REASON_CONTAINER_BIND}>
         <span class="v-checkable__faux">
           {ctx.slots.input?.()}
           {ctx.slots.icon ? (

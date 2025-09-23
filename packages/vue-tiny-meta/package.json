@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-tiny-meta",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "vue-tiny-meta",
   "keywords": [],
   "repository": {
@@ -63,10 +63,10 @@
   },
   "dependencies": {
     "@fastkit/ts-tiny-meta": "workspace:^",
-    "magic-string": "^0.30.10"
+    "magic-string": "^0.30.19"
   },
   "devDependencies": {
-    "vite": "^7.1.4"
+    "vite": "^7.1.7"
   },
   "peerDependencies": {
     "vite": "^6.0.0 || ^7.0.0"

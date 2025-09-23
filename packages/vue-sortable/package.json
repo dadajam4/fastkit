@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-sortable",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Integration implementation of SortableJS for Vue applications.",
   "keywords": [
     "fastkit",
@@ -57,10 +57,10 @@
     "@fastkit/helpers": "workspace:^",
     "@fastkit/vue-utils": "workspace:^",
     "@types/sortablejs": "^1.15.8",
-    "sortablejs": "^1.15.2"
+    "sortablejs": "^1.15.6"
   },
   "devDependencies": {
-    "vue": "^3.4.0"
+    "vue": "^3.5.21"
   },
   "peerDependencies": {
     "vue": "^3.4.0"

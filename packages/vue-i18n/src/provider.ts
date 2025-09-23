@@ -6,7 +6,11 @@ import {
   I18nDependencies,
 } from '@fastkit/i18n';
 import { inject, InjectionKey, App } from 'vue';
-import type { Router, RouteLocationNormalized } from 'vue-router';
+import type {
+  Router,
+  RouteLocationNormalized,
+  RouteLocationNormalizedGeneric,
+} from 'vue-router';
 import {
   arrayRemove,
   flattenRecursiveArray,
@@ -171,14 +175,18 @@ export class VueI18nSubSpaceProvider<
       }
     };
 
-    // Register a Guard
-    const disposer = router.beforeResolve(async (to) => {
-      const matchedProviders = extractVueI18nComponentOptions(to);
+    const applyRouteMatchedProviders = async (
+      route: RouteLocationNormalizedGeneric,
+    ) => {
+      const matchedProviders = extractVueI18nComponentOptions(route);
       applyMatchedProviders(matchedProviders);
 
       // The provider cache list is then updated with only what is needed, so initialize the internationalization space and load the required locales
       await space.init();
-    });
+    };
+
+    // Register a Guard
+    const disposer = router.beforeResolve(applyRouteMatchedProviders);
     return disposer;
   }
 }

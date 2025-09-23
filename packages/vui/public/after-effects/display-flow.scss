@@ -326,15 +326,15 @@ $props-map: (
     .grid-size-#{$i}#{$breakpoint-suffix} {
       --basis: calc(#{$i} / #{$columns-length} * 100%);
 
-      flex-basis: var(--basis);
       flex-grow: 0;
+      flex-basis: var(--basis);
       max-width: var(--basis);
     }
   }
 
   .grid-size-auto#{$breakpoint-suffix} {
-    flex-basis: 0;
     flex-grow: 1;
+    flex-basis: 0;
     max-width: 100%;
   }
 

@@ -1,5 +1,14 @@
 # @fastkit/vot-i18n
 
+## 5.1.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-i18n@0.15.0
+  - @fastkit/vot@1.1.0
+  - @fastkit/accept-language@0.15.0
+
 ## 5.0.0
 
 ### Patch Changes
@@ -160,7 +169,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes

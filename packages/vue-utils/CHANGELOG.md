@@ -1,11 +1,22 @@
 # @fastkit/vue-utils
 
+## 0.16.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.15.0
+  - @fastkit/visibility@0.15.0
+
 ## 0.15.13
 
 ### Patch Changes
 
 - Added VNode search utilities.
-
   - `isElementVNode` - Utility function to check if a VNode corresponds to a real DOM element.
   - `findFirstDomVNode` - Recursively searches a VNode tree and returns the first DOM-backed VNode.
 
@@ -101,7 +112,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes

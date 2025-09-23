@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 
-export type { CookieParseOptions, CookieSerializeOptions } from 'cookie';
+export type { ParseOptions, SerializeOptions } from 'cookie';
 
 export type CookiesBrowserContext = Document;
 
@@ -13,7 +13,7 @@ export type CookiesServerContext = CookiesNodeContext;
 
 export type CookiesContext = CookiesBrowserContext | CookiesServerContext;
 
-export type CookiesBucket = Record<string, string>;
+export type CookiesBucket = Record<string, string | undefined>;
 
 export interface OnCookiesChangeEvent {
   name: string;

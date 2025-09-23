@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-loading",
-  "version": "0.15.16",
+  "version": "0.16.0",
   "description": "Loading component for Vue applications.",
   "keywords": [
     "fastkit",
@@ -60,6 +60,10 @@
     "@fastkit/tiny-logger": "workspace:^",
     "@fastkit/vue-color-scheme": "workspace:^",
     "@fastkit/vue-utils": "workspace:^"
+  },
+  "devDependencies": {
+    "vue": "^3.5.21",
+    "vue-router": "^4.5.1"
   },
   "peerDependencies": {
     "vue": "^3.4.0",

@@ -1,5 +1,40 @@
 # @fastkit/vui
 
+## 1.1.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.3.0
+  - @fastkit/vue-click-outside@0.3.0
+  - @fastkit/color-scheme-gen@1.1.0
+  - @fastkit/vue-color-scheme@0.16.0
+  - @fastkit/vue-form-control@0.22.0
+  - @fastkit/media-match-gen@1.1.0
+  - @fastkit/vue-media-match@0.15.0
+  - @fastkit/vue-transitions@0.3.0
+  - @fastkit/vue-app-layout@0.17.0
+  - @fastkit/vue-keyboard@0.3.0
+  - @fastkit/vue-location@0.5.0
+  - @fastkit/vue-scroller@0.16.0
+  - @fastkit/vue-loading@0.16.0
+  - @fastkit/vue-resize@0.3.0
+  - @fastkit/vue-utils@0.16.0
+  - @fastkit/vue-disabled-reason@0.1.0
+  - @fastkit/vue-stack@0.18.0
+  - @fastkit/vue-action@0.4.0
+  - @fastkit/helpers@0.15.0
+  - @fastkit/dom@0.3.0
+  - @fastkit/rules@0.14.8
+  - @fastkit/tiny-logger@0.15.0
+  - @fastkit/color-scheme@2.1.0
+  - @fastkit/icon-font@2.1.0
+  - @fastkit/media-match@2.1.0
+
 ## 1.0.0
 
 ### Major Changes
@@ -743,7 +778,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes
@@ -1114,7 +1148,6 @@
 ### Minor Changes
 
 - Added `Node` representation to types prone to collisions in the application, introducing breaking changes in this release.
-
   - DateInputControlPropsOptions → DateInputNodeControlPropsOptions
   - createDateInputProps → createDateInputNodeProps
   - createDateInputEmits → createDateInputNodeEmits

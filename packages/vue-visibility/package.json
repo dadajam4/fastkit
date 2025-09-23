@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-visibility",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "description": "vue-visibility",
   "keywords": [],
   "repository": {
@@ -45,6 +45,9 @@
   },
   "dependencies": {
     "@fastkit/visibility": "workspace:^"
+  },
+  "devDependencies": {
+    "vue": "^3.5.21"
   },
   "peerDependencies": {
     "vue": "^3.4.0"

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy-vanilla-extract-plugin",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "",
   "keywords": [],
   "repository": {
@@ -54,11 +54,11 @@
   "dependencies": {
     "@vanilla-extract/css": "^1.17.4",
     "@vanilla-extract/esbuild-plugin": "^2.3.18",
-    "@vanilla-extract/vite-plugin": "^5.1.0"
+    "@vanilla-extract/vite-plugin": "^5.1.1"
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:^",
-    "vite": "^7.1.4"
+    "vite": "^7.1.7"
   },
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:^",

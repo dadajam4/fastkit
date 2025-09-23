@@ -5,9 +5,9 @@ import { EV } from '@fastkit/ev';
 import { IN_DOCUMENT } from '@fastkit/helpers';
 import {
   CookiesContext,
-  CookieParseOptions,
+  ParseOptions,
   CookiesBucket,
-  CookieSerializeOptions,
+  SerializeOptions,
   CookiesEventMap,
 } from './schemes';
 import {
@@ -19,7 +19,7 @@ import {
 } from './helpers';
 import { logger, CookiesError } from './logger';
 
-export interface CookiesOptions extends CookieParseOptions {
+export interface CookiesOptions extends ParseOptions {
   bucket?: CookiesBucket;
 }
 
@@ -71,7 +71,7 @@ export class Cookies extends EV<CookiesEventMap> {
     Object.assign(this.bucket, cookies);
   }
 
-  parse(options?: CookieParseOptions): CookiesBucket {
+  parse(options?: ParseOptions): CookiesBucket {
     const { ctx } = this;
     let cookieString: string;
     if (isCookiesBrowserContext(ctx)) {
@@ -88,7 +88,7 @@ export class Cookies extends EV<CookiesEventMap> {
     return this.bucket[name];
   }
 
-  set(name: string, value: string, options?: CookieSerializeOptions): void {
+  set(name: string, value: string, options?: SerializeOptions): void {
     if (value === '' || value == null) {
       return this.delete(name);
     }
@@ -143,7 +143,7 @@ export class Cookies extends EV<CookiesEventMap> {
             {
               // we prevent reencoding by default, but you might override it
               encode: (val: string) => val,
-              ...(parsedCookie as CookieSerializeOptions),
+              ...(parsedCookie as SerializeOptions),
             },
           );
           cookiesToSet.push(serializedCookie);
@@ -157,7 +157,7 @@ export class Cookies extends EV<CookiesEventMap> {
     this.update({ [name]: value });
   }
 
-  delete(name: string, options?: CookieSerializeOptions) {
+  delete(name: string, options?: SerializeOptions) {
     /**
      * We forward the request destroy to setCookie function
      * as it is the same function with modified maxAge value.

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-form-control",
-  "version": "0.21.1",
+  "version": "0.22.0",
   "description": "Basic form implementation library for Vue applications.",
   "keywords": [
     "fastkit",
@@ -63,7 +63,7 @@
     "imask": "^7.6.1"
   },
   "devDependencies": {
-    "vue": "^3.4.0"
+    "vue": "^3.5.21"
   },
   "peerDependencies": {
     "vue": "^3.4.0"

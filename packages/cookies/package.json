@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cookies",
-  "version": "0.14.6",
+  "version": "0.15.0",
   "description": "Helper implementation for universal server/browser control of cookie headers.",
   "keywords": [
     "fastkit",
@@ -54,11 +54,10 @@
     "@fastkit/ev": "workspace:^",
     "@fastkit/helpers": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
-    "cookie": "^0.6.0",
-    "set-cookie-parser": "^2.6.0"
+    "cookie": "^1.0.2",
+    "set-cookie-parser": "^2.7.1"
   },
   "devDependencies": {
-    "@types/cookie": "^0.6.0",
     "@types/set-cookie-parser": "^2.4.10"
   },
   "buildOptions": {

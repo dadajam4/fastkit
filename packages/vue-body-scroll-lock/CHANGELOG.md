@@ -1,5 +1,19 @@
 # @fastkit/vue-body-scroll-lock
 
+## 0.3.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.16.0
+  - @fastkit/helpers@0.15.0
+  - @fastkit/body-scroll-lock@0.15.0
+  - @fastkit/dom@0.3.0
+
 ## 0.2.14
 
 ### Patch Changes
@@ -120,7 +134,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes

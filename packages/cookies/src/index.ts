@@ -1,6 +1,6 @@
 export type {
-  CookieParseOptions,
-  CookieSerializeOptions,
+  ParseOptions,
+  SerializeOptions,
   CookiesBrowserContext,
   CookiesNodeContext,
   CookiesServerContext,

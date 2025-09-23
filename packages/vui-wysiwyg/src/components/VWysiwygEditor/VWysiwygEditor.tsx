@@ -33,10 +33,10 @@ import {
 import {
   EditorContent,
   useEditor,
-  BubbleMenu,
   FocusPosition,
   type Editor,
 } from '@tiptap/vue-3';
+import { BubbleMenu } from '@tiptap/vue-3/menus';
 import { StarterKit } from '@tiptap/starter-kit';
 import { VUI_WYSIWYG_EDITOR_SYMBOL } from '../../injections';
 import {
@@ -145,7 +145,7 @@ export const VWysiwygEditor = defineComponent({
         bold: false,
         bulletList: false,
         orderedList: false,
-        history: false,
+        undoRedo: false,
         italic: false,
       }),
       ...resolveRawWysiwygExtensions(props.extensions, initializeCtx),
@@ -165,10 +165,9 @@ export const VWysiwygEditor = defineComponent({
         const $editor = editor.value;
         if (!$editor || getOutput($editor, 'html') === modelValue) return;
 
-        $editor.commands.setContent(
-          modelValue == null ? '' : modelValue,
-          false,
-        );
+        $editor.commands.setContent(modelValue == null ? '' : modelValue, {
+          emitUpdate: false,
+        });
         textRef.value = getOutput($editor, 'text');
       },
     );
@@ -288,10 +287,10 @@ export const VWysiwygEditor = defineComponent({
         {!props.floatingToolbar &&
           !!editor.value &&
           !inputControl.isReadonly && (
-            <BubbleMenu
-              class="v-wysiwyg-editor__bubble-menu"
-              editor={editor.value}>
-              {createTools(true)}
+            <BubbleMenu editor={editor.value}>
+              <div class="v-wysiwyg-editor__bubble-menu">
+                {createTools(true)}
+              </div>
             </BubbleMenu>
           )}
       </div>

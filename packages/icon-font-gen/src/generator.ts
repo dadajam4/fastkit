@@ -126,7 +126,10 @@ export async function generateEntry(
 
   await Promise.all(
     buildedFormats.map(({ format, code }) =>
-      fs.writeFile(path.join(options.dest, `${options.name}.${format}`), code),
+      fs.writeFile(
+        path.join(options.dest, `${options.name}.${format}`),
+        code as string | Uint8Array,
+      ),
     ),
   );
 

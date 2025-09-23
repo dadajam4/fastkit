@@ -18,7 +18,7 @@ export function votPlugin(options: VotPluginOptions = {}) {
   const _Pages: typeof Pages =
     typeof Pages === 'function' ? Pages : (Pages as any).default;
   const pagesPlugin = _Pages({
-    pagesDir: 'src/pages',
+    dirs: ['src/pages'],
     extensions: ['vue', 'ts', 'tsx'],
     ...pages,
   });

@@ -2,7 +2,6 @@
 
 import { App, h, Component } from 'vue';
 import { Router } from 'vue-router';
-import { createHead } from '@unhead/vue';
 import { isPromise, IN_WINDOW, removeUndef } from '@fastkit/helpers';
 import {
   installVuePageControl,
@@ -26,6 +25,10 @@ export async function createVotHook(
     h(VPageRoot, null, {
       default: withCtx(defaultSlot),
     });
+  const { createHead } = await (typeof window !== undefined
+    ? import('@unhead/vue/client')
+    : import('@unhead/vue/server'));
+
   const routes =
     options.routes || (await import('virtual:generated-pages')).default;
 

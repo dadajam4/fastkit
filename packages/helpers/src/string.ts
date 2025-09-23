@@ -120,3 +120,33 @@ export function stripIndent(
 
   return str.replace(regex, '');
 }
+
+/**
+ * Converts a string to camelCase.
+ *
+ * @param str - Any input string
+ * @returns The string converted to camelCase
+ */
+export function toCamelCase(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
+}
+
+/**
+ * Converts a string to kebab-case (hyphen-separated lowercase)
+ *
+ * @param str - Any input string
+ * @returns The string converted to kebab-case
+ */
+export function toKebabCase(str: string): string {
+  return (
+    str
+      // Convert camelCase to hyphen-separated
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      // Replace spaces and underscores with hyphens
+      .replace(/[\s_]+/g, '-')
+      // Convert the entire string to lowercase
+      .toLowerCase()
+  );
+}

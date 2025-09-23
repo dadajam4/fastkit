@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy-vue-jsx-plugin",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "",
   "keywords": [],
   "repository": {
@@ -43,15 +43,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/core": "^7.24.9",
-    "@babel/plugin-transform-typescript": "^7.24.8",
-    "@vue/babel-plugin-jsx": "^1.2.2"
+    "@babel/core": "^7.28.4",
+    "@babel/plugin-transform-typescript": "^7.28.0",
+    "@vue/babel-plugin-jsx": "^1.5.0"
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:^",
     "@types/babel__core": "^7.20.5",
-    "@vitejs/plugin-vue-jsx": "^4.1.2",
-    "vite": "^7.1.4"
+    "@vitejs/plugin-vue-jsx": "^5.1.1",
+    "vite": "^7.1.7"
   },
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:^",

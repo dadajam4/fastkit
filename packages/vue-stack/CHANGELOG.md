@@ -1,5 +1,30 @@
 # @fastkit/vue-stack
 
+## 0.18.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+  This release also includes the following updates:
+
+  ### Improved typing for event handlers
+
+  The event object type passed to event handlers such as `onClick` has been changed from `MouseEvent` to `PointerEvent`.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.3.0
+  - @fastkit/vue-click-outside@0.3.0
+  - @fastkit/vue-transitions@0.3.0
+  - @fastkit/vue-keyboard@0.3.0
+  - @fastkit/vue-resize@0.3.0
+  - @fastkit/vue-utils@0.16.0
+  - @fastkit/helpers@0.15.0
+  - @fastkit/dom@0.3.0
+  - @fastkit/tiny-logger@0.15.0
+
 ## 0.17.4
 
 ### Patch Changes
@@ -68,7 +93,6 @@
   ### Added parent, children, and allChildren properties
 
   Properties were added to `VStackControl` for referencing parent-child relationships.
-
   - `parent` The VStackControl instance in the parent hierarchy of the component tree.
   - `children` List of VStackControl instances located below this component in the component tree.
   - `allChildren` List of all nested VStackControl instances, including children.
@@ -226,7 +250,6 @@
 ### Patch Changes
 
 - I've added the following features to the stack:
-
   - Added `disabled` option to the stack.
   - Added missing stack control type to MenuAPI.
 
@@ -302,7 +325,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes

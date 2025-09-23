@@ -78,7 +78,7 @@ export const generateRouteKey = (
   }
   const source =
     override ??
-    matchedRoute?.meta.key ??
+    (matchedRoute?.meta.key as string | undefined) ??
     interpolatePath(routeProps.route, matchedRoute);
   return typeof source === 'function' ? source(routeProps.route) : source;
 };

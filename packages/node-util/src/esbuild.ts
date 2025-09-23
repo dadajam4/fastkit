@@ -1,7 +1,7 @@
 import esbuild, { Plugin } from 'esbuild';
 import path from 'node:path';
 import fs from 'node:fs';
-import chokidar from 'chokidar';
+import chokidar, { type FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
 import module from 'node:module';
 import url from 'node:url';
@@ -210,7 +210,7 @@ export class ESbuildRunner<T = any> extends EV<ESbuildRunnerEventMap<T>> {
 
   readonly filename?: string;
 
-  private watcher: chokidar.FSWatcher | null = null;
+  private watcher: FSWatcher | null = null;
 
   private _dependencies: string[] = [];
 

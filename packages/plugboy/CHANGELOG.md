@@ -1,5 +1,15 @@
 # @fastkit/plugboy
 
+## 0.3.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+  This release also includes the following breaking change:
+
+  Previously, when running a plugboy build, the entries from package.json `peerDependencies` were copied into `devDependencies`. Now, if a version is already specified in `devDependencies`, it will no longer be overwritten.
+
 ## 0.2.7
 
 ### Patch Changes

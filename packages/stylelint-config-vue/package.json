@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/stylelint-config-vue",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "@fastkit/stylelint-config-vue",
   "buildOptions": {
     "ignore": true
@@ -41,6 +41,6 @@
   },
   "dependencies": {
     "@fastkit/stylelint-config": "workspace:^",
-    "stylelint-config-recommended-vue": "^1.5.0"
+    "stylelint-config-recommended-vue": "^1.6.1"
   }
 }

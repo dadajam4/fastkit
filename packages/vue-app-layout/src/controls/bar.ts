@@ -36,7 +36,7 @@ export class VueAppBar {
     this.layout = layout;
     this._active = computed(() => {
       const { active } = settings;
-      return typeof active === 'function' ? active(layout) : active ?? true;
+      return typeof active === 'function' ? active(layout) : (active ?? true);
     });
     this._position = computed(
       () => settings.position || VAL_BAR_DEFAULT_POSITION,

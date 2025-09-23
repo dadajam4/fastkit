@@ -27,9 +27,9 @@ export function isArrayBufferView(source: unknown): source is ArrayBufferView {
  * @param cur - Buffer from which to duplicate
  * @returns Copied buffer
  */
-export function copyBuffer(cur: Buffer | ArrayBufferView) {
+export function copyBuffer(cur: Buffer | ArrayBufferView): Buffer {
   if (isBuffer(cur)) {
-    return Buffer.from(cur);
+    return Buffer.from(cur as unknown as ArrayBuffer);
   }
   return Buffer.from(cur.buffer.slice(0), cur.byteOffset, cur.byteLength);
 }

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/color-scheme-gen",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generator for generating \"color\" schemas.",
   "keywords": [
     "fastkit",
@@ -56,8 +56,8 @@
     "@fastkit/ev": "workspace:^",
     "@fastkit/node-util": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
-    "eta": "^3.4.0",
-    "fs-extra": "^11.2.0"
+    "eta": "^4.0.1",
+    "fs-extra": "^11.3.2"
   },
   "buildOptions": {
     "name": "ColorSchemeGen"

@@ -9,6 +9,7 @@ import {
   defineSlots,
   DefineSlotsType,
 } from '@fastkit/vue-utils';
+import { DISABLED_REASON_CONTAINER_BIND } from '@fastkit/vue-disabled-reason';
 import {
   createControlProps,
   useControl,
@@ -146,7 +147,8 @@ export const VControlField = defineComponent({
         class={classes.value}
         onClick={handleClick}
         // tabindex={this.computedTabindex}
-        ref={hostElRef}>
+        ref={hostElRef}
+        {...DISABLED_REASON_CONTAINER_BIND}>
         {renderAdornment('start')}
         <div class="v-control-field__body">{ctx.slots.default?.()}</div>
         {renderAdornment('end')}

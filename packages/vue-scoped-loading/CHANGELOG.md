@@ -1,5 +1,16 @@
 # @fastkit/vue-scoped-loading
 
+## 0.2.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.15.0
+
 ## 0.1.3
 
 ### Patch Changes

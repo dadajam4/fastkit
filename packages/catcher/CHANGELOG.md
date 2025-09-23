@@ -1,5 +1,16 @@
 # @fastkit/catcher
 
+## 0.15.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.15.0
+
 ## 0.14.7
 
 ### Patch Changes
@@ -54,7 +65,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes
@@ -90,7 +100,6 @@
 ### Patch Changes
 
 - Fixed cases where information was missing for instance fields.
-
   - Resolved an issue where custom fields in the application were missing when enumerating keys for Catcher instances.
   - Addressed a situation where the stack of Catcher instances was missing when an empty stack was returned in the resolver.
 

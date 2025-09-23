@@ -6,6 +6,7 @@ import type {
   VNode,
   UnwrapRef,
   VNodeChild,
+  ExtractPublicPropTypes,
 } from 'vue';
 import type { RouterLinkProps, useLink, Router } from 'vue-router';
 import {
@@ -42,6 +43,7 @@ const ROUTER_LINK_PROPS = [
   'activeClass',
   'exactActiveClass',
   'ariaCurrentValue',
+  'viewTransition',
 ] as const;
 
 export const isRouterLinkProp = (
@@ -207,11 +209,20 @@ type ActionableAttrsProps = {
   >;
 };
 
+export interface ActionableCustomProps {}
+
+export interface ActionableCustomPropsInput
+  extends ExtractPublicPropTypes<ActionableCustomProps> {}
+
+export interface ExtractedActionableCustomProps
+  extends ExtractPropTypes<ActionableCustomProps> {}
+
 /** Component property options for actionable components */
 export interface ActionableInheritPropOptions
   extends ActionableAttrsProps,
     PointableAttributesProps,
-    FocusableAttributesProps {
+    FocusableAttributesProps,
+    ActionableCustomProps {
   /** tag name */
   tag: PropType<string>;
   /** class name */

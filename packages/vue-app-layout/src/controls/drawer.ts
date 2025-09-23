@@ -95,7 +95,9 @@ export class VueAppDrawer {
     const { id } = settings;
 
     this.id =
-      id instanceof VueAppDrawerControl ? id.id : id ?? Symbol('VueAppDrawer');
+      id instanceof VueAppDrawerControl
+        ? id.id
+        : (id ?? Symbol('VueAppDrawer'));
     this.stackRef = this.stackRef.bind(this);
 
     this._position = computed(

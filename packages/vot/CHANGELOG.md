@@ -1,5 +1,20 @@
 # @fastkit/vot
 
+## 1.1.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
+  Accordingly, the page directory previously specified with `pagesDir` must now be changed to `dirs`.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.16.0
+  - @fastkit/vue-page@0.16.0
+  - @fastkit/helpers@0.15.0
+
 ## 1.0.0
 
 ### Major Changes

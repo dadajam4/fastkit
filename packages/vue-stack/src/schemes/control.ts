@@ -68,9 +68,9 @@ export interface VStackActivatorAttributes {
   /** VNode ref */
   ref: Ref;
   /** Click handler */
-  onClick?: (ev: MouseEvent) => void;
+  onClick?: (ev: PointerEvent) => void;
   /** Context menu handler */
-  onContextmenu?: (ev: MouseEvent) => void;
+  onContextmenu?: (ev: PointerEvent) => void;
   /** Mouse enter handler */
   onMouseenter?: (ev: MouseEvent) => void;
   /** Mouse leave handler */

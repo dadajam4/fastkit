@@ -1,4 +1,4 @@
-import { defineComponent, computed } from 'vue';
+import { defineComponent } from 'vue';
 import { VApp } from '@fastkit/vui';
 import { VPage } from '@fastkit/vue-page';
 import { useHead } from '@unhead/vue';
@@ -8,12 +8,10 @@ export const App = defineComponent({
   name: 'App',
   setup() {
     const space = i18n.use();
-    const htmlAttrs = computed(() => ({
-      lang: space.currentLocaleName,
-    }));
-
     useHead({
-      htmlAttrs,
+      htmlAttrs: {
+        lang: () => space.currentLocaleName,
+      },
     });
 
     return () => (

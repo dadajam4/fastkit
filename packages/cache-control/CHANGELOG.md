@@ -1,5 +1,13 @@
 # @fastkit/cache-control
 
+## 0.15.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.15.0
+  - @fastkit/cloner@0.3.0
+
 ## 0.14.5
 
 ### Patch Changes
@@ -48,7 +56,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ### Patch Changes

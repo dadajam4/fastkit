@@ -142,5 +142,5 @@ export interface Hook {
 }
 
 export type HookResponse = void | {
-  head?: VueHeadClient<{}>;
+  head?: VueHeadClient<any>;
 };
