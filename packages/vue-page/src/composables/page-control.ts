@@ -1,6 +1,3 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-shadow */
-/* eslint-disable @typescript-eslint/ban-types */
 import {
   App,
   ref,
@@ -44,7 +41,7 @@ import { StateInjectionKey } from './state';
 
 type InitialState = Record<string, unknown>;
 
-export interface VuePageInjectionKey<T> extends String {}
+export type VuePageInjectionKey<T> = string;
 
 export type VuePagePrefetchFn = (
   this: void,
@@ -596,7 +593,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     return v;
   }
 
-  injectData<T, D extends T | undefined, N extends Boolean>(
+  injectData<T, D extends T | undefined, N extends boolean>(
     key: VuePageInjectionKey<T>,
     defaultData?: D,
     allowNull?: N,
@@ -670,7 +667,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       hash = tmp.hash;
     }
     const queryStr = query ? stringifyQuery(query) : query;
-    // eslint-disable-next-line no-nested-ternary
+
     const queryAppends = queryStr
       ? path.includes('?')
         ? `&${queryStr}`
@@ -920,35 +917,27 @@ export class VuePagePrefetchQueue extends EV<VuePagePrefetchQueueEventMap> {
 
   getQuery(key: string): string | undefined;
 
-  // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: undefined, defaultValue: string): string;
 
-  // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: StringConstructor): string | undefined;
 
-  // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: StringConstructor, defaultValue: string): string;
 
-  // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: NumberConstructor): number | undefined;
 
-  // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: NumberConstructor, defaultValue: number): number;
 
-  // eslint-disable-next-line no-dupe-class-members
   getQuery(key: string, type: BooleanConstructor): boolean;
 
-  // eslint-disable-next-line no-dupe-class-members
   getQuery(
     key: string,
     type: BooleanConstructor,
     defaultValue: boolean,
   ): boolean;
 
-  // eslint-disable-next-line no-dupe-class-members
   getQuery(
     key: string,
-    // eslint-disable-next-line default-param-last
+
     type: RouteQueryType = String,
     defaultValue?: string | number | boolean,
   ): string | number | boolean | undefined {
@@ -1026,7 +1015,7 @@ export interface UseVuePageControlOptions {
 export type PrefetchContext<T = any> = {
   key: VuePageInjectionKey<T>;
   prefetch: VuePagePrefetchFn;
-  inject: <D extends T | undefined, N extends Boolean>(
+  inject: <D extends T | undefined, N extends boolean>(
     defaultValue?: D,
     allowNull?: N,
   ) => D extends T ? T : N extends true ? T | D : T;
@@ -1040,7 +1029,7 @@ export function createPrefetch<T>(
     return queue.provide(key, data);
   };
 
-  function inject<D extends T | undefined, N extends Boolean>(
+  function inject<D extends T | undefined, N extends boolean>(
     defaultValue?: D,
     allowNull?: N,
   ): D extends T ? T : N extends true ? T | D : T {

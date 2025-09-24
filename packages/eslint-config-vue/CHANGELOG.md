@@ -1,5 +1,16 @@
 # @fastkit/eslint-config-vue
 
+## 0.14.0
+
+### Minor Changes
+
+- Updated ESLint to v9 and migrated to the flat configuration, making adjustments to the rules accordingly.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/eslint-config@0.14.0
+
 ## 0.13.12
 
 ### Patch Changes

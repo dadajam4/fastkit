@@ -33,7 +33,6 @@ export const VFormGroup = defineComponent({
   props: createVFormGroupProps(),
   emits,
   slots: formGroupSlots,
-  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const nodeControl = useFormGroup(props, ctx as any, {
       nodeType: VUI_FORM_GROUP_SYMBOL,

@@ -11,7 +11,6 @@ export default defineComponent({
   i18n: PkgI18nSubSpace,
   prefetch: ApiMeta.prefetch,
   setup() {
-    // eslint-disable-next-line no-new
     new ApiMeta();
 
     return () => (

@@ -90,7 +90,6 @@ export function createColorScope<
   });
 
   function resolve<R extends boolean>(
-    // eslint-disable-next-line no-shadow
     source: ColorScopeResolverResult | ColorScopeResolver<TN, PN, SN, VN, OK>,
     required?: R,
   ): R extends true ? Color : Color | void | null | false {
@@ -131,7 +130,6 @@ export function createColorScopeBucket<
   VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
-  // eslint-disable-next-line default-param-last
   sources: ColorScopeSource<TN, PN, SN, VN, OK>[] = [],
   ctx: ColorScopesContext<TN, PN, SN, VN, OK>,
 ) {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { describe, it, expect } from 'vitest';
 import { EV } from '../src';
 import { EVListener } from '../src/EVListener';
@@ -77,7 +76,6 @@ describe('on', () => {
       tag: 'tag2',
     });
 
-    // eslint-disable-next-line no-void
     ev.emit('e1', void 0);
     ev.emit('e2', 'str');
     ev.emit('e3', true);

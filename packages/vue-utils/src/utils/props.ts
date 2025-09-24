@@ -26,7 +26,6 @@ export function rawNumberProp<
   } as unknown as R;
 }
 
-/* eslint-disable @typescript-eslint/ban-types */
 type InferPropType<T> = [T] extends [null]
   ? any
   : [T] extends [

@@ -230,7 +230,6 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
   const { name, validate, message, constraints } = settings;
 
   function rule<EC extends C = C>(
-    // eslint-disable-next-line no-shadow
     constraints: Partial<EC>,
     overRides?: string | Partial<RuleSettings<EC>>,
   ): Rule<EC> {
@@ -306,7 +305,6 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
         };
       }
       if (!result || children) {
-        // eslint-disable-next-line no-shadow
         const message =
           RuleMessageService.resolve(context()) || RULE_DEFAULT_MESSAGE;
 
@@ -319,7 +317,7 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
     } catch (err) {
       const ctx = context();
       ctx.exception = err;
-      // eslint-disable-next-line no-shadow
+
       const message =
         RuleMessageService.resolve(ctx) || 'An error has occurred.';
 
@@ -330,7 +328,6 @@ export function createRule<C = any>(settings: RuleSettings<C>): Rule<C> {
     }
   };
 
-  // eslint-disable-next-line no-shadow
   rule.fork = function fork(settings: {
     name?: string;
     constraints?: C;

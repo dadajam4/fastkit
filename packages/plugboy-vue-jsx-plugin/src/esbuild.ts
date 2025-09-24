@@ -28,7 +28,6 @@ export const transformVue3 = async (
   };
 
   if (isTS(id)) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     transformOptions.plugins!.push([
       TS,
       { isTSX: true, allowExtensions: true },

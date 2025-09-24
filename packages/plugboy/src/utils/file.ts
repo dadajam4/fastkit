@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -163,7 +162,6 @@ export async function findConfig<
   };
 
   const result = await (async () => {
-    // eslint-disable-next-line no-shadow
     for (const fileName of fileNames) {
       try {
         const _path = path.join(dir, fileName);

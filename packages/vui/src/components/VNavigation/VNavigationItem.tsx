@@ -16,7 +16,6 @@ import { ScopeName } from '@fastkit/color-scheme';
 // @TODO Unable to resolve dts for `actionableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// eslint-disable-next-line import/no-duplicates
 import { useRoute, RouteLocationRaw } from 'vue-router';
 import { useVui } from '../../injections';
 import { createListTileProps, listTileEmits, VListTile } from '../VListTile';
@@ -34,7 +33,6 @@ export function createNavigationItemProps() {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface NavigationItemInput
   extends ExtractPropInput<ReturnType<typeof createNavigationItemProps>> {
   key: string | number;
@@ -98,9 +96,8 @@ export const VNavigationItem = defineComponent({
     const to = computed(() => ctx.attrs.to);
 
     const match = computed<string[] | undefined>(() => {
-      // eslint-disable-next-line no-shadow
       const { match } = props;
-      // eslint-disable-next-line no-shadow
+
       const { to } = ctx.attrs;
       if (match) {
         return (Array.isArray(match) ? match : [match]).map(trimEndSlash);

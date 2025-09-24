@@ -619,7 +619,6 @@ export function defineI18nComponent<
         for (const fallbackLocale of localeDependencies) {
           if (fallbackLocale === localeName) continue;
           const fallbackTranslations = flattenedTranslationsMap[fallbackLocale];
-          // eslint-disable-next-line no-shadow
           const value = fallbackTranslations[valuePath];
           if (value !== undefined) {
             (localeTranslations as any)[valuePath] = value;
@@ -670,7 +669,6 @@ export function defineI18nComponent<
        * @param localeName - locale name
        */
       const setupLocale = (localeName: LocaleName) => {
-        // eslint-disable-next-line no-shadow
         const strictSettings = getStrictSettings();
         const locale = loader.get(localeName);
         const translations =

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-dynamic-require */
 /* eslint-disable no-console */
 import path from 'node:path';
 import express, { Express } from 'express';
@@ -161,7 +160,6 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
     resolvedUrls: ResolvedServerUrls;
   }>((resolve, reject) => {
     try {
-      // eslint-disable-next-line no-shadow
       const launched = server.listen(port, host, async () => {
         const { server: serverOptions } = resolvedConfig;
         const resolvedUrls = await resolveServerUrls(

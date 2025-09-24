@@ -1,5 +1,11 @@
 # @fastkit/eslint-config
 
+## 0.14.0
+
+### Minor Changes
+
+- Updated ESLint to v9 and migrated to the flat configuration, making adjustments to the rules accordingly.
+
 ## 0.13.8
 
 ### Patch Changes

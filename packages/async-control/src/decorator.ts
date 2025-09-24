@@ -21,12 +21,10 @@ export function AsyncHandle<Fn extends AsyncFn>(
   options: AsyncHandlerOptions<Fn> = {},
 ) {
   return (
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    target: Object,
+    target: object,
     propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<Fn>,
   ) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const originalFn = descriptor.value!;
 
     const controller = new AsyncHandler<Fn>(null as any, options);

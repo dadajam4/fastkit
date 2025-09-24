@@ -8,8 +8,8 @@
     "dev": "vot",
     "build": "vot build",
     "serve": "vot serve",
-    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
-    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "eslint": "eslint .",
+    "eslint:fix": "eslint . --fix",
     "format": "pnpm run eslint:fix",
     "lint": "pnpm run eslint",
     "typecheck": "tsc --noEmit --skipLibCheck"

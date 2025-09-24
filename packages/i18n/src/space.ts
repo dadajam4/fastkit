@@ -591,7 +591,6 @@ export class I18nSubSpace<
       SpaceCustomInterface
     >,
     storage: I18nSpaceStorage<LocaleName, BaseLocale, LocaleMeta>,
-    // eslint-disable-next-line no-shadow
     Components: SubComponents,
     bucket: any = {},
   ) {
@@ -736,7 +735,6 @@ export function defineI18nSpace<
       };
 
       const loadComponents = (
-        // eslint-disable-next-line no-shadow
         Components: I18nComponentStatic<
           LocaleName,
           BaseLocale,
@@ -787,7 +785,7 @@ export function defineI18nSpace<
                 instance && instance._setupLocales(localeDependencies);
                 onComponentResolve();
               })
-              // eslint-disable-next-line no-loop-func
+
               .catch((err) => {
                 rejected = true;
                 releaseRequest();

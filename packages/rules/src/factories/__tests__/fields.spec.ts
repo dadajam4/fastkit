@@ -177,7 +177,7 @@ describe('factories/fields', () => {
             path: 'user',
           })) as ValidationError;
           const cloned = JSON.parse(JSON.stringify(expectValueSnapShot));
-          // eslint-disable-next-line no-shadow
+
           cloned.children.forEach((row: any, i: number) => {
             const same = (result as any).children[i];
             row.children = expectValueSnapShot.children[i].children;

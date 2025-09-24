@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import path from 'node:path';
 import imageminPngquant from 'imagemin-pngquant';
 import imageminMozjpeg from 'imagemin-mozjpeg';

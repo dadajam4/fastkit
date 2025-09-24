@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
 import path from 'node:path';
 import fs from 'fs-extra';
@@ -72,7 +71,7 @@ export async function generate(_config?: ResolvedConfig) {
     const matched = url.replace(/\/+/g, '/').match(urlParseRe);
     if (!matched) throw new Error(`Invalid url: ${url}`);
     const protocol = matched[1];
-    // eslint-disable-next-line no-shadow
+
     let path = matched[2];
     const query = matched[3] || '';
     if (!path.endsWith('/')) {
@@ -147,7 +146,6 @@ export async function generate(_config?: ResolvedConfig) {
             throw _err;
           });
           if (typeof html !== 'string') {
-            // eslint-disable-next-line no-throw-literal
             throw { statusCode: html.status };
           }
           await fs.ensureDir(outDir);

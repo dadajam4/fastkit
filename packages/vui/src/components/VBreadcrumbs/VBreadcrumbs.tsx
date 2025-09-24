@@ -62,7 +62,7 @@ export const VBreadcrumbs = defineComponent({
 
     return () => {
       if (lengthRef.value < 1) return;
-      // eslint-disable-next-line no-shadow
+
       let dividerSlot: (vui: VuiService) => VNodeChild;
       const propDivider = props.divider;
       if (propDivider) {

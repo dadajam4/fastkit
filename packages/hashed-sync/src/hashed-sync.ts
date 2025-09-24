@@ -130,7 +130,6 @@ export class HashedSync {
     for (const stack of stacks) {
       const { processor, updates } = stack;
       if (updates.length) {
-        // eslint-disable-next-line no-await-in-loop
         await processor.proc(updates);
       }
     }

@@ -3,7 +3,6 @@ import type { processors } from './processors';
 /**
  * 更新情報種別
  */
-// eslint-disable-next-line no-shadow
 export enum UpdateType {
   /**
    * 新規追加

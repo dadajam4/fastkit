@@ -6,7 +6,6 @@ import { ApiMeta } from './-shared';
 export default defineComponent({
   prefetch: ApiMeta.prefetch,
   setup() {
-    // eslint-disable-next-line no-new
     new ApiMeta();
 
     return () => (

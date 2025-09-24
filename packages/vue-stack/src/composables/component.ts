@@ -34,10 +34,11 @@ export interface DefineStackableSettings<
   CustomAPI extends Record<keyof any, any> = {},
 > {
   name?: string;
-  setup?: (ctx: StackableSetupContext<Props, Emits, Slots, CustomAPI>) =>
+  setup?: (
+    ctx: StackableSetupContext<Props, Emits, Slots, CustomAPI>,
+  ) =>
     | ((
         children: VNodeChild,
-        // eslint-disable-next-line no-shadow
         ctx: StackableSetupContext<Props, Emits, Slots, CustomAPI>,
       ) => VNode)
     | void;
@@ -64,7 +65,6 @@ export type EmitsToPropOptions<T extends EmitsOptions> = T extends string[]
             ? never // PropType<(...args: any[]) => any>
             : PropType<
                 (
-                  // eslint-disable-next-line no-shadow
                   ...args: T[Uncapitalize<C>] extends (...args: infer P) => any
                     ? P
                     : never

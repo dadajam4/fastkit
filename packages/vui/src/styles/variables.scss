@@ -161,30 +161,30 @@
   --control-field-rem-lg: 1.125rem; // 18
 
   // control defaults
-  --control-disabled-color: rgba(0, 0, 0, 0.38);
+  --control-disabled-color: rgb(0, 0, 0, 0.38);
   --control-horizontal-margin: 0.5em; // 16
   --control-field-radius: 2px;
-  --control-field-fill-color: rgba(0, 0, 0, 0.06);
-  --control-field-fill-hover-color: rgba(0, 0, 0, 0.09);
-  --control-field-outline-color: rgba(114, 106, 106, 0.23);
-  --control-field-outline-hover-color: rgba(0, 0, 0, 0.87);
-  --control-field-bottom-color: rgba(0, 0, 0, 0.42);
-  --control-field-bottom-hover-color: rgba(0, 0, 0, 0.87);
+  --control-field-fill-color: rgb(0, 0, 0, 0.06);
+  --control-field-fill-hover-color: rgb(0, 0, 0, 0.09);
+  --control-field-outline-color: rgb(114, 106, 106, 0.23);
+  --control-field-outline-hover-color: rgb(0, 0, 0, 0.87);
+  --control-field-bottom-color: rgb(0, 0, 0, 0.42);
+  --control-field-bottom-hover-color: rgb(0, 0, 0, 0.87);
   --control-field-height: 2.25em;
   --control-field-line-height: 1.4375em;
   --control-field-letter-spacing: 0.00938em;
-  --control-label-color: rgba(0, 0, 0, 0.6);
+  --control-label-color: rgb(0, 0, 0, 0.6);
   --control-label-font-weight: 500;
   --control-label-font-size: 0.75em; // 12
   --control-label-height: 1.4375em;
-  --control-message-color: rgba(0, 0, 0, 0.6);
+  --control-message-color: rgb(0, 0, 0, 0.6);
   --control-message-font-size: 0.75em; // 12
   --control-message-horizontal-margin: calc(var(--root-spacing) * 0.5);
   --control-checkable-outer-size: 2em; // 42
   --control-checkable-icon-size: 1em; // 20
   --control-checkable-faux-scale: 1.2;
   --control-checkable-faux-margin: 0.2em;
-  --control-checkable-base-color: rgba(0, 0, 0, 0.6);
+  --control-checkable-base-color: rgb(0, 0, 0, 0.6);
   --control-switch-width: 3.625em; // 58
   --control-switch-track-width: 2.125em; // 34
   --control-switch-track-height: 0.875em; // 14
@@ -200,9 +200,9 @@
   --wysiwyg-max-height-lg: 16em;
 
   // shadows
-  --shadow-key-umbra-opacity: rgba(0, 0, 0, 0.2);
-  --shadow-key-penumbra-opacity: rgba(0, 0, 0, 0.14);
-  --shadow-key-ambient-opacity: rgba(0, 0, 0, 0.12);
+  --shadow-key-umbra-opacity: rgb(0, 0, 0, 0.2);
+  --shadow-key-penumbra-opacity: rgb(0, 0, 0, 0.14);
+  --shadow-key-ambient-opacity: rgb(0, 0, 0, 0.12);
 
   // shadows(umbra)
   --shadow-key-umbra-0: 0px 0px 0px 0px var(--shadow-key-umbra-opacity);
@@ -335,34 +335,34 @@
   // snackbar
   // =============================================
   --snackbar-shadow:
-    0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14),
-    0 1px 18px 0 rgba(0, 0, 0, 0.12);
+    0 3px 5px -1px rgb(0, 0, 0, 0.2), 0 6px 10px 0 rgb(0, 0, 0, 0.14),
+    0 1px 18px 0 rgb(0, 0, 0, 0.12);
 
   // =============================================
   // dialogs
   // =============================================
   --dialog-shadow:
-    0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-    0 9px 46px 8px rgba(0, 0, 0, 0.12);
+    0 11px 15px -7px rgb(0, 0, 0, 0.2), 0 24px 38px 3px rgb(0, 0, 0, 0.14),
+    0 9px 46px 8px rgb(0, 0, 0, 0.12);
 
   // =============================================
   // menus
   // =============================================
   --menu-shadow:
-    0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    0 5px 5px -3px rgb(0, 0, 0, 0.2), 0 8px 10px 1px rgb(0, 0, 0, 0.14),
+    0 3px 14px 2px rgb(0, 0, 0, 0.12);
 
   // =============================================
   // tooltips
   // =============================================
-  --tooltip-background: rgba(35, 47, 52, 0.9);
+  --tooltip-background: rgb(35, 47, 52, 0.9);
   --tooltip-color: #fff;
   --tooltip-radius: 4px;
   --tooltip-padding: 5px 16px;
   --tooltip-font-size: calc(var(--root-em) * 0.875);
   --tooltip-shadow:
-    0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    0 3px 1px -2px rgb(0, 0, 0, 0.2), 0 2px 2px 0 rgb(0, 0, 0, 0.14),
+    0 1px 5px 0 rgb(0, 0, 0, 0.12);
 }
 
 :root,

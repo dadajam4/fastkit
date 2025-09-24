@@ -61,7 +61,6 @@ export const TSUP_SYNC_OPTIONS = [
 
 type TSUpSyncOption = (typeof TSUP_SYNC_OPTIONS)[number];
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TSUpSyncOptions extends Pick<TSUpOptions, TSUpSyncOption> {}
 
 /**
@@ -166,7 +165,7 @@ export interface WorkspaceDirs {
  *
  * @remarks This will be set to a value uniquely extended by the plugin
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+
 export interface WorkspaceMeta {}
 
 /**

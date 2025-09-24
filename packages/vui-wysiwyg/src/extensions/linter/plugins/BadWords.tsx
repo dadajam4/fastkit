@@ -5,7 +5,6 @@ export function WysiwygLinterBadWords(
 ): typeof WysiwygLinterPlugin {
   const regex = new RegExp(`\\b(${words.join('|')})\\b`);
 
-  // eslint-disable-next-line no-shadow
   return class WysiwygLinterBadWords extends WysiwygLinterPlugin {
     scan() {
       this.doc.descendants((node: any, position: number) => {

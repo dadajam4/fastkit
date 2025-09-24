@@ -1,4 +1,4 @@
-@use '../../styles/core.scss';
+@use '../../styles/core';
 
 @layer vui {
   .v-avatar {
@@ -22,15 +22,15 @@
       font-size: var(--avatar-font-size);
       font-weight: var(--avatar-font-weight);
       line-height: 1;
-      text-align: center;
       vertical-align: bottom;
+      text-align: center;
       cursor: default;
       border-style: solid;
       border-width: 1px;
       border-radius: var(--avatar-radius);
 
-      --shadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
-      --focusShadow-color: rgba(0, 0, 0, 0) !important; // @TODO layer supports
+      --shadow-color: rgb(0, 0, 0, 0) !important; // @TODO layer supports
+      --focusShadow-color: rgb(0, 0, 0, 0) !important; // @TODO layer supports
     }
 
     &--clickable {

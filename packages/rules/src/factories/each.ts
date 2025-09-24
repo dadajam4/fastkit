@@ -52,9 +52,7 @@ export function createEachRule(
     name,
     message,
     constraints,
-    // eslint-disable-next-line no-shadow
     validate: async (obj: any, constraints) => {
-      // eslint-disable-next-line no-shadow
       const { skipIfEmpty, rules } = constraints;
       if (skipIfEmpty && obj == null) return true;
       const isArray = Array.isArray(obj);

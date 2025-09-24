@@ -92,7 +92,7 @@ export function isPlainObject<
   if (isObject(prot) === false) return false;
 
   // If constructor does not have an Object-specific method
-  // eslint-disable-next-line no-prototype-builtins
+
   if (prot.hasOwnProperty('isPrototypeOf') === false) {
     return false;
   }
@@ -110,29 +110,27 @@ export function objectIncludes(b: any, a: any): boolean {
   let i: number;
 
   if (arrA && arrB) {
-    // eslint-disable-next-line eqeqeq
     if (a.length != b.length) return false;
     for (i = 0; i < a.length; i++)
       if (!objectIncludes(a[i], b[i])) return false;
     return true;
   }
 
-  // eslint-disable-next-line eqeqeq
   if (arrA != arrB) return false;
 
   if (a && b && typeof a === 'object' && typeof b === 'object') {
     const dateA = a instanceof Date;
     const dateB = b instanceof Date;
-    // eslint-disable-next-line eqeqeq
+
     if (dateA && dateB) return a.getTime() == b.getTime();
-    // eslint-disable-next-line eqeqeq
+
     if (dateA != dateB) return false;
 
     const regexpA = a instanceof RegExp;
     const regexpB = b instanceof RegExp;
-    // eslint-disable-next-line eqeqeq
+
     if (regexpA && regexpB) return a.toString() == b.toString();
-    // eslint-disable-next-line eqeqeq
+
     if (regexpA != regexpB) return false;
 
     const keys = Object.keys(a);
@@ -169,7 +167,7 @@ export function isIterableObject<T = any>(source?: any): source is Iterable<T> {
 /**
  * @see https://github.com/vuejs/vue-router/blob/c69ff7bd60228fb79acd764c3fdae91015a49103/src/util/route.js#L96
  */
-// eslint-disable-next-line default-param-last
+
 export function isObjectEqual<T>(a: T = {} as T, b: unknown): b is T {
   // handle null value #1566
   if (!a || !b) return a === b;
@@ -202,7 +200,6 @@ export function objectFromArray<R, K extends string | number | symbol, T>(
 
 objectFromArray.build =
   <R, T>(rows: R[] | readonly R[]) =>
-  // eslint-disable-next-line no-shadow
   <K extends string | number | symbol, T>(
     cb: (row: R, index: number) => [K, T],
   ) =>

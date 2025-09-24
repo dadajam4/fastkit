@@ -270,7 +270,6 @@ export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
   };
 
   if (multiple) {
-    // eslint-disable-next-line default-param-last
     extractor = ((queryValues, defaultValue = baseDefaultValue, required) => {
       const prepared = prepareValues(queryValues);
       const matchedValues: LocationQueryValue[] = [];
@@ -336,7 +335,6 @@ export function createQueryValueExtractor<Spec extends QuerySchemaSpec>(
       if (values.length) return values;
     };
   } else {
-    // eslint-disable-next-line default-param-last
     extractor = ((queryValues, defaultValue = baseDefaultValue, required) => {
       const prepared = prepareValues(queryValues);
       const matchedValues: LocationQueryValue[] = [];

@@ -37,7 +37,7 @@ const abortEvents: HTMLElementEventMapKey[] = [
 export function scroll(
   diffX: number,
   diffY: number,
-  // eslint-disable-next-line default-param-last
+
   options: ScrollOptions = {},
   _computedValues?: ComputedValues,
 ): ScrollResult {
@@ -93,7 +93,7 @@ export function scroll(
   //
   // Setup Temporary values
   //
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   let doneResolver: Function;
   let timeStart = 0;
   let timeElapsed: number;

@@ -37,7 +37,6 @@ export const VTextarea = defineComponent({
     ...slots(),
   },
   emits,
-  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const vui = useVui();
     const inputControl = useTextareaNodeControl(props, ctx, {

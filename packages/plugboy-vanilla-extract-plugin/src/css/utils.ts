@@ -21,13 +21,11 @@ export function get(obj: any, path: Array<string>) {
 }
 export function walkObject<T extends Walkable, MapTo>(
   obj: T,
-  // eslint-disable-next-line no-shadow
   fn: (value: Primitive, path: Array<string>) => MapTo,
   path: Array<string> = [],
 ): MapLeafNodes<T, MapTo> {
   const clone = obj.constructor();
 
-  // eslint-disable-next-line guard-for-in
   for (const key in obj) {
     const value = obj[key];
     const currentPath = [...path, key];

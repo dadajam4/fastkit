@@ -70,9 +70,8 @@ export function defineFormSelectorComponent(
       failedToLoadItemsMessage: {} as PropType<VNodeChildOrSlot>,
       ...slots(),
     },
-    slots,
     emits,
-    // eslint-disable-next-line no-shadow
+    slots,
     setup(props, ctx) {
       const selectorControl = useFormSelectorControl(props, ctx, {
         nodeType,

@@ -377,7 +377,6 @@ export class PlugboyWorkspace {
       if (!esbuildPlugins) continue;
       for (const chunk of esbuildPlugins) {
         const esbuildPlugin =
-          // eslint-disable-next-line no-await-in-loop
           typeof chunk === 'function' ? await chunk(this) : await chunk;
         if (esbuildPlugin) {
           results.push(esbuildPlugin);

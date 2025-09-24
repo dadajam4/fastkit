@@ -1,5 +1,16 @@
 # @fastkit/stylelint-config-vue
 
+## 0.2.0
+
+### Minor Changes
+
+- Changed the export file extensions to `.mjs` and made some adjustments to several rules.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/stylelint-config@0.15.0
+
 ## 0.1.0
 
 ### Minor Changes

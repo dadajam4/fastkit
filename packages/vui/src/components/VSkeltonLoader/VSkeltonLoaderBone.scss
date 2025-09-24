@@ -3,7 +3,7 @@
     position: relative;
     overflow: hidden;
     cursor: progress;
-    background: rgba(0, 0, 0, 0.12);
+    background: rgb(0, 0, 0, 0.12);
     border-radius: inherit;
 
     &::after {
@@ -16,9 +16,9 @@
       content: '';
       background: linear-gradient(
         90deg,
-        hsla(0deg, 0%, 100%, 0),
-        hsla(0deg, 0%, 100%, 0.3),
-        hsla(0deg, 0%, 100%, 0)
+        hsl(0deg, 0%, 100%, 0),
+        hsl(0deg, 0%, 100%, 0.3),
+        hsl(0deg, 0%, 100%, 0)
       );
       transform: translateX(-100%);
       animation: v-skelton-loader-bone-loading 1.5s infinite;

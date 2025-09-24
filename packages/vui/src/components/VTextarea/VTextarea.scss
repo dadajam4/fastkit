@@ -1,4 +1,4 @@
-@use '../../styles/core.scss';
+@use '../../styles/core';
 
 @layer vui {
   .v-textarea {
@@ -14,10 +14,10 @@
         line-height: inherit;
         letter-spacing: inherit;
         resize: none;
+        outline: 0;
         background: transparent;
         border: 0;
         border-radius: 0;
-        outline: 0;
 
         &:-webkit-autofill {
           @include core.auto-fill-cancel;

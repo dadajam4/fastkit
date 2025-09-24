@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import * as http from 'node:http';
 import chalk from 'chalk';
 import { isObject } from '@fastkit/helpers';
@@ -69,7 +69,6 @@ export function proxyMiddleware(
     for (const context in proxies) {
       if (doesProxyContextMatchUrl(context, url)) {
         const [proxy, opts] = proxies[context];
-        // eslint-disable-next-line no-shadow
         const options: HttpProxy.ServerOptions = {};
 
         if (opts.bypass) {

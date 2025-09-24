@@ -18,7 +18,6 @@ export interface WorkspacePlugin {
   hooks?: ExportorSerializeHook[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface WorkspaceOptions {
   plugins?: WorkspacePlugin[];
 }

@@ -199,7 +199,6 @@ export function createThemeBucket<
   VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
-  // eslint-disable-next-line default-param-last
   sources: ColorThemeSource<TN, PN, SN, VN, OK>[] = [],
   ctx: ColorThemesContext<TN, PN, SN, VN, OK>,
 ) {

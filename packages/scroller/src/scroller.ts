@@ -233,7 +233,6 @@ export interface ScrollerEventMap extends ScrollerScrollEventMap {
 /**
  * Scrollerの状態を示します。
  */
-// eslint-disable-next-line no-shadow
 export enum ScrollerState {
   /**
    * Scrollerが初期化されていない（Elementが設定されていない）状態を示します。
@@ -600,7 +599,7 @@ export class Scroller extends EV<ScrollerEventMap> {
 
   private _nowScrolling = false;
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   private _readyResolvers: Function[] = [];
 
   private _scrollingJudgeTimerId: number | null = null;

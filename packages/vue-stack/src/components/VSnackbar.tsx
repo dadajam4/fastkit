@@ -108,7 +108,6 @@ export function defineSnackbarComponent<
         SnackbarAPI
       >(_props, _ctx);
 
-      // eslint-disable-next-line no-shadow
       const { control, props } = baseCtx;
 
       const { snackbarDefaultPosition } = control.$service;

@@ -4,8 +4,8 @@ import { createVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plu
 import { createVueJSXPlugin } from '@fastkit/plugboy-vue-jsx-plugin';
 
 const eslintScripts = {
-  eslint: 'eslint . --ext ts,tsx,js,vue,html,yaml',
-  'eslint:fix': 'eslint . --ext ts,tsx,js,vue,html,yaml --fix',
+  eslint: 'eslint .',
+  'eslint:fix': 'eslint . --fix',
 };
 
 const stylelintScripts = {

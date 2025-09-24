@@ -6,7 +6,6 @@ import {
 
 export class WysiwygLinterHeadingLevel extends WysiwygLinterPlugin {
   fixHeader(level: number) {
-    // eslint-disable-next-line func-names
     return function ({ state, dispatch }: EditorView, issue: Issue) {
       dispatch(state.tr.setNodeMarkup(issue.from - 1, undefined, { level }));
     };

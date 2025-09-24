@@ -10,7 +10,6 @@ export function nilToEmptyString(source?: string | null): string {
 
 const FULL_WIDTH_SYMBOL_RE = /[！-～]/g;
 
-// eslint-disable-next-line no-irregular-whitespace
 const FULL_WIDTH_SPACE_RE = /　/g;
 
 const REMOVE_SPACE_RE = /[\s\t]/g;

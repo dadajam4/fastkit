@@ -118,10 +118,10 @@
 
       &__cell {
         position: relative;
+        vertical-align: middle;
         text-align: left;
         white-space: nowrap;
-        vertical-align: middle;
-        border-bottom: thin solid rgba(0, 0, 0, 0.12);
+        border-bottom: thin solid rgb(0, 0, 0, 0.12);
         transition: background 0.2s;
 
         &:first-child {
@@ -180,7 +180,7 @@
 
       &__header &__cell {
         user-select: none;
-        background: rgba(255, 255, 255, 0.85);
+        background: rgb(255, 255, 255, 0.85);
         backdrop-filter: blur(3px);
 
         // &--active[tabindex='0'] {

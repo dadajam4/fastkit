@@ -5,9 +5,10 @@
   width: 1px;
   height: 1px;
   overflow: hidden;
+  white-space: nowrap;
+  /* stylelint-disable-next-line property-no-deprecated */
   clip: rect(0 0 0 0);
   clip-path: inset(100%);
-  white-space: nowrap;
 }
 
 @mixin auto-fill-cancel {
@@ -40,7 +41,7 @@
 }
 
 @mixin remove-tap-highlight() {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: rgb(0, 0, 0, 0);
 
   &::-moz-focus-inner {
     border: 0;
@@ -56,10 +57,10 @@
     touch-action: manipulation;
     cursor: pointer;
     user-select: none;
+    outline: 0;
 
     // background-color: transparent;
     border-width: 0;
-    outline: 0;
   }
 
   &,

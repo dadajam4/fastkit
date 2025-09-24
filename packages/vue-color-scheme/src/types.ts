@@ -27,22 +27,22 @@ export type ColorSchemeProps<
   ? {
       [K in ThemeProp]: PropType<ThemeName>;
     }
-  : never) & // eslint-disable-line @typescript-eslint/ban-types
+  : never) &
   (ScopeProp extends string
     ? {
         [K in ScopeProp]: PropType<ScopeName>;
       }
-    : {}) & // eslint-disable-line @typescript-eslint/ban-types
+    : {}) &
   (TextColorProp extends string
     ? {
         [K in TextColorProp]: PropType<PaletteName>;
       }
-    : never) & // eslint-disable-line @typescript-eslint/ban-types
+    : never) &
   (BorderColorProp extends string
     ? {
         [K in BorderColorProp]: PropType<PaletteName>;
       }
-    : never); // eslint-disable-line @typescript-eslint/ban-types
+    : never);
 
 // export interface ColorSchemePropsStaticOptions {
 //   defaultScope?: ScopeName;

@@ -69,7 +69,6 @@ export function createColorPaletteBucket<
   VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 >(
-  // eslint-disable-next-line default-param-last
   sources: ColorPaletteItemSource<TN, PN, SN, VN, OK>[] = [],
   ctx: ColorPaletteContext<TN, PN, SN, VN, OK>,
 ) {

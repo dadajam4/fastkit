@@ -393,12 +393,10 @@ export function defineI18nComponentScheme<
     NumberFormats,
     ListFormats,
     Dependencies
-    // eslint-disable-next-line no-shadow
   > = function defineTranslations(translations) {
     return translations;
   };
 
-  // eslint-disable-next-line no-shadow
   defineTranslations.strict = function defineStrictTranslations(translations) {
     return translations;
   };

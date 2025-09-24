@@ -13,7 +13,6 @@ export const state = reactive<WindowState>({
   height: IN_WINDOW ? window.innerHeight : 0,
 });
 
-// eslint-disable-next-line no-shadow
 export type WindowResizeHandler = (state: WindowState) => any;
 
 function updateRects() {

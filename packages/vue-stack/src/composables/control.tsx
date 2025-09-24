@@ -494,7 +494,6 @@ export function useStackControl(
           name: transition,
         },
       };
-      // eslint-disable-next-line no-else-return
     } else {
       let Ctor: any = transition.transition;
       let name: string | undefined;
@@ -504,7 +503,6 @@ export function useStackControl(
         Ctor = Transition;
       }
 
-      // eslint-disable-next-line no-shadow
       const props = {
         ...transition.props,
       };
@@ -892,7 +890,7 @@ export function useStackControl(
     toggle() {
       return control.isActive ? control.close() : control.show();
     },
-    // eslint-disable-next-line no-shadow
+
     close(opts = {}) {
       const { force = false, reason = 'indeterminate' } = opts;
       if ((control.guardInProgress || persistent.value) && !force)
@@ -935,7 +933,7 @@ export function useStackControl(
       const maxActivateOrder = front ? front.activateOrder : 0;
       state.activateOrder = maxActivateOrder + 1;
     },
-    // eslint-disable-next-line no-shadow
+
     isFront(filter?: (control: VStackControl) => boolean) {
       return $vstack.isFront(control, filter);
     },
@@ -952,12 +950,12 @@ export function useStackControl(
     },
     getContainsOrSameElement,
     containsOrSameElement,
-    // eslint-disable-next-line no-shadow
+
     render(fn, opts = {}) {
       const { booted, needRender } = state;
       const { default: defaultSlot, activator: activatorSlot } =
         ctx.slots as VStackSlots;
-      // eslint-disable-next-line no-shadow
+
       const { transitionListeners, Transition: TransitionDefine } = privateApi;
 
       const $activator =

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { DirectiveHook, VNode, ObjectDirective, App } from 'vue';
 import { debounce, Debounced } from '@fastkit/debounce';
 import { installDirective } from '@fastkit/vue-utils';
@@ -140,9 +139,7 @@ export function installResizeDirective(app: App) {
 }
 
 declare module 'vue' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface HTMLAttributes extends ResizeDirectiveAttrs {}
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface AllowedComponentProps extends ResizeDirectiveAttrs {}
 }

@@ -3,7 +3,6 @@ import { I18nComponentStatic } from './component';
 /**
  * Translation objects that can be configured for internationalization services
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface I18nTranslations {}
 
 /**
@@ -38,7 +37,7 @@ export type I18nAnyFormats =
 /**
  * Configurable meta information for internationalization service locales
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+
 export interface I18nLocaleMeta {}
 
 /**

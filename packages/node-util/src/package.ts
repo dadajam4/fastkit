@@ -1,4 +1,3 @@
-/* eslint-disable import/no-dynamic-require */
 import path from 'node:path';
 import fs from 'fs-extra';
 import { execa } from 'execa';
@@ -53,7 +52,6 @@ export async function findPackage(
     from = path.dirname(from);
   }
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const target = path.join(from, 'package.json');
     try {
@@ -61,7 +59,6 @@ export async function findPackage(
       if (pkg) {
         if (
           !requireModuleDirectory ||
-          // eslint-disable-next-line no-await-in-loop
           (await isAvailableModuleDir(path.join(from, 'node_modules')))
         ) {
           result = {
@@ -113,7 +110,6 @@ export function findPackageSync(
     from = path.dirname(from);
   }
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const target = path.join(from, 'package.json');
     try {

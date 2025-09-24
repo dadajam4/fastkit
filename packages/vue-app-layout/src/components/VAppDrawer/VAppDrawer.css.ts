@@ -24,7 +24,6 @@ export const positions = horizontals((x) => {
   const computed = computedTokens.drawer[x];
   const { width } = computed;
 
-  // eslint-disable-next-line no-shadow
   const host = component.style({});
 
   /**

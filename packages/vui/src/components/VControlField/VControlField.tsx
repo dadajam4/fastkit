@@ -63,10 +63,10 @@ export const VControlField = defineComponent({
     ...slots(),
     error: Boolean,
   },
-  slots,
   emits: {
     click: (ev: MouseEvent) => true,
   },
+  slots,
   setup(props, ctx) {
     const parentNode = useParentFormNode();
     const control = useControl(props);
@@ -96,7 +96,6 @@ export const VControlField = defineComponent({
         },
         control.classes.value,
         colorProvider.className(
-          // eslint-disable-next-line no-nested-ternary
           props.error
             ? 'error'
             : invalid.value && !readonly.value

@@ -329,7 +329,6 @@ export class I18nSpaceStorage<
     this.updateLoadingLocales();
 
     return () => {
-      // eslint-disable-next-line no-shadow
       const req = this.findLoadRequest(Ctor);
       if (!req) return;
       req[0] = req[0].filter((localName) => !_localeNames.includes(localName));

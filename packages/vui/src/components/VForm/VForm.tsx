@@ -31,7 +31,6 @@ export const VForm = defineComponent({
   props: createVFormProps(),
   emits,
   slots: formSlots,
-  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const nodeControl = useForm(props, ctx as any, {
       nodeType: VUI_FORM_SYMBOL,

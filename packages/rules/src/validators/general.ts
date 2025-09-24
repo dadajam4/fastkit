@@ -120,7 +120,6 @@ export function isInteger(value: any): boolean {
  * value == requiredValue
  */
 export function isEqual(value: any, requiredValue: any): boolean {
-  // eslint-disable-next-line eqeqeq
   return value == requiredValue;
 }
 
@@ -129,7 +128,6 @@ export function isEqual(value: any, requiredValue: any): boolean {
  * value != requiredValue
  */
 export function isNotEqual(value: any, requiredValue: any): boolean {
-  // eslint-disable-next-line eqeqeq
   return value != requiredValue;
 }
 
@@ -271,7 +269,6 @@ export function isAlphaSpaces(value: any, locale?: string): boolean {
     : Object.keys(reMap).some((loc) => reMap[loc].test(value));
 }
 
-// eslint-disable-next-line no-irregular-whitespace
 export const kanaRe = /^[ｧ-ﾝﾞﾟ\-ァ-ヶー　\s\d]+$/;
 
 export function isKana(value: unknown): value is string {

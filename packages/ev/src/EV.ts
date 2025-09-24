@@ -381,7 +381,7 @@ export class EV<EventMap extends EVEventMap = EVEventMap> {
 
   private __ev_filter__(
     type?: string | null,
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     handler?: Function,
     tag?: EVListenerTag,
   ) {

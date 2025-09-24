@@ -4,23 +4,20 @@ import { ColorSchemeError } from './logger';
 
 export function createBucket<RN, T, G, C, J, I extends Bucket<RN, T, G, C, J>>(
   modelName: string,
-  // eslint-disable-next-line no-shadow
   values: (push: (value: T) => number, instance: I) => void,
   ctx: C,
   _getter: (value: T) => G,
-  // eslint-disable-next-line no-shadow
   _toJSON: (values: T[]) => J,
 ): I {
   const _values: T[] = [];
   const instance: I = function getter(name: RN): G {
-    // eslint-disable-next-line no-shadow
     const value = _values.find((value) => (value as any).name === name);
     if (!value) {
       throw new ColorSchemeError(`${modelName}: missing color "${name}"`);
     }
     return _getter(value);
   } as unknown as I;
-  // eslint-disable-next-line func-names
+
   instance[Symbol.iterator] = function () {
     return _values[Symbol.iterator]();
   };
@@ -43,7 +40,6 @@ export function createBucket<RN, T, G, C, J, I extends Bucket<RN, T, G, C, J>>(
       'reduceRight',
     ] as const
   ).forEach((funcName) => {
-    // eslint-disable-next-line func-names
     const func = function (...args: any[]) {
       return (_values as any)[funcName](...args);
     };

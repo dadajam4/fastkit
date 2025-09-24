@@ -22,7 +22,6 @@ import {
 import { VPageLink } from '@fastkit/vue-page';
 import { VLanguageSwitcher } from '../VLanguageSwitcher';
 import { PackageProvide, i18n } from '@@';
-// eslint-disable-next-line import/no-relative-packages
 import fastkitPackageJSON from '../../../../../package.json';
 
 const FASTKIT_AUTHOR = fastkitPackageJSON.author;

@@ -26,7 +26,7 @@ export function createIMaskEvent(
 
 export type IMaskTypedValue = string | number | Date;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 type IMaskRawInput = RegExp | Function | string;
 
 function isRawType(source: unknown): source is IMaskRawInput {

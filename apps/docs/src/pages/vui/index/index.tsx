@@ -159,7 +159,6 @@ export default defineComponent({
         },
       ],
       dispatch: (appended, dynamicMasked) => {
-        // eslint-disable-next-line no-shadow
         const number = (dynamicMasked.value + appended).replace(/\D/g, '');
 
         for (let i = 0; i < dynamicMasked.compiledMasks.length; i++) {

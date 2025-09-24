@@ -10,7 +10,6 @@ export const WysiwygLinkTool: WysiwygEditorToolFactory<LinkOptions> = (
     key: 'link',
     icon: vui.icon('editorLink'),
     active: ({ editor }) => editor.isActive('link'),
-    // eslint-disable-next-line no-shadow
     onClick: async ({ vui, editor }) => {
       const { href = '' } = editor.getAttributes('link');
       const result = await vui.prompt({

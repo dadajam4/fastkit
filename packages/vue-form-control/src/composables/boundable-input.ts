@@ -306,7 +306,6 @@ export type BoundableInputContext<
   EV extends T | null = T | null,
 > = SetupContext<BoundableInputEmits<T, MV, SV, EV>>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BoundableInputControlOptions<
   T extends BoundableValue = BoundableValue,
   MV extends T | null = T | null,

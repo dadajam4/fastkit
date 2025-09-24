@@ -213,7 +213,6 @@ export const VDataTable = defineComponent({
     const footerHeightRef = ref(0);
     const internalValues = ref<string[]>(props.modelValue.slice());
     const rowSettings = computed<DataTableRowSettingsFn>(() => {
-      // eslint-disable-next-line no-shadow
       const { rowSettings } = props;
       if (!rowSettings) return () => ({});
       return typeof rowSettings === 'function'
@@ -689,7 +688,6 @@ export const VDataTable = defineComponent({
         }
 
         if (!cellChildren) {
-          // eslint-disable-next-line default-case
           switch (headerKey) {
             case SELECTABLE_HEADER_SYMBOL: {
               cellChildren = [

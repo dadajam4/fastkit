@@ -18,7 +18,6 @@ export const VSwitch = defineComponent({
     ...createControlProps(),
   },
   emits,
-  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const nodeControl = useFormSelectorItemControl(props, ctx, {
       nodeType: VUI_SWITCH_SYMBOL,

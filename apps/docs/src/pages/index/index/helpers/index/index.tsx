@@ -13,7 +13,6 @@ export default defineComponent({
   setup() {
     const meta = HelpersMeta.use();
     // const { names } = prefetch.inject();
-    // eslint-disable-next-line no-shadow
     const pkg = PackageProvide.use();
     pkg.useHead();
     const pkgI18n = PkgI18nSubSpace.use();

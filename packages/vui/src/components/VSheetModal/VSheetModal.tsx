@@ -31,7 +31,6 @@ export const VSheetModal = defineComponent({
   inheritAttrs: false,
   props: sheetModalProps,
   emits,
-  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const stackControl = useStackControl(props, ctx, {
       stackType: SHEET_STACK_TYPE,

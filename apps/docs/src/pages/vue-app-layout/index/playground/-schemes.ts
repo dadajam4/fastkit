@@ -21,10 +21,8 @@ export interface BarState {
   active: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SystemBarState extends BarState {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ToolbarState extends BarState {}
 
 export interface DrawerState {

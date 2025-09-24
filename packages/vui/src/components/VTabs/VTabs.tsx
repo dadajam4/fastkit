@@ -124,7 +124,6 @@ export const VTabs = defineComponent({
           | undefined;
 
         if (router) {
-          // eslint-disable-next-line no-shadow
           const to = router(value);
           const route = vui.router.resolve(to);
           location = { to, route };
@@ -138,7 +137,6 @@ export const VTabs = defineComponent({
       });
     });
 
-    // eslint-disable-next-line no-shadow
     const setTabRef = (ref: VTabRef) => {
       tabRefs.value.push(ref);
     };
@@ -162,7 +160,7 @@ export const VTabs = defineComponent({
           if (!hit) return;
           const { location } = hit;
           if (!location) return;
-          // eslint-disable-next-line no-shadow
+
           const { to, route } = location;
           if (route.fullPath === vui.location.currentRoute.fullPath) return;
           vui.router[to.replace ? 'replace' : 'push'](to);
@@ -295,7 +293,6 @@ export const VTabs = defineComponent({
           label = itemSlot;
         }
 
-        // eslint-disable-next-line no-shadow
         const children =
           typeof label === 'function' ? label({ value, active, vui }) : label;
 

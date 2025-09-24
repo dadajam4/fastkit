@@ -101,7 +101,6 @@ export function build<
     ) {
       if (isCatcher(infoOrException) && overrides === undefined) {
         // If the error information is the Catcher instance itself, it will return itself
-        // eslint-disable-next-line no-constructor-return
         return infoOrException;
       }
 

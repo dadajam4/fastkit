@@ -36,7 +36,6 @@ export class VuePageControlError extends Error {
       }
     } else {
       settings =
-        // eslint-disable-next-line no-nested-ternary
         typeof rawSettings === 'string'
           ? { message: rawSettings }
           : rawSettings && typeof rawSettings === 'object'

@@ -1,7 +1,7 @@
 {
   "name": "@fastkit/eslint-config",
   "type": "module",
-  "version": "0.13.8",
+  "version": "0.14.0",
   "description": "@fastkit/eslint-config",
   "buildOptions": {
     "ignore": true
@@ -14,15 +14,15 @@
       "ja": "fastkitが推奨するeslintの設定。"
     }
   },
-  "main": "./index.cjs",
+  "main": "./index.mjs",
   "exports": {
-    ".": "./index.cjs",
-    "./shared": "./shared.cjs",
+    ".": "./index.mjs",
+    "./shared": "./shared.mjs",
     "./package.json": "./package.json"
   },
   "files": [
-    "shared.cjs",
-    "index.cjs"
+    "shared.mjs",
+    "index.mjs"
   ],
   "repository": {
     "type": "git",
@@ -44,12 +44,8 @@
     "prettier": "^3.0.0"
   },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "@typescript-eslint/parser": "^7.16.1",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-html-parser": "^6.8.2",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-prettier": "^5.2.1"
+    "typescript-eslint": "^8.44.1"
   }
 }

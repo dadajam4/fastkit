@@ -51,13 +51,11 @@ export function createNumberInputNodeSettings() {
   return { props, emits };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface NumberInputNodeEmitOptions
   extends ReturnType<typeof createNumberInputNodeEmits> {}
 
 export type NumberInputNodeContext = SetupContext<NumberInputNodeEmitOptions>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface NumberInputNodeControlOptions
   extends FormNodeControlBaseOptions {}
 

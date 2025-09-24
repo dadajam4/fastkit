@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import { Plugin } from 'vite';
 
 import {

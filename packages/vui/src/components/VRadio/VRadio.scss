@@ -56,8 +56,8 @@
         width: 50%;
         height: 50%;
         background: currentColor;
-        transition: transform 0.2s;
         transform: translate(-50%, -50%) scale(0);
+        transition: transform 0.2s;
       }
     }
 

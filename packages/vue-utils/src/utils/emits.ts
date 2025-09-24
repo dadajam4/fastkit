@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import { ObjectEmitsOptions, EmitsOptions } from 'vue';
 
 import { UnionToIntersection } from '@fastkit/ts-type-utils';

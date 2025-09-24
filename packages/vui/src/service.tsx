@@ -438,7 +438,6 @@ export class VuiService {
     const _onClick = BUILTIN_ACTION_HANDLERS[key];
     const action: VStackAction = {
       key,
-      // eslint-disable-next-line no-shadow
       content: ({ control, key }) => {
         const onClick = (ev: MouseEvent) => _onClick(control, ev);
 

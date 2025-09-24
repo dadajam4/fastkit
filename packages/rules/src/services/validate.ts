@@ -75,7 +75,6 @@ export function verifiableFnToRule(fn: VerifiableFn): VerifiableRule {
 
   let _lastMessage: string | undefined;
 
-  // eslint-disable-next-line no-shadow
   const validate: Rule['validate'] = async (value) => {
     _lastMessage = undefined;
     const result = await fn(value);
@@ -140,7 +139,6 @@ export async function validate(
 
   try {
     for (const rule of _rules) {
-      // eslint-disable-next-line no-await-in-loop
       const error = await rule.validate(value, opts);
       if (!error) continue;
       if (isValidateCancelSymbol(error)) break;

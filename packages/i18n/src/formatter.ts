@@ -935,7 +935,6 @@ export class I18nFormatter<
 
       const formatterGetter = (
         optionsOrFormatName?: any,
-        // eslint-disable-next-line default-param-last
         localeName: LocaleName = space.currentLocaleName,
         overrides?: any,
       ) => {
@@ -986,7 +985,7 @@ export class I18nFormatter<
         (
           value: any,
           optionsOrFormatName?: any,
-          // eslint-disable-next-line default-param-last
+
           localeName: LocaleName = space.currentLocaleName,
           overrides?: any,
         ) => {
@@ -1009,7 +1008,7 @@ export class I18nFormatter<
           startValue: any,
           endValue: any,
           optionsOrFormatName?: any,
-          // eslint-disable-next-line default-param-last
+
           localeName: LocaleName = space.currentLocaleName,
           overrides?: any,
         ) => {

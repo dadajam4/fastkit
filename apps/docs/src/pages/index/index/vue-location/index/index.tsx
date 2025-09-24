@@ -20,7 +20,6 @@ export default defineComponent({
     return () => (
       <VPackageProvider
         v-slots={{
-          // eslint-disable-next-line no-shadow
           default: ({ pkg }) => (
             <>
               {pkg.renderHeader()}

@@ -17,7 +17,6 @@ const DEFAULT_FORMAT: Intl.DateTimeFormatOptions = {
   day: '2-digit',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DateInputNodeControlPropsOptions<
   D extends DateInputValue | null = null,
   DS extends DateInputValue | null = null,
@@ -92,7 +91,6 @@ export function createDateInputNodeSettings<
   return { props, emits };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DateInputNodeControlOptions<
   MV extends DateInputValue | null = DateInputValue | null,
   SV extends DateInputValue | null = DateInputValue | null,

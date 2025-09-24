@@ -89,12 +89,10 @@ describe('コンポーネントを定義する時', () => {
         expect(scheme2.dependencies).toStrictEqual(dependencies);
       });
 
-      // eslint-disable-next-line no-shadow
       const ja = scheme2.defineLocale.strict({
         translations: { str2: '', num2: 2, bool2: true },
       });
 
-      // eslint-disable-next-line no-shadow
       const l2 = scheme2.defineLocale({
         translations: { bool2: false },
       });

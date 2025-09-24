@@ -88,7 +88,6 @@ export async function generateEntry(
 
   await fs.ensureDir(options.dest);
 
-  // eslint-disable-next-line no-shadow
   const { webfont } = await import('webfont');
 
   // const { startUnicode = 0xea01 } = options;
@@ -135,7 +134,6 @@ export async function generateEntry(
 
   const glyphs: { name: string; code: string }[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   result.glyphsData!.forEach(({ metadata }) => {
     if (!metadata) return;
     const { name, unicode } = metadata;

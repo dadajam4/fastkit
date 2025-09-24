@@ -9,7 +9,6 @@ import { VIcon } from '../VIcon';
 // @TODO Unable to resolve dts for `actionableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// eslint-disable-next-line import/order
 import { RouteLocationRaw } from 'vue-router';
 
 export const CHIP_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const;

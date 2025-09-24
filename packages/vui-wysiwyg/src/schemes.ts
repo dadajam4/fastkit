@@ -30,7 +30,6 @@ export type WysiwygEditorEvent = (typeof EDITOR_EVENTS)[number];
 
 export type WysiwygEditorPrefixedEvent = PrefixedEventName<WysiwygEditorEvent>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface WysiwygEditorEventsOptions
   extends Partial<Pick<EditorOptions, WysiwygEditorPrefixedEvent>> {}
 

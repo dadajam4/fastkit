@@ -35,7 +35,6 @@ export type AutocompletableInputProps = ExtractPropTypes<
   ReturnType<typeof createAutocompletableInputProps>
 >;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AutocompletableInputControlOptions
   extends FormNodeControlBaseOptions {}
 

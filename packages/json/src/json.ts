@@ -1,5 +1,3 @@
-/* eslint-disable func-names */
-/* eslint-disable no-bitwise */
 /**
  * Primitive Value Types in JSON
  */
@@ -72,7 +70,7 @@ export function safeJSONSerializer(
       const thisPos = stack.indexOf(this);
       ~thisPos ? stack.splice(thisPos + 1) : stack.push(this);
       ~thisPos ? keys.splice(thisPos, Infinity, key) : keys.push(key);
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       if (~stack.indexOf(value)) value = cycleReplacer!.call(this, key, value);
     } else stack.push(value);
 

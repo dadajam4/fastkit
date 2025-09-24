@@ -25,7 +25,6 @@ export const alpha: AlphaCheckerRegExpMap = {
   tr: /^[A-ZÇĞİıÖŞÜ]*$/i,
   uk: /^[А-ЩЬЮЯЄІЇҐ]*$/i,
 
-  // eslint-disable-next-line no-misleading-character-class
   ar: /^[ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ]*$/,
 };
 
@@ -47,7 +46,6 @@ export const alphaSpaces: AlphaCheckerRegExpMap = {
   tr: /^[A-ZÇĞİıÖŞÜ\s]*$/i,
   uk: /^[А-ЩЬЮЯЄІЇҐ\s]*$/i,
 
-  // eslint-disable-next-line no-misleading-character-class
   ar: /^[ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ\s]*$/,
 };
 
@@ -69,7 +67,6 @@ export const alphaNumeric: AlphaCheckerRegExpMap = {
   tr: /^[0-9A-ZÇĞİıÖŞÜ]*$/i,
   uk: /^[0-9А-ЩЬЮЯЄІЇҐ]*$/i,
 
-  // eslint-disable-next-line no-misleading-character-class
   ar: /^[٠١٢٣٤٥٦٧٨٩0-9ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ]*$/,
 };
 
@@ -91,6 +88,5 @@ export const alphaDash: AlphaCheckerRegExpMap = {
   tr: /^[0-9A-ZÇĞİıÖŞÜ_-]*$/i,
   uk: /^[0-9А-ЩЬЮЯЄІЇҐ_-]*$/i,
 
-  // eslint-disable-next-line no-misleading-character-class
   ar: /^[٠١٢٣٤٥٦٧٨٩0-9ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىيًٌٍَُِّْٰ_-]*$/,
 };

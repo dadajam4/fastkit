@@ -104,7 +104,6 @@ export async function getProject<
   );
   const workspaceHits = await glob(workspacesPattern);
   for (const _hit of workspaceHits) {
-    // eslint-disable-next-line no-await-in-loop
     const _json = JSON.parse(await fs.readFile(_hit, 'utf-8'));
     if (!isWorkspacePackageJson(_json)) {
       continue;

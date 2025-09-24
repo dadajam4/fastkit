@@ -8,7 +8,6 @@ import { VBusyImage } from '../VBusyImage';
 // @TODO Unable to resolve dts for `navigationableInheritProps`.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// eslint-disable-next-line import/order
 import { RouteLocationRaw } from 'vue-router';
 
 export const AVATAR_SIZES = ['sm', 'md', 'lg'] as const;

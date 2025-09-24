@@ -51,7 +51,6 @@ export const VTextField = defineComponent({
   props: createTextFieldProps(),
   emits,
   slots,
-  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const inputControl = useTextInputNodeControl(props, ctx, {
       nodeType: VUI_TEXT_FIELD_SYMBOL,

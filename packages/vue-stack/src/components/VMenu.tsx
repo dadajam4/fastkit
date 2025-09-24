@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import './VMenu.scss';
 import {
   defineComponent,
@@ -421,7 +420,6 @@ export function defineMenuComponent<
         activatorAttrs,
       });
 
-      // eslint-disable-next-line no-shadow
       const { props, control } = baseCtx;
 
       const state: VMenuState = reactive({

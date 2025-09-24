@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { isNonNullObject } from '@fastkit/helpers';
 
 interface AnyObject {
@@ -71,7 +70,6 @@ function getMergeFunction(
 function getEnumerableOwnPropertySymbols(target: any) {
   return Object.getOwnPropertySymbols
     ? Object.getOwnPropertySymbols(target).filter((symbol) =>
-        // eslint-disable-next-line no-prototype-builtins
         target.propertyIsEnumerable(symbol),
       )
     : [];

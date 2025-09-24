@@ -55,7 +55,6 @@ async function finalizeValue(
 ) {
   let result: string = nilToEmptyString(value);
   for (const finalizer of finalizers) {
-    // eslint-disable-next-line no-await-in-loop
     result = await finalizer(result);
   }
   return result;
@@ -130,13 +129,11 @@ export function createTextableSettings() {
   return { props, emits };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TextableEmitOptions
   extends ReturnType<typeof createTextableEmits> {}
 
 export type TextableContext = SetupContext<TextableEmitOptions>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TextableControlOptions extends FormNodeControlBaseOptions {}
 
 export class TextableControl extends FormNodeControl<string> {

@@ -14,7 +14,6 @@ export function extractRawGridValueClasses<
 >(
   value: NonNullable<RawGridValue<T>>,
   prefix: string,
-  // eslint-disable-next-line no-shadow
   getter?: (value: T) => string,
 ): string | string[] {
   if (typeof value !== 'object')

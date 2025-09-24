@@ -79,13 +79,11 @@ export function createTextareaNodeSettings(
   return { props, emits };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TextareaNodeEmitOptions
   extends ReturnType<typeof createTextareaNodeEmits> {}
 
 export type TextareaNodeContext = SetupContext<TextareaNodeEmitOptions>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TextareaNodeControlOptions extends TextableControlOptions {
   defaultRows?: number;
 }

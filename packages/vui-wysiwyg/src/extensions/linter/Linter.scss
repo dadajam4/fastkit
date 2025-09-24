@@ -91,9 +91,9 @@
 
           // text-decoration: underline;
           cursor: pointer;
+          outline: 0;
           background: transparent;
           border: 0;
-          outline: 0;
 
           &::before {
             position: absolute;
@@ -136,9 +136,9 @@
         text-decoration: underline;
         appearance: none;
         cursor: pointer;
+        outline: 0;
         background: transparent;
         border: 0;
-        outline: 0;
       }
     }
   }

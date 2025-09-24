@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 /**
  * Simple, high-quality 53-bit hash function
  *

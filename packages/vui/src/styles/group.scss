@@ -9,8 +9,8 @@ code {
   padding: 0.2em 0.4em;
   font-size: 85%;
   font-weight: 400;
-  color: rgba(0, 0, 0, 0.87); // @TODO
-  background-color: rgba(0, 0, 0, 0.05); // @TODO
+  color: rgb(0, 0, 0, 0.87); // @TODO
+  background-color: rgb(0, 0, 0, 0.05); // @TODO
   border-radius: 3px; // @TODO
 }
 
@@ -39,8 +39,8 @@ td {
   height: var(--table-cell-height);
   padding: var(--table-cell-vertial-padding)
     var(--table-cell-horizontal-padding);
-  text-align: left;
   vertical-align: middle;
+  text-align: left;
   border: 0;
 }
 

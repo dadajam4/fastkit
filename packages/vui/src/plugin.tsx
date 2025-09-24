@@ -26,7 +26,6 @@ import {
 setDefaultActionableClassName('clickable');
 const scroller = getDocumentScroller();
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VuiPluginStackOptions extends VueStackServiceOptions {}
 
 export interface VuiPluginOptions extends VuiServiceOptions {
@@ -80,7 +79,7 @@ export class VuiPlugin {
         options: {
           behavior: 'smooth',
         },
-        // eslint-disable-next-line no-shadow
+
         fn: (el, opts) => {
           if (window.getComputedStyle(el).scrollMargin) return;
           const duration = opts?.behavior === 'smooth' ? undefined : 0;

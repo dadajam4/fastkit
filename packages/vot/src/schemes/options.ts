@@ -127,7 +127,6 @@ export interface CreateEntryOptions {
   debug?: { mount?: boolean };
   transformState?: (
     state: any,
-    // eslint-disable-next-line no-shadow
     defaultTransformer: (state: any) => any,
   ) => any | Promise<any>;
   routes?: ExtendedRouteRaw[];

@@ -42,7 +42,6 @@ export const ClickOutsideDirectiveElementSymbol = Symbol(
   'ClickOutsideDirectiveElementSymbol',
 );
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ClickOutsideDirectiveElement extends HTMLElement {
   [ClickOutsideDirectiveElementSymbol]?: (ev: MouseEvent | PointerEvent) => any;
 }
@@ -119,9 +118,7 @@ export function installClickOutsideDirective(app: App) {
 }
 
 declare module 'vue' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface HTMLAttributes extends ClickOutsideDirectiveAttrs {}
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface AllowedComponentProps extends ClickOutsideDirectiveAttrs {}
 }

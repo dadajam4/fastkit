@@ -5,7 +5,6 @@ import { EV } from './EV';
  * By setting this tag when registering a listener with [[EV.on]] or [[EV.once]]
  * With [[EV.off]] you can release related listeners at once.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type EVListenerTag = number | string | symbol | object;
 type EVStackRemover = (stack: EVListener) => void;
 
@@ -16,7 +15,7 @@ export class EVListener {
 
   readonly tag?: EVListenerTag;
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   readonly handler: Function;
 
   readonly once: boolean;
@@ -33,7 +32,7 @@ export class EVListener {
     remover: EVStackRemover;
     type: string;
     tag?: EVListenerTag;
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     handler: Function;
     once: boolean;
   }) {
@@ -71,7 +70,7 @@ export class EVListener {
    * @param handler - event handler
    * @param tag - event tag
    */
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   match(type?: string | null, handler?: Function, tag?: EVListenerTag) {
     if (handler && handler !== this.handler) return false;
     if (type && this.type !== type) {

@@ -8,7 +8,6 @@ import {
   ScrollerControl,
 } from '../composables';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VScrollerSettings extends UseScrollerSetting {}
 
 const DEFAULT_GUIDE_OFFSET = 20;

@@ -1,4 +1,3 @@
-/* eslint-disable no-multi-assign */
 export interface LoadScriptAttrs {
   crossorigin?: 'anonymous' | 'use-credentials' | '';
   integrity?: string;
@@ -16,7 +15,6 @@ export function loadScript(
     const script = document.createElement('script');
 
     if (attrs) {
-      // eslint-disable-next-line guard-for-in
       for (const attr in attrs) {
         script.setAttribute(attr, (attrs as any)[attr]);
       }

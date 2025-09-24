@@ -7,7 +7,7 @@ export default defineComponent({
   prefetch,
   setup() {
     const { exports } = prefetch.inject();
-    // eslint-disable-next-line no-new
+
     new HelpersMeta(exports);
 
     return () => (

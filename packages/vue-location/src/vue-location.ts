@@ -346,7 +346,7 @@ export class LocationService {
 
   getQuery(
     key: string,
-    // eslint-disable-next-line default-param-last
+
     type: RouteQueryType = String,
     defaultValue?: string | number | boolean,
   ): string | number | boolean | undefined {

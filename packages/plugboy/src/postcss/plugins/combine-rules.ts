@@ -48,7 +48,7 @@ export function combineContainerRules(
   combinedRules.forEach((combinedRule) => {
     combinedRule.rules.forEach((rule, index) => {
       if (index === 0) return;
-      // eslint-disable-next-line no-shadow
+
       const { nodes } = rule;
       if (!nodes) return;
       nodes.forEach((node) => {

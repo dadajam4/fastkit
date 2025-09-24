@@ -1,5 +1,3 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable no-bitwise */
 let IDX = 256;
 let BUFFER: any;
 const HEX: any = [];
@@ -13,7 +11,7 @@ export function cheepUUID() {
   if (!BUFFER || IDX + 16 > 256) {
     BUFFER = Array((i = 256));
     while (i--) BUFFER[i] = (256 * Math.random()) | 0;
-    // eslint-disable-next-line no-multi-assign
+
     i = IDX = 0;
   }
 

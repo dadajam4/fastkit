@@ -1,5 +1,11 @@
 # @fastkit/stylelint-config
 
+## 0.15.0
+
+### Minor Changes
+
+- Changed the export file extensions to `.mjs` and made some adjustments to several rules.
+
 ## 0.14.0
 
 ### Minor Changes

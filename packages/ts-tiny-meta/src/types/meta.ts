@@ -120,7 +120,7 @@ export type FunctionNativeProperty =
 /**
  * Function Meta Information
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export interface FunctionMata<T extends Function = Function>
   extends FunctionMetaBody {
   /** meta kind */

@@ -12,11 +12,11 @@
 @layer vui {
   // @include meta.load-css('@fastkit/stylebase/normalize.css');
 
-  @include meta.load-css('./variables.scss');
-  @include meta.load-css('./base.scss');
-  @include meta.load-css('./typo.scss');
-  @include meta.load-css('./elevation.scss');
-  @include meta.load-css('./group.scss');
-  @include meta.load-css('./control.scss');
-  @include meta.load-css('./wysiwyg.scss');
+  @include meta.load-css('./variables');
+  @include meta.load-css('./base');
+  @include meta.load-css('./typo');
+  @include meta.load-css('./elevation');
+  @include meta.load-css('./group');
+  @include meta.load-css('./control');
+  @include meta.load-css('./wysiwyg');
 }

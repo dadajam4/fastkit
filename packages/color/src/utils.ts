@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 import {
   ColorModelInfo,
   AngleType,
@@ -113,7 +112,6 @@ export function rgb2hsl(
   const tmp = 1 - Math.abs(max + min - 1);
   const s = tmp === 0 ? 0 : diff / tmp;
 
-  // eslint-disable-next-line default-case
   switch (min) {
     case max:
       h = 0;
@@ -300,7 +298,6 @@ export function parseColorString(
     }
   }
   if (hex) {
-    // eslint-disable-next-line no-shadow
     const hex = createRoundedHex(_source);
     const rgba = hex2rgba(hex);
     return {

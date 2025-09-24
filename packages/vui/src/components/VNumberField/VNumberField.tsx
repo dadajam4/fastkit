@@ -44,7 +44,6 @@ export const VNumberField = defineComponent({
     });
 
     const inputmode = computed<TextFieldInput['inputmode']>(() => {
-      // eslint-disable-next-line no-shadow
       const { inputmode } = ctx.attrs as TextFieldInput;
       if (inputmode) return inputmode;
       return hasNumberMask.value ? 'decimal' : undefined;

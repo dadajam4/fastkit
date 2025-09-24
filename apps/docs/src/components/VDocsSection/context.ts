@@ -41,7 +41,6 @@ export class VDocsSectionContext {
       const parentLevel = parent && parent.level();
 
       const level: VDocsSectionLevel =
-        // eslint-disable-next-line no-nested-ternary
         parentLevel == null
           ? 2
           : parentLevel === 4

@@ -163,7 +163,6 @@ export function createFormSettings(options?: FormOptions) {
   return { props, emits };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormEmitOptions extends ReturnType<typeof createFormEmits> {}
 
 export type FormContext = SetupContext<FormEmitOptions>;

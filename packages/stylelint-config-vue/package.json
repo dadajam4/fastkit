@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/stylelint-config-vue",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "@fastkit/stylelint-config-vue",
   "buildOptions": {
     "ignore": true
@@ -13,13 +13,13 @@
       "ja": "fastkitが推奨するVueアプリケーションのstylelintの設定。"
     }
   },
-  "main": "./index.cjs",
+  "main": "./index.mjs",
   "exports": {
-    ".": "./index.cjs",
+    ".": "./index.mjs",
     "./package.json": "./package.json"
   },
   "files": [
-    "index.cjs"
+    "index.mjs"
   ],
   "repository": {
     "type": "git",

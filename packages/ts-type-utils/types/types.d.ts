@@ -14,7 +14,7 @@ export type OmitByType<T, PickedType = unknown> = Pick<
 >;
 
 /** Removing function type values from a structure */
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export type OmitFunction<T> = OmitByType<T, Function>;
 
 /**
@@ -55,7 +55,7 @@ export type Primitive =
   | symbol
   | undefined;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 type DeepReadonlyExclude = Function | Date | Error | RegExp;
 
 /**
@@ -68,7 +68,7 @@ export type DeepReadonly<T> = T extends DeepReadonlyExclude
   ? T
   : { readonly [key in keyof T]: DeepReadonly<T[key]> };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 type DeepPartialExclude = Function;
 
 /**
@@ -77,11 +77,9 @@ type DeepPartialExclude = Function;
  * @note
  * Considering the use case of this utility type, {@link DeepPartialExclude some values} skip recursive checks
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type DeepPartial<T> = T extends DeepPartialExclude
   ? T
-  : // eslint-disable-next-line @typescript-eslint/ban-types
-    T extends object
+  : T extends object
     ? {
         [P in keyof T]?: DeepPartial<T[P]>;
       }

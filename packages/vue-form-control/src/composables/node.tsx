@@ -67,7 +67,7 @@ const rulesToArray = (
   shallowCopy: boolean = false,
 ): RecursiveVerifiableRuleOrFnArray => {
   if (!rules) return [];
-  // eslint-disable-next-line no-nested-ternary
+
   return Array.isArray(rules) ? (shallowCopy ? rules.slice() : rules) : [rules];
 };
 
@@ -105,7 +105,6 @@ export function mergeFormNodeRules(
 
 export type FormNodeType = string | number | symbol;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormNodeError extends Omit<ValidationError, '$$symbol'> {}
 
 export type FormNodeErrors = FormNodeError[];
@@ -345,7 +344,6 @@ class Wrapper<T, D = T> {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormNodeEmitOptions<T, D = T>
   extends ReturnType<Wrapper<T, D>['wrapped']> {}
 
@@ -1386,7 +1384,6 @@ export class FormNodeControl<
     const rules = flattenRecursiveArray(propRules).map(resolveVerifiableRule);
 
     if (required) {
-      // eslint-disable-next-line no-shadow
       const requiredRule = this._requiredFactory();
       requiredRule && rules.unshift(requiredRule);
     }
@@ -1593,10 +1590,8 @@ export class FormNodeControl<
     this.resetValidates();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   focus(opts?: FocusOptions): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   blur(): void {}
 
   protected _forceFinalize(): boolean | undefined {
@@ -1666,7 +1661,6 @@ export class FormNodeControl<
     force?: boolean,
     forceFinalize: boolean | undefined = this._forceFinalize(),
   ): Promise<ValidationResult> {
-    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve) => {
       this.setShouldValidate(true);
       if (!force && !this._lastValidateValueChanged && !this.validating) {

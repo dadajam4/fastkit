@@ -1,4 +1,4 @@
-@use '../../styles/core.scss';
+@use '../../styles/core';
 
 @layer vui {
   .v-pagination {
@@ -51,7 +51,7 @@
 
       &:hover,
       &:focus {
-        background: rgba(0, 0, 0, 0.1);
+        background: rgb(0, 0, 0, 0.1);
       }
 
       &--active {

@@ -110,7 +110,6 @@ export interface VueI18n<
   defineSubSpace<
     SubComponents extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   >(
-    // eslint-disable-next-line no-shadow
     Components: SubComponents,
   ): VueI18nSubSpaceProvider<
     LocaleName,

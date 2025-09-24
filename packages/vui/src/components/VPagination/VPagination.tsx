@@ -245,7 +245,6 @@ export const VPagination = defineComponent({
     function genItem(source: ItemSource, index: number) {
       const { number, page, active, disabled } = createPageInfo(source);
       const type = number ? 'num' : source;
-      // eslint-disable-next-line no-shadow
       const classes = [
         'v-pagination__item',
         {
@@ -335,7 +334,7 @@ export const VPagination = defineComponent({
             const el = elRef.value;
             if (el) {
               const style = window.getComputedStyle(el, 'before');
-              // eslint-disable-next-line no-shadow
+
               const width = style.getPropertyValue('width');
               const margin = style.getPropertyValue('margin');
               const size = parseFloat(width) + parseFloat(margin) * 0.5;

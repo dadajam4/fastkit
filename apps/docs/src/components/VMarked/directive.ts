@@ -10,7 +10,6 @@ export interface MarkedDirectiveBindingValue {
   router: Router;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface MarkedElement extends HTMLElement {
   __clearMarkedElementListener?: () => void;
 }

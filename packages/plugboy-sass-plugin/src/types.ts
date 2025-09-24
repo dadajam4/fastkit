@@ -1,6 +1,5 @@
 import { Plugin } from '@fastkit/plugboy';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PluginOptions {}
 
 export const PLUGIN_NAME = 'plugboy-sass';

@@ -146,13 +146,11 @@ export function createTextInputNodeSettings() {
   return { props, emits };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TextInputNodeEmitOptions
   extends ReturnType<typeof createTextInputNodeEmits> {}
 
 export type TextInputNodeContext = SetupContext<TextInputNodeEmitOptions>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TextInputNodeControlOptions extends TextableControlOptions {}
 
 export class TextInputNodeControl extends TextableControl {
@@ -255,7 +253,7 @@ export class TextInputNodeControl extends TextableControl {
       onAccept: (ev) => {
         const { masked, unmasked, typed } = imask;
         emit('acceptMask', ev);
-        // eslint-disable-next-line no-nested-ternary
+
         const bucket = this.useUnmaskedValue
           ? unmasked
           : this.useTypedValue
@@ -293,7 +291,7 @@ export class TextInputNodeControl extends TextableControl {
 
     watch(this._value, (v) => {
       if (!this._getMaskInput()) return;
-      // eslint-disable-next-line no-nested-ternary
+
       const bucket = this.useUnmaskedValue
         ? unmasked
         : this.useTypedValue

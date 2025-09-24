@@ -8,7 +8,6 @@ type VanillaExtractVitePluginOptions = NonNullable<
   Parameters<typeof vanillaExtractPlugin>[0]
 >;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ViteVanillaExtractPluginOptions
   extends VanillaExtractVitePluginOptions {}
 

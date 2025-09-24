@@ -6,7 +6,6 @@ import { getSuspenseRouteBucket } from './suspense-route-bucket';
 export type RawRouterScrollBehavior = 'top' | RouterScrollBehavior;
 
 declare module 'vue' {
-  // eslint-disable-next-line no-shadow
   export interface ComponentCustomOptions {
     scrollBehavior?: RawRouterScrollBehavior;
   }

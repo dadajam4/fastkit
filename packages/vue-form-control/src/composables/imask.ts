@@ -1,4 +1,3 @@
-/* eslint-disable no-multi-assign */
 import {
   ref,
   Ref,
@@ -76,9 +75,8 @@ export function useIMaskControl(
     from: IMaskPipeType = PIPE_TYPE.MASKED,
   ): string => {
     const _value =
-      // eslint-disable-next-line no-nested-ternary
       value == null ? '' : typeof value === 'number' ? String(value) : value;
-    // eslint-disable-next-line no-shadow
+
     const masked = staticMask.value;
     if (!masked) return _value;
     return masked.runIsolated((m) => {
@@ -97,7 +95,6 @@ export function useIMaskControl(
     $masked = masked.value = _inputMask.value;
     if (onAccept) onAccept(ev);
     if (onAcceptDynamicMeta) {
-      // eslint-disable-next-line no-shadow
       const { masked } = _inputMask;
       if (masked instanceof MaskedDynamic) {
         if (masked.currentMask) {

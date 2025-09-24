@@ -43,7 +43,6 @@ export interface RouteMatchedItem {
 export function extractRouteMatchedItems(route: RouteLocationNormalized) {
   const results: RouteMatchedItem[] = [];
 
-  // eslint-disable-next-line no-shadow
   route.matched.forEach((route, index) => {
     const { components, instances } = route;
     if (!components) return;
@@ -105,7 +104,7 @@ export function getRouteQuery(bucket: LocationQuery, key: string, type: BooleanC
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
-  // eslint-disable-next-line default-param-last
+
   type: RouteQueryType = String,
   defaultValue?: string | number | boolean,
 ): string | number | boolean | undefined {

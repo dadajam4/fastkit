@@ -479,12 +479,11 @@ export interface ColorScheme<
   toJSON(): ColorSchemeJSON<TN, PN, SN, VN, OK>;
 }
 
-export interface ThemeSettings {} // eslint-disable-line @typescript-eslint/no-empty-interface
-export interface PaletteSettings {} // eslint-disable-line @typescript-eslint/no-empty-interface
-export interface ScopeSettings {} // eslint-disable-line @typescript-eslint/no-empty-interface
-export interface ColorVariantSettings {} // eslint-disable-line @typescript-eslint/no-empty-interface
+export interface ThemeSettings {}
+export interface PaletteSettings {}
+export interface ScopeSettings {}
+export interface ColorVariantSettings {}
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 type ExtractKeys<T extends object, D> = keyof T extends never ? D : keyof T;
 
 export type ThemeName = ExtractKeys<ThemeSettings, '__ThemeName__'>;

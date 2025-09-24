@@ -35,7 +35,6 @@ type AnyStyleRule<CustomRules extends CustomStyleRules | null = null> =
 type LayerStyleHooks<CustomRules extends CustomStyleRules | null = null> = {
   style?: (rule: ComplexLayerStyleRule<CustomRules>, debugId?: string) => void;
   global?: (selector: string, rule: LayerGlobalStyleRules<CustomRules>) => void;
-  // eslint-disable-next-line no-shadow
   anyStyle?: (style: AnyStyleRule<CustomRules>) => void;
 };
 

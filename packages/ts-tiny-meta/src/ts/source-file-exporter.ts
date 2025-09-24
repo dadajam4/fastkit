@@ -14,7 +14,6 @@ import { NodeLocation, getNodeLocationInSourceFile } from './location';
 import { AnyMeta, SourceFileExports, RefQuery } from '../types';
 import { hasPrivateLikeTag } from './serializers/doc';
 
-// eslint-disable-next-line no-shadow
 enum ExtractMethod {
   Single = 'extractMeta',
   Module = 'extractModule',

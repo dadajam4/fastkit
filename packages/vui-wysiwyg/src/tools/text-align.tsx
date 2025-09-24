@@ -96,7 +96,6 @@ export const WysiwygTextAlignTool: WysiwygEditorToolFactory<
   const tool: WysiwygEditorTool = {
     key: 'textAlign',
     icon: ({ editor }) => getIcon(getCurrentAlign(editor, resolvedOptions)),
-    // eslint-disable-next-line no-shadow
     onClick: async ({ vui, editor }, ev) => {
       vui.menu({
         distance: 0,

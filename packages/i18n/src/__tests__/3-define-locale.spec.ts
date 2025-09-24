@@ -39,7 +39,6 @@ describe('コンポーネントロケールを定義する時', () => {
       bool: false,
     });
 
-    // eslint-disable-next-line no-shadow
     const n = {} as const;
 
     const ja = scheme.defineLocale.strict({

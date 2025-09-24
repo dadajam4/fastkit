@@ -145,7 +145,6 @@ export class VueStackService {
    */
   isFront(
     control: VStackControl,
-    // eslint-disable-next-line no-shadow
     filter?: (control: VStackControl) => boolean,
   ) {
     return this.getFront(filter) === control;
@@ -169,7 +168,6 @@ export class VueStackService {
     props: ExtractDynamicStackProps<T>,
     content: DefaultContent,
     propsResolver?: (
-      // eslint-disable-next-line no-shadow
       props: ExtractDynamicStackProps<T>,
     ) => ExtractDynamicStackProps<T>,
   ): DynamicStackPayload<Payload>;
@@ -179,7 +177,6 @@ export class VueStackService {
     props: ExtractDynamicStackProps<T>,
     slots: ExtractDynamicStackSlots<T>,
     propsResolver?: (
-      // eslint-disable-next-line no-shadow
       props: ExtractDynamicStackProps<T>,
     ) => ExtractDynamicStackProps<T>,
   ): DynamicStackPayload<Payload>;

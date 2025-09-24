@@ -30,17 +30,17 @@
     // font-size: calc(var(--root-em) * 0.875);
     font-weight: 500;
     line-height: 1;
-    text-decoration: none;
+    vertical-align: bottom;
     text-transform: uppercase;
     letter-spacing: math.div(1.25, 14) * 1em; // 1.25px;
-    vertical-align: bottom;
+    text-decoration: none;
     appearance: none;
     cursor: pointer;
     user-select: none;
+    outline: 0;
     border-style: solid;
     border-width: 1px;
     border-radius: var(--control-field-radius);
-    outline: 0;
     transition:
       0.3s cubic-bezier(0.25, 0.8, 0.5, 1),
       color 1ms;

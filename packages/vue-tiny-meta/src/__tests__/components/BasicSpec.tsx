@@ -9,12 +9,12 @@ export const BasicSpec = defineComponent({
     /** prop comment */
     msg: String,
   },
-  slots: {} as SlotsType<{
-    /** slot comment */
-    customSlot?: (props: { message: string }) => any;
-  }>,
   emits: {
     /** event comment */
     click: (ev: MouseEvent) => true,
   },
+  slots: {} as SlotsType<{
+    /** slot comment */
+    customSlot?: (props: { message: string }) => any;
+  }>,
 });

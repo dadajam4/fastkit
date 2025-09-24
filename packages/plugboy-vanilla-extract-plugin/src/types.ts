@@ -5,11 +5,9 @@ type VanillaExtractPluginOptions = NonNullable<
   Parameters<typeof esbuildPlugin>[0]
 >;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface VanillaExtractEsbuildOptions
   extends NonNullable<VanillaExtractPluginOptions['esbuildOptions']> {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PluginOptions
   extends Pick<VanillaExtractPluginOptions, 'identifiers' | 'esbuildOptions'> {}
 

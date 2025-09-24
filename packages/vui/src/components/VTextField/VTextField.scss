@@ -1,4 +1,4 @@
-@use '../../styles/core.scss';
+@use '../../styles/core';
 
 @layer vui {
   .v-text-field {
@@ -13,17 +13,17 @@
         padding: 0;
         margin: 0;
         overflow: hidden;
+        text-overflow: ellipsis;
 
         // margin: 0 8px;
         font-size: inherit;
         line-height: inherit;
-        text-overflow: ellipsis;
         letter-spacing: inherit;
         white-space: nowrap;
+        outline: 0;
         background: transparent;
         border: 0;
         border-radius: 0;
-        outline: 0;
 
         &:-webkit-autofill {
           @include core.auto-fill-cancel;

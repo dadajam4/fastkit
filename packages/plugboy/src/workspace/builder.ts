@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import { Options, build } from 'tsup';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -284,7 +283,6 @@ function __plugboyPublicDir(...paths) {
     if (!hitTypeNames.length) return;
 
     if (pkgImports) {
-      // eslint-disable-next-line no-shadow
       const { pkg, imports, importRe } = pkgImports;
       const mods = imports
         .trim()

@@ -63,8 +63,8 @@
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "eslint": "eslint . --ext ts,tsx,js,vue,html,yaml",
-    "eslint:fix": "eslint . --ext ts,tsx,js,vue,html,yaml --fix",
+    "eslint": "eslint .",
+    "eslint:fix": "eslint . --fix",
     "lint": "pnpm run eslint",
     "format": "pnpm run eslint:fix",
     "typecheck": "tsc --noEmit --skipLibCheck",

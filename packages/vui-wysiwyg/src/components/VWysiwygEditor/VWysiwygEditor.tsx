@@ -341,7 +341,6 @@ export const VWysiwygEditor = defineComponent({
 
 function resolveContextualValue(
   ctx: WysiwygEditorContext,
-  // eslint-disable-next-line no-shadow
   source?: boolean | ((ctx: WysiwygEditorContext) => boolean),
 ) {
   return typeof source === 'function' ? source(ctx) : source;

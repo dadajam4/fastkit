@@ -32,7 +32,6 @@ if (typeof window !== 'undefined' && typeof console === 'undefined') {
 
 CONSOLE_METHODS.forEach((method) => {
   if (typeof console[method] !== 'function') {
-    // eslint-disable-next-line func-names
     console[method] = function () {};
   }
 });

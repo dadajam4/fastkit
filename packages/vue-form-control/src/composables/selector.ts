@@ -171,13 +171,11 @@ export function createFormSelectorSettings(
   return { props, emits };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormSelectorEmitOptions
   extends ReturnType<typeof createFormSelectorEmits> {}
 
 export type FormSelectorContext = SetupContext<FormSelectorEmitOptions>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormSelectorControlOptions extends FormNodeControlBaseOptions {
   defaultMultiple?: boolean;
   defaultPreserveOrder?: boolean;
@@ -652,7 +650,6 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
   }
 
   protected _safeMultipleValues(_value = this.value): (string | number)[] {
-    // eslint-disable-next-line no-nested-ternary
     const values: (string | number)[] = Array.isArray(_value)
       ? _value
       : _value == null

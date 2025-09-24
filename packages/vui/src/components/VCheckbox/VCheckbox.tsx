@@ -22,7 +22,6 @@ export const VCheckbox = defineComponent({
     indeterminate: Boolean,
   },
   emits,
-  // eslint-disable-next-line no-shadow
   setup(props, ctx) {
     const nodeControl = useFormSelectorItemControl(props, ctx, {
       nodeType: VUI_CHECKBOX_SYMBOL,

@@ -416,7 +416,7 @@ export type PROMISE_TYPE = Promise<INTERFACE>;
 export function GENERIC_FUNCTION<T, ARGS extends any[]>(
   source: T,
   ...args: ARGS
-): // eslint-disable-next-line @typescript-eslint/ban-types
-T extends Function ? never : [T, ARGS] {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+): T extends Function ? never : [T, ARGS] {
   return [source, args] as any;
 }

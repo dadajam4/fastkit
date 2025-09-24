@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 export function getScrollParent(el?: HTMLElement | null): HTMLElement {
   while (el) {
     if (hasScrollbar(el)) return el;

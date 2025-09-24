@@ -10,7 +10,6 @@ const PkgI18nSubSpace = i18n.defineSubSpace({ pkg });
 export default defineComponent({
   i18n: PkgI18nSubSpace,
   setup() {
-    // eslint-disable-next-line no-shadow
     const pkg = PackageProvide.use();
     pkg.useHead();
     const pkgI18n = PkgI18nSubSpace.use();

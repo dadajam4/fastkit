@@ -249,7 +249,6 @@ export function useActionable(
         let _resolvedHref: string | undefined;
 
         const slots: ActionableRouterLinkSettings['slots'] = (children) => ({
-          // eslint-disable-next-line no-shadow
           default: withCtx(({ href, isActive, isExactActive }) => {
             const classes = [
               isActive && activeClass,

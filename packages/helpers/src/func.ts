@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 /**
  * If the specified type is a function, the function type is returned; otherwise, the function type with the specified return type is returned.
  */

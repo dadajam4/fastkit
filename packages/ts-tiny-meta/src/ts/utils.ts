@@ -29,7 +29,6 @@ export function getAliasedSymbolIfNecessary(
   symbol: ts.Symbol,
   checker: ts.TypeChecker,
 ): ts.Symbol {
-  // eslint-disable-next-line no-bitwise
   if ((symbol.flags & ts.SymbolFlags.Alias) !== 0) {
     return checker.getAliasedSymbol(symbol);
   }

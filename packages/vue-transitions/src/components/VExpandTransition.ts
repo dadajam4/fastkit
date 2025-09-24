@@ -126,7 +126,6 @@ export const VExpandTransition = generateJavaScriptTransition({
         el.style[marginEndProperty] = '0';
         if (props.fade) el.style.opacity = '0';
 
-        // eslint-disable-next-line no-void
         void el.offsetHeight; // Force reflow
 
         el.style.transition = initialStyle.transition;
@@ -165,7 +164,6 @@ export const VExpandTransition = generateJavaScriptTransition({
         el.style[marginStartProperty] = marginStart;
         el.style[marginEndProperty] = marginEnd;
 
-        // eslint-disable-next-line no-void
         void el.offsetHeight; // Force reflow
 
         requestAnimationFrame(() => {

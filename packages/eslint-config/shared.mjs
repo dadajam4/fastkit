@@ -1,4 +1,4 @@
-const fastkitRules = {
+export const fastkitRules = {
   'class-methods-use-this': 'off',
   'consistent-return': 'off',
   'max-len': ['error', { ignoreComments: true }],
@@ -43,23 +43,14 @@ const fastkitRules = {
   '@typescript-eslint/no-unused-vars': 'off',
   '@typescript-eslint/no-var-requires': 'off',
   '@typescript-eslint/no-unsafe-declaration-merging': 'off',
-  '@typescript-eslint/ban-types': [
-    'error',
-    {
-      extendDefaults: true,
-      types: {
-        '{}': false,
-      },
-    },
-  ],
   '@typescript-eslint/explicit-module-boundary-types': 'off',
-  'prettier/prettier': [
-    'error',
-    {
-      semi: true,
-      endOfLine: 'auto',
-    },
-  ],
+  '@typescript-eslint/no-require-imports': 'off',
+  '@typescript-eslint/no-unused-expressions': 'off',
+  '@typescript-eslint/no-empty-object-type': 'off',
+  // '@typescript-eslint/no-empty-object-type': [
+  //   'error',
+  //   {
+  //     allowInterfaces: 'with-single-extends',
+  //   },
+  // ],
 };
-
-module.exports = { fastkitRules };

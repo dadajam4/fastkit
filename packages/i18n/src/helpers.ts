@@ -42,7 +42,7 @@ export function resolveLocale<
   }
   localeLikeString = normalizeLocale(localeLikeString as string);
   let resolved: LocaleName | undefined;
-  // eslint-disable-next-line no-constant-condition
+
   while (true) {
     for (const locale of availableLocales) {
       const normalizedLocale = normalizeLocale(locale);

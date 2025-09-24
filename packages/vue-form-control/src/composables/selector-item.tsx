@@ -57,7 +57,6 @@ export function createFormSelectorItemSettings() {
 
 export type FormSelectorItemInputType = 'checkbox' | 'radio';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormSelectorItemEmitOptions
   extends ReturnType<typeof createFormSelectorItemEmits> {}
 

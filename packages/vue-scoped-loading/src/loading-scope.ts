@@ -308,6 +308,7 @@ export function createLoadingScope(app?: App): LoadingScope {
     },
     createProgressHandler(handler, options) {
       return ((...args: any[]) => {
+        // eslint-disable-next-line prefer-const
         let _ref: LoadingRequest;
         const proxy = new Proxy({} as LoadingRequest, {
           get(_target, p, receiver) {

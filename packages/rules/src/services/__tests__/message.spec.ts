@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { describe, it, expect } from 'vitest';
 
 import { required, length, each, ValidationError } from '../..';

@@ -83,9 +83,8 @@ export const VSelect = defineComponent({
     }),
     closeOnNavigation: Boolean,
   },
-  slots,
   emits,
-  // eslint-disable-next-line no-shadow
+  slots,
   setup(props, ctx) {
     const menuRef: Ref<{ menu: MenuAPI } | null> = ref(null);
     const menuOpened = ref(false);
@@ -249,7 +248,6 @@ export const VSelect = defineComponent({
       );
 
       if (currentEl) {
-        // eslint-disable-next-line no-shadow
         const ev = new MouseEvent('click', {
           view: window,
           bubbles: true,

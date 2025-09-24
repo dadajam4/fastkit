@@ -51,7 +51,6 @@ export function createFormGroupSettings() {
   return { props, emits };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FormGroupEmitOptions
   extends ReturnType<typeof createFormGroupEmits> {}
 

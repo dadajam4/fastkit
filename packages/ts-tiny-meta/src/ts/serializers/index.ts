@@ -133,7 +133,6 @@ export const TYPE_TEXT_MAPPING: Record<string, string> = {
 
 export const TYPE_TEXT_REPLACE_MAP: [RegExp, string][] = [
   [
-    // eslint-disable-next-line prefer-regex-literals
     new RegExp(
       'VNode<RendererNode, RendererElement, \\{ \\[key: string\\]: any; \\}>',
       'g',
@@ -319,14 +318,14 @@ export function extractFunctionMetaBody(
     if (Node.isNode(declaration)) {
       const overloads =
         (Node.isOverloadable(declaration) && declaration.getOverloads()) || [];
-      // eslint-disable-next-line no-shadow
+
       const declarations = [...overloads, declaration];
       return {
         declarations,
         declarationKind: declaration.getKindName(),
       };
     }
-    // eslint-disable-next-line no-shadow
+
     const declarationKind = declaration
       .getSignature()
       .getDeclaration()
@@ -336,7 +335,7 @@ export function extractFunctionMetaBody(
       declarationKind,
     };
   })();
-  // eslint-disable-next-line no-shadow
+
   const signatures = declarations.map((declaration) => {
     const signature = declaration.getSignature();
     return serializeSignature(exporter, signature);

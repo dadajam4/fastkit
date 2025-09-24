@@ -56,7 +56,6 @@ export const VNavigation = defineComponent({
     }
 
     function onItemActivated(item: NavigationItemInput) {
-      // eslint-disable-next-line no-shadow
       itemsRef.value.forEach(({ key, ref }) => {
         if (key === item.key) return;
         ref.close();
@@ -72,7 +71,7 @@ export const VNavigation = defineComponent({
             renderNavigationItemInput(item, {
               class: 'v-navigation__item',
               startIconEmptySpace: startIconEmptySpace.value,
-              // eslint-disable-next-line no-shadow
+
               ref: (ref: any) => {
                 setItemRef(item, ref);
               },

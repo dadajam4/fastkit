@@ -1,303 +1,307 @@
 {
-	"folders": [
+  "folders": [
     {
       "name": "✨ fastkit",
-      "path": "."
+      "path": ".",
     },
     {
       "name": "🚀 docs",
-      "path": "apps/docs"
+      "path": "apps/docs",
     },
     {
       "name": "📦 @fastkit/accept-language",
-      "path": "packages/accept-language"
+      "path": "packages/accept-language",
     },
     {
       "name": "📦 @fastkit/async-control",
-      "path": "packages/async-control"
+      "path": "packages/async-control",
     },
     {
       "name": "📦 @fastkit/body-scroll-lock",
-      "path": "packages/body-scroll-lock"
+      "path": "packages/body-scroll-lock",
     },
     {
       "name": "📦 @fastkit/cache-control",
-      "path": "packages/cache-control"
+      "path": "packages/cache-control",
     },
     {
       "name": "📦 @fastkit/catcher",
-      "path": "packages/catcher"
+      "path": "packages/catcher",
     },
     {
       "name": "📦 @fastkit/cloner",
-      "path": "packages/cloner"
+      "path": "packages/cloner",
     },
     {
       "name": "📦 @fastkit/color",
-      "path": "packages/color"
+      "path": "packages/color",
     },
     {
       "name": "📦 @fastkit/color-scheme",
-      "path": "packages/color-scheme"
+      "path": "packages/color-scheme",
     },
     {
       "name": "📦 @fastkit/color-scheme-gen",
-      "path": "packages/color-scheme-gen"
+      "path": "packages/color-scheme-gen",
     },
     {
       "name": "📦 @fastkit/comparator",
-      "path": "packages/comparator"
+      "path": "packages/comparator",
     },
     {
       "name": "📦 @fastkit/cookies",
-      "path": "packages/cookies"
+      "path": "packages/cookies",
     },
     {
       "name": "📦 @fastkit/debounce",
-      "path": "packages/debounce"
+      "path": "packages/debounce",
     },
     {
       "name": "📦 @fastkit/dom",
-      "path": "packages/dom"
+      "path": "packages/dom",
     },
     {
       "name": "📦 @fastkit/duration",
-      "path": "packages/duration"
+      "path": "packages/duration",
     },
     {
       "name": "📦 @fastkit/eslint-config",
-      "path": "packages/eslint-config"
+      "path": "packages/eslint-config",
     },
     {
       "name": "📦 @fastkit/eslint-config-vue",
-      "path": "packages/eslint-config-vue"
+      "path": "packages/eslint-config-vue",
     },
     {
       "name": "📦 @fastkit/ev",
-      "path": "packages/ev"
+      "path": "packages/ev",
     },
     {
       "name": "📦 @fastkit/hashed-sync",
-      "path": "packages/hashed-sync"
+      "path": "packages/hashed-sync",
     },
     {
       "name": "📦 @fastkit/helpers",
-      "path": "packages/helpers"
+      "path": "packages/helpers",
     },
     {
       "name": "📦 @fastkit/i18n",
-      "path": "packages/i18n"
+      "path": "packages/i18n",
     },
     {
       "name": "📦 @fastkit/icon-font",
-      "path": "packages/icon-font"
+      "path": "packages/icon-font",
     },
     {
       "name": "📦 @fastkit/icon-font-gen",
-      "path": "packages/icon-font-gen"
+      "path": "packages/icon-font-gen",
     },
     {
       "name": "📦 @fastkit/json",
-      "path": "packages/json"
+      "path": "packages/json",
     },
     {
       "name": "📦 @fastkit/keyboard",
-      "path": "packages/keyboard"
+      "path": "packages/keyboard",
     },
     {
       "name": "📦 @fastkit/media-match",
-      "path": "packages/media-match"
+      "path": "packages/media-match",
     },
     {
       "name": "📦 @fastkit/media-match-gen",
-      "path": "packages/media-match-gen"
+      "path": "packages/media-match-gen",
     },
     {
       "name": "📦 @fastkit/merge",
-      "path": "packages/merge"
+      "path": "packages/merge",
     },
     {
       "name": "📦 @fastkit/node-util",
-      "path": "packages/node-util"
+      "path": "packages/node-util",
     },
     {
       "name": "📦 @fastkit/nodepack",
-      "path": "packages/nodepack"
+      "path": "packages/nodepack",
     },
     {
       "name": "📦 @fastkit/object-path",
-      "path": "packages/object-path"
+      "path": "packages/object-path",
     },
     {
       "name": "📦 @fastkit/plugboy",
-      "path": "packages/plugboy"
+      "path": "packages/plugboy",
     },
     {
       "name": "📦 @fastkit/plugboy-sass-plugin",
-      "path": "packages/plugboy-sass-plugin"
+      "path": "packages/plugboy-sass-plugin",
     },
     {
       "name": "📦 @fastkit/plugboy-vanilla-extract-plugin",
-      "path": "packages/plugboy-vanilla-extract-plugin"
+      "path": "packages/plugboy-vanilla-extract-plugin",
     },
     {
       "name": "📦 @fastkit/plugboy-vue-jsx-plugin",
-      "path": "packages/plugboy-vue-jsx-plugin"
+      "path": "packages/plugboy-vue-jsx-plugin",
     },
     {
       "name": "📦 @fastkit/rules",
-      "path": "packages/rules"
+      "path": "packages/rules",
     },
     {
       "name": "📦 @fastkit/scroller",
-      "path": "packages/scroller"
+      "path": "packages/scroller",
     },
     {
       "name": "📦 @fastkit/sprite-images",
-      "path": "packages/sprite-images"
+      "path": "packages/sprite-images",
     },
     {
       "name": "📦 @fastkit/stylebase",
-      "path": "packages/stylebase"
+      "path": "packages/stylebase",
     },
     {
       "name": "📦 @fastkit/stylelint-config",
-      "path": "packages/stylelint-config"
+      "path": "packages/stylelint-config",
     },
     {
       "name": "📦 @fastkit/stylelint-config-vue",
-      "path": "packages/stylelint-config-vue"
+      "path": "packages/stylelint-config-vue",
     },
     {
       "name": "📦 @fastkit/tiny-hash",
-      "path": "packages/tiny-hash"
+      "path": "packages/tiny-hash",
     },
     {
       "name": "📦 @fastkit/tiny-logger",
-      "path": "packages/tiny-logger"
+      "path": "packages/tiny-logger",
     },
     {
       "name": "📦 @fastkit/ts-tiny-meta",
-      "path": "packages/ts-tiny-meta"
+      "path": "packages/ts-tiny-meta",
     },
     {
       "name": "📦 @fastkit/ts-type-utils",
-      "path": "packages/ts-type-utils"
+      "path": "packages/ts-type-utils",
     },
     {
       "name": "📦 @fastkit/universal-logger",
-      "path": "packages/universal-logger"
+      "path": "packages/universal-logger",
     },
     {
       "name": "📦 @fastkit/visibility",
-      "path": "packages/visibility"
+      "path": "packages/visibility",
     },
     {
       "name": "📦 @fastkit/vite-kit",
-      "path": "packages/vite-kit"
+      "path": "packages/vite-kit",
     },
     {
       "name": "📦 @fastkit/vite-plugin-vui",
-      "path": "packages/vite-plugin-vui"
+      "path": "packages/vite-plugin-vui",
     },
     {
       "name": "📦 @fastkit/vot",
-      "path": "packages/vot"
+      "path": "packages/vot",
     },
     {
       "name": "📦 @fastkit/vot-i18n",
-      "path": "packages/vot-i18n"
+      "path": "packages/vot-i18n",
     },
     {
       "name": "📦 @fastkit/vue-action",
-      "path": "packages/vue-action"
+      "path": "packages/vue-action",
     },
     {
       "name": "📦 @fastkit/vue-app-layout",
-      "path": "packages/vue-app-layout"
+      "path": "packages/vue-app-layout",
     },
     {
       "name": "📦 @fastkit/vue-body-scroll-lock",
-      "path": "packages/vue-body-scroll-lock"
+      "path": "packages/vue-body-scroll-lock",
     },
     {
       "name": "📦 @fastkit/vue-click-outside",
-      "path": "packages/vue-click-outside"
+      "path": "packages/vue-click-outside",
     },
     {
       "name": "📦 @fastkit/vue-color-scheme",
-      "path": "packages/vue-color-scheme"
+      "path": "packages/vue-color-scheme",
+    },
+    {
+      "name": "📦 @fastkit/vue-disabled-reason",
+      "path": "packages/vue-disabled-reason",
     },
     {
       "name": "📦 @fastkit/vue-form-control",
-      "path": "packages/vue-form-control"
+      "path": "packages/vue-form-control",
     },
     {
       "name": "📦 @fastkit/vue-i18n",
-      "path": "packages/vue-i18n"
+      "path": "packages/vue-i18n",
     },
     {
       "name": "📦 @fastkit/vue-keyboard",
-      "path": "packages/vue-keyboard"
+      "path": "packages/vue-keyboard",
     },
     {
       "name": "📦 @fastkit/vue-loading",
-      "path": "packages/vue-loading"
+      "path": "packages/vue-loading",
     },
     {
       "name": "📦 @fastkit/vue-location",
-      "path": "packages/vue-location"
+      "path": "packages/vue-location",
     },
     {
       "name": "📦 @fastkit/vue-media-match",
-      "path": "packages/vue-media-match"
+      "path": "packages/vue-media-match",
     },
     {
       "name": "📦 @fastkit/vue-page",
-      "path": "packages/vue-page"
+      "path": "packages/vue-page",
     },
     {
       "name": "📦 @fastkit/vue-resize",
-      "path": "packages/vue-resize"
+      "path": "packages/vue-resize",
     },
     {
       "name": "📦 @fastkit/vue-scoped-loading",
-      "path": "packages/vue-scoped-loading"
+      "path": "packages/vue-scoped-loading",
     },
     {
       "name": "📦 @fastkit/vue-scroller",
-      "path": "packages/vue-scroller"
+      "path": "packages/vue-scroller",
     },
     {
       "name": "📦 @fastkit/vue-stack",
-      "path": "packages/vue-stack"
+      "path": "packages/vue-stack",
     },
     {
       "name": "📦 @fastkit/vue-tiny-meta",
-      "path": "packages/vue-tiny-meta"
+      "path": "packages/vue-tiny-meta",
     },
     {
       "name": "📦 @fastkit/vue-transitions",
-      "path": "packages/vue-transitions"
+      "path": "packages/vue-transitions",
     },
     {
       "name": "📦 @fastkit/vue-utils",
-      "path": "packages/vue-utils"
+      "path": "packages/vue-utils",
     },
     {
       "name": "📦 @fastkit/vue-visibility",
-      "path": "packages/vue-visibility"
+      "path": "packages/vue-visibility",
     },
     {
       "name": "📦 @fastkit/vui",
-      "path": "packages/vui"
+      "path": "packages/vui",
     },
     {
       "name": "📦 @fastkit/vui-wysiwyg",
-      "path": "packages/vui-wysiwyg"
-    }
+      "path": "packages/vui-wysiwyg",
+    },
   ],
-	"settings": {
+  "settings": {
     "search.followSymlinks": false,
     "search.maxResults": 5000,
     "search.searchOnType": false,
@@ -310,7 +314,7 @@
       "**/.turbo-cache": true,
       "**/dist": true,
       "**/pnpm-lock.yaml": true,
-      "**/*.code-search": true
+      "**/*.code-search": true,
     },
     "files.exclude": {
       "**/.git": true,
@@ -321,7 +325,7 @@
       "**/.turbo": true,
       "**/.turbo-cache": true,
       "**/.vui": true,
-      "coverage": true
+      "coverage": true,
     },
 
     // Use the project's typescript version
@@ -340,14 +344,12 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": "never",
       "source.fixAll.eslint": "explicit",
-      "source.fixAll.stylelint": "explicit"
+      "source.fixAll.stylelint": "explicit",
+      "source.fixAll.markdownlint": "explicit",
     },
 
     // ESLint settings
     "eslint.format.enable": true,
-    "eslint.options": {
-      "extensions": [".js", ".jsx", ".cjs", ".mjs", ".ts", ".tsx"]
-    },
     "eslint.validate": [
       "vue",
       "html",
@@ -357,11 +359,7 @@
     ],
 
     // Stylelint settings
-    "stylelint.validate": [
-      "css",
-      "scss",
-      "vue"
-    ],
+    "stylelint.validate": ["css", "scss", "vue"],
     "npm.packageManager": "pnpm",
   },
   "extensions": {
@@ -371,7 +369,7 @@
       "dbaeumer.vscode-eslint",
       "esbenp.prettier-vscode",
       "stylelint.vscode-stylelint",
-      "mikestead.dotenv"
-    ]
-  }
+      "mikestead.dotenv",
+    ],
+  },
 }

@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
 import path from 'node:path';
 import fs from 'node:fs/promises';

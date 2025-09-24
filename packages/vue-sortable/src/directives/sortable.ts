@@ -238,9 +238,7 @@ export function installSortableDirective(app: App) {
 }
 
 declare module 'vue' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface HTMLAttributes extends SortableDirectiveAttrs {}
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface AllowedComponentProps extends SortableDirectiveAttrs {}
 }
