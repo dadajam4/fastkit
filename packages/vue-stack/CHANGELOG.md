@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.18.1
+
+### Patch Changes
+
+- Fixed an issue where the Modal was unintentionally hidden in structures like Tooltip > Modal.
+
 ## 0.18.0
 
 ### Minor Changes
