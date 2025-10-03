@@ -1110,9 +1110,11 @@ export function useStackControl(
     (value) => {
       if (!value) {
         state.isContentHovered = false;
-        for (const child of allChildren.value) {
-          child.close();
-        }
+
+        // @TODO In a structure like Tooltip > Modal, the Modal may unintentionally be hidden
+        // for (const child of allChildren.value) {
+        //   child.close();
+        // }
       }
 
       if (value) {

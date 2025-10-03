@@ -942,6 +942,7 @@ export class FormNodeControl<
   get shouldSkipValidation(): boolean {
     return (
       (this._shouldSkipValidation ||
+        this._resetGuard ||
         (!this.detached && this.parentNode?.shouldSkipValidation)) ??
       false
     );
@@ -1118,7 +1119,7 @@ export class FormNodeControl<
 
     const onValidateValueChange = () => {
       this._lastValidateValueChanged = true;
-      if (this._resetGuard || this.shouldSkipValidation) return;
+      if (this.shouldSkipValidation) return;
 
       if (
         this.shouldValidate ||
@@ -1500,10 +1501,15 @@ export class FormNodeControl<
     this._validationErrors.value = [];
     this._lastValidateValueChanged = true;
     this.touched = false;
-    this.setShouldValidate(this.validateTimingIsAlways);
+    this.setShouldValidate(false);
     this._resetGuard = true;
     nextTick(() => {
+      if (this.isDestroyed) return;
+      this.setShouldValidate(this.validateTimingIsAlways);
       this._resetGuard = false;
+      if (this.validateTimingIsAlways) {
+        this.validateSelf();
+      }
     });
   }
 

@@ -1,5 +1,14 @@
 # @fastkit/vui
 
+## 1.1.1
+
+### Patch Changes
+
+- Improved the exported interface type of `VForm`.
+
+- Updated dependencies []:
+  - @fastkit/vue-form-control@0.22.1
+
 ## 1.1.0
 
 ### Minor Changes

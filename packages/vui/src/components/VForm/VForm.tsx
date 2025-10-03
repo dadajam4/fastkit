@@ -1,4 +1,9 @@
-import { defineComponent, computed } from 'vue';
+import {
+  defineComponent,
+  computed,
+  type RenderFunction,
+  getCurrentInstance,
+} from 'vue';
 import {
   VueForm,
   createFormSettings,
@@ -11,6 +16,14 @@ import { VUI_FORM_SYMBOL } from '../../injections';
 const { props, emits } = createFormSettings({
   nodeType: VUI_FORM_SYMBOL,
 });
+
+/**
+ * @TODO Externalize
+ */
+function useRender(render: RenderFunction) {
+  const vm = getCurrentInstance() as any;
+  vm.render = render;
+}
 
 export type VFormSlots = DefineSlotsType<{
   default?: (form: VueForm) => any;
@@ -48,14 +61,14 @@ export const VForm = defineComponent({
     ]);
     useControl(props);
 
-    ctx.expose({
-      control: nodeControl,
-    });
-
-    return () => (
+    useRender(() => (
       <form class={classes.value} {...nodeControl.formAttrs}>
         {ctx.slots.default?.(nodeControl)}
       </form>
-    );
+    ));
+
+    return {
+      control: nodeControl,
+    };
   },
 });

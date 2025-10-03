@@ -306,9 +306,15 @@ export class TextableControl extends FormNodeControl<string> {
   }
 
   protected async _finalize() {
+    if (this.shouldSkipValidation) return;
     const { finalizers } = this;
     if (!finalizers) return;
-    this.value = await finalizeValue(this.value, finalizers);
+
+    const currentValue = this.value;
+    const finalizedValue = await finalizeValue(currentValue, finalizers);
+    if (currentValue !== this.value) return;
+
+    this.value = finalizedValue;
   }
 
   protected _resolveRules() {

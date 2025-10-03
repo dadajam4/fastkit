@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.22.1
+
+### Patch Changes
+
+- Fixed an issue where updating `modelValue` from outside the component conflicted with the internal finalize process, preventing the value from being updated correctly.
+
 ## 0.22.0
 
 ### Minor Changes
