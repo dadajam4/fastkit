@@ -943,7 +943,7 @@ interface WysiwygEditorTool {
   icon: WysiwygEditorToolIcon                   // アイコン
   active?: boolean | ((ctx: WysiwygEditorContext) => boolean) // アクティブ状態
   disabled?: boolean | ((ctx: WysiwygEditorContext) => boolean) // 無効状態
-  onClick: (ctx: WysiwygEditorContext, ev: MouseEvent) => any // クリックハンドラ
+  onClick: (ctx: WysiwygEditorContext, ev: PointerEvent) => any // クリックハンドラ
   floating?: boolean                            // フローティングメニュー表示
   extensions?: Extensions                       // 依存拡張機能
 }
@@ -969,15 +969,18 @@ function createWysiwygExtension<Options = any, Storage = any>(
 ## 組み込みツール
 
 ### テキストフォーマット
+
 - `WysiwygFormatBoldTool` - 太字
 - `WysiwygFormatItalicTool` - 斜体
 - `WysiwygFormatUnderlineTool` - 下線
 
 ### リスト
+
 - `WysiwygBulletListTool` - 箇条書きリスト
 - `WysiwygOrderedListTool` - 番号付きリスト
 
 ### その他
+
 - `WysiwygLinkTool` - リンク
 - `WysiwygHistoryTool` - 元に戻す/やり直し
 - `WysiwygColorTool` - テキスト色
@@ -987,16 +990,19 @@ function createWysiwygExtension<Options = any, Storage = any>(
 ## Considerations
 
 ### ブラウザ対応
+
 - モダンブラウザのみサポート
 - Internet Explorer非対応
 - ProseMirrorの制約に準拠
 
 ### パフォーマンス
+
 - 大量のコンテンツ編集時は仮想スクロール推奨
 - 複雑な拡張機能は性能に影響する可能性
 - SSRでは初期化に注意が必要
 
 ### セキュリティ
+
 - HTMLコンテンツのサニタイゼーションは実装者責任
 - XSS攻撃への対策が必要
 - 信頼できないコンテンツの表示には注意

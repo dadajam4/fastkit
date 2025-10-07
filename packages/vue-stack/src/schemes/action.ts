@@ -5,7 +5,7 @@ import type { VueStackService } from '../service';
 export interface VStackActionContext {
   control: VStackControl;
   key: string | number;
-  onClick: (control: VStackControl, ev: MouseEvent) => any;
+  onClick: (control: VStackControl, ev: PointerEvent) => any;
 }
 
 export type VStackActionFn = (ctx: VStackActionContext) => VNodeChild;
@@ -13,7 +13,7 @@ export type VStackActionFn = (ctx: VStackActionContext) => VNodeChild;
 export interface VStackAction {
   key: string | number;
   content: VStackActionFn;
-  onClick?: (control: VStackControl, ev: MouseEvent) => any;
+  onClick?: (control: VStackControl, ev: PointerEvent) => any;
 }
 
 export function createStackActionProps() {
@@ -42,7 +42,7 @@ export interface VStackBuiltinActionContext {
   control: VStackControl;
   key: string | number;
   bindings: {
-    onClick?: (ev: MouseEvent) => void;
+    onClick?: (ev: PointerEvent) => void;
   };
 }
 
@@ -57,7 +57,7 @@ export type VStackBuiltinActions = Record<
 
 export const BUILTIN_ACTION_HANDLERS: Record<
   VStackBuiltinActionType,
-  (control: VStackControl, ev: MouseEvent) => any
+  (control: VStackControl, ev: PointerEvent) => any
 > = {
   ok: (control, ev) => {
     control.resolve(true);

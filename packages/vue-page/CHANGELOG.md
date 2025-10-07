@@ -1,5 +1,14 @@
 # @fastkit/vue-page
 
+## 0.17.0
+
+### Patch Changes
+
+- Fixed a regression where the return type of `createPrefetch().inject()` incorrectly included `undefined` in its union type.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.17.0
+
 ## 0.16.0
 
 ### Minor Changes
@@ -305,7 +314,7 @@
 - [#39](https://github.com/dadajam4/fastkit/pull/39) [`40ee82f`](https://github.com/dadajam4/fastkit/commit/40ee82f4501b88e44ad9b67918df2237298493a0) Thanks [@dadajam4](https://github.com/dadajam4)! - Updated Vue to improve type support for slots, etc.
   This improvement is based on the following Vue.js 3.3 release
 
-  https://blog.vuejs.org/posts/vue-3-3
+  <https://blog.vuejs.org/posts/vue-3-3>
 
 ### Patch Changes
 

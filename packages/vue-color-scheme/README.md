@@ -339,7 +339,7 @@ const props = defineProps({
 });
 
 defineEmits<{
-  click: [event: MouseEvent];
+  click: [event: PointerEvent];
 }>();
 
 // Color class generation
@@ -856,7 +856,7 @@ describe('VueColorScheme', () => {
     "@fastkit/vue-utils": "Vue.js utilities"
   },
   "peerDependencies": {
-    "vue": "^3.4.0",
+    "vue": "^3.5.0",
     "@unhead/vue": "^1.8.0"
   }
 }
@@ -864,7 +864,7 @@ describe('VueColorScheme', () => {
 
 ## Documentation
 
-https://dadajam4.github.io/fastkit/vue-color-scheme/
+<https://dadajam4.github.io/fastkit/vue-color-scheme/>
 
 ## License
 

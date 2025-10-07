@@ -248,10 +248,10 @@ export const VSelect = defineComponent({
       );
 
       if (currentEl) {
-        const ev = new MouseEvent('click', {
-          view: window,
+        const ev = new PointerEvent('click', {
           bubbles: true,
           cancelable: true,
+          view: window,
         });
         currentEl.dispatchEvent(ev);
         ev.preventDefault();
@@ -283,7 +283,7 @@ export const VSelect = defineComponent({
       closeMenu,
     });
 
-    const handleClickLabel = (ev: MouseEvent) => {
+    const handleClickLabel = (ev: PointerEvent) => {
       focus();
     };
 

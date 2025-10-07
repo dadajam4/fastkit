@@ -8,7 +8,7 @@ import {
 import { installDirective } from '@fastkit/vue-utils';
 
 export type ClickOutsideDirectiveHandler =
-  | ((ev: MouseEvent | PointerEvent) => any)
+  | ((ev: PointerEvent) => any)
   | undefined
   | void
   | false
@@ -16,7 +16,7 @@ export type ClickOutsideDirectiveHandler =
 
 export interface ClickOutsideDirectiveBindingValue {
   handler?: ClickOutsideDirectiveHandler;
-  conditional?: (ev: MouseEvent | PointerEvent, pre?: boolean) => boolean;
+  conditional?: (ev: PointerEvent, pre?: boolean) => boolean;
   include?: () => Element[];
 }
 
@@ -43,7 +43,7 @@ export const ClickOutsideDirectiveElementSymbol = Symbol(
 );
 
 export interface ClickOutsideDirectiveElement extends HTMLElement {
-  [ClickOutsideDirectiveElementSymbol]?: (ev: MouseEvent | PointerEvent) => any;
+  [ClickOutsideDirectiveElementSymbol]?: (ev: PointerEvent) => any;
 }
 
 export type ClickOutsideDirectiveVNode = VNode<
@@ -63,7 +63,7 @@ export type ClickOutsideDirective = ObjectDirective<
 >;
 
 function pointerHook(
-  ev: MouseEvent | PointerEvent,
+  ev: PointerEvent,
   el: ClickOutsideDirectiveElement,
   binding: ClickOutsideDirectiveBinding,
 ) {
@@ -89,8 +89,7 @@ function pointerHook(
 
 export const clickOutsideDirective: ClickOutsideDirective = {
   mounted(el, binding) {
-    const onClick = (ev: MouseEvent | PointerEvent) =>
-      pointerHook(ev, el, binding);
+    const onClick = (ev: PointerEvent) => pointerHook(ev, el, binding);
     document.addEventListener('click', onClick, true);
     el[ClickOutsideDirectiveElementSymbol] = onClick;
   },

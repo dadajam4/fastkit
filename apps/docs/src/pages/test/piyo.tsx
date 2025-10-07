@@ -5,10 +5,10 @@ export default defineComponent({
   setup() {
     const vui = useVui();
 
-    const confirmGuard = (ev: MouseEvent) =>
+    const confirmGuard = (ev: PointerEvent) =>
       vui.confirm('OKですか？').then((result) => result === true);
 
-    const handleClick = (ev: MouseEvent) => {
+    const handleClick = (ev: PointerEvent) => {
       vui.snackbar('Clicked !!!');
     };
 

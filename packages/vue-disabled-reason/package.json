@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-disabled-reason",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A headless Vue utility that monitors disabled elements and provides a slot or render function to display the reason.",
   "keywords": [
     "fastkit",
@@ -56,10 +56,10 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.21"
+    "vue": "^3.5.22"
   },
   "peerDependencies": {
-    "vue": "^3.4.0"
+    "vue": "^3.5.0"
   },
   "_docs": {
     "scope": "vue",

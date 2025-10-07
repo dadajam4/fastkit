@@ -177,7 +177,7 @@ export const VNavigationItem = defineComponent({
       return opened.value ? close() : open();
     }
 
-    const onClick = (ev: MouseEvent) => {
+    const onClick = (ev: PointerEvent) => {
       if (!to.value) {
         return toggle();
       }

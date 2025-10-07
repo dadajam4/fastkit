@@ -11,7 +11,7 @@ export const BasicSpec = defineComponent({
   },
   emits: {
     /** event comment */
-    click: (ev: MouseEvent) => true,
+    click: (ev: PointerEvent) => true,
   },
   slots: {} as SlotsType<{
     /** slot comment */

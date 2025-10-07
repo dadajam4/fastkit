@@ -102,7 +102,7 @@ export default defineComponent<Props>({
      * ボタンがクリックされた時に発行
      * @param event - マウスイベント
      */
-    click: (event: MouseEvent) => true,
+    click: (event: PointerEvent) => true,
 
     /**
      * フォーカスが当たった時に発行
@@ -141,7 +141,7 @@ export default defineComponent<Props>({
   },
 
   setup(props, { emit, slots }) {
-    const handleClick = (event: MouseEvent) => {
+    const handleClick = (event: PointerEvent) => {
       if (props.disabled || props.loading) return
       emit('click', event)
     }
@@ -792,10 +792,12 @@ function extractAll(
 ```
 
 **パラメータ:**
+
 - `filePath`: 解析対象のファイルパス
 - `options`: 解析オプション
 
 **戻り値:**
+
 - `ComponentMeta[]`: 抽出されたコンポーネントメタデータの配列
 
 ### `SerializeVueOptions`
@@ -841,6 +843,7 @@ function ViteVueTinyMeta(
 ```
 
 **オプション:**
+
 - `include`: 対象ファイルパターン
 - `exclude`: 除外ファイルパターン
 - `injectProperty`: 注入プロパティ名（デフォルト: `__docgenInfo`）

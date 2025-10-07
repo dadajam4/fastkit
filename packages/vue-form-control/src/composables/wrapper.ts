@@ -93,7 +93,7 @@ export type FormNodeWrapperProps = ExtractPropTypes<
 
 export function createFormNodeWrapperEmits() {
   return {
-    clickLabel: (ev: MouseEvent, wrapper: FormNodeWrapper) => true,
+    clickLabel: (ev: PointerEvent, wrapper: FormNodeWrapper) => true,
   };
 }
 

@@ -1,5 +1,16 @@
 # @fastkit/vue-click-outside
 
+## 0.4.0
+
+### Minor Changes
+
+- Updated native event types such as PointerEvent to align with changes in Vue 3.5.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.17.0
+
 ## 0.3.0
 
 ### Minor Changes

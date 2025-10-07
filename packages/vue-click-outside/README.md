@@ -670,7 +670,7 @@ const contextMenuStyle = computed(() => ({
   zIndex: 1000
 }))
 
-const showContextMenu = (event: MouseEvent) => {
+const showContextMenu = (event: PointerEvent) => {
   contextMenu.x = event.clientX
   contextMenu.y = event.clientY
   contextMenu.visible = true
@@ -804,11 +804,13 @@ const executeAction = (action: string) => {
 A directive that detects clicks outside an element and executes a handler.
 
 **Basic usage:**
+
 ```vue
 <div v-click-outside="handler">Content</div>
 ```
 
 **Advanced configuration:**
+
 ```vue
 <div v-click-outside="{
   handler: clickHandler,
@@ -824,7 +826,7 @@ A directive that detects clicks outside an element and executes a handler.
 ```typescript
 // Handler function type
 type ClickOutsideDirectiveHandler =
-  | ((ev: MouseEvent | PointerEvent) => any)
+  | ((ev: PointerEvent) => any)
   | undefined
   | void
   | false
@@ -833,7 +835,7 @@ type ClickOutsideDirectiveHandler =
 // Detailed configuration object type
 interface ClickOutsideDirectiveBindingValue {
   handler?: ClickOutsideDirectiveHandler
-  conditional?: (ev: MouseEvent | PointerEvent, pre?: boolean) => boolean
+  conditional?: (ev: PointerEvent, pre?: boolean) => boolean
   include?: () => Element[]
 }
 
@@ -881,7 +883,7 @@ export function useModal(options: {
   const clickOutsideHandler = computed(() => {
     if (!options.closeOnClickOutside) return null
 
-    return (ev: MouseEvent | PointerEvent) => {
+    return (ev: PointerEvent) => {
       if (options.confirmBeforeClose && hasChanges.value) {
         if (confirm('Changes are not saved. Do you want to close?')) {
           close()
@@ -928,7 +930,6 @@ export function useModal(options: {
 
 - Supported in all modern browsers
 - Works with Internet Explorer 11 and later
-- Supports both PointerEvent and MouseEvent
 
 ### Accessibility
 

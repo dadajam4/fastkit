@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vot",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Orchestration tools for building Vue applications.",
   "keywords": [
     "fastkit",
@@ -80,20 +80,20 @@
     "@types/connect": "^3.4.38",
     "@types/express": "^4.17.23",
     "@types/http-proxy": "^1.17.16",
-    "@types/node": "^24.5.2",
+    "@types/node": "^24.7.0",
     "@unhead/ssr": "^2.0.17",
     "@unhead/vue": "^2.0.17",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitejs/plugin-vue-jsx": "^5.1.1",
-    "@vue/server-renderer": "^3.5.21",
+    "@vue/server-renderer": "^3.5.22",
     "chalk": "^5.6.2",
     "connect": "^3.7.0",
     "express": "^4.21.2",
     "fs-extra": "^11.3.2",
     "http-proxy": "^1.18.1",
-    "vite": "^7.1.7",
+    "vite": "^7.1.9",
     "vite-plugin-pages": "^0.33.1",
-    "vue": "^3.5.21",
+    "vue": "^3.5.22",
     "vue-router": "^4.5.1"
   },
   "buildOptions": {

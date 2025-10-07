@@ -1,5 +1,19 @@
 # @fastkit/vue-app-layout
 
+## 0.18.0
+
+### Minor Changes
+
+- Updated native event types such as PointerEvent to align with changes in Vue 3.5.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.4.0
+  - @fastkit/vue-scroller@0.17.0
+  - @fastkit/vue-resize@0.4.0
+  - @fastkit/vue-utils@0.17.0
+
 ## 0.17.0
 
 ### Minor Changes

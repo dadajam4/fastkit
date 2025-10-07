@@ -52,7 +52,7 @@ export const VTextareaAutosize = defineComponent({
     maxRows: NumberishPropOption,
   },
   emits: {
-    input: (event: Event) => true,
+    input: (event: InputEvent) => true,
     'update:modelValue': (modelValue: string) => true,
     focus: (event: FocusEvent) => true,
     blur: (event: FocusEvent) => true,
@@ -200,7 +200,7 @@ export const VTextareaAutosize = defineComponent({
       renders.value = 0;
     });
 
-    const handleInput = (event: Event) => {
+    const handleInput = (event: InputEvent) => {
       renders.value = 0;
       value.value = (event.target as HTMLTextAreaElement).value;
 

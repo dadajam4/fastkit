@@ -727,7 +727,7 @@ console.log(debugScheme.debug.info());
     "@fastkit/tiny-logger": "Logging functionality"
   },
   "peerDependencies": {
-    "vue": "^3.4.0"
+    "vue": "^3.5.0"
   },
   "devDependencies": {
     "typescript": "^5.5.0",

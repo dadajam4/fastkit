@@ -49,6 +49,7 @@ plugboy gen [workspaceName]
 ### Workspace Configuration
 
 **`plugboy.workspace.ts`**:
+
 ```typescript
 import { defineWorkspaceConfig } from '@fastkit/plugboy';
 
@@ -70,13 +71,14 @@ export default defineWorkspaceConfig({
 ### Project Configuration
 
 **`plugboy.project.ts`**:
+
 ```typescript
 import { defineProjectConfig } from '@fastkit/plugboy';
 
 export default defineProjectConfig({
   workspacesDir: 'packages',
   peerDependencies: {
-    'vue': '^3.4.0'
+    'vue': '^3.5.0'
   },
   scripts: [
     {
@@ -149,7 +151,7 @@ export default defineProjectConfig({
   workspacesDir: 'packages',
   peerDependencies: {
     'react': '^18.0.0',
-    'vue': '^3.4.0'
+    'vue': '^3.5.0'
   }
 });
 ```
@@ -341,6 +343,7 @@ export default defineWorkspaceConfig({
 ## Dependencies
 
 ### Main Dependencies
+
 - `esbuild`: High-speed JavaScript builder
 - `tsup`: TypeScript build tool
 - `cac`: CLI creation library

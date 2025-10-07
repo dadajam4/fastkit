@@ -1,5 +1,16 @@
 # @fastkit/vui-wysiwyg
 
+## 8.2.0
+
+### Minor Changes
+
+- Updated native event types such as PointerEvent to align with changes in Vue 3.5.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vui@1.2.0
+
 ## 8.1.0
 
 ### Minor Changes

@@ -920,7 +920,7 @@ interface VuiPluginOptions {
     "@fastkit/helpers": "Utilities"
   },
   "peerDependencies": {
-    "vue": "^3.4.0",
+    "vue": "^3.5.0",
     "vue-router": "^4.0.0"
   }
 }

@@ -669,7 +669,7 @@ const contextMenuStyle = computed(() => ({
   zIndex: 1000
 }))
 
-const showContextMenu = (event: MouseEvent) => {
+const showContextMenu = (event: PointerEvent) => {
   contextMenu.x = event.clientX
   contextMenu.y = event.clientY
   contextMenu.visible = true
@@ -803,11 +803,13 @@ const executeAction = (action: string) => {
 要素外のクリックを検出してハンドラーを実行するディレクティブ。
 
 **基本的な使用法:**
+
 ```vue
 <div v-click-outside="handler">コンテンツ</div>
 ```
 
 **高度な設定:**
+
 ```vue
 <div v-click-outside="{
   handler: clickHandler,
@@ -823,7 +825,7 @@ const executeAction = (action: string) => {
 ```typescript
 // ハンドラー関数の型
 type ClickOutsideDirectiveHandler =
-  | ((ev: MouseEvent | PointerEvent) => any)
+  | ((ev: PointerEvent) => any)
   | undefined
   | void
   | false
@@ -832,7 +834,7 @@ type ClickOutsideDirectiveHandler =
 // 詳細設定オブジェクトの型
 interface ClickOutsideDirectiveBindingValue {
   handler?: ClickOutsideDirectiveHandler
-  conditional?: (ev: MouseEvent | PointerEvent, pre?: boolean) => boolean
+  conditional?: (ev: PointerEvent, pre?: boolean) => boolean
   include?: () => Element[]
 }
 
@@ -880,7 +882,7 @@ export function useModal(options: {
   const clickOutsideHandler = computed(() => {
     if (!options.closeOnClickOutside) return null
 
-    return (ev: MouseEvent | PointerEvent) => {
+    return (ev: PointerEvent) => {
       if (options.confirmBeforeClose && hasChanges.value) {
         if (confirm('変更が保存されていません。閉じますか？')) {
           close()
@@ -927,7 +929,6 @@ export function useModal(options: {
 
 - モダンブラウザすべてでサポート
 - Internet Explorer 11以降で動作
-- PointerEventとMouseEventの両方に対応
 
 ### アクセシビリティ
 

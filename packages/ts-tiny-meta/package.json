@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
-    "vite": "^7.1.7"
+    "vite": "^7.1.9"
   },
   "peerDependencies": {
     "vite": "^5.0.0 || ^6.0.0 || ^7.0.0"

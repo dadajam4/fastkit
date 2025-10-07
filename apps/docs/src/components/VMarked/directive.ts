@@ -25,7 +25,7 @@ const hook: MarkedDirectiveHook = function hook(el, binding) {
 
   const listenerOptions = { capture: true };
 
-  const listener = (ev: MouseEvent) => {
+  const listener = (ev: PointerEvent) => {
     if (ev.metaKey) return;
     const { target } = ev;
     if (!target) return;

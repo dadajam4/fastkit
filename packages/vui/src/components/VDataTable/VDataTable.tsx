@@ -493,7 +493,7 @@ export const VDataTable = defineComponent({
       }
     }
 
-    function handleClickSortHeader(header: DataTableHeader, ev: MouseEvent) {
+    function handleClickSortHeader(header: DataTableHeader, ev: PointerEvent) {
       const { sortQuery } = header;
       if (!sortQuery) return;
       if (sortByRef.value === sortQuery) {

@@ -60,7 +60,7 @@ export const VTextField = defineComponent({
 
     const classes = computed(() => ['v-text-field', control.classes.value]);
 
-    const handleClickLabel = (ev: MouseEvent) => {
+    const handleClickLabel = (ev: PointerEvent) => {
       inputControl.focus();
     };
 

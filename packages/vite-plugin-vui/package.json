@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-plugin-vui",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "vite-plugin-vui",
   "keywords": [
     "vite",
@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@fastkit/icon-font-gen": "workspace:^",
-    "vite": "^7.1.7"
+    "vite": "^7.1.9"
   },
   "peerDependencies": {
     "@fastkit/icon-font-gen": "workspace:^",

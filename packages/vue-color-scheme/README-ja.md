@@ -338,7 +338,7 @@ const props = defineProps({
 });
 
 defineEmits<{
-  click: [event: MouseEvent];
+  click: [event: PointerEvent];
 }>();
 
 // カラークラス生成
@@ -855,7 +855,7 @@ describe('VueColorScheme', () => {
     "@fastkit/vue-utils": "Vue.js ユーティリティ"
   },
   "peerDependencies": {
-    "vue": "^3.4.0",
+    "vue": "^3.5.0",
     "@unhead/vue": "^1.8.0"
   }
 }
@@ -863,7 +863,7 @@ describe('VueColorScheme', () => {
 
 ## ドキュメント
 
-https://dadajam4.github.io/fastkit/vue-color-scheme/
+<https://dadajam4.github.io/fastkit/vue-color-scheme/>
 
 ## ライセンス
 

@@ -59,10 +59,10 @@ export function setDefaultRouterLink(
 
 const noop = () => {};
 
-const isRightClick = (ev: MouseEvent) =>
+const isRightClick = (ev: PointerEvent) =>
   ev.button !== undefined && ev.button !== 0;
 
-const isWithControlKey = (ev: MouseEvent) =>
+const isWithControlKey = (ev: PointerEvent) =>
   !!(ev.metaKey || ev.altKey || ev.ctrlKey || ev.shiftKey);
 
 const unWrapFn = (

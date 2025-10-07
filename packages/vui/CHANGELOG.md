@@ -1,5 +1,31 @@
 # @fastkit/vui
 
+## 1.2.0
+
+### Minor Changes
+
+- Updated native event types such as PointerEvent to align with changes in Vue 3.5.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-click-outside@0.4.0
+  - @fastkit/vue-form-control@0.23.0
+  - @fastkit/vue-app-layout@0.18.0
+  - @fastkit/vue-action@0.5.0
+  - @fastkit/vue-stack@0.19.0
+  - @fastkit/vue-body-scroll-lock@0.4.0
+  - @fastkit/vue-disabled-reason@0.2.0
+  - @fastkit/vue-media-match@0.16.0
+  - @fastkit/vue-transitions@0.4.0
+  - @fastkit/vue-keyboard@0.4.0
+  - @fastkit/vue-location@0.6.0
+  - @fastkit/vue-scroller@0.17.0
+  - @fastkit/vue-loading@0.17.0
+  - @fastkit/vue-resize@0.4.0
+  - @fastkit/vue-utils@0.17.0
+  - @fastkit/vue-color-scheme@0.16.1
+
 ## 1.1.1
 
 ### Patch Changes

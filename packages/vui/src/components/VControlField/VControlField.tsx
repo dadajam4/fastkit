@@ -64,7 +64,7 @@ export const VControlField = defineComponent({
     error: Boolean,
   },
   emits: {
-    click: (ev: MouseEvent) => true,
+    click: (ev: PointerEvent) => true,
   },
   slots,
   setup(props, ctx) {
@@ -139,7 +139,7 @@ export const VControlField = defineComponent({
       );
     };
 
-    const handleClick = (ev: MouseEvent) => ctx.emit('click', ev);
+    const handleClick = (ev: PointerEvent) => ctx.emit('click', ev);
 
     return () => (
       <div

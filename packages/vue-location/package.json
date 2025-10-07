@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-location",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "vue-location",
   "keywords": [
     "vue",
@@ -51,11 +51,11 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.21",
+    "vue": "^3.5.22",
     "vue-router": "^4.5.1"
   },
   "peerDependencies": {
-    "vue": "^3.4.0",
+    "vue": "^3.5.0",
     "vue-router": "^4.4.0"
   },
   "_docs": {

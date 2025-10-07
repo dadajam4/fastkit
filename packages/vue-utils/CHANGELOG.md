@@ -1,5 +1,11 @@
 # @fastkit/vue-utils
 
+## 0.17.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
 ## 0.16.0
 
 ### Minor Changes

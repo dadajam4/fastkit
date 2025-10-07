@@ -585,7 +585,7 @@ import { useActionable } from '@fastkit/vue-action'
 const guardedAction = useActionable(
   {
     attrs: {
-      guard: async (ev: MouseEvent) => {
+      guard: async (ev: PointerEvent) => {
         // 非同期ガード処理
         const result = await confirm('本当に実行しますか？')
         return result // false を返すとアクションがキャンセルされる
@@ -836,7 +836,7 @@ interface VActionProps extends ActionableAttrs {
 }
 
 // ガード関数の型定義
-type ActionableGuard = (ev: MouseEvent) => boolean | void | Promise<boolean | void>;
+type ActionableGuard = (ev: PointerEvent) => boolean | void | Promise<boolean | void>;
 
 // スロット
 interface VActionSlots {

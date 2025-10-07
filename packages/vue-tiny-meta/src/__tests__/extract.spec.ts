@@ -23,7 +23,7 @@ describe('extract', () => {
     const ev1 = extracted.events[0];
     expect(ev1.name).toBe('onClick');
     expect(ev1.description).toBe(undefined);
-    expect(ev1.type.names[0]).toBe('(ev: MouseEvent) => any');
+    expect(ev1.type.names[0]).toBe('(ev: PointerEvent) => any');
 
     const slot1 = extracted.slots[0];
     expect(slot1.name).toBe('v-slot:customSlot');
@@ -51,7 +51,7 @@ describe('extract', () => {
     const ev1 = extracted.events[0];
     expect(ev1.name).toBe('onClick');
     expect(ev1.description).toBe(undefined);
-    expect(ev1.type.names[0]).toBe('(ev: MouseEvent) => any');
+    expect(ev1.type.names[0]).toBe('(ev: PointerEvent) => any');
 
     const slot1 = extracted.slots[0];
     expect(slot1.name).toBe('v-slot:customSlot');
@@ -79,7 +79,7 @@ describe('extract', () => {
     const ev1 = extracted.events[0];
     expect(ev1.name).toBe('onClick');
     expect(ev1.description).toBe(undefined);
-    expect(ev1.type.names[0]).toBe('(ev: MouseEvent) => any');
+    expect(ev1.type.names[0]).toBe('(ev: PointerEvent) => any');
 
     const slot1 = extracted.slots[0];
     expect(slot1.name).toBe('v-slot:customSlot');

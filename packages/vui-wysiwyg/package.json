@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui-wysiwyg",
-  "version": "8.1.0",
+  "version": "8.2.0",
   "description": "vui-wysiwyg",
   "keywords": [],
   "repository": {
@@ -299,26 +299,26 @@
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
-    "@tiptap/extension-bold": "^3.4.6",
-    "@tiptap/extension-bullet-list": "^3.4.6",
-    "@tiptap/extension-history": "^3.4.6",
-    "@tiptap/extension-italic": "^3.4.6",
-    "@tiptap/extension-link": "^3.4.6",
-    "@tiptap/extension-ordered-list": "^3.4.6",
-    "@tiptap/extension-text-align": "^3.4.6",
-    "@tiptap/extension-text-style": "^3.4.6",
-    "@tiptap/extension-underline": "^3.4.6",
-    "@tiptap/pm": "^3.4.6",
-    "@tiptap/starter-kit": "^3.4.6",
-    "@tiptap/vue-3": "^3.4.6",
+    "@tiptap/extension-bold": "^3.6.5",
+    "@tiptap/extension-bullet-list": "^3.6.5",
+    "@tiptap/extension-history": "^3.6.5",
+    "@tiptap/extension-italic": "^3.6.5",
+    "@tiptap/extension-link": "^3.6.5",
+    "@tiptap/extension-ordered-list": "^3.6.5",
+    "@tiptap/extension-text-align": "^3.6.5",
+    "@tiptap/extension-text-style": "^3.6.5",
+    "@tiptap/extension-underline": "^3.6.5",
+    "@tiptap/pm": "^3.6.5",
+    "@tiptap/starter-kit": "^3.6.5",
+    "@tiptap/vue-3": "^3.6.5",
     "@types/markdown-it": "^14.1.2"
   },
   "devDependencies": {
     "@fastkit/vui": "workspace:^",
-    "vue": "^3.5.21"
+    "vue": "^3.5.22"
   },
   "peerDependencies": {
     "@fastkit/vui": "workspace:^",
-    "vue": "^3.4.0"
+    "vue": "^3.5.0"
   }
 }

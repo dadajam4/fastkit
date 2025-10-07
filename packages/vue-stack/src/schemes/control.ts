@@ -321,7 +321,7 @@ export interface VStackControl {
     /** Set rendering request */
     setNeedRender(needRender: boolean): void;
     /** Process for determining hide on outside-click */
-    outsideClickCloseConditional(ev: MouseEvent, pre?: boolean): boolean;
+    outsideClickCloseConditional(ev: PointerEvent, pre?: boolean): boolean;
     /** Clear guard effect */
     clearGuardEffect(): void;
     joinChild(child: VStackControl): () => void;

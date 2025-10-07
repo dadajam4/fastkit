@@ -14,14 +14,14 @@ export type VueAppStackTransitionSettings = string | TransitionProps;
 export interface VueAppStackBackdropSettings {
   color?: string;
   transition?: VueAppStackTransitionSettings;
-  onClick?: (ev: MouseEvent) => any;
+  onClick?: (ev: PointerEvent) => any;
 }
 
 export interface VueAppStackResolvedBackdropSettings
   extends VueAppStackBackdropSettings {
   color?: string;
   transition: TransitionProps;
-  onClick: (ev: MouseEvent) => any;
+  onClick: (ev: PointerEvent) => any;
 }
 
 const resolveTransitionSettings = (
@@ -169,7 +169,7 @@ export class VueAppStack {
       resolveTransitionSettings(settings.transition),
     );
 
-    const defaultBackdropClickHandler = (ev: MouseEvent) => {
+    const defaultBackdropClickHandler = (ev: PointerEvent) => {
       this.active = false;
     };
 

@@ -1152,7 +1152,7 @@ describe('VueStack', () => {
     "@fastkit/vue-utils": "Vue.js utilities"
   },
   "peerDependencies": {
-    "vue": "^3.4.0",
+    "vue": "^3.5.0",
     "vue-router": "^4.4.0"
   }
 }
@@ -1160,7 +1160,7 @@ describe('VueStack', () => {
 
 ## Documentation
 
-https://dadajam4.github.io/fastkit/vue-stack/
+<https://dadajam4.github.io/fastkit/vue-stack/>
 
 ## License
 

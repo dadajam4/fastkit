@@ -586,7 +586,7 @@ import { useActionable } from '@fastkit/vue-action'
 const guardedAction = useActionable(
   {
     attrs: {
-      guard: async (ev: MouseEvent) => {
+      guard: async (ev: PointerEvent) => {
         // 非同期ガード処理
         const result = await confirm('Are you sure you want to execute?')
         return result // Returning false cancels the action
@@ -837,7 +837,7 @@ interface VActionProps extends ActionableAttrs {
 }
 
 // Guard function type definition
-type ActionableGuard = (ev: MouseEvent) => boolean | void | Promise<boolean | void>;
+type ActionableGuard = (ev: PointerEvent) => boolean | void | Promise<boolean | void>;
 
 // Slots
 interface VActionSlots {
@@ -956,7 +956,7 @@ interface ActionableAttrs extends ActionableRouterLinkProps {
 ### ActionableGuard
 
 ```typescript
-type ActionableGuard = (ev: MouseEvent) => boolean | void | Promise<boolean | void>
+type ActionableGuard = (ev: PointerEvent) => boolean | void | Promise<boolean | void>
 ```
 
 Guard functions can cancel actions by returning `false`.

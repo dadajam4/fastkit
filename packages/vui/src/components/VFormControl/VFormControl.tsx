@@ -115,7 +115,8 @@ export const VFormControl = defineComponent({
       vui,
     );
 
-    const handleClick = (ev: MouseEvent) => ctx.emit('clickLabel', ev, control);
+    const handleClick = (ev: PointerEvent) =>
+      ctx.emit('clickLabel', ev, control);
 
     return () => {
       const label = control.renderLabel();

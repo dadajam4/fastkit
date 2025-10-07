@@ -28,7 +28,7 @@ export const VTab = defineComponent({
     icon: [String, Function] as PropType<RawIconProp>,
   },
   emits: {
-    click: (ev: MouseEvent) => true,
+    click: (ev: PointerEvent) => true,
   },
   setup(props, ctx) {
     const classesRef = computed(() => ({

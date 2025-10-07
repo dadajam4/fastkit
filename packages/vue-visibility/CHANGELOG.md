@@ -1,5 +1,11 @@
 # @fastkit/vue-visibility
 
+## 0.4.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
 ## 0.3.0
 
 ### Minor Changes

@@ -5,7 +5,7 @@ export default defineComponent({
   setup() {
     const vui = useVui();
 
-    const handleClick = (ev: MouseEvent) => {
+    const handleClick = (ev: PointerEvent) => {
       vui.snackbar('Clicked !!!');
     };
 

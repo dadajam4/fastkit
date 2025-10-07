@@ -25,7 +25,7 @@ type ActionableGuardReturnValue =
   | Promise<ActionableGuardResult>;
 
 /** Guard function for actionable components */
-export type ActionableGuard = (ev: MouseEvent) => ActionableGuardReturnValue;
+export type ActionableGuard = (ev: PointerEvent) => ActionableGuardReturnValue;
 
 export interface CustomRouterLinkProps {}
 

@@ -1,5 +1,11 @@
 # @fastkit/vite-kit
 
+## 1.2.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
 ## 1.1.0
 
 ### Minor Changes

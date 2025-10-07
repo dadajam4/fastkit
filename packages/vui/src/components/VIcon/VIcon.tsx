@@ -77,7 +77,7 @@ export const VIcon = defineComponent({
     ...iconProps,
   },
   emits: {} as {
-    click: (ev: MouseEvent) => true;
+    click: (ev: PointerEvent) => true;
   },
   setup(props, ctx) {
     const iconName = computed(() => props.name);

@@ -208,7 +208,7 @@ export interface WysiwygEditorTool {
   /** Conditions for deactivating the icon */
   disabled?: boolean | ((ctx: WysiwygEditorContext) => boolean);
   /** Handler when mark text is clicked */
-  onClick: (ctx: WysiwygEditorContext, ev: MouseEvent) => any;
+  onClick: (ctx: WysiwygEditorContext, ev: PointerEvent) => any;
   /** Whether to display tools in floating menu or not */
   floating?: boolean;
   /** Extensions that the tool depends on */

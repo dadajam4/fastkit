@@ -439,7 +439,7 @@ export class VuiService {
     const action: VStackAction = {
       key,
       content: ({ control, key }) => {
-        const onClick = (ev: MouseEvent) => _onClick(control, ev);
+        const onClick = (ev: PointerEvent) => _onClick(control, ev);
 
         const _attrs: any = {
           disabled: control.guardInProgress,

@@ -383,7 +383,7 @@ export function useStackControl(
   };
 
   const availableEvents = {
-    onClick: (ev: MouseEvent) => {
+    onClick: (ev: PointerEvent) => {
       if (props.disabled) return;
       setActivatorByEvent(ev);
       control.toggle();
@@ -406,7 +406,7 @@ export function useStackControl(
       privateApi.clearDelay();
       mouseStates.onLeaveActivator();
     },
-    onContextmenu: (ev: MouseEvent) => {
+    onContextmenu: (ev: PointerEvent) => {
       if (props.disabled || ev.defaultPrevented) return;
       ev.preventDefault();
       setActivatorByEvent(ev);

@@ -267,7 +267,7 @@ export const VPagination = defineComponent({
             });
           })();
 
-      const onClick = (ev: MouseEvent) => {
+      const onClick = (ev: PointerEvent) => {
         ev.preventDefault();
         if (page === undefined || active || disabled) return;
         setPage(page);

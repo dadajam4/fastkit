@@ -317,13 +317,13 @@ export class FormSelectorItemControl extends FormNodeControl<boolean> {
     this.selected = (ev.target as HTMLInputElement).checked;
   }
 
-  handleClickInputElement(ev: MouseEvent): void {
+  handleClickInputElement(ev: PointerEvent): void {
     if (this.canOperation && this.selected) {
       this.parentSelector && this.parentSelector.handleSelectItem(this, ev);
     }
   }
 
-  handleClickElement(ev: MouseEvent): void {
+  handleClickElement(ev: PointerEvent): void {
     if (this.canOperation) {
       this.parentSelector && this.parentSelector.handleClickItem(this, ev);
     }

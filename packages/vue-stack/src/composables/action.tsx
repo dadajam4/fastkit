@@ -22,7 +22,7 @@ export function useStackAction(
   });
   const $actions = computed(() =>
     actions.value.map((action) => {
-      const onClick = (control: VStackControl, ev: MouseEvent) =>
+      const onClick = (control: VStackControl, ev: PointerEvent) =>
         action.onClick?.(control, ev);
 
       const content = action.content({

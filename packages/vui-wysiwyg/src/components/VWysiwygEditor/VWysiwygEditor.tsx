@@ -274,7 +274,7 @@ export const VWysiwygEditor = defineComponent({
 
     ctx.expose(api);
 
-    const handleClickLabel = (ev: MouseEvent) => {
+    const handleClickLabel = (ev: PointerEvent) => {
       focus('start', { scrollIntoView: true });
     };
 

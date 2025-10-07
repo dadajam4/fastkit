@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy-vanilla-extract-plugin",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "",
   "keywords": [],
   "repository": {
@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:^",
-    "vite": "^7.1.7"
+    "vite": "^7.1.9"
   },
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:^",

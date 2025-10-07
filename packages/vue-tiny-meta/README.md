@@ -101,9 +101,9 @@ export default defineComponent<Props>({
   emits: {
     /**
      * Emitted when button is clicked
-     * @param event - Mouse event
+     * @param event - Pointer event
      */
-    click: (event: MouseEvent) => true,
+    click: (event: PointerEvent) => true,
 
     /**
      * Emitted when button receives focus
@@ -142,7 +142,7 @@ export default defineComponent<Props>({
   },
 
   setup(props, { emit, slots }) {
-    const handleClick = (event: MouseEvent) => {
+    const handleClick = (event: PointerEvent) => {
       if (props.disabled || props.loading) return
       emit('click', event)
     }
@@ -793,10 +793,12 @@ function extractAll(
 ```
 
 **Parameters:**
+
 - `filePath`: File path to analyze
 - `options`: Analysis options
 
 **Return Value:**
+
 - `ComponentMeta[]`: Array of extracted component metadata
 
 ### `SerializeVueOptions`
@@ -842,6 +844,7 @@ function ViteVueTinyMeta(
 ```
 
 **Options:**
+
 - `include`: Target file patterns
 - `exclude`: Exclude file patterns
 - `injectProperty`: Inject property name (default: `__docgenInfo`)

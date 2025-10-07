@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-page",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "Middleware for more convenient control of routing in Vue applications.",
   "keywords": [
     "fastkit",
@@ -60,11 +60,11 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.21",
+    "vue": "^3.5.22",
     "vue-router": "^4.5.1"
   },
   "peerDependencies": {
-    "vue": "^3.4.0",
+    "vue": "^3.5.0",
     "vue-router": "^4.4.0"
   },
   "_docs": {

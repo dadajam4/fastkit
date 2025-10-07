@@ -1015,7 +1015,7 @@ export interface UseVuePageControlOptions {
 export type PrefetchContext<T = any> = {
   key: VuePageInjectionKey<T>;
   prefetch: VuePagePrefetchFn;
-  inject: <D extends T | undefined, N extends boolean>(
+  inject: <D extends T | undefined, N extends boolean = false>(
     defaultValue?: D,
     allowNull?: N,
   ) => D extends T ? T : N extends true ? T | D : T;

@@ -640,10 +640,12 @@ const form = useForm(fields, options);
 ```
 
 **Parameters:**
+
 - `fields`: Field definition object
 - `options`: Form options
 
 **Return Value:**
+
 - Form control instance
 
 ### useTextInputNodeControl
@@ -719,6 +721,7 @@ interface VTextareaAutosizeEmits {
 ```
 
 **Features:**
+
 - Automatic height adjustment based on content
 - Minimum and maximum row limits
 - Responsive support with ResizeObserver
@@ -829,7 +832,7 @@ const control = useTextInputNodeControl({
 
 ## Dependencies
 
-- `vue`: ^3.4.0 (Peer Dependency)
+- `vue`: ^3.5.0 (Peer Dependency)
 - `@fastkit/rules`: Validation rules
 - `@fastkit/helpers`: Helper utilities
 - `@fastkit/vue-utils`: Vue utilities

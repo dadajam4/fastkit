@@ -1,5 +1,11 @@
 # @fastkit/eslint-config
 
+## 0.15.0
+
+### Minor Changes
+
+- Updated major dependencies.
+
 ## 0.14.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/stylelint-config",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "@fastkit/stylelint-config",
   "buildOptions": {
     "ignore": true
@@ -44,7 +44,7 @@
     "postcss-scss": "^4.0.9",
     "stylelint-config-css-modules": "^4.5.1",
     "stylelint-config-recess-order": "^7.3.0",
-    "stylelint-config-standard": "^39.0.0",
+    "stylelint-config-standard": "^39.0.1",
     "stylelint-config-standard-scss": "^16.0.0"
   }
 }

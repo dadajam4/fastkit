@@ -33,7 +33,7 @@
     "@fastkit/vue-transitions": "workspace:^",
     "@fastkit/vui": "workspace:^",
     "@fastkit/vui-wysiwyg": "workspace:^",
-    "marked": "^16.3.0"
+    "marked": "^16.4.0"
   },
   "devDependencies": {
     "@mdi/svg": "^7.4.47",

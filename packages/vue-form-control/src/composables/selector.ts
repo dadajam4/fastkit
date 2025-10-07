@@ -87,7 +87,7 @@ export interface FormSelectorGuardContext {
   /** @see {@link FormSelectorControl} */
   selector: FormSelectorControl;
   /** Choice click event */
-  event: MouseEvent;
+  event: PointerEvent;
   /** Accept changes */
   accept: () => void;
 }
@@ -179,8 +179,8 @@ export type FormSelectorContext = SetupContext<FormSelectorEmitOptions>;
 export interface FormSelectorControlOptions extends FormNodeControlBaseOptions {
   defaultMultiple?: boolean;
   defaultPreserveOrder?: boolean;
-  onSelectItem?: (item: FormSelectorItemControl, ev: MouseEvent) => any;
-  onCancelSelect?: (item: FormSelectorItemControl, ev: MouseEvent) => any;
+  onSelectItem?: (item: FormSelectorItemControl, ev: PointerEvent) => any;
+  onCancelSelect?: (item: FormSelectorItemControl, ev: PointerEvent) => any;
 }
 
 export type FormSelectorLoadState = 'ready' | 'loading' | 'error';
@@ -213,12 +213,12 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
 
   protected onSelectItem?: (
     item: FormSelectorItemControl,
-    ev: MouseEvent,
+    ev: PointerEvent,
   ) => any;
 
   protected onCancelSelect?: (
     item: FormSelectorItemControl,
-    ev: MouseEvent,
+    ev: PointerEvent,
   ) => any;
 
   /**
@@ -869,7 +869,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     }
   }
 
-  handleSelectItem(item: FormSelectorItemControl, ev: MouseEvent) {
+  handleSelectItem(item: FormSelectorItemControl, ev: PointerEvent) {
     this.onSelectItem && this.onSelectItem(item, ev);
   }
 
@@ -877,7 +877,7 @@ export class FormSelectorControl extends FormNodeControl<FormSelectorValue> {
     this._guardingItem.value = undefined;
   }
 
-  handleClickItem(item: FormSelectorItemControl, ev: MouseEvent) {
+  handleClickItem(item: FormSelectorItemControl, ev: PointerEvent) {
     let accepted = false;
     const accept = () => {
       if (accepted) return;
