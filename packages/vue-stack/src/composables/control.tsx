@@ -693,10 +693,7 @@ export function useStackControl(
       }
 
       const target = ev.target as Element;
-      if (
-        contains(target) ||
-        allChildren.value.some((c) => c.contains(target))
-      ) {
+      if (allChildren.value.some((c) => c.contains(target))) {
         return false;
       }
 

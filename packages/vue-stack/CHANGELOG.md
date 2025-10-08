@@ -1,5 +1,11 @@
 # @fastkit/vue-stack
 
+## 0.19.1
+
+### Patch Changes
+
+- Fixed an issue where `closeOnOutsideClick` did not work properly.
+
 ## 0.19.0
 
 ### Minor Changes
