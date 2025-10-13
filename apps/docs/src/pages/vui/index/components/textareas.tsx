@@ -8,6 +8,7 @@ import {
   CONTROL_FIELD_VARIANTS,
   ControlFieldVariant,
   VSelect,
+  VButton,
 } from '@fastkit/vui';
 import { DocsSection } from '../../../-components';
 
@@ -37,6 +38,7 @@ export default defineComponent({
             label="コメント"
             v-model={this.text1}
             required
+            autosize={{ maxRows: 6 }}
             hint="これは入力ヒントテキストです。"
             counter
             maxlength="100"
@@ -50,6 +52,13 @@ export default defineComponent({
               } as any
             }
           />
+
+          <VButton
+            onClick={() => {
+              this.text1 = '';
+            }}>
+            clear
+          </VButton>
         </DocsSection>
 
         <DocsSection title="Styles">

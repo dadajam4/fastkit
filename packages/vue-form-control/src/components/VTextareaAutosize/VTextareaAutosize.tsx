@@ -196,9 +196,13 @@ export const VTextareaAutosize = defineComponent({
       };
     });
 
-    watch([() => props.modelValue], () => {
-      renders.value = 0;
-    });
+    watch(
+      () => props.modelValue,
+      (v) => {
+        renders.value = 0;
+        currentValue.value = v;
+      },
+    );
 
     const handleInput = (event: InputEvent) => {
       renders.value = 0;

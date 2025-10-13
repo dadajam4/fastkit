@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.23.1
+
+### Patch Changes
+
+- Fixed an issue where updates to `modelValue` were not reflected in the `textarea` element when using the `autoSize` setting in `TextareaNodeControl`.
+
 ## 0.23.0
 
 ### Minor Changes
