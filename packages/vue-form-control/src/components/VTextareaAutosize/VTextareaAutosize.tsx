@@ -6,6 +6,7 @@ import {
   reactive,
   watch,
   watchEffect,
+  nextTick,
 } from 'vue';
 import {
   BooleanishPropOption,
@@ -201,6 +202,7 @@ export const VTextareaAutosize = defineComponent({
       (v) => {
         renders.value = 0;
         currentValue.value = v;
+        nextTick(syncHeight);
       },
     );
 

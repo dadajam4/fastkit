@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.23.2
+
+### Patch Changes
+
+- Fixed an issue where the field height was not updated when `modelValue` was changed in `VTextareaAutosize`.
+
 ## 0.23.1
 
 ### Patch Changes
