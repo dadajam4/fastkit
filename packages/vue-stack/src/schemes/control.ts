@@ -162,6 +162,7 @@ export function isStackControl(source: unknown): source is VStackControl {
  */
 export interface VStackControl {
   readonly __isStackControl: true;
+  readonly props: VStackProps;
   /** Display state */
   readonly isActive: boolean;
   /**

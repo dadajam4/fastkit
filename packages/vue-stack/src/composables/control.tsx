@@ -48,10 +48,10 @@ import { V_STACK_ACTIVATED_ATTR, V_STACK_TYPE_ATTR } from '../constants';
 export type VStackCloseReason = 'indeterminate' | 'resolved' | 'canceled';
 
 export interface UseStackControlOptions {
-  onActivated?: (isActive: boolean) => any;
-  onContentMounted?: (content: HTMLElement) => any;
-  onContentDetached?: () => any;
-  transitionResolver?: () => string;
+  onActivated?: (isActive: boolean, control: VStackControl) => any;
+  onContentMounted?: (content: HTMLElement, control: VStackControl) => any;
+  onContentDetached?: (control: VStackControl) => any;
+  transitionResolver?: (control: VStackControl) => string;
   /**
    * A string or symbol used to identify the stack
    *
@@ -482,7 +482,7 @@ export function useStackControl(
       return {
         Ctor: Transition,
         props: {
-          name: transitionResolver(),
+          name: transitionResolver(control),
         },
       };
     }
@@ -580,7 +580,7 @@ export function useStackControl(
       onAfterLeave: (el) => {
         state.showing = false;
         state.closing = false;
-        onContentDetached && onContentDetached();
+        onContentDetached && onContentDetached(control);
         nextTick(() => {
           !control.isActive && privateApi.setNeedRender(false);
         });
@@ -760,6 +760,9 @@ export function useStackControl(
   const control: VStackControl = markRaw({
     __isStackControl: true,
     _: privateApi,
+    get props() {
+      return props;
+    },
     get parent() {
       return parent;
     },
@@ -1122,7 +1125,7 @@ export function useStackControl(
         }
       }
       privateApi.checkFocusTrap();
-      onActivated?.(value);
+      onActivated?.(value, control);
     },
     { immediate: true },
   );
@@ -1182,7 +1185,7 @@ export function useStackControl(
     const content = contentRef.value;
     if (content) {
       // this.autofocus();
-      onContentMounted && onContentMounted(content);
+      onContentMounted && onContentMounted(content, control);
       return;
     }
 

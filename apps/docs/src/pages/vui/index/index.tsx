@@ -8,6 +8,7 @@ import {
   MaskedRange,
   VTooltip,
   VButton,
+  VSwitch,
 } from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
 
@@ -36,6 +37,7 @@ function Rows(num: number) {
 export default defineComponent({
   setup() {
     const opened = ref(false);
+    const shouldRenderMenu = ref(false);
     const EXAMPLES = [
       '30569309025904',
       '4000056655665556',
@@ -175,6 +177,16 @@ export default defineComponent({
 
     return () => (
       <div>
+        <VSwitch v-model={shouldRenderMenu.value}>renderMenu</VSwitch>
+        {shouldRenderMenu.value && (
+          <VMenu
+            modelValue={true}
+            v-slots={{
+              activator: ({ attrs }) => <VButton {...attrs}>Menu</VButton>,
+              default: () => <div>This is Menu</div>,
+            }}
+          />
+        )}
         <button type="button" onClick={clearInput}>
           CLEAR
         </button>

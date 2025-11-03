@@ -13,6 +13,7 @@ import {
   SlotsType,
   watch,
   onBeforeUnmount,
+  type ExtractPropTypes,
 } from 'vue';
 import {
   useWindow,
@@ -381,20 +382,35 @@ export interface DefineMenuSettings<
       ) => Record<string, any>);
 }
 
+const getScrollingElement = () => {
+  if (!IN_WINDOW) return;
+  const { scrollingElement } = document;
+  if (!scrollingElement) {
+    logger.warn('document.scrollingElement is not scrollable.');
+  }
+  return scrollingElement;
+};
+
 export function defineMenuComponent<
   Props extends Readonly<ComponentPropsOptions> = {},
   Emits extends EmitsOptions = {},
   Slots extends SlotsType = SlotsType<{}>,
 >(settings: DefineMenuSettings<Props, Emits, Slots>) {
   const baseScheme = createMenuScheme(settings);
-  const { name, props, emits, activatorAttrs, stackType } = settings;
+  const {
+    name,
+    props: customProps,
+    emits,
+    activatorAttrs,
+    stackType,
+  } = settings;
 
   const Component = defineComponent({
     name,
     inheritAttrs: false,
     props: {
       ...baseScheme.props,
-      ...props,
+      ...customProps,
     } as typeof baseScheme.props &
       Props &
       EmitsToPropOptions<typeof baseScheme.emits & Emits>,
@@ -404,23 +420,9 @@ export function defineMenuComponent<
     } as typeof baseScheme.emits & Emits,
     slots: settings.slots as MergeStackBaseSlots<Slots>,
     setup(_props: any, _ctx) {
-      let _intersectionObserver: IntersectionObserver | undefined;
-      const baseCtx = setupStackableComponent<
-        MenuPropsOptions,
-        {},
-        Slots,
-        MenuAPI
-      >(_props, _ctx, {
-        onActivated,
-        onContentMounted: () => {
-          updateRects();
-        },
-        transitionResolver,
-        stackType,
-        activatorAttrs,
-      });
+      const __props = _props as ExtractPropTypes<typeof baseScheme.props>;
 
-      const { props, control } = baseCtx;
+      let _intersectionObserver: IntersectionObserver | undefined;
 
       const state: VMenuState = reactive({
         pageXOffset: 0,
@@ -448,14 +450,21 @@ export function defineMenuComponent<
         }
       };
 
-      function _disposeIntersectionObserver() {
+      const _disposeIntersectionObserver = () => {
         if (_intersectionObserver) {
           _intersectionObserver.disconnect();
           _intersectionObserver = undefined;
         }
-      }
+      };
 
-      function onActivated(isActive: boolean) {
+      const getActivatorElement = (_control: VStackControl) => {
+        const $activator = _control.activator;
+        return $activator instanceof Event
+          ? ($activator.target as HTMLElement)
+          : $activator;
+      };
+
+      const onActivated = (isActive: boolean, _control: VStackControl) => {
         if (!isActive) {
           _disposeIntersectionObserver();
           return;
@@ -463,14 +472,15 @@ export function defineMenuComponent<
 
         const scrollingElement = getScrollingElement();
         if (!scrollingElement) return;
+
         startOffsets.value = {
           pageXOffset: scrollingElement.scrollLeft,
           pageYOffset: scrollingElement.scrollTop,
         };
 
-        if (!props.hideOnInvisible) return;
+        if (!__props.hideOnInvisible) return;
 
-        const activator = getActivatorElement();
+        const activator = getActivatorElement(_control);
         if (!activator) return;
 
         _intersectionObserver = new IntersectionObserver(
@@ -479,7 +489,7 @@ export function defineMenuComponent<
             for (const entry of entries) {
               const inview = entry.isIntersecting;
               if (!inview) {
-                control.close();
+                _control.close();
                 break;
               }
             }
@@ -489,7 +499,44 @@ export function defineMenuComponent<
           },
         );
         _intersectionObserver.observe(activator);
-      }
+      };
+
+      const _transition = computed<string>(() => {
+        const { transition } = __props;
+        if (typeof transition === 'string' && transition !== DEFAULT_TRANSITION)
+          return transition;
+        const { x, y } = _positionFlags.value;
+        if (y === 'top') return 'v-stack-slide-y-reverse';
+        if (y === 'bottom') return 'v-stack-slide-y';
+        if (x === 'left') return 'v-stack-slide-x-reverse';
+        if (x === 'right') return 'v-stack-slide-x';
+        if (y === 'top-inner') return 'v-stack-slide-y';
+        if (y === 'bottom-inner') return 'v-stack-slide-y-reverse';
+        if (x === 'left-inner') return 'v-stack-slide-x';
+        if (x === 'right-inner') return 'v-stack-slide-x-reverse';
+        return 'v-stack-scale';
+      });
+
+      const transitionResolver = (): string => {
+        return _transition.value;
+      };
+
+      const baseCtx = setupStackableComponent<
+        MenuPropsOptions,
+        {},
+        Slots,
+        MenuAPI
+      >(_props, _ctx, {
+        onActivated,
+        onContentMounted: () => {
+          updateRects();
+        },
+        transitionResolver,
+        stackType,
+        activatorAttrs,
+      });
+
+      const { props, control } = baseCtx;
 
       const _scrollerRef = ref<HTMLElement | null>(null);
       const _bodyRef = ref<HTMLElement | null>(null);
@@ -603,26 +650,6 @@ export function defineMenuComponent<
           top: y === 'top' || y === 'top-inner',
           bottom: y === 'bottom' || y === 'bottom-inner',
         };
-      });
-
-      function transitionResolver(): string {
-        return _transition.value;
-      }
-
-      const _transition = computed<string>(() => {
-        const { transition } = props;
-        if (typeof transition === 'string' && transition !== DEFAULT_TRANSITION)
-          return transition;
-        const { x, y } = _positionFlags.value;
-        if (y === 'top') return 'v-stack-slide-y-reverse';
-        if (y === 'bottom') return 'v-stack-slide-y';
-        if (x === 'left') return 'v-stack-slide-x-reverse';
-        if (x === 'right') return 'v-stack-slide-x';
-        if (y === 'top-inner') return 'v-stack-slide-y';
-        if (y === 'bottom-inner') return 'v-stack-slide-y-reverse';
-        if (x === 'left-inner') return 'v-stack-slide-x';
-        if (x === 'right-inner') return 'v-stack-slide-x-reverse';
-        return 'v-stack-scale';
       });
 
       const _rect = computed<VMenuRectInfo | null>(() => {
@@ -1009,24 +1036,15 @@ export function defineMenuComponent<
         return styles;
       });
 
-      function getScrollingElement() {
-        if (!IN_WINDOW) return;
-        const { scrollingElement } = document;
-        if (!scrollingElement) {
-          logger.warn('document.scrollingElement is not scrollable.');
-        }
-        return scrollingElement;
-      }
-
-      function updatePageOffset() {
+      const updatePageOffset = () => {
         const scrollingElement = getScrollingElement();
         if (scrollingElement) {
           state.pageXOffset = scrollingElement.scrollLeft;
           state.pageYOffset = scrollingElement.scrollTop;
         }
-      }
+      };
 
-      function updateMenuRect(menuBodyRect?: ResizeDirectivePayload) {
+      const updateMenuRect = (menuBodyRect?: ResizeDirectivePayload) => {
         const content = control.contentRef.value;
         const body = _bodyRef.value;
 
@@ -1065,32 +1083,25 @@ export function defineMenuComponent<
           width: rect.width,
           height: rect.height,
         };
-      }
+      };
 
-      function getActivatorElement() {
-        const $activator = control.activator;
-        return $activator instanceof Event
-          ? ($activator.target as HTMLElement)
-          : $activator;
-      }
-
-      function getCurrentScrollParents():
+      const getCurrentScrollParents = ():
         | {
             activator: HTMLElement;
             parents: HTMLElement[];
           }
-        | undefined {
-        const activator = getActivatorElement();
+        | undefined => {
+        const activator = getActivatorElement(control);
         if (!activator) return;
         const parents = getScrollParents(activator);
         return {
           activator,
           parents,
         };
-      }
+      };
 
-      function updateActivatorRect() {
-        const el = getActivatorElement();
+      const updateActivatorRect = () => {
+        const el = getActivatorElement(control);
         if (!el) {
           // state.activatorRect = null;
           return;
@@ -1108,14 +1119,14 @@ export function defineMenuComponent<
           width,
           height,
         };
-      }
+      };
 
-      function updateRects(menuBodyRect?: ResizeDirectivePayload) {
+      const updateRects = (menuBodyRect?: ResizeDirectivePayload) => {
         if (!IN_WINDOW) return;
         updatePageOffset();
         updateMenuRect(menuBodyRect);
         updateActivatorRect();
-      }
+      };
 
       let _currentScrollParents:
         | {
@@ -1141,7 +1152,7 @@ export function defineMenuComponent<
         });
       };
 
-      function handleScrollerScroll(ev: Event) {
+      const handleScrollerScroll = (ev: Event) => {
         updateRects();
 
         const _hideOnScrollOffset = hideOnScrollOffset.value;
@@ -1154,9 +1165,9 @@ export function defineMenuComponent<
         ) {
           control.close();
         }
-      }
+      };
 
-      function resetScrollerScroll() {
+      const resetScrollerScroll = () => {
         if (_activatorResizeObserver) {
           _activatorResizeObserver.disconnect();
           _activatorResizeObserver = undefined;
@@ -1170,9 +1181,9 @@ export function defineMenuComponent<
           });
         }
         _currentScrollParents = undefined;
-      }
+      };
 
-      function setupScrollerScroll() {
+      const setupScrollerScroll = () => {
         resetScrollerScroll();
         _currentScrollParents = getCurrentScrollParents();
         if (!_currentScrollParents) return;
@@ -1188,7 +1199,7 @@ export function defineMenuComponent<
             passive: true,
           });
         }
-      }
+      };
 
       watch(
         () => control.isActive,

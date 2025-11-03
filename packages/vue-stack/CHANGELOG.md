@@ -1,5 +1,12 @@
 # @fastkit/vue-stack
 
+## 0.19.2
+
+### Patch Changes
+
+- #### Bug Fixes
+  - **Menu:** Fixed an issue where the component would fail to initialize if `modelValue` was set to `true` on the initial render.
+
 ## 0.19.1
 
 ### Patch Changes
