@@ -8,6 +8,7 @@ export * from './selector-item-group';
 export * from './selector';
 export * from './boundable-input';
 export * from './date-input';
+export * from './file';
 export * from './imask';
 export * from './wrapper';
 export * from './group';

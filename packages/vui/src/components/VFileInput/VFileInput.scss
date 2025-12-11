@@ -1,0 +1,42 @@
+@use '../../styles/core';
+
+@layer vui {
+  .v-file-input {
+    &__inner {
+      display: flex;
+      align-items: stretch;
+    }
+
+    &__button {
+      flex: 0 0 auto;
+      height: auto;
+      margin: 0;
+      margin-bottom: 1px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &__selections {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      align-self: stretch;
+      padding: 4px 6px;
+    }
+
+    &__placeholder {
+      color: var(--control-disabled-color);
+    }
+
+    &__input {
+      flex: 1 1 100%;
+      cursor: text;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+
+      &__element {
+        @include core.hidden-input-element;
+      }
+    }
+  }
+}

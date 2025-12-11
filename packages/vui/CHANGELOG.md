@@ -1,5 +1,16 @@
 # @fastkit/vui
 
+## 1.3.0
+
+### Minor Changes
+
+- Added the `VFileInput` component to handle [File](https://developer.mozilla.org/docs/Web/API/File) inputs.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-form-control@0.24.0
+
 ## 1.2.0
 
 ### Minor Changes

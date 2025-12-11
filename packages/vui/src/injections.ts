@@ -27,6 +27,7 @@ export const VUI_RADIO_GROUP_SYMBOL = 'vui-radio-group';
 export const VUI_RADIO_SYMBOL = 'vui-radio';
 export const VUI_SWITCH_GROUP_SYMBOL = 'vui-switch-group';
 export const VUI_SWITCH_SYMBOL = 'vui-switch';
+export const VUI_FILE_INPUT_SYMBOL = 'vui-file-input';
 export const VUI_FORM_GROUP_SYMBOL = 'vui-form-group';
 export const VUI_FORM_SYMBOL = 'vui-form';
 

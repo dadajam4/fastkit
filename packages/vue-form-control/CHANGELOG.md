@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.24.0
+
+### Minor Changes
+
+- Added `FileInputNodeControl` to handle [File](https://developer.mozilla.org/docs/Web/API/File) inputs.
+
 ## 0.23.2
 
 ### Patch Changes

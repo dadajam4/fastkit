@@ -7,6 +7,7 @@ import {
   ComputedRef,
   computed,
   ref,
+  shallowRef,
   Ref,
   watch,
   provide,
@@ -186,6 +187,7 @@ export interface FormNodeControlOptions<
 > extends FormNodeControlBaseOptions {
   modelValue?: Prop<T, D>;
   required?: Required;
+  shallow?: boolean;
 }
 
 export type FormNodeErrorSlotsSource = {
@@ -419,9 +421,9 @@ export class FormNodeControl<
 
   protected _name: ComputedRef<string | undefined>;
 
-  protected _value: Ref<T | D> = ref(null as any);
+  protected _value: Ref<T | D>;
 
-  protected _initialValue: Ref<T | D> = ref(null as any);
+  protected _initialValue: Ref<T | D>;
 
   protected _focused = ref(false);
 
@@ -948,6 +950,8 @@ export class FormNodeControl<
     );
   }
 
+  readonly shallow: boolean;
+
   constructor(
     props: FormNodeProps,
     ctx: FormNodeContext<T, D>,
@@ -955,6 +959,11 @@ export class FormNodeControl<
   ) {
     markRaw(this);
 
+    this.shallow = options?.shallow ?? false;
+    this._value = options?.shallow ? shallowRef(null as any) : ref(null as any);
+    this._initialValue = options?.shallow
+      ? shallowRef(null as any)
+      : ref(null as any);
     this._props = props;
     this._service = useVueForm();
     this._ctx = ctx;
@@ -1367,6 +1376,12 @@ export class FormNodeControl<
    * @param value - value
    */
   setValue(value: T | D): boolean {
+    if (this.shallow) {
+      this._value.value = value;
+      this._ctx.emit('update:modelValue', value);
+      return true;
+    }
+
     if (!cheepDeepEqual(this._value.value, value)) {
       const v = cheepClone(value);
       this._value.value = v as any;

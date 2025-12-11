@@ -1,5 +1,12 @@
 import { defineComponent } from 'vue';
-import { VHero, VButton, VGridContainer, VGridItem, VCard } from '@fastkit/vui';
+import {
+  VHero,
+  VButton,
+  VGridContainer,
+  VGridItem,
+  VCard,
+  VFileInput,
+} from '@fastkit/vui';
 
 export default defineComponent({
   render() {
@@ -11,6 +18,17 @@ export default defineComponent({
           }}>
           Components
         </VHero>
+
+        <VFileInput label="File" multiple clearable required size="sm" />
+        <VFileInput label="File" multiple variant="filled" clearable required />
+        <VFileInput label="File" multiple variant="flat" clearable required />
+        <VFileInput
+          label="File"
+          multiple
+          variant="outlined"
+          clearable
+          required
+        />
 
         <VButton
           onClick={() => {

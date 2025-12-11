@@ -149,6 +149,7 @@ export function viteVuiPlugin(
       hinttip: 'mdi-help-circle-outline' as any,
       clear: 'mdi-close' as any,
       reload: 'mdi-reload' as any,
+      fileUpload: 'mdi-file-upload' as any,
       // navigationExpand: (gen, active) => {
       //   return gen({
       //     name: 'mdi-menu-down' as any,

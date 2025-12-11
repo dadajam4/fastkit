@@ -35,6 +35,7 @@ export * from './VSelect';
 export * from './VTextField';
 export * from './VNumberField';
 export * from './VTextarea';
+export * from './VFileInput';
 // export * from './VWysiwygEditor';
 export * from './VFormGroup';
 export * from './VForm';
