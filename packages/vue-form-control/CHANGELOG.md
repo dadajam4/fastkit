@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.24.1
+
+### Patch Changes
+
+- Fixed an issue where passing an array of `File` objects to the `modelValue` of `FileInputNodeControl` caused an error.
+
 ## 0.24.0
 
 ### Minor Changes

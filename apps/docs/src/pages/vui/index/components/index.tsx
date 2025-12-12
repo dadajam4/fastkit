@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import {
   VHero,
   VButton,
@@ -9,6 +9,10 @@ import {
 } from '@fastkit/vui';
 
 export default defineComponent({
+  setup() {
+    const files = ref<File[]>([]);
+    return { files };
+  },
   render() {
     return (
       <div>
@@ -19,7 +23,25 @@ export default defineComponent({
           Components
         </VHero>
 
-        <VFileInput label="File" multiple clearable required size="sm" />
+        <VFileInput
+          label="File"
+          multiple
+          clearable
+          required
+          size="sm"
+          v-model={this.files}
+        />
+
+        <div>
+          <p>Selected files</p>
+          <ul>
+            {this.files.map((file) => (
+              <li key={file.name}>
+                {`${file.name} (${file.type}) (${file.size})`}
+              </li>
+            ))}
+          </ul>
+        </div>
         <VFileInput label="File" multiple variant="filled" clearable required />
         <VFileInput label="File" multiple variant="flat" clearable required />
         <VFileInput

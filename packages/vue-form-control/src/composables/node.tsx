@@ -1110,7 +1110,9 @@ export class FormNodeControl<
     watch(() => props.modelValue, this._syncValueFromProps, {
       immediate: true,
     });
-    this._initialValue.value = cheepClone(this._value.value) as any;
+    this._initialValue.value = this.shallow
+      ? this._value.value
+      : (cheepClone(this._value.value) as any);
 
     watch(
       () => props.validateTiming,
@@ -1392,7 +1394,10 @@ export class FormNodeControl<
   }
 
   protected _syncValueFromProps(value: any) {
-    this._value.value = cheepClone(this.safeModelValue(value)) as any;
+    const safeValue = this.safeModelValue(value);
+    this._value.value = this.shallow
+      ? safeValue
+      : (cheepClone(safeValue) as any);
   }
 
   protected _resolveRules(): VerifiableRule[] {
