@@ -25,7 +25,8 @@ export interface FileInputNodeControlOptions
   defaultMultiple?: boolean;
 }
 
-export interface FileInputNodeFile extends File {
+export interface FileInputNodeFile
+  extends Pick<File, 'name' | 'type' | 'size' | 'lastModified'> {
   readonly _file: File;
   readonly truncatedName: string;
   readonly readableSize: string;
@@ -58,12 +59,16 @@ function createFileInputNodeFile(
   file: File,
   truncateLength: number,
 ): FileInputNodeFile {
-  const truncatedName = truncateText(file.name, truncateLength);
-  const readableSize = humanReadableFileSize(file.size);
+  const { name, size, type, lastModified } = file;
+  const truncatedName = truncateText(name, truncateLength);
+  const readableSize = humanReadableFileSize(size);
 
   return {
-    ...file,
     _file: file,
+    name,
+    size,
+    type,
+    lastModified,
     truncatedName,
     readableSize,
   };
@@ -128,14 +133,18 @@ export type FileInputNodeProps = ExtractPropTypes<
   ReturnType<typeof createFileInputNodeProps>
 >;
 
-export function createFileInputNodeEmits() {
+export function createFileInputNodeEmits(
+  options?: FileInputNodeControlOptions,
+) {
   return {
-    ...createFormNodeEmits({ modelValue }),
+    ...createFormNodeEmits({ ...options, modelValue }),
   };
 }
 
-export function createFileInputNodeSettings() {
-  const props = createFileInputNodeProps();
+export function createFileInputNodeSettings(
+  options?: FileInputNodeControlOptions,
+) {
+  const props = createFileInputNodeProps(options);
   const emits = createFileInputNodeEmits();
   return { props, emits };
 }

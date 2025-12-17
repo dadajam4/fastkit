@@ -30,6 +30,11 @@ export default defineComponent({
           required
           size="sm"
           v-model={this.files}
+          v-slots={{
+            selections: (control) => {
+              return <div>{control.selectionContext.totalReadableSize}</div>;
+            },
+          }}
         />
 
         <div>
