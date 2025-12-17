@@ -1,5 +1,11 @@
 # @fastkit/vue-form-control
 
+## 0.24.2
+
+### Patch Changes
+
+- Fixed an issue where the `FileInputNodeControlOptions` settings were ignored when initializing `FileInputNode`.
+
 ## 0.24.1
 
 ### Patch Changes

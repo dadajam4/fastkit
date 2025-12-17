@@ -10,7 +10,7 @@
     &__button {
       flex: 0 0 auto;
       height: auto;
-      margin: 0;
+      margin: 0 !important; // @TODO remove important and apply layer order
       margin-bottom: 1px;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;

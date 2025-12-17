@@ -78,9 +78,11 @@ export interface FileInputNodeSelectionContext {
 export function createFileInputNodeProps(
   options: FileInputNodeControlOptions = {},
 ) {
-  const { defaultMultiple } = options;
+  const { defaultMultiple, defaultValidateTiming = 'change' } = options;
   return {
     ...createFormNodeProps({
+      ...options,
+      defaultValidateTiming,
       modelValue,
     }),
     ...createPropsOptions({
