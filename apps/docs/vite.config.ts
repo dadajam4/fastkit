@@ -11,7 +11,7 @@ import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
 
 const USE_GENERATE = true;
 
-const viteVui = viteVuiPlugin({
+const viteVui = await viteVuiPlugin({
   colorScheme: './config/color-scheme.ts',
   // onBooted: () => {
   //   console.log('★ onBooted');

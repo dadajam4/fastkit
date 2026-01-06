@@ -16,7 +16,7 @@ import {
   WORKSPACE_CONFIG_BASENAME,
   SEARCH_BUNDLE_EXTENSIONS_MATCH,
 } from '../constants';
-import { resolveUserPluginOptions } from './plugin';
+import { resolveUserPluginOption } from './plugin';
 
 export function isWorkspacePackageJson(
   json: PackageJson,
@@ -57,13 +57,15 @@ export async function resolveUserWorkspaceConfig(
     entries,
     plugins,
     optimizeCSS = true,
+    hooks,
   } = userConfig;
   return {
     ...userConfig,
     ignoreProjectConfig,
     entries: resolveRawWorkspaceEntries(entries),
-    plugins: await resolveUserPluginOptions(plugins),
+    plugins: await resolveUserPluginOption(plugins),
     optimizeCSS: optimizeCSS === true ? {} : optimizeCSS,
+    hooks,
   };
 }
 

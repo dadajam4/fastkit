@@ -14,175 +14,175 @@
     "./package.json": "./package.json",
     "./vui-wysiwyg.css": "./dist/vui-wysiwyg.css",
     ".": {
-      "types": "./dist/vui-wysiwyg.d.ts",
+      "types": "./dist/vui-wysiwyg.d.mts",
       "import": {
         "default": "./dist/vui-wysiwyg.mjs"
       }
     },
     "./tiptap/core": {
-      "types": "./dist/tiptap/core.d.ts",
+      "types": "./dist/tiptap/core.d.mts",
       "import": {
         "default": "./dist/tiptap/core.mjs"
       }
     },
     "./pm/view": {
-      "types": "./dist/pm/view.d.ts",
+      "types": "./dist/pm/view.d.mts",
       "import": {
         "default": "./dist/pm/view.mjs"
       }
     },
     "./pm/transform": {
-      "types": "./dist/pm/transform.d.ts",
+      "types": "./dist/pm/transform.d.mts",
       "import": {
         "default": "./dist/pm/transform.mjs"
       }
     },
     "./pm/trailing-node": {
-      "types": "./dist/pm/trailing-node.d.ts",
+      "types": "./dist/pm/trailing-node.d.mts",
       "import": {
         "default": "./dist/pm/trailing-node.mjs"
       }
     },
     "./pm/tables": {
-      "types": "./dist/pm/tables.d.ts",
+      "types": "./dist/pm/tables.d.mts",
       "import": {
         "default": "./dist/pm/tables.mjs"
       }
     },
     "./pm/state": {
-      "types": "./dist/pm/state.d.ts",
+      "types": "./dist/pm/state.d.mts",
       "import": {
         "default": "./dist/pm/state.mjs"
       }
     },
     "./pm/schema-list": {
-      "types": "./dist/pm/schema-list.d.ts",
+      "types": "./dist/pm/schema-list.d.mts",
       "import": {
         "default": "./dist/pm/schema-list.mjs"
       }
     },
     "./pm/schema-basic": {
-      "types": "./dist/pm/schema-basic.d.ts",
+      "types": "./dist/pm/schema-basic.d.mts",
       "import": {
         "default": "./dist/pm/schema-basic.mjs"
       }
     },
     "./pm/model": {
-      "types": "./dist/pm/model.d.ts",
+      "types": "./dist/pm/model.d.mts",
       "import": {
         "default": "./dist/pm/model.mjs"
       }
     },
     "./pm/menu": {
-      "types": "./dist/pm/menu.d.ts",
+      "types": "./dist/pm/menu.d.mts",
       "import": {
         "default": "./dist/pm/menu.mjs"
       }
     },
     "./pm/markdown": {
-      "types": "./dist/pm/markdown.d.ts",
+      "types": "./dist/pm/markdown.d.mts",
       "import": {
         "default": "./dist/pm/markdown.mjs"
       }
     },
     "./pm/keymap": {
-      "types": "./dist/pm/keymap.d.ts",
+      "types": "./dist/pm/keymap.d.mts",
       "import": {
         "default": "./dist/pm/keymap.mjs"
       }
     },
     "./pm/inputrules": {
-      "types": "./dist/pm/inputrules.d.ts",
+      "types": "./dist/pm/inputrules.d.mts",
       "import": {
         "default": "./dist/pm/inputrules.mjs"
       }
     },
     "./pm/history": {
-      "types": "./dist/pm/history.d.ts",
+      "types": "./dist/pm/history.d.mts",
       "import": {
         "default": "./dist/pm/history.mjs"
       }
     },
     "./pm/gapcursor": {
-      "types": "./dist/pm/gapcursor.d.ts",
+      "types": "./dist/pm/gapcursor.d.mts",
       "import": {
         "default": "./dist/pm/gapcursor.mjs"
       }
     },
     "./pm/dropcursor": {
-      "types": "./dist/pm/dropcursor.d.ts",
+      "types": "./dist/pm/dropcursor.d.mts",
       "import": {
         "default": "./dist/pm/dropcursor.mjs"
       }
     },
     "./pm/commands": {
-      "types": "./dist/pm/commands.d.ts",
+      "types": "./dist/pm/commands.d.mts",
       "import": {
         "default": "./dist/pm/commands.mjs"
       }
     },
     "./pm/collab": {
-      "types": "./dist/pm/collab.d.ts",
+      "types": "./dist/pm/collab.d.mts",
       "import": {
         "default": "./dist/pm/collab.mjs"
       }
     },
     "./pm/changeset": {
-      "types": "./dist/pm/changeset.d.ts",
+      "types": "./dist/pm/changeset.d.mts",
       "import": {
         "default": "./dist/pm/changeset.mjs"
       }
     },
     "./tiptap/extensions/underline": {
-      "types": "./dist/tiptap/extensions/underline.d.ts",
+      "types": "./dist/tiptap/extensions/underline.d.mts",
       "import": {
         "default": "./dist/tiptap/extensions/underline.mjs"
       }
     },
     "./tiptap/extensions/text-style": {
-      "types": "./dist/tiptap/extensions/text-style.d.ts",
+      "types": "./dist/tiptap/extensions/text-style.d.mts",
       "import": {
         "default": "./dist/tiptap/extensions/text-style.mjs"
       }
     },
     "./tiptap/extensions/text-align": {
-      "types": "./dist/tiptap/extensions/text-align.d.ts",
+      "types": "./dist/tiptap/extensions/text-align.d.mts",
       "import": {
         "default": "./dist/tiptap/extensions/text-align.mjs"
       }
     },
     "./tiptap/extensions/ordered-list": {
-      "types": "./dist/tiptap/extensions/ordered-list.d.ts",
+      "types": "./dist/tiptap/extensions/ordered-list.d.mts",
       "import": {
         "default": "./dist/tiptap/extensions/ordered-list.mjs"
       }
     },
     "./tiptap/extensions/link": {
-      "types": "./dist/tiptap/extensions/link.d.ts",
+      "types": "./dist/tiptap/extensions/link.d.mts",
       "import": {
         "default": "./dist/tiptap/extensions/link.mjs"
       }
     },
     "./tiptap/extensions/italic": {
-      "types": "./dist/tiptap/extensions/italic.d.ts",
+      "types": "./dist/tiptap/extensions/italic.d.mts",
       "import": {
         "default": "./dist/tiptap/extensions/italic.mjs"
       }
     },
     "./tiptap/extensions/history": {
-      "types": "./dist/tiptap/extensions/history.d.ts",
+      "types": "./dist/tiptap/extensions/history.d.mts",
       "import": {
         "default": "./dist/tiptap/extensions/history.mjs"
       }
     },
     "./tiptap/extensions/bullet-list": {
-      "types": "./dist/tiptap/extensions/bullet-list.d.ts",
+      "types": "./dist/tiptap/extensions/bullet-list.d.mts",
       "import": {
         "default": "./dist/tiptap/extensions/bullet-list.mjs"
       }
     },
     "./tiptap/extensions/bold": {
-      "types": "./dist/tiptap/extensions/bold.d.ts",
+      "types": "./dist/tiptap/extensions/bold.d.mts",
       "import": {
         "default": "./dist/tiptap/extensions/bold.mjs"
       }
@@ -190,95 +190,95 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vui-wysiwyg.mjs",
-  "types": "./dist/vui-wysiwyg.d.ts",
+  "types": "./dist/vui-wysiwyg.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vui-wysiwyg.d.ts"
+        "./dist/vui-wysiwyg.d.mts"
       ],
       "tiptap/core": [
-        "./dist/tiptap/core.d.ts"
+        "./dist/tiptap/core.d.mts"
       ],
       "pm/view": [
-        "./dist/pm/view.d.ts"
+        "./dist/pm/view.d.mts"
       ],
       "pm/transform": [
-        "./dist/pm/transform.d.ts"
+        "./dist/pm/transform.d.mts"
       ],
       "pm/trailing-node": [
-        "./dist/pm/trailing-node.d.ts"
+        "./dist/pm/trailing-node.d.mts"
       ],
       "pm/tables": [
-        "./dist/pm/tables.d.ts"
+        "./dist/pm/tables.d.mts"
       ],
       "pm/state": [
-        "./dist/pm/state.d.ts"
+        "./dist/pm/state.d.mts"
       ],
       "pm/schema-list": [
-        "./dist/pm/schema-list.d.ts"
+        "./dist/pm/schema-list.d.mts"
       ],
       "pm/schema-basic": [
-        "./dist/pm/schema-basic.d.ts"
+        "./dist/pm/schema-basic.d.mts"
       ],
       "pm/model": [
-        "./dist/pm/model.d.ts"
+        "./dist/pm/model.d.mts"
       ],
       "pm/menu": [
-        "./dist/pm/menu.d.ts"
+        "./dist/pm/menu.d.mts"
       ],
       "pm/markdown": [
-        "./dist/pm/markdown.d.ts"
+        "./dist/pm/markdown.d.mts"
       ],
       "pm/keymap": [
-        "./dist/pm/keymap.d.ts"
+        "./dist/pm/keymap.d.mts"
       ],
       "pm/inputrules": [
-        "./dist/pm/inputrules.d.ts"
+        "./dist/pm/inputrules.d.mts"
       ],
       "pm/history": [
-        "./dist/pm/history.d.ts"
+        "./dist/pm/history.d.mts"
       ],
       "pm/gapcursor": [
-        "./dist/pm/gapcursor.d.ts"
+        "./dist/pm/gapcursor.d.mts"
       ],
       "pm/dropcursor": [
-        "./dist/pm/dropcursor.d.ts"
+        "./dist/pm/dropcursor.d.mts"
       ],
       "pm/commands": [
-        "./dist/pm/commands.d.ts"
+        "./dist/pm/commands.d.mts"
       ],
       "pm/collab": [
-        "./dist/pm/collab.d.ts"
+        "./dist/pm/collab.d.mts"
       ],
       "pm/changeset": [
-        "./dist/pm/changeset.d.ts"
+        "./dist/pm/changeset.d.mts"
       ],
       "tiptap/extensions/underline": [
-        "./dist/tiptap/extensions/underline.d.ts"
+        "./dist/tiptap/extensions/underline.d.mts"
       ],
       "tiptap/extensions/text-style": [
-        "./dist/tiptap/extensions/text-style.d.ts"
+        "./dist/tiptap/extensions/text-style.d.mts"
       ],
       "tiptap/extensions/text-align": [
-        "./dist/tiptap/extensions/text-align.d.ts"
+        "./dist/tiptap/extensions/text-align.d.mts"
       ],
       "tiptap/extensions/ordered-list": [
-        "./dist/tiptap/extensions/ordered-list.d.ts"
+        "./dist/tiptap/extensions/ordered-list.d.mts"
       ],
       "tiptap/extensions/link": [
-        "./dist/tiptap/extensions/link.d.ts"
+        "./dist/tiptap/extensions/link.d.mts"
       ],
       "tiptap/extensions/italic": [
-        "./dist/tiptap/extensions/italic.d.ts"
+        "./dist/tiptap/extensions/italic.d.mts"
       ],
       "tiptap/extensions/history": [
-        "./dist/tiptap/extensions/history.d.ts"
+        "./dist/tiptap/extensions/history.d.mts"
       ],
       "tiptap/extensions/bullet-list": [
-        "./dist/tiptap/extensions/bullet-list.d.ts"
+        "./dist/tiptap/extensions/bullet-list.d.mts"
       ],
       "tiptap/extensions/bold": [
-        "./dist/tiptap/extensions/bold.d.ts"
+        "./dist/tiptap/extensions/bold.d.mts"
       ]
     }
   },

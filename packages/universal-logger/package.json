@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/universal-logger.d.ts",
+      "types": "./dist/universal-logger.d.mts",
       "import": {
         "default": "./dist/universal-logger.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/universal-logger.mjs",
-  "types": "./dist/universal-logger.d.ts",
+  "types": "./dist/universal-logger.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/universal-logger.d.ts"
+        "./dist/universal-logger.d.mts"
       ]
     }
   },

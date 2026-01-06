@@ -1,7 +1,7 @@
 import type { Builder } from '../workspace';
 
 /**
- * Type preservation target in d.ts file
+ * Type preservation target in d.mts file
  */
 export interface DTSPreserveTypeTarget {
   /** Type name */
@@ -13,7 +13,7 @@ export interface DTSPreserveTypeTarget {
 }
 
 /**
- * Type preservation target in d.ts file (normalized)
+ * Type preservation target in d.mts file (normalized)
  *
  * @see {@link DTSPreserveTypeTarget}
  */
@@ -34,7 +34,7 @@ export function normalizeDTSPreserveTypeTarget(
 }
 
 /**
- * Type preservation setting for d.ts files
+ * Type preservation setting for d.mts files
  *
  * @remarks This setting is for restoring type information inlined by the TypeScript compiler to the original type name by string substitution.
  */
@@ -46,7 +46,7 @@ export interface DTSPreserveTypeSettings {
 }
 
 /**
- * Type preservation setting for d.ts files (normalized)
+ * Type preservation setting for d.mts files (normalized)
  *
  * @see {@link DTSPreserveTypeSettings}
  */
@@ -66,8 +66,8 @@ export function normalizeDTSPreserveTypeSettings(
 }
 
 /**
- * Function to normalize d.ts strings
- * @param dts - Bundled d.ts strings
+ * Function to normalize d.mts strings
+ * @param dts - Bundled d.mts strings
  * @param builder - Builder
  */
 export type DTSNormalizer = (
@@ -76,11 +76,11 @@ export type DTSNormalizer = (
 ) => string | undefined | void | Promise<string | undefined | void>;
 
 /**
- * d.ts output setting
+ * d.mts output setting
  */
 export interface DTSSettings {
   /**
-   * Inline output without bundling d.ts
+   * Inline output without bundling d.mts
    *
    * @default false
    */
@@ -96,19 +96,19 @@ export interface DTSSettings {
   preserveType?: DTSPreserveTypeSettings[];
 
   /**
-   * list of function to normalize d.ts strings
+   * list of function to normalize d.mts strings
    */
   normalizers?: DTSNormalizer[];
 }
 
 /**
- * d.ts output setting (normalized)
+ * d.mts output setting (normalized)
  *
  * @see {@link DTSSettings}
  */
 export interface NormalizedDTSSettings {
   /**
-   * Inline output without bundling d.ts
+   * Inline output without bundling d.mts
    */
   inline: boolean;
 
@@ -118,7 +118,7 @@ export interface NormalizedDTSSettings {
   preserveType: NormalizedDTSPreserveTypeSettings[];
 
   /**
-   * list of function to normalize d.ts strings
+   * list of function to normalize d.mts strings
    */
   normalizers: DTSNormalizer[];
 }

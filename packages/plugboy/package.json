@@ -40,9 +40,13 @@
       "import": "./dist/dependencies/sort-package-json.mjs",
       "types": "./dist/dependencies/sort-package-json.d.ts"
     },
-    "./dependencies/tsup": {
-      "import": "./dist/dependencies/tsup.mjs",
-      "types": "./dist/dependencies/tsup.d.ts"
+    "./dependencies/tsdown": {
+      "import": "./dist/dependencies/tsdown.mjs",
+      "types": "./dist/dependencies/tsdown.d.ts"
+    },
+    "./runtime-utils": {
+      "import": "./dist/runtime-utils.mjs",
+      "types": "./dist/runtime-utils.d.ts"
     },
     "./env": {
       "types": "./env.d.ts"
@@ -61,7 +65,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
@@ -72,15 +76,13 @@
   },
   "dependencies": {
     "@inquirer/prompts": "^7.8.6",
-    "@swc/core": "^1.13.5",
     "bundle-require": "^5.1.0",
     "cac": "^6.7.14",
     "cssnano": "^7.1.1",
-    "esbuild": "^0.25.10",
     "execa": "^9.6.0",
     "glob": "^11.0.3",
     "pkg-types": "^2.3.0",
     "sort-package-json": "^3.4.0",
-    "tsup": "^8.5.0"
+    "tsdown": "^0.16.6"
   }
 }

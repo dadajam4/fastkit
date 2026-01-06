@@ -26,7 +26,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vot-i18n.d.ts",
+      "types": "./dist/vot-i18n.d.mts",
       "import": {
         "default": "./dist/vot-i18n.mjs"
       }
@@ -34,11 +34,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vot-i18n.mjs",
-  "types": "./dist/vot-i18n.d.ts",
+  "types": "./dist/vot-i18n.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vot-i18n.d.ts"
+        "./dist/vot-i18n.d.mts"
       ]
     }
   },

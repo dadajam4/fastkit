@@ -22,7 +22,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/accept-language.d.ts",
+      "types": "./dist/accept-language.d.mts",
       "import": {
         "default": "./dist/accept-language.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/accept-language.mjs",
-  "types": "./dist/accept-language.d.ts",
+  "types": "./dist/accept-language.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/accept-language.d.ts"
+        "./dist/accept-language.d.mts"
       ]
     }
   },

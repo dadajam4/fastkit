@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/sprite-images.d.ts",
+      "types": "./dist/sprite-images.d.mts",
       "import": {
         "default": "./dist/sprite-images.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/sprite-images.mjs",
-  "types": "./dist/sprite-images.d.ts",
+  "types": "./dist/sprite-images.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/sprite-images.d.ts"
+        "./dist/sprite-images.d.mts"
       ]
     }
   },

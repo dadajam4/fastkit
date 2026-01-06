@@ -22,7 +22,7 @@
     "./package.json": "./package.json",
     "./vue-disabled-reason.css": "./dist/vue-disabled-reason.css",
     ".": {
-      "types": "./dist/vue-disabled-reason.d.ts",
+      "types": "./dist/vue-disabled-reason.d.mts",
       "import": {
         "default": "./dist/vue-disabled-reason.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-disabled-reason.mjs",
-  "types": "./dist/vue-disabled-reason.d.ts",
+  "types": "./dist/vue-disabled-reason.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-disabled-reason.d.ts"
+        "./dist/vue-disabled-reason.d.mts"
       ]
     }
   },

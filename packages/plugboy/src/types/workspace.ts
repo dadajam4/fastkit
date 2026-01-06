@@ -1,11 +1,13 @@
-import type { Options as TSUpOptions } from 'tsup';
+import type { UserConfig as TSDownConfig } from 'tsdown';
 import type { Path } from '../path';
 import { RequiredPackageJSON, MarkRequired } from './_utils';
 import type { PlugboyProject } from '../project';
 import type { UserPluginOption, Plugin } from './plugin';
-import type { UserHooks, BuildedHooks } from './hook';
+import type { BuildedHooks, UserHooks } from './hook';
 import { DTSSettings, NormalizedDTSSettings } from './dts';
 import { OptimizeCSSOptions } from './css';
+import { type ExternalOption } from 'rolldown';
+import { type NoExternalOption } from './tsdown';
 
 export const WORKSPACE_REQUIRED_FIELDS = ['name', 'version'] as const;
 
@@ -51,22 +53,23 @@ export type WorkspaceEntries = Record<string, WorkspaceEntry>;
  */
 export type RawWorkspaceEntries = Record<string, RawWorkspaceEntry>;
 
-export const TSUP_SYNC_OPTIONS = [
+export const TSDOWN_SYNC_OPTIONS = [
   'define',
   'noExternal',
   'external',
-  'replaceNodeEnv',
   'skipNodeModulesBundle',
-] as const;
+  'onSuccess',
+  'copy',
+] as const satisfies (keyof TSDownConfig)[];
 
-type TSUpSyncOption = (typeof TSUP_SYNC_OPTIONS)[number];
+type TSDownSyncOption = (typeof TSDOWN_SYNC_OPTIONS)[number];
 
-interface TSUpSyncOptions extends Pick<TSUpOptions, TSUpSyncOption> {}
+interface TSDownSyncOptions extends Pick<TSDownConfig, TSDownSyncOption> {}
 
 /**
  * Workspace User Configuration
  */
-export interface UserWorkspaceConfig extends TSUpSyncOptions {
+export interface UserWorkspaceConfig extends TSDownSyncOptions {
   /**
    * Ignore project settings
    *
@@ -90,7 +93,7 @@ export interface UserWorkspaceConfig extends TSUpSyncOptions {
    */
   plugins?: UserPluginOption[];
   /**
-   * d.ts output setting
+   * d.mts output setting
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
@@ -113,10 +116,15 @@ export interface ResolvedWorkspaceConfig
   extends Required<
       Omit<
         UserWorkspaceConfig,
-        'entries' | 'hooks' | 'plugins' | 'dts' | 'optimizeCSS' | TSUpSyncOption
+        | 'entries'
+        | 'hooks'
+        | 'plugins'
+        | 'dts'
+        | 'optimizeCSS'
+        | TSDownSyncOption
       >
     >,
-    TSUpSyncOptions {
+    TSDownSyncOptions {
   /**
    * Configuration of all entries in the workspace
    *
@@ -134,7 +142,7 @@ export interface ResolvedWorkspaceConfig
    */
   plugins: Plugin[];
   /**
-   * d.ts output setting
+   * d.mts output setting
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
@@ -210,7 +218,7 @@ export interface WorkspaceSetupContext {
    */
   hooks: BuildedHooks;
   /**
-   * d.ts output setting
+   * d.mts output setting
    * @see {@link NormalizedDTSSettings}
    */
   dts: NormalizedDTSSettings;
@@ -222,4 +230,8 @@ export interface WorkspaceSetupContext {
    * @see {@link OptimizeCSSOptions}
    */
   optimizeCSS: OptimizeCSSOptions | false;
+  // @TODO JSDoc
+  mergeExternals(override: ExternalOption): void;
+  // @TODO JSDoc
+  mergeNoExternals(override: NoExternalOption): void;
 }

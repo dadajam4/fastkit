@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/helpers.d.ts",
+      "types": "./dist/helpers.d.mts",
       "import": {
         "default": "./dist/helpers.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/helpers.mjs",
-  "types": "./dist/helpers.d.ts",
+  "types": "./dist/helpers.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/helpers.d.ts"
+        "./dist/helpers.d.mts"
       ]
     }
   },

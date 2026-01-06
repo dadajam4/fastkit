@@ -22,7 +22,7 @@
     "./package.json": "./package.json",
     "./vue-app-layout.css": "./dist/vue-app-layout.css",
     ".": {
-      "types": "./dist/vue-app-layout.d.ts",
+      "types": "./dist/vue-app-layout.d.mts",
       "import": {
         "default": "./dist/vue-app-layout.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-app-layout.mjs",
-  "types": "./dist/vue-app-layout.d.ts",
+  "types": "./dist/vue-app-layout.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-app-layout.d.ts"
+        "./dist/vue-app-layout.d.mts"
       ]
     }
   },

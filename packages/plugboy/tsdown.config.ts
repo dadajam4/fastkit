@@ -1,8 +1,12 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const TS_EXT_RE = /\.ts$/;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const dependencies = fs
   .readdirSync(path.join(__dirname, 'src/dependencies'))
@@ -18,6 +22,7 @@ export default defineConfig({
   entry: {
     plugboy: 'src/index.ts',
     cli: 'src/cli.ts',
+    'runtime-utils': 'src/runtime-utils/index.ts',
     ...dependenciesEntry,
   },
   format: ['esm'],
@@ -25,8 +30,8 @@ export default defineConfig({
   clean: true,
   // splitting: false,
   sourcemap: true,
-  outExtension: ({ format }) => ({
-    js: `.mjs`,
-  }),
+  // outExtensions: ({ format }) => ({
+  //   js: `.mjs`,
+  // }),
   external: [/^@vanilla-extract/, /^@babel/, /^@vue/, 'typescript', 'postcss'],
 });

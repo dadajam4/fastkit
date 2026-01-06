@@ -20,13 +20,13 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/color-scheme.d.ts",
+      "types": "./dist/color-scheme.d.mts",
       "import": {
         "default": "./dist/color-scheme.mjs"
       }
     },
     "./plugboy-dts-preserve": {
-      "types": "./dist/plugboy-dts-preserve.d.ts",
+      "types": "./dist/plugboy-dts-preserve.d.mts",
       "import": {
         "default": "./dist/plugboy-dts-preserve.mjs"
       }
@@ -34,14 +34,14 @@
     "./*": "./dist/*"
   },
   "main": "./dist/color-scheme.mjs",
-  "types": "./dist/color-scheme.d.ts",
+  "types": "./dist/color-scheme.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/color-scheme.d.ts"
+        "./dist/color-scheme.d.mts"
       ],
       "plugboy-dts-preserve": [
-        "./dist/plugboy-dts-preserve.d.ts"
+        "./dist/plugboy-dts-preserve.d.mts"
       ]
     }
   },

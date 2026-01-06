@@ -23,7 +23,7 @@
     "./package.json": "./package.json",
     "./vui.css": "./dist/vui.css",
     ".": {
-      "types": "./dist/vui.d.ts",
+      "types": "./dist/vui.d.mts",
       "import": {
         "default": "./dist/vui.mjs"
       }
@@ -31,11 +31,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vui.mjs",
-  "types": "./dist/vui.d.ts",
+  "types": "./dist/vui.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vui.d.ts"
+        "./dist/vui.d.mts"
       ]
     }
   },

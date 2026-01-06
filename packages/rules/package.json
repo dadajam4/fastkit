@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/rules.d.ts",
+      "types": "./dist/rules.d.mts",
       "import": {
         "default": "./dist/rules.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/rules.mjs",
-  "types": "./dist/rules.d.ts",
+  "types": "./dist/rules.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/rules.d.ts"
+        "./dist/rules.d.mts"
       ]
     }
   },

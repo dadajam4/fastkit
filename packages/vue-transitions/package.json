@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-transitions.d.ts",
+      "types": "./dist/vue-transitions.d.mts",
       "import": {
         "default": "./dist/vue-transitions.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-transitions.mjs",
-  "types": "./dist/vue-transitions.d.ts",
+  "types": "./dist/vue-transitions.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-transitions.d.ts"
+        "./dist/vue-transitions.d.mts"
       ]
     }
   },

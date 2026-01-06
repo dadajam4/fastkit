@@ -1,18 +1,24 @@
 import { Plugin } from '@fastkit/plugboy';
-import { VueJSXPluginOptions } from '@vue/babel-plugin-jsx';
+// import { VueJSXPluginOptions } from '@vue/babel-plugin-jsx';
+import type VueJsx from 'unplugin-vue-jsx/rolldown';
 
-export interface JSXOptions extends VueJSXPluginOptions {
-  sourceMaps?: boolean;
-}
+export type _Options = NonNullable<Parameters<typeof VueJsx>[0]>;
+// VueJsx({
 
-export interface PluginOptions {
-  sourceMaps?: boolean;
-  jsx?: JSXOptions;
+//   // include,
+// });
+// export interface JSXOptions extends VueJSXPluginOptions {
+//   sourceMaps?: boolean;
+// }
+
+export interface PluginOptions extends _Options {
+  // sourceMaps?: boolean;
+  // jsx?: JSXOptions;
 }
 
 export const PLUGIN_NAME = 'plugboy-vue-jsx';
 
 export interface VueJSXPlugin extends Plugin {
   name: typeof PLUGIN_NAME;
-  options: PluginOptions;
+  _options: PluginOptions;
 }

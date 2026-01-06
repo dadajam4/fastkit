@@ -22,7 +22,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/duration.d.ts",
+      "types": "./dist/duration.d.mts",
       "import": {
         "default": "./dist/duration.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/duration.mjs",
-  "types": "./dist/duration.d.ts",
+  "types": "./dist/duration.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/duration.d.ts"
+        "./dist/duration.d.mts"
       ]
     }
   },

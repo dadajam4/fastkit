@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/object-path.d.ts",
+      "types": "./dist/object-path.d.mts",
       "import": {
         "default": "./dist/object-path.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/object-path.mjs",
-  "types": "./dist/object-path.d.ts",
+  "types": "./dist/object-path.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/object-path.d.ts"
+        "./dist/object-path.d.mts"
       ]
     }
   },

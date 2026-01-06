@@ -22,7 +22,7 @@
     "./package.json": "./package.json",
     "./vue-scroller.css": "./dist/vue-scroller.css",
     ".": {
-      "types": "./dist/vue-scroller.d.ts",
+      "types": "./dist/vue-scroller.d.mts",
       "import": {
         "default": "./dist/vue-scroller.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-scroller.mjs",
-  "types": "./dist/vue-scroller.d.ts",
+  "types": "./dist/vue-scroller.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-scroller.d.ts"
+        "./dist/vue-scroller.d.mts"
       ]
     }
   },

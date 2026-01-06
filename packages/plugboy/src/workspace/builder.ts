@@ -1,33 +1,26 @@
-import { Options, build } from 'tsup';
+import { type InlineConfig, build } from 'tsdown';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import type { OutputFile, Plugin } from 'esbuild';
 import { glob } from 'glob';
 import type { Processor, AcceptedPlugin as PostcssPlugin } from 'postcss';
 import type { PlugboyWorkspace, WorkspaceObjectExport } from './workspace';
 import {
-  TSUP_SYNC_OPTIONS,
+  TSDOWN_SYNC_OPTIONS,
   NormalizedDTSPreserveTypeSettings,
   ResolvedOptimizeCSSOptions,
 } from '../types';
-import { copyDirSync, rmrf } from '../utils';
+import { copyDirSync, rmrf, mergeExternals } from '../utils';
 import { emitDTS } from './dts';
+import { applyPlugboyEnvs, getPlugboyEnvCodeForStub } from '../env';
 
 const SHEBANG_MATCH_RE = /^(#!.+?)\n/;
-type EnvVarName = '__PLUGBOY_DEV__' | '__PLUGBOY_STUB__';
-type EnvFnName =
-  | '__plugboyWorkspaceDir'
-  | '__plugboySrcDir'
-  | '__plugboyPublicDir';
 
-interface ResolvedOptions extends Options {
-  esbuildPlugins: Plugin[];
-}
+interface ResolvedOptions extends InlineConfig {}
 
-function safeRemoveCSSMap(cssFilePath: string) {
-  const mapFilePath = `${cssFilePath}.map`;
-  return fs.rm(mapFilePath, { force: true });
-}
+// function safeRemoveCSSMap(cssFilePath: string) {
+//   const mapFilePath = `${cssFilePath}.map`;
+//   return fs.rm(mapFilePath, { force: true });
+// }
 
 const SOURCE_MAPPING_URL_COMMENT_RE = /\/\*# sourceMappingURL=.+? \*\//g;
 const allLayerDefRe = /(^|\n)@layer\s+([a-zA-Z\d\-_$. ,]+);/g;
@@ -65,7 +58,7 @@ async function getPostcss(
 export class Builder {
   readonly workspace: PlugboyWorkspace;
 
-  private _tsupOptions?: ResolvedOptions;
+  private _tsdownOptions?: ResolvedOptions;
 
   private _postcssCache?: Processor;
 
@@ -81,101 +74,52 @@ export class Builder {
     this.workspace = workspace;
   }
 
-  async tsupOptions(overrides?: { watch?: boolean }): Promise<ResolvedOptions> {
-    let { _tsupOptions } = this;
-    if (_tsupOptions) return _tsupOptions;
+  async tsdownOptions(overrides?: {
+    watch?: boolean;
+  }): Promise<ResolvedOptions> {
+    let { _tsdownOptions } = this;
+    if (_tsdownOptions) return _tsdownOptions;
 
     const { entry, dts } = this;
 
-    const esbuildPlugins = await this.workspace.getESBuildPlugins();
-
-    _tsupOptions = {
-      publicDir: true,
-      format: ['esm'],
+    _tsdownOptions = {
+      // publicDir: true,
+      // format: ['esm'],
       dts: dts.inline
         ? false
         : {
             resolve: ['@fastkit/plugboy'],
           },
       treeshake: true,
-      esbuildPlugins,
+      plugins: this.workspace.plugins,
       entry,
-      splitting: true,
-      outExtension: ({ format }) => ({
-        js: `.mjs`,
-      }),
       sourcemap: true,
       clean: true,
+      outputOptions: {
+        assetFileNames: (asset) => {
+          // console.log(asset);
+          // return '';
+          return asset.name || '';
+        },
+        // assetFileNames: '[name][extname]',
+      },
       ...overrides,
     };
 
-    for (const opt of TSUP_SYNC_OPTIONS) {
-      _tsupOptions[opt] = this.workspace.config[opt] as any;
+    for (const opt of TSDOWN_SYNC_OPTIONS) {
+      _tsdownOptions[opt] = this.workspace.config[opt] as any;
     }
 
-    const PLUGBOY_VAR_ENVS: Record<EnvVarName, string> = {
-      __PLUGBOY_DEV__: 'false',
-      __PLUGBOY_STUB__: 'false',
-    };
+    applyPlugboyEnvs(_tsdownOptions);
 
-    const DEFINE_VAR_INJECTS = Object.fromEntries(
-      Object.keys(PLUGBOY_VAR_ENVS).map((envName) => [envName, `$$${envName}`]),
-    );
-
-    _tsupOptions.define = {
-      ..._tsupOptions.define,
-      ...DEFINE_VAR_INJECTS,
-    };
-
-    const PLUGBOY_VAR_ENVS_BANNER = [
-      ...Object.entries(PLUGBOY_VAR_ENVS).map(
-        ([envName, variable]) =>
-          `const $$${envName} = /* @PLUGBOY:${envName}:start */${variable}/* @PLUGBOY:${envName}:end */;`,
-      ),
-      `const $$__PLUGBOY_RELATIVE_PATH_FOR_WORKSPACE__ = '@@__PLUGBOY_RELATIVE_PATH_FOR_WORKSPACE__';`,
-    ].join('\n');
-
-    const ENV_FN_INJECTS = `
-import __plugboy_path from 'node:path';
-import { fileURLToPath as __plugboy_fileURLToPath } from 'node:url';
-
-function __plugboyFilename() {
-  return __plugboy_fileURLToPath(import.meta.url);
-}
-
-function __plugboyDirname() {
-  return __plugboy_path.dirname(__plugboyFilename());
-}
-
-function __plugboyWorkspaceDir(...paths) {
-  return __plugboy_path.join(__plugboy_path.resolve(__plugboyDirname(), $$__PLUGBOY_RELATIVE_PATH_FOR_WORKSPACE__), ...paths);
-}
-
-function __plugboySrcDir(...paths) {
-  return __plugboy_path.join(__plugboyWorkspaceDir(), 'src', ...paths);
-}
-
-function __plugboyPublicDir(...paths) {
-  return __plugboy_path.join(__plugboyWorkspaceDir(), 'dist', ...paths);
-}
-    `.trim();
-
-    const banner: NonNullable<Options['banner']> = { ..._tsupOptions.banner };
-    banner.js = `${
-      banner.js ? `${banner.js}\n\n` : ''
-    }${PLUGBOY_VAR_ENVS_BANNER}\n\n${ENV_FN_INJECTS}`;
-
-    _tsupOptions.banner = banner;
-
-    _tsupOptions.external = _tsupOptions.external || [];
-    _tsupOptions.external.push(
-      /^(@fastkit\/)?plugboy/,
+    _tsdownOptions.external = mergeExternals(_tsdownOptions.external, [
+      /^(@fastkit\/)?plugboy(?!\/runtime-utils)/,
       ...this.workspace.dependencies,
-    );
+    ]);
 
-    this._tsupOptions = _tsupOptions;
+    this._tsdownOptions = _tsdownOptions;
 
-    return _tsupOptions;
+    return _tsdownOptions;
   }
 
   private async _stubLinkJS(from: string, to: string) {
@@ -186,23 +130,9 @@ function __plugboyPublicDir(...paths) {
     const location = path.join(toRelativeDir, toParsed.base);
     const source = await fs.readFile(to, 'utf-8');
     const shebang = source.match(SHEBANG_MATCH_RE)?.[1];
-    const STUB_FN_ERROR = `() => { throw new Error('Path resolution methods cannot be executed in stub mode.') }`;
-    const PLUGBOY_ENVS: Record<EnvVarName | EnvFnName, string> = {
-      __PLUGBOY_DEV__: 'true',
-      __PLUGBOY_STUB__: 'true',
-      __plugboyWorkspaceDir: STUB_FN_ERROR,
-      __plugboySrcDir: STUB_FN_ERROR,
-      __plugboyPublicDir: STUB_FN_ERROR,
-      // __plugboyWorkspaceDir: `(...paths) => path.join('${this.workspace.dir.value}', ...paths)`,
-      // __plugboySrcDir: `(...paths) => path.join(__plugboySrcDir(), 'src', ...paths)`,
-      // __plugboyPublicDir: `(...paths) => path.join(__plugboySrcDir(), 'dist', ...paths)`,
-    };
-    const ENV_INJECTS = Object.entries(PLUGBOY_ENVS)
-      .map(([envName, variable]) => `globalThis.${envName} = ${variable};`)
-      .join('\n');
     const disableChecks = '/* eslint-disable */\n// @ts-nocheck\n';
-    const code = `${disableChecks}${ENV_INJECTS}\nexport * from '${location}';`;
-    const dtsPath = path.join(fromDir, `${fromParsed.name}.d.ts`);
+    const code = `${disableChecks}${getPlugboyEnvCodeForStub()}\nexport * from '${location}';`;
+    const dtsPath = path.join(fromDir, `${fromParsed.name}.d.mts`);
     const dtsCode = `${disableChecks}export * from '${location.replace(
       /\.ts$/,
       '',
@@ -387,47 +317,55 @@ function __plugboyPublicDir(...paths) {
       }),
     );
 
-    const dtsFiles = await glob(path.join(dtsDest, '**/*.d.ts'));
+    const dtsFiles = await glob(path.join(dtsDest, '**/*.d.mts'));
     await this.normalizeDTSFiles(dtsFiles);
   }
 
   async build() {
-    const _outputFiles: OutputFile[] = [];
-    const options = await this.tsupOptions();
+    const options = await this.tsdownOptions();
     await build({
+      // outputOptions: {
+      //   // assetFileNames: '[name].css',
+      //   assetFileNames: (assetInfo) => {
+      //     if (assetInfo.name?.endsWith('.css')) {
+      //       return '[name][extname]'; // CSSはルートへ
+      //     }
+      //     return 'assets/[name]-[hash][extname]'; // 他はassetsへ
+      //   },
+      // },
       ...options,
-      esbuildPlugins: [
-        ...options.esbuildPlugins,
-        {
-          name: 'output-collection',
-          setup(_build) {
-            _build.onEnd((result) => {
-              const { outputFiles } = result;
-              if (!outputFiles) return;
-              _outputFiles.push(...outputFiles);
-            });
-          },
-        },
-      ],
-      onSuccess: async () => {
-        const emptyNativeNodeModuleRe = /(^|\n)import 'node:.+?';?/g;
-        await Promise.all(
-          _outputFiles.map(async ({ path: filePath }) => {
-            if (filePath.endsWith('.css')) {
-              await this._handleCSSOutput(filePath);
-              return;
-            }
-            if (!filePath.endsWith('.mjs')) return;
-            const code = await fs.readFile(filePath, 'utf-8');
-            const replaced = code.replace(emptyNativeNodeModuleRe, '');
-            if (code === replaced) return;
+      // esbuildPlugins: [
+      //   ...options.esbuildPlugins,
+      //   {
+      //     name: 'output-collection',
+      //     setup(_build) {
+      //       _build.onEnd((result) => {
+      //         const { outputFiles } = result;
+      //         if (!outputFiles) return;
+      //         _outputFiles.push(...outputFiles);
+      //       });
+      //     },
+      //   },
+      // ],
+      // onSuccess: async () => {
+      //   // const emptyNativeNodeModuleRe = /(^|\n)import 'node:.+?';?/g;
+      //   // await Promise.all(
+      //   //   _outputFiles.map(async ({ path: filePath }) => {
+      //   //     if (filePath.endsWith('.css')) {
+      //   //       await this._handleCSSOutput(filePath);
+      //   //       return;
+      //   //     }
+      //   //     if (!filePath.endsWith('.mjs')) return;
+      //   //     const code = await fs.readFile(filePath, 'utf-8');
+      //   //     const replaced = code.replace(emptyNativeNodeModuleRe, '');
+      //   //     if (code === replaced) return;
 
-            await fs.writeFile(filePath, replaced.trimStart(), 'utf-8');
-          }),
-        );
+      //   //     await fs.writeFile(filePath, replaced.trimStart(), 'utf-8');
+      //   //   }),
+      //   // );
 
-        await this.workspace.hooks.onSuccess(this, _outputFiles);
-      },
+      //   await this.workspace.hooks.onSuccess(this /*, _outputFiles*/);
+      // },
     });
 
     if (this.dts.inline) {
@@ -475,10 +413,10 @@ function __plugboyPublicDir(...paths) {
     await fs.writeFile(cssFilePath, result.css);
   }
 
-  private async _handleCSSOutput(cssFilePath: string) {
-    await Promise.all([
-      this.optimizeCSS(cssFilePath),
-      safeRemoveCSSMap(cssFilePath),
-    ]);
-  }
+  // private async _handleCSSOutput(cssFilePath: string) {
+  //   await Promise.all([
+  //     this.optimizeCSS(cssFilePath),
+  //     safeRemoveCSSMap(cssFilePath),
+  //   ]);
+  // }
 }

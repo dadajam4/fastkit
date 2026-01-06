@@ -16,7 +16,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/plugboy-sass-plugin.d.ts",
+      "types": "./dist/plugboy-sass-plugin.d.mts",
       "import": {
         "default": "./dist/plugboy-sass-plugin.mjs"
       }
@@ -24,11 +24,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/plugboy-sass-plugin.mjs",
-  "types": "./dist/plugboy-sass-plugin.d.ts",
+  "types": "./dist/plugboy-sass-plugin.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/plugboy-sass-plugin.d.ts"
+        "./dist/plugboy-sass-plugin.d.mts"
       ]
     }
   },
@@ -46,9 +46,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "esbuild-sass-plugin": "^3.3.1",
-    "resolve": "^1.22.10",
-    "sass": "^1.93.2"
+    "rollup-plugin-sass": "^1.15.3",
+    "sass": "^1.94.2"
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:^"

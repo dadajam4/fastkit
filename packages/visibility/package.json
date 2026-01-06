@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/visibility.d.ts",
+      "types": "./dist/visibility.d.mts",
       "import": {
         "default": "./dist/visibility.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/visibility.mjs",
-  "types": "./dist/visibility.d.ts",
+  "types": "./dist/visibility.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/visibility.d.ts"
+        "./dist/visibility.d.mts"
       ]
     }
   },

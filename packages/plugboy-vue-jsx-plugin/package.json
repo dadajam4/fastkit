@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/plugboy-vue-jsx-plugin.d.ts",
+      "types": "./dist/plugboy-vue-jsx-plugin.d.mts",
       "import": {
         "default": "./dist/plugboy-vue-jsx-plugin.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/plugboy-vue-jsx-plugin.mjs",
-  "types": "./dist/plugboy-vue-jsx-plugin.d.ts",
+  "types": "./dist/plugboy-vue-jsx-plugin.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/plugboy-vue-jsx-plugin.d.ts"
+        "./dist/plugboy-vue-jsx-plugin.d.mts"
       ]
     }
   },
@@ -43,14 +43,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/core": "^7.28.4",
-    "@babel/plugin-transform-typescript": "^7.28.0",
-    "@vue/babel-plugin-jsx": "^2.0.1"
+    "unplugin-vue-jsx": "^0.8.1"
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:^",
-    "@types/babel__core": "^7.20.5",
-    "@vitejs/plugin-vue-jsx": "^5.1.1",
+    "@vitejs/plugin-vue-jsx": "^5.1.2",
     "vite": "^7.1.9"
   },
   "peerDependencies": {

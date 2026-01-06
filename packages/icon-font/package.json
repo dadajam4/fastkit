@@ -20,13 +20,13 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/icon-font.d.ts",
+      "types": "./dist/icon-font.d.mts",
       "import": {
         "default": "./dist/icon-font.mjs"
       }
     },
     "./plugboy-dts-preserve": {
-      "types": "./dist/plugboy-dts-preserve.d.ts",
+      "types": "./dist/plugboy-dts-preserve.d.mts",
       "import": {
         "default": "./dist/plugboy-dts-preserve.mjs"
       }
@@ -34,14 +34,14 @@
     "./*": "./dist/*"
   },
   "main": "./dist/icon-font.mjs",
-  "types": "./dist/icon-font.d.ts",
+  "types": "./dist/icon-font.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/icon-font.d.ts"
+        "./dist/icon-font.d.mts"
       ],
       "plugboy-dts-preserve": [
-        "./dist/plugboy-dts-preserve.d.ts"
+        "./dist/plugboy-dts-preserve.d.mts"
       ]
     }
   },

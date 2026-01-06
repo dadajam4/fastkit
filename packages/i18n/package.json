@@ -25,7 +25,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/i18n.d.ts",
+      "types": "./dist/i18n.d.mts",
       "import": {
         "default": "./dist/i18n.mjs"
       }
@@ -33,11 +33,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/i18n.mjs",
-  "types": "./dist/i18n.d.ts",
+  "types": "./dist/i18n.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/i18n.d.ts"
+        "./dist/i18n.d.mts"
       ]
     }
   },

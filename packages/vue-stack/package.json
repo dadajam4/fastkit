@@ -26,7 +26,7 @@
     "./package.json": "./package.json",
     "./vue-stack.css": "./dist/vue-stack.css",
     ".": {
-      "types": "./dist/vue-stack.d.ts",
+      "types": "./dist/vue-stack.d.mts",
       "import": {
         "default": "./dist/vue-stack.mjs"
       }
@@ -34,11 +34,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-stack.mjs",
-  "types": "./dist/vue-stack.d.ts",
+  "types": "./dist/vue-stack.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-stack.d.ts"
+        "./dist/vue-stack.d.mts"
       ]
     }
   },

@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/cookies.d.ts",
+      "types": "./dist/cookies.d.mts",
       "import": {
         "default": "./dist/cookies.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/cookies.mjs",
-  "types": "./dist/cookies.d.ts",
+  "types": "./dist/cookies.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/cookies.d.ts"
+        "./dist/cookies.d.mts"
       ]
     }
   },

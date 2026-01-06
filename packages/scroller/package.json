@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/scroller.d.ts",
+      "types": "./dist/scroller.d.mts",
       "import": {
         "default": "./dist/scroller.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/scroller.mjs",
-  "types": "./dist/scroller.d.ts",
+  "types": "./dist/scroller.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/scroller.d.ts"
+        "./dist/scroller.d.mts"
       ]
     }
   },

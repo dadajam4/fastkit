@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/keyboard.d.ts",
+      "types": "./dist/keyboard.d.mts",
       "import": {
         "default": "./dist/keyboard.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/keyboard.mjs",
-  "types": "./dist/keyboard.d.ts",
+  "types": "./dist/keyboard.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/keyboard.d.ts"
+        "./dist/keyboard.d.mts"
       ]
     }
   },

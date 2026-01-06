@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-color-scheme.d.ts",
+      "types": "./dist/vue-color-scheme.d.mts",
       "import": {
         "default": "./dist/vue-color-scheme.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-color-scheme.mjs",
-  "types": "./dist/vue-color-scheme.d.ts",
+  "types": "./dist/vue-color-scheme.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-color-scheme.d.ts"
+        "./dist/vue-color-scheme.d.mts"
       ]
     }
   },

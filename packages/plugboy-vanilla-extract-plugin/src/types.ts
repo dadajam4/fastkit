@@ -1,12 +1,9 @@
 import { Plugin } from '@fastkit/plugboy';
-import type { vanillaExtractPlugin as esbuildPlugin } from '@vanilla-extract/esbuild-plugin';
+import type { vanillaExtractPlugin as rollupPlugin } from '@vanilla-extract/rollup-plugin';
 
 type VanillaExtractPluginOptions = NonNullable<
-  Parameters<typeof esbuildPlugin>[0]
+  Parameters<typeof rollupPlugin>[0]
 >;
-
-export interface VanillaExtractEsbuildOptions
-  extends NonNullable<VanillaExtractPluginOptions['esbuildOptions']> {}
 
 export interface PluginOptions
   extends Pick<VanillaExtractPluginOptions, 'identifiers' | 'esbuildOptions'> {}
@@ -15,5 +12,5 @@ export const PLUGIN_NAME = 'plugboy-vanilla-extract';
 
 export interface VanillaExtractPlugin extends Plugin {
   name: typeof PLUGIN_NAME;
-  options: PluginOptions;
+  _options: PluginOptions;
 }

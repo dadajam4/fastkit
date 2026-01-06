@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/media-match-gen.d.ts",
+      "types": "./dist/media-match-gen.d.mts",
       "import": {
         "default": "./dist/media-match-gen.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/media-match-gen.mjs",
-  "types": "./dist/media-match-gen.d.ts",
+  "types": "./dist/media-match-gen.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/media-match-gen.d.ts"
+        "./dist/media-match-gen.d.mts"
       ]
     }
   },

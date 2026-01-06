@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/ev.d.ts",
+      "types": "./dist/ev.d.mts",
       "import": {
         "default": "./dist/ev.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/ev.mjs",
-  "types": "./dist/ev.d.ts",
+  "types": "./dist/ev.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/ev.d.ts"
+        "./dist/ev.d.mts"
       ]
     }
   },

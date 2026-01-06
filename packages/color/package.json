@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/color.d.ts",
+      "types": "./dist/color.d.mts",
       "import": {
         "default": "./dist/color.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/color.mjs",
-  "types": "./dist/color.d.ts",
+  "types": "./dist/color.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/color.d.ts"
+        "./dist/color.d.mts"
       ]
     }
   },

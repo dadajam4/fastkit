@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-action.d.ts",
+      "types": "./dist/vue-action.d.mts",
       "import": {
         "default": "./dist/vue-action.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-action.mjs",
-  "types": "./dist/vue-action.d.ts",
+  "types": "./dist/vue-action.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-action.d.ts"
+        "./dist/vue-action.d.mts"
       ]
     }
   },

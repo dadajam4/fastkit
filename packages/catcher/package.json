@@ -22,7 +22,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/catcher.d.ts",
+      "types": "./dist/catcher.d.mts",
       "import": {
         "default": "./dist/catcher.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/catcher.mjs",
-  "types": "./dist/catcher.d.ts",
+  "types": "./dist/catcher.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/catcher.d.ts"
+        "./dist/catcher.d.mts"
       ]
     }
   },

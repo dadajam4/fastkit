@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-click-outside.d.ts",
+      "types": "./dist/vue-click-outside.d.mts",
       "import": {
         "default": "./dist/vue-click-outside.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-click-outside.mjs",
-  "types": "./dist/vue-click-outside.d.ts",
+  "types": "./dist/vue-click-outside.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-click-outside.d.ts"
+        "./dist/vue-click-outside.d.mts"
       ]
     }
   },

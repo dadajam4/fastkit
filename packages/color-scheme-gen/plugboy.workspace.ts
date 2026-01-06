@@ -4,4 +4,5 @@ export default defineWorkspaceConfig({
   entries: {
     '.': './src/index.ts',
   },
+  copy: ['public/templates'],
 });

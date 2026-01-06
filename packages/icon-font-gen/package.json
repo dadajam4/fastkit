@@ -20,13 +20,13 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/icon-font-gen.d.ts",
+      "types": "./dist/icon-font-gen.d.mts",
       "import": {
         "default": "./dist/icon-font-gen.mjs"
       }
     },
     "./cli": {
-      "types": "./dist/cli.d.ts",
+      "types": "./dist/cli.d.mts",
       "import": {
         "default": "./dist/cli.mjs"
       }
@@ -34,14 +34,14 @@
     "./*": "./dist/*"
   },
   "main": "./dist/icon-font-gen.mjs",
-  "types": "./dist/icon-font-gen.d.ts",
+  "types": "./dist/icon-font-gen.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/icon-font-gen.d.ts"
+        "./dist/icon-font-gen.d.mts"
       ],
       "cli": [
-        "./dist/cli.d.ts"
+        "./dist/cli.d.mts"
       ]
     }
   },

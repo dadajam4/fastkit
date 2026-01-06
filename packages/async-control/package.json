@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/async-control.d.ts",
+      "types": "./dist/async-control.d.mts",
       "import": {
         "default": "./dist/async-control.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/async-control.mjs",
-  "types": "./dist/async-control.d.ts",
+  "types": "./dist/async-control.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/async-control.d.ts"
+        "./dist/async-control.d.mts"
       ]
     }
   },

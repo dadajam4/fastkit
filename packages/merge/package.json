@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/merge.d.ts",
+      "types": "./dist/merge.d.mts",
       "import": {
         "default": "./dist/merge.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/merge.mjs",
-  "types": "./dist/merge.d.ts",
+  "types": "./dist/merge.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/merge.d.ts"
+        "./dist/merge.d.mts"
       ]
     }
   },

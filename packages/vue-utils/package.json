@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-utils.d.ts",
+      "types": "./dist/vue-utils.d.mts",
       "import": {
         "default": "./dist/vue-utils.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-utils.mjs",
-  "types": "./dist/vue-utils.d.ts",
+  "types": "./dist/vue-utils.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-utils.d.ts"
+        "./dist/vue-utils.d.mts"
       ]
     }
   },

@@ -38,4 +38,10 @@ export default defineWorkspaceConfig({
       },
     ],
   },
+  copy: [
+    {
+      from: 'public',
+      to: 'dist',
+    },
+  ],
 });

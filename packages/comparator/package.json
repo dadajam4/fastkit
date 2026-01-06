@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/comparator.d.ts",
+      "types": "./dist/comparator.d.mts",
       "import": {
         "default": "./dist/comparator.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/comparator.mjs",
-  "types": "./dist/comparator.d.ts",
+  "types": "./dist/comparator.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/comparator.d.ts"
+        "./dist/comparator.d.mts"
       ]
     }
   },

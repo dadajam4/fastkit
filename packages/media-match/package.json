@@ -21,13 +21,13 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/media-match.d.ts",
+      "types": "./dist/media-match.d.mts",
       "import": {
         "default": "./dist/media-match.mjs"
       }
     },
     "./plugboy-dts-preserve": {
-      "types": "./dist/plugboy-dts-preserve.d.ts",
+      "types": "./dist/plugboy-dts-preserve.d.mts",
       "import": {
         "default": "./dist/plugboy-dts-preserve.mjs"
       }
@@ -35,14 +35,14 @@
     "./*": "./dist/*"
   },
   "main": "./dist/media-match.mjs",
-  "types": "./dist/media-match.d.ts",
+  "types": "./dist/media-match.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/media-match.d.ts"
+        "./dist/media-match.d.mts"
       ],
       "plugboy-dts-preserve": [
-        "./dist/plugboy-dts-preserve.d.ts"
+        "./dist/plugboy-dts-preserve.d.mts"
       ]
     }
   },

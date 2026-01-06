@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/cache-control.d.ts",
+      "types": "./dist/cache-control.d.mts",
       "import": {
         "default": "./dist/cache-control.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/cache-control.mjs",
-  "types": "./dist/cache-control.d.ts",
+  "types": "./dist/cache-control.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/cache-control.d.ts"
+        "./dist/cache-control.d.mts"
       ]
     }
   },

@@ -22,7 +22,7 @@
     "./package.json": "./package.json",
     "./vue-loading.css": "./dist/vue-loading.css",
     ".": {
-      "types": "./dist/vue-loading.d.ts",
+      "types": "./dist/vue-loading.d.mts",
       "import": {
         "default": "./dist/vue-loading.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-loading.mjs",
-  "types": "./dist/vue-loading.d.ts",
+  "types": "./dist/vue-loading.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-loading.d.ts"
+        "./dist/vue-loading.d.mts"
       ]
     }
   },

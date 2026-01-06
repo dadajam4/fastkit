@@ -5,5 +5,5 @@ import { PLUGIN_NAME, VueJSXPlugin } from './types';
 
 export async function ViteVueJSXPlugin(): Promise<VitePlugin> {
   const plugin = await findProjectPlugin<VueJSXPlugin>(PLUGIN_NAME);
-  return JSX(plugin?.options.jsx) as VitePlugin;
+  return JSX(plugin?._options) as VitePlugin;
 }

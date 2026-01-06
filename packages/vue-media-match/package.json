@@ -22,7 +22,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-media-match.d.ts",
+      "types": "./dist/vue-media-match.d.mts",
       "import": {
         "default": "./dist/vue-media-match.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-media-match.mjs",
-  "types": "./dist/vue-media-match.d.ts",
+  "types": "./dist/vue-media-match.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-media-match.d.ts"
+        "./dist/vue-media-match.d.mts"
       ]
     }
   },

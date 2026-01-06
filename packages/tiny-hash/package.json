@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/tiny-hash.d.ts",
+      "types": "./dist/tiny-hash.d.mts",
       "import": {
         "default": "./dist/tiny-hash.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/tiny-hash.mjs",
-  "types": "./dist/tiny-hash.d.ts",
+  "types": "./dist/tiny-hash.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/tiny-hash.d.ts"
+        "./dist/tiny-hash.d.mts"
       ]
     }
   },

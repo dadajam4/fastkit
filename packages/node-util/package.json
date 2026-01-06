@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/node-util.d.ts",
+      "types": "./dist/node-util.d.mts",
       "import": {
         "default": "./dist/node-util.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/node-util.mjs",
-  "types": "./dist/node-util.d.ts",
+  "types": "./dist/node-util.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/node-util.d.ts"
+        "./dist/node-util.d.mts"
       ]
     }
   },

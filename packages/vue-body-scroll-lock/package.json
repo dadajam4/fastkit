@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-body-scroll-lock.d.ts",
+      "types": "./dist/vue-body-scroll-lock.d.mts",
       "import": {
         "default": "./dist/vue-body-scroll-lock.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-body-scroll-lock.mjs",
-  "types": "./dist/vue-body-scroll-lock.d.ts",
+  "types": "./dist/vue-body-scroll-lock.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-body-scroll-lock.d.ts"
+        "./dist/vue-body-scroll-lock.d.mts"
       ]
     }
   },

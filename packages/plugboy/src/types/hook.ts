@@ -1,7 +1,6 @@
-import type { OutputFile } from 'esbuild';
 import type { Listable } from '../utils';
 import { WorkspaceSetupContext, WorkspacePackageJson } from './workspace';
-import type { PlugboyWorkspace, Builder } from '../workspace';
+import type { PlugboyWorkspace } from '../workspace';
 
 /** plugboy hook definition */
 export interface HookTypes {
@@ -25,18 +24,6 @@ export interface HookTypes {
     json: WorkspacePackageJson,
     workspace: PlugboyWorkspace,
   ) => any;
-  /**
-   * Hooks when successful build
-   * @param builder - Builder
-   * @param outputFiles - List of output files
-   *
-   * @note
-   * The text information contained in outputFiles may have already been rewritten by plugboy and output as files.
-   * If you wish to perform text replacement, etc., be sure to do so on the read file.
-   *
-   * @see {@link OutputFile}
-   */
-  onSuccess: (builder: Builder, outputFiles: OutputFile[]) => any;
 }
 
 export function createHooksDefaults(): ResolvedHooks {
@@ -44,7 +31,6 @@ export function createHooksDefaults(): ResolvedHooks {
     setupWorkspace: [],
     createWorkspace: [],
     preparePackageJSON: [],
-    onSuccess: [],
   };
 }
 

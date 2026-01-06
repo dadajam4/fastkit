@@ -6,21 +6,23 @@ import {
   loadWorkspaceConfig,
   resolveUserHooks,
   buildHooks,
+  mergeExternals,
+  mergeNoExternals,
+  writeFileAtomic,
 } from '../utils';
 import {
-  ProjectPackageJson,
-  WorkspacePackageJson,
-  ResolvedWorkspaceConfig,
-  WorkspaceDirs,
-  WorkspaceSetupContext,
-  WorkspaceMeta,
-  Plugin,
-  UserHooks,
-  BuildedHooks,
-  ESBuildPlugin,
+  type ProjectPackageJson,
+  type WorkspacePackageJson,
+  type ResolvedWorkspaceConfig,
+  type WorkspaceDirs,
+  type WorkspaceSetupContext,
+  type WorkspaceMeta,
+  type Plugin,
+  type UserHooks,
+  type BuildedHooks,
   mergeDTSSettingsList,
-  NormalizedDTSSettings,
-  ResolvedOptimizeCSSOptions,
+  type NormalizedDTSSettings,
+  type ResolvedOptimizeCSSOptions,
   resolveOptimizeCSSOptions,
 } from '../types';
 import { Path } from '../path';
@@ -28,6 +30,7 @@ import { WORKSPACE_SPEC_PREFIX, PACKAGE_JSON_FILENAME } from '../constants';
 import { PlugboyProject, getProject } from '../project';
 import { Builder } from './builder';
 import { getWorkspacePackageJson } from '../package';
+import { WorkspaceEnvPlugin } from '../env';
 
 export type WorkspaceStubLink =
   | {
@@ -151,7 +154,7 @@ export class PlugboyWorkspace {
     this.projectDependencies = projectDependencies;
     this.meta = meta;
     this.config = config;
-    this.plugins = plugins;
+    this.plugins = [...plugins, WorkspaceEnvPlugin(this)];
     this.hooks = hooks;
     this.dts = dts;
     this.optimizeCSSOptions = optimizeCSS
@@ -193,10 +196,10 @@ export class PlugboyWorkspace {
         if (srcIsCSS) return;
       }
 
-      const types = `./dist/${normalizedId}.d.ts`;
+      const types = `./dist/${normalizedId}.d.mts`;
       const dtsDest = `./dist/${src
         .replace(/^\.\/src/, '.dts')
-        .replace(/\.ts$/, '.d.ts')}`;
+        .replace(/\.ts$/, '.d.mts')}`;
 
       this.dtsFiles.push(dir.join(types).value);
       exports.push({
@@ -313,7 +316,7 @@ export class PlugboyWorkspace {
     const sorted = sortPackageJson(cloned);
     const toStr = JSON.stringify(sorted, null, 2);
     if (originalJSONString !== toStr) {
-      await fs.writeFile(this.dir.join(PACKAGE_JSON_FILENAME).value, toStr);
+      await writeFileAtomic(this.dir.join(PACKAGE_JSON_FILENAME).value, toStr);
       this._json = sorted;
     }
     return sorted;
@@ -331,59 +334,6 @@ export class PlugboyWorkspace {
     await this.clean();
     await fs.mkdir(this.dirs.dist.value);
     return this.builder.stub();
-  }
-
-  async getESBuildPlugins(): Promise<ESBuildPlugin[]> {
-    const results: ESBuildPlugin[] = [];
-    results.push({
-      name: 'plugboy-workspace-env',
-      setup: (build) => {
-        const isJS = /\.m?js$/;
-        const RELATIVE_PATH_FOR_WORKSPACE =
-          '@@__PLUGBOY_RELATIVE_PATH_FOR_WORKSPACE__';
-        const encoder = new TextEncoder();
-
-        build.onEnd(({ outputFiles, errors, warnings }) => {
-          const result = { errors, warnings };
-          if (!outputFiles || !outputFiles.length || errors.length)
-            return result;
-
-          for (const file of outputFiles) {
-            const { path: filePath, text } = file;
-            if (
-              !isJS.test(filePath) ||
-              !text.includes(RELATIVE_PATH_FOR_WORKSPACE)
-            ) {
-              continue;
-            }
-            const relativePath = path.relative(
-              path.dirname(filePath),
-              this.dir.value,
-            );
-            const content = text.replace(
-              RELATIVE_PATH_FOR_WORKSPACE,
-              relativePath,
-            );
-            file.contents = encoder.encode(content);
-          }
-
-          return result;
-        });
-      },
-    });
-    const { plugins } = this;
-    for (const plugin of plugins) {
-      const { esbuildPlugins } = plugin;
-      if (!esbuildPlugins) continue;
-      for (const chunk of esbuildPlugins) {
-        const esbuildPlugin =
-          typeof chunk === 'function' ? await chunk(this) : await chunk;
-        if (esbuildPlugin) {
-          results.push(esbuildPlugin);
-        }
-      }
-    }
-    return results;
   }
 
   async build() {
@@ -429,12 +379,17 @@ export async function getWorkspace<
 
   const meta: WorkspaceMeta = {};
 
-  const packagePlugins = project?.plugins || [];
-  const packageHooks = project?.hooks || [];
-  const plugins: Plugin[] = [...packagePlugins, ...config.plugins];
-  const _hooks: UserHooks[] = [...packageHooks];
+  const projectPlugins = project?.plugins || [];
+  const projectHooks = project?.hooks || [];
+  const plugins: Plugin[] = [...projectPlugins, ...config.plugins];
+  const _hooks: UserHooks[] = [...projectHooks];
   if (config.hooks) {
     _hooks.push(config.hooks);
+  }
+  for (const plugin of config.plugins) {
+    if (plugin.hooks) {
+      _hooks.push(plugin.hooks);
+    }
   }
   const resolvedHooks = await resolveUserHooks(..._hooks);
   const hooks = buildHooks(resolvedHooks);
@@ -462,6 +417,12 @@ export async function getWorkspace<
     hooks,
     dts,
     optimizeCSS,
+    mergeExternals: (override) => {
+      config.external = mergeExternals(config.external, override);
+    },
+    mergeNoExternals: (override) => {
+      config.noExternal = mergeNoExternals(config.noExternal, override);
+    },
   };
 
   await hooks.setupWorkspace(ctx);

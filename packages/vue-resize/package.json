@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-resize.d.ts",
+      "types": "./dist/vue-resize.d.mts",
       "import": {
         "default": "./dist/vue-resize.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-resize.mjs",
-  "types": "./dist/vue-resize.d.ts",
+  "types": "./dist/vue-resize.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-resize.d.ts"
+        "./dist/vue-resize.d.mts"
       ]
     }
   },

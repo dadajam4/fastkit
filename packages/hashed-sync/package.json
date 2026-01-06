@@ -23,7 +23,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/hashed-sync.d.ts",
+      "types": "./dist/hashed-sync.d.mts",
       "import": {
         "default": "./dist/hashed-sync.mjs"
       }
@@ -31,11 +31,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/hashed-sync.mjs",
-  "types": "./dist/hashed-sync.d.ts",
+  "types": "./dist/hashed-sync.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/hashed-sync.d.ts"
+        "./dist/hashed-sync.d.mts"
       ]
     }
   },

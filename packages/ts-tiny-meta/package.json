@@ -13,25 +13,25 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/ts-tiny-meta.d.ts",
+      "types": "./dist/ts-tiny-meta.d.mts",
       "import": {
         "default": "./dist/ts-tiny-meta.mjs"
       }
     },
     "./ts": {
-      "types": "./dist/ts.d.ts",
+      "types": "./dist/ts.d.mts",
       "import": {
         "default": "./dist/ts.mjs"
       }
     },
     "./vite": {
-      "types": "./dist/vite.d.ts",
+      "types": "./dist/vite.d.mts",
       "import": {
         "default": "./dist/vite.mjs"
       }
     },
     "./ts-morph": {
-      "types": "./dist/ts-morph.d.ts",
+      "types": "./dist/ts-morph.d.mts",
       "import": {
         "default": "./dist/ts-morph.mjs"
       }
@@ -42,20 +42,20 @@
     "./*": "./dist/*"
   },
   "main": "./dist/ts-tiny-meta.mjs",
-  "types": "./dist/ts-tiny-meta.d.ts",
+  "types": "./dist/ts-tiny-meta.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/ts-tiny-meta.d.ts"
+        "./dist/ts-tiny-meta.d.mts"
       ],
       "ts": [
-        "./dist/ts.d.ts"
+        "./dist/ts.d.mts"
       ],
       "vite": [
-        "./dist/vite.d.ts"
+        "./dist/vite.d.mts"
       ],
       "ts-morph": [
-        "./dist/ts-morph.d.ts"
+        "./dist/ts-morph.d.mts"
       ]
     }
   },

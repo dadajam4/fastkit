@@ -18,7 +18,7 @@ export async function ViteVanillaExtractPlugin(
   const {
     identifiers: baseIdentifiers,
     // esbuildOptions: baseEsbuildOptions = {},
-  } = plugin?.options || {};
+  } = plugin?._options || {};
 
   // const { esbuildOptions = {} } = options;
 

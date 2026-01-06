@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/nodepack.d.ts",
+      "types": "./dist/nodepack.d.mts",
       "import": {
         "default": "./dist/nodepack.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/nodepack.mjs",
-  "types": "./dist/nodepack.d.ts",
+  "types": "./dist/nodepack.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/nodepack.d.ts"
+        "./dist/nodepack.d.mts"
       ]
     }
   },

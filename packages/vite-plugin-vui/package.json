@@ -17,7 +17,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vite-plugin-vui.d.ts",
+      "types": "./dist/vite-plugin-vui.d.mts",
       "import": {
         "default": "./dist/vite-plugin-vui.mjs"
       }
@@ -25,11 +25,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vite-plugin-vui.mjs",
-  "types": "./dist/vite-plugin-vui.d.ts",
+  "types": "./dist/vite-plugin-vui.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vite-plugin-vui.d.ts"
+        "./dist/vite-plugin-vui.d.mts"
       ]
     }
   },

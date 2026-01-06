@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-keyboard.d.ts",
+      "types": "./dist/vue-keyboard.d.mts",
       "import": {
         "default": "./dist/vue-keyboard.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-keyboard.mjs",
-  "types": "./dist/vue-keyboard.d.ts",
+  "types": "./dist/vue-keyboard.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-keyboard.d.ts"
+        "./dist/vue-keyboard.d.mts"
       ]
     }
   },

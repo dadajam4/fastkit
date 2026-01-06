@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/body-scroll-lock.d.ts",
+      "types": "./dist/body-scroll-lock.d.mts",
       "import": {
         "default": "./dist/body-scroll-lock.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/body-scroll-lock.mjs",
-  "types": "./dist/body-scroll-lock.d.ts",
+  "types": "./dist/body-scroll-lock.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/body-scroll-lock.d.ts"
+        "./dist/body-scroll-lock.d.mts"
       ]
     }
   },

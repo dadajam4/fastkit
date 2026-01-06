@@ -3,11 +3,11 @@
 
 🌐 English | [日本語](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README-ja.md)
 
-A monorepo-compatible module bundler and project management tool. Provides a high-speed build system based on esbuild, tsup, and other tools.
+A monorepo-compatible module bundler and project management tool. Provides a high-speed build system based on tsdown, and other tools.
 
 ## Features
 
-- **High-Speed Build**: Ultra-fast bundling based on esbuild and tsup
+- **High-Speed Build**: Ultra-fast bundling based on tsdown
 - **Monorepo Support**: Integrated management of multi-package projects
 - **Full TypeScript Support**: Automatic type definition generation and optimization
 - **Plugin System**: Extensible architecture
@@ -345,7 +345,7 @@ export default defineWorkspaceConfig({
 ### Main Dependencies
 
 - `esbuild`: High-speed JavaScript builder
-- `tsup`: TypeScript build tool
+- `tsdown`: TypeScript build tool
 - `cac`: CLI creation library
 - `glob`: File matching
 - `cssnano`: CSS optimization

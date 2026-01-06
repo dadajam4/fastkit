@@ -11,8 +11,7 @@ import { ESbuildRunner, ESbuildRequireResult } from '@fastkit/node-util';
 import { EV } from '@fastkit/ev';
 import { toScssValues } from './to-scss-values';
 import { logger, ColorSchemeGenError } from './logger';
-
-const TEMPLATES_DIR = __plugboyPublicDir('templates');
+import { getPackageDir } from '@fastkit/plugboy/runtime-utils';
 
 export const COLOR_SCHEME_LOADER_TYPES = ['info', 'json', 'scss'] as const;
 
@@ -183,13 +182,18 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
 
 type TemplateName = 'info' | 'scss';
 
+async function getTemplateDir() {
+  const packageDir = await getPackageDir();
+  return path.join(packageDir, 'dist', 'templates');
+}
+
 async function getTemplate(name: TemplateName) {
-  const filePath = path.join(TEMPLATES_DIR, `${name}.tmpl`);
+  const filePath = path.join(await getTemplateDir(), `${name}.tmpl`);
   return fs.readFile(filePath, 'utf-8');
 }
 
 async function getVariantTemplate(name: BuiltinColorVariant) {
-  const filePath = path.join(TEMPLATES_DIR, `variant.${name}.tmpl`);
+  const filePath = path.join(await getTemplateDir(), `variant.${name}.tmpl`);
   return fs.readFile(filePath, 'utf-8');
 }
 

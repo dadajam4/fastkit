@@ -23,7 +23,7 @@
     "./package.json": "./package.json",
     "./vue-sortable.css": "./dist/vue-sortable.css",
     ".": {
-      "types": "./dist/vue-sortable.d.ts",
+      "types": "./dist/vue-sortable.d.mts",
       "import": {
         "default": "./dist/vue-sortable.mjs"
       }
@@ -31,11 +31,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-sortable.mjs",
-  "types": "./dist/vue-sortable.d.ts",
+  "types": "./dist/vue-sortable.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-sortable.d.ts"
+        "./dist/vue-sortable.d.mts"
       ]
     }
   },

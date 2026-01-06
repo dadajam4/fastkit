@@ -23,7 +23,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-form-control.d.ts",
+      "types": "./dist/vue-form-control.d.mts",
       "import": {
         "default": "./dist/vue-form-control.mjs"
       }
@@ -31,11 +31,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-form-control.mjs",
-  "types": "./dist/vue-form-control.d.ts",
+  "types": "./dist/vue-form-control.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-form-control.d.ts"
+        "./dist/vue-form-control.d.mts"
       ]
     }
   },

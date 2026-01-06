@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/color-scheme-gen.d.ts",
+      "types": "./dist/color-scheme-gen.d.mts",
       "import": {
         "default": "./dist/color-scheme-gen.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/color-scheme-gen.mjs",
-  "types": "./dist/color-scheme-gen.d.ts",
+  "types": "./dist/color-scheme-gen.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/color-scheme-gen.d.ts"
+        "./dist/color-scheme-gen.d.mts"
       ]
     }
   },

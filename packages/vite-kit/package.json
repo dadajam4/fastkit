@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vite-kit.d.ts",
+      "types": "./dist/vite-kit.d.mts",
       "import": {
         "default": "./dist/vite-kit.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vite-kit.mjs",
-  "types": "./dist/vite-kit.d.ts",
+  "types": "./dist/vite-kit.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vite-kit.d.ts"
+        "./dist/vite-kit.d.mts"
       ]
     }
   },

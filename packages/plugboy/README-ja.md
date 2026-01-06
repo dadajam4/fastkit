@@ -2,11 +2,11 @@
 
 🌐 [English](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README.md) | 日本語
 
-モノレポ対応のモジュールバンドラー・プロジェクト管理ツールです。esbuild、tsup等をベースとした高速ビルドシステムを提供します。
+モノレポ対応のモジュールバンドラー・プロジェクト管理ツールです。tsdownをベースとした高速ビルドシステムを提供します。
 
 ## 特徴
 
-- **高速ビルド**: esbuild、tsupベースの超高速バンドリング
+- **高速ビルド**: tsdownベースの超高速バンドリング
 - **モノレポ対応**: マルチパッケージプロジェクトの統合管理
 - **TypeScript完全対応**: 自動型定義生成・最適化
 - **プラグインシステム**: 拡張可能なアーキテクチャ
@@ -343,8 +343,7 @@ export default defineWorkspaceConfig({
 
 ### 主要依存
 
-- `esbuild`: 高速JavaScriptビルダー
-- `tsup`: TypeScriptビルドツール
+- `tsdown`: TypeScriptビルドツール
 - `cac`: CLI作成ライブラリ
 - `glob`: ファイルマッチング
 - `cssnano`: CSS最適化

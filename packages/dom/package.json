@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/dom.d.ts",
+      "types": "./dist/dom.d.mts",
       "import": {
         "default": "./dist/dom.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/dom.mjs",
-  "types": "./dist/dom.d.ts",
+  "types": "./dist/dom.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/dom.d.ts"
+        "./dist/dom.d.mts"
       ]
     }
   },

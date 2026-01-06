@@ -1,27 +1,16 @@
-import { UserHooks } from './hook';
-import type { Listable } from '../utils/general';
-import type { ESBuildPlugin } from './esbuild';
-import type { PlugboyWorkspace } from '../workspace';
+import { RolldownPlugin } from './rolldown';
+import type { UserHooks } from './hook';
+import type { MaybePromise, NullValue } from './_utils';
 
-export type ESBuildPluginOption =
-  | ESBuildPlugin
-  | undefined
-  | false
-  | null
-  | Promise<ESBuildPlugin | undefined | false | null>
-  | ((
-      workspace: PlugboyWorkspace,
-    ) =>
-      | ESBuildPlugin
-      | undefined
-      | false
-      | null
-      | Promise<ESBuildPlugin | undefined | false | null>);
-
-export interface Plugin {
-  name: string;
+export interface Plugin<A = any> extends RolldownPlugin<A> {
   hooks?: UserHooks;
-  esbuildPlugins?: ESBuildPluginOption[];
 }
 
-export type UserPluginOption = Listable<Plugin>;
+export type UserPluginOption<A = any> = MaybePromise<
+  | NullValue<Plugin<A>>
+  | {
+      name: string;
+    }
+  | false
+  | UserPluginOption[]
+>;

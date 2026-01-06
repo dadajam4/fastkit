@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-scoped-loading.d.ts",
+      "types": "./dist/vue-scoped-loading.d.mts",
       "import": {
         "default": "./dist/vue-scoped-loading.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-scoped-loading.mjs",
-  "types": "./dist/vue-scoped-loading.d.ts",
+  "types": "./dist/vue-scoped-loading.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-scoped-loading.d.ts"
+        "./dist/vue-scoped-loading.d.mts"
       ]
     }
   },

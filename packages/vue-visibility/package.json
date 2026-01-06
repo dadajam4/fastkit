@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-visibility.d.ts",
+      "types": "./dist/vue-visibility.d.mts",
       "import": {
         "default": "./dist/vue-visibility.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-visibility.mjs",
-  "types": "./dist/vue-visibility.d.ts",
+  "types": "./dist/vue-visibility.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-visibility.d.ts"
+        "./dist/vue-visibility.d.mts"
       ]
     }
   },

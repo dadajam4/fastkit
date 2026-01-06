@@ -16,7 +16,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-location.d.ts",
+      "types": "./dist/vue-location.d.mts",
       "import": {
         "default": "./dist/vue-location.mjs"
       }
@@ -24,11 +24,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-location.mjs",
-  "types": "./dist/vue-location.d.ts",
+  "types": "./dist/vue-location.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-location.d.ts"
+        "./dist/vue-location.d.mts"
       ]
     }
   },
