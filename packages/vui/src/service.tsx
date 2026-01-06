@@ -132,6 +132,7 @@ export interface VuiServiceIconSettings {
   hinttip: IconName;
   clear: IconName;
   reload: IconName;
+  fileUpload: IconName;
 }
 
 export type RawVuiServiceIconSettings = Partial<VuiServiceIconSettings>;

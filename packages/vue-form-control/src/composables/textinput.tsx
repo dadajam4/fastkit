@@ -414,13 +414,11 @@ export class TextInputNodeControl extends TextableControl {
 
   focus(opts?: FocusOptions) {
     if (this.isDisabled) return;
-    const { inputElement } = this;
-    inputElement && inputElement.focus(opts);
+    this.inputElement?.focus(opts);
   }
 
   blur() {
-    const { inputElement } = this;
-    inputElement && inputElement.blur();
+    this.inputElement?.blur();
   }
 }
 

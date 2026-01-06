@@ -1,7 +1,18 @@
-import { defineComponent } from 'vue';
-import { VHero, VButton, VGridContainer, VGridItem, VCard } from '@fastkit/vui';
+import { defineComponent, ref } from 'vue';
+import {
+  VHero,
+  VButton,
+  VGridContainer,
+  VGridItem,
+  VCard,
+  VFileInput,
+} from '@fastkit/vui';
 
 export default defineComponent({
+  setup() {
+    const files = ref<File[]>([]);
+    return { files };
+  },
   render() {
     return (
       <div>
@@ -11,6 +22,40 @@ export default defineComponent({
           }}>
           Components
         </VHero>
+
+        <VFileInput
+          label="File"
+          multiple
+          clearable
+          required
+          size="sm"
+          v-model={this.files}
+          v-slots={{
+            selections: (control) => {
+              return <div>{control.selectionContext.totalReadableSize}</div>;
+            },
+          }}
+        />
+
+        <div>
+          <p>Selected files</p>
+          <ul>
+            {this.files.map((file) => (
+              <li key={file.name}>
+                {`${file.name} (${file.type}) (${file.size})`}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <VFileInput label="File" multiple variant="filled" clearable required />
+        <VFileInput label="File" multiple variant="flat" clearable required />
+        <VFileInput
+          label="File"
+          multiple
+          variant="outlined"
+          clearable
+          required
+        />
 
         <VButton
           onClick={() => {

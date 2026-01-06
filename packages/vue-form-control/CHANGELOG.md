@@ -1,5 +1,31 @@
 # @fastkit/vue-form-control
 
+## 0.24.3
+
+### Patch Changes
+
+- This is a bugfix release related to `FileInputNode`.
+  - Updated the `createFileInputNodeSettings` function to accept `FileInputNodeControlOptions`, allowing customization of settings.
+  - Fixed an issue where `FileInputNodeFile` did not include the properties of the `File` interface.
+
+## 0.24.2
+
+### Patch Changes
+
+- Fixed an issue where the `FileInputNodeControlOptions` settings were ignored when initializing `FileInputNode`.
+
+## 0.24.1
+
+### Patch Changes
+
+- Fixed an issue where passing an array of `File` objects to the `modelValue` of `FileInputNodeControl` caused an error.
+
+## 0.24.0
+
+### Minor Changes
+
+- Added `FileInputNodeControl` to handle [File](https://developer.mozilla.org/docs/Web/API/File) inputs.
+
 ## 0.23.2
 
 ### Patch Changes

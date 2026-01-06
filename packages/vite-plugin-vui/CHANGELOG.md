@@ -1,5 +1,16 @@
 # @fastkit/vite-plugin-vui
 
+## 3.3.0
+
+### Minor Changes
+
+- Added the `VFileInput` component to handle [File](https://developer.mozilla.org/docs/Web/API/File) inputs.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vui@1.3.0
+
 ## 3.2.0
 
 ### Minor Changes
