@@ -2,7 +2,8 @@ import { definePlugin, findFile } from '@fastkit/plugboy';
 // import fs from 'node:fs/promises';
 // @vanilla-extract/rollup-plugin
 // import { ESBuildVanillaExtract } from './esbuild';
-import { vanillaExtractPlugin } from '@vanilla-extract/rollup-plugin';
+// import { vanillaExtractPlugin } from '@vanilla-extract/rollup-plugin';
+import { vanillaExtractPlugin } from './_origin';
 import { VanillaExtractPlugin, PluginOptions, PLUGIN_NAME } from './types';
 
 declare module '@fastkit/plugboy' {
@@ -11,27 +12,44 @@ declare module '@fastkit/plugboy' {
   }
 }
 
-const extMatchRe = /\.(mjs|css)$/;
+// const extMatchRe = /\.(mjs|css)$/;
 
-function extractExt(filePath: string) {
-  return filePath.match(extMatchRe)?.[1] as 'mjs' | 'css' | undefined;
-}
+// function extractExt(filePath: string) {
+//   return filePath.match(extMatchRe)?.[1] as 'mjs' | 'css' | undefined;
+// }
 
-const emptyVanillaImportRe = /(^|\n)import '@vanilla-extract\/css';?/g;
+// const emptyVanillaImportRe = /(^|\n)import '@vanilla-extract\/css';?/g;
 
-function cleanJS(code: string) {
-  return code.replace(emptyVanillaImportRe, '');
-}
+// function cleanJS(code: string) {
+//   return code.replace(emptyVanillaImportRe, '');
+// }
 
 export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
-  const plug = vanillaExtractPlugin({
-    ...options,
-    extract: {
-      // name: '[name].css',
-      sourcemap: true,
+  return definePlugin<VanillaExtractPlugin>({
+    name: PLUGIN_NAME,
+    _options: options,
+    hooks: {
+      async setupWorkspace(ctx) {
+        ctx.mergeExternals(/@vanilla-extract/);
+
+        ctx.meta.hasVanillaExtract = await !!findFile(
+          ctx.dirs.src.value,
+          /\.css\.ts$/,
+        );
+
+        if (ctx.meta.hasVanillaExtract) {
+          const originalPlugin = vanillaExtractPlugin({
+            ...options,
+            extract: true,
+            // unstable_injectFilescopes: true,
+          });
+
+          ctx.plugins.push(originalPlugin);
+        }
+      },
     },
   });
-  return plug;
+
   // return definePlugin<VanillaExtractPlugin>({
   //   name: PLUGIN_NAME,
   //   _options: options,

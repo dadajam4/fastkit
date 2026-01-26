@@ -6,4 +6,5 @@ export default defineWorkspaceConfig({
     '.': './src/index.ts',
     css: './src/css/index.ts',
   },
+  external: ['@vanilla-extract/integration'],
 });

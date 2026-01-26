@@ -17,11 +17,6 @@ const SHEBANG_MATCH_RE = /^(#!.+?)\n/;
 
 interface ResolvedOptions extends InlineConfig {}
 
-// function safeRemoveCSSMap(cssFilePath: string) {
-//   const mapFilePath = `${cssFilePath}.map`;
-//   return fs.rm(mapFilePath, { force: true });
-// }
-
 const SOURCE_MAPPING_URL_COMMENT_RE = /\/\*# sourceMappingURL=.+? \*\//g;
 const allLayerDefRe = /(^|\n)@layer\s+([a-zA-Z\d\-_$. ,]+);/g;
 const layerDefTrimRe = /((^|\n)@layer\s+|;)/g;
@@ -95,14 +90,14 @@ export class Builder {
       entry,
       sourcemap: true,
       clean: true,
-      outputOptions: {
-        assetFileNames: (asset) => {
-          // console.log(asset);
-          // return '';
-          return asset.name || '';
-        },
-        // assetFileNames: '[name][extname]',
-      },
+      // outputOptions: {
+      //   assetFileNames: (asset) => {
+      //     // console.log(asset);
+      //     // return '';
+      //     return asset.name || '';
+      //   },
+      //   // assetFileNames: '[name][extname]',
+      // },
       ...overrides,
     };
 
@@ -324,29 +319,7 @@ export class Builder {
   async build() {
     const options = await this.tsdownOptions();
     await build({
-      // outputOptions: {
-      //   // assetFileNames: '[name].css',
-      //   assetFileNames: (assetInfo) => {
-      //     if (assetInfo.name?.endsWith('.css')) {
-      //       return '[name][extname]'; // CSSはルートへ
-      //     }
-      //     return 'assets/[name]-[hash][extname]'; // 他はassetsへ
-      //   },
-      // },
       ...options,
-      // esbuildPlugins: [
-      //   ...options.esbuildPlugins,
-      //   {
-      //     name: 'output-collection',
-      //     setup(_build) {
-      //       _build.onEnd((result) => {
-      //         const { outputFiles } = result;
-      //         if (!outputFiles) return;
-      //         _outputFiles.push(...outputFiles);
-      //       });
-      //     },
-      //   },
-      // ],
       // onSuccess: async () => {
       //   // const emptyNativeNodeModuleRe = /(^|\n)import 'node:.+?';?/g;
       //   // await Promise.all(
@@ -416,7 +389,6 @@ export class Builder {
   // private async _handleCSSOutput(cssFilePath: string) {
   //   await Promise.all([
   //     this.optimizeCSS(cssFilePath),
-  //     safeRemoveCSSMap(cssFilePath),
   //   ]);
   // }
 }

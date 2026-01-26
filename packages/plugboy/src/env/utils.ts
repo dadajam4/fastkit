@@ -1,15 +1,17 @@
 import { type InlineConfig } from 'tsdown';
-import type { PlugboyEnvVarName } from './types';
+import {
+  PLUGBOY_VAR_ENVS_FOR_BUNDLE,
+  PLUGBOY_VAR_ENVS_FOR_STUB,
+} from './constants';
 
 export function applyPlugboyEnvs(
   config: Pick<InlineConfig, 'define' | 'banner'>,
 ) {
-  const PLUGBOY_VAR_ENVS: Record<PlugboyEnvVarName, string> = {
-    __PLUGBOY_STUB__: 'false',
-  };
-
   const DEFINE_VAR_INJECTS = Object.fromEntries(
-    Object.keys(PLUGBOY_VAR_ENVS).map((envName) => [envName, `$$${envName}`]),
+    Object.entries(PLUGBOY_VAR_ENVS_FOR_BUNDLE).map(([envName, value]) => {
+      const _value = value.startsWith('#') ? `$$${envName}` : value;
+      return [envName, _value];
+    }),
   );
 
   config.define = {
@@ -19,10 +21,7 @@ export function applyPlugboyEnvs(
 }
 
 export function getPlugboyEnvCodeForStub() {
-  const PLUGBOY_ENVS: Record<PlugboyEnvVarName, string> = {
-    __PLUGBOY_STUB__: 'true',
-  };
-  return Object.entries(PLUGBOY_ENVS)
+  return Object.entries(PLUGBOY_VAR_ENVS_FOR_STUB)
     .map(([envName, variable]) => `globalThis.${envName} = ${variable};`)
     .join('\n');
 }
