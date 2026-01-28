@@ -1204,10 +1204,11 @@ export function useStackControl(
 function refElement<T extends object | undefined>(
   obj: T,
 ): HTMLElement | undefined {
-  return (
-    (obj && '$el' in obj ? (obj.$el as HTMLElement) : (obj as HTMLElement)) ||
-    undefined
-  );
+  const el = obj && '$el' in obj ? obj.$el : obj;
+  if (el instanceof HTMLElement) {
+    return el;
+  }
+  return undefined;
 }
 
 function getActivator(
