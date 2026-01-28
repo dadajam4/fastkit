@@ -8,6 +8,7 @@ import {
   Teleport,
   watch,
   ref,
+  h,
   VNode,
   withDirectives,
   vShow,
@@ -998,7 +999,15 @@ export function useStackControl(
             dirs.push(_clickOutside);
           }
 
-          $child = withDirectives(node, dirs);
+          // If node is a component (not an element), wrap it with a div
+          // to avoid "Runtime directive used on component with non-element root node" warning
+          const isElementNode =
+            typeof node.type === 'string' || node.type === undefined;
+          const targetNode = isElementNode
+            ? node
+            : h('div', { style: { display: 'contents' } }, [node]);
+
+          $child = withDirectives(targetNode, dirs);
 
           const _props: Record<string, any> = {
             class: control.classes,
