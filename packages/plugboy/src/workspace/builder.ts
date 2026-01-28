@@ -2,12 +2,12 @@ import { type InlineConfig, build } from 'tsdown';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { glob } from 'glob';
-import type { Processor, AcceptedPlugin as PostcssPlugin } from 'postcss';
+// import type { Processor, AcceptedPlugin as PostcssPlugin } from 'postcss';
 import type { PlugboyWorkspace, WorkspaceObjectExport } from './workspace';
 import {
   TSDOWN_SYNC_OPTIONS,
   NormalizedDTSPreserveTypeSettings,
-  ResolvedOptimizeCSSOptions,
+  // ResolvedOptimizeCSSOptions,
 } from '../types';
 import { copyDirSync, rmrf, mergeExternals } from '../utils';
 import { emitDTS } from './dts';
@@ -17,45 +17,45 @@ const SHEBANG_MATCH_RE = /^(#!.+?)\n/;
 
 interface ResolvedOptions extends InlineConfig {}
 
-const SOURCE_MAPPING_URL_COMMENT_RE = /\/\*# sourceMappingURL=.+? \*\//g;
-const allLayerDefRe = /(^|\n)@layer\s+([a-zA-Z\d\-_$. ,]+);/g;
-const layerDefTrimRe = /((^|\n)@layer\s+|;)/g;
+// const SOURCE_MAPPING_URL_COMMENT_RE = /\/\*# sourceMappingURL=.+? \*\//g;
+// const allLayerDefRe = /(^|\n)@layer\s+([a-zA-Z\d\-_$. ,]+);/g;
+// const layerDefTrimRe = /((^|\n)@layer\s+|;)/g;
 
-async function getPostcss(
-  options: ResolvedOptimizeCSSOptions,
-): Promise<Processor> {
-  const { layer, media, combineRules, cssnano } = options;
-  const [postcss, _layer, _media, _combineRules, _cssnano] = await Promise.all([
-    import('postcss').then((mod) => mod.default),
-    layer &&
-      import('../postcss/plugins/optimize-layer').then((mod) =>
-        mod.OptimizeLayer(layer),
-      ),
-    media &&
-      import('../postcss/plugins/optimize-media').then((mod) =>
-        mod.OptimizeMedia(media),
-      ),
-    combineRules &&
-      import('../postcss/plugins/combine-rules').then((mod) =>
-        mod.CombineRules(combineRules),
-      ),
-    cssnano && import('cssnano').then((mod) => mod.default(cssnano)),
-  ]);
-  const plugins: PostcssPlugin[] = [];
-  _layer && plugins.push(_layer);
-  _media && plugins.push(_media);
-  _combineRules && plugins.push(_combineRules);
-  _cssnano && plugins.push(_cssnano);
+// async function getPostcss(
+//   options: ResolvedOptimizeCSSOptions,
+// ): Promise<Processor> {
+//   const { layer, media, combineRules, cssnano } = options;
+//   const [postcss, _layer, _media, _combineRules, _cssnano] = await Promise.all([
+//     import('postcss').then((mod) => mod.default),
+//     layer &&
+//       import('../postcss/plugins/optimize-layer').then((mod) =>
+//         mod.OptimizeLayer(layer),
+//       ),
+//     media &&
+//       import('../postcss/plugins/optimize-media').then((mod) =>
+//         mod.OptimizeMedia(media),
+//       ),
+//     combineRules &&
+//       import('../postcss/plugins/combine-rules').then((mod) =>
+//         mod.CombineRules(combineRules),
+//       ),
+//     cssnano && import('cssnano').then((mod) => mod.default(cssnano)),
+//   ]);
+//   const plugins: PostcssPlugin[] = [];
+//   _layer && plugins.push(_layer);
+//   _media && plugins.push(_media);
+//   _combineRules && plugins.push(_combineRules);
+//   _cssnano && plugins.push(_cssnano);
 
-  return postcss(plugins);
-}
+//   return postcss(plugins);
+// }
 
 export class Builder {
   readonly workspace: PlugboyWorkspace;
 
   private _tsdownOptions?: ResolvedOptions;
 
-  private _postcssCache?: Processor;
+  // private _postcssCache?: Processor;
 
   get entry() {
     return this.workspace.entry;
@@ -80,11 +80,12 @@ export class Builder {
     _tsdownOptions = {
       // publicDir: true,
       // format: ['esm'],
-      dts: dts.inline
-        ? false
-        : {
-            resolve: ['@fastkit/plugboy'],
-          },
+      dts: !dts.inline,
+      // dts: dts.inline
+      //   ? false
+      //   : {
+      //       resolve: ['@fastkit/plugboy'],
+      //     },
       treeshake: true,
       plugins: this.workspace.plugins,
       entry,
@@ -305,14 +306,14 @@ export class Builder {
         const relativeDir = path.relative(typesDir, dtsDestDir);
         const relativePath = path.join(
           relativeDir,
-          path.basename(at.dtsDest).replace(/\.d\.ts$/, ''),
+          path.basename(at.dtsDest).replace(/\.d\.m?ts$/, ''),
         );
         const code = `export * from './${relativePath}';`;
         await fs.writeFile(at.types, code, 'utf-8');
       }),
     );
 
-    const dtsFiles = await glob(path.join(dtsDest, '**/*.d.mts'));
+    const dtsFiles = await glob(path.join(dtsDest, '**/*.{d.ts,d.mts}'));
     await this.normalizeDTSFiles(dtsFiles);
   }
 
@@ -348,43 +349,43 @@ export class Builder {
     }
   }
 
-  async optimizeCSS(cssFilePath: string) {
-    const options = this.workspace.optimizeCSSOptions;
-    if (!options) return Promise.resolve();
+  // async optimizeCSS(cssFilePath: string) {
+  //   const options = this.workspace.optimizeCSSOptions;
+  //   if (!options) return Promise.resolve();
 
-    let postcss = this._postcssCache;
-    if (!postcss) {
-      postcss = await getPostcss(options);
-      this._postcssCache = postcss;
-    }
+  //   let postcss = this._postcssCache;
+  //   if (!postcss) {
+  //     postcss = await getPostcss(options);
+  //     this._postcssCache = postcss;
+  //   }
 
-    function prepare(css: string): string {
-      const layerDefs = (() => {
-        const matched = css.match(allLayerDefRe);
-        if (!matched) return '';
-        const layerNames: string[] = [];
-        matched.forEach((row) => {
-          const trimmed = row.replace(layerDefTrimRe, '');
-          const chunks = trimmed.split(',');
-          chunks.forEach((chunk) => layerNames.push(chunk.trim()));
-        });
-        const uniqued = Array.from(new Set(layerNames));
-        const def = `@layer ${uniqued.join(', ')};\n`;
-        return def;
-      })();
-      return (
-        layerDefs +
-        css
-          .replace(allLayerDefRe, '')
-          .replace(SOURCE_MAPPING_URL_COMMENT_RE, '')
-      );
-    }
+  //   function prepare(css: string): string {
+  //     const layerDefs = (() => {
+  //       const matched = css.match(allLayerDefRe);
+  //       if (!matched) return '';
+  //       const layerNames: string[] = [];
+  //       matched.forEach((row) => {
+  //         const trimmed = row.replace(layerDefTrimRe, '');
+  //         const chunks = trimmed.split(',');
+  //         chunks.forEach((chunk) => layerNames.push(chunk.trim()));
+  //       });
+  //       const uniqued = Array.from(new Set(layerNames));
+  //       const def = `@layer ${uniqued.join(', ')};\n`;
+  //       return def;
+  //     })();
+  //     return (
+  //       layerDefs +
+  //       css
+  //         .replace(allLayerDefRe, '')
+  //         .replace(SOURCE_MAPPING_URL_COMMENT_RE, '')
+  //     );
+  //   }
 
-    const css = prepare(await fs.readFile(cssFilePath, 'utf-8'));
+  //   const css = prepare(await fs.readFile(cssFilePath, 'utf-8'));
 
-    const result = await postcss.process(css, { from: cssFilePath });
-    await fs.writeFile(cssFilePath, result.css);
-  }
+  //   const result = await postcss.process(css, { from: cssFilePath });
+  //   await fs.writeFile(cssFilePath, result.css);
+  // }
 
   // private async _handleCSSOutput(cssFilePath: string) {
   //   await Promise.all([

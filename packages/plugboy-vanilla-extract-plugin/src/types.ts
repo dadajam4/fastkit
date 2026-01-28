@@ -1,8 +1,9 @@
 import { Plugin } from '@fastkit/plugboy';
 import type { vanillaExtractPlugin as rollupPlugin } from '@vanilla-extract/rollup-plugin';
 
-type VanillaExtractPluginOptions = NonNullable<
-  Parameters<typeof rollupPlugin>[0]
+type VanillaExtractPluginOptions = Omit<
+  NonNullable<Parameters<typeof rollupPlugin>[0]>,
+  'extract'
 >;
 
 export interface PluginOptions

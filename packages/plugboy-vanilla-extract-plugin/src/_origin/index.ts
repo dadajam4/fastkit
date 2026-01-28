@@ -187,8 +187,11 @@ export function vanillaExtractPlugin({
       for (const chunk of Object.values(bundle)) {
         if (chunk.type !== 'chunk' || !chunk.isEntry) continue;
 
-        const extractName = extract.name || '[name].css';
         const jsFileName = chunk.fileName; // index.js / index.mjs
+        // Skip DTS files
+        if (/\.d\.(ts|mts|cts)$/.test(jsFileName)) continue;
+
+        const extractName = extract.name || '[name].css';
         const name = jsFileName.replace(/\.(js|mjs)$/, '');
         const cssFileName =
           typeof extractName === 'function'

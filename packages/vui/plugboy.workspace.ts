@@ -40,7 +40,15 @@ export default defineWorkspaceConfig({
   },
   copy: [
     {
-      from: 'public',
+      from: 'public/after-effects',
+      to: 'dist',
+    },
+    {
+      from: 'public/after-effects.scss',
+      to: 'dist',
+    },
+    {
+      from: 'public/builtins',
       to: 'dist',
     },
   ],

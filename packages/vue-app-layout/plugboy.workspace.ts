@@ -7,4 +7,7 @@ export default defineWorkspaceConfig({
       css: true,
     },
   },
+  dts: {
+    inline: true,
+  },
 });

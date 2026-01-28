@@ -32,10 +32,10 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
       async setupWorkspace(ctx) {
         ctx.mergeExternals(/@vanilla-extract/);
 
-        ctx.meta.hasVanillaExtract = await !!findFile(
+        ctx.meta.hasVanillaExtract = !!(await findFile(
           ctx.dirs.src.value,
           /\.css\.ts$/,
-        );
+        ));
 
         if (ctx.meta.hasVanillaExtract) {
           const originalPlugin = vanillaExtractPlugin({

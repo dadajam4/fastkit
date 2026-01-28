@@ -65,7 +65,7 @@ export interface UserProjectConfig {
    */
   plugins?: UserPluginOption[];
   /**
-   * d.mts output setting
+   * declaration output setting
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
@@ -113,7 +113,7 @@ export interface ResolvedProjectConfig
    */
   plugins: Plugin[];
   /**
-   * d.mts output setting
+   * declaration output setting
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;

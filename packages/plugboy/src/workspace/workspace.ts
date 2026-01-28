@@ -31,6 +31,7 @@ import { PlugboyProject, getProject } from '../project';
 import { Builder } from './builder';
 import { getWorkspacePackageJson } from '../package';
 import { WorkspaceEnvPlugin } from '../env';
+import { OptimizeCSSPlugin } from '../postcss/plugin';
 
 export type WorkspaceStubLink =
   | {
@@ -154,7 +155,11 @@ export class PlugboyWorkspace {
     this.projectDependencies = projectDependencies;
     this.meta = meta;
     this.config = config;
-    this.plugins = [...plugins, WorkspaceEnvPlugin(this)];
+    this.plugins = [
+      ...plugins,
+      OptimizeCSSPlugin(this),
+      WorkspaceEnvPlugin(this),
+    ];
     this.hooks = hooks;
     this.dts = dts;
     this.optimizeCSSOptions = optimizeCSS

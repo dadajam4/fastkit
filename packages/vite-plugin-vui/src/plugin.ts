@@ -184,7 +184,7 @@ export {};
 
   fs.ensureDirSync(dynamicDest);
   fs.writeFileSync(path.join(dynamicDest, 'setup.scss'), COLOR_DUMP_STYLE);
-  fs.writeFileSync(path.join(dynamicDest, 'vui.d.ts'), dts);
+  fs.writeFileSync(path.join(dynamicDest, 'vui.d.mts'), dts);
 
   let iconFontEntries: RawIconFontEntry[] = iconFont || [
     {
