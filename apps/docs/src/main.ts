@@ -1,3 +1,6 @@
+import '~/main.scss';
+import '~/main.css';
+
 import { createVotEntry } from '@fastkit/vot';
 import { LocaleLink, useLink } from '@fastkit/vue-i18n';
 import type { VuiService } from '@fastkit/vui';
@@ -6,9 +9,6 @@ import { installVui } from '../.vui/installer';
 import { App } from './App';
 import { i18n, pmScriptPlugin } from '@@';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
-
-import '~/main.scss';
-import '~/main.css';
 
 declare module '@fastkit/vue-page' {
   interface VuePageControl {
