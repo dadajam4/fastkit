@@ -1,5 +1,18 @@
 # @fastkit/vot
 
+## 1.3.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.18.0-next.0
+  - @fastkit/vue-page@0.18.0-next.0
+  - @fastkit/helpers@0.16.0-next.0
+
 ## 1.2.0
 
 ### Minor Changes

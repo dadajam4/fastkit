@@ -1,5 +1,17 @@
 # @fastkit/vue-media-match
 
+## 0.17.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/media-match@3.0.0-next.0
+  - @fastkit/helpers@0.16.0-next.0
+
 ## 0.16.0
 
 ### Minor Changes

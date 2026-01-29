@@ -1,5 +1,24 @@
 # @fastkit/vue-stack
 
+## 0.20.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.5.0-next.0
+  - @fastkit/vue-click-outside@0.5.0-next.0
+  - @fastkit/vue-transitions@0.5.0-next.0
+  - @fastkit/vue-keyboard@0.5.0-next.0
+  - @fastkit/tiny-logger@0.16.0-next.0
+  - @fastkit/vue-resize@0.5.0-next.0
+  - @fastkit/vue-utils@0.18.0-next.0
+  - @fastkit/helpers@0.16.0-next.0
+  - @fastkit/dom@0.4.0-next.0
+
 ## 0.19.3
 
 ### Patch Changes

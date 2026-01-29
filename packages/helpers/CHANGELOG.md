@@ -1,5 +1,11 @@
 # @fastkit/helpers
 
+## 0.16.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
 ## 0.15.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # @fastkit/vue-tiny-meta
 
+## 1.2.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/ts-tiny-meta@1.2.0-next.0
+
 ## 1.1.0
 
 ### Minor Changes

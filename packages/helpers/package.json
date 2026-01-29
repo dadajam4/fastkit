@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/helpers",
-  "version": "0.15.0",
+  "version": "0.16.0-next.0",
   "description": "A small collection of helper implementations for processing primitive values and objects.",
   "keywords": [
     "fastkit",

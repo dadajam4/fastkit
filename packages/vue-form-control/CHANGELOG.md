@@ -1,5 +1,21 @@
 # @fastkit/vue-form-control
 
+## 0.25.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.16.0-next.0
+  - @fastkit/vue-utils@0.18.0-next.0
+  - @fastkit/debounce@0.3.0-next.0
+  - @fastkit/helpers@0.16.0-next.0
+  - @fastkit/rules@0.16.0-next.0
+  - @fastkit/dom@0.4.0-next.0
+
 ## 0.24.3
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @fastkit/vui-wysiwyg
 
+## 8.3.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vui@1.4.0-next.0
+
 ## 8.2.0
 
 ### Minor Changes

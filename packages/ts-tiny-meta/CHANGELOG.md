@@ -1,5 +1,11 @@
 # @fastkit/ts-tiny-meta
 
+## 1.2.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
 ## 1.1.0
 
 ### Minor Changes

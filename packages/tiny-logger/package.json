@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/tiny-logger",
-  "version": "0.15.0",
+  "version": "0.16.0-next.0",
   "description": "A small logger to display the application logs just a little bit nicer.",
   "keywords": [
     "fastkit",

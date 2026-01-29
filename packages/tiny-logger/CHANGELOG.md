@@ -1,5 +1,16 @@
 # @fastkit/tiny-logger
 
+## 0.16.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.16.0-next.0
+
 ## 0.15.0
 
 ### Patch Changes

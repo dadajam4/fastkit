@@ -1,5 +1,11 @@
 # @fastkit/json
 
+## 0.3.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
 ## 0.2.1
 
 ### Patch Changes
@@ -11,7 +17,6 @@
 ### Minor Changes
 
 - This release includes no functional changes, but it contains the following important updates:
-
   - Now adheres to ES Modules and the latest TypeScript standards, and the output for the `main` field and `typesVersions` is no longer generated.
 
 ## 0.1.2

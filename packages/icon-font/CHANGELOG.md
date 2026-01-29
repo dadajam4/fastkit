@@ -1,5 +1,16 @@
 # @fastkit/icon-font
 
+## 2.2.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/plugboy@1.0.0-next.0
+
 ## 2.1.0
 
 ### Patch Changes

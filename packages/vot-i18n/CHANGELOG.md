@@ -1,5 +1,18 @@
 # @fastkit/vot-i18n
 
+## 5.3.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/accept-language@0.16.0-next.0
+  - @fastkit/vue-i18n@0.17.0-next.0
+  - @fastkit/vot@1.3.0-next.0
+
 ## 5.2.0
 
 ### Patch Changes

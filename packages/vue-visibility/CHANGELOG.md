@@ -1,5 +1,16 @@
 # @fastkit/vue-visibility
 
+## 0.5.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/visibility@0.16.0-next.0
+
 ## 0.4.0
 
 ### Minor Changes

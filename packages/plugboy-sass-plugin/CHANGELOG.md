@@ -1,5 +1,16 @@
 # @fastkit/plugboy-sass-plugin
 
+## 3.0.0-next.0
+
+### Major Changes
+
+- Contains fixes to follow the internal bundler change in plugboy.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/plugboy@1.0.0-next.0
+
 ## 2.2.0
 
 ### Minor Changes

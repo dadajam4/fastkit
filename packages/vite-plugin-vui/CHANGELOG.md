@@ -1,5 +1,19 @@
 # @fastkit/vite-plugin-vui
 
+## 3.4.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/icon-font-gen@0.16.0-next.0
+  - @fastkit/tiny-logger@0.16.0-next.0
+  - @fastkit/vite-kit@1.3.0-next.0
+  - @fastkit/vui@1.4.0-next.0
+
 ## 3.3.0
 
 ### Minor Changes

@@ -1,5 +1,18 @@
 # @fastkit/vue-scroller
 
+## 0.18.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.16.0-next.0
+  - @fastkit/vue-utils@0.18.0-next.0
+  - @fastkit/scroller@0.16.0-next.0
+
 ## 0.17.0
 
 ### Minor Changes

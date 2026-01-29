@@ -1,5 +1,19 @@
 # @fastkit/universal-logger
 
+## 0.17.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.16.0-next.0
+  - @fastkit/helpers@0.16.0-next.0
+  - @fastkit/cloner@0.4.0-next.0
+  - @fastkit/json@0.3.0-next.0
+
 ## 0.16.0
 
 ### Minor Changes

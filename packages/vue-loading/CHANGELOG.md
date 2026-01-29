@@ -1,5 +1,20 @@
 # @fastkit/vue-loading
 
+## 0.18.0-next.0
+
+### Minor Changes
+
+- Release due to package bundler change. No functional changes included.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/vue-color-scheme@0.18.0-next.0
+  - @fastkit/color-scheme@3.0.0-next.0
+  - @fastkit/tiny-logger@0.16.0-next.0
+  - @fastkit/vue-utils@0.18.0-next.0
+  - @fastkit/helpers@0.16.0-next.0
+
 ## 0.17.0
 
 ### Minor Changes
