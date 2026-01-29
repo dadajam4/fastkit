@@ -1,0 +1,64 @@
+{
+  "name": "@fastkit/plugboy-vue-plugin",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/plugboy-vue-plugin.d.mts",
+      "import": {
+        "default": "./dist/plugboy-vue-plugin.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/plugboy-vue-plugin.mjs",
+  "types": "./dist/plugboy-vue-plugin.d.mts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/plugboy-vue-plugin.d.mts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint .",
+    "eslint:fix": "eslint . --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "unplugin-vue": "^7.1.1"
+  },
+  "devDependencies": {
+    "@fastkit/plugboy": "workspace:^"
+  },
+  "peerDependencies": {
+    "@fastkit/plugboy": "workspace:^",
+    "vite": "^5.0.0 || ^6.0.0 || ^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@vitejs/plugin-vue": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
+  }
+}

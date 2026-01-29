@@ -430,7 +430,9 @@ export async function getWorkspace<
     },
   };
 
-  await hooks.setupWorkspace(ctx);
+  await hooks.setupWorkspace(ctx, () => {
+    return typeof workspace === 'undefined' ? undefined : workspace;
+  });
 
   const workspace = new PlugboyWorkspace(ctx);
 

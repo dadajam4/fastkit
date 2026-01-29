@@ -1,6 +1,7 @@
 import { defineProjectConfig } from '@fastkit/plugboy';
 import { createSassPlugin } from '@fastkit/plugboy-sass-plugin';
 import { createVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plugin';
+import { createVuePlugin } from '@fastkit/plugboy-vue-plugin';
 import { createVueJSXPlugin } from '@fastkit/plugboy-vue-jsx-plugin';
 
 const eslintScripts = {
@@ -62,6 +63,7 @@ export default defineProjectConfig({
     createVanillaExtractPlugin({
       identifiers: 'short',
     }),
+    createVuePlugin(),
     createVueJSXPlugin(),
   ],
   optimizeCSS: {

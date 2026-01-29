@@ -1,4 +1,4 @@
-import { definePlugin } from '@fastkit/plugboy';
+import { definePlugin, type TryGetWorkspace } from '@fastkit/plugboy';
 import sass from 'rollup-plugin-sass';
 import { PLUGIN_NAME, PluginOptions, SassPlugin } from './types';
 import { modulesPaths } from './utils';
@@ -26,10 +26,17 @@ export function createSassPlugin(options: PluginOptions = {}) {
     },
   });
 
+  let _getWorkspace: TryGetWorkspace;
+
   return definePlugin<SassPlugin>({
     name: PLUGIN_NAME,
     _options: options,
     ...(sassPluginSettings as any),
+    hooks: {
+      setupWorkspace(_, getWorkspace) {
+        _getWorkspace = getWorkspace;
+      },
+    },
     async generateBundle(outputOptions, bundle, isWrite) {
       if (typeof generateBundle === 'function') {
         await generateBundle.call(
@@ -43,13 +50,23 @@ export function createSassPlugin(options: PluginOptions = {}) {
       if (!_styles) return;
 
       let cssFile = outputOptions.file;
+
       if (!cssFile) {
-        const fileNames = Object.keys(bundle);
-        const jsFile = fileNames.find((f) => /\.m?js$/.test(f));
-        if (!jsFile) {
-          return;
+        const workspace = _getWorkspace();
+
+        const cssExport = workspace?.exports.find((e) => e.id.endsWith('.css'));
+        if (cssExport) {
+          const tmp = cssExport.id.split('/');
+          cssFile = tmp[tmp.length - 1];
+        } else {
+          const fileNames = Object.keys(bundle);
+          const jsFile = fileNames.find((f) => /\.m?js$/.test(f));
+
+          if (!jsFile) {
+            return;
+          }
+          cssFile = jsFile.replace(/\.m?js$/, '.css');
         }
-        cssFile = jsFile.replace(/\.m?js$/, '.css');
       }
       this.emitFile({
         type: 'asset',

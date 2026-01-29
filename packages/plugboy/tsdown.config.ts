@@ -30,9 +30,6 @@ export default defineConfig({
   clean: true,
   // splitting: false,
   sourcemap: true,
-  // outExtensions: ({ format }) => ({
-  //   js: `.mjs`,
-  // }),
   external: [
     /^@vanilla-extract/,
     /^@babel/,

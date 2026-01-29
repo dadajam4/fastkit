@@ -1,4 +1,25 @@
 import type { Builder } from '../workspace';
+import type { PlugboyWorkspace } from '../workspace';
+
+export interface EmitDTSOptions {
+  cwd?: string;
+  outDir?: string;
+}
+
+/**
+ * Custom DTS compiler function
+ */
+export type DTSCompilerFunction = (
+  opts: EmitDTSOptions & { workspace: PlugboyWorkspace },
+) => Promise<void>;
+
+/**
+ * DTS compiler specification
+ * - 'tsc': TypeScript compiler (default)
+ * - 'vue-tsc': Vue SFC compatible compiler
+ * - function: Custom compiler function
+ */
+export type DTSCompilerOption = 'tsc' | 'vue-tsc' | DTSCompilerFunction;
 
 /**
  * Type preservation target in declaration file
@@ -87,6 +108,18 @@ export interface DTSSettings {
   inline?: boolean;
 
   /**
+   * DTS compiler specification
+   * @default 'tsc'
+   */
+  compiler?: DTSCompilerOption;
+
+  /**
+   * Whether to ignore compiler errors and continue
+   * @default false
+   */
+  ignoreCompilerErrors?: boolean;
+
+  /**
    * list of type preservation settings
    *
    * @remarks This setting is for restoring type information inlined by the TypeScript compiler to the original type name by string substitution.
@@ -113,6 +146,16 @@ export interface NormalizedDTSSettings {
   inline: boolean;
 
   /**
+   * DTS compiler specification
+   */
+  compiler: DTSCompilerOption;
+
+  /**
+   * Whether to ignore compiler errors and continue
+   */
+  ignoreCompilerErrors: boolean;
+
+  /**
    * list of type preservation settings
    */
   preserveType: NormalizedDTSPreserveTypeSettings[];
@@ -128,11 +171,15 @@ export function normalizeDTSSettings(
 ): NormalizedDTSSettings {
   const {
     inline = false,
+    compiler = 'tsc',
+    ignoreCompilerErrors = false,
     preserveType = [],
     normalizers = [],
   } = settings || {};
   return {
     inline,
+    compiler,
+    ignoreCompilerErrors,
     preserveType: preserveType.map(normalizeDTSPreserveTypeSettings),
     normalizers,
   };

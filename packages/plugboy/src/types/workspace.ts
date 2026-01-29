@@ -208,7 +208,7 @@ export interface WorkspaceSetupContext {
    */
   meta: WorkspaceMeta;
   /**
-   * プラグインリスト
+   * Plugin list
    * @see {@link Plugin}
    */
   plugins: Plugin[];

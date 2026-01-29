@@ -2,6 +2,8 @@ import type { Listable } from '../utils';
 import { WorkspaceSetupContext, WorkspacePackageJson } from './workspace';
 import type { PlugboyWorkspace } from '../workspace';
 
+export type TryGetWorkspace = () => PlugboyWorkspace | undefined;
+
 /** plugboy hook definition */
 export interface HookTypes {
   /**
@@ -9,7 +11,10 @@ export interface HookTypes {
    * @remarks Called just before the workspace instance is created
    * @param ctx - {@link WorkspaceSetupContext Workspace setup context object}
    */
-  setupWorkspace: (ctx: WorkspaceSetupContext) => any;
+  setupWorkspace: (
+    ctx: WorkspaceSetupContext,
+    getWorkspace: TryGetWorkspace,
+  ) => any;
   /**
    * Hooks after workspace generation
    * @param workspace - {@link PlugboyWorkspace workspace instance}

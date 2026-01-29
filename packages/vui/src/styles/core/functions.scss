@@ -25,11 +25,15 @@
 }
 
 @mixin elevation($z, $important: false) {
-  box-shadow:
-    var(--shadow-key-umbra-#{$z}),
-    var(--shadow-key-penumbra-#{$z}),
-    var(--shadow-key-ambient-#{$z})
-      if($important, string.unquote('!important'), null);
+  $shadow:
+    var(--shadow-key-umbra-#{$z}), var(--shadow-key-penumbra-#{$z}),
+    var(--shadow-key-ambient-#{$z});
+
+  @if $important {
+    box-shadow: $shadow !important;
+  } @else {
+    box-shadow: $shadow;
+  }
 }
 
 @mixin elevation-transition(
