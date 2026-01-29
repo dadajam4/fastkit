@@ -3,7 +3,7 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "isolatedModules": true,
     "target": "ESNext",
     "module": "ESNext",

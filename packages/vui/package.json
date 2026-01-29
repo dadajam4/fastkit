@@ -54,7 +54,7 @@
     "stylelint": "stylelint \"**/*.{css,scss,vue,html}\" --allow-empty-input",
     "stylelint:fix": "stylelint \"**/*.{css,scss,vue,html}\" --fix --allow-empty-input",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit --skipLibCheck"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fastkit/color-scheme": "workspace:^",

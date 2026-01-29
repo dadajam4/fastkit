@@ -50,7 +50,7 @@
     "lint": "pnpm run eslint",
     "stub": "plugboy stub",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@fastkit/helpers": "workspace:^",

@@ -12,7 +12,7 @@
     "eslint:fix": "eslint . --fix",
     "format": "pnpm run eslint:fix",
     "lint": "pnpm run eslint",
-    "typecheck": "tsc --noEmit --skipLibCheck"
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

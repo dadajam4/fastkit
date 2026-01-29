@@ -71,11 +71,12 @@
     "eslint:fix": "eslint . --fix",
     "lint": "pnpm run eslint",
     "format": "pnpm run eslint:fix",
-    "typecheck": "tsc --noEmit --skipLibCheck",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.8.6",
+    "acorn": "^8.14.0",
     "bundle-require": "^5.1.0",
     "cac": "^6.7.14",
     "cssnano": "^7.1.2",

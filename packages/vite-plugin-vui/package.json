@@ -45,7 +45,7 @@
     "lint": "pnpm run eslint",
     "stub": "plugboy stub",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit --skipLibCheck"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fastkit/tiny-logger": "workspace:^",
