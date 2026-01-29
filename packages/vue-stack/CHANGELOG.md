@@ -1,5 +1,13 @@
 # @fastkit/vue-stack
 
+## 0.19.3
+
+### Patch Changes
+
+- [#154](https://github.com/dadajam4/fastkit/pull/154) [`8011038`](https://github.com/dadajam4/fastkit/commit/8011038366c5c2d276805ee27dd35a6d2ee96cd4) Thanks [@schwarz9791](https://github.com/schwarz9791)! - #### Bug Fixes
+  - **refElement:** Fixed an issue where `beforeEl?.removeAttribute is not a function` error could occur when the activator element's `$el` was not an `HTMLElement` (e.g., Comment node, Text node, or Proxy instance).
+  - **withDirectives:** Fixed an issue where "Runtime directive used on component with non-element root node" warning occurred when the activator slot returned a component VNode instead of an element VNode. Component VNodes are now wrapped with a `<div style="display: contents">` to ensure directives work correctly.
+
 ## 0.19.2
 
 ### Patch Changes

@@ -38,6 +38,7 @@ export default defineComponent({
   setup() {
     const opened = ref(false);
     const shouldRenderMenu = ref(false);
+    const isDisabledReasonButtonDisabled = ref(true);
     const EXAMPLES = [
       '30569309025904',
       '4000056655665556',
@@ -177,6 +178,43 @@ export default defineComponent({
 
     return () => (
       <div>
+        {/* Test: VMenu with disabledReason button as activator */}
+        <div
+          style={{
+            marginBottom: '20px',
+            padding: '10px',
+            background: '#f5f5f5',
+          }}>
+          <h3>disabled-reason + VMenu Test</h3>
+          <VSwitch v-model={isDisabledReasonButtonDisabled.value}>
+            Disabled
+          </VSwitch>
+          <div style={{ marginTop: '10px' }}>
+            <VMenu
+              v-slots={{
+                activator: ({ attrs }) => (
+                  <VButton
+                    {...attrs}
+                    disabled={isDisabledReasonButtonDisabled.value}
+                    disabledReason="この機能は現在利用できません">
+                    Open Menu
+                  </VButton>
+                ),
+                default: () => (
+                  <div style={{ padding: '10px' }}>
+                    <p>Menu Content 1</p>
+                    <p>Menu Content 2</p>
+                    <p>Menu Content 3</p>
+                  </div>
+                ),
+              }}
+            />
+            <span style={{ marginLeft: '10px' }}>
+              ← disabled時はホバーで理由表示、enabled時はクリックでメニュー表示
+            </span>
+          </div>
+        </div>
+
         <VSwitch v-model={shouldRenderMenu.value}>renderMenu</VSwitch>
         {shouldRenderMenu.value && (
           <VMenu
