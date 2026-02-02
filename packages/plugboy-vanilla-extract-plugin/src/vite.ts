@@ -16,8 +16,24 @@ export async function ViteVanillaExtractPlugin(
   const plugin = await findProjectPlugin<VanillaExtractPlugin>(PLUGIN_NAME);
   const { identifiers: baseIdentifiers } = plugin?._options || {};
 
-  return vanillaExtractPlugin({
-    identifiers: baseIdentifiers,
-    ...options,
-  });
+  return [
+    ...vanillaExtractPlugin({
+      identifiers: baseIdentifiers,
+      ...options,
+    }),
+    // @MEMO
+    // Plugin to prevent file scope mismatches when utilities using vanilla-extract
+    // functions are placed in external files
+    {
+      name: 'vanilla-extract-fix-file-scope',
+      config(viteConfig) {
+        viteConfig.resolve ??= {};
+        viteConfig.resolve.dedupe ??= [];
+        viteConfig.resolve.dedupe.push(
+          '@vanilla-extract/css',
+          '@vanilla-extract/css/fileScope',
+        );
+      },
+    },
+  ];
 }

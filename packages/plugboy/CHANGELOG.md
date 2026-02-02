@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 1.0.0-next.1
+
+### Patch Changes
+
+- The raw-loader plugin has been integrated via the `?raw` query.
+
 ## 1.0.0-next.0
 
 ### Major Changes

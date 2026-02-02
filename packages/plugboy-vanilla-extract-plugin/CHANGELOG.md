@@ -1,5 +1,14 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 4.0.0-next.3
+
+### Patch Changes
+
+- Added support to fix an issue where file scopes were not created correctly when utilities using vanilla-extract functions (such as `style`) are defined in external packages.
+
+- Updated dependencies []:
+  - @fastkit/plugboy@1.0.0-next.1
+
 ## 4.0.0-next.2
 
 ### Patch Changes
