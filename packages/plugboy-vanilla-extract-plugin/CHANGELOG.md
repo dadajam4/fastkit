@@ -1,5 +1,12 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 4.0.0-next.1
+
+### Patch Changes
+
+- - Removed the forced inline output setting for d.ts.
+  - Fixed an issue where CSS was emitted for entries that did not require it when multiple entries were configured.
+
 ## 4.0.0-next.0
 
 ### Major Changes

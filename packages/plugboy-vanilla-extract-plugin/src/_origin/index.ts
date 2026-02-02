@@ -69,13 +69,16 @@ export interface Options {
   unstable_injectFilescopes?: boolean;
 }
 
-export function vanillaExtractPlugin({
-  identifiers,
-  cwd = process.cwd(),
-  esbuildOptions,
-  extract = false,
-  unstable_injectFilescopes = false,
-}: Options = {}): Plugin {
+export function vanillaExtractPlugin(
+  {
+    identifiers,
+    cwd = process.cwd(),
+    esbuildOptions,
+    extract = false,
+    unstable_injectFilescopes = false,
+  }: Options = {},
+  filterAvailableEntries: () => string[] | void,
+): Plugin {
   if (extract === true) {
     extract = {};
   }
@@ -184,8 +187,14 @@ export function vanillaExtractPlugin({
         return;
       }
 
+      const availableEntries = filterAvailableEntries();
+
       for (const chunk of Object.values(bundle)) {
         if (chunk.type !== 'chunk' || !chunk.isEntry) continue;
+
+        if (availableEntries && !availableEntries.includes(chunk.name)) {
+          continue;
+        }
 
         const jsFileName = chunk.fileName; // index.js / index.mjs
         // Skip DTS files
