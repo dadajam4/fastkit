@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 1.0.0-next.3
+
+### Patch Changes
+
+- A fix has been added to work around an issue where `@import` rules were removed when the imported CSS target was an external module, due to the current behavior of rolldown.
+
 ## 1.0.0-next.2
 
 ### Patch Changes

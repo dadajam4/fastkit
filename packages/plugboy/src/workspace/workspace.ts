@@ -32,7 +32,7 @@ import { Builder } from './builder';
 import { getWorkspacePackageJson } from '../package';
 import { WorkspaceEnvPlugin } from '../env';
 import { OptimizeCSSPlugin } from '../postcss/plugin';
-import { rawLoaderPlugin } from './plugins';
+import { rawLoaderPlugin, createPreserveCssImportsPlugin } from './plugins';
 import { type CssOptions } from 'tsdown';
 
 export type WorkspaceStubLink =
@@ -165,6 +165,7 @@ export class PlugboyWorkspace {
       OptimizeCSSPlugin(this),
       WorkspaceEnvPlugin(this),
       rawLoaderPlugin,
+      createPreserveCssImportsPlugin(),
     ];
     this.hooks = hooks;
     this.dts = dts;
