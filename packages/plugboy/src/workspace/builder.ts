@@ -48,6 +48,7 @@ export class Builder {
             ? { vue: true }
             : true,
       treeshake: true,
+      css: this.workspace.cssOptions,
       plugins: this.workspace.plugins,
       entry,
       sourcemap: true,

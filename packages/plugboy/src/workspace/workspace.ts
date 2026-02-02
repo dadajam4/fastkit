@@ -33,6 +33,7 @@ import { getWorkspacePackageJson } from '../package';
 import { WorkspaceEnvPlugin } from '../env';
 import { OptimizeCSSPlugin } from '../postcss/plugin';
 import { rawLoaderPlugin } from './plugins';
+import { type CssOptions } from 'tsdown';
 
 export type WorkspaceStubLink =
   | {
@@ -123,6 +124,8 @@ export class PlugboyWorkspace {
 
   readonly dts: NormalizedDTSSettings;
 
+  cssOptions: CssOptions | undefined;
+
   readonly optimizeCSSOptions: ResolvedOptimizeCSSOptions | false;
 
   private _json: WorkspacePackageJson;
@@ -144,6 +147,7 @@ export class PlugboyWorkspace {
       plugins,
       hooks,
       dts,
+      css,
       optimizeCSS,
     } = ctx;
 
@@ -164,6 +168,7 @@ export class PlugboyWorkspace {
     ];
     this.hooks = hooks;
     this.dts = dts;
+    this.cssOptions = css;
     this.optimizeCSSOptions = optimizeCSS
       ? resolveOptimizeCSSOptions(optimizeCSS)
       : false;
@@ -423,6 +428,7 @@ export async function getWorkspace<
     plugins,
     hooks,
     dts,
+    css: config.css,
     optimizeCSS,
     mergeExternals: (override) => {
       config.external = mergeExternals(config.external, override);

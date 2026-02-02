@@ -1,5 +1,5 @@
 import { definePlugin, findFile } from '@fastkit/plugboy';
-import { vanillaExtractPlugin } from './_origin';
+import { vanillaExtractPlugin, TSDOWN_CSS_FILE_NAME } from './_origin';
 import { VanillaExtractPlugin, PluginOptions, PLUGIN_NAME } from './types';
 import path from 'node:path';
 
@@ -15,6 +15,11 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
     _options: options,
     hooks: {
       async setupWorkspace(ctx, getWorkspace) {
+        ctx.css = {
+          splitting: false,
+          fileName: TSDOWN_CSS_FILE_NAME,
+        };
+
         ctx.mergeExternals(/@vanilla-extract/);
 
         ctx.meta.hasVanillaExtract = !!(await findFile(

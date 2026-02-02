@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 1.0.0-next.2
+
+### Patch Changes
+
+- Support for the tsdown `css` option has been added.
+
 ## 1.0.0-next.1
 
 ### Patch Changes

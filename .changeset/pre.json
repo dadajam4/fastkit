@@ -80,7 +80,9 @@
     "@fastkit/vui-wysiwyg": "8.2.0"
   },
   "changesets": [
+    "chilly-adults-bake",
     "four-poets-attend",
+    "fruity-mammals-divide",
     "great-maps-rule",
     "nice-impalas-prove",
     "open-bushes-flash",

@@ -8,6 +8,7 @@ import { DTSSettings, NormalizedDTSSettings } from './dts';
 import { OptimizeCSSOptions } from './css';
 import { type ExternalOption } from 'rolldown';
 import { type NoExternalOption } from './tsdown';
+import { type CssOptions } from 'tsdown';
 
 export const WORKSPACE_REQUIRED_FIELDS = ['name', 'version'] as const;
 
@@ -97,6 +98,7 @@ export interface UserWorkspaceConfig extends TSDownSyncOptions {
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
+  css?: CssOptions;
   /**
    * CSS optimization options
    *
@@ -222,6 +224,7 @@ export interface WorkspaceSetupContext {
    * @see {@link NormalizedDTSSettings}
    */
   dts: NormalizedDTSSettings;
+  css?: CssOptions;
   /**
    * CSS optimization options
    *

@@ -1,5 +1,14 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 4.0.0-next.6
+
+### Patch Changes
+
+- When plain CSS is imported, it is now merged into the beginning of the vanilla-extract bundle file.
+
+- Updated dependencies []:
+  - @fastkit/plugboy@1.0.0-next.2
+
 ## 4.0.0-next.5
 
 ### Patch Changes

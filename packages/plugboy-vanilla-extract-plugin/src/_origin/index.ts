@@ -68,8 +68,10 @@ export interface Options {
    * @default false
    */
   unstable_injectFilescopes?: boolean;
-  prepend?: string;
+  prepend?: string | PrependFn;
 }
+
+export const TSDOWN_CSS_FILE_NAME = '__ve-tmp__.css';
 
 export function vanillaExtractPlugin(
   {
@@ -193,6 +195,11 @@ export function vanillaExtractPlugin(
         return;
       }
 
+      const tsdownCssBundle = bundle[TSDOWN_CSS_FILE_NAME];
+      if (tsdownCssBundle) {
+        delete bundle[TSDOWN_CSS_FILE_NAME];
+      }
+
       const availableEntries = filterAvailableEntries();
 
       for (const chunk of Object.values(bundle)) {
@@ -220,10 +227,15 @@ export function vanillaExtractPlugin(
         // const name = extract.name || 'bundle.css';
         const prependCode = await prependFn({ cssFileName });
 
+        const tsdownCssCode =
+          tsdownCssBundle && tsdownCssBundle.type === 'asset'
+            ? tsdownCssBundle.source.toString() + '\n'
+            : '';
+
         this.emitFile({
           type: 'asset',
           fileName: cssFileName,
-          source: (prependCode || '') + cssBundle.toString(),
+          source: (prependCode || '') + tsdownCssCode + cssBundle.toString(),
         });
 
         if (extract.sourcemap) {
