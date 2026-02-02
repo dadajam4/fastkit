@@ -15,6 +15,7 @@ import {
   stripSideEffectImportsMatching,
   tryGetPackageName,
 } from './lib';
+import { type PrependFn } from '../types';
 
 const { relative, normalize, dirname } = posix;
 
@@ -84,6 +85,9 @@ export function vanillaExtractPlugin(
   if (extract === true) {
     extract = {};
   }
+  const prependFn: PrependFn =
+    typeof prepend === 'string' ? () => prepend : prepend ? prepend : () => {};
+
   const isProduction = process.env.NODE_ENV === 'production';
 
   let extractedCssIds = new Set<string>(); // only for `extract`
@@ -214,10 +218,12 @@ export function vanillaExtractPlugin(
         extractedCssIds = extractedIds;
 
         // const name = extract.name || 'bundle.css';
+        const prependCode = await prependFn({ cssFileName });
+
         this.emitFile({
           type: 'asset',
           fileName: cssFileName,
-          source: (prepend || '') + cssBundle.toString(),
+          source: (prependCode || '') + cssBundle.toString(),
         });
 
         if (extract.sourcemap) {

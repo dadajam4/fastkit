@@ -1,5 +1,11 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 4.0.0-next.5
+
+### Patch Changes
+
+- The `prepend` option has been enhanced to accept a function, enabling dynamic code injection.
+
 ## 4.0.0-next.4
 
 ### Patch Changes
