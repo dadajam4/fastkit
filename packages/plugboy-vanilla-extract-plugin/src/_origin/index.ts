@@ -67,6 +67,7 @@ export interface Options {
    * @default false
    */
   unstable_injectFilescopes?: boolean;
+  prepend?: string;
 }
 
 export function vanillaExtractPlugin(
@@ -76,6 +77,7 @@ export function vanillaExtractPlugin(
     esbuildOptions,
     extract = false,
     unstable_injectFilescopes = false,
+    prepend,
   }: Options = {},
   filterAvailableEntries: () => string[] | void,
 ): Plugin {
@@ -210,11 +212,12 @@ export function vanillaExtractPlugin(
         const { bundle: cssBundle, extractedCssIds: extractedIds } =
           generateCssBundle(this);
         extractedCssIds = extractedIds;
+
         // const name = extract.name || 'bundle.css';
         this.emitFile({
           type: 'asset',
           fileName: cssFileName,
-          source: cssBundle.toString(),
+          source: (prepend || '') + cssBundle.toString(),
         });
 
         if (extract.sourcemap) {

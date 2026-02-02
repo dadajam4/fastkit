@@ -1,5 +1,11 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 4.0.0-next.4
+
+### Patch Changes
+
+- Added a `prepend` option to insert arbitrary code at the beginning of the bundled CSS file.
+
 ## 4.0.0-next.3
 
 ### Patch Changes

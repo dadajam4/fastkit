@@ -7,7 +7,9 @@ type VanillaExtractPluginOptions = Omit<
 >;
 
 export interface PluginOptions
-  extends Pick<VanillaExtractPluginOptions, 'identifiers' | 'esbuildOptions'> {}
+  extends Pick<VanillaExtractPluginOptions, 'identifiers' | 'esbuildOptions'> {
+  prepend?: string;
+}
 
 export const PLUGIN_NAME = 'plugboy-vanilla-extract';
 
