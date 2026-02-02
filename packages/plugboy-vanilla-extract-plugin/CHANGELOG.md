@@ -1,5 +1,11 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 4.0.0-next.2
+
+### Patch Changes
+
+- This release does not include any functional changes.
+
 ## 4.0.0-next.1
 
 ### Patch Changes
