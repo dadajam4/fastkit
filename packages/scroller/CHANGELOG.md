@@ -1,5 +1,11 @@
 # @fastkit/scroller
 
+## 0.16.0
+
+### Minor Changes
+
+- Remove the `bezier-easing` dependency and replace it with an internal implementation to ensure proper ESM compatibility.
+
 ## 0.15.0
 
 ### Patch Changes

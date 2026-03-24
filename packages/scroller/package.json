@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/scroller",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Library for controlling the scrolling state of DOM elements.",
   "keywords": [
     "fastkit",
@@ -54,8 +54,7 @@
     "@fastkit/ev": "workspace:^",
     "@fastkit/helpers": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
-    "@fastkit/visibility": "workspace:^",
-    "bezier-easing": "^2.1.0"
+    "@fastkit/visibility": "workspace:^"
   },
   "buildOptions": {
     "name": "Scroller"

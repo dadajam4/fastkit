@@ -66,7 +66,6 @@
     "@vanilla-extract/css-utils": "^0.1.6",
     "@vue/runtime-core": "^3.5.22",
     "@vue/test-utils": "^2.4.6",
-    "bezier-easing": "^2.1.0",
     "cookie": "^1.0.2",
     "eslint": "^9.37.0",
     "eslint-plugin-prettier": "^5.5.4",
