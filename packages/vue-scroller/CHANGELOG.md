@@ -13,8 +13,7 @@
 - Updated dependencies []:
   - @fastkit/tiny-logger@0.16.0-next.0
   - @fastkit/vue-utils@0.18.0-next.0
-  - @fastkit/scroller@0.16.0-next.0
-  - @fastkit/scroller@0.16.0
+  - @fastkit/scroller@0.17.0-next.0
 
 ## 0.17.0
 

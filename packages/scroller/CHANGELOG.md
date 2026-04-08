@@ -1,6 +1,6 @@
 # @fastkit/scroller
 
-## 0.16.0-next.0
+## 0.17.0-next.0
 
 ### Minor Changes
 
