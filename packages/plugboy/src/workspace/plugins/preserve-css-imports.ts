@@ -11,7 +11,7 @@ import { definePlugin } from '../../utils';
  */
 
 /**
- * Regular expression for CSS @import
+ * Regular expression for CSS @import (with optional layer() support)
  *
  * Supports the following patterns:
  * - @import 'path';
@@ -19,13 +19,28 @@ import { definePlugin } from '../../utils';
  * - @import url(path);
  * - @import url('path');
  * - @import url("path");
+ * - @import url('path') layer(name);
+ * - @import 'path' layer(name);
+ *
+ * Captures:
+ *   1: import path
+ *   2: layer specification (e.g. " layer(fabric.foundation)") or undefined
  */
 const EXTERNAL_IMPORT_REGEX =
-  /@import\s+(?:url\(\s*['"]?|['"])([^'"\s);]+)(?:['"]?\s*\)|['"])\s*;/g;
+  /@import\s+(?:url\(\s*['"]?|['"])([^'"\s);]+)(?:['"]?\s*\)|['"])(\s+layer\([^)]+\))?\s*;/g;
+
+interface ExternalCssImport {
+  path: string;
+  layer?: string;
+}
+
+function externalImportKey(entry: ExternalCssImport): string {
+  return entry.layer ? `${entry.path}::${entry.layer}` : entry.path;
+}
 
 export function createPreserveCssImportsPlugin() {
-  // Collect external CSS import paths (using Set to avoid duplicates)
-  const externalCssImports = new Set<string>();
+  // Collect external CSS imports (using Map keyed by path+layer to avoid duplicates)
+  const externalCssImports = new Map<string, ExternalCssImport>();
 
   return definePlugin({
     name: 'preserve-css-imports',
@@ -40,11 +55,15 @@ export function createPreserveCssImportsPlugin() {
         let hasExternalImports = false;
         const transformed = code.replace(
           EXTERNAL_IMPORT_REGEX,
-          (match, importPath: string) => {
+          (match, importPath: string, layerSpec?: string) => {
             // If not a relative path (./) or absolute path (/), treat as package reference from node_modules
             if (!importPath.startsWith('.') && !importPath.startsWith('/')) {
               hasExternalImports = true;
-              externalCssImports.add(importPath);
+              const entry: ExternalCssImport = {
+                path: importPath,
+                layer: layerSpec?.trim(),
+              };
+              externalCssImports.set(externalImportKey(entry), entry);
               // Remove @import (replace with empty string)
               return '';
             }
@@ -65,8 +84,10 @@ export function createPreserveCssImportsPlugin() {
           return;
         }
 
-        const importStatements = Array.from(externalCssImports)
-          .map((path) => `@import '${path}';`)
+        const importStatements = Array.from(externalCssImports.values())
+          .map(({ path, layer }) =>
+            layer ? `@import '${path}' ${layer};` : `@import '${path}';`,
+          )
           .join('\n');
 
         for (const chunk of Object.values(bundle)) {

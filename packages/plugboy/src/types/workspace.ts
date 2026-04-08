@@ -122,6 +122,7 @@ export interface ResolvedWorkspaceConfig
         | 'hooks'
         | 'plugins'
         | 'dts'
+        | 'css'
         | 'optimizeCSS'
         | TSDownSyncOption
       >
@@ -148,6 +149,7 @@ export interface ResolvedWorkspaceConfig
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
+  css?: CssOptions;
   /**
    * CSS optimization options
    *

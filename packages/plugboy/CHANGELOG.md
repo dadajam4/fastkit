@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 1.0.0-next.4
+
+### Patch Changes
+
+- Updated the regular expression in `preserve-css-imports.ts` to support import with layer
+
 ## 1.0.0-next.3
 
 ### Patch Changes
