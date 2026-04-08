@@ -137,6 +137,21 @@ export class VueStackService {
   }
 
   /**
+   * Update the `--v-stack-current-z-index` CSS custom property on
+   * `document.documentElement` to reflect the z-index of the frontmost
+   * active stack.
+   */
+  updateCurrentZIndexVar() {
+    if (typeof document === 'undefined') return;
+    const front = this.getFront();
+    const maxActivateOrder = front ? front.activateOrder : 0;
+    document.documentElement.style.setProperty(
+      '--v-stack-current-z-index',
+      String(this.zIndex + maxActivateOrder),
+    );
+  }
+
+  /**
    * Check if the specified stack is currently displayed in the foreground
    *
    * @param control - The stack to check

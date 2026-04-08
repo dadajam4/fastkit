@@ -18,6 +18,11 @@
   - @fastkit/vue-utils@0.18.0-next.0
   - @fastkit/helpers@0.16.0-next.0
   - @fastkit/dom@0.4.0-next.0
+## 0.19.4
+
+### Patch Changes
+
+- [#156](https://github.com/dadajam4/fastkit/pull/156) [`7cfef97`](https://github.com/dadajam4/fastkit/commit/7cfef975d13452f463af1942a7800876874d1e35) Thanks [@schwarz9791](https://github.com/schwarz9791)! - The CSS custom property `--v-stack-current-z-index`, indicating the current z-index, is added to the document root.
 
 ## 0.19.3
 

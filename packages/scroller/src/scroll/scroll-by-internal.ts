@@ -1,4 +1,4 @@
-import BezierEasing, { EasingFunction } from 'bezier-easing';
+import BezierEasing, { EasingFunction } from '../bezier-easing';
 import { removeUndef } from '@fastkit/helpers';
 import easings, { EasingValues } from './easings';
 import {

@@ -674,7 +674,10 @@ export function useStackControl(
       }
     },
     setNeedRender(needRender: boolean) {
-      if (!needRender) state.activateOrder = 0;
+      if (!needRender) {
+        state.activateOrder = 0;
+        $vstack.updateCurrentZIndexVar();
+      }
       state.needRender = alwaysRender.value || needRender;
     },
     outsideClickCloseConditional(ev, pre) {
@@ -933,6 +936,7 @@ export function useStackControl(
       const front = $vstack.getFront();
       const maxActivateOrder = front ? front.activateOrder : 0;
       state.activateOrder = maxActivateOrder + 1;
+      $vstack.updateCurrentZIndexVar();
     },
 
     isFront(filter?: (control: VStackControl) => boolean) {

@@ -68,7 +68,6 @@
     "@vue/runtime-core": "^3.5.22",
     "@vue/test-utils": "^2.4.6",
     "baseline-browser-mapping": "^2.9.14",
-    "bezier-easing": "^2.1.0",
     "cookie": "^1.0.2",
     "eslint": "^9.37.0",
     "eslint-plugin-prettier": "^5.5.4",
