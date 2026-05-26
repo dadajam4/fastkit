@@ -39,6 +39,7 @@ export default defineComponent({
     const opened = ref(false);
     const shouldRenderMenu = ref(false);
     const isDisabledReasonButtonDisabled = ref(true);
+    const isResizeMenuExpanded = ref(false);
     const EXAMPLES = [
       '30569309025904',
       '4000056655665556',
@@ -211,6 +212,49 @@ export default defineComponent({
             />
             <span style={{ marginLeft: '10px' }}>
               ← disabled時はホバーで理由表示、enabled時はクリックでメニュー表示
+            </span>
+          </div>
+        </div>
+
+        {/* Test: VMenu resize tracking when inner content height changes */}
+        <div
+          style={{
+            marginBottom: '20px',
+            padding: '10px',
+            background: '#f5f5f5',
+          }}>
+          <h3>VMenu resize tracking Test</h3>
+          <div>
+            <VMenu
+              v-slots={{
+                activator: ({ attrs }) => (
+                  <VButton {...attrs}>Open Resizable Menu</VButton>
+                ),
+                default: () => (
+                  <div style={{ padding: '10px', width: '240px' }}>
+                    <VButton
+                      onClick={() => {
+                        isResizeMenuExpanded.value =
+                          !isResizeMenuExpanded.value;
+                      }}>
+                      {isResizeMenuExpanded.value ? 'Collapse' : 'Expand'}
+                    </VButton>
+                    <div
+                      v-show={isResizeMenuExpanded.value}
+                      style={{
+                        marginTop: '10px',
+                        height: '300px',
+                        background: 'skyblue',
+                      }}>
+                      動的に出し入れされる大きい要素
+                    </div>
+                    <p>末尾の固定行</p>
+                  </div>
+                ),
+              }}
+            />
+            <span style={{ marginLeft: '10px' }}>
+              ← Expand/Collapseでメニュー外枠の高さが追従するか確認
             </span>
           </div>
         </div>
