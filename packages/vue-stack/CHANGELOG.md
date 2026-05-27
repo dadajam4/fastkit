@@ -18,6 +18,12 @@
   - @fastkit/vue-utils@0.18.0-next.0
   - @fastkit/helpers@0.16.0-next.0
   - @fastkit/dom@0.4.0-next.0
+## 0.19.5
+
+### Patch Changes
+
+- [#159](https://github.com/dadajam4/fastkit/pull/159) [`e27bb75`](https://github.com/dadajam4/fastkit/commit/e27bb75623e35c2a14f0796557404ae0cab00ecc) Thanks [@schwarz9791](https://github.com/schwarz9791)! - Fix `VMenu` not resizing its outer scroller when the inner content shrinks (e.g. collapsing an accordion or hiding nodes with `v-show`). `updateMenuRect` now clears the content element's fixed inline size before calling `getBoundingClientRect`, so the body's natural size is measured instead of the constrained one — previously the measurement was taken before the styles were cleared, leaving stale dimensions that prevented the scroller from shrinking.
+
 ## 0.19.4
 
 ### Patch Changes
