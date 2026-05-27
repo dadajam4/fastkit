@@ -10,7 +10,36 @@ import {
   VButton,
   VSwitch,
 } from '@fastkit/vui';
+import { defineMenuComponent } from '@fastkit/vue-stack';
 import { range } from '@fastkit/helpers';
+
+// Test-only menu component that mimics consumers (e.g. Fabric's UIMenu)
+// whose body conforms to the scroller's clamped height.
+// `min-height: 100%` makes the body match the scroller height whenever the
+// inner content is smaller — the exact condition that triggers the
+// resize-measure-order bug after collapsing previously-expanded content.
+// (Using `min-height` instead of `height: 100%` so that during the expanded
+// state the body still grows with its content and keeps a solid background
+// behind the overflowing rows.)
+const VMenuResizeTest = defineMenuComponent({
+  name: 'VMenuResizeTest',
+  attrs: { class: 'v-menu' },
+  setup(ctx) {
+    ctx.setupContext.expose({ menu: ctx });
+    return (children) => (
+      <div
+        style={{
+          display: 'block',
+          minHeight: '100%',
+          background: '#fff',
+          boxSizing: 'border-box',
+        }}
+        {...ctx.attrs}>
+        {children}
+      </div>
+    );
+  },
+});
 
 function Test(attrs: any = {}) {
   return (
@@ -39,6 +68,7 @@ export default defineComponent({
     const opened = ref(false);
     const shouldRenderMenu = ref(false);
     const isDisabledReasonButtonDisabled = ref(true);
+    const isResizeMenuExpanded = ref(false);
     const EXAMPLES = [
       '30569309025904',
       '4000056655665556',
@@ -211,6 +241,64 @@ export default defineComponent({
             />
             <span style={{ marginLeft: '10px' }}>
               ← disabled時はホバーで理由表示、enabled時はクリックでメニュー表示
+            </span>
+          </div>
+        </div>
+
+        {/* Test: VMenu resize tracking when inner content height changes.
+            Reproduces the bug observed in consumers whose menu body conforms
+            to the scroller's clamped height. Open the menu, click Expand to
+            reveal a tall block (forces max-height clamping / scrollable),
+            then click Collapse — without the fix, the scroller keeps the
+            phantom scrollable area instead of shrinking back. */}
+        <div
+          style={{
+            marginBottom: '20px',
+            padding: '10px',
+            background: '#f5f5f5',
+          }}>
+          <h3>VMenu resize tracking Test</h3>
+          <div>
+            <VMenuResizeTest
+              maxHeight={250}
+              v-slots={{
+                activator: ({ attrs }: any) => (
+                  <VButton {...attrs}>Open Resizable Menu</VButton>
+                ),
+                default: () => (
+                  <div
+                    style={{
+                      padding: '10px',
+                      width: '280px',
+                    }}>
+                    <VButton
+                      onClick={() => {
+                        isResizeMenuExpanded.value =
+                          !isResizeMenuExpanded.value;
+                      }}>
+                      {isResizeMenuExpanded.value ? 'Collapse' : 'Expand'}
+                    </VButton>
+                    <div v-show={isResizeMenuExpanded.value}>
+                      {range(40, 1).map((n) => (
+                        <p
+                          key={n}
+                          style={{
+                            margin: '6px 0',
+                            padding: '4px 8px',
+                            background: 'rgba(135, 206, 235, 0.3)',
+                          }}>
+                          Expanded row {n}
+                        </p>
+                      ))}
+                    </div>
+                    <p style={{ marginTop: '10px' }}>末尾の固定行</p>
+                  </div>
+                ),
+              }}
+            />
+            <span style={{ marginLeft: '10px' }}>
+              ← Expand→Collapse でメニュー外枠が縮むか確認（修正前は phantom
+              スクロール領域が残る）
             </span>
           </div>
         </div>

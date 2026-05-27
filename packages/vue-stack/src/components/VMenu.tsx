@@ -1059,13 +1059,13 @@ export function defineMenuComponent<
         const originalMaxWidth = content.style.maxWidth;
         const originalMaxHeight = content.style.maxHeight;
 
-        const rect = body.getBoundingClientRect();
-
         content.style.display = '';
         content.style.width = '';
         content.style.height = '';
         content.style.maxWidth = '';
         content.style.maxHeight = '';
+
+        const rect = body.getBoundingClientRect();
 
         content.style.display = originalDisplay;
         content.style.width = originalWidth;
