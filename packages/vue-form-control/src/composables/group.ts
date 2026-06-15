@@ -51,8 +51,9 @@ export function createFormGroupSettings() {
   return { props, emits };
 }
 
-export interface FormGroupEmitOptions
-  extends ReturnType<typeof createFormGroupEmits> {}
+export interface FormGroupEmitOptions extends ReturnType<
+  typeof createFormGroupEmits
+> {}
 
 export type FormGroupContext = SetupContext<FormGroupEmitOptions>;
 

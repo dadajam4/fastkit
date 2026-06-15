@@ -18,8 +18,10 @@ import {
 
 export type UseScrollerTarget = 'self' | 'body';
 
-export interface UseScrollerSetting
-  extends Omit<Partial<ScrollerSetting>, 'el'> {
+export interface UseScrollerSetting extends Omit<
+  Partial<ScrollerSetting>,
+  'el'
+> {
   el?: UseScrollerTarget;
 }
 

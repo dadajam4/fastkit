@@ -1,5 +1,14 @@
 # @fastkit/vue-disabled-reason
 
+## 0.3.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.18.0-next.1
+
 ## 0.3.0-next.0
 
 ### Minor Changes

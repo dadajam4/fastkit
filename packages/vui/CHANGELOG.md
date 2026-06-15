@@ -1,5 +1,38 @@
 # @fastkit/vui
 
+## 1.4.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
+- Updated dependencies []:
+  - @fastkit/vue-body-scroll-lock@0.5.0-next.1
+  - @fastkit/vue-disabled-reason@0.3.0-next.1
+  - @fastkit/vue-click-outside@0.5.0-next.1
+  - @fastkit/color-scheme-gen@1.2.0-next.1
+  - @fastkit/vue-color-scheme@0.18.0-next.1
+  - @fastkit/vue-form-control@0.25.0-next.1
+  - @fastkit/media-match-gen@1.2.0-next.1
+  - @fastkit/vue-media-match@0.17.0-next.1
+  - @fastkit/vue-transitions@0.5.0-next.1
+  - @fastkit/vue-app-layout@0.19.0-next.1
+  - @fastkit/color-scheme@2.2.0-next.1
+  - @fastkit/vue-keyboard@0.5.0-next.1
+  - @fastkit/vue-location@0.7.0-next.1
+  - @fastkit/vue-scroller@0.18.0-next.1
+  - @fastkit/media-match@2.2.0-next.1
+  - @fastkit/tiny-logger@0.16.0-next.1
+  - @fastkit/vue-loading@0.18.0-next.1
+  - @fastkit/vue-action@0.6.0-next.1
+  - @fastkit/vue-resize@0.5.0-next.1
+  - @fastkit/icon-font@2.2.0-next.1
+  - @fastkit/vue-stack@0.20.0-next.1
+  - @fastkit/vue-utils@0.18.0-next.1
+  - @fastkit/helpers@0.16.0-next.1
+  - @fastkit/rules@0.16.0-next.1
+  - @fastkit/dom@0.4.0-next.1
+
 ## 1.4.0-next.0
 
 ### Minor Changes

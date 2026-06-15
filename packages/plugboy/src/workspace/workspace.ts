@@ -33,7 +33,7 @@ import { getWorkspacePackageJson } from '../package';
 import { WorkspaceEnvPlugin } from '../env';
 import { OptimizeCSSPlugin } from '../postcss/plugin';
 import { rawLoaderPlugin, createPreserveCssImportsPlugin } from './plugins';
-import { type CssOptions } from 'tsdown';
+import { type CssOptions } from '@tsdown/css';
 
 export type WorkspaceStubLink =
   | {
@@ -432,10 +432,18 @@ export async function getWorkspace<
     css: config.css,
     optimizeCSS,
     mergeExternals: (override) => {
-      config.external = mergeExternals(config.external, override);
+      config.deps ??= {};
+      config.deps.neverBundle = mergeExternals(
+        config.deps.neverBundle,
+        override,
+      );
     },
     mergeNoExternals: (override) => {
-      config.noExternal = mergeNoExternals(config.noExternal, override);
+      config.deps ??= {};
+      config.deps.alwaysBundle = mergeNoExternals(
+        config.deps.alwaysBundle,
+        override,
+      );
     },
   };
 

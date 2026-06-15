@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui-wysiwyg",
-  "version": "8.3.0-next.0",
+  "version": "8.3.0-next.1",
   "description": "vui-wysiwyg",
   "keywords": [],
   "repository": {
@@ -37,12 +37,6 @@
         "default": "./dist/pm/transform.mjs"
       }
     },
-    "./pm/trailing-node": {
-      "types": "./dist/pm/trailing-node.d.mts",
-      "import": {
-        "default": "./dist/pm/trailing-node.mjs"
-      }
-    },
     "./pm/tables": {
       "types": "./dist/pm/tables.d.mts",
       "import": {
@@ -61,28 +55,10 @@
         "default": "./dist/pm/schema-list.mjs"
       }
     },
-    "./pm/schema-basic": {
-      "types": "./dist/pm/schema-basic.d.mts",
-      "import": {
-        "default": "./dist/pm/schema-basic.mjs"
-      }
-    },
     "./pm/model": {
       "types": "./dist/pm/model.d.mts",
       "import": {
         "default": "./dist/pm/model.mjs"
-      }
-    },
-    "./pm/menu": {
-      "types": "./dist/pm/menu.d.mts",
-      "import": {
-        "default": "./dist/pm/menu.mjs"
-      }
-    },
-    "./pm/markdown": {
-      "types": "./dist/pm/markdown.d.mts",
-      "import": {
-        "default": "./dist/pm/markdown.mjs"
       }
     },
     "./pm/keymap": {
@@ -119,12 +95,6 @@
       "types": "./dist/pm/commands.d.mts",
       "import": {
         "default": "./dist/pm/commands.mjs"
-      }
-    },
-    "./pm/collab": {
-      "types": "./dist/pm/collab.d.mts",
-      "import": {
-        "default": "./dist/pm/collab.mjs"
       }
     },
     "./pm/changeset": {
@@ -205,9 +175,6 @@
       "pm/transform": [
         "./dist/pm/transform.d.mts"
       ],
-      "pm/trailing-node": [
-        "./dist/pm/trailing-node.d.mts"
-      ],
       "pm/tables": [
         "./dist/pm/tables.d.mts"
       ],
@@ -217,17 +184,8 @@
       "pm/schema-list": [
         "./dist/pm/schema-list.d.mts"
       ],
-      "pm/schema-basic": [
-        "./dist/pm/schema-basic.d.mts"
-      ],
       "pm/model": [
         "./dist/pm/model.d.mts"
-      ],
-      "pm/menu": [
-        "./dist/pm/menu.d.mts"
-      ],
-      "pm/markdown": [
-        "./dist/pm/markdown.d.mts"
       ],
       "pm/keymap": [
         "./dist/pm/keymap.d.mts"
@@ -246,9 +204,6 @@
       ],
       "pm/commands": [
         "./dist/pm/commands.d.mts"
-      ],
-      "pm/collab": [
-        "./dist/pm/collab.d.mts"
       ],
       "pm/changeset": [
         "./dist/pm/changeset.d.mts"
@@ -299,26 +254,27 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tiptap/extension-bold": "^3.6.5",
-    "@tiptap/extension-bullet-list": "^3.6.5",
-    "@tiptap/extension-history": "^3.6.5",
-    "@tiptap/extension-italic": "^3.6.5",
-    "@tiptap/extension-link": "^3.6.5",
-    "@tiptap/extension-ordered-list": "^3.6.5",
-    "@tiptap/extension-text-align": "^3.6.5",
-    "@tiptap/extension-text-style": "^3.6.5",
-    "@tiptap/extension-underline": "^3.6.5",
-    "@tiptap/pm": "^3.6.5",
-    "@tiptap/starter-kit": "^3.6.5",
-    "@tiptap/vue-3": "^3.6.5",
+    "@tiptap/extension-bold": "^3.26.1",
+    "@tiptap/extension-bullet-list": "^3.26.1",
+    "@tiptap/extension-history": "^3.26.1",
+    "@tiptap/extension-italic": "^3.26.1",
+    "@tiptap/extension-link": "^3.26.1",
+    "@tiptap/extension-ordered-list": "^3.26.1",
+    "@tiptap/extension-text-align": "^3.26.1",
+    "@tiptap/extension-text-style": "^3.26.1",
+    "@tiptap/extension-underline": "^3.26.1",
+    "@tiptap/pm": "^3.26.1",
+    "@tiptap/starter-kit": "^3.26.1",
+    "@tiptap/vue-3": "^3.26.1",
     "@types/markdown-it": "^14.1.2"
   },
   "devDependencies": {
     "@fastkit/vui": "workspace:^",
-    "vue": "^3.5.22"
+    "vue": "^3.5.38"
   },
   "peerDependencies": {
     "@fastkit/vui": "workspace:^",
-    "vue": "^3.5.0"
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0"
   }
 }

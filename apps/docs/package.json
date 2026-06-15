@@ -33,10 +33,9 @@
     "@fastkit/vue-transitions": "workspace:^",
     "@fastkit/vui": "workspace:^",
     "@fastkit/vui-wysiwyg": "workspace:^",
-    "marked": "^16.4.0"
+    "marked": "^18.0.5"
   },
   "devDependencies": {
-    "@mdi/svg": "^7.4.47",
-    "vite-tsconfig-paths": "^5.1.4"
+    "@mdi/svg": "^7.4.47"
   }
 }

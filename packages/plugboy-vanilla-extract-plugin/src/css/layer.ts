@@ -19,7 +19,8 @@ type LayerStyleRules<CustomRules extends CustomStyleRules | null = null> =
 type ClassNames = string | ClassNames[];
 
 type ComplexLayerStyleRule<CustomRules extends CustomStyleRules | null = null> =
-  LayerStyleRules<CustomRules> | (LayerStyleRules<CustomRules> | ClassNames)[];
+  | LayerStyleRules<CustomRules>
+  | (LayerStyleRules<CustomRules> | ClassNames)[];
 
 type _LayerGlobalStyleRules = NonNullable<GlobalStyleRule['@layer']>[string];
 

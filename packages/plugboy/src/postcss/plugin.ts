@@ -1,7 +1,21 @@
 import type { PlugboyWorkspace } from '../workspace';
 import type { Plugin, ResolvedOptimizeCSSOptions } from '../types';
 import type { Processor, AcceptedPlugin as PostcssPlugin } from 'postcss';
-import type { OutputAsset } from 'rolldown';
+import type { RolldownChunk } from 'tsdown';
+
+/**
+ * The rolldown `OutputAsset` type.
+ *
+ * tsdown no longer re-exports rolldown's `OutputAsset` directly, and rolldown
+ * itself is not a direct dependency. We therefore derive it from the only
+ * rolldown-output type tsdown still exposes (`RolldownChunk`), which is
+ * `(OutputChunk | OutputAsset) & { outDir: string }`.
+ *
+ * - `Extract<..., { type: 'asset' }>` picks the asset variant via its discriminant.
+ * - `Omit<..., 'outDir'>` drops the tsdown-specific augmentation so the type
+ *   matches the plain assets handed to rolldown's `generateBundle` hook.
+ */
+type OutputAsset = Omit<Extract<RolldownChunk, { type: 'asset' }>, 'outDir'>;
 
 async function getPostcss(
   options: ResolvedOptimizeCSSOptions,

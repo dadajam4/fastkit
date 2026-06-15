@@ -6,5 +6,7 @@ export default defineWorkspaceConfig({
     vite: './src/vite/index.ts',
     storybook: './src/storybook/index.ts',
   },
-  external: ['typescript'],
+  deps: {
+    neverBundle: ['typescript'],
+  },
 });

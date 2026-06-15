@@ -190,18 +190,21 @@ export default defineProjectConfig({
 
 ### Custom Plugins
 
-```typescript
-import type { Plugin } from '@fastkit/plugboy';
+A plugin extends a tsdown (Rollup-compatible) plugin with an additional `hooks` field for plugboy lifecycle hooks. Use `definePlugin` to get type inference.
 
-const customPlugin = (): Plugin => ({
-  name: 'custom-plugin',
-  setup(workspace) {
-    // Plugin initialization
-    workspace.hooks.buildStart?.tap('custom-plugin', () => {
-      console.log('Build started');
-    });
-  }
-});
+```typescript
+import { definePlugin } from '@fastkit/plugboy';
+
+const customPlugin = () =>
+  definePlugin({
+    name: 'custom-plugin',
+    hooks: {
+      // Called just before the workspace instance is created
+      setupWorkspace(ctx, getWorkspace) {
+        console.log('Setting up workspace:', ctx.json.name);
+      }
+    }
+  });
 
 export default defineWorkspaceConfig({
   plugins: [customPlugin()]
@@ -280,25 +283,30 @@ export default defineWorkspaceConfig({
     createVueJSXPlugin(),
     createSassPlugin()
   ],
-  external: ['vue']
+  deps: {
+    neverBundle: ['vue']
+  }
 });
 ```
 
 ## Hook System
 
-### Build Hooks
+### Lifecycle Hooks
 
 ```typescript
 export default defineWorkspaceConfig({
   hooks: {
-    buildStart: () => {
-      console.log('Build starting...');
+    // Called just before the workspace instance is created
+    setupWorkspace: (ctx, getWorkspace) => {
+      console.log('Setting up workspace:', ctx.json.name);
     },
-    buildEnd: (result) => {
-      console.log('Build completed:', result);
+    // Called after the workspace instance is created
+    createWorkspace: (workspace) => {
+      console.log('Workspace created:', workspace.name);
     },
-    buildError: (error) => {
-      console.error('Build failed:', error);
+    // Called just before package.json is modified and saved
+    preparePackageJSON: (json, workspace) => {
+      json.sideEffects = false;
     }
   }
 });
@@ -344,8 +352,7 @@ export default defineWorkspaceConfig({
 
 ### Main Dependencies
 
-- `esbuild`: High-speed JavaScript builder
-- `tsdown`: TypeScript build tool
+- `tsdown`: High-speed TypeScript build tool (based on Rolldown)
 - `cac`: CLI creation library
 - `glob`: File matching
 - `cssnano`: CSS optimization

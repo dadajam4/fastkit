@@ -2,8 +2,10 @@ import { App } from 'vue';
 import { VueColorSchemeServiceSettings, ThemeName } from './types';
 import { VueColorSchemeService } from './service';
 
-export interface VueColorSchemePluginSettings
-  extends Omit<VueColorSchemeServiceSettings, 'defaultTheme'> {
+export interface VueColorSchemePluginSettings extends Omit<
+  VueColorSchemeServiceSettings,
+  'defaultTheme'
+> {
   defaultTheme?: ThemeName;
 }
 

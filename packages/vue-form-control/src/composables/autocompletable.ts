@@ -35,8 +35,7 @@ export type AutocompletableInputProps = ExtractPropTypes<
   ReturnType<typeof createAutocompletableInputProps>
 >;
 
-export interface AutocompletableInputControlOptions
-  extends FormNodeControlBaseOptions {}
+export interface AutocompletableInputControlOptions extends FormNodeControlBaseOptions {}
 
 export function createAutocompletableInputControl(
   props: AutocompletableInputProps,

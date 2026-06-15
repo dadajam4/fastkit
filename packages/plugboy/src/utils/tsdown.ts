@@ -3,8 +3,7 @@ import {
   type ChunkAddonObject,
   type ChunkAddonFunction,
 } from 'tsdown';
-import { type ExternalOption } from 'rolldown';
-import { NoExternalOption } from '../types';
+import type { NoExternalOption, ExternalOption } from '../types';
 
 type ChunkAddonFunctionARGS = Parameters<ChunkAddonFunction>;
 

@@ -189,18 +189,21 @@ export default defineProjectConfig({
 
 ### カスタムプラグイン
 
-```typescript
-import type { Plugin } from '@fastkit/plugboy';
+プラグインは tsdown（Rollup互換）プラグインを拡張し、plugboyのライフサイクルフック用の `hooks` フィールドを追加できます。型推論を得るには `definePlugin` を使用します。
 
-const customPlugin = (): Plugin => ({
-  name: 'custom-plugin',
-  setup(workspace) {
-    // プラグイン初期化
-    workspace.hooks.buildStart?.tap('custom-plugin', () => {
-      console.log('Build started');
-    });
-  }
-});
+```typescript
+import { definePlugin } from '@fastkit/plugboy';
+
+const customPlugin = () =>
+  definePlugin({
+    name: 'custom-plugin',
+    hooks: {
+      // ワークスペースインスタンスが生成される直前に呼び出されます
+      setupWorkspace(ctx, getWorkspace) {
+        console.log('Setting up workspace:', ctx.json.name);
+      }
+    }
+  });
 
 export default defineWorkspaceConfig({
   plugins: [customPlugin()]
@@ -279,25 +282,30 @@ export default defineWorkspaceConfig({
     createVueJSXPlugin(),
     createSassPlugin()
   ],
-  external: ['vue']
+  deps: {
+    neverBundle: ['vue']
+  }
 });
 ```
 
 ## フック システム
 
-### ビルドフック
+### ライフサイクルフック
 
 ```typescript
 export default defineWorkspaceConfig({
   hooks: {
-    buildStart: () => {
-      console.log('Build starting...');
+    // ワークスペースインスタンスが生成される直前に呼び出されます
+    setupWorkspace: (ctx, getWorkspace) => {
+      console.log('Setting up workspace:', ctx.json.name);
     },
-    buildEnd: (result) => {
-      console.log('Build completed:', result);
+    // ワークスペースインスタンスの生成後に呼び出されます
+    createWorkspace: (workspace) => {
+      console.log('Workspace created:', workspace.name);
     },
-    buildError: (error) => {
-      console.error('Build failed:', error);
+    // package.json が修正・保存される直前に呼び出されます
+    preparePackageJSON: (json, workspace) => {
+      json.sideEffects = false;
     }
   }
 });

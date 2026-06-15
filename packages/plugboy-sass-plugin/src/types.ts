@@ -4,8 +4,10 @@ import { type Options as SassOptions } from 'sass';
 
 type RollupPluginSassOptions = NonNullable<Parameters<typeof sass>[0]>;
 
-export interface PluginOptions
-  extends Pick<RollupPluginSassOptions, 'include' | 'exclude'> {
+export interface PluginOptions extends Pick<
+  RollupPluginSassOptions,
+  'include' | 'exclude'
+> {
   sass?: SassOptions<'async'>;
 }
 

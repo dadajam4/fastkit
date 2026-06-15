@@ -7,8 +7,7 @@ type VanillaExtractVitePluginOptions = NonNullable<
   Parameters<typeof vanillaExtractPlugin>[0]
 >;
 
-export interface ViteVanillaExtractPluginOptions
-  extends VanillaExtractVitePluginOptions {}
+export interface ViteVanillaExtractPluginOptions extends VanillaExtractVitePluginOptions {}
 
 export async function ViteVanillaExtractPlugin(
   options: ViteVanillaExtractPluginOptions = {},

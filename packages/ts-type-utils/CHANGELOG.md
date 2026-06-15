@@ -1,5 +1,11 @@
 # @fastkit/ts-type-utils
 
+## 0.2.2-next.0
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
 ## 0.2.1
 
 ### Patch Changes

@@ -85,13 +85,12 @@ export interface UserProjectConfig {
  * Project Configuration
  */
 
-export interface ResolvedProjectConfig
-  extends Required<
-    Omit<
-      UserProjectConfig,
-      'scripts' | 'tsconfig' | 'hooks' | 'plugins' | 'dts' | 'optimizeCSS'
-    >
-  > {
+export interface ResolvedProjectConfig extends Required<
+  Omit<
+    UserProjectConfig,
+    'scripts' | 'tsconfig' | 'hooks' | 'plugins' | 'dts' | 'optimizeCSS'
+  >
+> {
   /**
    * Workspace script templates list
    * @remarks Used to create a new workspace with the `plugboy gen` CLI command.

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy-vue-jsx-plugin",
-  "version": "4.0.0-next.0",
+  "version": "4.0.0-next.1",
   "description": "",
   "keywords": [],
   "repository": {
@@ -43,12 +43,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "unplugin-vue-jsx": "^0.8.1"
+    "unplugin-vue-jsx": "^0.9.0"
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:^",
-    "@vitejs/plugin-vue-jsx": "^5.1.3",
-    "vite": "^7.1.9"
+    "@vitejs/plugin-vue-jsx": "^5.1.5",
+    "vite": "^8.0.16"
   },
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:^",

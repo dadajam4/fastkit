@@ -43,10 +43,9 @@ export const DISABLED_REASON_PROPS = {
   }),
 };
 
-export interface DisabledReasonInput
-  extends ExtractPublicPropTypes<
-    typeof DISABLED_REASON_PROPS & typeof DISABLED_REASON_BASE_PROPS
-  > {}
+export interface DisabledReasonInput extends ExtractPublicPropTypes<
+  typeof DISABLED_REASON_PROPS & typeof DISABLED_REASON_BASE_PROPS
+> {}
 
 export const VDisabledReason = defineDisabledReasonComponent({
   name: 'VDisabledReason',

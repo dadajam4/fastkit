@@ -1,5 +1,16 @@
 # @fastkit/vite-plugin-vui
 
+## 3.4.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.16.0-next.1
+  - @fastkit/vite-kit@1.3.0-next.1
+  - @fastkit/vui@1.4.0-next.1
+
 ## 3.4.0-next.0
 
 ### Minor Changes

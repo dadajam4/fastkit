@@ -1,5 +1,11 @@
 # @fastkit/stylelint-config
 
+## 0.16.1-next.0
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
 ## 0.16.0
 
 ### Minor Changes

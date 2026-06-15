@@ -128,11 +128,8 @@ export interface VueI18nSpaceOptions<
   LocaleName extends string = string,
   BaseLocale extends LocaleName = LocaleName,
   LocaleMeta extends I18nLocaleMeta = I18nLocaleMeta,
-  Components extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   StrategyCustomInterface extends { [key in keyof any]: any } = {},
 > extends I18nSpaceOptions<LocaleName, BaseLocale, LocaleMeta, Components> {
   /**

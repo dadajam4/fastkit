@@ -1,5 +1,11 @@
 # @fastkit/plugboy-vue-jsx-plugin
 
+## 4.0.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
 ## 4.0.0-next.0
 
 ### Major Changes

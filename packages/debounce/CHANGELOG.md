@@ -1,5 +1,11 @@
 # @fastkit/debounce
 
+## 0.3.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
 ## 0.3.0-next.0
 
 ### Minor Changes

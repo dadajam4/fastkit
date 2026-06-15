@@ -75,8 +75,9 @@ async function getBuiltinsDir() {
   return path.join(pkgDir, 'node_modules/@fastkit/vui/dist/builtins');
 }
 
-export interface ViteVuiPluginOptions
-  extends Partial<Pick<VuiServiceOptions, 'uiSettings' | 'icons'>> {
+export interface ViteVuiPluginOptions extends Partial<
+  Pick<VuiServiceOptions, 'uiSettings' | 'icons'>
+> {
   dynamicDest?: string;
   colorScheme?: string;
   mediaMatch?: string;
@@ -86,8 +87,10 @@ export interface ViteVuiPluginOptions
   onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }
 
-export interface ViteVuiPluginResultSettings
-  extends Pick<VuiServiceOptions, 'uiSettings' | 'icons'> {
+export interface ViteVuiPluginResultSettings extends Pick<
+  VuiServiceOptions,
+  'uiSettings' | 'icons'
+> {
   colorScheme: string;
   mediaMatch: string;
 }

@@ -1,5 +1,11 @@
 # @fastkit/media-match
 
+## 2.2.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
 ## 2.2.0-next.0
 
 ### Minor Changes

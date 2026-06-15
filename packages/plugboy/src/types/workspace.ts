@@ -6,9 +6,9 @@ import type { UserPluginOption, Plugin } from './plugin';
 import type { BuildedHooks, UserHooks } from './hook';
 import { DTSSettings, NormalizedDTSSettings } from './dts';
 import { OptimizeCSSOptions } from './css';
-import { type ExternalOption } from 'rolldown';
+import type { ExternalOption } from '../types';
 import { type NoExternalOption } from './tsdown';
-import { type CssOptions } from 'tsdown';
+import { type CssOptions } from '@tsdown/css';
 
 export const WORKSPACE_REQUIRED_FIELDS = ['name', 'version'] as const;
 
@@ -56,11 +56,10 @@ export type RawWorkspaceEntries = Record<string, RawWorkspaceEntry>;
 
 export const TSDOWN_SYNC_OPTIONS = [
   'define',
-  'noExternal',
-  'external',
   'skipNodeModulesBundle',
   'onSuccess',
   'copy',
+  'deps',
 ] as const satisfies (keyof TSDownConfig)[];
 
 type TSDownSyncOption = (typeof TSDOWN_SYNC_OPTIONS)[number];
@@ -115,7 +114,8 @@ export interface UserWorkspaceConfig extends TSDownSyncOptions {
  * Workspace Configuration
  */
 export interface ResolvedWorkspaceConfig
-  extends Required<
+  extends
+    Required<
       Omit<
         UserWorkspaceConfig,
         | 'entries'

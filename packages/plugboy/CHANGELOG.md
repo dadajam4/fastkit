@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 1.0.0-next.5
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
 ## 1.0.0-next.4
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @fastkit/accept-language
 
+## 0.16.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
+- Updated dependencies []:
+  - @fastkit/helpers@0.16.0-next.1
+
 ## 0.16.0-next.0
 
 ### Minor Changes

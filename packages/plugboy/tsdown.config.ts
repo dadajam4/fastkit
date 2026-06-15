@@ -30,13 +30,15 @@ export default defineConfig({
   clean: true,
   // splitting: false,
   sourcemap: true,
-  external: [
-    /^@vanilla-extract/,
-    /^@babel/,
-    /^@vue/,
-    'typescript',
-    'postcss',
-    'acorn',
-    'magic-string',
-  ],
+  deps: {
+    neverBundle: [
+      /^@vanilla-extract/,
+      /^@babel/,
+      /^@vue/,
+      'typescript',
+      'postcss',
+      'acorn',
+      'magic-string',
+    ],
+  },
 });

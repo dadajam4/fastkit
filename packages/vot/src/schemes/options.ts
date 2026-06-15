@@ -116,8 +116,10 @@ export type ExtendedRouteRaw = RouteLocationRaw & {
   meta?: Meta;
 };
 
-export interface VotRouterOptions
-  extends Omit<RouterOptions, 'routes' | 'history'> {
+export interface VotRouterOptions extends Omit<
+  RouterOptions,
+  'routes' | 'history'
+> {
   RouterLink?: any;
   useLink?: typeof useLink;
 }

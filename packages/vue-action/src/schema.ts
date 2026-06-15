@@ -1,7 +1,7 @@
 import type {
   PropType,
   ExtractPropTypes,
-  CSSProperties,
+  StyleValue,
   ButtonHTMLAttributes,
   VNode,
   UnwrapRef,
@@ -32,7 +32,8 @@ export interface CustomRouterLinkProps {}
 export type RouterLinkPropKey = keyof RouterLinkProps;
 
 export interface ActionableRouterLinkProps
-  extends Partial<Pick<RouterLinkProps, 'to'>>,
+  extends
+    Partial<Pick<RouterLinkProps, 'to'>>,
     Omit<RouterLinkProps, 'to'>,
     CustomRouterLinkProps {}
 
@@ -211,15 +212,14 @@ type ActionableAttrsProps = {
 
 export interface ActionableCustomProps {}
 
-export interface ActionableCustomPropsInput
-  extends ExtractPublicPropTypes<ActionableCustomProps> {}
+export interface ActionableCustomPropsInput extends ExtractPublicPropTypes<ActionableCustomProps> {}
 
-export interface ExtractedActionableCustomProps
-  extends ExtractPropTypes<ActionableCustomProps> {}
+export interface ExtractedActionableCustomProps extends ExtractPropTypes<ActionableCustomProps> {}
 
 /** Component property options for actionable components */
 export interface ActionableInheritPropOptions
-  extends ActionableAttrsProps,
+  extends
+    ActionableAttrsProps,
     PointableAttributesProps,
     FocusableAttributesProps,
     ActionableCustomProps {
@@ -228,7 +228,7 @@ export interface ActionableInheritPropOptions
   /** class name */
   class: PropType<any>;
   /** style */
-  style: PropType<CSSProperties>;
+  style: PropType<StyleValue>;
   /**
    * HTML tag name to be adopted if neither the `a` tag nor the `button` tag is resolved
    */

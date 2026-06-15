@@ -20,13 +20,14 @@ import {
 
 const modelValue = Array as PropType<File[]>;
 
-export interface FileInputNodeControlOptions
-  extends FormNodeControlBaseOptions {
+export interface FileInputNodeControlOptions extends FormNodeControlBaseOptions {
   defaultMultiple?: boolean;
 }
 
-export interface FileInputNodeFile
-  extends Pick<File, 'name' | 'type' | 'size' | 'lastModified'> {
+export interface FileInputNodeFile extends Pick<
+  File,
+  'name' | 'type' | 'size' | 'lastModified'
+> {
   readonly _file: File;
   readonly truncatedName: string;
   readonly readableSize: string;
@@ -149,8 +150,9 @@ export function createFileInputNodeSettings(
   return { props, emits };
 }
 
-export interface FileInputNodeEmits
-  extends ReturnType<typeof createFileInputNodeEmits> {}
+export interface FileInputNodeEmits extends ReturnType<
+  typeof createFileInputNodeEmits
+> {}
 
 export type FileInputNodeContext = SetupContext<FileInputNodeEmits>;
 

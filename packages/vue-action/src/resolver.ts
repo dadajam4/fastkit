@@ -32,7 +32,8 @@ export interface ActionableAttrsResolverSetupContext {
  * Context information when resolving attributes
  */
 export interface ActionableAttrsResolverContext
-  extends ActionableAttrsResolverSetupContext,
+  extends
+    ActionableAttrsResolverSetupContext,
     CustomActionableAttrsResolverContext {
   getAttr<AttrName extends keyof ActionableInheritProps>(
     attrName: AttrName,
@@ -152,8 +153,12 @@ export function useActionableResolvedAttrs(
     customProps: ActionableCustomProps,
   ] => {
     const { attrs } = ctx.setupContext;
-    if (!_handlers.length) return [{ ...attrs }, {}];
-    let modifiedAttrs = { ...attrs };
+    // Vue 3.5 types `SetupContext['attrs']` with a `style?: StyleValue` (which
+    // allows `null`/arrays/strings), so the spread is not directly assignable to
+    // `ActionableInheritProps` (whose `style` is `CSSProperties | undefined`).
+    // `attrs` is loosely typed runtime input, so cast to the narrower type.
+    if (!_handlers.length) return [{ ...attrs } as ActionableInheritProps, {}];
+    let modifiedAttrs = { ...attrs } as ActionableInheritProps;
     let customProps = {} as ActionableCustomProps;
     for (const handler of _handlers) {
       const handlerResult = handler(modifiedAttrs, _ctx);

@@ -1,3 +1,5 @@
+// @vitest-environment jsdom
+// Mounts components via @vue/test-utils, which requires a DOM.
 import { describe, it, expect } from 'vitest';
 import { defineComponent, nextTick, h } from 'vue';
 import { mount, VueWrapper } from '@vue/test-utils';

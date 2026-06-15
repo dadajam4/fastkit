@@ -46,11 +46,11 @@ export interface DefineSnackbarSettings<
   Emits extends EmitsOptions,
   Slots extends SlotsType,
 > extends DefineStackableSettings<
-    Props & SnackbarPropsOptions,
-    Emits,
-    Slots,
-    SnackbarAPI
-  > {
+  Props & SnackbarPropsOptions,
+  Emits,
+  Slots,
+  SnackbarAPI
+> {
   props?: Props;
   emits?: Emits;
   slots?: Slots;

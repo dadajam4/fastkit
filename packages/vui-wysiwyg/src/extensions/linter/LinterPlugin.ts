@@ -28,8 +28,10 @@ export interface WysiwygLinterResult {
   fix: WysiwygLinterFixer[];
 }
 
-export interface RawLinterResult
-  extends Omit<WysiwygLinterResult, 'level' | 'fix' | 'id' | 'icon'> {
+export interface RawLinterResult extends Omit<
+  WysiwygLinterResult,
+  'level' | 'fix' | 'id' | 'icon'
+> {
   level?: WysiwygLinterResultLevel;
   icon?: boolean;
   fix?: WysiwygLinterFixer | WysiwygLinterFixer[];

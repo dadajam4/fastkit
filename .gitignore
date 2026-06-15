@@ -25,3 +25,7 @@ coverage
 play.ts
 _private
 .memo
+
+# Claude Code (personal/local settings; not for sharing)
+.claude/settings.json
+.claude/settings.local.json

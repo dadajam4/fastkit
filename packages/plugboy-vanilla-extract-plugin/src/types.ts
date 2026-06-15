@@ -12,8 +12,10 @@ export type PrependFn = (ctx: {
   cssFileName: string;
 }) => PrependFnResultValue | Promise<PrependFnResultValue>;
 
-export interface PluginOptions
-  extends Pick<VanillaExtractPluginOptions, 'identifiers' | 'esbuildOptions'> {
+export interface PluginOptions extends Pick<
+  VanillaExtractPluginOptions,
+  'identifiers' | 'esbuildOptions'
+> {
   /**
    * Inserts arbitrary code at the beginning of the generated CSS bundle.
    * This is useful for injecting global directives or comments.

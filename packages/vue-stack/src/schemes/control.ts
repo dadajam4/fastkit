@@ -9,6 +9,7 @@ import {
   SlotsType,
   ComponentPublicInstance,
   type HTMLAttributes,
+  type StyleValue as VueStyleValue,
 } from 'vue';
 import { RouteLocationNormalized } from 'vue-router';
 import { StyleValue, defineSlots, rawNumberProp } from '@fastkit/vue-utils';
@@ -603,7 +604,7 @@ export function createStackableProps<T extends string | JavaScriptTransition>(
     /** Class attributes */
     class: null,
     /** Style attributes */
-    style: null as unknown as PropType<StyleValue>,
+    style: null as unknown as PropType<VueStyleValue>,
     /**
      * Transition settings
      *

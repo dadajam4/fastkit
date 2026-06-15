@@ -1,5 +1,16 @@
 # @fastkit/vue-utils
 
+## 0.18.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
+- Updated dependencies []:
+  - @fastkit/ts-type-utils@0.2.2-next.0
+  - @fastkit/visibility@0.16.0-next.1
+  - @fastkit/helpers@0.16.0-next.1
+
 ## 0.18.0-next.0
 
 ### Minor Changes

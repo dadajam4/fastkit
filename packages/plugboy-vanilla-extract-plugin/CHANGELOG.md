@@ -1,5 +1,11 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 4.0.0-next.7
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
 ## 4.0.0-next.6
 
 ### Patch Changes

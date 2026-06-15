@@ -3,6 +3,8 @@ import eslintHtmlParser from 'eslint-html-parser';
 import tseslint from 'typescript-eslint';
 import { fastkitRules } from './shared.mjs';
 
+export { tseslint };
+
 export default [
   {
     name: 'ignore for test',

@@ -56,16 +56,10 @@ export class VueI18nSubSpaceProvider<
   LocaleName extends string = string,
   BaseLocale extends LocaleName = LocaleName,
   LocaleMeta extends I18nLocaleMeta = I18nLocaleMeta,
-  SpaceComponents extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
-  SubComponents extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  SpaceComponents extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  SubComponents extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   StrategyCustomInterface extends { [key in keyof any]: any } = {},
 > {
   /**

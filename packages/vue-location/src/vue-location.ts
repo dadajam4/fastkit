@@ -61,8 +61,9 @@ export interface LocationServiceContext {
   router: Router;
 }
 
-export interface WatchRouteOptions<Immediate = boolean>
-  extends WatchOptions<Immediate> {
+export interface WatchRouteOptions<
+  Immediate = boolean,
+> extends WatchOptions<Immediate> {
   /**
    * Automatically stop watching when the component is unmounted
    */

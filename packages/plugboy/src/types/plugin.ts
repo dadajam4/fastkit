@@ -1,8 +1,8 @@
-import { RolldownPlugin } from './rolldown';
+import { type TsdownPlugin } from './tsdown';
 import type { UserHooks } from './hook';
 import type { MaybePromise, NullValue } from './_utils';
 
-export interface Plugin<A = any> extends RolldownPlugin<A> {
+export interface Plugin<A = any> extends TsdownPlugin<A> {
   hooks?: UserHooks;
 }
 

@@ -1,5 +1,14 @@
 # @fastkit/helpers
 
+## 0.16.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
+- Updated dependencies []:
+  - @fastkit/ts-type-utils@0.2.2-next.0
+
 ## 0.16.0-next.0
 
 ### Minor Changes

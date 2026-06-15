@@ -24,15 +24,28 @@ export function ViteTSTinyMeta(): Plugin {
     configureServer(devServer) {
       EntryWatcher.setServer(devServer);
     },
-    resolveId(id, importer) {
+    async resolveId(id, importer) {
       if (filter(id) && importer) {
         if (JSON_EXT_MATCH_RE.test(id)) {
-          const fromDir = path.dirname(importer);
-          const absolutePath = path.resolve(fromDir, id);
-          const resolvedId =
-            RESOLVED_VIRTUAL_MODULE_ID_PREFIX +
-            absolutePath.replace(JSON_EXT_MATCH_RE, '');
-          return resolvedId;
+          // `$types.json` is a virtual module, so it can't be resolved by Vite
+          // directly. Resolve its real `$types.ts` sibling through Vite first
+          // so that path aliases (tsconfig `paths`, `resolve.alias`, etc.) are
+          // applied before we build the virtual module id. This matters because
+          // this plugin runs with `enforce: 'pre'`, ahead of Vite's core path
+          // resolution — a naive `path.resolve(dirname(importer), id)` would
+          // treat an unresolved alias like `@@@/...` as a relative segment and
+          // produce a bogus path. Fall back to the naive form for plain
+          // relative ids (e.g. when `this.resolve` yields nothing).
+          const tsRequest = id.replace(JSON_EXT_MATCH_RE, '.ts');
+          const resolved = await this.resolve(tsRequest, importer, {
+            skipSelf: true,
+          });
+          const base = resolved
+            ? resolved.id.replace(/\.ts$/, '')
+            : path
+                .resolve(path.dirname(importer), id)
+                .replace(JSON_EXT_MATCH_RE, '');
+          return RESOLVED_VIRTUAL_MODULE_ID_PREFIX + base;
         }
       }
       return null;

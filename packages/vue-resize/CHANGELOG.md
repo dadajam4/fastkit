@@ -1,5 +1,16 @@
 # @fastkit/vue-resize
 
+## 0.5.0-next.1
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.18.0-next.1
+  - @fastkit/debounce@0.3.0-next.1
+  - @fastkit/helpers@0.16.0-next.1
+
 ## 0.5.0-next.0
 
 ### Minor Changes

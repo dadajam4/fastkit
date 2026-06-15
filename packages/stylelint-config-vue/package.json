@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/stylelint-config-vue",
-  "version": "0.3.0",
+  "version": "0.3.1-next.0",
   "description": "@fastkit/stylelint-config-vue",
   "buildOptions": {
     "ignore": true
@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/stylelint-config#readme",
   "peerDependencies": {
-    "stylelint": "^15.6.0"
+    "stylelint": "^17.0.0"
   },
   "dependencies": {
     "@fastkit/stylelint-config": "workspace:^",

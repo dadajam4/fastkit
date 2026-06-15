@@ -1,3 +1,40 @@
 packages:
   - 'packages/**'
   - 'apps/**'
+
+allowBuilds:
+  '@parcel/watcher': true
+  core-js-pure: false
+  esbuild: true
+  mozjpeg: true
+  pngquant-bin: true
+
+# Exclude dependency versions published less than 3 days (4320 minutes) ago (pnpm 11 supply-chain protection).
+minimumReleaseAge: 4320
+
+overrides:
+  '@types/node': ^24.13.2
+  # stylelint-config-recommended-vue@1.6.1 pulls stylelint-config-recommended via
+  # an open `>=6.0.0` range that resolves to a stylelint 16-era version; pin it to
+  # the stylelint 17 compatible major to match the rest of the toolchain.
+  stylelint-config-recommended: ^18.0.0
+
+peerDependencyRules:
+  allowedVersions:
+    # nunjucks declares chokidar as an optional peer pinned to ^3.3.0 (used only
+    # for its own file-watching, which we don't use). chokidar 5 is intentionally
+    # installed as a direct dependency of @fastkit/icon-font-gen.
+    chokidar: '5'
+  ignoreMissing:
+    - typescript
+    - eslint
+    - prettier
+    - stylelint
+    - postcss
+    - vitest
+    - esbuild
+    - vite
+    - vue
+    - '@tiptap/core'
+    - '@tiptap/pm'
+    - postcss-html

@@ -3,7 +3,6 @@ import type { Plugin } from 'vite';
 import { ViteVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plugin';
 import { viteVuiPlugin } from '@fastkit/vite-plugin-vui';
 import { votPlugin } from '@fastkit/vot/tool';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { ViteTSTinyMeta } from '@fastkit/ts-tiny-meta/vite';
 import { PackageLoader } from './modules/package-loader/plugin';
 import { MOCK_ITEMS_1 } from './src/pages/vui/index/components/tabs/-tabs';
@@ -30,6 +29,9 @@ export default defineConfig({
     proxy: {
       '/google': 'https://google.com',
     },
+  },
+  resolve: {
+    tsconfigPaths: true,
   },
   build: {
     rollupOptions: {
@@ -62,7 +64,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    tsconfigPaths(),
     ViteTSTinyMeta(),
     ViteVanillaExtractPlugin({
       // @TODO

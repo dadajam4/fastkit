@@ -58,11 +58,11 @@ export type ExtendedEventHandlers<C = undefined> = {
 };
 
 export interface ExtendedSortableOptions<C = undefined>
-  extends Omit<SortableOptions, EventOptionName>,
-    ExtendedEventHandlers<C> {}
+  extends Omit<SortableOptions, EventOptionName>, ExtendedEventHandlers<C> {}
 
-export interface SortableDirectiveValue<C = undefined>
-  extends ExtendedSortableOptions<C> {
+export interface SortableDirectiveValue<
+  C = undefined,
+> extends ExtendedSortableOptions<C> {
   onMounted?: (sortable: Sortable) => void;
   inject?: () => C;
 }

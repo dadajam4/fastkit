@@ -38,8 +38,10 @@ export interface ValidationOptions {
 /**
  * Interface available for validation rule.
  */
-export interface VerifiableRule
-  extends Pick<Rule, 'validate' | 'message' | '$name'> {}
+export interface VerifiableRule extends Pick<
+  Rule,
+  'validate' | 'message' | '$name'
+> {}
 
 /**
  * Verifiable function type.

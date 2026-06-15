@@ -35,12 +35,12 @@ export class Builder {
   async tsdownOptions(overrides?: {
     watch?: boolean;
   }): Promise<ResolvedOptions> {
-    let { _tsdownOptions } = this;
+    const { _tsdownOptions } = this;
     if (_tsdownOptions) return _tsdownOptions;
 
     const { entry, dts } = this;
 
-    _tsdownOptions = {
+    const resolvedOptions: ResolvedOptions = {
       dts:
         dts.inline || typeof dts.compiler === 'function'
           ? false
@@ -57,19 +57,23 @@ export class Builder {
     };
 
     for (const opt of TSDOWN_SYNC_OPTIONS) {
-      _tsdownOptions[opt] = this.workspace.config[opt] as any;
+      resolvedOptions[opt] = this.workspace.config[opt] as any;
     }
 
-    applyPlugboyEnvs(_tsdownOptions);
+    applyPlugboyEnvs(resolvedOptions);
 
-    _tsdownOptions.external = mergeExternals(_tsdownOptions.external, [
-      /^(@fastkit\/)?plugboy(?!\/runtime-utils)/,
-      ...this.workspace.dependencies,
-    ]);
+    resolvedOptions.deps ??= {};
+    resolvedOptions.deps.neverBundle = mergeExternals(
+      resolvedOptions.deps.neverBundle,
+      [
+        /^(@fastkit\/)?plugboy(?!\/runtime-utils)/,
+        ...this.workspace.dependencies,
+      ],
+    );
 
-    this._tsdownOptions = _tsdownOptions;
+    this._tsdownOptions = resolvedOptions;
 
-    return _tsdownOptions;
+    return resolvedOptions;
   }
 
   private async _stubLinkJS(from: string, to: string) {

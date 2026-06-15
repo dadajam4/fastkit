@@ -6,7 +6,8 @@ import {
 } from '../extensions/custom-tag';
 
 export interface WysiwygCustomTagToolSettings
-  extends Pick<WysiwygEditorTool, 'icon' | 'floating'>,
+  extends
+    Pick<WysiwygEditorTool, 'icon' | 'floating'>,
     Partial<WysiwygCustomTagSettings> {}
 
 /**

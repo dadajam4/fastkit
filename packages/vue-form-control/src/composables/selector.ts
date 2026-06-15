@@ -52,13 +52,17 @@ export interface FormSelectorGroup {
   items: FormSelectorItem[];
 }
 
-export interface ResolvedFormSelectorItem
-  extends Omit<FormSelectorItem, 'label'> {
+export interface ResolvedFormSelectorItem extends Omit<
+  FormSelectorItem,
+  'label'
+> {
   label: TypedSlot<FormSelectorControl>;
 }
 
-export interface ResolvedFormSelectorGroup
-  extends Omit<FormSelectorGroup, 'label'> {
+export interface ResolvedFormSelectorGroup extends Omit<
+  FormSelectorGroup,
+  'label'
+> {
   label: TypedSlot<FormSelectorControl>;
   items: ResolvedFormSelectorItem[];
 }
@@ -171,8 +175,9 @@ export function createFormSelectorSettings(
   return { props, emits };
 }
 
-export interface FormSelectorEmitOptions
-  extends ReturnType<typeof createFormSelectorEmits> {}
+export interface FormSelectorEmitOptions extends ReturnType<
+  typeof createFormSelectorEmits
+> {}
 
 export type FormSelectorContext = SetupContext<FormSelectorEmitOptions>;
 

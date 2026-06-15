@@ -57,13 +57,13 @@ export function createFormSelectorItemSettings() {
 
 export type FormSelectorItemInputType = 'checkbox' | 'radio';
 
-export interface FormSelectorItemEmitOptions
-  extends ReturnType<typeof createFormSelectorItemEmits> {}
+export interface FormSelectorItemEmitOptions extends ReturnType<
+  typeof createFormSelectorItemEmits
+> {}
 
 export type FormSelectorItemContext = SetupContext<FormSelectorItemEmitOptions>;
 
-export interface FormSelectorItemControlOptions
-  extends FormNodeControlBaseOptions {
+export interface FormSelectorItemControlOptions extends FormNodeControlBaseOptions {
   parentNodeType?: FormNodeType;
 }
 

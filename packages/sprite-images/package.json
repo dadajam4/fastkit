@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/sprite-images",
-  "version": "1.2.0-next.0",
+  "version": "1.2.0-next.1",
   "description": "Tools for generating sprite images.",
   "keywords": [
     "fastkit",
@@ -54,8 +54,8 @@
   "dependencies": {
     "@fastkit/ev": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
-    "chokidar": "^4.0.3",
-    "fs-extra": "^11.3.2",
+    "chokidar": "^5.0.0",
+    "fs-extra": "^11.3.5",
     "spritesmith": "^3.5.1"
   },
   "buildOptions": {

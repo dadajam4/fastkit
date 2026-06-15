@@ -38,8 +38,10 @@ export interface DTSPreserveTypeTarget {
  *
  * @see {@link DTSPreserveTypeTarget}
  */
-export interface NormalizedDTSPreserveTypeTarget
-  extends Omit<DTSPreserveTypeTarget, 'from'> {
+export interface NormalizedDTSPreserveTypeTarget extends Omit<
+  DTSPreserveTypeTarget,
+  'from'
+> {
   /** Regular expression to match the string to be restored */
   from: RegExp;
 }
@@ -71,8 +73,10 @@ export interface DTSPreserveTypeSettings {
  *
  * @see {@link DTSPreserveTypeSettings}
  */
-export interface NormalizedDTSPreserveTypeSettings
-  extends Omit<DTSPreserveTypeSettings, 'targets'> {
+export interface NormalizedDTSPreserveTypeSettings extends Omit<
+  DTSPreserveTypeSettings,
+  'targets'
+> {
   /** List of normalized type preservation targets */
   targets: NormalizedDTSPreserveTypeTarget[];
 }

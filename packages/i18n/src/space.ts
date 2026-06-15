@@ -184,11 +184,8 @@ export interface I18nSpaceOptions<
   LocaleName extends string = string,
   BaseLocale extends LocaleName = LocaleName,
   LocaleMeta extends I18nLocaleMeta = I18nLocaleMeta,
-  Components extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
 > {
   /**
    * Configurable storage interface for internationalization services, or a factory for it
@@ -223,11 +220,8 @@ export type I18nSpace<
   LocaleName extends string,
   BaseLocale extends LocaleName,
   LocaleMeta extends I18nLocaleMeta,
-  Components extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   SpaceCustomInterface extends { [key in keyof any]: any } = {},
 > = I18nSpaceStaticImpl<LocaleName, BaseLocale, LocaleMeta> & {
   /** space definition */
@@ -524,21 +518,14 @@ export class I18nSubSpace<
   LocaleName extends string,
   BaseLocale extends LocaleName,
   LocaleMeta extends I18nLocaleMeta,
-  Components extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
-  SubComponents extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  SubComponents extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   SpaceCustomInterface extends { [key in keyof any]: any } = {},
   // Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   // SubComponents extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
-> implements I18nSpaceStaticImpl<LocaleName, BaseLocale, LocaleMeta>
-{
+> implements I18nSpaceStaticImpl<LocaleName, BaseLocale, LocaleMeta> {
   /** Internationalization Space */
   readonly space: I18nSpace<
     LocaleName,

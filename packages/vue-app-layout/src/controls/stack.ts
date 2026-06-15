@@ -17,8 +17,7 @@ export interface VueAppStackBackdropSettings {
   onClick?: (ev: PointerEvent) => any;
 }
 
-export interface VueAppStackResolvedBackdropSettings
-  extends VueAppStackBackdropSettings {
+export interface VueAppStackResolvedBackdropSettings extends VueAppStackBackdropSettings {
   color?: string;
   transition: TransitionProps;
   onClick: (ev: PointerEvent) => any;
@@ -72,16 +71,14 @@ export interface VueAppStackPositionYSettings {
 }
 
 export interface VueAppStackPositionSettings
-  extends VueAppStackPositionXSettings,
-    VueAppStackPositionYSettings {}
+  extends VueAppStackPositionXSettings, VueAppStackPositionYSettings {}
 
 export interface VueAppStackBaseSettings {
   transition?: VueAppStackTransitionSettings;
 }
 
 export interface VueAppStackSettings
-  extends VueAppStackBaseSettings,
-    VueAppStackPositionSettings {
+  extends VueAppStackBaseSettings, VueAppStackPositionSettings {
   modelValue?: boolean;
 
   /**

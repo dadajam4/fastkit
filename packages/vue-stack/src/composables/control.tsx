@@ -449,7 +449,10 @@ export function useStackControl(
 
     const setupAttrs = resolveActivatorAttrsSpec(opts.activatorAttrs);
     const propAttrs = resolveActivatorAttrsSpec(props.activatorAttrs);
-    const classNames: string[] = [];
+    // `class` is Vue's `ClassValue` (string | object | array), not just a
+    // string, so collect into a loosely-typed array that Vue normalizes when
+    // bound to `attrs.class` below.
+    const classNames: any[] = [];
     setupAttrs?.class && classNames.push(setupAttrs?.class);
     propAttrs?.class && classNames.push(propAttrs?.class);
 

@@ -261,11 +261,11 @@ export interface I18nComponentScheme<
   ListFormats extends I18nListFormats,
   Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
 > extends I18nComponentSchemeImpl<
-    DateTimeFormats,
-    RelativeTimeFormats,
-    NumberFormats,
-    ListFormats
-  > {
+  DateTimeFormats,
+  RelativeTimeFormats,
+  NumberFormats,
+  ListFormats
+> {
   /** Translation object validators */
   readonly isAvailableTranslations: (translations: Translations) => boolean;
 

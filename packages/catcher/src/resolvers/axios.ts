@@ -40,8 +40,10 @@ const ConfigPicks = [
 /**
  * JSON serializable axios request config
  */
-export interface SerializableAxiosRequestConfig
-  extends Pick<AxiosRequestConfig, (typeof ConfigPicks)[number]> {
+export interface SerializableAxiosRequestConfig extends Pick<
+  AxiosRequestConfig,
+  (typeof ConfigPicks)[number]
+> {
   fullUrl?: string;
 }
 
