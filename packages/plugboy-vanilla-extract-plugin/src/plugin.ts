@@ -1,14 +1,28 @@
 import { definePlugin, findFile, type Plugin } from '@fastkit/plugboy';
-// import { TSDOWN_CSS_FILE_NAME } from './_origin';
 import { vanillaExtractPlugin } from '@vanilla-extract/rollup-plugin';
 import { VanillaExtractPlugin, PluginOptions, PLUGIN_NAME } from './types';
-// import path from 'node:path';
 
 declare module '@fastkit/plugboy' {
   export interface WorkspaceMeta {
     hasVanillaExtract: boolean;
   }
 }
+
+/**
+ * Temporary file name for the CSS that tsdown's own CSS pipeline emits.
+ *
+ * A package can have two independent sources of CSS:
+ * - tsdown's built-in CSS handling, for plain `.css` / `.scss` imports.
+ * - `@vanilla-extract/rollup-plugin`, for `.css.ts` files (extracted into a
+ *   single bundle named after the package).
+ *
+ * If both are pointed at the same final file name they collide
+ * (`FILE_NAME_CONFLICT` — one silently overwrites the other, dropping all of
+ * the vanilla-extract component CSS). To avoid that we route tsdown's CSS to
+ * this temporary name and merge it into the vanilla-extract bundle in
+ * `generateBundle`.
+ */
+const TSDOWN_CSS_FILE_NAME = '__ve-tsdown__.css';
 
 export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
   return definePlugin<VanillaExtractPlugin>({
@@ -28,9 +42,12 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
           : (entryIds[0] ?? ctx.dir.basename);
         const cssFileName = `${cssBaseName}.css`;
 
+        // Keep tsdown's own CSS out of `cssFileName` so it doesn't collide with
+        // the vanilla-extract bundle that also targets `cssFileName`. The two
+        // are merged into a single `cssFileName` later (see the merge hook).
         ctx.css = {
           splitting: false,
-          fileName: cssFileName,
+          fileName: TSDOWN_CSS_FILE_NAME,
         };
 
         ctx.mergeExternals(/@vanilla-extract/);
@@ -64,11 +81,11 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
           // default `assetFileNames` pattern (`assets/[name]-[hash][extname]`),
           // producing e.g. `dist/assets/vue-app-layout-dry0z-1l.css`.
           //
-          // We can't rename it in `generateBundle` because rolldown ignores
-          // mutations to the bundle object. Instead, override `assetFileNames`
-          // via the `outputOptions` hook so this single CSS asset keeps its
-          // derived name verbatim (no hash, no `assets/` dir) while every other
-          // asset keeps its original naming.
+          // We can't *rename* an asset in `generateBundle` because rolldown
+          // ignores mutations to a bundle entry's `fileName`. Instead, override
+          // `assetFileNames` via the `outputOptions` hook so this single CSS
+          // asset keeps its derived name verbatim (no hash, no `assets/` dir)
+          // while every other asset keeps its original naming.
           ctx.plugins.push({
             name: `${PLUGIN_NAME}:rename-css`,
             outputOptions(opts) {
@@ -81,6 +98,31 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
                 return original ?? 'assets/[name]-[hash][extname]';
               };
               return opts;
+            },
+            // Merge tsdown's own CSS (emitted to `TSDOWN_CSS_FILE_NAME`) into the
+            // vanilla-extract bundle so the package ships a single `cssFileName`.
+            // tsdown's CSS comes first so its `@layer` declarations / resets are
+            // established before the extracted component styles. Unlike renaming,
+            // mutating an asset's `source` IS honored by rolldown.
+            generateBundle(_opts, bundle) {
+              const tmp = bundle[TSDOWN_CSS_FILE_NAME];
+              const tmpCss =
+                tmp && tmp.type === 'asset' ? tmp.source.toString() : '';
+              if (tmp) delete bundle[TSDOWN_CSS_FILE_NAME];
+              if (!tmpCss) return;
+
+              const veAsset = bundle[cssFileName];
+              if (veAsset && veAsset.type === 'asset') {
+                veAsset.source = `${tmpCss}\n${veAsset.source.toString()}`;
+              } else {
+                // No vanilla-extract output (e.g. `.css.ts` produced no rules) —
+                // promote tsdown's CSS to the final file name.
+                this.emitFile({
+                  type: 'asset',
+                  fileName: cssFileName,
+                  source: tmpCss,
+                });
+              }
             },
           });
         }
