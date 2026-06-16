@@ -6,22 +6,10 @@ type VanillaExtractPluginOptions = Omit<
   'extract'
 >;
 
-export type PrependFnResultValue = string | void;
-
-export type PrependFn = (ctx: {
-  cssFileName: string;
-}) => PrependFnResultValue | Promise<PrependFnResultValue>;
-
-export interface PluginOptions extends Pick<
+export type PluginOptions = Pick<
   VanillaExtractPluginOptions,
   'identifiers' | 'esbuildOptions'
-> {
-  /**
-   * Inserts arbitrary code at the beginning of the generated CSS bundle.
-   * This is useful for injecting global directives or comments.
-   */
-  prepend?: string | PrependFn;
-}
+>;
 
 export const PLUGIN_NAME = 'plugboy-vanilla-extract';
 
