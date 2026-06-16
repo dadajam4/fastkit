@@ -57,9 +57,6 @@
     "cookie": "^1.1.1",
     "set-cookie-parser": "^3.1.0"
   },
-  "devDependencies": {
-    "@types/set-cookie-parser": "^2.4.10"
-  },
   "buildOptions": {
     "name": "Cookies"
   },

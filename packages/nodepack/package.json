@@ -57,9 +57,6 @@
     "esbuild": "^0.28.1",
     "nodemon": "^3.1.14"
   },
-  "devDependencies": {
-    "@types/nodemon": "^3.1.1"
-  },
   "buildOptions": {
     "name": "Nodepack"
   },

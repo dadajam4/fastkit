@@ -265,8 +265,7 @@
     "@tiptap/extension-underline": "^3.26.1",
     "@tiptap/pm": "^3.26.1",
     "@tiptap/starter-kit": "^3.26.1",
-    "@tiptap/vue-3": "^3.26.1",
-    "@types/markdown-it": "^14.1.2"
+    "@tiptap/vue-3": "^3.26.1"
   },
   "devDependencies": {
     "@fastkit/vui": "workspace:^",
