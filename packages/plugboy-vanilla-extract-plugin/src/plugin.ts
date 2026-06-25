@@ -44,6 +44,20 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
           : (entryIds[0] ?? ctx.dir.basename);
         const cssFileName = `${cssBaseName}.css`;
 
+        // Routing for tsdown's plain-CSS blob (see `writeBundle`). plugboy's CSS
+        // pipeline emits ALL plain (non-`.css.ts`) CSS — e.g. an `@font-face`
+        // sheet `import`ed by an entry — into a single combined file
+        // (`TSDOWN_CSS_FILE_NAME`); it cannot be split per entry (tsdown's own CSS
+        // `splitting` drops the styles entirely when vanilla-extract is present).
+        // The per-entry split in `generateBundle` fills these so the blob is
+        // merged into the right entry CSS files instead of an orphan
+        // `cssFileName`. Defaults (no split) keep the original single-file
+        // behavior. `plainCssTargets`: entry CSS files (`a.css`) that import plain
+        // CSS. `plainCssFallback`: where the blob goes when the split fired but no
+        // entry with a CSS file owns the plain CSS (avoids re-creating an orphan).
+        const plainCssTargets = new Set<string>();
+        let plainCssFallback = cssFileName;
+
         ctx.mergeExternals(/@vanilla-extract/);
 
         ctx.meta.hasVanillaExtract = !!(await findFile(
@@ -138,12 +152,16 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
             // correct, fully-ordered output, so it is left untouched and existing
             // single-entry packages are byte-for-byte unaffected.
             generateBundle(_options, bundle) {
-              // Collect, in import order, the CSS of every `.css.ts` reachable
-              // from `root` through the input module graph (deduped per entry).
-              const collectEntryCss = (root: string): string[] => {
+              // Walk the input module graph from `root`, collecting (deduped, in
+              // import order) the CSS of every `.css.ts` reached (`meta.css`), and
+              // flagging whether any plain (non-`.css.ts`) CSS file is imported.
+              const collectEntryCss = (
+                root: string,
+              ): { css: string[]; hasPlain: boolean } => {
                 const visited = new Set<string>();
                 const seenCss = new Set<string>();
                 const out: string[] = [];
+                let hasPlain = false;
                 const walk = (id: string) => {
                   if (visited.has(id)) return;
                   visited.add(id);
@@ -151,18 +169,29 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
                   if (!info) return;
                   for (const dep of info.importedIds ?? []) {
                     const css = this.getModuleInfo(dep)?.meta?.css;
-                    if (typeof css === 'string' && !seenCss.has(dep)) {
-                      seenCss.add(dep);
-                      out.push(css);
+                    if (typeof css === 'string') {
+                      // vanilla-extract virtual CSS (`*.vanilla.css`).
+                      if (!seenCss.has(dep)) {
+                        seenCss.add(dep);
+                        out.push(css);
+                      }
+                    } else if (/\.css(\?|$)/i.test(dep)) {
+                      // Plain CSS import (no `meta.css`) — its content lives in
+                      // tsdown's combined blob, merged per entry in `writeBundle`.
+                      hasPlain = true;
                     }
                     walk(dep);
                   }
                 };
                 walk(root);
-                return out;
+                return { css: out, hasPlain };
               };
 
-              const entryCss: { name: string; source: string }[] = [];
+              const entryCss: {
+                name: string;
+                source: string;
+                hasPlain: boolean;
+              }[] = [];
 
               for (const chunk of Object.values(bundle)) {
                 if (
@@ -173,16 +202,18 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
                 ) {
                   continue;
                 }
-                const cssChunks = collectEntryCss(chunk.facadeModuleId);
-                if (cssChunks.length) {
+                const { css, hasPlain } = collectEntryCss(chunk.facadeModuleId);
+                if (css.length) {
                   entryCss.push({
                     name: chunk.name,
-                    source: cssChunks.join('\n'),
+                    source: css.join('\n'),
+                    hasPlain,
                   });
                 }
               }
 
-              // 0 or 1 CSS entry → vanilla-extract's bundle is already correct.
+              // 0 or 1 CSS entry → vanilla-extract's bundle is already correct,
+              // and the single-file `writeBundle` fallback applies unchanged.
               if (entryCss.length <= 1) return;
 
               // Replace vanilla-extract's combined bundle with per-entry files.
@@ -212,17 +243,36 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
               ) {
                 delete bundle[cssFileName];
               }
+
+              // Tell `writeBundle` where to merge tsdown's plain-CSS blob: into
+              // each entry CSS file whose entry imports plain CSS. Falling back to
+              // the first entry's file keeps the blob attached to a real, exported
+              // CSS file instead of resurrecting the now-deleted `cssFileName`.
+              plainCssTargets.clear();
+              plainCssFallback = `${entryCss[0].name}.css`;
+              for (const { name, hasPlain } of entryCss) {
+                if (hasPlain) plainCssTargets.add(`${name}.css`);
+              }
             },
-            // Merge tsdown's own CSS (emitted to `TSDOWN_CSS_FILE_NAME`) into the
-            // vanilla-extract bundle so the package ships a single `cssFileName`.
+            // Merge tsdown's own plain-CSS blob (emitted to
+            // `TSDOWN_CSS_FILE_NAME`) into the vanilla-extract CSS file(s).
             //
             // This has to happen in `writeBundle`, not `generateBundle`: tsdown
             // emits its CSS in a separate output pass, so `TSDOWN_CSS_FILE_NAME`
-            // is absent from the bundle our `generateBundle` sees but present
-            // (alongside the vanilla-extract asset) by `writeBundle`. By then both
-            // files are already on disk, so we merge on disk rather than mutating
-            // bundle sources. tsdown's CSS goes first so its `@layer` declarations
-            // / resets are established before the extracted component styles.
+            // is absent from the bundle our `generateBundle` sees but present by
+            // `writeBundle`. By then the vanilla-extract files are already on disk,
+            // so we merge on disk rather than mutating bundle sources. tsdown's
+            // CSS goes first so its `@layer` declarations / resets / `@font-face`
+            // are established before the extracted component styles.
+            //
+            // Targets:
+            // - Per-entry split fired → the entry CSS files whose entries import
+            //   plain CSS (`plainCssTargets`), falling back to the first entry's
+            //   file. Never `cssFileName`, which the split deleted (no orphan).
+            // - No split (single CSS entry) → `cssFileName`, the one combined file.
+            // The combined blob cannot be partitioned per entry, so when several
+            // entries import distinct plain CSS each target receives the whole
+            // blob; in practice plain CSS (fonts/resets) is imported by one entry.
             async writeBundle(outputOptions, bundle) {
               // Only the output pass that emitted tsdown's CSS performs the merge
               // (it is the one whose `bundle` contains `TSDOWN_CSS_FILE_NAME`).
@@ -233,23 +283,30 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
               const tmpCss = tmp.type === 'asset' ? tmp.source.toString() : '';
               const dir = outputOptions.dir ?? '.';
               const tmpPath = path.join(dir, TSDOWN_CSS_FILE_NAME);
-              const targetPath = path.join(dir, cssFileName);
 
-              let targetCss = '';
-              try {
-                targetCss = await fs.readFile(targetPath, 'utf8');
-              } catch {
-                // No vanilla-extract output file (e.g. `.css.ts` produced no
-                // rules) — tsdown's CSS becomes the whole `cssFileName`.
+              if (tmpCss) {
+                const targets = plainCssTargets.size
+                  ? [...plainCssTargets]
+                  : [plainCssFallback];
+
+                await Promise.all(
+                  targets.map(async (target) => {
+                    const targetPath = path.join(dir, target);
+                    let targetCss = '';
+                    try {
+                      targetCss = await fs.readFile(targetPath, 'utf8');
+                    } catch {
+                      // No vanilla-extract file for this target (e.g. `.css.ts`
+                      // produced no rules) — tsdown's CSS becomes the whole file.
+                    }
+                    await fs.writeFile(
+                      targetPath,
+                      targetCss ? `${tmpCss}\n${targetCss}` : tmpCss,
+                    );
+                  }),
+                );
               }
 
-              const merged = tmpCss
-                ? targetCss
-                  ? `${tmpCss}\n${targetCss}`
-                  : tmpCss
-                : targetCss;
-
-              if (merged) await fs.writeFile(targetPath, merged);
               await fs.rm(tmpPath, { force: true });
             },
           });
