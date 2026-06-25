@@ -113,9 +113,21 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
             // export, but only `cssFileName` is ever produced. We rebuild the
             // per-entry files from data vanilla-extract already exposes:
             // `moduleInfo.meta.css` (its public hand-off for extracted CSS, the
-            // same field its own bundler reads) keyed by each entry chunk's
-            // `imports`. We never parse vanilla-extract's asset names or re-add the
-            // import statements it strips, so the only coupling is `meta.css`.
+            // same field its own bundler reads).
+            //
+            // CSS is attributed to an entry by walking the INPUT module graph from
+            // that entry's `facadeModuleId` via `getModuleInfo().importedIds`, NOT
+            // by reading the output chunk's `imports`. `chunk.imports` lists output
+            // chunk file names plus external ids, and whether vanilla-extract's
+            // external virtual CSS ids appear there is rolldown-version-dependent
+            // (some versions only list real output chunks, so the lookup finds
+            // nothing and the split silently no-ops). The input graph is stable: it
+            // always yields the `.css.ts` modules an entry reaches, regardless of
+            // how rolldown chunks the output. A `.css.ts` shared by several entries
+            // is included in each entry's file (self-contained per-entry CSS).
+            //
+            // We never parse vanilla-extract's asset names or re-add the import
+            // statements it strips, so the only coupling is `meta.css`.
             //
             // Runs before `plugboy-optimize-css` (appended later in
             // `workspace.plugins`), so each emitted per-entry file still goes
@@ -126,21 +138,42 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
             // correct, fully-ordered output, so it is left untouched and existing
             // single-entry packages are byte-for-byte unaffected.
             generateBundle(_options, bundle) {
+              // Collect, in import order, the CSS of every `.css.ts` reachable
+              // from `root` through the input module graph (deduped per entry).
+              const collectEntryCss = (root: string): string[] => {
+                const visited = new Set<string>();
+                const seenCss = new Set<string>();
+                const out: string[] = [];
+                const walk = (id: string) => {
+                  if (visited.has(id)) return;
+                  visited.add(id);
+                  const info = this.getModuleInfo(id);
+                  if (!info) return;
+                  for (const dep of info.importedIds ?? []) {
+                    const css = this.getModuleInfo(dep)?.meta?.css;
+                    if (typeof css === 'string' && !seenCss.has(dep)) {
+                      seenCss.add(dep);
+                      out.push(css);
+                    }
+                    walk(dep);
+                  }
+                };
+                walk(root);
+                return out;
+              };
+
               const entryCss: { name: string; source: string }[] = [];
 
               for (const chunk of Object.values(bundle)) {
                 if (
                   chunk.type !== 'chunk' ||
                   !chunk.isEntry ||
-                  !chunk.fileName.endsWith('.mjs')
+                  !chunk.fileName.endsWith('.mjs') ||
+                  !chunk.facadeModuleId
                 ) {
                   continue;
                 }
-                const cssChunks: string[] = [];
-                for (const importId of chunk.imports) {
-                  const css = this.getModuleInfo(importId)?.meta?.css;
-                  if (typeof css === 'string') cssChunks.push(css);
-                }
+                const cssChunks = collectEntryCss(chunk.facadeModuleId);
                 if (cssChunks.length) {
                   entryCss.push({
                     name: chunk.name,
