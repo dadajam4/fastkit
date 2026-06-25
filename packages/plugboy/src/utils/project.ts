@@ -46,8 +46,8 @@ export async function resolveUserProjectConfig(
   };
 }
 
-export function defineProjectConfig<Config extends UserProjectConfig>(
-  config: Config,
+export function defineProjectConfig(
+  config: UserProjectConfig,
 ): Promise<ResolvedProjectConfig> {
   return resolveUserProjectConfig(config);
 }

@@ -69,8 +69,8 @@ export async function resolveUserWorkspaceConfig(
   };
 }
 
-export function defineWorkspaceConfig<Config extends UserWorkspaceConfig>(
-  config: Config,
+export function defineWorkspaceConfig(
+  config: UserWorkspaceConfig,
 ): Promise<ResolvedWorkspaceConfig> {
   return resolveUserWorkspaceConfig(config);
 }
