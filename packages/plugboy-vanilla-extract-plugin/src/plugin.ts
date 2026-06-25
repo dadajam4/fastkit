@@ -105,6 +105,81 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
               };
               return opts;
             },
+            // Split vanilla-extract's single bundle into one CSS file per entry.
+            //
+            // `extract: { name }` mode collects the CSS of EVERY `.css.ts` in the
+            // graph into one asset (`cssFileName`), which loses plugboy's per-entry
+            // CSS contract: every entry with `css: true` declares a `./<entry>.css`
+            // export, but only `cssFileName` is ever produced. We rebuild the
+            // per-entry files from data vanilla-extract already exposes:
+            // `moduleInfo.meta.css` (its public hand-off for extracted CSS, the
+            // same field its own bundler reads) keyed by each entry chunk's
+            // `imports`. We never parse vanilla-extract's asset names or re-add the
+            // import statements it strips, so the only coupling is `meta.css`.
+            //
+            // Runs before `plugboy-optimize-css` (appended later in
+            // `workspace.plugins`), so each emitted per-entry file still goes
+            // through the postcss optimizations.
+            //
+            // Only splits when more than one entry actually has CSS. With a single
+            // CSS entry (the common case) vanilla-extract's bundle is already the
+            // correct, fully-ordered output, so it is left untouched and existing
+            // single-entry packages are byte-for-byte unaffected.
+            generateBundle(_options, bundle) {
+              const entryCss: { name: string; source: string }[] = [];
+
+              for (const chunk of Object.values(bundle)) {
+                if (
+                  chunk.type !== 'chunk' ||
+                  !chunk.isEntry ||
+                  !chunk.fileName.endsWith('.mjs')
+                ) {
+                  continue;
+                }
+                const cssChunks: string[] = [];
+                for (const importId of chunk.imports) {
+                  const css = this.getModuleInfo(importId)?.meta?.css;
+                  if (typeof css === 'string') cssChunks.push(css);
+                }
+                if (cssChunks.length) {
+                  entryCss.push({
+                    name: chunk.name,
+                    source: cssChunks.join('\n'),
+                  });
+                }
+              }
+
+              // 0 or 1 CSS entry → vanilla-extract's bundle is already correct.
+              if (entryCss.length <= 1) return;
+
+              // Replace vanilla-extract's combined bundle with per-entry files.
+              // The entry whose file name matches `cssFileName` overwrites the
+              // existing asset in place — re-`emitFile`ing the same name would
+              // trip rolldown's FILE_NAME_CONFLICT, since deleting the bundle
+              // entry does not release the reserved file name. Other entries are
+              // emitted as new assets.
+              const reused = new Set<string>();
+              for (const { name, source } of entryCss) {
+                const fileName = `${name}.css`;
+                const existing = bundle[fileName];
+                if (existing && existing.type === 'asset') {
+                  existing.source = source;
+                  reused.add(fileName);
+                } else {
+                  this.emitFile({ type: 'asset', fileName, source });
+                }
+              }
+
+              // Drop vanilla-extract's combined bundle if no entry reused it.
+              const combined = bundle[cssFileName];
+              if (
+                combined &&
+                combined.type === 'asset' &&
+                !reused.has(cssFileName)
+              ) {
+                delete bundle[cssFileName];
+              }
+            },
             // Merge tsdown's own CSS (emitted to `TSDOWN_CSS_FILE_NAME`) into the
             // vanilla-extract bundle so the package ships a single `cssFileName`.
             //
