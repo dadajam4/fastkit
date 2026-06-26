@@ -1,5 +1,84 @@
 # @fastkit/plugboy
 
+## 1.0.0
+
+### Major Changes
+
+- Major release: the plugboy toolchain migrates its internal bundler from **tsup (esbuild)** to **tsdown (rolldown)**.
+
+  This is a large change that affects the workspace config schema, the plugin-authoring API, and several output details. See the migration guide for what changed and the steps to upgrade:
+
+  https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/docs/migrations/v1.md
+
+- [`b824e71`](https://github.com/dadajam4/fastkit/commit/b824e7136b57649d7958e257c21e8704267380e6) Thanks [@dadajam4](https://github.com/dadajam4)! - Changed the bundler from tsup to tsdown.
+
+  This release includes the following breaking changes:
+
+  - Plugin system changed from esbuild-based to rolldown-based
+  - `onSuccess` hook has been removed
+  - `publicDir` option has been removed
+
+  New features:
+
+  - Plugboy plugins are now compatible with tsdown (rolldown) plugins
+  - vue-tsc can now be used as the DTS compiler (`dts.compiler: 'vue-tsc'`)
+  - Added `dts.ignoreCompilerErrors` option
+  - Added `@fastkit/plugboy/runtime-utils` export for runtime utilities
+
+  ### Migration Guide
+  - If using `esbuildPlugins`, replace with rolldown-compatible plugins
+  - If using `onSuccess` hook, use the `onSuccess` option in workspace config instead
+  - If using `publicDir`, use the `copy` option instead
+
+### Patch Changes
+
+- [`7b655c1`](https://github.com/dadajam4/fastkit/commit/7b655c1513ccc9fec99ea66fb0db396dc831f5c7) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix CSS regressions from the tsdown migration
+
+  `@fastkit/plugboy`:
+
+  - Repair the `preserve-css-imports` plugin so external (bare-specifier) `@import`s
+    — e.g. `@import url('material-symbols/rounded.css') layer(...)` — are kept
+    verbatim instead of being inlined by tsdown's lightningcss, which bloated the
+    bundle and broke the imported package's relative asset URLs (fonts). The
+    statements are now stripped in a `load` hook (which runs before the CSS
+    transform that previously inlined them) and re-emitted in `writeBundle`, just
+    below a hoisted `@layer` order declaration so cascade ordering is preserved.
+
+  `@fastkit/plugboy-vanilla-extract-plugin`:
+
+  - Resolve a `FILE_NAME_CONFLICT` where tsdown's built-in CSS pipeline and
+    `@vanilla-extract/rollup-plugin` both emitted `<pkg>.css`, silently dropping
+    all extracted component styles. tsdown's CSS is now routed to a temporary file
+    and merged into the vanilla-extract bundle in `writeBundle`, so the package
+    again ships a single `<pkg>.css`. This only happens when vanilla-extract is
+    present, so packages without `.css.ts` keep emitting `<pkg>.css` directly.
+  - Remove the unused `prepend` option, which had no effect after the migration to
+    `@vanilla-extract/rollup-plugin`.
+
+- [`7e16feb`](https://github.com/dadajam4/fastkit/commit/7e16feb3e45cd6bbf06ac878b8c8e9133f373eb6) Thanks [@dadajam4](https://github.com/dadajam4)! - Support for the tsdown `css` option has been added.
+
+- [`8271c15`](https://github.com/dadajam4/fastkit/commit/8271c15bc79fe7de6ff5df40e8393168df74fe86) Thanks [@dadajam4](https://github.com/dadajam4)! - Improve the type hints shown for `defineWorkspaceConfig` / `defineProjectConfig`.
+
+  Both helpers declared a generic type parameter (`<Config extends UserWorkspaceConfig>` / `<Config extends UserProjectConfig>`) that the return type never used, so it added nothing but noise: on hover the parameter showed up as the opaque `Config`, hiding the field-level types and JSDoc of the underlying config type. The generic is removed and the config is typed directly (`config: UserWorkspaceConfig` / `config: UserProjectConfig`), giving callers a clean signature and proper per-field hints. Behavior is unchanged.
+
+- [`ed9b7b3`](https://github.com/dadajam4/fastkit/commit/ed9b7b3c3cf6ce262c0c5682ba1f1bac047ae98f) Thanks [@dadajam4](https://github.com/dadajam4)! - Document the `__PLUGBOY_DEV__` / `__PLUGBOY_STUB__` build-time env constants and fix their type JSDoc.
+
+  - Correct the `__PLUGBOY_DEV__` global type's `@remarks` to match actual behavior: `true` during `stub`, and in a published `build` it is replaced with a runtime check of the consumer's environment (`NODE_ENV` / `import.meta.env.DEV`) rather than being stub-only.
+  - Add an "Env constants" usage guide (`docs/env-constants.md`, with a Japanese version) and a v1 (tsdown) migration guide (`docs/migrations/v1.md`), linked from the README.
+
+- [`3ecc871`](https://github.com/dadajam4/fastkit/commit/3ecc87179bff9cb97096b14e08bf7717f99b077d) Thanks [@dadajam4](https://github.com/dadajam4)! - Add a plugboy-owned `publicDir` workspace option and drop the public `css` option.
+
+  - `publicDir` copies a directory (default `./public`, `false` to disable, or a custom path) into the output directory. plugboy performs this copy itself, identically in both `build` and `stub`, so dev (`stub`) and release (`build`) stay in sync without relying on tsdown's `copy` (whose `flatten`/`rename`/function form would diverge between the two). tsdown's `copy` still works for build-time-only assets and is documented as not running during `stub`.
+  - Remove `css` from the public workspace config (`UserWorkspaceConfig` / `ResolvedWorkspaceConfig`). It was never meaningfully user-settable — CSS plugins (e.g. vanilla-extract) overwrite it — and exposing it conflicted with per-entry CSS handling. It remains as the internal `ctx.css` channel for plugins.
+
+- [`71d8d03`](https://github.com/dadajam4/fastkit/commit/71d8d03ec5351bd296aa9a182f05ca6be3de5c6f) Thanks [@dadajam4](https://github.com/dadajam4)! - A fix has been added to work around an issue where `@import` rules were removed when the imported CSS target was an external module, due to the current behavior of rolldown.
+
+- [`b9640a7`](https://github.com/dadajam4/fastkit/commit/b9640a7e3786b1e75f54df3b184941cea6038672) Thanks [@dadajam4](https://github.com/dadajam4)! - The raw-loader plugin has been integrated via the `?raw` query.
+
+- [#158](https://github.com/dadajam4/fastkit/pull/158) [`ab1fc22`](https://github.com/dadajam4/fastkit/commit/ab1fc228299c2610aaf024ab390e8f5e2ed82a82) Thanks [@schwarz9791](https://github.com/schwarz9791)! - Updated the regular expression in `preserve-css-imports.ts` to support import with layer
+
+- [`25602cb`](https://github.com/dadajam4/fastkit/commit/25602cbe1493cbeb10456b8b0e7680983d9e2ed7) Thanks [@dadajam4](https://github.com/dadajam4)! - Update dependencies and apply the associated fixes.
+
 ## 1.0.0-next.9
 
 ### Patch Changes

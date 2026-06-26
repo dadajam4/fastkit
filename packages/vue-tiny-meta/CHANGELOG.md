@@ -1,5 +1,22 @@
 # @fastkit/vue-tiny-meta
 
+## 1.2.0
+
+### Minor Changes
+
+- [`b824e71`](https://github.com/dadajam4/fastkit/commit/b824e7136b57649d7958e257c21e8704267380e6) Thanks [@dadajam4](https://github.com/dadajam4)! - Release due to package bundler change. No functional changes included.
+
+- Release accompanying the plugboy bundler migration (tsup → tsdown).
+
+  No API changes are intended for this package. The minor bump exists because the package is rebuilt with the new bundler (tsdown / rolldown), and is published together so any incidental output differences are versioned explicitly.
+
+### Patch Changes
+
+- [`25602cb`](https://github.com/dadajam4/fastkit/commit/25602cbe1493cbeb10456b8b0e7680983d9e2ed7) Thanks [@dadajam4](https://github.com/dadajam4)! - Update dependencies and apply the associated fixes.
+
+- Updated dependencies [[`b824e71`](https://github.com/dadajam4/fastkit/commit/b824e7136b57649d7958e257c21e8704267380e6), [`25602cb`](https://github.com/dadajam4/fastkit/commit/25602cbe1493cbeb10456b8b0e7680983d9e2ed7)]:
+  - @fastkit/ts-tiny-meta@1.2.0
+
 ## 1.2.0-next.1
 
 ### Patch Changes

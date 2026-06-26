@@ -1,7 +1,7 @@
 {
   "name": "@fastkit/eslint-config-vue",
   "type": "module",
-  "version": "0.14.2-next.0",
+  "version": "0.15.0",
   "description": "@fastkit/eslint-config-vue",
   "buildOptions": {
     "ignore": true

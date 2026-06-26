@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vanilla-extract-utils",
-  "version": "0.1.0-next.2",
+  "version": "1.0.0",
   "description": "vanilla-extract authoring helpers (layer-scoped styles, global themes).",
   "keywords": [
     "fastkit",
