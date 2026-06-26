@@ -38,18 +38,6 @@ export default defineWorkspaceConfig({
       },
     ],
   },
-  copy: [
-    {
-      from: 'public/after-effects',
-      to: 'dist',
-    },
-    {
-      from: 'public/after-effects.scss',
-      to: 'dist',
-    },
-    {
-      from: 'public/builtins',
-      to: 'dist',
-    },
-  ],
+  // `public/` (after-effects, after-effects.scss, builtins) is copied into
+  // `dist` by the default `publicDir: true` (consistent in both build and stub).
 });

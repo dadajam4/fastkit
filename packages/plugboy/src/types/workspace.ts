@@ -97,7 +97,30 @@ export interface UserWorkspaceConfig extends TSDownSyncOptions {
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
-  css?: CssOptions;
+  /**
+   * Directory whose contents are copied into the output directory (`dist`).
+   *
+   * Owned by plugboy (not tsdown's `copy`) so the copy is performed identically
+   * in both `build` and `stub`. Use tsdown's `copy` for advanced cases that
+   * only need to run during a real build.
+   *
+   * - `true` (default): copy `./public`
+   * - `false`: disable
+   * - string: copy the given directory
+   *
+   * @default true
+   */
+  publicDir?: string | boolean;
+  /**
+   * tsdown's `copy` option — copy files into the output directory.
+   *
+   * @remarks
+   * Runs during `build` only. `stub` does NOT execute this (it does not run
+   * tsdown). For assets that must also be present in the stub output, use
+   * {@link publicDir}, which plugboy copies identically in both `build` and
+   * `stub`.
+   */
+  copy?: TSDownConfig['copy'];
   /**
    * CSS optimization options
    *
@@ -122,7 +145,7 @@ export interface ResolvedWorkspaceConfig
         | 'hooks'
         | 'plugins'
         | 'dts'
-        | 'css'
+        | 'publicDir'
         | 'optimizeCSS'
         | TSDownSyncOption
       >
@@ -149,7 +172,12 @@ export interface ResolvedWorkspaceConfig
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
-  css?: CssOptions;
+  /**
+   * Directory whose contents are copied into the output directory (`dist`),
+   * or `false` to disable. Resolved from {@link UserWorkspaceConfig.publicDir}
+   * (`true` → `'public'`).
+   */
+  publicDir: string | false;
   /**
    * CSS optimization options
    *

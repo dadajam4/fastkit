@@ -107,14 +107,27 @@ export class Builder {
     await fs.writeFile(from, code);
   }
 
-  async copyPublicDir() {
-    const publicDir = this.workspace.dir.join('public').value;
-    await copyDirSync(publicDir, this.workspace.dirs.dist.value);
+  /**
+   * Copy the workspace's `publicDir` contents into the output directory.
+   *
+   * Owned by plugboy (not tsdown's `copy`) so the result is identical in `build`
+   * and `stub`: both call this with plugboy's own recursive copy. `copyDirSync`
+   * no-ops when the directory is absent, so packages without a public directory
+   * are unaffected. tsdown's `copy` option is left to tsdown and only applies
+   * during a real `build`.
+   */
+  copyPublicDir() {
+    const { publicDir } = this.workspace.config;
+    if (!publicDir) return;
+    copyDirSync(
+      this.workspace.dir.join(publicDir).value,
+      this.workspace.dirs.dist.value,
+    );
   }
 
   async stub() {
     const links = this.workspace.getStubLinks();
-    await this.copyPublicDir();
+    this.copyPublicDir();
     await Promise.all(
       links.map((link) => {
         if (link.type === 'js') {
@@ -281,6 +294,10 @@ export class Builder {
   async build() {
     const options = await this.tsdownOptions();
     await build(options);
+
+    // After tsdown (its `clean` wipes `dist` first), so the copy survives.
+    // Identical to the `stub()` path — plugboy owns the public-dir copy.
+    this.copyPublicDir();
 
     if (this.dts.inline || typeof this.dts.compiler === 'function') {
       await this.emitDTSManually();

@@ -57,6 +57,7 @@ export async function resolveUserWorkspaceConfig(
     entries,
     plugins,
     optimizeCSS = true,
+    publicDir = true,
     hooks,
   } = userConfig;
   return {
@@ -65,6 +66,7 @@ export async function resolveUserWorkspaceConfig(
     entries: resolveRawWorkspaceEntries(entries),
     plugins: await resolveUserPluginOption(plugins),
     optimizeCSS: optimizeCSS === true ? {} : optimizeCSS,
+    publicDir: publicDir === true ? 'public' : publicDir,
     hooks,
   };
 }

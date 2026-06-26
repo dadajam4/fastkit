@@ -429,7 +429,8 @@ export async function getWorkspace<
     plugins,
     hooks,
     dts,
-    css: config.css,
+    // `css` is an internal channel set by CSS plugins (e.g. vanilla-extract) via
+    // `ctx.css`; it is not a user-facing workspace option. Starts undefined.
     optimizeCSS,
     mergeExternals: (override) => {
       config.deps ??= {};
