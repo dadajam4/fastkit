@@ -1,8 +1,13 @@
 declare global {
   /**
-   * Development bundle or not
+   * Whether the code is running in a development context.
    *
-   * @remarks This feature is still under development and is currently only `true` in stub mode.
+   * @remarks
+   * - `stub`: always `true`.
+   * - published `build`: replaced with a runtime check of the consumer's
+   *   environment (`process.env.NODE_ENV === 'development'` or
+   *   `import.meta.env.DEV === true`), so the branch is evaluated at the
+   *   consumer's runtime rather than eliminated.
    */
   const __PLUGBOY_DEV__: boolean;
 

@@ -5,6 +5,8 @@
 
 A monorepo-compatible module bundler and project management tool. Provides a high-speed build system based on tsdown, and other tools.
 
+> **Upgrading from v0.x?** See the [v1 migration guide](./docs/migrations/v1.md) (tsdown migration).
+
 ## Features
 
 - **High-Speed Build**: Ultra-fast bundling based on tsdown
@@ -14,6 +16,7 @@ A monorepo-compatible module bundler and project management tool. Provides a hig
 - **CSS Integration**: Sass, Vanilla Extract, and CSS optimization support
 - **Development Efficiency**: Fast development cycle with stub functionality
 - **Automation**: Automatic generation of package.json and exports
+- **Env Constants**: `__PLUGBOY_DEV__` / `__PLUGBOY_STUB__` for guarding dev-only code ([docs](./docs/env-constants.md))
 
 ## Installation
 

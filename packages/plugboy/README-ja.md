@@ -4,6 +4,8 @@
 
 モノレポ対応のモジュールバンドラー・プロジェクト管理ツールです。tsdownをベースとした高速ビルドシステムを提供します。
 
+> **v0.x からの移行は** [v1 移行ガイド](./docs/migrations/v1.md)（tsdown 移行）を参照してください。
+
 ## 特徴
 
 - **高速ビルド**: tsdownベースの超高速バンドリング
@@ -13,6 +15,7 @@
 - **CSS統合**: Sass、Vanilla Extract、CSS最適化サポート
 - **開発効率**: stub機能による高速開発サイクル
 - **自動化**: package.json、exports自動生成
+- **環境定数**: 開発時のみのコードを切り分ける `__PLUGBOY_DEV__` / `__PLUGBOY_STUB__`（[ドキュメント](./docs/env-constants-ja.md)）
 
 ## インストール
 
