@@ -319,7 +319,7 @@ export function defineLayerStyle<
   // serializable descriptor for it.
   if (isGlobal) {
     addFunctionSerializer(layerStyle, {
-      importPath: '@fastkit/plugboy-vanilla-extract-plugin/css',
+      importPath: '@fastkit/vanilla-extract-utils',
       importName: 'defineLayerStyle',
       args: [
         {
@@ -330,7 +330,7 @@ export function defineLayerStyle<
     });
   } else {
     addFunctionSerializer(layerStyle, {
-      importPath: '@fastkit/plugboy-vanilla-extract-plugin/css',
+      importPath: '@fastkit/vanilla-extract-utils',
       importName: 'defineLayerStyleFromResolvedName',
       args: [layerName, parent || null],
     });

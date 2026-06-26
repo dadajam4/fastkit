@@ -53,6 +53,7 @@
     "@fastkit/stylelint-config": "workspace:^",
     "@fastkit/stylelint-config-vue": "workspace:^",
     "@fastkit/ts-tiny-meta": "workspace:^",
+    "@fastkit/vanilla-extract-utils": "workspace:^",
     "@fastkit/vite-plugin-vui": "workspace:^",
     "@fastkit/vot": "workspace:^",
     "@fastkit/vot-i18n": "workspace:^",

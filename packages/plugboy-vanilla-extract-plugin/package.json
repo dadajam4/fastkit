@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy-vanilla-extract-plugin",
-  "version": "4.0.0-next.13",
+  "version": "4.0.0-next.14",
   "description": "",
   "keywords": [],
   "repository": {
@@ -18,12 +18,6 @@
         "default": "./dist/plugboy-vanilla-extract-plugin.mjs"
       }
     },
-    "./css": {
-      "types": "./dist/css.d.mts",
-      "import": {
-        "default": "./dist/css.mjs"
-      }
-    },
     "./*": "./dist/*"
   },
   "main": "./dist/plugboy-vanilla-extract-plugin.mjs",
@@ -32,9 +26,6 @@
     "*": {
       ".": [
         "./dist/plugboy-vanilla-extract-plugin.d.mts"
-      ],
-      "css": [
-        "./dist/css.d.mts"
       ]
     }
   },
@@ -52,7 +43,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@vanilla-extract/css": "^1.20.1",
     "@vanilla-extract/rollup-plugin": "^1.5.3",
     "@vanilla-extract/vite-plugin": "^5.2.2"
   },
