@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/nodepack",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "A small bundled tool for developing Node.js server and tool implementations.",
   "keywords": [
     "fastkit",
@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/nodepack.d.ts",
+      "types": "./dist/nodepack.d.mts",
       "import": {
         "default": "./dist/nodepack.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/nodepack.mjs",
-  "types": "./dist/nodepack.d.ts",
+  "types": "./dist/nodepack.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/nodepack.d.ts"
+        "./dist/nodepack.d.mts"
       ]
     }
   },
@@ -49,16 +49,13 @@
     "lint": "pnpm run eslint",
     "stub": "plugboy stub",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit --skipLibCheck"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fastkit/node-util": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
-    "esbuild": "^0.25.10",
-    "nodemon": "^3.1.10"
-  },
-  "devDependencies": {
-    "@types/nodemon": "^3.1.1"
+    "esbuild": "^0.28.1",
+    "nodemon": "^3.1.14"
   },
   "buildOptions": {
     "name": "Nodepack"

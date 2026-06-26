@@ -22,7 +22,8 @@ export interface EachRuleConstraints {
  * Settings for the rule enumerating array or object elements.
  */
 export interface EachRuleSettings
-  extends Partial<RuleBasicSettings<EachRuleConstraints>>,
+  extends
+    Partial<RuleBasicSettings<EachRuleConstraints>>,
     EachRuleConstraints {}
 
 /**

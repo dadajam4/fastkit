@@ -125,8 +125,7 @@ interface RouteMatchedItemWithPrefetch extends RouteMatchedItem {
   updateQueries(queries: string[]): void;
 }
 
-interface RequiredRouteMatchedItemWithPrefetch
-  extends RouteMatchedItemWithPrefetch {
+interface RequiredRouteMatchedItemWithPrefetch extends RouteMatchedItemWithPrefetch {
   prefetch: RawPrefetchContext;
 }
 
@@ -209,7 +208,8 @@ export type RawVuePageControlRedirectSpec =
   | (RouteQueryAndHash & LocationAsRelativeRaw & RedirectOptions);
 
 export interface VuePageControlRedirectSpec
-  extends RouteQueryAndHash,
+  extends
+    RouteQueryAndHash,
     MatcherLocationAsPath,
     Omit<LocationAsRelativeRaw, 'path'> {
   statusCode: number;

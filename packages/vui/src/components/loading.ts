@@ -1,1 +1,1 @@
-export * from '@fastkit/vue-loading';
+export { VProgressCircular, VProgressLinear } from '@fastkit/vue-loading';

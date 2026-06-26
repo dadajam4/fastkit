@@ -56,10 +56,8 @@ export interface PackageDep {
  * Package Information
  */
 export interface PackageInfo
-  extends Pick<
-      FastkitPackage,
-      'version' | 'repository' | 'homepage' | 'keywords'
-    >,
+  extends
+    Pick<FastkitPackage, 'version' | 'repository' | 'homepage' | 'keywords'>,
     PackageDocsOptions {
   /**
    * Package Name

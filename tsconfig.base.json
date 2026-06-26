@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "isolatedModules": true,
     "target": "ESNext",
     "module": "ESNext",
@@ -20,7 +19,8 @@
     "resolveJsonModule": true,
     "types": [
       "node",
-      "@fastkit/plugboy/env"
+      "@fastkit/plugboy/env",
+      "../../types/css-modules"
     ],
   },
   "exclude": [

@@ -1,8 +1,10 @@
 import { Plugin } from 'vite';
 import { HashedSync, HashedSyncOptions } from '@fastkit/hashed-sync';
 
-export interface HashedSyncVitePluginOptions
-  extends Omit<HashedSyncOptions, 'watch'> {
+export interface HashedSyncVitePluginOptions extends Omit<
+  HashedSyncOptions,
+  'watch'
+> {
   onBooted?: (() => any) | (() => Promise<any>);
   onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }

@@ -79,8 +79,9 @@ export function createTextareaNodeSettings(
   return { props, emits };
 }
 
-export interface TextareaNodeEmitOptions
-  extends ReturnType<typeof createTextareaNodeEmits> {}
+export interface TextareaNodeEmitOptions extends ReturnType<
+  typeof createTextareaNodeEmits
+> {}
 
 export type TextareaNodeContext = SetupContext<TextareaNodeEmitOptions>;
 

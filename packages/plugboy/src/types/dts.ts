@@ -1,7 +1,28 @@
 import type { Builder } from '../workspace';
+import type { PlugboyWorkspace } from '../workspace';
+
+export interface EmitDTSOptions {
+  cwd?: string;
+  outDir?: string;
+}
 
 /**
- * Type preservation target in d.ts file
+ * Custom DTS compiler function
+ */
+export type DTSCompilerFunction = (
+  opts: EmitDTSOptions & { workspace: PlugboyWorkspace },
+) => Promise<void>;
+
+/**
+ * DTS compiler specification
+ * - 'tsc': TypeScript compiler (default)
+ * - 'vue-tsc': Vue SFC compatible compiler
+ * - function: Custom compiler function
+ */
+export type DTSCompilerOption = 'tsc' | 'vue-tsc' | DTSCompilerFunction;
+
+/**
+ * Type preservation target in declaration file
  */
 export interface DTSPreserveTypeTarget {
   /** Type name */
@@ -13,12 +34,14 @@ export interface DTSPreserveTypeTarget {
 }
 
 /**
- * Type preservation target in d.ts file (normalized)
+ * Type preservation target in declaration file (normalized)
  *
  * @see {@link DTSPreserveTypeTarget}
  */
-export interface NormalizedDTSPreserveTypeTarget
-  extends Omit<DTSPreserveTypeTarget, 'from'> {
+export interface NormalizedDTSPreserveTypeTarget extends Omit<
+  DTSPreserveTypeTarget,
+  'from'
+> {
   /** Regular expression to match the string to be restored */
   from: RegExp;
 }
@@ -34,7 +57,7 @@ export function normalizeDTSPreserveTypeTarget(
 }
 
 /**
- * Type preservation setting for d.ts files
+ * Type preservation setting for declaration files
  *
  * @remarks This setting is for restoring type information inlined by the TypeScript compiler to the original type name by string substitution.
  */
@@ -46,12 +69,14 @@ export interface DTSPreserveTypeSettings {
 }
 
 /**
- * Type preservation setting for d.ts files (normalized)
+ * Type preservation setting for declaration files (normalized)
  *
  * @see {@link DTSPreserveTypeSettings}
  */
-export interface NormalizedDTSPreserveTypeSettings
-  extends Omit<DTSPreserveTypeSettings, 'targets'> {
+export interface NormalizedDTSPreserveTypeSettings extends Omit<
+  DTSPreserveTypeSettings,
+  'targets'
+> {
   /** List of normalized type preservation targets */
   targets: NormalizedDTSPreserveTypeTarget[];
 }
@@ -66,8 +91,8 @@ export function normalizeDTSPreserveTypeSettings(
 }
 
 /**
- * Function to normalize d.ts strings
- * @param dts - Bundled d.ts strings
+ * Function to normalize declaration strings
+ * @param dts - Bundled declaration strings
  * @param builder - Builder
  */
 export type DTSNormalizer = (
@@ -76,15 +101,27 @@ export type DTSNormalizer = (
 ) => string | undefined | void | Promise<string | undefined | void>;
 
 /**
- * d.ts output setting
+ * declaration output setting
  */
 export interface DTSSettings {
   /**
-   * Inline output without bundling d.ts
+   * Inline output without bundling declaration
    *
    * @default false
    */
   inline?: boolean;
+
+  /**
+   * DTS compiler specification
+   * @default 'tsc'
+   */
+  compiler?: DTSCompilerOption;
+
+  /**
+   * Whether to ignore compiler errors and continue
+   * @default false
+   */
+  ignoreCompilerErrors?: boolean;
 
   /**
    * list of type preservation settings
@@ -96,21 +133,31 @@ export interface DTSSettings {
   preserveType?: DTSPreserveTypeSettings[];
 
   /**
-   * list of function to normalize d.ts strings
+   * list of function to normalize declaration strings
    */
   normalizers?: DTSNormalizer[];
 }
 
 /**
- * d.ts output setting (normalized)
+ * declaration output setting (normalized)
  *
  * @see {@link DTSSettings}
  */
 export interface NormalizedDTSSettings {
   /**
-   * Inline output without bundling d.ts
+   * Inline output without bundling declaration
    */
   inline: boolean;
+
+  /**
+   * DTS compiler specification
+   */
+  compiler: DTSCompilerOption;
+
+  /**
+   * Whether to ignore compiler errors and continue
+   */
+  ignoreCompilerErrors: boolean;
 
   /**
    * list of type preservation settings
@@ -118,7 +165,7 @@ export interface NormalizedDTSSettings {
   preserveType: NormalizedDTSPreserveTypeSettings[];
 
   /**
-   * list of function to normalize d.ts strings
+   * list of function to normalize declaration strings
    */
   normalizers: DTSNormalizer[];
 }
@@ -128,11 +175,15 @@ export function normalizeDTSSettings(
 ): NormalizedDTSSettings {
   const {
     inline = false,
+    compiler = 'tsc',
+    ignoreCompilerErrors = false,
     preserveType = [],
     normalizers = [],
   } = settings || {};
   return {
     inline,
+    compiler,
+    ignoreCompilerErrors,
     preserveType: preserveType.map(normalizeDTSPreserveTypeSettings),
     normalizers,
   };

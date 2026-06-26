@@ -29,7 +29,8 @@ export interface DeepMergeOptions {
 }
 
 export interface ResolvedDeepMergeOptions
-  extends Omit<DeepMergeOptions, 'isMergeableObject'>,
+  extends
+    Omit<DeepMergeOptions, 'isMergeableObject'>,
     Required<Pick<DeepMergeOptions, 'isMergeableObject'>> {
   cloneUnlessOtherwiseSpecified: <T>(
     value: T,

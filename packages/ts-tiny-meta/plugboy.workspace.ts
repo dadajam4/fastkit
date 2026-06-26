@@ -7,5 +7,7 @@ export default defineWorkspaceConfig({
     vite: './src/vite/index.ts',
     'ts-morph': './src/dependencies/ts-morph.ts',
   },
-  external: ['typescript'],
+  deps: {
+    neverBundle: ['typescript'],
+  },
 });

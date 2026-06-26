@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { exitHook } from './exit-hook';
 
 export function getFilename(importMetaURL: string) {
   return fileURLToPath(importMetaURL);
@@ -222,5 +223,22 @@ export function copyDirSync(srcDir: string, destDir: string): void {
     } else {
       fs.copyFileSync(srcFile, destFile);
     }
+  }
+}
+
+export async function writeFileAtomic(filePath: string, content: string) {
+  const tempFile = `${filePath}.${process.pid}.tmp`;
+  const cleanup = () => {
+    return fs.promises.unlink(tempFile).catch(() => {});
+  };
+  const off = exitHook(cleanup);
+  try {
+    await fs.promises.writeFile(tempFile, content);
+    await fs.promises.rename(tempFile, filePath);
+    off();
+  } catch (error) {
+    off();
+    await cleanup();
+    throw error;
   }
 }

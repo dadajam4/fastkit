@@ -12,12 +12,11 @@ export function createTinyError(name: string) {
   }
 
   return class TinyError extends Error {
-    get _tiny_error_symbol() {
-      return TINY_ERROR_SYMBOL;
-    }
+    readonly _tiny_error_symbol: symbol;
 
     constructor(message: string | Error) {
       super(resolveMessage(message));
+      this._tiny_error_symbol = TINY_ERROR_SYMBOL;
     }
   };
 }

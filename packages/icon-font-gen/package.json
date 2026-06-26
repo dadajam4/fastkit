@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/icon-font-gen",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "A tool to generate icon web fonts and their definitions Type-safe for your application.",
   "keywords": [
     "fastkit",
@@ -20,13 +20,13 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/icon-font-gen.d.ts",
+      "types": "./dist/icon-font-gen.d.mts",
       "import": {
         "default": "./dist/icon-font-gen.mjs"
       }
     },
     "./cli": {
-      "types": "./dist/cli.d.ts",
+      "types": "./dist/cli.d.mts",
       "import": {
         "default": "./dist/cli.mjs"
       }
@@ -34,14 +34,14 @@
     "./*": "./dist/*"
   },
   "main": "./dist/icon-font-gen.mjs",
-  "types": "./dist/icon-font-gen.d.ts",
+  "types": "./dist/icon-font-gen.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/icon-font-gen.d.ts"
+        "./dist/icon-font-gen.d.mts"
       ],
       "cli": [
-        "./dist/cli.d.ts"
+        "./dist/cli.d.mts"
       ]
     }
   },
@@ -69,9 +69,9 @@
     "@fastkit/icon-font": "workspace:^",
     "@fastkit/node-util": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
-    "cac": "^6.7.14",
-    "chokidar": "^4.0.3",
-    "fs-extra": "^11.3.2",
+    "cac": "^7.0.0",
+    "chokidar": "^5.0.0",
+    "fs-extra": "^11.3.5",
     "webfont": "^11.2.26"
   },
   "buildOptions": {

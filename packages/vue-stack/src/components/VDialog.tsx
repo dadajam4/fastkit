@@ -61,7 +61,9 @@ export interface DefineDialogSettings<
   Props extends Readonly<ComponentPropsOptions>,
   Emits extends EmitsOptions,
   Slots extends SlotsType,
-> extends DefineStackableSettings<Props, Emits, Slots>,
+>
+  extends
+    DefineStackableSettings<Props, Emits, Slots>,
     CreateDialogSchemeOptions {
   props?: Props;
   emits?: Emits;

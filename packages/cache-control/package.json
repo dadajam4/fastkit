@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cache-control",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Helper implementation for plugging cache controls into a JavaScript implementation.",
   "keywords": [
     "fastkit",
@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/cache-control.d.ts",
+      "types": "./dist/cache-control.d.mts",
       "import": {
         "default": "./dist/cache-control.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/cache-control.mjs",
-  "types": "./dist/cache-control.d.ts",
+  "types": "./dist/cache-control.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/cache-control.d.ts"
+        "./dist/cache-control.d.mts"
       ]
     }
   },

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "A simple, extensible UI kit for Vue applications.",
   "keywords": [
     "fastkit",
@@ -23,7 +23,7 @@
     "./package.json": "./package.json",
     "./vui.css": "./dist/vui.css",
     ".": {
-      "types": "./dist/vui.d.ts",
+      "types": "./dist/vui.d.mts",
       "import": {
         "default": "./dist/vui.mjs"
       }
@@ -31,11 +31,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vui.mjs",
-  "types": "./dist/vui.d.ts",
+  "types": "./dist/vui.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vui.d.ts"
+        "./dist/vui.d.mts"
       ]
     }
   },
@@ -54,7 +54,7 @@
     "stylelint": "stylelint \"**/*.{css,scss,vue,html}\" --allow-empty-input",
     "stylelint:fix": "stylelint \"**/*.{css,scss,vue,html}\" --fix --allow-empty-input",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit --skipLibCheck"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fastkit/color-scheme": "workspace:^",
@@ -85,8 +85,8 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.22",
-    "vue-router": "^4.5.1"
+    "vue": "^3.5.38",
+    "vue-router": "^5.1.0"
   },
   "peerDependencies": {
     "vue": "^3.5.0",

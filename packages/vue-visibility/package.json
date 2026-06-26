@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-visibility",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "vue-visibility",
   "keywords": [],
   "repository": {
@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-visibility.d.ts",
+      "types": "./dist/vue-visibility.d.mts",
       "import": {
         "default": "./dist/vue-visibility.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-visibility.mjs",
-  "types": "./dist/vue-visibility.d.ts",
+  "types": "./dist/vue-visibility.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-visibility.d.ts"
+        "./dist/vue-visibility.d.mts"
       ]
     }
   },
@@ -47,7 +47,7 @@
     "@fastkit/visibility": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.22"
+    "vue": "^3.5.38"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

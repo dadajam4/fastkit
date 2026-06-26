@@ -66,8 +66,7 @@ export interface CacheRemainingTimes {
  * Cache details and remaining expiration date information.
  */
 export interface CacheDetailsWithRemainingTimes<T = any>
-  extends CacheDetails<T>,
-    CacheRemainingTimes {}
+  extends CacheDetails<T>, CacheRemainingTimes {}
 
 /**
  * Cache acquisition request.

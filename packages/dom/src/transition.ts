@@ -8,8 +8,7 @@ export interface AddTransitionEventOptions extends AddEventListenerOptions {
   properties?: string | string[] | ((propertyName: string) => boolean);
 }
 
-export interface AddTransitionendEventOptions
-  extends AddTransitionEventOptions {
+export interface AddTransitionendEventOptions extends AddTransitionEventOptions {
   includeCancel?: boolean;
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/rules",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Universal validation library that works in server/browser.",
   "keywords": [
     "fastkit",
@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/rules.d.ts",
+      "types": "./dist/rules.d.mts",
       "import": {
         "default": "./dist/rules.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/rules.mjs",
-  "types": "./dist/rules.d.ts",
+  "types": "./dist/rules.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/rules.d.ts"
+        "./dist/rules.d.mts"
       ]
     }
   },

@@ -1,7 +1,5 @@
-import baseConfig from '@fastkit/eslint-config';
+import baseConfig, { tseslint } from '@fastkit/eslint-config';
 import pluginVue from 'eslint-plugin-vue';
-import globals from 'globals';
-import typescriptEslint from 'typescript-eslint';
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting';
 
 export default [
@@ -11,11 +9,8 @@ export default [
   {
     languageOptions: {
       sourceType: 'module',
-      globals: {
-        ...globals.browser,
-      },
       parserOptions: {
-        parser: typescriptEslint.parser,
+        parser: tseslint.parser,
         ecmaFeatures: {
           jsx: true,
         },

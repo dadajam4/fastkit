@@ -43,11 +43,10 @@ export interface IconFontEntry extends IconFontSettings {
   display: 'block' | 'swap';
 }
 
-export interface RawIconFontEntry
-  extends Omit<
-    IconFontEntry,
-    'name' | 'fontName' | 'prefix' | 'dest' | 'display'
-  > {
+export interface RawIconFontEntry extends Omit<
+  IconFontEntry,
+  'name' | 'fontName' | 'prefix' | 'dest' | 'display'
+> {
   name?: string;
   fontName?: string;
   /**

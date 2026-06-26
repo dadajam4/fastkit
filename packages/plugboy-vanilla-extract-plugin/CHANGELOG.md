@@ -1,5 +1,275 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 4.0.0
+
+### Major Changes
+
+- [`b824e71`](https://github.com/dadajam4/fastkit/commit/b824e7136b57649d7958e257c21e8704267380e6) Thanks [@dadajam4](https://github.com/dadajam4)! - Contains fixes to follow the internal bundler change in plugboy.
+
+- Major release: the plugboy toolchain migrates its internal bundler from **tsup (esbuild)** to **tsdown (rolldown)**.
+
+  This is a large change that affects the workspace config schema, the plugin-authoring API, and several output details. See the migration guide for what changed and the steps to upgrade:
+
+  https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/docs/migrations/v1.md
+
+- [`7f48999`](https://github.com/dadajam4/fastkit/commit/7f4899920b42da8098f3596031d7255b3ce59d42) Thanks [@dadajam4](https://github.com/dadajam4)! - Extract the vanilla-extract authoring helpers into a new `@fastkit/vanilla-extract-utils` package.
+
+  `defineLayerStyle`, `createGlobalTheme` and the related layer/theme utilities were previously exported from `@fastkit/plugboy-vanilla-extract-plugin/css`. They are bundler-agnostic (they only wrap `@vanilla-extract/css`) and have nothing to do with the plugboy build pipeline, so they now live in their own package.
+
+  - **New `@fastkit/vanilla-extract-utils`** — provides `defineLayerStyle` etc. Declares `@vanilla-extract/css` as a **peer dependency** so it resolves to the consumer's single instance (vanilla-extract requires a singleton).
+  - **Breaking (`@fastkit/plugboy-vanilla-extract-plugin`)** — the `./css` subpath export is removed, and the package no longer depends on `@vanilla-extract/css`. It is now purely the plugboy build plugin (`@vanilla-extract/rollup-plugin` / `vite-plugin`). Migration: replace `@fastkit/plugboy-vanilla-extract-plugin/css` imports with `@fastkit/vanilla-extract-utils` (and add `@vanilla-extract/css` to your dependencies).
+
+### Patch Changes
+
+- [`7e16feb`](https://github.com/dadajam4/fastkit/commit/7e16feb3e45cd6bbf06ac878b8c8e9133f373eb6) Thanks [@dadajam4](https://github.com/dadajam4)! - When plain CSS is imported, it is now merged into the beginning of the vanilla-extract bundle file.
+
+- [`7b655c1`](https://github.com/dadajam4/fastkit/commit/7b655c1513ccc9fec99ea66fb0db396dc831f5c7) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix CSS regressions from the tsdown migration
+
+  `@fastkit/plugboy`:
+
+  - Repair the `preserve-css-imports` plugin so external (bare-specifier) `@import`s
+    — e.g. `@import url('material-symbols/rounded.css') layer(...)` — are kept
+    verbatim instead of being inlined by tsdown's lightningcss, which bloated the
+    bundle and broke the imported package's relative asset URLs (fonts). The
+    statements are now stripped in a `load` hook (which runs before the CSS
+    transform that previously inlined them) and re-emitted in `writeBundle`, just
+    below a hoisted `@layer` order declaration so cascade ordering is preserved.
+
+  `@fastkit/plugboy-vanilla-extract-plugin`:
+
+  - Resolve a `FILE_NAME_CONFLICT` where tsdown's built-in CSS pipeline and
+    `@vanilla-extract/rollup-plugin` both emitted `<pkg>.css`, silently dropping
+    all extracted component styles. tsdown's CSS is now routed to a temporary file
+    and merged into the vanilla-extract bundle in `writeBundle`, so the package
+    again ships a single `<pkg>.css`. This only happens when vanilla-extract is
+    present, so packages without `.css.ts` keep emitting `<pkg>.css` directly.
+  - Remove the unused `prepend` option, which had no effect after the migration to
+    `@vanilla-extract/rollup-plugin`.
+
+- [`e5a301d`](https://github.com/dadajam4/fastkit/commit/e5a301d2ab722317f1fcd4e40a54d69d101ef54f) Thanks [@dadajam4](https://github.com/dadajam4)! - Added a `prepend` option to insert arbitrary code at the beginning of the bundled CSS file.
+
+- [`f821548`](https://github.com/dadajam4/fastkit/commit/f821548d8b812efe1f91f443a487875fe8804662) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix per-entry CSS splitting silently no-op'ing on some rolldown versions.
+
+  The split introduced in 4.0.0-next.11 attributed CSS to entries by reading each output chunk's `imports`, but whether vanilla-extract's external virtual CSS ids appear there is rolldown-version-dependent. On versions that list only real output chunks, the lookup found nothing, so multi-entry packages fell back to a single combined `<package>.css` instead of one `<entry>.css` per entry.
+
+  CSS is now attributed by walking the input module graph from each entry's `facadeModuleId` via `getModuleInfo().importedIds`, which is stable across rolldown versions and independent of how the output is chunked. A `.css.ts` reached by several entries is included in each entry's file (self-contained per-entry CSS). Single-CSS-entry packages are unaffected.
+
+- [`cde4fad`](https://github.com/dadajam4/fastkit/commit/cde4fad840325d08d3fd4428c262e5cf54d35c75) Thanks [@dadajam4](https://github.com/dadajam4)! - Allow `LayerStyle` values created by `defineLayerStyle` to be exported from `.css.ts` modules.
+
+  The `.css.ts` build is delegated to `@vanilla-extract/rollup-plugin`, whose `serializeVanillaModule` rejects plain function exports — so the documented usage `export const x = defineLayerStyle(...)` (which returns a function) previously crashed the build. `defineLayerStyle` now registers vanilla-extract's official function serializer (`addFunctionSerializer`), emitting deterministic re-construction code instead of throwing.
+
+  - Global layers (`{ globalName }`) re-construct via `defineLayerStyle({ globalName, parent })`, whose name is deterministic. Existing behavior is unchanged.
+  - Scoped layers (`{ debugId }`) carry their build-time hash name verbatim through the new internal `defineLayerStyleFromResolvedName(layerName, parentLayerName)` entry, so the re-constructed reference resolves to the exact layer emitted into CSS (calling `layer()` again would produce a different name).
+
+  A re-constructed instance is a reference handle that restores only deterministic state (`layerName` / `parentLayerName`); `hooks` and `extend()` additions are not serialized. This does not affect build-time behavior — hooks run during `.css.ts` evaluation and their CSS is already baked in before serialization.
+
+- [`c581733`](https://github.com/dadajam4/fastkit/commit/c5817337cd4fa315f32f6d2fad3f1c507ccc007d) Thanks [@dadajam4](https://github.com/dadajam4)! - This release does not include any functional changes.
+
+- [`c30c7bd`](https://github.com/dadajam4/fastkit/commit/c30c7bdd5baf594512f84f2054f716f95c51bed1) Thanks [@dadajam4](https://github.com/dadajam4)! - - Removed the forced inline output setting for d.ts.
+
+  - Fixed an issue where CSS was emitted for entries that did not require it when multiple entries were configured.
+
+- [`55c1990`](https://github.com/dadajam4/fastkit/commit/55c19907812f5a146a79e61e0a6be33198cc4e59) Thanks [@dadajam4](https://github.com/dadajam4)! - Split extracted CSS per entry so multi-entry packages emit one `<entry>.css` per entry again.
+
+  `@vanilla-extract/rollup-plugin`'s `extract: { name }` mode collects the CSS of every `.css.ts` in the graph into a single bundle, which lost plugboy's per-entry CSS contract: each entry with `css: true` declares a `./<entry>.css` export, but only the main entry's file was ever produced (so e.g. `pkg/secondary.css` 404'd).
+
+  The `rename-css` plugin now rebuilds per-entry files from data vanilla-extract already exposes — `moduleInfo.meta.css` (its public hand-off for extracted CSS) keyed by each entry chunk's `imports`. The only coupling to vanilla-extract is `meta.css`; asset names are not parsed and the import statements it strips are not re-added.
+
+  - Splitting only happens when more than one entry actually has CSS. With a single CSS entry (the common case) vanilla-extract's already-correct bundle is left untouched, so existing single-entry packages are unaffected.
+  - The split runs before `plugboy-optimize-css`, so each per-entry file still goes through the postcss optimizations.
+  - The main entry overwrites vanilla-extract's existing asset in place (re-emitting the same name would trip rolldown's `FILE_NAME_CONFLICT`); other entries are emitted as new assets.
+
+- [`25602cb`](https://github.com/dadajam4/fastkit/commit/25602cbe1493cbeb10456b8b0e7680983d9e2ed7) Thanks [@dadajam4](https://github.com/dadajam4)! - Update dependencies and apply the associated fixes.
+
+- [`46ed4b7`](https://github.com/dadajam4/fastkit/commit/46ed4b7e4101057b4b8fb53f65005ddca39142ba) Thanks [@dadajam4](https://github.com/dadajam4)! - The `prepend` option has been enhanced to accept a function, enabling dynamic code injection.
+
+- [`b9640a7`](https://github.com/dadajam4/fastkit/commit/b9640a7e3786b1e75f54df3b184941cea6038672) Thanks [@dadajam4](https://github.com/dadajam4)! - Added support to fix an issue where file scopes were not created correctly when utilities using vanilla-extract functions (such as `style`) are defined in external packages.
+
+- [`bd97396`](https://github.com/dadajam4/fastkit/commit/bd97396fd6fbd6897bdcc8bc432e81533dcc825f) Thanks [@dadajam4](https://github.com/dadajam4)! - Merge plain (non-`.css.ts`) CSS into the per-entry CSS of the entry that imports it.
+
+  Plain CSS imported by an entry (e.g. an `@font-face` sheet) flows through tsdown's own CSS pipeline, which combines it into a single file. With per-entry splitting active that combined file was written to a `<package>.css` named after the package directory — a file that is not in `package.json#exports` and is imported by no entry, so consumers reading the real `<entry>.css` lost those styles (e.g. `@font-face` went missing).
+
+  `generateBundle` now records which entries import plain CSS (by walking the input module graph), and `writeBundle` merges tsdown's plain-CSS blob into those entries' CSS files instead of the orphan `<package>.css`. With a single CSS entry the original single-file behavior is unchanged.
+
+  Note: the combined blob cannot be partitioned per entry, so if several entries import distinct plain CSS each receives the whole blob; in practice plain CSS (fonts/resets) is imported by a single entry. tsdown's native CSS `splitting` is not usable here — it drops plain CSS entirely when vanilla-extract is present.
+
+- [`4f5dc5b`](https://github.com/dadajam4/fastkit/commit/4f5dc5bb6215ee46bd0d19ab190e78e6a4db3450) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix CSS file name conflict that dropped all vanilla-extract component styles
+
+  When a package emits CSS from both tsdown's built-in pipeline (plain `.css` /
+  `.scss`) and `@vanilla-extract/rollup-plugin` (`.css.ts`), both outputs were
+  pointed at the same `<pkg>.css` file. rolldown reported `FILE_NAME_CONFLICT` and
+  one output silently overwrote the other, so the extracted component styles were
+  lost and only the global CSS shipped.
+
+  tsdown's CSS is now routed to a temporary file and merged into the
+  vanilla-extract bundle in `generateBundle`, so the package again ships a single
+  `<pkg>.css` containing both the global and component styles (global first, to
+  preserve `@layer` ordering).
+
+## 4.0.0-next.14
+
+### Major Changes
+
+- Extract the vanilla-extract authoring helpers into a new `@fastkit/vanilla-extract-utils` package.
+
+  `defineLayerStyle`, `createGlobalTheme` and the related layer/theme utilities were previously exported from `@fastkit/plugboy-vanilla-extract-plugin/css`. They are bundler-agnostic (they only wrap `@vanilla-extract/css`) and have nothing to do with the plugboy build pipeline, so they now live in their own package.
+
+  - **New `@fastkit/vanilla-extract-utils`** — provides `defineLayerStyle` etc. Declares `@vanilla-extract/css` as a **peer dependency** so it resolves to the consumer's single instance (vanilla-extract requires a singleton).
+  - **Breaking (`@fastkit/plugboy-vanilla-extract-plugin`)** — the `./css` subpath export is removed, and the package no longer depends on `@vanilla-extract/css`. It is now purely the plugboy build plugin (`@vanilla-extract/rollup-plugin` / `vite-plugin`). Migration: replace `@fastkit/plugboy-vanilla-extract-plugin/css` imports with `@fastkit/vanilla-extract-utils` (and add `@vanilla-extract/css` to your dependencies).
+
+## 4.0.0-next.13
+
+### Patch Changes
+
+- Merge plain (non-`.css.ts`) CSS into the per-entry CSS of the entry that imports it.
+
+  Plain CSS imported by an entry (e.g. an `@font-face` sheet) flows through tsdown's own CSS pipeline, which combines it into a single file. With per-entry splitting active that combined file was written to a `<package>.css` named after the package directory — a file that is not in `package.json#exports` and is imported by no entry, so consumers reading the real `<entry>.css` lost those styles (e.g. `@font-face` went missing).
+
+  `generateBundle` now records which entries import plain CSS (by walking the input module graph), and `writeBundle` merges tsdown's plain-CSS blob into those entries' CSS files instead of the orphan `<package>.css`. With a single CSS entry the original single-file behavior is unchanged.
+
+  Note: the combined blob cannot be partitioned per entry, so if several entries import distinct plain CSS each receives the whole blob; in practice plain CSS (fonts/resets) is imported by a single entry. tsdown's native CSS `splitting` is not usable here — it drops plain CSS entirely when vanilla-extract is present.
+
+## 4.0.0-next.12
+
+### Patch Changes
+
+- Fix per-entry CSS splitting silently no-op'ing on some rolldown versions.
+
+  The split introduced in 4.0.0-next.11 attributed CSS to entries by reading each output chunk's `imports`, but whether vanilla-extract's external virtual CSS ids appear there is rolldown-version-dependent. On versions that list only real output chunks, the lookup found nothing, so multi-entry packages fell back to a single combined `<package>.css` instead of one `<entry>.css` per entry.
+
+  CSS is now attributed by walking the input module graph from each entry's `facadeModuleId` via `getModuleInfo().importedIds`, which is stable across rolldown versions and independent of how the output is chunked. A `.css.ts` reached by several entries is included in each entry's file (self-contained per-entry CSS). Single-CSS-entry packages are unaffected.
+
+## 4.0.0-next.11
+
+### Patch Changes
+
+- Split extracted CSS per entry so multi-entry packages emit one `<entry>.css` per entry again.
+
+  `@vanilla-extract/rollup-plugin`'s `extract: { name }` mode collects the CSS of every `.css.ts` in the graph into a single bundle, which lost plugboy's per-entry CSS contract: each entry with `css: true` declares a `./<entry>.css` export, but only the main entry's file was ever produced (so e.g. `pkg/secondary.css` 404'd).
+
+  The `rename-css` plugin now rebuilds per-entry files from data vanilla-extract already exposes — `moduleInfo.meta.css` (its public hand-off for extracted CSS) keyed by each entry chunk's `imports`. The only coupling to vanilla-extract is `meta.css`; asset names are not parsed and the import statements it strips are not re-added.
+
+  - Splitting only happens when more than one entry actually has CSS. With a single CSS entry (the common case) vanilla-extract's already-correct bundle is left untouched, so existing single-entry packages are unaffected.
+  - The split runs before `plugboy-optimize-css`, so each per-entry file still goes through the postcss optimizations.
+  - The main entry overwrites vanilla-extract's existing asset in place (re-emitting the same name would trip rolldown's `FILE_NAME_CONFLICT`); other entries are emitted as new assets.
+
+## 4.0.0-next.10
+
+### Patch Changes
+
+- Allow `LayerStyle` values created by `defineLayerStyle` to be exported from `.css.ts` modules.
+
+  The `.css.ts` build is delegated to `@vanilla-extract/rollup-plugin`, whose `serializeVanillaModule` rejects plain function exports — so the documented usage `export const x = defineLayerStyle(...)` (which returns a function) previously crashed the build. `defineLayerStyle` now registers vanilla-extract's official function serializer (`addFunctionSerializer`), emitting deterministic re-construction code instead of throwing.
+
+  - Global layers (`{ globalName }`) re-construct via `defineLayerStyle({ globalName, parent })`, whose name is deterministic. Existing behavior is unchanged.
+  - Scoped layers (`{ debugId }`) carry their build-time hash name verbatim through the new internal `defineLayerStyleFromResolvedName(layerName, parentLayerName)` entry, so the re-constructed reference resolves to the exact layer emitted into CSS (calling `layer()` again would produce a different name).
+
+  A re-constructed instance is a reference handle that restores only deterministic state (`layerName` / `parentLayerName`); `hooks` and `extend()` additions are not serialized. This does not affect build-time behavior — hooks run during `.css.ts` evaluation and their CSS is already baked in before serialization.
+
+## 4.0.0-next.9
+
+### Patch Changes
+
+- Fix CSS regressions from the tsdown migration
+
+  `@fastkit/plugboy`:
+
+  - Repair the `preserve-css-imports` plugin so external (bare-specifier) `@import`s
+    — e.g. `@import url('material-symbols/rounded.css') layer(...)` — are kept
+    verbatim instead of being inlined by tsdown's lightningcss, which bloated the
+    bundle and broke the imported package's relative asset URLs (fonts). The
+    statements are now stripped in a `load` hook (which runs before the CSS
+    transform that previously inlined them) and re-emitted in `writeBundle`, just
+    below a hoisted `@layer` order declaration so cascade ordering is preserved.
+
+  `@fastkit/plugboy-vanilla-extract-plugin`:
+
+  - Resolve a `FILE_NAME_CONFLICT` where tsdown's built-in CSS pipeline and
+    `@vanilla-extract/rollup-plugin` both emitted `<pkg>.css`, silently dropping
+    all extracted component styles. tsdown's CSS is now routed to a temporary file
+    and merged into the vanilla-extract bundle in `writeBundle`, so the package
+    again ships a single `<pkg>.css`. This only happens when vanilla-extract is
+    present, so packages without `.css.ts` keep emitting `<pkg>.css` directly.
+  - Remove the unused `prepend` option, which had no effect after the migration to
+    `@vanilla-extract/rollup-plugin`.
+
+## 4.0.0-next.8
+
+### Patch Changes
+
+- Fix CSS file name conflict that dropped all vanilla-extract component styles
+
+  When a package emits CSS from both tsdown's built-in pipeline (plain `.css` /
+  `.scss`) and `@vanilla-extract/rollup-plugin` (`.css.ts`), both outputs were
+  pointed at the same `<pkg>.css` file. rolldown reported `FILE_NAME_CONFLICT` and
+  one output silently overwrote the other, so the extracted component styles were
+  lost and only the global CSS shipped.
+
+  tsdown's CSS is now routed to a temporary file and merged into the
+  vanilla-extract bundle in `generateBundle`, so the package again ships a single
+  `<pkg>.css` containing both the global and component styles (global first, to
+  preserve `@layer` ordering).
+
+## 4.0.0-next.7
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
+## 4.0.0-next.6
+
+### Patch Changes
+
+- When plain CSS is imported, it is now merged into the beginning of the vanilla-extract bundle file.
+
+- Updated dependencies []:
+  - @fastkit/plugboy@1.0.0-next.2
+
+## 4.0.0-next.5
+
+### Patch Changes
+
+- The `prepend` option has been enhanced to accept a function, enabling dynamic code injection.
+
+## 4.0.0-next.4
+
+### Patch Changes
+
+- Added a `prepend` option to insert arbitrary code at the beginning of the bundled CSS file.
+
+## 4.0.0-next.3
+
+### Patch Changes
+
+- Added support to fix an issue where file scopes were not created correctly when utilities using vanilla-extract functions (such as `style`) are defined in external packages.
+
+- Updated dependencies []:
+  - @fastkit/plugboy@1.0.0-next.1
+
+## 4.0.0-next.2
+
+### Patch Changes
+
+- This release does not include any functional changes.
+
+## 4.0.0-next.1
+
+### Patch Changes
+
+- - Removed the forced inline output setting for d.ts.
+  - Fixed an issue where CSS was emitted for entries that did not require it when multiple entries were configured.
+
+## 4.0.0-next.0
+
+### Major Changes
+
+- Contains fixes to follow the internal bundler change in plugboy.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/plugboy@1.0.0-next.0
+
 ## 3.2.0
 
 ### Minor Changes

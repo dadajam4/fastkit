@@ -6,6 +6,7 @@ import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
 import { VuiServiceOptions } from '@fastkit/vui';
 import { Eta } from 'eta';
 import { VitePluginVuiError } from './logger';
+import { getPackageDir } from '@fastkit/plugboy/runtime-utils';
 
 const COLOR_DUMP_STYLE = `${`
 /* stylelint-disable */
@@ -69,12 +70,14 @@ function defaultDynamicDest() {
   return path.resolve('.vui');
 }
 
-function getBuiltinsDir() {
-  return __plugboyWorkspaceDir('node_modules/@fastkit/vui/dist/builtins');
+async function getBuiltinsDir() {
+  const pkgDir = await getPackageDir();
+  return path.join(pkgDir, 'node_modules/@fastkit/vui/dist/builtins');
 }
 
-export interface ViteVuiPluginOptions
-  extends Partial<Pick<VuiServiceOptions, 'uiSettings' | 'icons'>> {
+export interface ViteVuiPluginOptions extends Partial<
+  Pick<VuiServiceOptions, 'uiSettings' | 'icons'>
+> {
   dynamicDest?: string;
   colorScheme?: string;
   mediaMatch?: string;
@@ -84,8 +87,10 @@ export interface ViteVuiPluginOptions
   onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }
 
-export interface ViteVuiPluginResultSettings
-  extends Pick<VuiServiceOptions, 'uiSettings' | 'icons'> {
+export interface ViteVuiPluginResultSettings extends Pick<
+  VuiServiceOptions,
+  'uiSettings' | 'icons'
+> {
   colorScheme: string;
   mediaMatch: string;
 }
@@ -96,12 +101,12 @@ export interface ViteVuiPluginResult {
   dest: string;
 }
 
-export function viteVuiPlugin(
+export async function viteVuiPlugin(
   options: ViteVuiPluginOptions = {},
-): ViteVuiPluginResult {
+): Promise<ViteVuiPluginResult> {
   const plugins: (Plugin | Plugin[])[] = [];
 
-  const builtinsDir = getBuiltinsDir();
+  const builtinsDir = await getBuiltinsDir();
   const {
     colorScheme = path.join(builtinsDir, 'color-scheme'),
     mediaMatch = path.join(builtinsDir, 'media-match'),
@@ -182,7 +187,7 @@ export {};
 
   fs.ensureDirSync(dynamicDest);
   fs.writeFileSync(path.join(dynamicDest, 'setup.scss'), COLOR_DUMP_STYLE);
-  fs.writeFileSync(path.join(dynamicDest, 'vui.d.ts'), dts);
+  fs.writeFileSync(path.join(dynamicDest, 'vui.d.mts'), dts);
 
   let iconFontEntries: RawIconFontEntry[] = iconFont || [
     {

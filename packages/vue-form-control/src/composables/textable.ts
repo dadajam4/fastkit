@@ -129,8 +129,9 @@ export function createTextableSettings() {
   return { props, emits };
 }
 
-export interface TextableEmitOptions
-  extends ReturnType<typeof createTextableEmits> {}
+export interface TextableEmitOptions extends ReturnType<
+  typeof createTextableEmits
+> {}
 
 export type TextableContext = SetupContext<TextableEmitOptions>;
 

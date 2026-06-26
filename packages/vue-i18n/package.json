@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-i18n",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "@fastkit/vue-i18n",
   "keywords": [
     "fastkit",
@@ -26,7 +26,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-i18n.d.ts",
+      "types": "./dist/vue-i18n.d.mts",
       "import": {
         "default": "./dist/vue-i18n.mjs"
       }
@@ -34,11 +34,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-i18n.mjs",
-  "types": "./dist/vue-i18n.d.ts",
+  "types": "./dist/vue-i18n.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-i18n.d.ts"
+        "./dist/vue-i18n.d.mts"
       ]
     }
   },
@@ -63,8 +63,8 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.22",
-    "vue-router": "^4.5.1"
+    "vue": "^3.5.38",
+    "vue-router": "^5.1.0"
   },
   "peerDependencies": {
     "vue": "^3.5.0",

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vite-kit",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "A collection of toolkits for vite application setup.",
   "keywords": [
     "fastkit",
@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vite-kit.d.ts",
+      "types": "./dist/vite-kit.d.mts",
       "import": {
         "default": "./dist/vite-kit.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vite-kit.mjs",
-  "types": "./dist/vite-kit.d.ts",
+  "types": "./dist/vite-kit.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vite-kit.d.ts"
+        "./dist/vite-kit.d.mts"
       ]
     }
   },
@@ -61,7 +61,7 @@
     "@fastkit/tiny-logger": "workspace:^"
   },
   "devDependencies": {
-    "vite": "^7.1.9"
+    "vite": "^8.0.16"
   },
   "peerDependencies": {
     "vite": "^5.0.0 || ^6.0.0 || ^7.0.0"

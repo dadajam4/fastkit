@@ -182,8 +182,7 @@ export interface PrepareFormSubmissionOptions {
 /**
  * Dispatch option for form action
  */
-export interface DispatchFormActionOptions
-  extends PrepareFormSubmissionOptions {
+export interface DispatchFormActionOptions extends PrepareFormSubmissionOptions {
   /** Submit event object */
   event?: Event;
 }

@@ -6,8 +6,10 @@ import { useVui } from '../../injections';
 import type { VuiService } from '../../service';
 import { RawIconProp, resolveRawIconProp } from '../VIcon';
 
-export interface BreadcrumbsItem
-  extends Pick<ActionableInheritProps, 'to' | 'disabled'> {
+export interface BreadcrumbsItem extends Pick<
+  ActionableInheritProps,
+  'to' | 'disabled'
+> {
   /**
    * "正確なマッチモード" を強制する場合true
    */

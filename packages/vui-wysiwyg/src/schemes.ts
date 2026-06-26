@@ -30,8 +30,9 @@ export type WysiwygEditorEvent = (typeof EDITOR_EVENTS)[number];
 
 export type WysiwygEditorPrefixedEvent = PrefixedEventName<WysiwygEditorEvent>;
 
-export interface WysiwygEditorEventsOptions
-  extends Partial<Pick<EditorOptions, WysiwygEditorPrefixedEvent>> {}
+export interface WysiwygEditorEventsOptions extends Partial<
+  Pick<EditorOptions, WysiwygEditorPrefixedEvent>
+> {}
 
 export type WysiwygEditorEventsBucket = {
   [EV in WysiwygEditorEvent]: NonNullable<

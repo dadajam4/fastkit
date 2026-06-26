@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { createRouter, createMemoryHistory, RouteRecordRaw } from 'vue-router';
-import { renderSSRHead } from '@unhead/ssr';
+import { renderSSRHead } from 'unhead/server';
 import { createMockPathRoute } from '@fastkit/vue-utils';
 import { getFullPath, withoutSuffix, createUrl } from './utils/route';
 import { serializeState } from './utils/serialize-state';

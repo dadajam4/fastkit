@@ -146,8 +146,9 @@ export function createTextInputNodeSettings() {
   return { props, emits };
 }
 
-export interface TextInputNodeEmitOptions
-  extends ReturnType<typeof createTextInputNodeEmits> {}
+export interface TextInputNodeEmitOptions extends ReturnType<
+  typeof createTextInputNodeEmits
+> {}
 
 export type TextInputNodeContext = SetupContext<TextInputNodeEmitOptions>;
 

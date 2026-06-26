@@ -1,11 +1,14 @@
-import type { Options as TSUpOptions } from 'tsup';
+import type { UserConfig as TSDownConfig } from 'tsdown';
 import type { Path } from '../path';
 import { RequiredPackageJSON, MarkRequired } from './_utils';
 import type { PlugboyProject } from '../project';
 import type { UserPluginOption, Plugin } from './plugin';
-import type { UserHooks, BuildedHooks } from './hook';
+import type { BuildedHooks, UserHooks } from './hook';
 import { DTSSettings, NormalizedDTSSettings } from './dts';
 import { OptimizeCSSOptions } from './css';
+import type { ExternalOption } from '../types';
+import { type NoExternalOption } from './tsdown';
+import { type CssOptions } from '@tsdown/css';
 
 export const WORKSPACE_REQUIRED_FIELDS = ['name', 'version'] as const;
 
@@ -51,22 +54,22 @@ export type WorkspaceEntries = Record<string, WorkspaceEntry>;
  */
 export type RawWorkspaceEntries = Record<string, RawWorkspaceEntry>;
 
-export const TSUP_SYNC_OPTIONS = [
+export const TSDOWN_SYNC_OPTIONS = [
   'define',
-  'noExternal',
-  'external',
-  'replaceNodeEnv',
   'skipNodeModulesBundle',
-] as const;
+  'onSuccess',
+  'copy',
+  'deps',
+] as const satisfies (keyof TSDownConfig)[];
 
-type TSUpSyncOption = (typeof TSUP_SYNC_OPTIONS)[number];
+type TSDownSyncOption = (typeof TSDOWN_SYNC_OPTIONS)[number];
 
-interface TSUpSyncOptions extends Pick<TSUpOptions, TSUpSyncOption> {}
+interface TSDownSyncOptions extends Pick<TSDownConfig, TSDownSyncOption> {}
 
 /**
  * Workspace User Configuration
  */
-export interface UserWorkspaceConfig extends TSUpSyncOptions {
+export interface UserWorkspaceConfig extends TSDownSyncOptions {
   /**
    * Ignore project settings
    *
@@ -90,10 +93,34 @@ export interface UserWorkspaceConfig extends TSUpSyncOptions {
    */
   plugins?: UserPluginOption[];
   /**
-   * d.ts output setting
+   * declaration output setting
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
+  /**
+   * Directory whose contents are copied into the output directory (`dist`).
+   *
+   * Owned by plugboy (not tsdown's `copy`) so the copy is performed identically
+   * in both `build` and `stub`. Use tsdown's `copy` for advanced cases that
+   * only need to run during a real build.
+   *
+   * - `true` (default): copy `./public`
+   * - `false`: disable
+   * - string: copy the given directory
+   *
+   * @default true
+   */
+  publicDir?: string | boolean;
+  /**
+   * tsdown's `copy` option — copy files into the output directory.
+   *
+   * @remarks
+   * Runs during `build` only. `stub` does NOT execute this (it does not run
+   * tsdown). For assets that must also be present in the stub output, use
+   * {@link publicDir}, which plugboy copies identically in both `build` and
+   * `stub`.
+   */
+  copy?: TSDownConfig['copy'];
   /**
    * CSS optimization options
    *
@@ -110,13 +137,20 @@ export interface UserWorkspaceConfig extends TSUpSyncOptions {
  * Workspace Configuration
  */
 export interface ResolvedWorkspaceConfig
-  extends Required<
+  extends
+    Required<
       Omit<
         UserWorkspaceConfig,
-        'entries' | 'hooks' | 'plugins' | 'dts' | 'optimizeCSS' | TSUpSyncOption
+        | 'entries'
+        | 'hooks'
+        | 'plugins'
+        | 'dts'
+        | 'publicDir'
+        | 'optimizeCSS'
+        | TSDownSyncOption
       >
     >,
-    TSUpSyncOptions {
+    TSDownSyncOptions {
   /**
    * Configuration of all entries in the workspace
    *
@@ -134,10 +168,16 @@ export interface ResolvedWorkspaceConfig
    */
   plugins: Plugin[];
   /**
-   * d.ts output setting
+   * declaration output setting
    * @see {@link DTSSettings}
    */
   dts?: DTSSettings;
+  /**
+   * Directory whose contents are copied into the output directory (`dist`),
+   * or `false` to disable. Resolved from {@link UserWorkspaceConfig.publicDir}
+   * (`true` → `'public'`).
+   */
+  publicDir: string | false;
   /**
    * CSS optimization options
    *
@@ -200,7 +240,7 @@ export interface WorkspaceSetupContext {
    */
   meta: WorkspaceMeta;
   /**
-   * プラグインリスト
+   * Plugin list
    * @see {@link Plugin}
    */
   plugins: Plugin[];
@@ -210,10 +250,11 @@ export interface WorkspaceSetupContext {
    */
   hooks: BuildedHooks;
   /**
-   * d.ts output setting
+   * declaration output setting
    * @see {@link NormalizedDTSSettings}
    */
   dts: NormalizedDTSSettings;
+  css?: CssOptions;
   /**
    * CSS optimization options
    *
@@ -222,4 +263,8 @@ export interface WorkspaceSetupContext {
    * @see {@link OptimizeCSSOptions}
    */
   optimizeCSS: OptimizeCSSOptions | false;
+  // @TODO JSDoc
+  mergeExternals(override: ExternalOption): void;
+  // @TODO JSDoc
+  mergeNoExternals(override: NoExternalOption): void;
 }

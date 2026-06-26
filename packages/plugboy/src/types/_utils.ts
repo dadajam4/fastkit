@@ -9,3 +9,7 @@ export type MarkRequired<
 
 export type RequiredPackageJSON<Field extends string> = PackageJson &
   Required<Pick<PackageJson, Field>>;
+
+export type MaybePromise<T> = T | Promise<T>;
+
+export type NullValue<T = void> = T | undefined | null | void;

@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/tiny-logger",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "A small logger to display the application logs just a little bit nicer.",
   "keywords": [
     "fastkit",
@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/tiny-logger.d.ts",
+      "types": "./dist/tiny-logger.d.mts",
       "import": {
         "default": "./dist/tiny-logger.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/tiny-logger.mjs",
-  "types": "./dist/tiny-logger.d.ts",
+  "types": "./dist/tiny-logger.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/tiny-logger.d.ts"
+        "./dist/tiny-logger.d.mts"
       ]
     }
   },

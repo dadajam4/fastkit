@@ -29,8 +29,9 @@ export interface SortableWrapperSlotContext<
   get attrs(): Record<string, any>;
 }
 
-export interface SortableItemSlotContext<T extends SortableData = SortableData>
-  extends SortableItemDetails<T> {
+export interface SortableItemSlotContext<
+  T extends SortableData = SortableData,
+> extends SortableItemDetails<T> {
   get sortable(): SortableContext<T>;
 }
 

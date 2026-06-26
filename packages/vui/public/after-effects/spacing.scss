@@ -87,7 +87,11 @@ $sides-map: (
       @if $has-auto {
         #{$base-selector}-auto#{$breakpoint-suffix} {
           @each $sides-prop in $sides-props {
-            $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+            $prop-suffix: '';
+
+            @if $sides-prop != 'all' {
+              $prop-suffix: '-' + $sides-prop;
+            }
 
             #{$prop-name}#{$prop-suffix}: auto;
           }
@@ -95,16 +99,23 @@ $sides-map: (
       }
 
       @for $i from 0 through 10 {
-        $base-value: if(
-          $i == 0,
-          0,
-          if($i == 1, var(--root-spacing), calc(var(--root-spacing) * #{$i}))
-        );
+        $base-value: 0;
+
+        @if $i == 1 {
+          $base-value: var(--root-spacing);
+        } @else if $i > 1 {
+          $base-value: calc(var(--root-spacing) * #{$i});
+        }
+
         $half-value: calc(var(--root-spacing) * #{$i + 0.5});
 
         #{$base-selector}-#{$i}#{$breakpoint-suffix} {
           @each $sides-prop in $sides-props {
-            $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+            $prop-suffix: '';
+
+            @if $sides-prop != 'all' {
+              $prop-suffix: '-' + $sides-prop;
+            }
 
             #{$prop-name}#{$prop-suffix}: $base-value;
           }
@@ -112,7 +123,11 @@ $sides-map: (
 
         #{$base-selector}-#{$i}h#{$breakpoint-suffix} {
           @each $sides-prop in $sides-props {
-            $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+            $prop-suffix: '';
+
+            @if $sides-prop != 'all' {
+              $prop-suffix: '-' + $sides-prop;
+            }
 
             #{$prop-name}#{$prop-suffix}: $half-value;
           }
@@ -121,16 +136,21 @@ $sides-map: (
 
       @if $has-negative {
         @for $i from 1 through 10 {
-          $base-value: if(
-            $i == 1,
-            calc(var(--root-spacing) * -1),
-            calc(var(--root-spacing) * -#{$i})
-          );
+          $base-value: calc(var(--root-spacing) * -1);
+
+          @if $i > 1 {
+            $base-value: calc(var(--root-spacing) * -#{$i});
+          }
+
           $half-value: calc(var(--root-spacing) * -#{$i + 0.5});
 
           #{$base-selector}-n#{$i}#{$breakpoint-suffix} {
             @each $sides-prop in $sides-props {
-              $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+              $prop-suffix: '';
+
+              @if $sides-prop != 'all' {
+                $prop-suffix: '-' + $sides-prop;
+              }
 
               #{$prop-name}#{$prop-suffix}: $base-value;
             }
@@ -138,7 +158,11 @@ $sides-map: (
 
           #{$base-selector}-n#{$i}h#{$breakpoint-suffix} {
             @each $sides-prop in $sides-props {
-              $prop-suffix: if($sides-prop == 'all', '', '-' + $sides-prop);
+              $prop-suffix: '';
+
+              @if $sides-prop != 'all' {
+                $prop-suffix: '-' + $sides-prop;
+              }
 
               #{$prop-name}#{$prop-suffix}: $half-value;
             }

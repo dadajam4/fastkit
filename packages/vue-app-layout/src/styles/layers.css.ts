@@ -1,4 +1,4 @@
-import { defineLayerStyle } from '@fastkit/plugboy-vanilla-extract-plugin/css';
+import { defineLayerStyle } from '@fastkit/vanilla-extract-utils';
 
 export const framework = defineLayerStyle({ globalName: 'vue-app-layout' });
 

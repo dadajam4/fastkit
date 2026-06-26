@@ -45,8 +45,9 @@ export interface DebounceOptions {
 /**
  * Debounce settings
  */
-export interface DebounceSettings<FN extends AnyFunction = AnyFunction>
-  extends DebounceOptions {
+export interface DebounceSettings<
+  FN extends AnyFunction = AnyFunction,
+> extends DebounceOptions {
   /** handler function */
   handler: FN;
 }

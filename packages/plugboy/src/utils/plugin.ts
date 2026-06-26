@@ -1,12 +1,22 @@
 import { UserPluginOption, Plugin } from '../types';
-import { resolveListable } from './general';
 import { loadProjectConfig } from './project';
 
-export async function resolveUserPluginOptions(
-  pluginOptions: UserPluginOption[] | undefined,
+export async function resolveUserPluginOption(
+  pluginOption: UserPluginOption | undefined,
 ): Promise<Plugin[]> {
-  if (!pluginOptions) return [];
-  return resolveListable(pluginOptions);
+  if (!pluginOption) return [];
+
+  const awaited = await pluginOption;
+  if (!awaited) return [];
+
+  if (Array.isArray(pluginOption)) {
+    return (
+      await Promise.all(
+        pluginOption.map((o) => resolveUserPluginOption(o)).flat(),
+      )
+    ).flat();
+  }
+  return [awaited as Plugin];
 }
 
 export function definePlugin<T extends Plugin>(options: T): T {

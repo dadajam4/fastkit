@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/media-match-gen",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A tool to generate Type-safe media query breakpoint schemas.",
   "keywords": [
     "fastkit",
@@ -21,7 +21,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/media-match-gen.d.ts",
+      "types": "./dist/media-match-gen.d.mts",
       "import": {
         "default": "./dist/media-match-gen.mjs"
       }
@@ -29,11 +29,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/media-match-gen.mjs",
-  "types": "./dist/media-match-gen.d.ts",
+  "types": "./dist/media-match-gen.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/media-match-gen.d.ts"
+        "./dist/media-match-gen.d.mts"
       ]
     }
   },
@@ -56,7 +56,7 @@
     "@fastkit/media-match": "workspace:^",
     "@fastkit/node-util": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
-    "fs-extra": "^11.3.2"
+    "fs-extra": "^11.3.5"
   },
   "buildOptions": {
     "name": "MediaMatchGen"

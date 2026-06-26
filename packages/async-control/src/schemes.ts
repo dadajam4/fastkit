@@ -94,8 +94,9 @@ export type AsyncHandlerCacheRevalidateCondition<T = any> =
 /**
  * Cache controller behavior settings.
  */
-export interface AsyncHandlerCacheBehavior<T = any>
-  extends CacheControllerBehavior<T> {
+export interface AsyncHandlerCacheBehavior<
+  T = any,
+> extends CacheControllerBehavior<T> {
   /**
    * Cache Refresh Conditions.
    * This setting will trigger a cache update in the background after the cache is acquired.

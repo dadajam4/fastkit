@@ -16,7 +16,7 @@ import {
   WORKSPACE_CONFIG_BASENAME,
   SEARCH_BUNDLE_EXTENSIONS_MATCH,
 } from '../constants';
-import { resolveUserPluginOptions } from './plugin';
+import { resolveUserPluginOption } from './plugin';
 
 export function isWorkspacePackageJson(
   json: PackageJson,
@@ -57,18 +57,22 @@ export async function resolveUserWorkspaceConfig(
     entries,
     plugins,
     optimizeCSS = true,
+    publicDir = true,
+    hooks,
   } = userConfig;
   return {
     ...userConfig,
     ignoreProjectConfig,
     entries: resolveRawWorkspaceEntries(entries),
-    plugins: await resolveUserPluginOptions(plugins),
+    plugins: await resolveUserPluginOption(plugins),
     optimizeCSS: optimizeCSS === true ? {} : optimizeCSS,
+    publicDir: publicDir === true ? 'public' : publicDir,
+    hooks,
   };
 }
 
-export function defineWorkspaceConfig<Config extends UserWorkspaceConfig>(
-  config: Config,
+export function defineWorkspaceConfig(
+  config: UserWorkspaceConfig,
 ): Promise<ResolvedWorkspaceConfig> {
   return resolveUserWorkspaceConfig(config);
 }

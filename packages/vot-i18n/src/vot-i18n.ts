@@ -19,7 +19,9 @@ export interface VotI18n<
   LocaleMeta extends I18nLocaleMeta,
   Components extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   StrategyCustomInterface extends { [key in keyof any]: any } = {},
-> extends VotPlugin,
+>
+  extends
+    VotPlugin,
     Pick<
       VueI18n<
         LocaleName,

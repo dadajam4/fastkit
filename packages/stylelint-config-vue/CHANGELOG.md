@@ -1,5 +1,29 @@
 # @fastkit/stylelint-config-vue
 
+## 0.4.0
+
+### Minor Changes
+
+- Release accompanying the plugboy bundler migration (tsup → tsdown).
+
+  No API changes are intended for this package. The minor bump exists because the package is rebuilt with the new bundler (tsdown / rolldown), and is published together so any incidental output differences are versioned explicitly.
+
+### Patch Changes
+
+- [`25602cb`](https://github.com/dadajam4/fastkit/commit/25602cbe1493cbeb10456b8b0e7680983d9e2ed7) Thanks [@dadajam4](https://github.com/dadajam4)! - Update dependencies and apply the associated fixes.
+
+- Updated dependencies [[`25602cb`](https://github.com/dadajam4/fastkit/commit/25602cbe1493cbeb10456b8b0e7680983d9e2ed7)]:
+  - @fastkit/stylelint-config@0.17.0
+
+## 0.3.1-next.0
+
+### Patch Changes
+
+- Update dependencies and apply the associated fixes.
+
+- Updated dependencies []:
+  - @fastkit/stylelint-config@0.16.1-next.0
+
 ## 0.3.0
 
 ### Patch Changes

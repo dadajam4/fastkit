@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/plugboy",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "",
   "keywords": [],
   "repository": {
@@ -40,9 +40,13 @@
       "import": "./dist/dependencies/sort-package-json.mjs",
       "types": "./dist/dependencies/sort-package-json.d.ts"
     },
-    "./dependencies/tsup": {
-      "import": "./dist/dependencies/tsup.mjs",
-      "types": "./dist/dependencies/tsup.d.ts"
+    "./dependencies/tsdown": {
+      "import": "./dist/dependencies/tsdown.mjs",
+      "types": "./dist/dependencies/tsdown.d.ts"
+    },
+    "./runtime-utils": {
+      "import": "./dist/runtime-utils.mjs",
+      "types": "./dist/runtime-utils.d.ts"
     },
     "./env": {
       "types": "./env.d.ts"
@@ -61,26 +65,27 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
     "lint": "pnpm run eslint",
     "format": "pnpm run eslint:fix",
-    "typecheck": "tsc --noEmit --skipLibCheck",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
-    "@inquirer/prompts": "^7.8.6",
-    "@swc/core": "^1.13.5",
+    "@inquirer/prompts": "^8.5.2",
+    "@tsdown/css": "^0.22.2",
+    "acorn": "^8.17.0",
     "bundle-require": "^5.1.0",
-    "cac": "^6.7.14",
-    "cssnano": "^7.1.1",
-    "esbuild": "^0.25.10",
-    "execa": "^9.6.0",
-    "glob": "^11.0.3",
-    "pkg-types": "^2.3.0",
-    "sort-package-json": "^3.4.0",
-    "tsup": "^8.5.0"
+    "cac": "^7.0.0",
+    "cssnano": "^8.0.2",
+    "execa": "^9.6.1",
+    "glob": "^13.0.6",
+    "magic-string": "^0.30.21",
+    "pkg-types": "^2.3.1",
+    "sort-package-json": "^4.0.0",
+    "tsdown": "^0.22.2"
   }
 }

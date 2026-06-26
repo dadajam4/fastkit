@@ -313,10 +313,9 @@ export interface BoundableInputControlOptions<
   EV extends T | null = T | null,
   Min extends T | null = null,
   Max extends T | null = null,
-> extends Omit<
-      BoundableInputControlPropsOptions<T, MV, SV, EV, Min, Max>,
-      'type'
-    >,
+>
+  extends
+    Omit<BoundableInputControlPropsOptions<T, MV, SV, EV, Min, Max>, 'type'>,
     Pick<FormNodeControlBaseOptions, 'nodeType'> {}
 
 export class BoundableInputControl<

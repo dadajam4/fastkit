@@ -364,12 +364,9 @@ export interface DefineMenuSettings<
   Props extends Readonly<ComponentPropsOptions>,
   Emits extends EmitsOptions,
   Slots extends SlotsType,
-> extends DefineStackableSettings<
-      Props & MenuPropsOptions,
-      Emits,
-      Slots,
-      MenuAPI
-    >,
+>
+  extends
+    DefineStackableSettings<Props & MenuPropsOptions, Emits, Slots, MenuAPI>,
     CreateMenuSchemeOptions,
     Pick<UseStackControlOptions, 'activatorAttrs' | 'stackType'> {
   props?: Props;

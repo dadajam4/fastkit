@@ -90,11 +90,8 @@ export type I18nComponentLocaleOrLoader<
   RelativeTimeFormats extends I18nRelativeTimeFormats = I18nRelativeTimeFormats,
   NumberFormats extends I18nNumberFormats = I18nNumberFormats,
   ListFormats extends I18nListFormats = I18nListFormats,
-  Dependencies extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   Strict extends boolean = false,
 > =
   | I18nComponentLocale<
@@ -134,11 +131,8 @@ export type I18nComponentLocales<
   RelativeTimeFormats extends I18nRelativeTimeFormats = I18nRelativeTimeFormats,
   NumberFormats extends I18nNumberFormats = I18nNumberFormats,
   ListFormats extends I18nListFormats = I18nListFormats,
-  Dependencies extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
 > = Record<
   BaseLocale,
   I18nComponentLocaleOrLoader<
@@ -270,12 +264,11 @@ export interface I18nComponent<
   RelativeTimeFormats extends I18nRelativeTimeFormats = I18nRelativeTimeFormats,
   NumberFormats extends I18nNumberFormats = I18nNumberFormats,
   ListFormats extends I18nListFormats = I18nListFormats,
-  Dependencies extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
-> extends I18nComponentStaticImpl<
+  Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+>
+  extends
+    I18nComponentStaticImpl<
       LocaleName,
       BaseLocale,
       LocaleMeta,
@@ -353,12 +346,11 @@ export interface I18nComponentStatic<
   RelativeTimeFormats extends I18nRelativeTimeFormats = I18nRelativeTimeFormats,
   NumberFormats extends I18nNumberFormats = I18nNumberFormats,
   ListFormats extends I18nListFormats = I18nListFormats,
-  Dependencies extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
-> extends I18nComponentStaticImpl<
+  Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+>
+  extends
+    I18nComponentStaticImpl<
       LocaleName,
       BaseLocale,
       LocaleMeta,

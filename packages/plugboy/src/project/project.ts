@@ -62,7 +62,7 @@ export class PlugboyProject {
   get hooks(): UserHooks[] {
     const { hooks: _hooks, plugins } = this.config;
     const pluginHooks = plugins.map((plugin) => plugin.hooks);
-    return [_hooks, ...pluginHooks].filter((hook): hook is UserHooks => !!hook);
+    return [_hooks, ...pluginHooks].filter((hook) => !!hook);
   }
 
   constructor(ctx: ProjectSetupContext) {

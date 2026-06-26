@@ -170,8 +170,10 @@ export interface VuiServiceOptions {
   requiredChip?: VuiVNodeResolver;
 }
 
-export interface RawVuiServiceOptions
-  extends Omit<Partial<VuiServiceOptions>, 'uiSettings' | 'icons'> {
+export interface RawVuiServiceOptions extends Omit<
+  Partial<VuiServiceOptions>,
+  'uiSettings' | 'icons'
+> {
   uiSettings?: RawVuiServiceUISettings;
   icons?: RawVuiServiceIconSettings;
 }

@@ -11,7 +11,7 @@ import {
   SEARCH_BUNDLE_EXTENSIONS_MATCH,
 } from '../constants';
 import { findConfig } from './file';
-import { resolveUserPluginOptions } from './plugin';
+import { resolveUserPluginOption } from './plugin';
 
 export function isProjectPackageJson(
   json: PackageJson,
@@ -32,6 +32,7 @@ export async function resolveUserProjectConfig(
     readme = (json) => `# ${json.name}\n`,
     plugins,
     optimizeCSS = true,
+    hooks,
   } = userConfig;
   return {
     workspacesDir,
@@ -39,13 +40,14 @@ export async function resolveUserProjectConfig(
     peerDependencies,
     tsconfig,
     readme,
-    plugins: await resolveUserPluginOptions(plugins),
+    plugins: await resolveUserPluginOption(plugins),
     optimizeCSS: optimizeCSS === true ? {} : optimizeCSS,
+    hooks,
   };
 }
 
-export function defineProjectConfig<Config extends UserProjectConfig>(
-  config: Config,
+export function defineProjectConfig(
+  config: UserProjectConfig,
 ): Promise<ResolvedProjectConfig> {
   return resolveUserProjectConfig(config);
 }

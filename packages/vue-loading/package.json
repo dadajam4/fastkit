@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-loading",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Loading component for Vue applications.",
   "keywords": [
     "fastkit",
@@ -22,7 +22,7 @@
     "./package.json": "./package.json",
     "./vue-loading.css": "./dist/vue-loading.css",
     ".": {
-      "types": "./dist/vue-loading.d.ts",
+      "types": "./dist/vue-loading.d.mts",
       "import": {
         "default": "./dist/vue-loading.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-loading.mjs",
-  "types": "./dist/vue-loading.d.ts",
+  "types": "./dist/vue-loading.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-loading.d.ts"
+        "./dist/vue-loading.d.mts"
       ]
     }
   },
@@ -52,7 +52,7 @@
     "stylelint": "stylelint \"**/*.{css,scss,vue,html}\" --allow-empty-input",
     "stylelint:fix": "stylelint \"**/*.{css,scss,vue,html}\" --fix --allow-empty-input",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit --skipLibCheck"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@fastkit/color-scheme": "workspace:^",
@@ -62,8 +62,8 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.22",
-    "vue-router": "^4.5.1"
+    "vue": "^3.5.38",
+    "vue-router": "^5.1.0"
   },
   "peerDependencies": {
     "vue": "^3.5.0",

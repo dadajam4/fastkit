@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/cloner",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "cloner",
   "keywords": [],
   "repository": {
@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/cloner.d.ts",
+      "types": "./dist/cloner.d.mts",
       "import": {
         "default": "./dist/cloner.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/cloner.mjs",
-  "types": "./dist/cloner.d.ts",
+  "types": "./dist/cloner.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/cloner.d.ts"
+        "./dist/cloner.d.mts"
       ]
     }
   },

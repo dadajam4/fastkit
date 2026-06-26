@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/visibility",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "A library to watch the visible state of the browser window.",
   "keywords": [
     "fastkit",
@@ -20,7 +20,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/visibility.d.ts",
+      "types": "./dist/visibility.d.mts",
       "import": {
         "default": "./dist/visibility.mjs"
       }
@@ -28,11 +28,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/visibility.mjs",
-  "types": "./dist/visibility.d.ts",
+  "types": "./dist/visibility.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/visibility.d.ts"
+        "./dist/visibility.d.mts"
       ]
     }
   },

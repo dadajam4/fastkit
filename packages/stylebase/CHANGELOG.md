@@ -1,5 +1,13 @@
 # @fastkit/stylebase
 
+## 0.14.0
+
+### Minor Changes
+
+- Release accompanying the plugboy bundler migration (tsup → tsdown).
+
+  No API changes are intended for this package. The minor bump exists because the package is rebuilt with the new bundler (tsdown / rolldown), and is published together so any incidental output differences are versioned explicitly.
+
 ## 0.13.1
 
 ### Patch Changes

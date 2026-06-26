@@ -32,8 +32,7 @@ export type FormSelectorItemGroupProps = ExtractPropTypes<
 
 export type FormSelectorItemGroupContext = SetupContext;
 
-export interface FormSelectorItemGroupControlOptions
-  extends FormNodeControlBaseOptions {
+export interface FormSelectorItemGroupControlOptions extends FormNodeControlBaseOptions {
   parentNodeType?: FormNodeType;
 }
 

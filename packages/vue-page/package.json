@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-page",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Middleware for more convenient control of routing in Vue applications.",
   "keywords": [
     "fastkit",
@@ -22,7 +22,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-page.d.ts",
+      "types": "./dist/vue-page.d.mts",
       "import": {
         "default": "./dist/vue-page.mjs"
       }
@@ -30,11 +30,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-page.mjs",
-  "types": "./dist/vue-page.d.ts",
+  "types": "./dist/vue-page.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-page.d.ts"
+        "./dist/vue-page.d.mts"
       ]
     }
   },
@@ -60,8 +60,8 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.22",
-    "vue-router": "^4.5.1"
+    "vue": "^3.5.38",
+    "vue-router": "^5.1.0"
   },
   "peerDependencies": {
     "vue": "^3.5.0",

@@ -34,11 +34,8 @@ export type I18nTranslationsFactory<
   RelativeTimeFormats extends I18nRelativeTimeFormats = I18nRelativeTimeFormats,
   NumberFormats extends I18nNumberFormats = I18nNumberFormats,
   ListFormats extends I18nListFormats = I18nListFormats,
-  Dependencies extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   Strict extends boolean = false,
 > = (
   component: I18nComponent<
@@ -64,11 +61,8 @@ export type I18nTranslationsOrFactory<
   RelativeTimeFormats extends I18nRelativeTimeFormats = I18nRelativeTimeFormats,
   NumberFormats extends I18nNumberFormats = I18nNumberFormats,
   ListFormats extends I18nListFormats = I18nListFormats,
-  Dependencies extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   Strict extends boolean = true,
 > =
   | I18nTranslationsData<Translations, Strict>
@@ -100,11 +94,8 @@ function normalizeTranslationsToFactory<
   RelativeTimeFormats extends I18nRelativeTimeFormats = I18nRelativeTimeFormats,
   NumberFormats extends I18nNumberFormats = I18nNumberFormats,
   ListFormats extends I18nListFormats = I18nListFormats,
-  Dependencies extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   Strict extends boolean = true,
 >(
   target: I18nTranslationsOrFactory<
@@ -159,11 +150,8 @@ export interface I18nComponentLocaleSettings<
   RelativeTimeFormats extends I18nRelativeTimeFormats = I18nRelativeTimeFormats,
   NumberFormats extends I18nNumberFormats = I18nNumberFormats,
   ListFormats extends I18nListFormats = I18nListFormats,
-  Dependencies extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   Strict extends boolean = false,
 > {
   /** Translation object or its factory */
@@ -206,11 +194,8 @@ export class I18nComponentLocale<
   RelativeTimeFormats extends I18nRelativeTimeFormats = I18nRelativeTimeFormats,
   NumberFormats extends I18nNumberFormats = I18nNumberFormats,
   ListFormats extends I18nListFormats = I18nListFormats,
-  Dependencies extends I18nDependencies<
-    LocaleName,
-    BaseLocale,
-    LocaleMeta
-  > = I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
+  Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta> =
+    I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   Strict extends boolean = false,
 > {
   /**

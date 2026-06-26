@@ -24,9 +24,9 @@ export interface DateInputNodeControlPropsOptions<
   Min extends DateInputValue | null = null,
   Max extends DateInputValue | null = null,
 > extends Omit<
-    BoundableInputControlPropsOptions<DateInputValue, D, DS, DE, Min, Max>,
-    'type'
-  > {
+  BoundableInputControlPropsOptions<DateInputValue, D, DS, DE, Min, Max>,
+  'type'
+> {
   omitEndYearFormat?: boolean;
 }
 

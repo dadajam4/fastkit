@@ -51,13 +51,13 @@ export function createNumberInputNodeSettings() {
   return { props, emits };
 }
 
-export interface NumberInputNodeEmitOptions
-  extends ReturnType<typeof createNumberInputNodeEmits> {}
+export interface NumberInputNodeEmitOptions extends ReturnType<
+  typeof createNumberInputNodeEmits
+> {}
 
 export type NumberInputNodeContext = SetupContext<NumberInputNodeEmitOptions>;
 
-export interface NumberInputNodeControlOptions
-  extends FormNodeControlBaseOptions {}
+export interface NumberInputNodeControlOptions extends FormNodeControlBaseOptions {}
 
 export class NumberInputNodeControl extends FormNodeControl<number, undefined> {
   readonly _props: NumberInputNodeProps;

@@ -2,17 +2,20 @@
 
 🌐 [English](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README.md) | 日本語
 
-モノレポ対応のモジュールバンドラー・プロジェクト管理ツールです。esbuild、tsup等をベースとした高速ビルドシステムを提供します。
+モノレポ対応のモジュールバンドラー・プロジェクト管理ツールです。tsdownをベースとした高速ビルドシステムを提供します。
+
+> **v0.x からの移行は** [v1 移行ガイド](./docs/migrations/v1.md)（tsdown 移行）を参照してください。
 
 ## 特徴
 
-- **高速ビルド**: esbuild、tsupベースの超高速バンドリング
+- **高速ビルド**: tsdownベースの超高速バンドリング
 - **モノレポ対応**: マルチパッケージプロジェクトの統合管理
 - **TypeScript完全対応**: 自動型定義生成・最適化
 - **プラグインシステム**: 拡張可能なアーキテクチャ
 - **CSS統合**: Sass、Vanilla Extract、CSS最適化サポート
 - **開発効率**: stub機能による高速開発サイクル
 - **自動化**: package.json、exports自動生成
+- **環境定数**: 開発時のみのコードを切り分ける `__PLUGBOY_DEV__` / `__PLUGBOY_STUB__`（[ドキュメント](./docs/env-constants-ja.md)）
 
 ## インストール
 
@@ -189,18 +192,21 @@ export default defineProjectConfig({
 
 ### カスタムプラグイン
 
-```typescript
-import type { Plugin } from '@fastkit/plugboy';
+プラグインは tsdown（Rollup互換）プラグインを拡張し、plugboyのライフサイクルフック用の `hooks` フィールドを追加できます。型推論を得るには `definePlugin` を使用します。
 
-const customPlugin = (): Plugin => ({
-  name: 'custom-plugin',
-  setup(workspace) {
-    // プラグイン初期化
-    workspace.hooks.buildStart?.tap('custom-plugin', () => {
-      console.log('Build started');
-    });
-  }
-});
+```typescript
+import { definePlugin } from '@fastkit/plugboy';
+
+const customPlugin = () =>
+  definePlugin({
+    name: 'custom-plugin',
+    hooks: {
+      // ワークスペースインスタンスが生成される直前に呼び出されます
+      setupWorkspace(ctx, getWorkspace) {
+        console.log('Setting up workspace:', ctx.json.name);
+      }
+    }
+  });
 
 export default defineWorkspaceConfig({
   plugins: [customPlugin()]
@@ -279,25 +285,30 @@ export default defineWorkspaceConfig({
     createVueJSXPlugin(),
     createSassPlugin()
   ],
-  external: ['vue']
+  deps: {
+    neverBundle: ['vue']
+  }
 });
 ```
 
 ## フック システム
 
-### ビルドフック
+### ライフサイクルフック
 
 ```typescript
 export default defineWorkspaceConfig({
   hooks: {
-    buildStart: () => {
-      console.log('Build starting...');
+    // ワークスペースインスタンスが生成される直前に呼び出されます
+    setupWorkspace: (ctx, getWorkspace) => {
+      console.log('Setting up workspace:', ctx.json.name);
     },
-    buildEnd: (result) => {
-      console.log('Build completed:', result);
+    // ワークスペースインスタンスの生成後に呼び出されます
+    createWorkspace: (workspace) => {
+      console.log('Workspace created:', workspace.name);
     },
-    buildError: (error) => {
-      console.error('Build failed:', error);
+    // package.json が修正・保存される直前に呼び出されます
+    preparePackageJSON: (json, workspace) => {
+      json.sideEffects = false;
     }
   }
 });
@@ -343,8 +354,7 @@ export default defineWorkspaceConfig({
 
 ### 主要依存
 
-- `esbuild`: 高速JavaScriptビルダー
-- `tsup`: TypeScriptビルドツール
+- `tsdown`: TypeScriptビルドツール
 - `cac`: CLI作成ライブラリ
 - `glob`: ファイルマッチング
 - `cssnano`: CSS最適化

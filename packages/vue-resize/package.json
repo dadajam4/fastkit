@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-resize",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "vue-resize",
   "keywords": [],
   "repository": {
@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-resize.d.ts",
+      "types": "./dist/vue-resize.d.mts",
       "import": {
         "default": "./dist/vue-resize.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-resize.mjs",
-  "types": "./dist/vue-resize.d.ts",
+  "types": "./dist/vue-resize.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-resize.d.ts"
+        "./dist/vue-resize.d.mts"
       ]
     }
   },
@@ -49,7 +49,7 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.22"
+    "vue": "^3.5.38"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

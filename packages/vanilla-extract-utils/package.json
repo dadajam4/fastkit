@@ -1,0 +1,70 @@
+{
+  "name": "@fastkit/vanilla-extract-utils",
+  "version": "1.0.0",
+  "description": "vanilla-extract authoring helpers (layer-scoped styles, global themes).",
+  "keywords": [
+    "fastkit",
+    "vanilla-extract",
+    "css",
+    "layer"
+  ],
+  "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/vanilla-extract-utils#readme",
+  "bugs": {
+    "url": "https://github.com/dadajam4/fastkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadajam4/fastkit.git"
+  },
+  "license": "MIT",
+  "author": "dadajam4",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/vanilla-extract-utils.d.mts",
+      "import": {
+        "default": "./dist/vanilla-extract-utils.mjs"
+      }
+    },
+    "./*": "./dist/*"
+  },
+  "main": "./dist/vanilla-extract-utils.mjs",
+  "types": "./dist/vanilla-extract-utils.d.mts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/vanilla-extract-utils.d.mts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "plugboy build",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "eslint": "eslint .",
+    "eslint:fix": "eslint . --fix",
+    "format": "pnpm run eslint:fix",
+    "lint": "pnpm run eslint",
+    "stub": "plugboy stub",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@fastkit/plugboy": "workspace:^",
+    "@vanilla-extract/css": "^1.20.1"
+  },
+  "peerDependencies": {
+    "@vanilla-extract/css": "^1.20.1"
+  },
+  "_docs": {
+    "scope": "css",
+    "feature": "css",
+    "description": {
+      "en": "vanilla-extract authoring helpers (layer-scoped styles, global themes).",
+      "ja": "vanilla-extract のオーサリングヘルパ（レイヤースコープのスタイル、グローバルテーマ）。"
+    }
+  }
+}

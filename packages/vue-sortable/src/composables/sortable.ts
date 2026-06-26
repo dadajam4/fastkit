@@ -67,8 +67,9 @@ export type SortableUpdateGuardFn<T extends SortableData = SortableData> = (
   ctx: SortableUpdateContext<T>,
 ) => SortableGuardReturn;
 
-export interface SortableProps<T extends SortableData = SortableData>
-  extends ExtendedSortableOptions<SortableContext<T>> {
+export interface SortableProps<
+  T extends SortableData = SortableData,
+> extends ExtendedSortableOptions<SortableContext<T>> {
   modelValue?: T[];
   /**
    * Detection criteria for item key

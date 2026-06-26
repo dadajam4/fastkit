@@ -233,35 +233,41 @@ $props-map: (
 );
 
 @mixin grid-spacing($breakpoint-suffix: '', $direction: 'all') {
-  $props: if(
-    $direction == 'all',
-    ('top', 'left'),
-    if($direction == 'x', ('left'), ('top'))
-  );
-  $suffix: if($direction == 'all', '', '-' + $direction);
+  $props: ('top', 'left');
+
+  @if $direction == 'x' {
+    $props: ('left');
+  } @else if $direction == 'y' {
+    $props: ('top');
+  }
+
+  $suffix: '';
+
+  @if $direction != 'all' {
+    $suffix: '-' + $direction;
+  }
 
   @for $i from 1 through 10 {
-    $base-value: if(
-      $i == 0,
-      0,
-      if($i == 1, var(--root-spacing), calc(var(--root-spacing) * #{$i}))
-    );
+    $base-value: var(--root-spacing);
+
+    @if $i > 1 {
+      $base-value: calc(var(--root-spacing) * #{$i});
+    }
+
     $half-value: calc(var(--root-spacing) * #{$i + 0.5});
-    $negative-base-value: if(
-      $i == 1,
-      calc(var(--root-spacing) * -1),
-      calc(var(--root-spacing) * -#{$i})
-    );
+    $negative-base-value: calc(var(--root-spacing) * -1);
+
+    @if $i > 1 {
+      $negative-base-value: calc(var(--root-spacing) * -#{$i});
+    }
+
     $negative-half-value: calc(var(--root-spacing) * -#{$i + 0.5});
-    $container-width: if(
-      $i == 0,
-      100%,
-      if(
-        $i == 1,
-        calc(100% + var(--root-spacing)),
-        calc(100% + (var(--root-spacing) * #{$i}))
-      )
-    );
+    $container-width: calc(100% + var(--root-spacing));
+
+    @if $i > 1 {
+      $container-width: calc(100% + (var(--root-spacing) * #{$i}));
+    }
+
     $container-width-half: calc(100% + (var(--root-spacing) * #{$i + 0.5}));
 
     .grid-spacing#{$suffix}-#{$i}#{$breakpoint-suffix} {

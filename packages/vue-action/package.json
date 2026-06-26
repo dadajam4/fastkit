@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-action",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "vue-action",
   "keywords": [],
   "repository": {
@@ -13,7 +13,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/vue-action.d.ts",
+      "types": "./dist/vue-action.d.mts",
       "import": {
         "default": "./dist/vue-action.mjs"
       }
@@ -21,11 +21,11 @@
     "./*": "./dist/*"
   },
   "main": "./dist/vue-action.mjs",
-  "types": "./dist/vue-action.d.ts",
+  "types": "./dist/vue-action.d.mts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/vue-action.d.ts"
+        "./dist/vue-action.d.mts"
       ]
     }
   },
@@ -48,8 +48,8 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.22",
-    "vue-router": "^4.5.1"
+    "vue": "^3.5.38",
+    "vue-router": "^5.1.0"
   },
   "peerDependencies": {
     "vue": "^3.5.0",

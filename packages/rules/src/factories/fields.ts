@@ -31,7 +31,8 @@ export interface FieldsRuleConstraints<T extends Fields = Fields> {
  * Settings for the rule that executes validation for each field of the object.
  */
 export interface FieldsRuleSettings<T extends Fields = Fields>
-  extends Partial<RuleBasicSettings<FieldsRuleConstraints<T>>>,
+  extends
+    Partial<RuleBasicSettings<FieldsRuleConstraints<T>>>,
     FieldsRuleConstraints<T> {}
 
 /**
@@ -51,8 +52,9 @@ export interface FieldsRuleSettingsRule<T extends Fields = Fields> {
   value?: (obj: T) => any;
 }
 
-interface FieldsRuleSettingsRow<T extends Fields = Fields>
-  extends FieldsRuleSettingsRule<T> {
+interface FieldsRuleSettingsRow<
+  T extends Fields = Fields,
+> extends FieldsRuleSettingsRule<T> {
   path: string;
 }
 

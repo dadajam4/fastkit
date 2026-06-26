@@ -346,8 +346,9 @@ class Wrapper<T, D = T> {
   }
 }
 
-export interface FormNodeEmitOptions<T, D = T>
-  extends ReturnType<Wrapper<T, D>['wrapped']> {}
+export interface FormNodeEmitOptions<T, D = T> extends ReturnType<
+  Wrapper<T, D>['wrapped']
+> {}
 
 export function createFormNodeSettings<T, D = T>(
   options: FormNodeControlOptions<T, D>,

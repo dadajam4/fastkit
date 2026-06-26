@@ -3,17 +3,12 @@ import {
   InlineConfig,
   ResolvedConfig,
   mergeConfig,
+  type Rolldown,
 } from 'vite';
 import replace from '@rollup/plugin-replace';
 import { promises } from 'node:fs';
 import fs from 'fs-extra';
 import path from 'node:path';
-import type {
-  RollupOutput,
-  RollupWatcher,
-  OutputAsset,
-  OutputOptions,
-} from 'rollup';
 import {
   getEntryPoint,
   getPluginOptions,
@@ -127,7 +122,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
 
     if (isWatching) {
       // This is a build watcher
-      const watcher = clientResult as RollupWatcher;
+      const watcher = clientResult as Rolldown.RolldownWatcher;
       let resolved = false;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -164,14 +159,14 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
       const clientOutputs = (
         Array.isArray(clientResult)
           ? clientResult
-          : [clientResult as RollupOutput]
+          : [clientResult as Rolldown.RolldownOutput]
       ).flatMap((result) => result.output);
 
       // Get the index.html from the resulting bundle.
       indexHtmlTemplate = (
         clientOutputs.find(
           (file) => file.type === 'asset' && file.fileName === INDEX_HTML,
-        ) as OutputAsset
+        ) as Rolldown.OutputAsset
       )?.source as string;
 
       await viteBuild(serverBuildOptions);
@@ -208,7 +203,7 @@ async function generatePackageJson(
   if (serverBuildOptions.packageJson === false) return;
 
   const outputFile = (
-    serverBuildOptions.build?.rollupOptions?.output as OutputOptions
+    serverBuildOptions.build?.rollupOptions?.output as Rolldown.OutputOptions
   )?.file;
 
   const ssrOutput = path.parse(

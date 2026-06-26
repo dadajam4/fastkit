@@ -33,8 +33,9 @@ export function createNavigationItemProps() {
   };
 }
 
-export interface NavigationItemInput
-  extends ExtractPropInput<ReturnType<typeof createNavigationItemProps>> {
+export interface NavigationItemInput extends ExtractPropInput<
+  ReturnType<typeof createNavigationItemProps>
+> {
   key: string | number;
   label: VNodeChild | (() => VNodeChild);
   children?: NavigationItemInput[];
