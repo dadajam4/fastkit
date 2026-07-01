@@ -1,5 +1,42 @@
 # @fastkit/vui
 
+## 1.4.1
+
+### Patch Changes
+
+- [`d63b1af`](https://github.com/dadajam4/fastkit/commit/d63b1af8bf1bb131590ff540af82428cc60aeb7e) Thanks [@dadajam4](https://github.com/dadajam4)! - Strip the dangling `//# sourceMappingURL=*.d.mts.map` comment from emitted declaration files.
+
+  tsdown (rolldown) appends this comment to every `.d.(m)ts` it emits but does not emit the referenced declaration map, so consumers' editors/build tools fail to resolve it. plugboy now removes the comment during build — but only when the referenced map is genuinely absent, so it becomes a no-op automatically if a future tsdown starts emitting real declaration maps.
+
+  Every package in this monorepo is built by plugboy, so this patch re-publishes them all with declaration files that no longer point at a missing map.
+
+- Updated dependencies [[`d63b1af`](https://github.com/dadajam4/fastkit/commit/d63b1af8bf1bb131590ff540af82428cc60aeb7e)]:
+  - @fastkit/color-scheme@2.2.1
+  - @fastkit/color-scheme-gen@1.2.1
+  - @fastkit/dom@0.4.1
+  - @fastkit/helpers@0.16.1
+  - @fastkit/icon-font@2.2.1
+  - @fastkit/media-match@2.2.1
+  - @fastkit/media-match-gen@1.2.1
+  - @fastkit/rules@0.16.1
+  - @fastkit/tiny-logger@0.16.1
+  - @fastkit/vue-action@0.6.1
+  - @fastkit/vue-app-layout@0.19.1
+  - @fastkit/vue-body-scroll-lock@0.5.1
+  - @fastkit/vue-click-outside@0.5.1
+  - @fastkit/vue-color-scheme@0.18.1
+  - @fastkit/vue-disabled-reason@0.3.1
+  - @fastkit/vue-form-control@0.25.1
+  - @fastkit/vue-keyboard@0.5.1
+  - @fastkit/vue-loading@0.18.1
+  - @fastkit/vue-location@0.7.1
+  - @fastkit/vue-media-match@0.17.1
+  - @fastkit/vue-resize@0.5.1
+  - @fastkit/vue-scroller@0.18.1
+  - @fastkit/vue-stack@0.20.1
+  - @fastkit/vue-transitions@0.5.1
+  - @fastkit/vue-utils@0.18.1
+
 ## 1.4.0
 
 ### Minor Changes

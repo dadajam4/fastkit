@@ -1,5 +1,29 @@
 # @fastkit/eslint-config
 
+## 0.17.0
+
+### Minor Changes
+
+- [`bc06d47`](https://github.com/dadajam4/fastkit/commit/bc06d4726601129763f19c53271169258df3ff89) Thanks [@dadajam4](https://github.com/dadajam4)! - Clean up peer dependencies.
+
+  - Drop the unused `prettier` peer. The config only uses `eslint-config-prettier` (which does not require Prettier to be installed) to turn off formatting rules and does not run Prettier itself, so requiring `prettier` was misleading.
+  - Narrow the `eslint` peer from `^8.50.0` to `^9.0.0 || ^10.0.0`. This is a flat-config-only preset (built on typescript-eslint's flat configs and `eslint-plugin-vue` v10) that requires ESLint 9+; ESLint 8 is also end-of-life. Consumers must be on ESLint 9 or 10.
+
+### Patch Changes
+
+- [`dbc6fd1`](https://github.com/dadajam4/fastkit/commit/dbc6fd13195bed3206dbe1f28898ceef47fe2d75) Thanks [@dadajam4](https://github.com/dadajam4)! - Bump dependencies to their latest compatible versions:
+
+  - `@fastkit/eslint-config`: typescript-eslint 8.62.0
+  - `@fastkit/vui-wysiwyg`: @tiptap/\* 3.27.1
+  - `@fastkit/plugboy`: tsdown / @tsdown/css 0.22.3
+  - `@fastkit/plugboy-vue-jsx-plugin`: unplugin-vue-jsx 0.10.0
+
+- [`a738f71`](https://github.com/dadajam4/fastkit/commit/a738f7183415b73c5de85925cbd9550ab83a461a) Thanks [@dadajam4](https://github.com/dadajam4)! - Document the formatting stance and add usage docs; clean up how the Vue config disables formatting.
+
+  Both configs turn off ESLint's formatting rules (via `eslint-config-prettier`) and do **not** run any formatter — pick and run your own on your side (Prettier via CLI/editor, dprint, Biome, or `eslint-plugin-prettier` if you want to format through ESLint). The READMEs now cover installation, flat-config usage, and this stance.
+
+  Migration: no action needed for most setups. `@fastkit/eslint-config-vue` now disables formatting with `eslint-config-prettier/flat` instead of `@vue/eslint-config-prettier/skip-formatting`. Behavior is unchanged — `eslint-plugin-vue`'s formatting rules are still turned off — but it is no longer Prettier-specific (`skip-formatting` also forced `prettier/prettier` off), and the `@vue/eslint-config-prettier` dependency is dropped in favor of `eslint-config-prettier`.
+
 ## 0.16.0
 
 ### Minor Changes

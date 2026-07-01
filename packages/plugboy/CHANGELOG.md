@@ -1,5 +1,26 @@
 # @fastkit/plugboy
 
+## 1.0.1
+
+### Patch Changes
+
+- [`dbc6fd1`](https://github.com/dadajam4/fastkit/commit/dbc6fd13195bed3206dbe1f28898ceef47fe2d75) Thanks [@dadajam4](https://github.com/dadajam4)! - Bump dependencies to their latest compatible versions:
+
+  - `@fastkit/eslint-config`: typescript-eslint 8.62.0
+  - `@fastkit/vui-wysiwyg`: @tiptap/\* 3.27.1
+  - `@fastkit/plugboy`: tsdown / @tsdown/css 0.22.3
+  - `@fastkit/plugboy-vue-jsx-plugin`: unplugin-vue-jsx 0.10.0
+
+- [`40fae8a`](https://github.com/dadajam4/fastkit/commit/40fae8a9bad88289fb96bffa80dd5632799777fd) Thanks [@dadajam4](https://github.com/dadajam4)! - Write the temporary bundled config file into `<configDir>/node_modules/.plugboy/` instead of next to the config.
+
+  When loading `plugboy.project.*` / `plugboy.workspace.*`, `bundle-require` bundles the config to a throwaway `.mjs` before importing it. By default that landed in the repo/package root (e.g. `plugboy.project.bundled_<id>.mjs`), which is noisy and can be left behind if the build is force-killed. It now goes under the config's own `node_modules/.plugboy/` — already gitignored and out of sight — while module resolution is unchanged (Node still walks up to the same `node_modules`).
+
+- [`d63b1af`](https://github.com/dadajam4/fastkit/commit/d63b1af8bf1bb131590ff540af82428cc60aeb7e) Thanks [@dadajam4](https://github.com/dadajam4)! - Strip the dangling `//# sourceMappingURL=*.d.mts.map` comment from emitted declaration files.
+
+  tsdown (rolldown) appends this comment to every `.d.(m)ts` it emits but does not emit the referenced declaration map, so consumers' editors/build tools fail to resolve it. plugboy now removes the comment during build — but only when the referenced map is genuinely absent, so it becomes a no-op automatically if a future tsdown starts emitting real declaration maps.
+
+  Every package in this monorepo is built by plugboy, so this patch re-publishes them all with declaration files that no longer point at a missing map.
+
 ## 1.0.0
 
 ### Major Changes
