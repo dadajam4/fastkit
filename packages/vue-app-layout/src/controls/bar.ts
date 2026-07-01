@@ -3,8 +3,7 @@ import type { VueAppLayout } from './layout';
 import { VueAppLayoutPositionY, VAL_BAR_DEFAULT_POSITION } from '../schemes';
 
 export type VueAppBarActivateCondition =
-  | boolean
-  | ((layout: VueAppLayout) => boolean);
+  boolean | ((layout: VueAppLayout) => boolean);
 
 export interface VueAppBarSettings {
   /**

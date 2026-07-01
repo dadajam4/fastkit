@@ -13,8 +13,7 @@ import type {
 import { isObjectEqual } from '@fastkit/helpers';
 
 export type RawRouteComponent =
-  | RouteComponent
-  | (() => Promise<RouteComponent>);
+  RouteComponent | (() => Promise<RouteComponent>);
 
 export function getRouteMatchedComponents<
   P extends 'components' = 'components',
@@ -89,18 +88,51 @@ export function getQueryMergedLocation(
 }
 
 export type RouteQueryType =
-  | StringConstructor
-  | NumberConstructor
-  | BooleanConstructor;
+  StringConstructor | NumberConstructor | BooleanConstructor;
 
-export function getRouteQuery(bucket: LocationQuery, key: string): string | undefined; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQuery, key: string, type: undefined, defaultValue: string): string; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQuery, key: string, type: StringConstructor): string | undefined; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQuery, key: string, type: StringConstructor, defaultValue: string): string; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQuery, key: string, type: NumberConstructor): number | undefined; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQuery, key: string, type: NumberConstructor, defaultValue: number): number; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQuery, key: string, type: BooleanConstructor): boolean; // eslint-disable-line prettier/prettier
-export function getRouteQuery(bucket: LocationQuery, key: string, type: BooleanConstructor, defaultValue: boolean): boolean; // eslint-disable-line prettier/prettier
+export function getRouteQuery(
+  bucket: LocationQuery,
+  key: string,
+): string | undefined; // eslint-disable-line prettier/prettier
+export function getRouteQuery(
+  bucket: LocationQuery,
+  key: string,
+  type: undefined,
+  defaultValue: string,
+): string; // eslint-disable-line prettier/prettier
+export function getRouteQuery(
+  bucket: LocationQuery,
+  key: string,
+  type: StringConstructor,
+): string | undefined; // eslint-disable-line prettier/prettier
+export function getRouteQuery(
+  bucket: LocationQuery,
+  key: string,
+  type: StringConstructor,
+  defaultValue: string,
+): string; // eslint-disable-line prettier/prettier
+export function getRouteQuery(
+  bucket: LocationQuery,
+  key: string,
+  type: NumberConstructor,
+): number | undefined; // eslint-disable-line prettier/prettier
+export function getRouteQuery(
+  bucket: LocationQuery,
+  key: string,
+  type: NumberConstructor,
+  defaultValue: number,
+): number; // eslint-disable-line prettier/prettier
+export function getRouteQuery(
+  bucket: LocationQuery,
+  key: string,
+  type: BooleanConstructor,
+): boolean; // eslint-disable-line prettier/prettier
+export function getRouteQuery(
+  bucket: LocationQuery,
+  key: string,
+  type: BooleanConstructor,
+  defaultValue: boolean,
+): boolean; // eslint-disable-line prettier/prettier
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,

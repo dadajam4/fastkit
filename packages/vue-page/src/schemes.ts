@@ -17,6 +17,4 @@ export type RouterViewSlotProps = Parameters<
 export type WatchQueryOption = boolean | string[];
 
 export type VuePageKeyOverride =
-  | string
-  | null
-  | ((route: RouteLocationNormalizedLoaded) => string);
+  string | null | ((route: RouteLocationNormalizedLoaded) => string);

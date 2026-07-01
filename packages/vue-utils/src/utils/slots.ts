@@ -133,13 +133,15 @@ export function withCtxForSlots<Slots extends Record<string, any>>(
 }
 
 type RemoveIndexSignature<T> = {
-  [K in keyof T as string extends K
-    ? never
-    : number extends K
+  [
+    K in keyof T as string extends K
       ? never
-      : symbol extends K
+      : number extends K
         ? never
-        : K]: T[K];
+        : symbol extends K
+          ? never
+          : K
+  ]: T[K];
 };
 
 type ToAny<T extends Record<string, AnyFn | undefined>> = {

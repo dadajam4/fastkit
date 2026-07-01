@@ -60,8 +60,7 @@ export interface SortableUpdateContext<T extends SortableData = SortableData> {
 export type SortableGuardResult = boolean | void;
 
 export type SortableGuardReturn =
-  | SortableGuardResult
-  | Promise<SortableGuardResult>;
+  SortableGuardResult | Promise<SortableGuardResult>;
 
 export type SortableUpdateGuardFn<T extends SortableData = SortableData> = (
   ctx: SortableUpdateContext<T>,

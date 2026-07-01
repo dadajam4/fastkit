@@ -101,8 +101,7 @@ export type DataTableRowSettingsFn<T extends DataTableItem = DataTableItem> = (
 ) => DataTableRowSettings<T>;
 
 export type RawDataTableRowSettings<T extends DataTableItem = DataTableItem> =
-  | DataTableRowSettingsFn<T>
-  | DataTableRowSettings<T>;
+  DataTableRowSettingsFn<T> | DataTableRowSettings<T>;
 
 const SELECTABLE_HEADER_SYMBOL = '__selectable_header__';
 

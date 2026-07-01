@@ -2,9 +2,7 @@ import { PropType } from 'vue';
 import { MediaMatchKey } from '@fastkit/media-match';
 
 export type RawGridValue<T extends number | string = number | string> =
-  | T
-  | Partial<Record<MediaMatchKey, T>>
-  | undefined;
+  T | Partial<Record<MediaMatchKey, T>> | undefined;
 
 export type RawGridValueProp<T extends number | string = number | string> =
   PropType<RawGridValue<T>>;

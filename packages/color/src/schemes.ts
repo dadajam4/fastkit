@@ -1,6 +1,5 @@
 export type RGBArray =
-  | [number, number, number]
-  | [number, number, number, number];
+  [number, number, number] | [number, number, number, number];
 
 /**
  * RGB color values

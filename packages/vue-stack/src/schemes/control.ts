@@ -574,8 +574,7 @@ export type VStackActivatorAttrsFn = (ctx: {
 }) => VStackActivatorAttrsObject | undefined;
 
 export type VStackActivatorAttrsSpec =
-  | VStackActivatorAttrsFn
-  | VStackActivatorAttrsObject;
+  VStackActivatorAttrsFn | VStackActivatorAttrsObject;
 
 export function createStackableProps<T extends string | JavaScriptTransition>(
   opts: CreateStackablePropsOptions = {},

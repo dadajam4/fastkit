@@ -1,8 +1,5 @@
 export type TransitionEventType =
-  | 'transitioncancel'
-  | 'transitionend'
-  | 'transitionrun'
-  | 'transitionstart';
+  'transitioncancel' | 'transitionend' | 'transitionrun' | 'transitionstart';
 
 export interface AddTransitionEventOptions extends AddEventListenerOptions {
   properties?: string | string[] | ((propertyName: string) => boolean);

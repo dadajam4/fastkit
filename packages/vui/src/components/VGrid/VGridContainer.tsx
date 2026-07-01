@@ -31,10 +31,7 @@ function spacingValueToString(value: GridContainerSpacingValue): string {
 }
 
 export type GridContainerDirectionValue =
-  | 'row'
-  | 'row-reverse'
-  | 'column'
-  | 'column-reverse';
+  'row' | 'row-reverse' | 'column' | 'column-reverse';
 
 export type GridContainerWrapValue = 'wrap' | 'nowrap' | 'wrap-reverse';
 

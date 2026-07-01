@@ -69,8 +69,7 @@ export type IgnoreRule = string | RegExp | ((name: string) => boolean | void);
 export type Filter = (name: string) => boolean;
 
 export type UserFilter =
-  | IgnoreRule[]
-  | ((baseRules: IgnoreRule[]) => IgnoreRule[] | void);
+  IgnoreRule[] | ((baseRules: IgnoreRule[]) => IgnoreRule[] | void);
 
 export interface ResolverContext {
   component: ComponentDescription;

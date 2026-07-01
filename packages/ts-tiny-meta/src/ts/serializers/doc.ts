@@ -55,8 +55,7 @@ export function getLinkSourceFromJSDocCommentNode(node: JSDocCommentNode):
 const LINK_TEXT_PARSE_RE = /^([^\s]+)(\s+)?(.*)?$/;
 
 type JSDocCommentType =
-  | ReturnType<JSDocTag['getComment']>
-  | ts.SymbolDisplayPart[];
+  ReturnType<JSDocTag['getComment']> | ts.SymbolDisplayPart[];
 
 export function normalizeJSDocComment(
   comment: JSDocCommentType,

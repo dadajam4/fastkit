@@ -68,10 +68,7 @@ export interface ResolvedFormSelectorGroup extends Omit<
 }
 
 export type FormSelectorValue =
-  | undefined
-  | string
-  | number
-  | (string | number)[];
+  undefined | string | number | (string | number)[];
 
 const modelValue = [String, Number, Array] as PropType<FormSelectorValue>;
 

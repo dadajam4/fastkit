@@ -20,8 +20,7 @@ type LayerStyleRules<CustomRules extends CustomStyleRules | null = null> =
 type ClassNames = string | ClassNames[];
 
 type ComplexLayerStyleRule<CustomRules extends CustomStyleRules | null = null> =
-  | LayerStyleRules<CustomRules>
-  | (LayerStyleRules<CustomRules> | ClassNames)[];
+  LayerStyleRules<CustomRules> | (LayerStyleRules<CustomRules> | ClassNames)[];
 
 type _LayerGlobalStyleRules = NonNullable<GlobalStyleRule['@layer']>[string];
 
@@ -31,8 +30,7 @@ type LayerGlobalStyleRules<CustomRules extends CustomStyleRules | null = null> =
     : _LayerGlobalStyleRules & CustomRules;
 
 type AnyStyleRule<CustomRules extends CustomStyleRules | null = null> =
-  | LayerStyleRules<CustomRules>
-  | LayerGlobalStyleRules<CustomRules>;
+  LayerStyleRules<CustomRules> | LayerGlobalStyleRules<CustomRules>;
 
 type LayerStyleHooks<CustomRules extends CustomStyleRules | null = null> = {
   style?: (rule: ComplexLayerStyleRule<CustomRules>, debugId?: string) => void;
@@ -117,8 +115,7 @@ export interface DefineLayerGlobalOptions<
 export type DefineLayerOptions<
   CustomRules extends CustomStyleRules | null = null,
 > =
-  | DefineLayerScopedOptions<CustomRules>
-  | DefineLayerGlobalOptions<CustomRules>;
+  DefineLayerScopedOptions<CustomRules> | DefineLayerGlobalOptions<CustomRules>;
 
 export type DefineNestableLayerOptions<
   CustomRules extends CustomStyleRules | null = null,

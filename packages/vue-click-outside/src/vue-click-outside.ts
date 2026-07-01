@@ -8,11 +8,7 @@ import {
 import { installDirective } from '@fastkit/vue-utils';
 
 export type ClickOutsideDirectiveHandler =
-  | ((ev: PointerEvent) => any)
-  | undefined
-  | void
-  | false
-  | null;
+  ((ev: PointerEvent) => any) | undefined | void | false | null;
 
 export interface ClickOutsideDirectiveBindingValue {
   handler?: ClickOutsideDirectiveHandler;
@@ -21,8 +17,7 @@ export interface ClickOutsideDirectiveBindingValue {
 }
 
 export type RawClickOutsideDirectiveBindingValue =
-  | ClickOutsideDirectiveHandler
-  | ClickOutsideDirectiveBindingValue;
+  ClickOutsideDirectiveHandler | ClickOutsideDirectiveBindingValue;
 
 function normalizeRawClickOutsideDirectiveBindingValue(
   value: RawClickOutsideDirectiveBindingValue,

@@ -105,9 +105,7 @@ export interface WysiwygEditorContext {
 export type WysiwygExtensionFactory<Options = any, Storage = any> = (
   ctx: WysiwygEditorInitializeContext,
 ) =>
-  | Extension<Options, Storage>
-  | Node<Options, Storage>
-  | Mark<Options, Storage>;
+  Extension<Options, Storage> | Node<Options, Storage> | Mark<Options, Storage>;
 
 export interface CreatedWysiwygExtension<Options = any, Storage = any> {
   __isCreatedWysiwygExtension: true;
@@ -222,8 +220,7 @@ export type WysiwygEditorToolFactory<Options = void> = (
 ) => WysiwygEditorTool | WysiwygEditorTool[];
 
 export type RawWysiwygEditorTool =
-  | WysiwygEditorTool
-  | WysiwygEditorToolFactory<any>;
+  WysiwygEditorTool | WysiwygEditorToolFactory<any>;
 
 function resolveRawWysiwygEditorTool(
   raw: RawWysiwygEditorTool,

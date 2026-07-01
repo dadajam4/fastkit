@@ -96,9 +96,18 @@ function isMissingSymbol(source: unknown): source is typeof MISSING_SYMBOL {
   return source === MISSING_SYMBOL;
 }
 
-export function debounce<FN extends AnyFunction = AnyFunction>(handler: FN, delay?: number, immediate?: boolean): Debounced<FN>; // eslint-disable-line prettier/prettier
-export function debounce<FN extends AnyFunction = AnyFunction>(handler: FN, options: DebounceOptions): Debounced<FN>; // eslint-disable-line prettier/prettier
-export function debounce<FN extends AnyFunction = AnyFunction>(setrings: DebounceSettings<FN>): Debounced<FN>; // eslint-disable-line prettier/prettier
+export function debounce<FN extends AnyFunction = AnyFunction>(
+  handler: FN,
+  delay?: number,
+  immediate?: boolean,
+): Debounced<FN>; // eslint-disable-line prettier/prettier
+export function debounce<FN extends AnyFunction = AnyFunction>(
+  handler: FN,
+  options: DebounceOptions,
+): Debounced<FN>; // eslint-disable-line prettier/prettier
+export function debounce<FN extends AnyFunction = AnyFunction>(
+  setrings: DebounceSettings<FN>,
+): Debounced<FN>; // eslint-disable-line prettier/prettier
 
 export function debounce<FN extends AnyFunction = AnyFunction>(
   fnOrSettings: FN | DebounceSettings<FN>,

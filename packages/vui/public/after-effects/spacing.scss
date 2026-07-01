@@ -28,9 +28,7 @@ $property-map: (
 $sides-map: (
   (
     selector: '',
-    props: (
-      'all',
-    ),
+    props: ('all'),
   ),
   (
     selector: 'x',
@@ -48,27 +46,19 @@ $sides-map: (
   ),
   (
     selector: 't',
-    props: (
-      'top',
-    ),
+    props: ('top'),
   ),
   (
     selector: 'b',
-    props: (
-      'bottom',
-    ),
+    props: ('bottom'),
   ),
   (
     selector: 'l',
-    props: (
-      'left',
-    ),
+    props: ('left'),
   ),
   (
     selector: 'r',
-    props: (
-      'right',
-    ),
+    props: ('right'),
   )
 );
 

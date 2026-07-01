@@ -68,10 +68,7 @@ export interface SortableDirectiveValue<
 }
 
 export type RawSortableDirectiveValue<C = undefined> =
-  | SortableDirectiveValue<C>
-  | undefined
-  | null
-  | boolean;
+  SortableDirectiveValue<C> | undefined | null | boolean;
 
 const normalizeRawSortableDirectiveValue = <C = undefined>(
   source: RawSortableDirectiveValue<C>,

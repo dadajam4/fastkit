@@ -148,8 +148,7 @@ export type ColorScopeOptionalValueMap<
   VN extends string = string,
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
   T extends ColorSource | ColorScopeResolver<TN, PN, SN, VN, OK> =
-    | ColorSource
-    | ColorScopeResolver<TN, PN, SN, VN, OK>,
+    ColorSource | ColorScopeResolver<TN, PN, SN, VN, OK>,
 > = {
   readonly [K in OK]?: T;
 };
@@ -278,8 +277,7 @@ export type ColorScopeDefaultsSource<
   OK extends ColorScopeOptionalKey = ColorScopeOptionalKey,
 > = {
   [K in ColorScopeDefaultsKey]?:
-    | ColorScopeDefaultSource<OK>
-    | ColorScopeDefaultResolver<TN, PN, SN, VN, OK>;
+    ColorScopeDefaultSource<OK> | ColorScopeDefaultResolver<TN, PN, SN, VN, OK>;
 };
 
 export type ColorScopeDefaultsJSON<
@@ -407,8 +405,7 @@ export interface ColorVariantSource<VN extends string> {
 }
 
 export type RawColorVariantSource<VN extends string> =
-  | VN
-  | ColorVariantSource<VN>;
+  VN | ColorVariantSource<VN>;
 
 export interface ColorSchemeSource<
   TN extends string,

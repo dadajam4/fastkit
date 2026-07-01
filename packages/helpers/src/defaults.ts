@@ -8,9 +8,8 @@ interface AnyObject {
 export type DefaultsSchemeSource<V> =
   V extends Array<infer U>
     ? U extends AnyObject
-      ?
-          | [DefaultsScheme<U>]
-          | [DefaultsScheme<U>, (notObject: unknown) => Partial<U> | void]
+      ? | [DefaultsScheme<U>]
+        | [DefaultsScheme<U>, (notObject: unknown) => Partial<U> | void]
       : [() => U[]]
     : V extends AnyObject
       ? DefaultsScheme<V>
@@ -80,8 +79,7 @@ export function mergeDefaults<T>(base: T, scheme: DefaultsScheme<T>): T {
 
       if (typeof schemeOrFn === 'object') {
         const fallbackFn = (source as any)[1] as unknown as
-          | ((notObject: unknown) => any)
-          | undefined;
+          ((notObject: unknown) => any) | undefined;
         const newItems: any[] = [];
         bucket.forEach((row) => {
           if (!row || typeof row !== 'object') {

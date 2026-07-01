@@ -33,11 +33,7 @@ export interface AsyncHandlerRequestResolver {
  * - `"destroyed"` destroyed.
  */
 export type AsyncHandlerRequestState =
-  | 'pending'
-  | 'running'
-  | 'resolved'
-  | 'rejected'
-  | 'destroyed';
+  'pending' | 'running' | 'resolved' | 'rejected' | 'destroyed';
 
 /**
  * A method to customize the argument list just before generating the hash.
@@ -86,10 +82,7 @@ export type AsyncHandlerCacheRevalidateChecker<T = any> = (
  * * `Function` - Handler that determines whether or not the cache needs to be refreshed.
  */
 export type AsyncHandlerCacheRevalidateCondition<T = any> =
-  | 'always'
-  | number
-  | Duration
-  | AsyncHandlerCacheRevalidateChecker<T>;
+  'always' | number | Duration | AsyncHandlerCacheRevalidateChecker<T>;
 
 /**
  * Cache controller behavior settings.
@@ -143,8 +136,7 @@ export interface AsyncHandlerCacheSettings<T = any> {
  * Cache controller instance or its behavior settings.
  */
 export type RawAsyncHandlerCacheBehavior<T = any> =
-  | AsyncHandlerCacheBehavior<T>
-  | CacheController<T>;
+  AsyncHandlerCacheBehavior<T> | CacheController<T>;
 
 /**
  * Error logger for AsyncHandler.

@@ -106,8 +106,7 @@ export function resolveI18nTypedImported<T>(imported: I18nTypedImported<T>): T {
  * Per-language fallback settings for internationalization services
  */
 export type I18nSpaceFallbackLocale<LocaleName extends string> =
-  | LocaleName
-  | Partial<Record<LocaleName, LocaleName>>;
+  LocaleName | Partial<Record<LocaleName, LocaleName>>;
 
 export const I18N_FORMAT_TYPES = [
   'dateTime',

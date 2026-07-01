@@ -44,9 +44,7 @@ export function cumulativeOffset(element: Element) {
 }
 
 export type HTMLElementEventMapKey =
-  | keyof HTMLElementEventMap
-  | 'DOMMouseScroll'
-  | 'mousewheel';
+  keyof HTMLElementEventMap | 'DOMMouseScroll' | 'mousewheel';
 
 export function on(
   element: Element,
