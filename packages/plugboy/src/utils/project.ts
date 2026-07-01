@@ -11,6 +11,7 @@ import {
   SEARCH_BUNDLE_EXTENSIONS_MATCH,
 } from '../constants';
 import { findConfig } from './file';
+import { resolveBundledConfigOutputFile } from './bundled-config';
 import { resolveUserPluginOption } from './plugin';
 
 export function isProjectPackageJson(
@@ -71,6 +72,7 @@ export async function loadProjectConfig(
           default: UserProjectConfig | Promise<UserProjectConfig>;
         }>({
           filepath: hit.path,
+          getOutputFile: resolveBundledConfigOutputFile,
         })
       ).mod.default
     : ({} as UserProjectConfig);

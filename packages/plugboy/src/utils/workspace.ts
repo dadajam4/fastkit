@@ -12,6 +12,7 @@ import {
   WorkspaceEntries,
 } from '../types';
 import { findConfig } from './file';
+import { resolveBundledConfigOutputFile } from './bundled-config';
 import {
   WORKSPACE_CONFIG_BASENAME,
   SEARCH_BUNDLE_EXTENSIONS_MATCH,
@@ -96,6 +97,7 @@ export async function loadWorkspaceConfig(
           default: UserWorkspaceConfig | Promise<UserWorkspaceConfig>;
         }>({
           filepath: hit.path,
+          getOutputFile: resolveBundledConfigOutputFile,
         })
       ).mod.default
     : ({} as UserWorkspaceConfig);
