@@ -1,6 +1,6 @@
 import baseConfig, { tseslint } from '@fastkit/eslint-config';
 import pluginVue from 'eslint-plugin-vue';
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
 export default [
   ...baseConfig,
@@ -54,5 +54,8 @@ export default [
       'vue/multi-word-component-names': 'off',
     },
   },
-  skipFormatting,
+  // Turn off formatting rules last so it also covers eslint-plugin-vue's
+  // formatting rules (enabled above). Like the base config, this does not
+  // format — run your formatter of choice on your side.
+  eslintConfigPrettier,
 ];
