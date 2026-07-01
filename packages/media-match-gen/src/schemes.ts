@@ -26,9 +26,7 @@ export interface MediaMatchCustom<C extends string> {
 }
 
 export type ComputedMediaMatchKey<K extends string> =
-  | K
-  | `${K}AndDown`
-  | `${K}AndUp`;
+  K | `${K}AndDown` | `${K}AndUp`;
 
 export interface MediaMatchSettings<
   K extends string = string,

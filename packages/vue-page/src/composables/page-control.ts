@@ -509,9 +509,12 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     return data;
   }
 
-  useState<T  extends object>(key: StateInjectionKey<T>): T | undefined; // eslint-disable-line prettier/prettier
+  useState<T extends object>(key: StateInjectionKey<T>): T | undefined; // eslint-disable-line prettier/prettier
 
-  useState<T extends object>(key: StateInjectionKey<T>, defaultValue: T | (() => T)): T; // eslint-disable-line prettier/prettier
+  useState<T extends object>(
+    key: StateInjectionKey<T>,
+    defaultValue: T | (() => T),
+  ): T; // eslint-disable-line prettier/prettier
 
   useState<T extends object>(
     key: StateInjectionKey<T>,
@@ -535,9 +538,17 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
   inject<T>(key: InjectionKey<T> | string): T | undefined;
 
-  inject<T>(key: InjectionKey<T> | string, defaultValue: T, treatDefaultAsFactory?: false): T; // eslint-disable-line prettier/prettier
+  inject<T>(
+    key: InjectionKey<T> | string,
+    defaultValue: T,
+    treatDefaultAsFactory?: false,
+  ): T; // eslint-disable-line prettier/prettier
 
-  inject<T>(key: InjectionKey<T> | string, defaultValue: T | (() => T), treatDefaultAsFactory: true): T; // eslint-disable-line prettier/prettier
+  inject<T>(
+    key: InjectionKey<T> | string,
+    defaultValue: T | (() => T),
+    treatDefaultAsFactory: true,
+  ): T; // eslint-disable-line prettier/prettier
 
   inject<T>(
     key: InjectionKey<T> | string,

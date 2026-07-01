@@ -60,15 +60,13 @@ export type RuleValidationResultValue =
  * Result of rule validation or its Promise instance.
  */
 export type RuleValidationResult =
-  | RuleValidationResultValue
-  | Promise<RuleValidationResultValue>;
+  RuleValidationResultValue | Promise<RuleValidationResultValue>;
 
 /**
  * Message specification for the rule.
  */
 export type RuleMessageSpec<C = any> =
-  | string
-  | ((value: any, ctx: RuleValidateContext<C>) => string);
+  string | ((value: any, ctx: RuleValidateContext<C>) => string);
 
 /** Basic settings for the rule. */
 export interface RuleBasicSettings<C = any> {

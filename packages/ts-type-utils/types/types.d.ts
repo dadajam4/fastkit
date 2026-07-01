@@ -47,13 +47,7 @@ export type AwaitedReturnType<Fn extends (...args: any) => any> = Awaited<
  * JavaScript primitive variable type
  */
 export type Primitive =
-  | bigint
-  | boolean
-  | null
-  | number
-  | string
-  | symbol
-  | undefined;
+  bigint | boolean | null | number | string | symbol | undefined;
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 type DeepReadonlyExclude = Function | Date | Error | RegExp;

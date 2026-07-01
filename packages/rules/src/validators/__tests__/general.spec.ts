@@ -15,8 +15,7 @@ type ListExpectedArrayItem<V extends () => unknown> = [
 ];
 
 type ListExpectedItem<V extends () => unknown> =
-  | ListExpectedObjectItem<V>
-  | ListExpectedArrayItem<V>;
+  ListExpectedObjectItem<V> | ListExpectedArrayItem<V>;
 
 function listExpected<V extends (...args: unknown[]) => unknown>(
   validator: V,

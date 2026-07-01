@@ -13,12 +13,7 @@ import { isIterableObject } from '@fastkit/helpers';
  * Types of values allowed as values for parameter comparisons. Types that are not defined here will be missing when flattened.
  */
 export type ComparatorConditionalValue =
-  | string
-  | number
-  | boolean
-  | undefined
-  | null
-  | Date;
+  string | number | boolean | undefined | null | Date;
 
 const allowedPrimitiveValueTypes = ['string', 'number', 'boolean', 'undefined'];
 

@@ -93,8 +93,7 @@ export function createFieldsRule<T extends Fields = Fields>(
       const paths = Object.keys(rules);
       const ruleSettings: FieldsRuleSettingsRow<T>[] = paths.map((path) => {
         let setting = rules[path] as
-          | RecursiveArray<Rule>
-          | FieldsRuleSettingsRule<T>;
+          RecursiveArray<Rule> | FieldsRuleSettingsRule<T>;
 
         if (typeof setting === 'function' || Array.isArray(setting)) {
           setting = {

@@ -31,8 +31,7 @@ export interface DateInputNodeControlPropsOptions<
 }
 
 export type DateInputFormat =
-  | Intl.DateTimeFormatOptions
-  | ((value: DateInputValue) => string);
+  Intl.DateTimeFormatOptions | ((value: DateInputValue) => string);
 
 type FormatLocales = string | string[];
 

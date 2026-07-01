@@ -32,9 +32,7 @@ export interface TextareaAutosizeSettings {
 }
 
 export type RawTextareaAutosizeSettings =
-  | undefined
-  | boolean
-  | TextareaAutosizeSettings;
+  undefined | boolean | TextareaAutosizeSettings;
 
 function resolveRawTextareaAutosizeSettings(
   raw: RawTextareaAutosizeSettings,

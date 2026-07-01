@@ -13,11 +13,7 @@ import { logger, VueI18nError } from './logger';
  * * We are aware of values such as Navigator.language and the Accept language header
  */
 export type GetClientLanguageResult =
-  | string
-  | string[]
-  | readonly string[]
-  | undefined
-  | null;
+  string | string[] | readonly string[] | undefined | null;
 
 /**
  * Method for redirects on the server

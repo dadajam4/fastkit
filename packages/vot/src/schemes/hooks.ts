@@ -39,8 +39,7 @@ function isVotPluginHooksChunk(source: any): source is VotPluginHooksChunk {
 export type VotHooksSettingsChunk = VotHooksSettings | VotPluginHooksChunk;
 
 export type VotHooksSettingsSource =
-  | VotHooksSettingsChunk
-  | VotHooksSettingsChunk[];
+  VotHooksSettingsChunk | VotHooksSettingsChunk[];
 
 export function setupVotHooks(source: VotHooksSettingsSource): SetupedVotHooks {
   const hooks: SetupedVotHooks = {

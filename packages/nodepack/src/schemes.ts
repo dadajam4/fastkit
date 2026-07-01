@@ -2,8 +2,7 @@ import type { OnResolveArgs, OnResolveResult } from 'esbuild';
 
 export interface ExternalPluginOptions {
   skipNodeModulesBundle?:
-    | boolean
-    | ((args: OnResolveArgs) => OnResolveResult | void);
+    boolean | ((args: OnResolveArgs) => OnResolveResult | void);
   external?: (string | RegExp)[];
   noExternal?: (string | RegExp)[];
   tsconfigResolvePaths?: Record<string, string[]>;

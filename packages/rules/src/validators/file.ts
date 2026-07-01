@@ -97,8 +97,9 @@ export interface ImageFileDimensionConditions {
  * 画像サイズのバリデーション条件
  */
 export type ImageFileDimensionInputConditions = {
-  [P in keyof ImageFileDimensionConditions]?: string | string[];
-  // width?: string;
+  [P in keyof ImageFileDimensionConditions]?:
+    string | string[];
+    // width?: string;
 };
 
 /**

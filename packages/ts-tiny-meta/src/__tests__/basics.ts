@@ -93,10 +93,7 @@ export type INLINE_UNION_TYPE = '1' | 2 | true;
  * alias union
  */
 export type ALIAS_UNION_TYPE =
-  | CONST_STR_ALIAS
-  | STR_TYPE
-  | typeof CONST_TEMPLATE_STR
-  | typeof NUM;
+  CONST_STR_ALIAS | STR_TYPE | typeof CONST_TEMPLATE_STR | typeof NUM;
 
 /**
  * object type

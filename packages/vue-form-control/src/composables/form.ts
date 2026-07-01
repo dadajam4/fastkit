@@ -67,8 +67,7 @@ export type FormInvalidSubmissionAcceptor = (
 ) => void;
 
 export type FormAcceptInvalidSubmissionSpec =
-  | boolean
-  | FormInvalidSubmissionAcceptor;
+  boolean | FormInvalidSubmissionAcceptor;
 
 export interface FormOptions extends FormGroupOptions {}
 

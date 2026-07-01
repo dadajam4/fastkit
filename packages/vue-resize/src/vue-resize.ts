@@ -21,8 +21,7 @@ export interface ResizeDirectiveBindingValue {
 }
 
 export type RawResizeDirectiveBindingValue =
-  | ResizeDirectiveHandler
-  | ResizeDirectiveBindingValue;
+  ResizeDirectiveHandler | ResizeDirectiveBindingValue;
 
 export interface ResizeDirectiveContext {
   bindingValue: ResizeDirectiveBindingValue;

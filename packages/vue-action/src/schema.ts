@@ -21,8 +21,7 @@ type RouterLinkSlotPayload = UnwrapRef<ReturnType<typeof useLink>>;
 type ActionableGuardResult = boolean | void;
 
 type ActionableGuardReturnValue =
-  | ActionableGuardResult
-  | Promise<ActionableGuardResult>;
+  ActionableGuardResult | Promise<ActionableGuardResult>;
 
 /** Guard function for actionable components */
 export type ActionableGuard = (ev: PointerEvent) => ActionableGuardReturnValue;
@@ -243,8 +242,7 @@ export const ACTIONABLE_INHERIT_PROPS = [
 ] as const;
 
 export type ActionableInheritPropKey =
-  | ActionableAttrsKey
-  | (typeof ACTIONABLE_INHERIT_PROPS)[number];
+  ActionableAttrsKey | (typeof ACTIONABLE_INHERIT_PROPS)[number];
 
 export const isActionableInheritPropKey = (
   source: unknown,

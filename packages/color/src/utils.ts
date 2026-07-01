@@ -490,8 +490,7 @@ const modelKeys = {
 };
 
 type ModelValueKey =
-  | (typeof modelKeys)['rgb'][number]
-  | (typeof modelKeys)['hsl'][number];
+  (typeof modelKeys)['rgb'][number] | (typeof modelKeys)['hsl'][number];
 
 export function mixColorSource(
   baseSource: ColorSource,

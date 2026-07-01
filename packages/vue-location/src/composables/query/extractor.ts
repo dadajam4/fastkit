@@ -85,10 +85,7 @@ type ExtractorReturnValue<
  * - `validation-failed` Validation failed
  */
 export type QueryExtractResultState =
-  | 'found'
-  | 'fallback-default'
-  | 'missing'
-  | 'validation-failed';
+  'found' | 'fallback-default' | 'missing' | 'validation-failed';
 
 /**
  * The result of the query value extraction

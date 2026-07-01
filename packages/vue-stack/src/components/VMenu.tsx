@@ -92,8 +92,7 @@ interface CreateMenuSchemeOptions {
 type MenuSizeSpec = number | 'fit' | 'free';
 
 type RawMenuMaxSize =
-  | MenuSizeSpec
-  | ((window: UseWindowRef) => number | undefined);
+  MenuSizeSpec | ((window: UseWindowRef) => number | undefined);
 
 const RAW_MENU_SIZE_PROP = {
   type: [Number, String] as PropType<number | 'fit' | 'free'>,
@@ -288,18 +287,10 @@ export type MenuInput = ExtractPropInput<MenuPropsOptions>;
 export type MenuEmits = ReturnType<typeof createMenuScheme>['emits'];
 
 export type VMenuXPosition =
-  | 'left'
-  | 'left-inner'
-  | 'center'
-  | 'right'
-  | 'right-inner';
+  'left' | 'left-inner' | 'center' | 'right' | 'right-inner';
 
 export type VMenuYPosition =
-  | 'top'
-  | 'top-inner'
-  | 'center'
-  | 'bottom'
-  | 'bottom-inner';
+  'top' | 'top-inner' | 'center' | 'bottom' | 'bottom-inner';
 
 export interface VMenuRect {
   left: number;

@@ -124,8 +124,7 @@ export class CacheController<T = any> {
  * Cache controller instance or its behavior settings.
  */
 export type CacheControllerOrBehavior<T = any> =
-  | CacheControllerBehavior<T>
-  | CacheController<T>;
+  CacheControllerBehavior<T> | CacheController<T>;
 
 export function resolveCacheControllerOrBehavior<T = any>(
   raw: CacheControllerOrBehavior<T>,

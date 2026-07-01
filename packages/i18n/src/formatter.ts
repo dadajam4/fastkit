@@ -959,11 +959,9 @@ export class I18nFormatter<
         const options = overrides
           ? { ...baseOptions, ...overrides }
           : baseOptions;
-        const formatter =
-          new (IntlFormat as unknown as typeof Intl.DateTimeFormat)(
-            space.getFormatLocales(localeName),
-            options,
-          );
+        const formatter = new (
+          IntlFormat as unknown as typeof Intl.DateTimeFormat
+        )(space.getFormatLocales(localeName), options);
 
         if (!overrides) {
           // Cache only if no overwrite setting is specified

@@ -190,9 +190,7 @@ export interface VueI18nInjectedComponent {
 }
 
 export type VueI18nComponentOption =
-  | AnyProvider
-  | VueI18nInjectedComponent
-  | VueI18nComponentOption[];
+  AnyProvider | VueI18nInjectedComponent | VueI18nComponentOption[];
 
 declare module 'vue' {
   export interface ComponentCustomOptions {

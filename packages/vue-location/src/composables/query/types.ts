@@ -17,8 +17,7 @@ export type BooleanQueryValues =
   | readonly [trueValue: string, falseValue: string];
 
 export type RawBooleanQueryValues =
-  | keyof typeof BUILTIN_BOOLEAN_SCHEMA
-  | BooleanQueryValues;
+  keyof typeof BUILTIN_BOOLEAN_SCHEMA | BooleanQueryValues;
 
 export interface RawBooleanQuerySchema {
   /**
@@ -105,10 +104,7 @@ export type QuerySchema<T = any, D = T> = {
 
 /** Query schema specification */
 export type QuerySchemaSpec<T = any> =
-  | QueryType<T>
-  | QuerySchema<T>
-  | null
-  | true;
+  QueryType<T> | QuerySchema<T> | null | true;
 
 /** Queries schema */
 export type QueriesSchema<P = Data> = {

@@ -9,11 +9,7 @@ export interface VotGenerateParams {
 }
 
 export type VotGenerateConditionResult =
-  | void
-  | VotGenerateParams
-  | string
-  | boolean
-  | (VotGenerateParams | string)[];
+  void | VotGenerateParams | string | boolean | (VotGenerateParams | string)[];
 
 export type VotGenerateHandler = (
   page: VotExtractedPage,
@@ -26,9 +22,7 @@ export interface VotGenerateOptions {
 }
 
 export type RawVotGenerateOptions =
-  | boolean
-  | VotGenerateHandler
-  | Partial<VotGenerateOptions>;
+  boolean | VotGenerateHandler | Partial<VotGenerateOptions>;
 
 const DEFAULT_GENERATE_HANDLER: VotGenerateHandler = (page) =>
   !page.dynamicParams;

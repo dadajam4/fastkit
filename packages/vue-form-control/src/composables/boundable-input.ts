@@ -34,8 +34,7 @@ export type BoundableRequiredConstraints = 'start' | 'end' | 'any' | 'both';
  * Specify of Required criteria for Boundable inputs
  */
 export type BoundableRequiredConstraintsSpec =
-  | boolean
-  | BoundableRequiredConstraints;
+  boolean | BoundableRequiredConstraints;
 
 export const boundableRequired = createRule<BoundableRequiredConstraints>({
   name: 'boundable:required',

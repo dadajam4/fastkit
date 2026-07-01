@@ -4,18 +4,7 @@ import { defineComponent, computed } from 'vue';
 import { RawGridValueProp, extractRawGridValueClasses } from './schemes';
 
 export type GridItemNumberSizeValue =
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12;
+  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 export type GridItemSizeValue = GridItemNumberSizeValue | 'auto';
 

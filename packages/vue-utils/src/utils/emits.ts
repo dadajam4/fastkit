@@ -80,8 +80,9 @@ export type EmitsToProps<T extends EmitsOptions | Record<string, any[]>> =
       }
     : T extends ObjectEmitsOptions
       ? {
-          [K in string &
-            `on${Capitalize<string & keyof T>}`]?: K extends `on${infer C}`
+          [
+            K in string & `on${Capitalize<string & keyof T>}`
+          ]?: K extends `on${infer C}`
             ? T[Uncapitalize<C>] extends null
               ? (...args: any[]) => any
               : (

@@ -642,9 +642,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    */
   constructor(
     settingOrElementOrQueryString:
-      | Partial<ScrollerSetting>
-      | Element
-      | string = {},
+      Partial<ScrollerSetting> | Element | string = {},
   ) {
     super();
 
@@ -734,8 +732,7 @@ export class Scroller extends EV<ScrollerEventMap> {
   }
 
   private _scrollToElementAdditionalOffset:
-    | ScrollToElementAdditionalOffset
-    | undefined;
+    ScrollToElementAdditionalOffset | undefined;
 
   setScrollToElementAdditionalOffset(
     offset: ScrollToElementAdditionalOffset | undefined,
