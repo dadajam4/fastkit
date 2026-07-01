@@ -23,7 +23,7 @@ pnpm add -D @fastkit/plugboy-vanilla-extract-plugin
 ```
 
 > [!NOTE]
-> `@fastkit/plugboy` と（Vite 連携を使う場合は）`vite` を peer dependencies として要求します。
+> `@fastkit/plugboy` を peer dependencies として要求します。Vite 連携（`@fastkit/plugboy-vanilla-extract-plugin/vite`）を使う場合は、`vite` と `@vanilla-extract/vite-plugin` も peer dependencies として必要になるため、利用者側でインストールしてください。メインエントリはこれらを一切ロードしないので、ビルドのみの利用ならどちらも不要です。
 
 ## 使い方
 
@@ -53,7 +53,7 @@ export default defineProjectConfig({
 
 ```typescript
 import { defineConfig } from 'vite';
-import { ViteVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plugin';
+import { ViteVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plugin/vite';
 
 export default defineConfig({
   plugins: [

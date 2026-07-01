@@ -18,6 +18,12 @@
         "default": "./dist/plugboy-vue-jsx-plugin.mjs"
       }
     },
+    "./vite": {
+      "types": "./dist/vite.d.mts",
+      "import": {
+        "default": "./dist/vite.mjs"
+      }
+    },
     "./*": "./dist/*"
   },
   "main": "./dist/plugboy-vue-jsx-plugin.mjs",
@@ -26,6 +32,9 @@
     "*": {
       ".": [
         "./dist/plugboy-vue-jsx-plugin.d.mts"
+      ],
+      "vite": [
+        "./dist/vite.d.mts"
       ]
     }
   },
@@ -52,8 +61,8 @@
   },
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:^",
-    "@vitejs/plugin-vue-jsx": "^3.0.1",
-    "vite": "^5.0.0 || ^6.0.0 || ^7.0.0"
+    "@vitejs/plugin-vue-jsx": "^5.0.0",
+    "vite": "^6.0.0 || ^7.0.0 || ^8.0.0"
   },
   "peerDependenciesMeta": {
     "@vitejs/plugin-vue-jsx": {

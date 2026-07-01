@@ -18,6 +18,12 @@
         "default": "./dist/plugboy-vanilla-extract-plugin.mjs"
       }
     },
+    "./vite": {
+      "types": "./dist/vite.d.mts",
+      "import": {
+        "default": "./dist/vite.mjs"
+      }
+    },
     "./*": "./dist/*"
   },
   "main": "./dist/plugboy-vanilla-extract-plugin.mjs",
@@ -26,6 +32,9 @@
     "*": {
       ".": [
         "./dist/plugboy-vanilla-extract-plugin.d.mts"
+      ],
+      "vite": [
+        "./dist/vite.d.mts"
       ]
     }
   },
@@ -43,16 +52,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@vanilla-extract/rollup-plugin": "^1.5.3",
-    "@vanilla-extract/vite-plugin": "^5.2.2"
+    "@vanilla-extract/rollup-plugin": "^1.5.3"
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:^",
+    "@vanilla-extract/vite-plugin": "^5.2.2",
     "vite": "^8.0.16"
   },
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:^",
-    "vite": "^5.0.0 || ^6.0.0 || ^7.0.0"
+    "@vanilla-extract/vite-plugin": "^5.0.0",
+    "vite": "^6.0.0 || ^7.0.0 || ^8.0.0"
   },
   "peerDependenciesMeta": {
     "@vanilla-extract/vite-plugin": {
