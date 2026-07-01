@@ -1,5 +1,22 @@
 # @fastkit/vui-wysiwyg
 
+## 8.3.1
+
+### Patch Changes
+
+- [`dbc6fd1`](https://github.com/dadajam4/fastkit/commit/dbc6fd13195bed3206dbe1f28898ceef47fe2d75) Thanks [@dadajam4](https://github.com/dadajam4)! - Bump dependencies to their latest compatible versions:
+
+  - `@fastkit/eslint-config`: typescript-eslint 8.62.0
+  - `@fastkit/vui-wysiwyg`: @tiptap/\* 3.27.1
+  - `@fastkit/plugboy`: tsdown / @tsdown/css 0.22.3
+  - `@fastkit/plugboy-vue-jsx-plugin`: unplugin-vue-jsx 0.10.0
+
+- [`d63b1af`](https://github.com/dadajam4/fastkit/commit/d63b1af8bf1bb131590ff540af82428cc60aeb7e) Thanks [@dadajam4](https://github.com/dadajam4)! - Strip the dangling `//# sourceMappingURL=*.d.mts.map` comment from emitted declaration files.
+
+  tsdown (rolldown) appends this comment to every `.d.(m)ts` it emits but does not emit the referenced declaration map, so consumers' editors/build tools fail to resolve it. plugboy now removes the comment during build — but only when the referenced map is genuinely absent, so it becomes a no-op automatically if a future tsdown starts emitting real declaration maps.
+
+  Every package in this monorepo is built by plugboy, so this patch re-publishes them all with declaration files that no longer point at a missing map.
+
 ## 8.3.0
 
 ### Minor Changes
