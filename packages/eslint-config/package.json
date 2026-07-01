@@ -40,8 +40,7 @@
   },
   "homepage": "https://github.com/dadajam4/fastkit/tree/main/packages/eslint-config#readme",
   "peerDependencies": {
-    "eslint": "^8.50.0",
-    "prettier": "^3.0.0"
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
     "eslint-config-prettier": "^10.1.8",
