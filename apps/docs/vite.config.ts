@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import type { Plugin } from 'vite';
-import { ViteVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plugin';
+import { ViteVanillaExtractPlugin } from '@fastkit/plugboy-vanilla-extract-plugin/vite';
 import { viteVuiPlugin } from '@fastkit/vite-plugin-vui';
 import { votPlugin } from '@fastkit/vot/tool';
 import { ViteTSTinyMeta } from '@fastkit/ts-tiny-meta/vite';
