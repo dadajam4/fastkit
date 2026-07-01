@@ -1,6 +1,7 @@
 export * from './general';
 export * from './tsdown';
 export * from './exit-hook';
+export * from './dts-source-map';
 export * from './file';
 export * from './expose';
 export * from './tsdown';
