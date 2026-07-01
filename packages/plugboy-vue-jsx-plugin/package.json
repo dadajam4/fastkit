@@ -52,7 +52,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "unplugin-vue-jsx": "^0.9.0"
+    "unplugin-vue-jsx": "^0.10.0"
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:^",

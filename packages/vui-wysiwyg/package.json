@@ -19,12 +19,6 @@
         "default": "./dist/vui-wysiwyg.mjs"
       }
     },
-    "./tiptap/core": {
-      "types": "./dist/tiptap/core.d.mts",
-      "import": {
-        "default": "./dist/tiptap/core.mjs"
-      }
-    },
     "./pm/view": {
       "types": "./dist/pm/view.d.mts",
       "import": {
@@ -103,6 +97,12 @@
         "default": "./dist/pm/changeset.mjs"
       }
     },
+    "./tiptap/core": {
+      "types": "./dist/tiptap/core.d.mts",
+      "import": {
+        "default": "./dist/tiptap/core.mjs"
+      }
+    },
     "./tiptap/extensions/underline": {
       "types": "./dist/tiptap/extensions/underline.d.mts",
       "import": {
@@ -166,9 +166,6 @@
       ".": [
         "./dist/vui-wysiwyg.d.mts"
       ],
-      "tiptap/core": [
-        "./dist/tiptap/core.d.mts"
-      ],
       "pm/view": [
         "./dist/pm/view.d.mts"
       ],
@@ -207,6 +204,9 @@
       ],
       "pm/changeset": [
         "./dist/pm/changeset.d.mts"
+      ],
+      "tiptap/core": [
+        "./dist/tiptap/core.d.mts"
       ],
       "tiptap/extensions/underline": [
         "./dist/tiptap/extensions/underline.d.mts"
@@ -254,18 +254,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tiptap/extension-bold": "^3.26.1",
-    "@tiptap/extension-bullet-list": "^3.26.1",
-    "@tiptap/extension-history": "^3.26.1",
-    "@tiptap/extension-italic": "^3.26.1",
-    "@tiptap/extension-link": "^3.26.1",
-    "@tiptap/extension-ordered-list": "^3.26.1",
-    "@tiptap/extension-text-align": "^3.26.1",
-    "@tiptap/extension-text-style": "^3.26.1",
-    "@tiptap/extension-underline": "^3.26.1",
-    "@tiptap/pm": "^3.26.1",
-    "@tiptap/starter-kit": "^3.26.1",
-    "@tiptap/vue-3": "^3.26.1"
+    "@tiptap/extension-bold": "^3.27.1",
+    "@tiptap/extension-bullet-list": "^3.27.1",
+    "@tiptap/extension-history": "^3.27.1",
+    "@tiptap/extension-italic": "^3.27.1",
+    "@tiptap/extension-link": "^3.27.1",
+    "@tiptap/extension-ordered-list": "^3.27.1",
+    "@tiptap/extension-text-align": "^3.27.1",
+    "@tiptap/extension-text-style": "^3.27.1",
+    "@tiptap/extension-underline": "^3.27.1",
+    "@tiptap/pm": "^3.27.1",
+    "@tiptap/starter-kit": "^3.27.1",
+    "@tiptap/vue-3": "^3.27.1"
   },
   "devDependencies": {
     "@fastkit/vui": "workspace:^",
