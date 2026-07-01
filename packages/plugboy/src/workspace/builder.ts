@@ -7,7 +7,12 @@ import {
   TSDOWN_SYNC_OPTIONS,
   NormalizedDTSPreserveTypeSettings,
 } from '../types';
-import { copyDirSync, rmrf, mergeExternals } from '../utils';
+import {
+  copyDirSync,
+  rmrf,
+  mergeExternals,
+  stripDanglingDTSSourceMaps,
+} from '../utils';
 import { emitDTS } from './dts';
 import { applyPlugboyEnvs, getPlugboyEnvCodeForStub } from '../env';
 
@@ -304,5 +309,7 @@ export class Builder {
     } else {
       await this.normalizeDTSFiles();
     }
+
+    await stripDanglingDTSSourceMaps(this.workspace.dirs.dist.value);
   }
 }
