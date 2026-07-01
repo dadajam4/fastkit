@@ -1,5 +1,11 @@
 # @fastkit/universal-logger
 
+## 0.17.2
+
+### Patch Changes
+
+- [`5b5e3dc`](https://github.com/dadajam4/fastkit/commit/5b5e3dc642ea6cf0a92ecda1d0f4bce66ff83127) Thanks [@dadajam4](https://github.com/dadajam4)! - Widen the `@datadog/browser-logs` peer dependency range to `^5.8.0 || ^6.0.0 || ^7.0.0` so it matches the version actually built against (`7.4.0`). Previously the peer range only allowed `^5.8.0`, which excluded the v6/v7 majors used in development and emitted spurious peer warnings for consumers on newer versions. The used API surface (`init`, `logger[level]` with the `error` argument) is present across all of these majors.
+
 ## 0.17.1
 
 ### Patch Changes
