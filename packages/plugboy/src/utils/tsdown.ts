@@ -89,6 +89,31 @@ function isExternal(
   return false;
 }
 
+/**
+ * Collect the plain string entries from an {@link ExternalOption}, flattening
+ * nested arrays.
+ *
+ * Only string entries can be turned into package-name prefixes for subpath
+ * matching (`RegExp` / function entries are opaque and are skipped). Used to
+ * feed the external-imports plugin so that a `deps.neverBundle` package name
+ * also externalizes its subpath imports (e.g. `pkg/foo.svg`).
+ */
+export function collectExternalStringPrefixes(
+  option: ExternalOption | undefined,
+): string[] {
+  const prefixes: string[] = [];
+  const walk = (o: ExternalOption | undefined): void => {
+    if (!o) return;
+    if (typeof o === 'string') {
+      prefixes.push(o);
+    } else if (Array.isArray(o)) {
+      o.forEach(walk);
+    }
+  };
+  walk(option);
+  return prefixes;
+}
+
 export function mergeExternals(
   base: ExternalOption | undefined,
   override: ExternalOption | undefined,

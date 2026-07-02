@@ -2,6 +2,8 @@
 .DS_Store
 *.log
 .tmp
+.tmp-plugboy-e2e-*
+.tmp-plugboy-dts-*
 vitest.config.ts.timestamp-*
 vite.config.ts.timestamp-*
 *.bundled_*.mjs

@@ -509,12 +509,12 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     return data;
   }
 
-  useState<T extends object>(key: StateInjectionKey<T>): T | undefined; // eslint-disable-line prettier/prettier
+  useState<T extends object>(key: StateInjectionKey<T>): T | undefined;
 
   useState<T extends object>(
     key: StateInjectionKey<T>,
     defaultValue: T | (() => T),
-  ): T; // eslint-disable-line prettier/prettier
+  ): T;
 
   useState<T extends object>(
     key: StateInjectionKey<T>,
@@ -542,13 +542,13 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
     key: InjectionKey<T> | string,
     defaultValue: T,
     treatDefaultAsFactory?: false,
-  ): T; // eslint-disable-line prettier/prettier
+  ): T;
 
   inject<T>(
     key: InjectionKey<T> | string,
     defaultValue: T | (() => T),
     treatDefaultAsFactory: true,
-  ): T; // eslint-disable-line prettier/prettier
+  ): T;
 
   inject<T>(
     key: InjectionKey<T> | string,

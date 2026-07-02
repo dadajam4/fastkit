@@ -235,6 +235,14 @@ export interface WorkspaceSetupContext {
    */
   projectDependencies: string[];
   /**
+   * Package-name prefixes collected from string `deps.neverBundle` entries.
+   *
+   * Used by the external-imports plugin to externalize a declared package's
+   * subpath imports (`pkg/foo.svg`) without emitting an `UNRESOLVED_IMPORT`
+   * warning. `RegExp` / function externals are opaque and are not collected.
+   */
+  neverBundlePrefixes: string[];
+  /**
    * Workspace Meta Information
    * @see {@link WorkspaceMeta}
    */
