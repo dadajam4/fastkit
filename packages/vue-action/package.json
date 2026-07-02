@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-action",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "vue-action",
   "keywords": [],
   "repository": {
@@ -53,6 +53,6 @@
   },
   "peerDependencies": {
     "vue": "^3.5.0",
-    "vue-router": "^4.4.0"
+    "vue-router": "^4.4.0 || ^5.0.0"
   }
 }

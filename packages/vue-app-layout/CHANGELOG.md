@@ -1,5 +1,17 @@
 # @fastkit/vue-app-layout
 
+## 0.19.2
+
+### Patch Changes
+
+- [#166](https://github.com/dadajam4/fastkit/pull/166) [`88d561b`](https://github.com/dadajam4/fastkit/commit/88d561be563b26a9b1347f97b3eb9c21a3ef8730) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix peer dependency ranges that had drifted behind the versions actually built against.
+
+  - `vue-router`: widen the peer range from `^4.4.0` to `^4.4.0 || ^5.0.0` across the packages that declare it. Development moved to `vue-router@5.1.0`, but the peer range still only allowed the v4 major, which excluded v5 for consumers and pulled a stale `vue-router@4.6.4` into the lockfile via `@fastkit/vui-wysiwyg`. Both majors are now supported.
+  - `@unhead/vue` (`@fastkit/vue-color-scheme`): bump the peer range from `^1.8.0` to `^3.0.0` to match the `3.1.3` version used in development. The previous range was two majors behind and emitted spurious peer warnings.
+
+- Updated dependencies [[`88d561b`](https://github.com/dadajam4/fastkit/commit/88d561be563b26a9b1347f97b3eb9c21a3ef8730)]:
+  - @fastkit/vue-utils@0.18.2
+
 ## 0.19.1
 
 ### Patch Changes

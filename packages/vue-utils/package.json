@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "description": "Utilities for efficient development of Vue applications.",
   "keywords": [
     "fastkit",
@@ -61,7 +61,7 @@
   },
   "peerDependencies": {
     "vue": "^3.5.0",
-    "vue-router": "^4.4.0"
+    "vue-router": "^4.4.0 || ^5.0.0"
   },
   "buildOptions": {
     "name": "VueUtils"

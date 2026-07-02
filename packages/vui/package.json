@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vui",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "A simple, extensible UI kit for Vue applications.",
   "keywords": [
     "fastkit",
@@ -90,7 +90,7 @@
   },
   "peerDependencies": {
     "vue": "^3.5.0",
-    "vue-router": "^4.4.0"
+    "vue-router": "^4.4.0 || ^5.0.0"
   },
   "buildOptions": {
     "name": "Vui"
