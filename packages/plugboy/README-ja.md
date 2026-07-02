@@ -291,6 +291,20 @@ export default defineWorkspaceConfig({
 });
 ```
 
+### 依存関係の外部化
+
+`deps.neverBundle` は、指定したパッケージをバンドルせず外部依存（external）として
+扱います。マッチングは**パッケージ名とそのサブパス**単位で行われ、`'foo'` を指定
+すると `foo` と `foo/bar` の両方が external になります。
+
+**自己参照（self-reference）は常に自動で external になります。** モジュールが自身の
+パッケージ名で import した場合（例: `import logo from 'my-pkg/assets/logo.svg'`）、
+その import はパッケージ自身の `exports` マップ（`"./*": "./dist/*"`）を通じて
+実行時に解決されるため、バンドルされません。自分自身のパッケージを `neverBundle` に
+列挙する必要はありません。plugboy がこれらを事前に external として解決するため、
+rolldown の `UNRESOLVED_IMPORT` 警告は発生しません。一方、本当に解決できない
+specifier（typo など）は従来どおり警告されます。
+
 ## フック システム
 
 ### ライフサイクルフック

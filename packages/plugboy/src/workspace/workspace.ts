@@ -8,6 +8,7 @@ import {
   buildHooks,
   mergeExternals,
   mergeNoExternals,
+  collectExternalStringPrefixes,
   writeFileAtomic,
 } from '../utils';
 import {
@@ -32,7 +33,12 @@ import { Builder } from './builder';
 import { getWorkspacePackageJson } from '../package';
 import { WorkspaceEnvPlugin } from '../env';
 import { OptimizeCSSPlugin } from '../postcss/plugin';
-import { rawLoaderPlugin, createPreserveCssImportsPlugin } from './plugins';
+import {
+  rawLoaderPlugin,
+  createPreserveCssImportsPlugin,
+  createExternalImportsPlugin,
+  createSuppressDtsSourcemapWarningPlugin,
+} from './plugins';
 import { type CssOptions } from '@tsdown/css';
 
 export type WorkspaceStubLink =
@@ -108,6 +114,8 @@ export class PlugboyWorkspace {
 
   readonly projectDependencies: string[];
 
+  readonly neverBundlePrefixes: string[];
+
   readonly meta: WorkspaceMeta;
 
   readonly entry: Record<string, string>;
@@ -143,6 +151,7 @@ export class PlugboyWorkspace {
       dirs,
       dependencies,
       projectDependencies,
+      neverBundlePrefixes,
       meta,
       plugins,
       hooks,
@@ -158,9 +167,17 @@ export class PlugboyWorkspace {
     this.dirs = dirs;
     this.dependencies = dependencies;
     this.projectDependencies = projectDependencies;
+    this.neverBundlePrefixes = neverBundlePrefixes;
     this.meta = meta;
     this.config = config;
     this.plugins = [
+      // Runs first so self-reference / `neverBundle` imports are marked external
+      // before any resolver (built-in or user) can attempt — and fail — to
+      // resolve them on disk.
+      createExternalImportsPlugin(this),
+      // Filters the spurious dts SOURCEMAP_BROKEN warning; harmless if the dts
+      // pipeline is absent, so it can live alongside the other plugins.
+      createSuppressDtsSourcemapWarningPlugin(),
       ...plugins,
       OptimizeCSSPlugin(this),
       WorkspaceEnvPlugin(this),
@@ -392,6 +409,13 @@ export async function getWorkspace<
 
   const meta: WorkspaceMeta = {};
 
+  // Prefixes for the external-imports plugin. Seeded from the user's initial
+  // `deps.neverBundle` and extended by any `ctx.mergeExternals` calls made
+  // during workspace setup (see below).
+  const neverBundlePrefixes = collectExternalStringPrefixes(
+    config.deps?.neverBundle,
+  );
+
   const projectPlugins = project?.plugins || [];
   const projectHooks = project?.hooks || [];
   const plugins: Plugin[] = [...projectPlugins, ...config.plugins];
@@ -425,6 +449,7 @@ export async function getWorkspace<
     dirs,
     dependencies: _dependencies,
     projectDependencies,
+    neverBundlePrefixes,
     meta,
     plugins,
     hooks,
@@ -438,6 +463,7 @@ export async function getWorkspace<
         config.deps.neverBundle,
         override,
       );
+      neverBundlePrefixes.push(...collectExternalStringPrefixes(override));
     },
     mergeNoExternals: (override) => {
       config.deps ??= {};

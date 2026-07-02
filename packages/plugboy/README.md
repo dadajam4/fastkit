@@ -292,6 +292,20 @@ export default defineWorkspaceConfig({
 });
 ```
 
+### Dependency Externalization
+
+`deps.neverBundle` marks packages as external instead of bundling them. Matching
+is by **package name and its subpaths** — listing `'foo'` externalizes both
+`foo` and `foo/bar`.
+
+**Self-references are always external, automatically.** When a module imports
+its own package by name (e.g. `import logo from 'my-pkg/assets/logo.svg'`), the
+import is served at runtime via the package's own `exports` map
+(`"./*": "./dist/*"`) and is never bundled — you do **not** need to list your own
+package in `neverBundle`. Because plugboy resolves these as external up front,
+they never trigger rolldown's `UNRESOLVED_IMPORT` warning, while genuinely
+unresolved specifiers (typos) still warn as usual.
+
 ## Hook System
 
 ### Lifecycle Hooks
