@@ -93,46 +93,46 @@ export type RouteQueryType =
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
-): string | undefined; // eslint-disable-line prettier/prettier
+): string | undefined;
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
   type: undefined,
   defaultValue: string,
-): string; // eslint-disable-line prettier/prettier
+): string;
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
   type: StringConstructor,
-): string | undefined; // eslint-disable-line prettier/prettier
+): string | undefined;
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
   type: StringConstructor,
   defaultValue: string,
-): string; // eslint-disable-line prettier/prettier
+): string;
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
   type: NumberConstructor,
-): number | undefined; // eslint-disable-line prettier/prettier
+): number | undefined;
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
   type: NumberConstructor,
   defaultValue: number,
-): number; // eslint-disable-line prettier/prettier
+): number;
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
   type: BooleanConstructor,
-): boolean; // eslint-disable-line prettier/prettier
+): boolean;
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,
   type: BooleanConstructor,
   defaultValue: boolean,
-): boolean; // eslint-disable-line prettier/prettier
+): boolean;
 export function getRouteQuery(
   bucket: LocationQuery,
   key: string,

@@ -81,9 +81,11 @@ describe('collectExternalStringPrefixes', () => {
   test('collects string entries, flattening nested arrays', () => {
     expect(collectExternalStringPrefixes('a')).toEqual(['a']);
     expect(collectExternalStringPrefixes(['a', 'b'])).toEqual(['a', 'b']);
-    expect(
-      collectExternalStringPrefixes(['a', ['b', ['c']]] as any),
-    ).toEqual(['a', 'b', 'c']);
+    expect(collectExternalStringPrefixes(['a', ['b', ['c']]] as any)).toEqual([
+      'a',
+      'b',
+      'c',
+    ]);
   });
 
   test('skips RegExp and function entries (opaque, not prefixable)', () => {

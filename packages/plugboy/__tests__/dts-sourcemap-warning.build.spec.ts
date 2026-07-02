@@ -65,7 +65,10 @@ function emptyDtsFixture(): string {
 }
 
 function run(driver: string, args: string[], cwd: string): string {
-  const result = spawnSync(TSX_BIN, [driver, ...args], { cwd, encoding: 'utf8' });
+  const result = spawnSync(TSX_BIN, [driver, ...args], {
+    cwd,
+    encoding: 'utf8',
+  });
   return `${result.stdout ?? ''}${result.stderr ?? ''}`.replace(ANSI_RE, '');
 }
 

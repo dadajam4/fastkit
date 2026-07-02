@@ -100,14 +100,14 @@ export function debounce<FN extends AnyFunction = AnyFunction>(
   handler: FN,
   delay?: number,
   immediate?: boolean,
-): Debounced<FN>; // eslint-disable-line prettier/prettier
+): Debounced<FN>;
 export function debounce<FN extends AnyFunction = AnyFunction>(
   handler: FN,
   options: DebounceOptions,
-): Debounced<FN>; // eslint-disable-line prettier/prettier
+): Debounced<FN>;
 export function debounce<FN extends AnyFunction = AnyFunction>(
   setrings: DebounceSettings<FN>,
-): Debounced<FN>; // eslint-disable-line prettier/prettier
+): Debounced<FN>;
 
 export function debounce<FN extends AnyFunction = AnyFunction>(
   fnOrSettings: FN | DebounceSettings<FN>,
