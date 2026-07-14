@@ -18,6 +18,22 @@ overrides:
   # an open `>=6.0.0` range that resolves to a stylelint 16-era version; pin it to
   # the stylelint 17 compatible major to match the rest of the toolchain.
   stylelint-config-recommended: ^18.0.0
+  # Pin the whole Vue family to a single version across the workspace. Vue is a
+  # singleton and its internal @vue/* packages cross-depend by exact version, so
+  # floating ranges (e.g. vite-plugin-vui's `^3.5.0` resolving to a newer patch
+  # than the `^3.5.38` used elsewhere) duplicate Vue's module identity and break
+  # JSX / VNode type-checking. Overrides affect install-time resolution only;
+  # published peerDependencies keep their own ranges.
+  vue: 3.5.38
+  '@vue/compiler-core': 3.5.38
+  '@vue/compiler-dom': 3.5.38
+  '@vue/compiler-sfc': 3.5.38
+  '@vue/compiler-ssr': 3.5.38
+  '@vue/reactivity': 3.5.38
+  '@vue/runtime-core': 3.5.38
+  '@vue/runtime-dom': 3.5.38
+  '@vue/server-renderer': 3.5.38
+  '@vue/shared': 3.5.38
 
 peerDependencyRules:
   allowedVersions:
