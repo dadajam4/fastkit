@@ -26,7 +26,7 @@ const baseScripts = {
 export default defineProjectConfig({
   peerDependencies: {
     vue: '^3.5.0',
-    'vue-router': '^4.4.0',
+    'vue-router': '^4.4.0 || ^5.0.0',
   },
   scripts: [
     {

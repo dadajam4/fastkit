@@ -59,6 +59,9 @@
     "eta": "^4.6.0",
     "fs-extra": "^11.3.5"
   },
+  "devDependencies": {
+    "@fastkit/plugboy": "workspace:^"
+  },
   "buildOptions": {
     "name": "ColorSchemeGen"
   },

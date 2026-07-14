@@ -1,0 +1,18 @@
+/* stylelint-disable */
+/*
+ * Aggregated builtin styles for VUI.
+ *
+ * VUI owns the CSS of the `@fastkit/vue-*` packages it depends on and re-exports
+ * them here as a single entry. Consumers (e.g. `@fastkit/vite-plugin-vui`) import
+ * only `@fastkit/vui/builtins.css` instead of reaching around VUI into its own
+ * dependencies — keeping the dependency ownership where it belongs.
+ *
+ * Cascade-layer ordering is established by the importer (see the `@layer`
+ * declaration emitted by `@fastkit/vite-plugin-vui`).
+ */
+@import '@fastkit/vue-disabled-reason/vue-disabled-reason.css';
+@import '@fastkit/vue-stack/vue-stack.css';
+@import '@fastkit/vue-app-layout/vue-app-layout.css';
+@import '@fastkit/vue-loading/vue-loading.css';
+@import '@fastkit/vue-scroller/vue-scroller.css';
+@import './vui.css';

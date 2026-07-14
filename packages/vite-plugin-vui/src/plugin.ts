@@ -13,12 +13,7 @@ const COLOR_DUMP_STYLE = `${`
 @use './color-scheme/color-scheme' as *;
 @layer vui-normalize, vui-color-scheme, vue-disabled-reason, vue-loading, vue-app-layout, vui;
 @include dump-color-scheme(true, "vui-color-scheme");
-@import '@fastkit/vue-disabled-reason/vue-disabled-reason.css';
-@import '@fastkit/vue-stack/vue-stack.css';
-@import '@fastkit/vue-app-layout/vue-app-layout.css';
-@import '@fastkit/vue-loading/vue-loading.css';
-@import '@fastkit/vue-scroller/vue-scroller.css';
-@import '@fastkit/vui/vui.css';
+@import '@fastkit/vui/builtins.css';
 `.trim()}\n`;
 
 const TEMPLATE = `
