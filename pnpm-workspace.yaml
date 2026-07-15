@@ -41,16 +41,3 @@ peerDependencyRules:
     # for its own file-watching, which we don't use). chokidar 5 is intentionally
     # installed as a direct dependency of @fastkit/icon-font-gen.
     chokidar: '5'
-  ignoreMissing:
-    - typescript
-    - eslint
-    - prettier
-    - stylelint
-    - postcss
-    - vitest
-    - esbuild
-    - vite
-    - vue
-    - '@tiptap/core'
-    - '@tiptap/pm'
-    - postcss-html
