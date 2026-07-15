@@ -263,7 +263,16 @@ pnpm test
     guarded and intentionally undeclared rather than a real miss.
 
   Strip comments before scanning, or JSDoc `@example` code blocks in `.d.ts`
-  produce false positives. **Goal: static-runtime = 0 and type = 0.** Note that
+  produce false positives. The scan is regex-based over source text, so it also
+  counts import-like strings inside string literals (e.g. a codegen template
+  that emits `import … from 'vue'`) — it **over-reports rather than under-reports**,
+  which is the safe direction for a guardrail (worst case you declare a dep you
+  didn't strictly need; you never silently miss one). It also reports at most one
+  version per dependency, so it flags an undeclared dep, not version drift.
+  Packages that publish source directly instead of a `dist` build (config / type
+  packages such as the eslint/stylelint configs) are outside this dist-based
+  audit; the script reports them separately so a partial build can't masquerade
+  as a clean pass. **Goal: static-runtime = 0 and type = 0.** Note that
   pnpm's `hoist=false` does **not** surface these (root-declared deps still
   resolve via upward traversal), and a real isolated install (`pnpm deploy`-style)
   is the ultimate confirmation.

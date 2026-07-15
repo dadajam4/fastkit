@@ -73,15 +73,32 @@ const RT = /\.(mjs|cjs|js)$/;
 const DT = /\.d\.(m|c)?ts$/;
 
 const rows = [];
-let nStatic = 0, nDynamic = 0, nType = 0, scanned = 0;
+let nStatic = 0, nDynamic = 0, nType = 0, scanned = 0, publishable = 0;
+const skipped = [], nonDist = [];
+
+// Does the package ship its published output from `dist/`? (vs config/type
+// packages that publish source files directly, e.g. `index.mjs`, `types/`.)
+const expectsDist = (pkg) => {
+  const fields = [pkg.main, pkg.module, pkg.types, pkg.typings].filter(Boolean);
+  if (fields.some((f) => /(^|\/)dist\//.test(f))) return true;
+  if (Array.isArray(pkg.files) && pkg.files.some((f) => /(^|\/)dist(\/|$)/.test(f))) return true;
+  return pkg.exports ? JSON.stringify(pkg.exports).includes('/dist') : false;
+};
 
 for (const name of readdirSync(pkgsBase)) {
   const dir = join(pkgsBase, name);
   const pj = join(dir, 'package.json');
-  const dist = join(dir, 'dist');
-  if (!existsSync(pj) || !existsSync(dist)) continue;
+  if (!existsSync(pj)) continue;
   const pkg = JSON.parse(readFileSync(pj, 'utf8'));
   if (pkg.private) continue;
+  publishable += 1;
+  const dist = join(dir, 'dist');
+  if (!existsSync(dist)) {
+    // Ships from dist but has none -> not built (real problem, warn).
+    // Doesn't ship from dist (config / source-shipped) -> outside this audit.
+    (expectsDist(pkg) ? skipped : nonDist).push(pkg.name);
+    continue;
+  }
   scanned += 1;
   const declared = new Set([
     ...Object.keys(pkg.dependencies || {}),
@@ -124,7 +141,14 @@ if (scanned === 0) {
   process.exit(2);
 }
 
-console.log(`Scanned ${scanned} published packages.`);
+console.log(`Scanned ${scanned} of ${publishable} publishable packages.`);
+if (nonDist.length) {
+  console.log(`  (${nonDist.length} ship without a dist build and are outside this dist-based audit: ${nonDist.join(', ')})`);
+}
+if (skipped.length) {
+  console.warn(`WARNING: ${skipped.length} dist-shipping package(s) had no dist (not built?) and were NOT audited: ${skipped.join(', ')}`);
+  console.warn('Run a full `pnpm build` before trusting a clean result.');
+}
 console.log(`  static runtime (import/require): ${nStatic}   <- must be 0`);
 console.log(`  type (.d.ts):                    ${nType}   <- must be 0`);
 console.log(`  dynamic import() (informational): ${nDynamic}\n`);
