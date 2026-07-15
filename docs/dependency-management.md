@@ -229,7 +229,29 @@ pnpm test
 - **Consumer reproduction:** `pnpm add` a single package into a throwaway project
   with default settings (no `shamefully-hoist`) and confirm its imports resolve.
   A missing runtime `dependencies` / `peerDependencies` fails here.
-- **Detecting phantoms:** pnpm's `hoist=false` does **not** surface these —
-  root-declared deps still resolve via upward traversal. Use an isolated install
-  (`pnpm deploy`-style), or a static import-vs-declaration audit in CI, to catch
-  undeclared runtime imports.
+- **Detecting phantoms — audit the built `dist`, not `src`.** The
+  authoritative consumer-facing check is: for each published package, scan its
+  built `dist/**` for import specifiers and verify each is declared in
+  `dependencies` / `peerDependencies` / `optionalDependencies` (NOT
+  `devDependencies` — consumers don't get those; and bundled imports never
+  appear in `dist`). A `src`-based scan over-reports — it includes type-only
+  imports erased from the output, `*.css.ts` compiled away at build, test files,
+  and bundled helpers. Classify findings by severity:
+  - **static runtime import** (`import … from` / `require`) → hard runtime break;
+  - **type import in `.d.ts`** → breaks consumer type-checking;
+  - **dynamic `import()`** → usually an optional feature (often `try`/`catch`
+    guarded, e.g. `@fastkit/vot`'s memory-monitoring imports); confirm each is
+    guarded and intentionally undeclared rather than a real miss.
+
+  Strip comments before scanning, or JSDoc `@example` code blocks in `.d.ts`
+  produce false positives. **Goal: static-runtime = 0 and type = 0.** Note that
+  pnpm's `hoist=false` does **not** surface these (root-declared deps still
+  resolve via upward traversal), and a real isolated install (`pnpm deploy`-style)
+  is the ultimate confirmation.
+
+  > **Do not declare a guarded optional dynamic dependency just to silence the
+  > audit.** Declaring it as a peer with `auto-install-peers` on (pnpm default)
+  > pulls the (often native) module into the install for everyone; declaring it
+  > as an `optionalDependency` force-installs it too. Leaving a `try`/`catch`
+  > `import()` undeclared is the correct "bring your own if you want the feature"
+  > pattern — it does not break consumers.
