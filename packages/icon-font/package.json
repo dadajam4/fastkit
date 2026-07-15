@@ -65,6 +65,11 @@
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:^"
   },
+  "peerDependenciesMeta": {
+    "@fastkit/plugboy": {
+      "optional": true
+    }
+  },
   "_docs": {
     "scope": "",
     "feature": "icon",
