@@ -116,6 +116,25 @@ Contrast: a dependency used by the **main** entry (e.g. `vue` in a component
 package, or `typescript` in `@fastkit/ts-tiny-meta`'s core) is a **required**
 peer — every consumer needs it.
 
+### Peer dependency version ranges
+
+When declaring a `peerDependency`, **enumerate the major versions you support and
+cap before the next unverified one** — e.g. `^6.0.0 || ^7.0.0`. Do **not** use an
+open-ended `>=6.0.0`: it claims compatibility with every future major (8, 9, …),
+each of which will contain breaking changes you have not verified.
+
+This matters most for dependencies that do not follow semver. **TypeScript in
+particular breaks its public API in minor and major releases**, so:
+
+- `^6.0.0` alone excludes the imminent TypeScript 7 (caret means `>=6.0.0 <7.0.0`)
+  and warns those consumers unnecessarily;
+- `>=6.0.0` over-promises TypeScript 8+;
+- `^6.0.0 || ^7.0.0` is correct — extend to `|| ^8.0.0` once TS 8 ships and is
+  verified.
+
+This matches the repo's existing peers (cf. the `vite` peer
+`^6.0.0 || ^7.0.0 || ^8.0.0` — enumerated majors, explicit upper bound).
+
 ### Framework singletons (the Vue family)
 
 `vue` and every `@vue/*` internal package (`@vue/runtime-core`,
