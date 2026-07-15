@@ -1,5 +1,11 @@
 # @fastkit/icon-font
 
+## 2.2.2
+
+### Patch Changes
+
+- [#167](https://github.com/dadajam4/fastkit/pull/167) [`edd4249`](https://github.com/dadajam4/fastkit/commit/edd4249e45ebdf39e6f3563a60c1b1c08aef8ea7) Thanks [@dadajam4](https://github.com/dadajam4)! - Mark the `@fastkit/plugboy` peer dependency as optional. It is only used by the optional `./plugboy-dts-preserve` entry (consumed from within a plugboy build), so consumers of the main entry no longer get a spurious "missing peer dependency" warning.
+
 ## 2.2.1
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @fastkit/vue-loading
 
+## 0.18.3
+
+### Patch Changes
+
+- [#167](https://github.com/dadajam4/fastkit/pull/167) [`edd4249`](https://github.com/dadajam4/fastkit/commit/edd4249e45ebdf39e6f3563a60c1b1c08aef8ea7) Thanks [@dadajam4](https://github.com/dadajam4)! - Drop the unnecessary `vue-router` peer dependency from `@fastkit/vue-loading`. The package does not use `vue-router` at all — neither its source nor its published output references it — so requiring consumers to provide `vue-router` was spurious.
+
+- Updated dependencies [[`edd4249`](https://github.com/dadajam4/fastkit/commit/edd4249e45ebdf39e6f3563a60c1b1c08aef8ea7)]:
+  - @fastkit/color-scheme@2.2.2
+
 ## 0.18.2
 
 ### Patch Changes
