@@ -1,5 +1,16 @@
 # @fastkit/vite-plugin-vui
 
+## 3.5.0
+
+### Minor Changes
+
+- [#167](https://github.com/dadajam4/fastkit/pull/167) [`edd4249`](https://github.com/dadajam4/fastkit/commit/edd4249e45ebdf39e6f3563a60c1b1c08aef8ea7) Thanks [@dadajam4](https://github.com/dadajam4)! - Declare the dependencies the plugin actually uses so it resolves without `shamefully-hoist`: `@fastkit/vue-page` as a dependency, and `vue` / `vue-router` as peer dependencies. The generated built-in stylesheet now imports the aggregated `@fastkit/vui/builtins.css` instead of reaching into VUI's individual sub-packages (equivalent CSS output).
+
+### Patch Changes
+
+- Updated dependencies [[`edd4249`](https://github.com/dadajam4/fastkit/commit/edd4249e45ebdf39e6f3563a60c1b1c08aef8ea7)]:
+  - @fastkit/vui@1.5.0
+
 ## 3.4.1
 
 ### Patch Changes

@@ -1,5 +1,19 @@
 # @fastkit/vui
 
+## 1.5.0
+
+### Minor Changes
+
+- [#167](https://github.com/dadajam4/fastkit/pull/167) [`edd4249`](https://github.com/dadajam4/fastkit/commit/edd4249e45ebdf39e6f3563a60c1b1c08aef8ea7) Thanks [@dadajam4](https://github.com/dadajam4)! - Add a `builtins.css` export (`@fastkit/vui/builtins.css`) that aggregates the built-in component stylesheets VUI depends on. Tooling can now pull the built-in styles through VUI itself instead of reaching into its individual dependencies.
+
+### Patch Changes
+
+- Updated dependencies [[`edd4249`](https://github.com/dadajam4/fastkit/commit/edd4249e45ebdf39e6f3563a60c1b1c08aef8ea7), [`edd4249`](https://github.com/dadajam4/fastkit/commit/edd4249e45ebdf39e6f3563a60c1b1c08aef8ea7)]:
+  - @fastkit/vue-loading@0.18.3
+  - @fastkit/color-scheme@2.2.2
+  - @fastkit/icon-font@2.2.2
+  - @fastkit/media-match@2.2.2
+
 ## 1.4.2
 
 ### Patch Changes

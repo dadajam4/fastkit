@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 1.1.0
+
+### Minor Changes
+
+- [#167](https://github.com/dadajam4/fastkit/pull/167) [`edd4249`](https://github.com/dadajam4/fastkit/commit/edd4249e45ebdf39e6f3563a60c1b1c08aef8ea7) Thanks [@dadajam4](https://github.com/dadajam4)! - Declare `typescript` as a peer dependency (`^6.0.0 || ^7.0.0`). Both packages use the TypeScript compiler API and/or expose its types in their published `.d.ts`, so declaring it lets them resolve correctly in an isolated install instead of relying on the dependency being hoisted.
+
 ## 1.0.2
 
 ### Patch Changes
