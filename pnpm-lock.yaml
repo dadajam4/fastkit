@@ -721,22 +721,22 @@ importers:
         version: 4.0.9(postcss@8.5.15)
       stylelint:
         specifier: ^17.0.0
-        version: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+        version: 17.13.0(typescript@6.0.3)
       stylelint-config-css-modules:
         specifier: ^4.6.0
-        version: 4.6.0(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
+        version: 4.6.0(stylelint@17.13.0(typescript@6.0.3))
       stylelint-config-recess-order:
         specifier: ^7.7.0
-        version: 7.7.0(stylelint-order@8.1.1(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3)))(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
+        version: 7.7.0(stylelint-order@8.1.1(stylelint@17.13.0(typescript@6.0.3)))(stylelint@17.13.0(typescript@6.0.3))
       stylelint-config-standard:
         specifier: ^40.0.0
-        version: 40.0.0(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
+        version: 40.0.0(stylelint@17.13.0(typescript@6.0.3))
       stylelint-config-standard-scss:
         specifier: ^17.0.0
-        version: 17.0.0(postcss@8.5.15)(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
+        version: 17.0.0(postcss@8.5.15)(stylelint@17.13.0(typescript@6.0.3))
       stylelint-order:
         specifier: ^8.0.0
-        version: 8.1.1(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
+        version: 8.1.1(stylelint@17.13.0(typescript@6.0.3))
 
   packages/stylelint-config-vue:
     dependencies:
@@ -745,7 +745,7 @@ importers:
         version: link:../stylelint-config
       stylelint:
         specifier: ^17.0.0
-        version: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+        version: 17.13.0(typescript@6.0.3)
       stylelint-config-recommended-vue:
         specifier: ^1.6.1
         version: 1.6.1(postcss-html@1.8.1)(stylelint@17.13.0(typescript@6.0.3))
@@ -1497,6 +1497,9 @@ importers:
       vue:
         specifier: 3.5.38
         version: 3.5.38(typescript@6.0.3)
+      vue-router:
+        specifier: ^5.1.0
+        version: 5.1.0(@vue/compiler-sfc@3.5.38)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.0.16(@types/node@24.13.2)(esbuild@0.28.1)(sass-embedded@1.86.0)(sass@1.101.0)(tsx@4.22.4)(yaml@2.9.0))(vue@3.5.38(typescript@6.0.3))
 
 packages:
 
@@ -14759,28 +14762,28 @@ snapshots:
       postcss: 8.5.15
       postcss-selector-parser: 7.1.4
 
-  stylelint-config-css-modules@4.6.0(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3)):
+  stylelint-config-css-modules@4.6.0(stylelint@17.13.0(typescript@6.0.3)):
     dependencies:
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+      stylelint: 17.13.0(typescript@6.0.3)
     optionalDependencies:
-      stylelint-scss: 7.2.0(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
+      stylelint-scss: 7.2.0(stylelint@17.13.0(typescript@6.0.3))
 
   stylelint-config-html@1.1.0(postcss-html@1.8.1)(stylelint@17.13.0(typescript@6.0.3)):
     dependencies:
       postcss-html: 1.8.1
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+      stylelint: 17.13.0(typescript@6.0.3)
 
-  stylelint-config-recess-order@7.7.0(stylelint-order@8.1.1(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3)))(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3)):
+  stylelint-config-recess-order@7.7.0(stylelint-order@8.1.1(stylelint@17.13.0(typescript@6.0.3)))(stylelint@17.13.0(typescript@6.0.3)):
     dependencies:
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
-      stylelint-order: 8.1.1(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
+      stylelint: 17.13.0(typescript@6.0.3)
+      stylelint-order: 8.1.1(stylelint@17.13.0(typescript@6.0.3))
 
-  stylelint-config-recommended-scss@17.0.1(postcss@8.5.15)(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3)):
+  stylelint-config-recommended-scss@17.0.1(postcss@8.5.15)(stylelint@17.13.0(typescript@6.0.3)):
     dependencies:
       postcss-scss: 4.0.9(postcss@8.5.15)
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+      stylelint: 17.13.0(typescript@6.0.3)
       stylelint-config-recommended: 18.0.0(stylelint@17.13.0(typescript@6.0.3))
-      stylelint-scss: 7.2.0(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
+      stylelint-scss: 7.2.0(stylelint@17.13.0(typescript@6.0.3))
     optionalDependencies:
       postcss: 8.5.15
 
@@ -14788,32 +14791,32 @@ snapshots:
     dependencies:
       postcss-html: 1.8.1
       semver: 7.6.2
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+      stylelint: 17.13.0(typescript@6.0.3)
       stylelint-config-html: 1.1.0(postcss-html@1.8.1)(stylelint@17.13.0(typescript@6.0.3))
       stylelint-config-recommended: 18.0.0(stylelint@17.13.0(typescript@6.0.3))
 
   stylelint-config-recommended@18.0.0(stylelint@17.13.0(typescript@6.0.3)):
     dependencies:
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+      stylelint: 17.13.0(typescript@6.0.3)
 
-  stylelint-config-standard-scss@17.0.0(postcss@8.5.15)(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3)):
+  stylelint-config-standard-scss@17.0.0(postcss@8.5.15)(stylelint@17.13.0(typescript@6.0.3)):
     dependencies:
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
-      stylelint-config-recommended-scss: 17.0.1(postcss@8.5.15)(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
-      stylelint-config-standard: 40.0.0(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3))
+      stylelint: 17.13.0(typescript@6.0.3)
+      stylelint-config-recommended-scss: 17.0.1(postcss@8.5.15)(stylelint@17.13.0(typescript@6.0.3))
+      stylelint-config-standard: 40.0.0(stylelint@17.13.0(typescript@6.0.3))
     optionalDependencies:
       postcss: 8.5.15
 
-  stylelint-config-standard@40.0.0(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3)):
+  stylelint-config-standard@40.0.0(stylelint@17.13.0(typescript@6.0.3)):
     dependencies:
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+      stylelint: 17.13.0(typescript@6.0.3)
       stylelint-config-recommended: 18.0.0(stylelint@17.13.0(typescript@6.0.3))
 
-  stylelint-order@8.1.1(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3)):
+  stylelint-order@8.1.1(stylelint@17.13.0(typescript@6.0.3)):
     dependencies:
       postcss: 8.5.15
       postcss-sorting: 10.0.0(postcss@8.5.15)
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+      stylelint: 17.13.0(typescript@6.0.3)
 
   stylelint-prettier@5.0.3(prettier@3.9.1)(stylelint@17.14.0(supports-color@5.5.0)(typescript@6.0.3)):
     dependencies:
@@ -14821,7 +14824,7 @@ snapshots:
       prettier-linter-helpers: 1.0.0
       stylelint: 17.14.0(supports-color@5.5.0)(typescript@6.0.3)
 
-  stylelint-scss@7.2.0(stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3)):
+  stylelint-scss@7.2.0(stylelint@17.13.0(typescript@6.0.3)):
     dependencies:
       '@csstools/css-calc': 3.2.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
@@ -14834,9 +14837,9 @@ snapshots:
       postcss-resolve-nested-selector: 0.1.6
       postcss-selector-parser: 7.1.4
       postcss-value-parser: 4.2.0
-      stylelint: 17.13.0(supports-color@5.5.0)(typescript@6.0.3)
+      stylelint: 17.13.0(typescript@6.0.3)
 
-  stylelint@17.13.0(supports-color@5.5.0)(typescript@6.0.3):
+  stylelint@17.13.0(typescript@6.0.3):
     dependencies:
       '@csstools/css-calc': 3.2.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)

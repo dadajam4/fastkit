@@ -194,6 +194,66 @@ The consuming app must therefore **declare that package directly** (e.g.
 `apps/docs` declares `@fastkit/color-scheme`); otherwise the two resolve
 different copies and the types fall back to the uncustomized placeholders.
 
+### Inlined external types in `.d.ts` (reference, don't inline)
+
+plugboy generates types with tsdown → `rolldown-plugin-dts`, which produces a
+**self-contained `.d.ts`**. For each type the emitted declarations reference, the
+bundler either keeps an `import('pkg').Foo` reference or copies the declaration
+**inline** — decided by whether `pkg` is **externalized**. plugboy externalizes
+its declared deps (`dependencies` + `peerDependencies` + `optionalDependencies`)
+*plus* whatever a `plugboy.workspace.ts` `deps.neverBundle` lists.
+
+What actually decides it, per type:
+
+- A type the **source references by an explicit name imported from an external
+  package** (e.g. `const control: TextableControl`, `TextableControl` imported
+  from `@fastkit/vui`) → kept as `import('@fastkit/vui').TextableControl`. The
+  import specifier is preserved.
+- A type that only appears because TypeScript **structurally expanded** some
+  other value/function (e.g. spreading `...createFormNodeWrapperProps()`; the
+  source never writes the type name) → resolved to its **definition package** and
+  **inlined** (unless that package is external). A re-export subpath does NOT
+  redirect this — the bundler always follows to the definition origin.
+
+**Why inlining is bad — it is not just bloat.** An inlined class with
+`private`/`protected` members is compared **nominally**: the baked-in copy and a
+consumer's real copy of the same class are *different declarations*, so
+`TS2322 "not assignable"` fires the moment a consumer bridges the two (e.g. takes
+`VWysiwygEditorAPI`'s form-node type and passes it to a `@fastkit/vue-form-control`
+API). Plus it bloats the file (inlining `vue-form-control` added ~1,600 lines) and
+is invisible to an import-specifier scan.
+
+**Fix: make the type a reference, not an inline.** Two tools, by case:
+
+1. **Declare the package** (`dependencies` / `peerDependencies`) — when it is a
+   genuine dependency this package uses (runtime, or imported by name). Standard,
+   self-describing.
+2. **`deps.neverBundle` in `plugboy.workspace.ts`** — when the type is type-only,
+   arrives *only* through structural expansion (the source never imports it by
+   name), and is already **provided by a REQUIRED declared dep**. Externalizing it
+   emits the reference; it resolves through that provider. Use this instead of
+   re-declaring a foundation the package doesn't itself use. Example:
+   `@fastkit/vui-wysiwyg` never names `@fastkit/vue-form-control`, but its
+   `VWysiwygEditor` props spread `createFormNodeWrapperProps()` (vui re-exports it),
+   pulling `FormNodeControl` in. `neverBundle: ['@fastkit/vue-form-control',
+   '@fastkit/vue-utils']` makes the `.d.ts` reference them; they resolve via the
+   required `@fastkit/vui` peer (which depends on them).
+
+**`neverBundle` is only safe when a REQUIRED declared dep provides the package.**
+Externalizing something that nothing declared provides just moves the phantom to
+the consumer (an undeclared `import('pkg')` they can't resolve under strict
+isolation — see the earlier neverBundle-without-a-provider trap). Having to spell
+`neverBundle` out is a minor wart (ideally the bundler would reference the type
+through the re-export path the source used, but it resolves to the definition
+origin instead); it is an acceptable, audited workaround.
+
+**Audit.** `audit:deps` fails on any `[inlined]` external type (both
+`node_modules/…` and workspace-relative `../pkg/dist/…` regions — goal:
+**inlined external = 0**), so a missing `neverBundle`/declaration is caught. A
+reference that is undeclared **but provided through a required declared dep** is
+reported as **`[via]`** (informational, non-failing) — the accepted `neverBundle`
+outcome.
+
 ## Root-aggregated dev toolchain
 
 The shared build/lint/test toolchain lives in the workspace-root
@@ -220,6 +280,13 @@ and `fs-extra` because its own build modules use them.
   `optionalDependencies`. Everything else (`devDependencies` and undeclared
   imports) is **bundled** into `dist`. This is why a bundled helper must not sit
   in `dependencies`.
+- **The same external set (plus `deps.neverBundle`) governs the `.d.ts`.** tsdown →
+  `rolldown-plugin-dts` keeps an external package's types as an `import('pkg')`
+  reference and **inlines a non-external package's types** instead. Inlining is not
+  just bloat — an inlined nominal class (`private`/`protected` members) is a
+  *different declaration* from the consumer's real copy and clashes (`TS2322`). So
+  externalization controls JS bundling *and* whether a type is referenced (good) or
+  copied in (bad). See "Inlined external types" above.
 - **`shamefully-hoist` only affects consumers via transitive dependencies.** The
   real fix for the consumer-facing problem is complete `dependencies` /
   `peerDependencies` per published package — nothing else.
@@ -258,6 +325,12 @@ pnpm test
   and bundled helpers. Classify findings by severity:
   - **static runtime import** (`import … from` / `require`) → hard runtime break;
   - **type import in `.d.ts`** → breaks consumer type-checking;
+  - **inlined external type** (`//#region` region, `node_modules/…` or
+    workspace-relative `../pkg/dist/…`) → bloat + nominal type-identity clash; fix
+    by declaring or `neverBundle` (see "Inlined external types" above);
+  - **via declared dep** → undeclared but genuinely provided through a REQUIRED
+    declared dep (its dep/peer); informational, not a failure (the accepted
+    `neverBundle` outcome);
   - **dynamic `import()`** → usually an optional feature (often `try`/`catch`
     guarded, e.g. `@fastkit/vot`'s memory-monitoring imports); confirm each is
     guarded and intentionally undeclared rather than a real miss.
@@ -272,10 +345,15 @@ pnpm test
   Packages that publish source directly instead of a `dist` build (config / type
   packages such as the eslint/stylelint configs) are outside this dist-based
   audit; the script reports them separately so a partial build can't masquerade
-  as a clean pass. **Goal: static-runtime = 0 and type = 0.** Note that
-  pnpm's `hoist=false` does **not** surface these (root-declared deps still
-  resolve via upward traversal), and a real isolated install (`pnpm deploy`-style)
-  is the ultimate confirmation.
+  as a clean pass. The script also detects the inverse leak — an undeclared
+  external package whose types are **inlined** into a `.d.ts` (the `[inlined]`
+  category; see "Inlined external types" above) — which an import-specifier scan
+  cannot. **Goal: static-runtime = 0, type = 0, and inlined external = 0.**
+  References that are undeclared but genuinely provided through a required declared
+  dep are reported as `[via]` and are acceptable (not counted against the goal).
+  Note that pnpm's `hoist=false` does **not** surface these (root-declared deps
+  still resolve via upward traversal), and a real isolated install
+  (`pnpm deploy`-style) is the ultimate confirmation.
 
   > **Blind spot — ambient `@types/*`.** An import-specifier scan cannot see
   > `@types/*` packages: they are pulled in implicitly by `import … from 'x'`,
