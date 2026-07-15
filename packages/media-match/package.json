@@ -66,6 +66,11 @@
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:^"
   },
+  "peerDependenciesMeta": {
+    "@fastkit/plugboy": {
+      "optional": true
+    }
+  },
   "buildOptions": {
     "name": "MediaMatch"
   },

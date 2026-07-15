@@ -269,7 +269,8 @@
   },
   "devDependencies": {
     "@fastkit/vui": "workspace:^",
-    "vue": "^3.5.38"
+    "vue": "^3.5.38",
+    "vue-router": "^5.1.0"
   },
   "peerDependencies": {
     "@fastkit/vui": "workspace:^",

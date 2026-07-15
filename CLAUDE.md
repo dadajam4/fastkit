@@ -151,6 +151,30 @@ packages/[name]/
 - **TypeScript 5.5.3**: Latest stable version
 - **Build Tools**: Turbo (caching), pnpm (package management), esbuild (bundling)
 
+### Dependency Management
+
+When adding, moving, or removing any dependency — choosing between
+`dependencies` / `peerDependencies` / `devDependencies` /
+`optionalDependencies`, or the workspace root — follow the policy in
+[docs/dependency-management.md](docs/dependency-management.md). Key rules:
+
+- Published packages must declare everything that ships in their `dist`
+  (`dependencies`, or `peerDependencies` for framework / host-provided deps).
+- The shared dev toolchain (plugboy + its plugins, vitest, typescript, eslint,
+  prettier, stylelint, turbo, changesets, …) is **root-aggregated** — do not
+  declare it per package.
+- `@fastkit/plugboy` used in build config (`plugboy.workspace.ts`) or via a
+  bundled helper (`@fastkit/plugboy/runtime-utils`) must be root-aggregated or a
+  `devDependency` — **never `dependencies`** (plugboy externalizes
+  `dependencies`/`peerDependencies` and would break the bundled helper).
+- Pin the Vue family (`vue` + all `@vue/*`) to one version via `pnpm overrides`;
+  declare `vue` / `vue-router` as peers (+ dev) per package.
+- A dependency reachable only via an opt-in subpath export → **optional** peer
+  (`peerDependenciesMeta.<dep>.optional`).
+- Verify dependency changes with `pnpm build:force` (never `turbo run … --force`,
+  which breaks plugboy's self-bootstrap), then `pnpm build:docs` / `typecheck` /
+  `test`.
+
 ### Code Style
 
 - **ESLint**: Airbnb-base + TypeScript + Prettier integration
