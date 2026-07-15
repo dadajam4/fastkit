@@ -268,6 +268,16 @@ pnpm test
   resolve via upward traversal), and a real isolated install (`pnpm deploy`-style)
   is the ultimate confirmation.
 
+  > **Blind spot — ambient `@types/*`.** An import-specifier scan cannot see
+  > `@types/*` packages: they are pulled in implicitly by `import … from 'x'`,
+  > never referenced by name. Dev-only `@types/*` whose types do **not** appear
+  > in any published `.d.ts` are fine root-aggregated (like `@types/node`). But
+  > if a published `.d.ts` exposes a type from `@types/X` (i.e. `X`'s types are
+  > part of the public API), the package must declare `@types/X` itself
+  > (`dependencies`) — the consumer needs it to type-check. Check this by
+  > grepping published `.d.ts` for the module (`grep -r "from 'x'" dist/*.d.mts`),
+  > not by the import audit.
+
   > **Do not declare a guarded optional dynamic dependency just to silence the
   > audit.** Declaring it as a peer with `auto-install-peers` on (pnpm default)
   > pulls the (often native) module into the install for everyone; declaring it
