@@ -46,6 +46,7 @@
   "devDependencies": {
     "@fastkit/color-scheme-gen": "workspace:^",
     "@fastkit/node-util": "workspace:^",
+    "@fastkit/ts-tiny-meta": "workspace:^",
     "@mdi/svg": "^7.4.47",
     "@types/prismjs": "^1.26.6",
     "fs-extra": "^11.3.5"
