@@ -23,6 +23,7 @@
     "format": "turbo run format --cache-dir=./.turbo-cache",
     "typecheck": "turbo run typecheck --cache-dir=./.turbo-cache",
     "typecheck:packages": "turbo run typecheck --filter=!docs --cache-dir=./.turbo-cache",
+    "audit:deps": "node scripts/audit-dist-phantoms.mjs",
     "plugboy": "plugboy",
     "gen": "pnpm run plugboy gen",
     "play": "tsx play.ts",
