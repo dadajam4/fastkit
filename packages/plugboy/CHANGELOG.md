@@ -1,5 +1,11 @@
 # @fastkit/plugboy
 
+## 1.2.0
+
+### Minor Changes
+
+- [#170](https://github.com/dadajam4/fastkit/pull/170) [`fbb2897`](https://github.com/dadajam4/fastkit/commit/fbb28977f7eb6eb70280d29abb31440abb7c8084) Thanks [@dadajam4](https://github.com/dadajam4)! - Add Vite-compatible ambient module types to the `@fastkit/plugboy/env` subpath. Referencing it (already required for the `__PLUGBOY_DEV__` / `__PLUGBOY_STUB__` constants) now also types the non-JS imports plugboy can bundle, mirroring a subset of Vite's `vite/client` types so source written for Vite/tsdown type-checks the same way: static assets (images, media, fonts, `.webmanifest`, `.pdf`, `.txt`, …) as a `string` default export, CSS side-effect imports and CSS Modules, and `?raw` as a `string`. Vite-only features without a plugboy loader (`?url` / `?inline`, `?worker` / `?sharedworker`, `*.wasm?init`, `vite/modulepreload-polyfill`, `vite:preloadError`) are intentionally omitted so the types never imply unsupported behavior.
+
 ## 1.1.0
 
 ### Minor Changes
