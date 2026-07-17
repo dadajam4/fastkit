@@ -1,23 +1,28 @@
-declare global {
-  /**
-   * Whether the code is running in a development context.
-   *
-   * @remarks
-   * - `stub`: always `true`.
-   * - published `build`: replaced with a runtime check of the consumer's
-   *   environment (`process.env.NODE_ENV === 'development'` or
-   *   `import.meta.env.DEV === true`), so the branch is evaluated at the
-   *   consumer's runtime rather than eliminated.
-   */
-  const __PLUGBOY_DEV__: boolean;
+// This file must remain a SCRIPT (no top-level `import`/`export`). A trailing
+// `export {}` would make it a module, and top-level wildcard `declare module
+// '*.svg'` declarations in a module file are NOT registered as global ambient
+// modules — they would silently fail to apply on the consumer side. Keeping the
+// file a script (plain top-level `declare const` / `declare module`) is what
+// makes both the constants and the module declarations below globally visible.
 
-  /**
-   * The bundle is in stub mode.
-   *
-   * @remarks In stub mode, source code is executed in the source directory. This flag is available because of the different way of loading files in relative paths.
-   */
-  const __PLUGBOY_STUB__: boolean;
-}
+/**
+ * Whether the code is running in a development context.
+ *
+ * @remarks
+ * - `stub`: always `true`.
+ * - published `build`: replaced with a runtime check of the consumer's
+ *   environment (`process.env.NODE_ENV === 'development'` or
+ *   `import.meta.env.DEV === true`), so the branch is evaluated at the
+ *   consumer's runtime rather than eliminated.
+ */
+declare const __PLUGBOY_DEV__: boolean;
+
+/**
+ * The bundle is in stub mode.
+ *
+ * @remarks In stub mode, source code is executed in the source directory. This flag is available because of the different way of loading files in relative paths.
+ */
+declare const __PLUGBOY_STUB__: boolean;
 
 // The declarations below mirror the subset of Vite's `vite/client` module
 // declarations that Plugboy is compatible with, so that source that already
@@ -231,5 +236,3 @@ declare module '*?raw' {
   const src: string;
   export default src;
 }
-
-export {};
