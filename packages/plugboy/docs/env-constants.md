@@ -1,4 +1,4 @@
-# Env constants
+# Env constants & module types
 
 🌐 English | [日本語](./env-constants-ja.md)
 
@@ -42,7 +42,8 @@ if (__PLUGBOY_STUB__) {
 ## TypeScript
 
 The global types ship from the `@fastkit/plugboy/env` subpath. Reference it once
-(e.g. in a `*.d.ts` in your package) so the constants are typed:
+(e.g. in a `*.d.ts` in your package) so the constants — and the [module
+types](#module-types-assets-css-raw) below — are typed:
 
 ```ts
 /// <reference types="@fastkit/plugboy/env" />
@@ -57,3 +58,28 @@ Or add it to `tsconfig.json`:
   }
 }
 ```
+
+## Module types (assets, CSS, `?raw`)
+
+The same `@fastkit/plugboy/env` reference also declares ambient module types for
+the non-JS imports plugboy can bundle, mirroring a subset of Vite's `vite/client`
+types. Source written for Vite (or tsdown) type-checks the same way here:
+
+- **Static assets** (images, media, fonts, `.webmanifest`, `.pdf`, `.txt`, …) —
+  default-export a `string`.
+- **CSS** — side-effect imports (`*.css`, `*.scss`, …) and CSS Modules
+  (`*.module.css` → a class-name map).
+- **`?raw`** — the file contents as a `string`.
+
+```ts
+import iconUrl from './icon.svg'; // string
+import styles from './button.module.css'; // { readonly [key: string]: string }
+import shader from './shader.glsl?raw'; // string
+import './global.css'; // side-effect only
+```
+
+Only imports plugboy actually handles are typed. Vite-only features without a
+plugboy loader are intentionally omitted so the types never imply unsupported
+behavior: `?url` / `?inline`, `?worker` / `?sharedworker`, `*.wasm?init`,
+`vite/modulepreload-polyfill`, and the `vite:preloadError` event. For dev
+guards, use `__PLUGBOY_DEV__` rather than `import.meta.env`.

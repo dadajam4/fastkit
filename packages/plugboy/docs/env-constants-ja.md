@@ -1,4 +1,4 @@
-# 環境定数（Env constants）
+# 環境定数とモジュール型（Env constants & module types）
 
 🌐 [English](./env-constants.md) | 日本語
 
@@ -33,7 +33,7 @@ if (__PLUGBOY_STUB__) {
 ## TypeScript
 
 グローバル型は `@fastkit/plugboy/env` サブパスから提供されます。一度参照すれば
-（例: パッケージ内の任意の `*.d.ts`）定数が型付けされます。
+（例: パッケージ内の任意の `*.d.ts`）定数と、後述の[モジュール型](#モジュール型assetscssraw)が型付けされます。
 
 ```ts
 /// <reference types="@fastkit/plugboy/env" />
@@ -48,3 +48,28 @@ if (__PLUGBOY_STUB__) {
   }
 }
 ```
+
+## モジュール型（assets・CSS・?raw）
+
+同じ `@fastkit/plugboy/env` の参照は、plugboy がバンドルできる非JSインポート向けの
+アンビエントモジュール型も宣言します。これは Vite の `vite/client` 型のサブセットに
+準拠しており、Vite（や tsdown）向けに書かれたソースが同じように型チェックされます。
+
+- **静的アセット**（画像・メディア・フォント・`.webmanifest`・`.pdf`・`.txt` など）
+  — `string` を default export します。
+- **CSS** — side-effect インポート（`*.css`・`*.scss` など）と CSS Modules
+  （`*.module.css` → クラス名マップ）。
+- **`?raw`** — ファイルの内容を `string` として取得します。
+
+```ts
+import iconUrl from './icon.svg'; // string
+import styles from './button.module.css'; // { readonly [key: string]: string }
+import shader from './shader.glsl?raw'; // string
+import './global.css'; // 副作用のみ
+```
+
+型付けされるのは plugboy が実際に処理するインポートだけです。plugboy にローダーの無い
+Vite 固有機能は、未対応の挙動を型が示唆しないよう意図的に除外しています:
+`?url` / `?inline`、`?worker` / `?sharedworker`、`*.wasm?init`、
+`vite/modulepreload-polyfill`、`vite:preloadError` イベント。開発時ガードには
+`import.meta.env` ではなく `__PLUGBOY_DEV__` を使ってください。
