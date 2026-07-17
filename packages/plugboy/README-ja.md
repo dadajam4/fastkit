@@ -15,7 +15,7 @@
 - **CSS統合**: Sass、Vanilla Extract、CSS最適化サポート
 - **開発効率**: stub機能による高速開発サイクル
 - **自動化**: package.json、exports自動生成
-- **環境定数**: 開発時のみのコードを切り分ける `__PLUGBOY_DEV__` / `__PLUGBOY_STUB__`（[ドキュメント](./docs/env-constants-ja.md)）
+- **環境定数とモジュール型**: 開発時ガードの `__PLUGBOY_DEV__` / `__PLUGBOY_STUB__` に加え、アセット・CSS・`?raw` インポート向けの Vite 互換アンビエント型（[ドキュメント](./docs/env-constants-ja.md)）
 
 ## インストール
 

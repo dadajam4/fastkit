@@ -16,7 +16,7 @@ A monorepo-compatible module bundler and project management tool. Provides a hig
 - **CSS Integration**: Sass, Vanilla Extract, and CSS optimization support
 - **Development Efficiency**: Fast development cycle with stub functionality
 - **Automation**: Automatic generation of package.json and exports
-- **Env Constants**: `__PLUGBOY_DEV__` / `__PLUGBOY_STUB__` for guarding dev-only code ([docs](./docs/env-constants.md))
+- **Env & Module Types**: `__PLUGBOY_DEV__` / `__PLUGBOY_STUB__` dev guards, plus Vite-compatible ambient types for asset, CSS, and `?raw` imports ([docs](./docs/env-constants.md))
 
 ## Installation
 
