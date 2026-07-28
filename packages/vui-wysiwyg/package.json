@@ -19,6 +19,12 @@
         "default": "./dist/vui-wysiwyg.mjs"
       }
     },
+    "./tiptap/core": {
+      "types": "./dist/tiptap/core.d.mts",
+      "import": {
+        "default": "./dist/tiptap/core.mjs"
+      }
+    },
     "./pm/view": {
       "types": "./dist/pm/view.d.mts",
       "import": {
@@ -97,12 +103,6 @@
         "default": "./dist/pm/changeset.mjs"
       }
     },
-    "./tiptap/core": {
-      "types": "./dist/tiptap/core.d.mts",
-      "import": {
-        "default": "./dist/tiptap/core.mjs"
-      }
-    },
     "./tiptap/extensions/underline": {
       "types": "./dist/tiptap/extensions/underline.d.mts",
       "import": {
@@ -166,6 +166,9 @@
       ".": [
         "./dist/vui-wysiwyg.d.mts"
       ],
+      "tiptap/core": [
+        "./dist/tiptap/core.d.mts"
+      ],
       "pm/view": [
         "./dist/pm/view.d.mts"
       ],
@@ -204,9 +207,6 @@
       ],
       "pm/changeset": [
         "./dist/pm/changeset.d.mts"
-      ],
-      "tiptap/core": [
-        "./dist/tiptap/core.d.mts"
       ],
       "tiptap/extensions/underline": [
         "./dist/tiptap/extensions/underline.d.mts"
