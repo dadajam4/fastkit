@@ -1,5 +1,19 @@
 # @fastkit/node-util
 
+## 0.16.2
+
+### Patch Changes
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Update `execa` from 9.x to 10.x.
+
+  No code changes were needed. Every call site uses the plain `execa(file, args, options)` form and only awaits the result or reads `stdout` / `stderr`, so none of execa 10's removals apply — `execaCommand()` / `execaCommandSync()`, the `stdio: [..., 'ipc']` syntax, and the `ChildProcess` methods that moved behind `subprocess.nodeChildProcess` are all unused, as is the `input` / `inputFile` behaviour change.
+
+  Both packages are bumped together so a single execa major is installed rather than two side by side.
+
+- Updated dependencies [[`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5)]:
+  - @fastkit/ev@0.15.2
+  - @fastkit/tiny-logger@0.16.2
+
 ## 0.16.1
 
 ### Patch Changes

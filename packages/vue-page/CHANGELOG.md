@@ -1,5 +1,16 @@
 # @fastkit/vue-page
 
+## 0.18.3
+
+### Patch Changes
+
+- Updated dependencies [[`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5), [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5), [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5)]:
+  - @fastkit/cookies@0.17.0
+  - @fastkit/ev@0.15.2
+  - @fastkit/helpers@0.16.2
+  - @fastkit/tiny-logger@0.16.2
+  - @fastkit/vue-utils@0.18.3
+
 ## 0.18.2
 
 ### Patch Changes

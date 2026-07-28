@@ -1,5 +1,29 @@
 # @fastkit/plugboy
 
+## 1.2.2
+
+### Patch Changes
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Update `execa` from 9.x to 10.x.
+
+  No code changes were needed. Every call site uses the plain `execa(file, args, options)` form and only awaits the result or reads `stdout` / `stderr`, so none of execa 10's removals apply — `execaCommand()` / `execaCommandSync()`, the `stdio: [..., 'ipc']` syntax, and the `ChildProcess` methods that moved behind `subprocess.nodeChildProcess` are all unused, as is the `input` / `inputFile` behaviour change.
+
+  Both packages are bumped together so a single execa major is installed rather than two side by side.
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Update `magic-string` from 0.30.x to 1.1.0.
+
+  No code changes were needed. magic-string 1.0.0 is a pure-ESM release — the CJS, UMD and IIFE builds were dropped and the type declarations are now generated from its TypeScript source — but the API is unchanged and `MagicString` is still exported as the default. Both packages already ship ESM only, so nothing about how they are consumed changes.
+
+  Only append-style operations are used here (`appendLeft` in plugboy's env plugin, `append` in vue-tiny-meta's Vite plugin, both followed by `toString()` and `generateMap({ hires: true })`), so the 1.x fixes around replacement trimming and zero-length range moves do not apply. Emitted code and source maps were compared between 0.30.21 and 1.1.0 for both call shapes and are identical.
+
+  Both packages are bumped together so a single magic-string major is installed rather than two side by side.
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Generate a stable entry order in `exposeEntries()`.
+
+  `glob` makes no ordering guarantee, and the insertion order of the entries `exposeEntries()` builds becomes the key order of the generated `exports` and `typesVersions`. The result was that building the same sources rewrote the workspace's `package.json` on an arbitrary subset of builds — over seven runs of this repo it flipped back and forth between two orderings, leaving a dirty working tree roughly every other build. The glob result is now sorted, so the generated key order is fixed.
+
+  `@fastkit/vui-wysiwyg` is the only workspace using `exposeEntries()`; its `package.json` is committed in the new sorted order and no longer changes when it is rebuilt.
+
 ## 1.2.1
 
 ### Patch Changes

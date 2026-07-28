@@ -1,5 +1,28 @@
 # @fastkit/cookies
 
+## 0.17.0
+
+### Minor Changes
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Update `cookie` from 1.x to 2.x.
+
+  The public API is unchanged — the re-exported `ParseOptions` and `SerializeOptions` types are byte-for-byte identical between cookie 1.1.1 and 2.0.1, and cookie serialization/parsing produces the same output (verified across the attribute matrix, including the `TypeError` cases for invalid values). Internally, the calls moved off the aliases cookie 2 removed: `parse` → `parseCookie`, and `serialize(name, value, options)` → `stringifySetCookie({ ...attributes, name, value }, { encode })`, since object mode is now the only supported signature and `encode` lives in a separate argument.
+
+  Note that cookie 2 is ESM-only and declares `engines.node >= 22`, so consumers of this package inherit that floor. `@fastkit/cookies` already ships ESM only, so nothing changes about how it is consumed.
+
+### Patch Changes
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix `Cookies#delete()`, which never worked, and stop `Cookies#set()` from emitting duplicate `Set-Cookie` headers. Adds the package's first test suite, which is what surfaced all three problems.
+
+  - `delete()` and `set()` called each other in a loop — `set()` routed an empty value to `delete()`, and `delete()` re-entered `set()` with `''` — so every `delete()` ended in `RangeError: Maximum call stack size exceeded`. The header-writing logic now lives in a private `write()` that both entry points call. `set(name, '', options)` also forwards its options, so deleting a cookie scoped by `path` / `domain` targets the right cookie instead of a bare name.
+  - `update()` ended with an `Object.assign(this.bucket, cookies)` that wrote the raw value back after the loop above it had already deleted the key, so a removed cookie reappeared in the bucket as `''`. The loop already maintains the bucket, so the trailing assign is gone.
+  - `areCookiesEqual()` compared the cookie value, so re-setting a cookie under an existing name appended a second `Set-Cookie` instead of replacing the stale one. Cookies are overwritten by key and attributes, not by value, so the value is now excluded. `sameSite` is also normalized on both sides, because one side comes from a parsed header while the other comes from `createCookie()`, which defaults it — without that, anything set without an explicit `sameSite` still duplicated.
+
+- Updated dependencies [[`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5)]:
+  - @fastkit/ev@0.15.2
+  - @fastkit/helpers@0.16.2
+  - @fastkit/tiny-logger@0.16.2
+
 ## 0.16.1
 
 ### Patch Changes

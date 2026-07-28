@@ -1,5 +1,43 @@
 # @fastkit/vui
 
+## 1.5.1
+
+### Patch Changes
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Emit Sass stylesheets in a deterministic order.
+
+  `rollup-plugin-sass` appends each stylesheet to a flat array from its `transform` hook and joins that array as-is. rolldown runs `transform` concurrently, so the array ended up in whatever order the transforms happened to finish, and building the same sources twice produced CSS with the rule blocks in a different order — which matters, because that order is the cascade order. Building this repo three times produced three different `vui.css` files.
+
+  The plugin now joins the collected entries in the bundle's module execution order, which is already stable. Every stylesheet is a module in the graph, so the order is fully determined; anything the graph does not account for keeps its collected order, after the entries that could be placed.
+
+  No rules are added, removed or rewritten — only reordered. This was verified during the build for all five affected packages: the byte length is unchanged and the set of rule blocks is an exact permutation of the previous output. The patch bumps for the CSS-emitting packages are there because their published `.css` changes order.
+
+- Updated dependencies [[`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5), [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5)]:
+  - @fastkit/vue-stack@0.20.3
+  - @fastkit/vue-loading@0.18.4
+  - @fastkit/vue-scroller@0.18.2
+  - @fastkit/color-scheme@2.2.3
+  - @fastkit/color-scheme-gen@1.2.2
+  - @fastkit/helpers@0.16.2
+  - @fastkit/icon-font@2.2.3
+  - @fastkit/media-match@2.2.3
+  - @fastkit/media-match-gen@1.2.2
+  - @fastkit/rules@0.16.2
+  - @fastkit/tiny-logger@0.16.2
+  - @fastkit/vue-action@0.6.3
+  - @fastkit/vue-app-layout@0.19.3
+  - @fastkit/vue-body-scroll-lock@0.5.2
+  - @fastkit/vue-click-outside@0.5.2
+  - @fastkit/vue-color-scheme@0.18.3
+  - @fastkit/vue-disabled-reason@0.3.2
+  - @fastkit/vue-form-control@0.25.2
+  - @fastkit/vue-keyboard@0.5.2
+  - @fastkit/vue-location@0.7.3
+  - @fastkit/vue-media-match@0.17.2
+  - @fastkit/vue-resize@0.5.2
+  - @fastkit/vue-transitions@0.5.2
+  - @fastkit/vue-utils@0.18.3
+
 ## 1.5.0
 
 ### Minor Changes
