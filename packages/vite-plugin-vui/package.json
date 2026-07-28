@@ -58,7 +58,7 @@
   "devDependencies": {
     "@fastkit/icon-font-gen": "workspace:^",
     "vite": "^8.1.5",
-    "vue": "^3.5.0",
+    "vue": "^3.5.40",
     "vue-router": "^5.2.0"
   },
   "peerDependencies": {
