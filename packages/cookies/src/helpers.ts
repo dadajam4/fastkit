@@ -3,6 +3,7 @@ import type {
   IncomingHttpHeaders,
   ServerResponse,
 } from 'node:http';
+import { stringifySetCookie } from 'cookie';
 import type { Cookie } from 'set-cookie-parser';
 import { isObject } from '@fastkit/helpers';
 import { CookiesBrowserContext, SerializeOptions } from './schemes';
@@ -57,6 +58,22 @@ export function createCookie(
     value,
     ...cookieToSet,
   };
+}
+
+/**
+ * Serialize a cookie into a `Set-Cookie` header value.
+ *
+ * cookie@2 dropped the `serialize(name, value, options)` signature in favour of
+ * object mode, and `encode` now lives in a separate argument instead of being
+ * mixed in with the cookie attributes.
+ */
+export function serializeCookie(
+  name: string,
+  value: string,
+  options: SerializeOptions = {},
+): string {
+  const { encode, ...attributes } = options;
+  return stringifySetCookie({ ...attributes, name, value }, { encode });
 }
 
 type Dict<T = any> = { [key: string]: T };
