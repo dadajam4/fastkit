@@ -1,10 +1,62 @@
 import { definePlugin, type TryGetWorkspace } from '@fastkit/plugboy';
 import sass from 'rollup-plugin-sass';
-import { PLUGIN_NAME, PluginOptions, SassPlugin } from './types';
+import {
+  PLUGIN_NAME,
+  PluginOptions,
+  SassPlugin,
+  SassStyleEntry,
+} from './types';
 import { modulesPaths } from './utils';
 
+/**
+ * Concatenate the collected stylesheets in module execution order.
+ *
+ * rollup-plugin-sass appends each stylesheet to a flat array from its
+ * `transform` hook, then joins that array as-is. rolldown runs `transform`
+ * concurrently, so the array ends up in whatever order the transforms happened
+ * to finish and the emitted CSS differs between builds of identical sources —
+ * which matters, because that order is the cascade order.
+ *
+ * The bundle's module order is already stable, so use it as the key. Entries the
+ * module graph does not account for keep the order they were collected in, after
+ * the ones that could be placed.
+ */
+function concatStylesInModuleOrder(
+  entries: SassStyleEntry[],
+  bundle: Record<string, unknown>,
+): string {
+  const position = new Map<string, number>();
+
+  for (const output of Object.values(bundle)) {
+    const chunk = output as {
+      type?: string;
+      modules?: Record<string, unknown>;
+    };
+    if (chunk.type !== 'chunk' || !chunk.modules) continue;
+    for (const id of Object.keys(chunk.modules)) {
+      if (!position.has(id)) position.set(id, position.size);
+    }
+  }
+
+  return entries
+    .map((entry, collectedAt) => ({ entry, collectedAt }))
+    .sort((a, b) => {
+      const pa =
+        a.entry.id === undefined ? undefined : position.get(a.entry.id);
+      const pb =
+        b.entry.id === undefined ? undefined : position.get(b.entry.id);
+      if (pa === undefined && pb === undefined)
+        return a.collectedAt - b.collectedAt;
+      if (pa === undefined) return 1;
+      if (pb === undefined) return -1;
+      return pa - pb;
+    })
+    .map(({ entry }) => entry.content || '')
+    .join('');
+}
+
 export function createSassPlugin(options: PluginOptions = {}) {
-  let _styles = '';
+  let _styleEntries: SassStyleEntry[] = [];
 
   const { sass: sassOptions, ...restOptions } = options;
 
@@ -21,8 +73,10 @@ export function createSassPlugin(options: PluginOptions = {}) {
         new Set([...(sassOptions?.loadPaths || modulesPaths())]),
       ),
     },
-    output(styles) {
-      _styles = styles;
+    // The joined string this also receives is built in transform-completion
+    // order, so take the entries and join them ourselves.
+    output(_styles, entries) {
+      _styleEntries = entries;
     },
   });
 
@@ -47,7 +101,8 @@ export function createSassPlugin(options: PluginOptions = {}) {
         );
       }
 
-      if (!_styles) return;
+      const styles = concatStylesInModuleOrder(_styleEntries, bundle);
+      if (!styles) return;
 
       let cssFile = outputOptions.file;
 
@@ -72,7 +127,7 @@ export function createSassPlugin(options: PluginOptions = {}) {
         type: 'asset',
         name: cssFile,
         fileName: cssFile,
-        source: _styles,
+        source: styles,
       });
     },
   });
