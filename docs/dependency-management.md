@@ -34,10 +34,17 @@ Work through these in order for any dependency `X` used by a package:
    `eslint` + configs, `prettier`, `stylelint` + configs, `turbo`,
    `@changesets/*`, `jsdom`, `@vue/test-utils`, `@vitejs/plugin-vue-jsx`,
    `rollup`, `vite`, `postcss`, `tsx`, `@fastkit/ts-tiny-meta`,
-   `@fastkit/vanilla-extract-utils`, `@types/node`, …)
+   `@types/node`, …)
    → **Root-aggregate it** (declare in the workspace-root `package.json`
    `devDependencies`). Do **not** declare it per package. See
    [Root-aggregated dev toolchain](#root-aggregated-dev-toolchain).
+
+   Root-aggregation exists to keep a dependency that *every* package uses out of
+   60-odd `package.json` files. It does not extend to a **workspace** package that
+   only a few packages build against: turbo orders `build` with
+   `dependsOn: ["^build"]`, which walks declared workspace dependencies, so an
+   undeclared one has no edge and its `dist` may not exist yet when the dependent
+   builds — see [Workspace build-time helpers](#workspace-build-time-helpers).
 
 2. **Is `X` used only in the package's own build config / tests, or is it a
    build-time helper that gets bundled into `dist` (not externalized)?**
@@ -180,8 +187,33 @@ placement depends on how it is used:
 `@vanilla-extract/css` / `@vanilla-extract/css-utils` / the
 `@fastkit/vanilla-extract-utils` helpers used in `*.css.ts` files are compiled to
 static CSS at build time and leave **no import in the shipped JS**. Treat them as
-build tooling → `devDependencies` (or the root toolchain), **not**
-`dependencies`.
+build tooling → `devDependencies`, **not** `dependencies`.
+
+The two external ones are root-aggregated. `@fastkit/vanilla-extract-utils` is a
+workspace package, so declare it in the `devDependencies` of each package whose
+`*.css.ts` imports it — see
+[Workspace build-time helpers](#workspace-build-time-helpers).
+
+### Workspace build-time helpers
+
+A **workspace** package that another package only needs at build time — a
+`*.css.ts` helper such as `@fastkit/vanilla-extract-utils`, a
+`./plugboy-dts-preserve` subpath, a codegen helper — still has to be declared by
+the package that imports it, normally in `devDependencies`. Relying on the root
+toolchain is not enough here, for a reason that has nothing to do with
+resolution:
+
+`build` is ordered by `dependsOn: ["^build"]` in `turbo.json`, which walks
+**declared** workspace dependencies. An undeclared import gives turbo no edge, so
+the helper and its dependent can build concurrently, and the dependent fails with
+`Could not resolve …` whenever the helper's `dist` does not happen to exist yet.
+A warm `dist` hides this, so it tends to surface only on a cold cache — for
+instance `turbo run build --filter=<the dependent>`, or CI after a lockfile
+change invalidates everything.
+
+`@fastkit/plugboy` is the exception, and only because *every* package builds with
+it: ordering is handled once by the `build:plugboy` phase that `build` and
+`build:docs` run first, rather than by 60 declarations.
 
 ### Module-augmentation types
 
