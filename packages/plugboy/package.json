@@ -76,18 +76,18 @@
   },
   "dependencies": {
     "@inquirer/prompts": "^8.5.2",
-    "@tsdown/css": "^0.22.3",
+    "@tsdown/css": "^0.22.14",
     "acorn": "^8.17.0",
     "bundle-require": "^5.1.0",
     "cac": "^7.0.0",
     "cssnano": "^8.0.2",
-    "execa": "^9.6.1",
+    "execa": "^10.0.0",
     "glob": "^13.0.6",
-    "magic-string": "^0.30.21",
+    "magic-string": "^1.1.0",
     "pkg-types": "^2.3.1",
-    "postcss": "^8.5.15",
+    "postcss": "^8.5.23",
     "sort-package-json": "^4.0.0",
-    "tsdown": "^0.22.3"
+    "tsdown": "^0.22.14"
   },
   "devDependencies": {
     "typescript": "^6.0.3"

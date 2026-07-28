@@ -55,7 +55,7 @@
     "@fastkit/ev": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
     "chokidar": "^5.0.0",
-    "fs-extra": "^11.3.5",
+    "fs-extra": "^11.4.0",
     "spritesmith": "^3.5.1"
   },
   "buildOptions": {

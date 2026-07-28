@@ -71,8 +71,8 @@
     "@fastkit/tiny-logger": "workspace:^",
     "cac": "^7.0.0",
     "chokidar": "^5.0.0",
-    "fs-extra": "^11.3.5",
-    "webfont": "^11.2.26"
+    "fs-extra": "^11.4.0",
+    "webfont": "^12.5.0"
   },
   "buildOptions": {
     "name": "IconFont"

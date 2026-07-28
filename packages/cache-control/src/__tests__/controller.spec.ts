@@ -1,9 +1,15 @@
-import { describe, it, expect } from 'vitest';
-import { delay } from '@fastkit/helpers';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Duration } from '@fastkit/duration';
 import { CacheController } from '../controller';
 import { MemoryCacheStorage } from '../storages';
 import { CacheStorage } from '../schemes';
+
+/**
+ * Expiry is decided by comparing `expiredAt` against the current time, and the
+ * storage schedules its eviction with `setTimeout`. Faking just those keeps
+ * promise scheduling real.
+ */
+const FAKED_TIMERS = ['setTimeout', 'clearTimeout', 'Date'] as const;
 
 function runControllerTests(createStorage: () => CacheStorage<any>) {
   describe(CacheController.name, () => {
@@ -37,9 +43,11 @@ function runControllerTests(createStorage: () => CacheStorage<any>) {
     const storage = createStorage();
     expect(storage instanceof MemoryCacheStorage).toStrictEqual(true);
 
+    // Long enough that nothing expires while these cases run — expiry has its
+    // own block below.
     const controller = new CacheController({
       storage,
-      ttl: 1,
+      ttl: 60,
     });
 
     it('It can be set.', async () => {
@@ -91,24 +99,6 @@ function runControllerTests(createStorage: () => CacheStorage<any>) {
       expect(details2.expiredAt).toBeNull();
     });
 
-    it('When it expires, null is obtained.', async () => {
-      await delay(500);
-
-      let details1 = await controller.get('key-1');
-      let details2 = await controller.get({ key: 'key-2' });
-
-      expect(details1).not.toBeNull();
-      expect(details2).not.toBeNull();
-
-      await delay(500);
-
-      details1 = await controller.get({ key: 'key-1' });
-      details2 = await controller.get({ key: 'key-2' });
-
-      expect(details1).toBeNull();
-      expect(details2).not.toBeNull();
-    });
-
     it('It can be delete.', async () => {
       await controller.set({
         key: 'key-1',
@@ -130,6 +120,43 @@ function runControllerTests(createStorage: () => CacheStorage<any>) {
 
       expect(details1).toBeNull();
       expect(details2).toBeNull();
+    });
+  });
+
+  describe('expiration', () => {
+    const ttl = 1;
+
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: [...FAKED_TIMERS] });
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    async function setup() {
+      const controller = new CacheController({ storage: createStorage(), ttl });
+      await controller.set({ key: 'expires', args: [1], data: 1 });
+      await controller.set({ key: 'permanent', args: [2], data: 2, ttl: -1 });
+      return controller;
+    }
+
+    it('Entries are kept until their expiration date.', async () => {
+      const controller = await setup();
+
+      vi.advanceTimersByTime(ttl * 1000 - 1);
+
+      expect(await controller.get('expires')).not.toBeNull();
+      expect(await controller.get('permanent')).not.toBeNull();
+    });
+
+    it('When it expires, null is obtained.', async () => {
+      const controller = await setup();
+
+      vi.advanceTimersByTime(ttl * 1000);
+
+      expect(await controller.get('expires')).toBeNull();
+      expect(await controller.get('permanent')).not.toBeNull();
     });
   });
 }

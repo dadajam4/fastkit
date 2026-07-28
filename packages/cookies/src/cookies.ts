@@ -1,4 +1,4 @@
-import { parse, serialize } from 'cookie';
+import { parseCookie } from 'cookie';
 import * as setCookieParser from 'set-cookie-parser';
 import type { Cookie } from 'set-cookie-parser';
 import { EV } from '@fastkit/ev';
@@ -16,6 +16,7 @@ import {
   isServerResponse,
   createCookie,
   areCookiesEqual,
+  serializeCookie,
 } from './helpers';
 import { logger, CookiesError } from './logger';
 
@@ -68,7 +69,6 @@ export class Cookies extends EV<CookiesEventMap> {
         this.emit('change', { name, value: newValue });
       }
     });
-    Object.assign(this.bucket, cookies);
   }
 
   parse(options?: ParseOptions): CookiesBucket {
@@ -81,7 +81,7 @@ export class Cookies extends EV<CookiesEventMap> {
     } else {
       return {};
     }
-    return parse(cookieString, options || this.options);
+    return parseCookie(cookieString, options || this.options);
   }
 
   get(name: string): string | undefined {
@@ -90,14 +90,18 @@ export class Cookies extends EV<CookiesEventMap> {
 
   set(name: string, value: string, options?: SerializeOptions): void {
     if (value === '' || value == null) {
-      return this.delete(name);
+      return this.delete(name, options);
     }
+    this.write(name, value, options);
+  }
+
+  private write(name: string, value: string, options?: SerializeOptions): void {
     const { ctx } = this;
     if (isCookiesBrowserContext(ctx)) {
       if (options && options.httpOnly) {
         throw new CookiesError('Can not set a httpOnly cookie in the browser.');
       }
-      ctx.cookie = serialize(name, value, options);
+      ctx.cookie = serializeCookie(name, value, options);
     } else if (isServerResponse(ctx.res)) {
       const { res } = ctx;
 
@@ -137,7 +141,7 @@ export class Cookies extends EV<CookiesEventMap> {
            * We serialize the cookie back to the original format
            * if it isn't the same as the new one.
            */
-          const serializedCookie = serialize(
+          const serializedCookie = serializeCookie(
             parsedCookie.name,
             parsedCookie.value,
             {
@@ -149,7 +153,7 @@ export class Cookies extends EV<CookiesEventMap> {
           cookiesToSet.push(serializedCookie);
         }
       });
-      cookiesToSet.push(serialize(name, value, options));
+      cookiesToSet.push(serializeCookie(name, value, options));
 
       // Update the header.
       res.setHeader('Set-Cookie', cookiesToSet);
@@ -157,11 +161,12 @@ export class Cookies extends EV<CookiesEventMap> {
     this.update({ [name]: value });
   }
 
-  delete(name: string, options?: SerializeOptions) {
+  delete(name: string, options?: SerializeOptions): void {
     /**
-     * We forward the request destroy to setCookie function
-     * as it is the same function with modified maxAge value.
+     * Deleting is the same write with an expired maxAge. It has to go straight
+     * to `write()` rather than back through `set()`, since the empty value
+     * would be routed right back here.
      */
-    return this.set(name, '', { ...(options || {}), maxAge: -1 });
+    this.write(name, '', { ...(options || {}), maxAge: -1 });
   }
 }

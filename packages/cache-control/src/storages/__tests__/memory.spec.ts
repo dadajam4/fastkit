@@ -1,10 +1,13 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { MemoryCacheStorage } from '../memory';
 import { CacheDetails } from '../../schemes';
 
-function delay(ms: number) {
-  return new Promise<void>((resolve) => setTimeout(resolve, ms));
-}
+/**
+ * Expiry is driven by a `setTimeout` scheduled in `set()`, so only the timer
+ * APIs the storage actually uses are faked. Leaving the rest alone keeps promise
+ * scheduling real.
+ */
+const FAKED_TIMERS = ['setTimeout', 'clearTimeout', 'Date'] as const;
 
 function createDetails(settings: {
   key: string;
@@ -52,8 +55,9 @@ describe(MemoryCacheStorage.name, () => {
     const argDt = new Date();
     const args = [1, '2', argDt];
     const data = { args: [1, '2', argDt] };
-    const ttl = 1;
-    const details = createDetails({ key, args, data, ttl });
+    // Deliberately no TTL: expiry has its own block below, and a live eviction
+    // timer here would race the rest of these cases.
+    const details = createDetails({ key, args, data, ttl: null });
 
     it('It can be set.', () => {
       expect(storage.size).toStrictEqual(0);
@@ -82,17 +86,42 @@ describe(MemoryCacheStorage.name, () => {
       storage.delete({ key: 'add1' });
       expect(storage.size).toStrictEqual(1);
     });
+  });
 
-    it('After the expiration date, the cache will disappear.', async () => {
-      await delay(ttl * 500);
+  describe('expiration', () => {
+    const key = 'test';
+    const ttl = 1;
 
-      const saved = storage.get({ key });
-      expect(saved).toEqual(details);
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: [...FAKED_TIMERS] });
+    });
 
-      await delay(ttl * 500 + 1);
+    afterEach(() => {
+      vi.useRealTimers();
+    });
 
-      const reFetched = storage.get({ key });
-      expect(reFetched).toEqual(null);
+    function setup() {
+      const storage = new MemoryCacheStorage();
+      const details = createDetails({ key, data: 'test', ttl });
+      storage.set(details);
+      return { storage, details };
+    }
+
+    it('It is kept until the expiration date.', () => {
+      const { storage, details } = setup();
+
+      vi.advanceTimersByTime(ttl * 1000 - 1);
+
+      expect(storage.get({ key })).toEqual(details);
+      expect(storage.size).toStrictEqual(1);
+    });
+
+    it('After the expiration date, the cache will disappear.', () => {
+      const { storage } = setup();
+
+      vi.advanceTimersByTime(ttl * 1000);
+
+      expect(storage.get({ key })).toBeNull();
       expect(storage.size).toStrictEqual(0);
     });
   });

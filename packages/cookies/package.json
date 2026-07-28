@@ -54,8 +54,8 @@
     "@fastkit/ev": "workspace:^",
     "@fastkit/helpers": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
-    "cookie": "^1.1.1",
-    "set-cookie-parser": "^3.1.0"
+    "cookie": "^2.0.1",
+    "set-cookie-parser": "^3.1.2"
   },
   "buildOptions": {
     "name": "Cookies"
