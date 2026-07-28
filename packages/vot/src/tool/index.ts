@@ -95,7 +95,35 @@ export function votPlugin(options: VotPluginOptions = {}) {
   //   };
   // }
 
-  const plugins = [pagesPlugin, vuePlugin, vueJsxPlugin, plugin];
+  // Vue 3.5.40 removed the `vue` peerDependency from @vue/server-renderer and
+  // made @vue/runtime-dom a plain dependency instead (vuejs/core#15063). The SSR
+  // build keeps `vue` external while bundling @vue/*, so server-renderer would
+  // pull in its own copy of the runtime and Vue would end up loaded twice in a
+  // single process — rendering then dies on a null `currentRenderingInstance`
+  // ("resolveDirective can only be used in render() or setup()"). `vue`
+  // re-exports every symbol server-renderer takes from @vue/runtime-dom, so
+  // sending the import back to `vue` restores the single-instance topology that
+  // Vue itself relied on up to 3.5.39.
+  const vueRuntimeDomPlugin: Plugin = {
+    name: 'vite:vot-vue-runtime-dom',
+    enforce: 'pre',
+    resolveId(source, importer, { ssr }) {
+      if (!ssr || source !== '@vue/runtime-dom') return;
+      // `vue` re-exports @vue/runtime-dom itself, so redirecting its own import
+      // would be a cycle. This only shows up once `vue` stops being external
+      // (e.g. a consumer adding it to `ssr.noExternal`).
+      if (importer && /[\\/]node_modules[\\/]vue[\\/]/.test(importer)) return;
+      return this.resolve('vue', importer, { skipSelf: true });
+    },
+  };
+
+  const plugins = [
+    pagesPlugin,
+    vuePlugin,
+    vueJsxPlugin,
+    vueRuntimeDomPlugin,
+    plugin,
+  ];
 
   if ((options.excludeSsrComponents || []).length > 0) {
     const plugin: Plugin = {
