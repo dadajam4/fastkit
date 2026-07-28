@@ -1,12 +1,23 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+  vi,
+} from 'vitest';
 import path from 'node:path';
 import fs from 'fs-extra';
 import { FileCacheStorage } from '../file';
 import { CacheDetails } from '../../schemes';
 
-function delay(ms: number) {
-  return new Promise<void>((resolve) => setTimeout(resolve, ms));
-}
+/**
+ * Expiry is driven by a `setTimeout` scheduled in `set()`. Only those APIs are
+ * faked, so the real filesystem callbacks this storage depends on keep working.
+ */
+const FAKED_TIMERS = ['setTimeout', 'clearTimeout', 'Date'] as const;
 
 function createDetails(settings: {
   key: string;
@@ -141,20 +152,58 @@ describe(FileCacheStorage.name, () => {
       const deleted = await storage.get({ key: 'add1' });
       expect(deleted).toBeNull();
     });
+  });
+
+  describe('expiration', () => {
+    const key = 'test';
+    const ttl = 1;
+
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: [...FAKED_TIMERS] });
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    async function setup(name: string) {
+      const storage = new FileCacheStorage({ dir: dirs(name).relative });
+      const details = createDetails({ key, data: 'test', ttl });
+      await storage.set(details);
+      return { storage, details };
+    }
+
+    /**
+     * The eviction `set()` schedules unlinks the file without the storage
+     * awaiting it, so the timer firing does not mean the file is gone yet. Yield
+     * to the event loop until it is. `setImmediate` is not faked, so this
+     * settles on I/O completion rather than on elapsed time.
+     */
+    async function readUntilGone(storage: FileCacheStorage, attempts = 50) {
+      for (let i = 0; i < attempts; i++) {
+        const found = await storage.get({ key });
+        if (found === null) return null;
+        await new Promise((resolve) => {
+          setImmediate(resolve);
+        });
+      }
+      return storage.get({ key });
+    }
+
+    it('It is kept until the expiration date.', async () => {
+      const { storage, details } = await setup('expiration-kept');
+
+      await vi.advanceTimersByTimeAsync(ttl * 1000 - 1);
+
+      expect(await storage.get({ key })).toEqual(details);
+    });
 
     it('After the expiration date, the cache will disappear.', async () => {
-      const { storage, details, ttl, key } = init('expiration');
-      await storage.set(details);
+      const { storage } = await setup('expiration-dropped');
 
-      await delay(ttl * 500);
+      await vi.advanceTimersByTimeAsync(ttl * 1000);
 
-      const saved = await storage.get({ key });
-      expect(saved).toEqual(details);
-
-      await delay(ttl * 500 + 1);
-
-      const reFetched = await storage.get({ key });
-      expect(reFetched).toEqual(null);
+      expect(await readUntilGone(storage)).toBeNull();
     });
   });
 });
