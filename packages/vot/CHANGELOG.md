@@ -1,5 +1,16 @@
 # @fastkit/vot
 
+## 1.3.2
+
+### Patch Changes
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix SSR breaking with Vue 3.5.40 or newer. That release removed the `vue` peerDependency from `@vue/server-renderer` and made `@vue/runtime-dom` a plain dependency instead ([vuejs/core#15063](https://github.com/vuejs/core/pull/15063)). Because the SSR build keeps `vue` external while bundling `@vue/*`, server-renderer started pulling in its own copy of the runtime, leaving two Vue instances in one process — rendering then failed with `resolveDirective can only be used in render() or setup()` warnings followed by `TypeError: Cannot read properties of null (reading 'ce')`. A `vite:vot-vue-runtime-dom` plugin now redirects `@vue/runtime-dom` back to `vue` during SSR resolution, restoring the single-instance topology. `vue` re-exports every symbol server-renderer needs, and the change requires no additional dependencies on the consumer side.
+
+- Updated dependencies [[`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5)]:
+  - @fastkit/helpers@0.16.2
+  - @fastkit/vue-utils@0.18.3
+  - @fastkit/vue-page@0.18.3
+
 ## 1.3.1
 
 ### Patch Changes

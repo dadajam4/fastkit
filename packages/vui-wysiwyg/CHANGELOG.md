@@ -1,5 +1,23 @@
 # @fastkit/vui-wysiwyg
 
+## 8.3.4
+
+### Patch Changes
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Generate a stable entry order in `exposeEntries()`.
+
+  `glob` makes no ordering guarantee, and the insertion order of the entries `exposeEntries()` builds becomes the key order of the generated `exports` and `typesVersions`. The result was that building the same sources rewrote the workspace's `package.json` on an arbitrary subset of builds — over seven runs of this repo it flipped back and forth between two orderings, leaving a dirty working tree roughly every other build. The glob result is now sorted, so the generated key order is fixed.
+
+  `@fastkit/vui-wysiwyg` is the only workspace using `exposeEntries()`; its `package.json` is committed in the new sorted order and no longer changes when it is rebuilt.
+
+- [#175](https://github.com/dadajam4/fastkit/pull/175) [`05d8bb4`](https://github.com/dadajam4/fastkit/commit/05d8bb4385811b677e323d2137a6d0e8a65186c5) Thanks [@dadajam4](https://github.com/dadajam4)! - Emit Sass stylesheets in a deterministic order.
+
+  `rollup-plugin-sass` appends each stylesheet to a flat array from its `transform` hook and joins that array as-is. rolldown runs `transform` concurrently, so the array ended up in whatever order the transforms happened to finish, and building the same sources twice produced CSS with the rule blocks in a different order — which matters, because that order is the cascade order. Building this repo three times produced three different `vui.css` files.
+
+  The plugin now joins the collected entries in the bundle's module execution order, which is already stable. Every stylesheet is a module in the graph, so the order is fully determined; anything the graph does not account for keeps its collected order, after the entries that could be placed.
+
+  No rules are added, removed or rewritten — only reordered. This was verified during the build for all five affected packages: the byte length is unchanged and the set of rule blocks is an exact permutation of the previous output. The patch bumps for the CSS-emitting packages are there because their published `.css` changes order.
+
 ## 8.3.3
 
 ### Patch Changes
