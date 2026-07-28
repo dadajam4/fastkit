@@ -1,15 +1,30 @@
-import type { OptionsBase } from 'webfont/dist/src/types/OptionsBase';
+import type { webfont } from 'webfont';
 import path from 'node:path';
 import { installPackage } from '@fastkit/node-util';
 
-export type IconFontFormat = NonNullable<OptionsBase['formats']>[number];
+/**
+ * Derived from webfont's public signature. webfont 12 added an `exports` map
+ * that only publishes the package root, so its internal `dist` type paths are no
+ * longer reachable. Tracking the upstream union means a format added there shows
+ * up here as a missing key in {@link ICON_FONT_FORMAT_MAP}.
+ */
+export type IconFontFormat = NonNullable<
+  NonNullable<Parameters<typeof webfont>[0]>['formats']
+>[number];
 
+/**
+ * Every format this package knows how to emit, in the order they are written to
+ * the `@font-face` `src` list. Only the formats actually requested through
+ * `formats` are generated, so appending to this list does not change the output
+ * of an existing configuration.
+ */
 export const ICON_FONT_FORMATS: IconFontFormat[] = [
   'eot',
   'woff',
   'woff2',
   'svg',
   'ttf',
+  'otf',
 ];
 
 export const ICON_FONT_FORMAT_MAP: Record<IconFontFormat, string> = {
@@ -18,6 +33,7 @@ export const ICON_FONT_FORMAT_MAP: Record<IconFontFormat, string> = {
   woff: 'woff',
   ttf: 'truetype',
   svg: 'svg',
+  otf: 'opentype',
 };
 
 export interface IconFontSettings {
