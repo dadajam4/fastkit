@@ -37,6 +37,17 @@ export function isServerResponse(source: any): source is ServerResponse {
 }
 
 /**
+ * Resolve `sameSite` to the value a browser would apply, so that a cookie
+ * parsed out of a `Set-Cookie` header and one built from `SerializeOptions` can
+ * be compared on equal terms.
+ */
+function normalizeSameSite(sameSite: boolean | string | undefined): string {
+  if (sameSite === true) return 'strict';
+  if (sameSite == null || sameSite === false) return 'lax';
+  return sameSite.toLowerCase();
+}
+
+/**
  * Create an instance of the Cookie interface
  */
 export function createCookie(
@@ -44,14 +55,10 @@ export function createCookie(
   value: string,
   options: SerializeOptions = {},
 ): Cookie {
-  let { sameSite } = options;
-  if (sameSite === true) {
-    sameSite = 'strict';
-  }
-  if (sameSite === undefined || sameSite === false) {
-    sameSite = 'lax';
-  }
-  const cookieToSet = { ...options, sameSite };
+  const cookieToSet = {
+    ...options,
+    sameSite: normalizeSameSite(options.sameSite),
+  };
   delete cookieToSet.encode;
   return {
     name,
@@ -103,19 +110,20 @@ export function hasSameProperties(a: Dict, b: Dict) {
  * Compare the cookie and return true if the cookies have equivalent
  * options and the cookies would be overwritten in the browser storage.
  *
+ * The value is deliberately excluded: a cookie is overwritten based on its key
+ * and attributes, so two cookies that differ only in value are the same cookie
+ * and re-sending the old one would be redundant. `sameSite` is compared through
+ * {@link normalizeSameSite} because one side typically comes from a parsed
+ * header and the other from {@link createCookie}.
+ *
  * @param a first Cookie for comparison
  * @param b second Cookie for comparison
  */
 export function areCookiesEqual(a: Cookie, b: Cookie) {
-  let sameSiteSame = a.sameSite === b.sameSite;
-  if (typeof a.sameSite === 'string' && typeof b.sameSite === 'string') {
-    sameSiteSame = a.sameSite.toLowerCase() === b.sameSite.toLowerCase();
-  }
-
   return (
     hasSameProperties(
-      { ...a, sameSite: undefined },
-      { ...b, sameSite: undefined },
-    ) && sameSiteSame
+      { ...a, value: undefined, sameSite: undefined },
+      { ...b, value: undefined, sameSite: undefined },
+    ) && normalizeSameSite(a.sameSite) === normalizeSameSite(b.sameSite)
   );
 }
