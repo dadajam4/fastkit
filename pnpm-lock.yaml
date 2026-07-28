@@ -1007,6 +1007,9 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
     devDependencies:
+      '@fastkit/vanilla-extract-utils':
+        specifier: workspace:^
+        version: link:../vanilla-extract-utils
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)

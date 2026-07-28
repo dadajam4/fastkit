@@ -61,6 +61,7 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
+    "@fastkit/vanilla-extract-utils": "workspace:^",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
   },
