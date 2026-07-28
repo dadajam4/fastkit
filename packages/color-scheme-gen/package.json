@@ -57,7 +57,7 @@
     "@fastkit/node-util": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
     "eta": "^4.6.0",
-    "fs-extra": "^11.3.5"
+    "fs-extra": "^11.4.0"
   },
   "buildOptions": {
     "name": "ColorSchemeGen"

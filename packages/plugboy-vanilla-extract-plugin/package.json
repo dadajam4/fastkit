@@ -52,12 +52,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@vanilla-extract/rollup-plugin": "^1.5.3"
+    "@vanilla-extract/rollup-plugin": "^1.5.4"
   },
   "devDependencies": {
     "@fastkit/plugboy": "workspace:^",
-    "@vanilla-extract/vite-plugin": "^5.2.2",
-    "vite": "^8.0.16"
+    "@vanilla-extract/vite-plugin": "^5.2.5",
+    "vite": "^8.1.5"
   },
   "peerDependencies": {
     "@fastkit/plugboy": "workspace:^",

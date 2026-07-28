@@ -57,7 +57,7 @@
     "@fastkit/helpers": "workspace:^"
   },
   "devDependencies": {
-    "fs-extra": "^11.3.5"
+    "fs-extra": "^11.4.0"
   },
   "buildOptions": {
     "name": "CacheControl"

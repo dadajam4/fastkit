@@ -56,7 +56,7 @@
     "@fastkit/media-match": "workspace:^",
     "@fastkit/node-util": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
-    "fs-extra": "^11.3.5"
+    "fs-extra": "^11.4.0"
   },
   "buildOptions": {
     "name": "MediaMatchGen"

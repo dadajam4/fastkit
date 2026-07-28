@@ -61,7 +61,7 @@
     "@fastkit/tiny-logger": "workspace:^"
   },
   "devDependencies": {
-    "vite": "^8.0.16"
+    "vite": "^8.1.5"
   },
   "peerDependencies": {
     "vite": "^6.0.0 || ^7.0.0 || ^8.0.0"

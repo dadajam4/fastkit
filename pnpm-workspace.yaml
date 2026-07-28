@@ -21,19 +21,25 @@ overrides:
   # Pin the whole Vue family to a single version across the workspace. Vue is a
   # singleton and its internal @vue/* packages cross-depend by exact version, so
   # floating ranges (e.g. vite-plugin-vui's `^3.5.0` resolving to a newer patch
-  # than the `^3.5.38` used elsewhere) duplicate Vue's module identity and break
+  # than the `^3.5.40` used elsewhere) duplicate Vue's module identity and break
   # JSX / VNode type-checking. Overrides affect install-time resolution only;
   # published peerDependencies keep their own ranges.
-  vue: 3.5.38
-  '@vue/compiler-core': 3.5.38
-  '@vue/compiler-dom': 3.5.38
-  '@vue/compiler-sfc': 3.5.38
-  '@vue/compiler-ssr': 3.5.38
-  '@vue/reactivity': 3.5.38
-  '@vue/runtime-core': 3.5.38
-  '@vue/runtime-dom': 3.5.38
-  '@vue/server-renderer': 3.5.38
-  '@vue/shared': 3.5.38
+  #
+  # Note for 3.5.40+: @vue/server-renderer no longer peer-depends on `vue` and
+  # imports @vue/runtime-dom directly (vuejs/core#15063), which would load Vue
+  # twice in vot's SSR build. The `vite:vot-vue-runtime-dom` plugin in
+  # packages/vot/src/tool/index.ts sends that import back to `vue`; keep it in
+  # place while these overrides track 3.5.40 or newer.
+  vue: 3.5.40
+  '@vue/compiler-core': 3.5.40
+  '@vue/compiler-dom': 3.5.40
+  '@vue/compiler-sfc': 3.5.40
+  '@vue/compiler-ssr': 3.5.40
+  '@vue/reactivity': 3.5.40
+  '@vue/runtime-core': 3.5.40
+  '@vue/runtime-dom': 3.5.40
+  '@vue/server-renderer': 3.5.40
+  '@vue/shared': 3.5.40
 
 peerDependencyRules:
   allowedVersions:

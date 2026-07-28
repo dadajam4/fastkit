@@ -57,7 +57,7 @@
     "@fastkit/media-match": "workspace:^"
   },
   "devDependencies": {
-    "vue": "^3.5.38"
+    "vue": "^3.5.40"
   },
   "peerDependencies": {
     "vue": "^3.5.0"
