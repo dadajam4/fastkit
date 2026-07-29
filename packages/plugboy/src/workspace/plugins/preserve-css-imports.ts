@@ -3,20 +3,29 @@ import path from 'node:path';
 import { definePlugin } from '../../utils';
 
 /**
- * Plugin to preserve external CSS `@import` statements.
+ * Plugin to preserve what tsdown's CSS pipeline would rewrite away at the top of
+ * a stylesheet: external `@import` statements and the authored `@layer` order.
  *
- * rolldown / tsdown's CSS pipeline (lightningcss) resolves and inlines every
- * `@import` it can. For bare package specifiers (e.g.
+ * **External `@import`s.** rolldown / tsdown's CSS pipeline (lightningcss)
+ * resolves and inlines every `@import` it can. For bare package specifiers (e.g.
  * `@import url('material-symbols/rounded.css') layer(...)`) that is wrong for a
  * library build: it bloats the output and rebases the imported package's own
  * relative asset URLs (fonts) against our `dist`, breaking them. Such imports
  * should stay external so the consumer's bundler resolves them.
  *
- * We can't intercept this in a `transform` hook — by then tsdown has already
- * inlined the imports. Instead we strip them in `load` (which runs before the
- * CSS transform), remember them, and re-emit them in `writeBundle`, after every
- * other CSS producer (including vanilla-extract's merge) has written the final
- * file to disk.
+ * **Layer order.** lightningcss drops a name from an `@layer a, b, c;` statement
+ * when a block for it follows in the same stylesheet, since the block establishes
+ * the same order. That holds for a standalone document, but not for a library
+ * stylesheet whose statement also orders layers belonging to *other* packages:
+ * once the name is gone, its position is decided by wherever its block happens to
+ * land relative to those, and the authored order is lost. `@fastkit/vui` declares
+ * `@layer vui-normalize, vui-color-scheme, …, vui;`, and losing `vui-normalize`
+ * from it promoted the reset layer above the packages it is supposed to lose to.
+ *
+ * Neither can be intercepted in a `transform` hook — tsdown's CSS handling is a
+ * *pre* plugin, so by then the imports are inlined and the statement is pruned.
+ * Both are therefore recorded in `load` (which runs first) and re-emitted in
+ * `writeBundle`, after every CSS producer has written its final file to disk.
  */
 
 /**
@@ -38,9 +47,25 @@ function isInternalImportSpecifier(spec: string): boolean {
 /** Matches a top-level `@layer <names>;` statement (declaration, not a block). */
 const LAYER_STATEMENT_RE = /@layer\s+([^{};]+);[ \t]*\n?/g;
 
+/** Sources whose `@layer` statements are authored rather than generated. */
+const STYLE_SOURCE_RE = /\.(?:css|scss|sass|less|styl|stylus)$/;
+
+/** Collect the layer names of every `@layer a, b;` statement, in order. */
+function collectLayerNames(css: string, into: string[]): void {
+  for (const [, names] of css.matchAll(LAYER_STATEMENT_RE)) {
+    for (const name of names.split(',')) {
+      const trimmed = name.trim();
+      if (trimmed && !into.includes(trimmed)) into.push(trimmed);
+    }
+  }
+}
+
 export function createPreserveCssImportsPlugin() {
   // External `@import` statements, kept verbatim and in first-seen order.
   const externalImports: string[] = [];
+  // Layer names as authored, in first-seen order, read before lightningcss can
+  // prune the statements they came from.
+  const declaredLayers: string[] = [];
   // Absolute paths already rewritten, to stay idempotent across output passes.
   const processed = new Set<string>();
 
@@ -48,13 +73,14 @@ export function createPreserveCssImportsPlugin() {
     name: 'preserve-css-imports',
     buildStart() {
       externalImports.length = 0;
+      declaredLayers.length = 0;
       processed.clear();
     },
-    // `load` runs before the CSS `transform` that would otherwise inline the
-    // imports, so this is where they have to be stripped.
+    // `load` runs before the CSS `transform` that inlines the imports and prunes
+    // the layer statements, so this is where both have to be captured.
     async load(id: string) {
       const file = id.split('?')[0];
-      if (!file.endsWith('.css')) return null;
+      if (!STYLE_SOURCE_RE.test(file)) return null;
 
       let code: string;
       try {
@@ -62,7 +88,12 @@ export function createPreserveCssImportsPlugin() {
       } catch {
         return null;
       }
-      if (!code.includes('@import')) return null;
+
+      collectLayerNames(code, declaredLayers);
+
+      // Only plain CSS is rewritten here. A preprocessor's `@import` is its own
+      // module system, resolved before any CSS ever reaches tsdown.
+      if (!file.endsWith('.css') || !code.includes('@import')) return null;
 
       let changed = false;
       const stripped = code.replace(IMPORT_RE, (statement, _quote, spec) => {
@@ -77,16 +108,18 @@ export function createPreserveCssImportsPlugin() {
       if (!changed) return null;
       return { code: stripped, map: null };
     },
-    // Re-emit the preserved imports into the final CSS files on disk. Running in
-    // `writeBundle` (rather than `generateBundle`) lets other CSS producers —
-    // e.g. the vanilla-extract plugin, which assembles its single stylesheet in
-    // its own `writeBundle` — finish first.
+    // Re-emit the preserved imports and layer order into the final CSS files on
+    // disk. Running in `writeBundle` (rather than `generateBundle`) lets every
+    // other CSS producer — tsdown's own pipeline emits from a *post* plugin —
+    // finish first.
     async writeBundle(options, bundle) {
-      if (!externalImports.length) return;
+      if (!externalImports.length && !declaredLayers.length) return;
       const { dir } = options;
       if (!dir) return;
 
-      const importBlock = `${externalImports.join('\n')}\n`;
+      const importBlock = externalImports.length
+        ? `${externalImports.join('\n')}\n`
+        : '';
 
       await Promise.all(
         Object.values(bundle).map(async (chunk) => {
@@ -100,8 +133,7 @@ export function createPreserveCssImportsPlugin() {
           try {
             css = await fs.readFile(filePath, 'utf8');
           } catch {
-            // The asset may have been removed by another plugin (e.g. a
-            // vanilla-extract temporary file merged elsewhere).
+            // The asset may have been removed by another plugin.
             return;
           }
           processed.add(filePath);
@@ -109,23 +141,19 @@ export function createPreserveCssImportsPlugin() {
           // Hoist all `@layer <names>;` declarations to the top so the cascade
           // order is fixed before any layered `@import` adds to a layer, then
           // place the imports right after (they must precede every style rule).
-          const layerNames: string[] = [];
-          for (const [, names] of css.matchAll(LAYER_STATEMENT_RE)) {
-            for (const name of names.split(',')) {
-              const trimmed = name.trim();
-              if (trimmed && !layerNames.includes(trimmed)) {
-                layerNames.push(trimmed);
-              }
-            }
-          }
+          //
+          // The authored names come first and in their authored order; anything
+          // the emitted stylesheet declares on its own (a generated `@layer`
+          // statement, e.g. from vanilla-extract) is appended after them.
+          const layerNames = [...declaredLayers];
+          collectLayerNames(css, layerNames);
+
           const body = css.replace(LAYER_STATEMENT_RE, '');
           const layerStatement = layerNames.length
             ? `@layer ${layerNames.join(', ')};\n`
             : '';
-          await fs.writeFile(
-            filePath,
-            `${layerStatement}${importBlock}${body}`,
-          );
+          const next = `${layerStatement}${importBlock}${body}`;
+          if (next !== css) await fs.writeFile(filePath, next);
         }),
       );
     },

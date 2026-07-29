@@ -214,9 +214,26 @@ export default defineWorkspaceConfig({
 
 It runs in `writeBundle`, on the stylesheets on disk, so it covers **every**
 stylesheet the build writes — including the ones tsdown's own CSS pipeline emits,
-which it does after every plugin has had its say. External `@import`s preserved
-by plugboy are re-injected afterwards, so they always end up above the optimized
-rules.
+which it does after every plugin has had its say.
+
+#### Preserved at the top of a stylesheet
+
+Two things tsdown's CSS pipeline would rewrite are restored afterwards, in this
+order, above every rule:
+
+1. **The authored `@layer` order.** lightningcss prunes a name from an
+   `@layer a, b, c;` statement once a block for it appears in the same
+   stylesheet. For a library that is wrong whenever the statement also orders
+   layers owned by *other* packages — the pruned layer's position then depends on
+   where its block happens to land relative to those. plugboy reads the statements
+   before the transform and re-emits them verbatim.
+2. **External `@import`s.** A bare package specifier (e.g.
+   `@import url('material-symbols/rounded.css') layer(...)`) stays external
+   instead of being inlined, so the consumer's bundler resolves it and the
+   imported package's own relative asset URLs keep working.
+
+Both are read from the stylesheet sources, so a generated `@layer` statement (as
+vanilla-extract emits) is subject to lightningcss's pruning.
 
 ### defineProjectConfig
 
