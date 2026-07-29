@@ -1,6 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { definePlugin } from '../../utils';
+import type { PlugboyWorkspace } from '../workspace';
+import { listEmittedStylesheets } from '../stylesheets';
 
 /**
  * Plugin to preserve what tsdown's CSS pipeline would rewrite away at the top of
@@ -65,7 +67,7 @@ function collectLayerNames(css: string, into: string[]): void {
   }
 }
 
-export function createPreserveCssImportsPlugin() {
+export function createPreserveCssImportsPlugin(workspace: PlugboyWorkspace) {
   // External `@import` statements, kept verbatim and in first-seen order.
   const externalImports: string[] = [];
   // Layer names per stylesheet module, captured before lightningcss can prune the
@@ -149,12 +151,11 @@ export function createPreserveCssImportsPlugin() {
         ? `${externalImports.join('\n')}\n`
         : '';
 
+      const stylesheets = await listEmittedStylesheets(workspace, dir, bundle);
+
       await Promise.all(
-        Object.values(bundle).map(async (chunk) => {
-          if (chunk.type !== 'asset' || !chunk.fileName.endsWith('.css')) {
-            return;
-          }
-          const filePath = path.join(dir, chunk.fileName);
+        stylesheets.map(async (fileName) => {
+          const filePath = path.join(dir, fileName);
           if (processed.has(filePath)) return;
 
           let css: string;

@@ -35,6 +35,7 @@ import { WorkspaceEnvPlugin } from '../env';
 import { OptimizeCSSPlugin } from '../postcss/plugin';
 import {
   rawLoaderPlugin,
+  createAssembleEntryCssPlugin,
   createPreserveCssImportsPlugin,
   createExternalImportsPlugin,
   createSuppressDtsSourcemapWarningPlugin,
@@ -179,10 +180,12 @@ export class PlugboyWorkspace {
       // pipeline is absent, so it can live alongside the other plugins.
       createSuppressDtsSourcemapWarningPlugin(),
       ...plugins,
+      // Must precede the stages that post-process the written stylesheets.
+      createAssembleEntryCssPlugin(this),
       OptimizeCSSPlugin(this),
       WorkspaceEnvPlugin(this),
       rawLoaderPlugin,
-      createPreserveCssImportsPlugin(),
+      createPreserveCssImportsPlugin(this),
     ];
     this.hooks = hooks;
     this.dts = dts;

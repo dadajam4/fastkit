@@ -3,6 +3,7 @@ import path from 'node:path';
 import type { PlugboyWorkspace } from '../workspace';
 import type { Plugin, ResolvedOptimizeCSSOptions } from '../types';
 import type { Processor, AcceptedPlugin as PostcssPlugin } from 'postcss';
+import { listEmittedStylesheets } from '../workspace/stylesheets';
 
 async function getPostcss(
   options: ResolvedOptimizeCSSOptions,
@@ -103,12 +104,11 @@ export function OptimizeCSSPlugin(workspace: PlugboyWorkspace): Plugin {
       const { dir } = options;
       if (!dir) return;
 
+      const stylesheets = await listEmittedStylesheets(workspace, dir, bundle);
+
       await Promise.all(
-        Object.values(bundle).map(async (chunk) => {
-          if (chunk.type !== 'asset' || !chunk.fileName.endsWith('.css')) {
-            return;
-          }
-          const filePath = path.join(dir, chunk.fileName);
+        stylesheets.map(async (fileName) => {
+          const filePath = path.join(dir, fileName);
           if (processed.has(filePath)) return;
 
           let css: string;
@@ -122,7 +122,7 @@ export function OptimizeCSSPlugin(workspace: PlugboyWorkspace): Plugin {
 
           const optimized = await optimizeCSS(
             css,
-            chunk.fileName,
+            fileName,
             optimizeCSSOptions,
           );
           if (optimized !== css) {

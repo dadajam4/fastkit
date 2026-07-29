@@ -96,7 +96,7 @@ export const component = framework.defineNestedLayer({ globalName: 'component' }
 設定はプラグインのデフォルトより優先されるため、これらのキーを宣言するとその通りに適用され、出力ファイル名が上記の export と一致しなくなる場合があります。その他の `css` オプション（`target`、`transformer`、`minify`、`preprocessorOptions`、`lightningcss`、`postcss`、`modules` など）は自由に利用でき、抽出された CSS にも適用されます。
 
 > [!NOTE]
-> CSS エントリが複数ある場合、2 つ以上のエントリから import された `.css.ts` は共有チャンクに配置されるため、その CSS は各エントリのスタイルシートに複製されず共有チャンク側のスタイルシートに出力されます。この場合 `./<entry>.css` は自己完結しません。
+> CSS エントリが複数ある場合、2 つ以上のエントリから import された `.css.ts` は共有チャンクに配置されます。plugboy がその共有チャンクのスタイルシートを必要な各エントリへ畳み込むため、`./<entry>.css` は常に完結した内容になります（[CSS エントリごとのスタイルシート](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README-ja.md#css-エントリごとのスタイルシート)）。
 
 ### CSS が出力に至る経路
 

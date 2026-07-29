@@ -105,10 +105,10 @@ other `css` option (`target`, `transformer`, `minify`, `preprocessorOptions`,
 extracted CSS as well.
 
 > [!NOTE]
-> With several CSS entries, a `.css.ts` imported by more than one of them is
-> placed in a shared chunk, so its CSS lands in that chunk's own stylesheet rather
-> than being duplicated into each entry's. `./<entry>.css` is then not
-> self-contained.
+> With several CSS entries, a `.css.ts` imported by more than one of them is placed
+> in a shared chunk. plugboy folds that chunk's stylesheet back into each entry that
+> needs it, so every `./<entry>.css` stays complete — see
+> [One stylesheet per CSS entry](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README.md#one-stylesheet-per-css-entry).
 
 ### How the CSS reaches the output
 
