@@ -8,7 +8,8 @@
       "inputs": [
         "src/**/*",
         "public/**/*",
-        "plugboy.workspace.ts"
+        "plugboy.workspace.ts",
+        "$TURBO_ROOT$/plugboy.project.ts"
       ],
       "outputs": [
         "dist/**"
