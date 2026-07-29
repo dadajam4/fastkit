@@ -1,5 +1,45 @@
 # @fastkit/plugboy
 
+## 1.4.0
+
+### Minor Changes
+
+- [#180](https://github.com/dadajam4/fastkit/pull/180) [`406f96d`](https://github.com/dadajam4/fastkit/commit/406f96d74bd9ce0fdbfca36a03ef4b83342abfaf) Thanks [@dadajam4](https://github.com/dadajam4)! - Apply `optimizeCSS` to every stylesheet the build writes.
+
+  The optimizations ran in `generateBundle`, over the CSS assets present in the bundle at that moment. tsdown's own CSS pipeline emits from a _post_ plugin, which runs after every user plugin's `generateBundle`, so a stylesheet tsdown produced was never in that set: it silently skipped the layer/media merging and `combineRules`. Only CSS that a plugin emitted itself — `@fastkit/plugboy-sass-plugin`, or the vanilla-extract plugin — was optimized, which is why the gap went unnoticed.
+
+  The pass now runs in `writeBundle`, on the files on disk, where every producer has finished. `preserve-css-imports` re-injects external `@import`s in its own `writeBundle` and is registered later, so they still end up above the optimized rules.
+
+  Every stylesheet this repository publishes is byte-identical after the change, since all of them came from a plugin. A package whose CSS comes only from tsdown (a plain `.css` / `.scss` import, with neither the sass nor the vanilla-extract plugin in play) now gets the optimizations it always declared.
+
+### Patch Changes
+
+- [#180](https://github.com/dadajam4/fastkit/pull/180) [`406f96d`](https://github.com/dadajam4/fastkit/commit/406f96d74bd9ce0fdbfca36a03ef4b83342abfaf) Thanks [@dadajam4](https://github.com/dadajam4)! - Guarantee a stylesheet for every `css: true` entry.
+
+  plugboy declares a `./<entry>.css` export for each such entry, but with more than one of them the file it points at was not always produced. The build emits one stylesheet per output _chunk_ (`css.splitting`), which does not line up with the entries: CSS reached from several entries is moved into a shared chunk and emitted under that chunk's hashed name, which no export points at, and an entry whose CSS comes _only_ from there gets no stylesheet at all — a published export resolving to a missing file. Reported from a downstream package with two CSS entries, one of which re-exports only shared `.css.ts` helpers.
+
+  Each entry's stylesheet is now rebuilt from its own CSS plus the CSS of every chunk it imports, dependencies first, and the leftover per-chunk files are deleted. Shared CSS is duplicated into each entry that needs it, which is what makes a single `./<entry>.css` import complete. Skipped when `css.inject` is on, since the JavaScript then imports the per-chunk stylesheets by name.
+
+  The chunk graph is captured in `generateBundle` because it is gone by the time the stylesheets exist: a chunk holding nothing but CSS is dropped once tsdown's CSS pipeline has emitted its stylesheet, and its importers' `imports` are emptied with it — by `writeBundle` only the orphaned stylesheet is left. For the same reason `optimizeCSS` and `preserve-css-imports` no longer walk the bundle assets alone; they take every stylesheet the build wrote, so an assembled file gets the same treatment as any other.
+
+  A package with a single CSS entry emits one combined stylesheet and is untouched: every stylesheet this repository publishes is byte-identical.
+
+- [#180](https://github.com/dadajam4/fastkit/pull/180) [`406f96d`](https://github.com/dadajam4/fastkit/commit/406f96d74bd9ce0fdbfca36a03ef4b83342abfaf) Thanks [@dadajam4](https://github.com/dadajam4)! - Preserve the authored `@layer` order through the CSS transform.
+
+  lightningcss drops a name from an `@layer a, b, c;` statement when a block for that layer follows in the same stylesheet — the block establishes the same order, so the name is redundant. That reasoning holds for a standalone document. It does not hold for a library stylesheet whose statement _also_ orders layers belonging to other packages: once the name is gone, the layer's position is decided by wherever its own block lands relative to those other packages' stylesheets, and the authored order is lost.
+
+  `@fastkit/vui` declares `@layer vui-normalize, vui-color-scheme, vue-disabled-reason, vue-loading, vue-app-layout, vui;`, of which only `vui-normalize` and `vui` have blocks in the file. Both were being pruned, so the published `vui.css` declared four layers instead of six and `vui-normalize` was established _after_ `vui-color-scheme` / `vue-disabled-reason` / `vue-loading` — promoting the reset layer above the packages it is supposed to lose to, which showed up as changed component styling (buttons, among others).
+
+  `preserve-css-imports` now records the layer names of every `@layer a, b;` statement before tsdown's CSS pipeline can prune them, and re-emits them, in their declared order, at the top of each stylesheet in `writeBundle`. Names the emitted stylesheet still declares on its own are appended after them.
+
+  The capture is a `transform` hook declared `order: 'pre'`, which runs ahead of tsdown's CSS handling even though that is registered as a _pre plugin_ — hook order wins over plugin order. It is the only point that sees the CSS of every stylesheet in the graph, including a virtual one another plugin supplies from `load`: vanilla-extract generates its `@layer` statements into such a module, and for a package built entirely from `.css.ts` that generated statement is the only record of the intended order.
+
+  Each stylesheet's declarations are read as a set of "must come before" constraints and merged by topological sort, rather than concatenated with repeats dropped. A name's first appearance is rarely where its order is decided: vanilla-extract re-declares a layer at the top of _every_ stylesheet that puts a rule in it, so a single `@layer that-one;` from some component is seen before the module that declares how all the layers relate — and taking first appearances would let that component decide the layer's position. The sequences are visited in module execution order, which decides which one wins a contradiction and how otherwise-free names are ordered.
+
+  This regressed when a build `target` was first declared: before that, lightningcss transformed nothing at all (`@tsdown/css` returns early with no target, no `lightningcss` options and no minification), so the statement survived untouched.
+
+  `vui.css` grows by the 20 bytes of the two restored names; its rules are unchanged.
+
 ## 1.3.0
 
 ### Minor Changes
