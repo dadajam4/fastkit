@@ -144,6 +144,41 @@ export default defineWorkspaceConfig({
 });
 ```
 
+#### ビルドターゲット
+
+`target` はそのまま tsdown に渡され、どの JavaScript 構文をダウンレベルするかを決定します。単一のターゲット、ターゲットの配列、または全ての変換を無効化する `false` を指定できます。
+
+```typescript
+export default defineWorkspaceConfig({
+  // Node.js とブラウザの双方で動作するライブラリは、それぞれの下限を宣言します。
+  // 出力は列挙した全ての環境を満たすものになります。
+  target: ['node20.19', 'chrome111', 'firefox114', 'safari16.4']
+});
+```
+
+`plugboy.project.ts` に設定すれば全ワークスペースに適用されます。ワークスペース側で `target` を宣言した場合はプロジェクトの値を完全に置き換えます（ターゲットのリストはマージされません）。どちらのレイヤーでも未設定の場合、tsdown はパッケージの `engines.node` フィールドにフォールバックし、そのフィールドも無い場合は一切変換を行いません。
+
+ダウンレベルされるのは*構文*のみで、ランタイム API（`structuredClone`、`Array#at` など）がポリフィルされることはありません。この値は後述の `css.target` のデフォルトにもなります（リストのうちブラウザ以外のエントリは無視されます）。
+
+#### CSS オプション
+
+`css` はそのまま tsdown に渡され、スタイルシートの処理方法と出力を制御します。出力ファイル名、プリプロセッサのオプション、CSS Modules、構文のダウンレベルなどが対象です。
+
+```typescript
+export default defineWorkspaceConfig({
+  css: {
+    // 出力される単一のスタイルシートの名前。
+    fileName: 'my-package.css',
+    // `target` とは独立に、CSS の構文をブラウザ向けにのみダウンレベルする。
+    target: ['chrome111', 'firefox114', 'safari16.4']
+  }
+});
+```
+
+`plugboy.project.ts` に設定すれば全ワークスペースのデフォルトになります。ワークスペースの値はプロジェクトの値へ浅くマージされるため、変更するキーだけを書けば十分です。
+
+プラグインがワークスペースのセットアップ時にデフォルト値を与える場合があります。例えば vanilla-extract プラグインは、CSS のマージ処理が依存するため `splitting` と `fileName` を所有します。設定値は常にプラグインのデフォルトより優先されるので、プラグインが管理するキーを上書きする前にそのドキュメントを確認してください。
+
 ### defineProjectConfig
 
 #### ワークスペース管理

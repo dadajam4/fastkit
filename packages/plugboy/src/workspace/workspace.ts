@@ -441,6 +441,20 @@ export async function getWorkspace<
     };
   }
 
+  // Unlike `target`, the keys of `css` are independent, so the workspace value
+  // is shallow-merged over the project one (mirroring `optimizeCSS`). Stays
+  // `undefined` when neither layer sets it, leaving tsdown's own defaults alone.
+  const css =
+    config.css || project?.config.css
+      ? { ...project?.config.css, ...config.css }
+      : undefined;
+
+  // Inherit the project's `target` unless the workspace declares its own. A
+  // target list describes one environment set, so the workspace value replaces
+  // the project default rather than merging with it. `??` (not `||`) keeps an
+  // explicit `false` — tsdown's "apply no transformation" — intact.
+  config.target ??= project?.config.target;
+
   const ctx: WorkspaceSetupContext = {
     dir,
     json,
@@ -454,8 +468,7 @@ export async function getWorkspace<
     plugins,
     hooks,
     dts,
-    // `css` is an internal channel set by CSS plugins (e.g. vanilla-extract) via
-    // `ctx.css`; it is not a user-facing workspace option. Starts undefined.
+    css,
     optimizeCSS,
     mergeExternals: (override) => {
       config.deps ??= {};

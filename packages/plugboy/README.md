@@ -145,6 +145,56 @@ export default defineWorkspaceConfig({
 });
 ```
 
+#### Build Target
+
+`target` is passed straight through to tsdown and decides which JavaScript
+syntax is downleveled. Pass a single target, an array of targets, or `false` to
+disable every transformation.
+
+```typescript
+export default defineWorkspaceConfig({
+  // A library expected to run on both Node.js and browsers declares the lower
+  // bound of each: the output satisfies every listed environment.
+  target: ['node20.19', 'chrome111', 'firefox114', 'safari16.4']
+});
+```
+
+Set it in `plugboy.project.ts` to apply one target to every workspace; a
+workspace that declares its own `target` replaces the project value outright
+(target lists are not merged). When neither layer sets it, tsdown falls back to
+the package's `engines.node` field, and applies no transformation at all when
+that field is absent.
+
+Only *syntax* is lowered — runtime APIs (`structuredClone`, `Array#at`, …) are
+never polyfilled. The value also becomes the default for `css.target` below,
+where every non-browser entry of the list is ignored.
+
+#### CSS Options
+
+`css` is passed straight through to tsdown and controls how stylesheets are
+processed and emitted — the output file name, preprocessor options, CSS modules,
+syntax lowering, and so on.
+
+```typescript
+export default defineWorkspaceConfig({
+  css: {
+    // Name of the single emitted stylesheet.
+    fileName: 'my-package.css',
+    // Lower CSS syntax for browsers only, independently of `target`.
+    target: ['chrome111', 'firefox114', 'safari16.4']
+  }
+});
+```
+
+Set it in `plugboy.project.ts` to apply defaults to every workspace; a workspace
+value is shallow-merged over the project one, so it only needs to restate the
+keys it changes.
+
+Plugins may seed defaults here during workspace setup — the vanilla-extract
+plugin, for instance, owns `splitting` and `fileName` because its CSS merge
+depends on them. A configured value always wins over a plugin default, so check
+the plugin's documentation before overriding a key it manages.
+
 ### defineProjectConfig
 
 #### Workspace Management
