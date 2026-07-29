@@ -52,6 +52,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@vanilla-extract/integration": "^8.0.10",
     "@vanilla-extract/rollup-plugin": "^1.5.4"
   },
   "devDependencies": {

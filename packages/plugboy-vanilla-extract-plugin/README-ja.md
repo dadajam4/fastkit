@@ -6,8 +6,8 @@
 
 ## 特徴
 
-- **単一 CSS へ集約**: パッケージ内の `.css.ts` から抽出したスタイルを `dist/<package>.css` 1 ファイルにまとめて出力します。
-- **プレーン CSS との自動マージ**: tsdown が処理する素の `.css` / `.scss` の出力と Vanilla Extract の出力を 1 ファイルへ統合します（両者のファイル名衝突によるスタイル欠落を防ぎます）。
+- **単一 CSS へ集約**: パッケージ内の `.css.ts` から抽出したスタイルを、パッケージが import する素の `.css` / `.scss` とあわせて `dist/<package>.css` 1 ファイルに出力します。
+- **tsdown の CSS パイプラインで処理**: 抽出した CSS を通常の CSS モジュールとして tsdown へ渡すため、すべての [`css` オプション](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README-ja.md#css-オプション)が適用されます（`target` によるベンダープレフィクスと構文変換、`transformer` の lightningcss / postcss、`minify`、プリプロセッサオプション）。plugboy 自身の `optimizeCSS` も同様に適用されます。
 - **Vite 連携**: 開発サーバーや Storybook などで利用する Vite 用プラグインを同梱しています。
 - **レイヤーヘルパー**: `@fastkit/plugboy-vanilla-extract-plugin/css` から、カスケードレイヤーを型安全に定義するユーティリティを提供します。
 
@@ -88,11 +88,23 @@ export const component = framework.defineNestedLayer({ globalName: 'component' }
 
 ### 予約された `css` オプション
 
-このプラグインは、登録されたワークスペースに対して plugboy の `css.splitting` と `css.fileName` を設定します。**これらを `plugboy.workspace.ts` / `plugboy.project.ts` で宣言しないでください。**
+このプラグインは、登録されたワークスペースに対して plugboy の `css.splitting` と `css.fileName` を設定します。これは、出力されるスタイルシートが plugboy の宣言する CSS export（`css: true` の各エントリに対する `./<entry>.css`）と一致するようにするためです。
 
-パッケージは 2 つの独立した CSS 生成元を持ち得ます。プレーンな `.css` / `.scss` の import を扱う tsdown 自身のパイプラインと、`.css.ts` を扱うこのプラグインです。両者は単一の出力名で衝突するため、プラグインは tsdown 側の CSS を一時ファイルへ退避し、tsdown の CSS split を無効化した上で、ビルド後にエントリごとの 1 ファイルへマージします。この 2 つのオプション値はそのマージ処理の前提になっています。
+- 該当エントリが 1 つ（通常のケース）: `splitting: false`、`fileName: '<package>.css'` — パッケージにつき単一のスタイルシート。
+- 複数の場合: `splitting: true` とし、tsdown が出力チャンクごとにその名前でスタイルシートを出力します。`splitting: false` ではパッケージ全体を 1 ファイルに集約する際に 1 つのチャンクの CSS しか残らず、残りが黙って失われます。
 
-設定はプラグインのデフォルトより優先されるため、これらのキーを宣言するとその通りに適用され、マージは入力を見失ったまま黙って素通りします。多くの場合、公開された CSS からコンポーネントのスタイルが欠落する形で顕在化します。その他の `css` オプション（`target`、`preprocessorOptions`、`lightningcss`、`modules` など）は自由に利用できます。
+設定はプラグインのデフォルトより優先されるため、これらのキーを宣言するとその通りに適用され、出力ファイル名が上記の export と一致しなくなる場合があります。その他の `css` オプション（`target`、`transformer`、`minify`、`preprocessorOptions`、`lightningcss`、`postcss`、`modules` など）は自由に利用でき、抽出された CSS にも適用されます。
+
+> [!NOTE]
+> CSS エントリが複数ある場合、2 つ以上のエントリから import された `.css.ts` は共有チャンクに配置されます。plugboy がその共有チャンクのスタイルシートを必要な各エントリへ畳み込むため、`./<entry>.css` は常に完結した内容になります（[CSS エントリごとのスタイルシート](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README-ja.md#css-エントリごとのスタイルシート)）。
+
+### CSS が出力に至る経路
+
+`@vanilla-extract/rollup-plugin` は `.css.ts` を JavaScript と仮想スタイルシートの `import` にコンパイルし、その仮想スタイルシートを **external** として解決します（`extract` モードではさらに自身がバンドラのアセットとして出力します）。いずれの場合も CSS は tsdown の CSS パイプラインに入らないため、`css` オプションが一切届きません。
+
+本プラグインは代わりにその仮想スタイルシートを実モジュールとして解決します（公式の [`@vanilla-extract/vite-plugin`](https://vanilla-extract.style/documentation/integrations/vite/) と同じ方式）。これにより抽出された CSS はモジュールグラフ上の通常の `.css` モジュールとなり、以降は tsdown が処理を担います。
+
+plugboy のビルド向けに CSS を出力するプラグインを書く場合も、同じ形を推奨します。スタイルシートをバンドラのアセットとして出力すると、設定されたパイプラインの外に出てしまい、`css.target` や `css.transformer` が何も適用されません。
 
 ## ライセンス
 

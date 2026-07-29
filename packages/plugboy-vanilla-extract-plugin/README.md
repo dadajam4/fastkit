@@ -6,8 +6,8 @@ A plugin that integrates [Vanilla Extract](https://vanilla-extract.style/) into 
 
 ## Features
 
-- **Single CSS output**: Combines the styles extracted from a package's `.css.ts` files into one `dist/<package>.css`.
-- **Automatic merge with plain CSS**: Merges tsdown's output for plain `.css` / `.scss` with the Vanilla Extract output into a single file (preventing the style loss caused by a file-name collision between the two).
+- **Single CSS output**: Combines the styles extracted from a package's `.css.ts` files into one `dist/<package>.css`, together with any plain `.css` / `.scss` the package imports.
+- **Handled by tsdown's CSS pipeline**: The extracted CSS is handed to tsdown as an ordinary CSS module, so every [`css` option](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README.md#css-options) applies to it — `target` (vendor prefixes and syntax lowering), `transformer` (lightningcss or postcss), `minify`, preprocessor options — as do plugboy's own `optimizeCSS` optimizations.
 - **Vite integration**: Ships a Vite plugin for use in dev servers, Storybook, and similar environments.
 - **Layer helpers**: `@fastkit/plugboy-vanilla-extract-plugin/css` exposes utilities for defining cascade layers in a type-safe way.
 
@@ -89,21 +89,42 @@ The main options accepted by `createVanillaExtractPlugin(options)` / `ViteVanill
 ### Reserved `css` options
 
 This plugin sets plugboy's `css.splitting` and `css.fileName` for the workspaces
-it is registered in, and **they should not be declared in
-`plugboy.workspace.ts` / `plugboy.project.ts`**.
+it is registered in, so the emitted stylesheets match the CSS exports plugboy
+declares — `./<entry>.css` for every entry with `css: true`:
 
-A package can have two independent CSS producers — tsdown's own pipeline for
-plain `.css` / `.scss` imports, and this plugin for `.css.ts` files. The two
-would collide on a single output name, so the plugin routes tsdown's CSS to a
-temporary file, disables tsdown's CSS splitting, and merges everything into one
-file per entry after the build. Both option values are load-bearing for that
-merge.
+- One such entry (the common case): `splitting: false` and
+  `fileName: '<package>.css'` — a single stylesheet for the package.
+- Several: `splitting: true`, so tsdown emits one stylesheet per output chunk,
+  named after it. `splitting: false` would collect the package into one file and
+  keep only one chunk's CSS, silently dropping the rest.
 
-Configuration wins over plugin defaults, so a value declared for either key is
-applied as written — and the merge then silently misses its inputs, which
-typically shows up as component styles missing from the published CSS. Every
-other `css` option (`target`, `preprocessorOptions`, `lightningcss`, `modules`,
-…) is free to use.
+Configuration wins over plugin defaults, so declaring either key is applied as
+written, and the emitted file names may then no longer match those exports. Every
+other `css` option (`target`, `transformer`, `minify`, `preprocessorOptions`,
+`lightningcss`, `postcss`, `modules`, …) is free to use and applies to the
+extracted CSS as well.
+
+> [!NOTE]
+> With several CSS entries, a `.css.ts` imported by more than one of them is placed
+> in a shared chunk. plugboy folds that chunk's stylesheet back into each entry that
+> needs it, so every `./<entry>.css` stays complete — see
+> [One stylesheet per CSS entry](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README.md#one-stylesheet-per-css-entry).
+
+### How the CSS reaches the output
+
+`@vanilla-extract/rollup-plugin` compiles a `.css.ts` to JavaScript plus an
+`import` of a virtual stylesheet, which it then resolves as an **external**
+module — and, in `extract` mode, emits itself as a bundler asset. Either way the
+CSS never enters tsdown's CSS pipeline, so none of the `css` options can reach it.
+
+This plugin resolves that virtual stylesheet as a real module instead — the
+approach [`@vanilla-extract/vite-plugin`](https://vanilla-extract.style/documentation/integrations/vite/)
+takes — so the extracted CSS is an ordinary `.css` module in the graph and tsdown
+owns it from there.
+
+If you write a plugin that emits CSS for a plugboy build, prefer the same shape.
+Emitting a stylesheet as a bundler asset puts it outside the configured pipeline,
+where nothing about `css.target` or `css.transformer` applies to it.
 
 ## License
 
