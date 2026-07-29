@@ -63,6 +63,8 @@ interface FixtureOptions {
    * plugboy declares a `./<entry>.css` export for each of them.
    */
   secondEntry?: string;
+  /** Treat `secondEntry` as the entry module itself rather than a `.css.ts`. */
+  secondEntryIsReExport?: boolean;
 }
 
 interface BuildResult {
@@ -88,6 +90,7 @@ function buildFixture(options: FixtureOptions = {}): BuildResult {
     rawCss,
     preamble = '',
     secondEntry,
+    secondEntryIsReExport = false,
   } = options;
   const root = path.join(
     REPO_ROOT,
@@ -154,11 +157,15 @@ export default {
   fs.writeFileSync(path.join(dir, 'src/index.ts'), `${imports.join('\n')}\n`);
 
   if (secondEntry !== undefined) {
-    fs.writeFileSync(path.join(dir, 'src/other.css.ts'), secondEntry);
-    fs.writeFileSync(
-      path.join(dir, 'src/other.ts'),
-      `export * from './other.css';\n`,
-    );
+    if (secondEntryIsReExport) {
+      fs.writeFileSync(path.join(dir, 'src/other.ts'), secondEntry);
+    } else {
+      fs.writeFileSync(path.join(dir, 'src/other.css.ts'), secondEntry);
+      fs.writeFileSync(
+        path.join(dir, 'src/other.ts'),
+        `export * from './other.css';\n`,
+      );
+    }
   }
 
   spawnSync(TSX_BIN, [DRIVER, dir], { cwd: dir, encoding: 'utf8' });
@@ -264,6 +271,38 @@ export const layered = style({
     });
     const css = read('pkg.css');
     expect(css.split('\n')[0]).toBe('@layer e2e-outer, e2e-inner;');
+  }, 60_000);
+
+  test('a generated @layer statement survives being re-declared elsewhere', () => {
+    // vanilla-extract re-declares a layer at the top of every stylesheet that puts
+    // a rule in it. With several entries the module that declares how the layers
+    // relate lands in a shared chunk, so those single-name re-declarations are seen
+    // first — and taking the first appearance of each name would put the
+    // re-declared layer at the front, reversing the cascade.
+    const { read } = buildFixture({
+      target: ['safari16'],
+      secondEntry: `export * from './layers.css';\n`,
+      secondEntryIsReExport: true,
+      files: {
+        'layers.css.ts': `import { globalLayer } from '@vanilla-extract/css';
+
+export const root = globalLayer('e2e');
+export const normalize = globalLayer({ parent: root }, 'normalize');
+export const foundation = globalLayer({ parent: root }, 'foundation');
+`,
+        'tokens.css.ts': `import { globalStyle } from '@vanilla-extract/css';
+import { foundation } from './layers.css';
+
+globalStyle(':root', { '@layer': { [foundation]: { vars: { '--e2e': '1' } } } });
+`,
+      },
+    });
+    // Declared root -> normalize -> foundation; only `foundation` has a block.
+    for (const file of ['pkg.css', 'other.css']) {
+      expect(read(file).split('\n')[0]).toBe(
+        '@layer e2e, e2e.normalize, e2e.foundation;',
+      );
+    }
   }, 60_000);
 
   test('plain CSS and extracted CSS land in one stylesheet', () => {

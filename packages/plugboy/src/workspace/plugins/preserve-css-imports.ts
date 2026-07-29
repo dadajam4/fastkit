@@ -57,14 +57,89 @@ const LAYER_STATEMENT_RE = /@layer\s+([^{};]+);[ \t]*\n?/g;
 /** Stylesheet ids, with any query (`?source=…`, `?inline`) still attached. */
 const STYLE_ID_RE = /\.(?:css|scss|sass|less|styl|stylus)(?:$|\?)/;
 
-/** Collect the layer names of every `@layer a, b;` statement, in order. */
-function collectLayerNames(css: string, into: string[]): void {
-  for (const [, names] of css.matchAll(LAYER_STATEMENT_RE)) {
-    for (const name of names.split(',')) {
+/** The layer names a stylesheet declares, in the order it declares them. */
+function collectLayerNames(css: string): string[] {
+  const names: string[] = [];
+  for (const [, group] of css.matchAll(LAYER_STATEMENT_RE)) {
+    for (const name of group.split(',')) {
       const trimmed = name.trim();
-      if (trimmed && !into.includes(trimmed)) into.push(trimmed);
+      if (trimmed && !names.includes(trimmed)) names.push(trimmed);
     }
   }
+  return names;
+}
+
+/**
+ * Merge several declaration orders into one that contradicts none of them.
+ *
+ * Concatenating them and dropping repeats does not work, because a name's first
+ * appearance is rarely where its order is decided: vanilla-extract re-declares a
+ * layer at the top of *every* stylesheet that puts a rule in it, so a single
+ * `@layer that-one;` from some component is seen before the module that declares
+ * how all the layers relate — and once the component's name is in the list, the
+ * declaring module's order is silently dropped for it.
+ *
+ * Each sequence is therefore read as a set of "must come before" constraints and
+ * the result is a topological sort of them, preferring the earliest-seen name when
+ * several are free. Earlier sequences win: a constraint that would contradict one
+ * already recorded is skipped, so a stylesheet's own surviving statement — whose
+ * order tsdown may have rewritten — can add names without reordering anything.
+ */
+function mergeLayerOrder(sequences: string[][]): string[] {
+  const nodes: string[] = [];
+  const next = new Map<string, Set<string>>();
+
+  const add = (name: string) => {
+    if (next.has(name)) return;
+    nodes.push(name);
+    next.set(name, new Set());
+  };
+  /** Whether `to` already has to come after `from`. */
+  const precedes = (from: string, to: string): boolean => {
+    const seen = new Set<string>();
+    const stack = [from];
+    while (stack.length) {
+      const current = stack.pop()!;
+      if (current === to) return true;
+      if (seen.has(current)) continue;
+      seen.add(current);
+      stack.push(...(next.get(current) ?? []));
+    }
+    return false;
+  };
+
+  for (const sequence of sequences) {
+    sequence.forEach(add);
+    for (let i = 0; i + 1 < sequence.length; i++) {
+      const from = sequence[i];
+      const to = sequence[i + 1];
+      if (from === to || precedes(to, from)) continue;
+      next.get(from)!.add(to);
+    }
+  }
+
+  const incoming = new Map(nodes.map((name) => [name, 0]));
+  for (const [, targets] of next) {
+    for (const target of targets) {
+      incoming.set(target, (incoming.get(target) ?? 0) + 1);
+    }
+  }
+
+  const remaining = new Set(nodes);
+  const merged: string[] = [];
+  while (remaining.size) {
+    // A cycle can only come from contradicting sequences, which `precedes`
+    // already rejects; the fallback keeps this terminating regardless.
+    const name =
+      nodes.find((it) => remaining.has(it) && incoming.get(it) === 0) ??
+      nodes.find((it) => remaining.has(it))!;
+    remaining.delete(name);
+    merged.push(name);
+    for (const target of next.get(name) ?? []) {
+      incoming.set(target, (incoming.get(target) ?? 1) - 1);
+    }
+  }
+  return merged;
 }
 
 export function createPreserveCssImportsPlugin(workspace: PlugboyWorkspace) {
@@ -74,7 +149,7 @@ export function createPreserveCssImportsPlugin(workspace: PlugboyWorkspace) {
   // statements they came from. Keyed by module id, because the order modules are
   // transformed in is not the order their CSS ends up in.
   const layersByModule = new Map<string, string[]>();
-  // The same names flattened into declaration order, filled in `generateBundle`.
+  // The merged declaration order, filled in `generateBundle`.
   const declaredLayers: string[] = [];
   // Absolute paths already rewritten, to stay idempotent across output passes.
   const processed = new Set<string>();
@@ -96,8 +171,7 @@ export function createPreserveCssImportsPlugin(workspace: PlugboyWorkspace) {
         const file = id.split('?')[0];
         if (!STYLE_ID_RE.test(file)) return null;
 
-        const names: string[] = [];
-        collectLayerNames(code, names);
+        const names = collectLayerNames(code);
         if (names.length) layersByModule.set(id, names);
 
         // Only plain CSS is rewritten here. A preprocessor's `@import` is its own
@@ -118,25 +192,25 @@ export function createPreserveCssImportsPlugin(workspace: PlugboyWorkspace) {
         return { code: stripped, map: null };
       },
     },
-    // Flatten the per-module layer names into one declaration order.
+    // Merge the per-module declarations into one order (see `mergeLayerOrder`).
     //
-    // A module's position in `chunk.moduleIds` is its execution order, which is
-    // also the order tsdown concatenates the modules' CSS in — so walking the
-    // chunks and their modules reproduces the order the statements were authored
-    // in. The order the `transform` hook happened to visit the modules in does
-    // not: a layer's *users* are frequently transformed before the module that
-    // declares the order.
+    // The sequences are visited in module execution order — a module's position in
+    // `chunk.moduleIds`, which is also the order tsdown concatenates the modules'
+    // CSS in. That decides which sequence wins a contradiction, and how free names
+    // are ordered; the order the `transform` hook happened to visit modules in is
+    // not usable for either.
     generateBundle(_options, bundle) {
       if (!layersByModule.size) return;
-      declaredLayers.length = 0;
+      const sequences: string[][] = [];
       for (const chunk of Object.values(bundle)) {
         if (chunk.type !== 'chunk') continue;
         for (const id of chunk.moduleIds) {
-          for (const name of layersByModule.get(id) ?? []) {
-            if (!declaredLayers.includes(name)) declaredLayers.push(name);
-          }
+          const names = layersByModule.get(id);
+          if (names) sequences.push(names);
         }
       }
+      declaredLayers.length = 0;
+      declaredLayers.push(...mergeLayerOrder(sequences));
     },
     // Re-emit the preserved imports and layer order into the final CSS files on
     // disk. Running in `writeBundle` (rather than `generateBundle`) lets every
@@ -171,11 +245,12 @@ export function createPreserveCssImportsPlugin(workspace: PlugboyWorkspace) {
           // order is fixed before any layered `@import` adds to a layer, then
           // place the imports right after (they must precede every style rule).
           //
-          // The captured names come first and in the order they were declared;
-          // anything the emitted stylesheet still declares on its own is appended
-          // after them.
-          const layerNames = [...declaredLayers];
-          collectLayerNames(css, layerNames);
+          // The captured order decides; a name only this stylesheet declares is
+          // merged in without reordering the rest.
+          const layerNames = mergeLayerOrder([
+            declaredLayers,
+            collectLayerNames(css),
+          ]);
 
           const body = css.replace(LAYER_STATEMENT_RE, '');
           const layerStatement = layerNames.length
