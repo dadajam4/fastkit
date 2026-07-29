@@ -34,7 +34,7 @@ import { getWorkspacePackageJson } from '../package';
 import { WorkspaceEnvPlugin } from '../env';
 import { OptimizeCSSPlugin } from '../postcss/plugin';
 import {
-  rawLoaderPlugin,
+  createRawLoaderPlugin,
   createAssembleEntryCssPlugin,
   createPreserveCssImportsPlugin,
   createExternalImportsPlugin,
@@ -184,7 +184,7 @@ export class PlugboyWorkspace {
       createAssembleEntryCssPlugin(this),
       OptimizeCSSPlugin(this),
       WorkspaceEnvPlugin(this),
-      rawLoaderPlugin,
+      createRawLoaderPlugin(this),
       createPreserveCssImportsPlugin(this),
     ];
     this.hooks = hooks;
