@@ -195,6 +195,29 @@ plugin, for instance, owns `splitting` and `fileName` because its CSS merge
 depends on them. A configured value always wins over a plugin default, so check
 the plugin's documentation before overriding a key it manages.
 
+#### CSS Optimization
+
+`optimizeCSS` applies plugboy's own postcss pass on top of whatever tsdown
+produced: duplicate `@layer` / `@media` blocks are merged, and the selectors
+listed in `combineRules` are combined into a single rule. Pass `false` to disable
+it.
+
+```typescript
+export default defineWorkspaceConfig({
+  optimizeCSS: {
+    combineRules: {
+      rules: [':root']
+    }
+  }
+});
+```
+
+It runs in `writeBundle`, on the stylesheets on disk, so it covers **every**
+stylesheet the build writes — including the ones tsdown's own CSS pipeline emits,
+which it does after every plugin has had its say. External `@import`s preserved
+by plugboy are re-injected afterwards, so they always end up above the optimized
+rules.
+
 ### defineProjectConfig
 
 #### Workspace Management

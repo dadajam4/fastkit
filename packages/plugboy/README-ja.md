@@ -179,6 +179,22 @@ export default defineWorkspaceConfig({
 
 プラグインがワークスペースのセットアップ時にデフォルト値を与える場合があります。例えば vanilla-extract プラグインは、CSS のマージ処理が依存するため `splitting` と `fileName` を所有します。設定値は常にプラグインのデフォルトより優先されるので、プラグインが管理するキーを上書きする前にそのドキュメントを確認してください。
 
+#### CSS の最適化
+
+`optimizeCSS` は、tsdown が生成した CSS に対して plugboy 独自の postcss 処理を適用します。重複した `@layer` / `@media` ブロックの統合と、`combineRules` に列挙したセレクタの単一ルールへの結合を行います。`false` で無効化できます。
+
+```typescript
+export default defineWorkspaceConfig({
+  optimizeCSS: {
+    combineRules: {
+      rules: [':root']
+    }
+  }
+});
+```
+
+この処理は `writeBundle` でディスク上のスタイルシートに対して実行されるため、ビルドが書き出す**すべての**スタイルシートが対象になります。tsdown 自身の CSS パイプラインは全プラグインの処理後に CSS を出力しますが、それも含まれます。plugboy が保持した外部 `@import` はその後に再挿入されるため、常に最適化済みのルールより上に配置されます。
+
 ### defineProjectConfig
 
 #### ワークスペース管理
