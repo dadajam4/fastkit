@@ -7,6 +7,7 @@ import type { Path } from '../path';
 import { UserHooks } from './hook';
 import { DTSSettings } from './dts';
 import { OptimizeCSSOptions } from './css';
+import { type CssOptions } from '@tsdown/css';
 
 export const PROJECT_REQUIRED_FIELDS = ['name'] as const;
 
@@ -92,6 +93,17 @@ export interface UserProjectConfig {
    * @example `['node20.19', 'chrome111']`
    */
   target?: TSDownConfig['target'];
+  /**
+   * tsdown's `css` option — how stylesheets are processed and emitted.
+   *
+   * @remarks
+   * Applies to every workspace in the project. A workspace's own `css` is
+   * shallow-merged over this value, so it only needs to restate the keys it
+   * changes.
+   *
+   * @see {@link CssOptions}
+   */
+  css?: CssOptions;
 }
 
 /**
@@ -108,6 +120,7 @@ export interface ResolvedProjectConfig extends Required<
     | 'dts'
     | 'optimizeCSS'
     | 'target'
+    | 'css'
   >
 > {
   /**
@@ -148,6 +161,11 @@ export interface ResolvedProjectConfig extends Required<
    * the workspace declares its own.
    */
   target?: TSDownConfig['target'];
+  /**
+   * tsdown's `css` option applied to every workspace in the project, with the
+   * workspace's own `css` shallow-merged over it.
+   */
+  css?: CssOptions;
 }
 
 export type ProjectPackageJson = RequiredPackageJSON<ProjectRequiredField>;

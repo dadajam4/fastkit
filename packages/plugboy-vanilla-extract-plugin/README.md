@@ -86,6 +86,25 @@ The main options accepted by `createVanillaExtractPlugin(options)` / `ViteVanill
 | `identifiers` | `'short' \| 'debug' \| ((meta) => string)` | Format of generated identifiers such as class names. Use `'short'` for production builds and `'debug'` while debugging. |
 | `esbuildOptions` | `EsbuildOptions` | Options forwarded to esbuild when compiling `.css.ts` files. |
 
+### Reserved `css` options
+
+This plugin sets plugboy's `css.splitting` and `css.fileName` for the workspaces
+it is registered in, and **they should not be declared in
+`plugboy.workspace.ts` / `plugboy.project.ts`**.
+
+A package can have two independent CSS producers — tsdown's own pipeline for
+plain `.css` / `.scss` imports, and this plugin for `.css.ts` files. The two
+would collide on a single output name, so the plugin routes tsdown's CSS to a
+temporary file, disables tsdown's CSS splitting, and merges everything into one
+file per entry after the build. Both option values are load-bearing for that
+merge.
+
+Configuration wins over plugin defaults, so a value declared for either key is
+applied as written — and the merge then silently misses its inputs, which
+typically shows up as component styles missing from the published CSS. Every
+other `css` option (`target`, `preprocessorOptions`, `lightningcss`, `modules`,
+…) is free to use.
+
 ## License
 
 [MIT](https://github.com/dadajam4/fastkit/blob/main/LICENSE)

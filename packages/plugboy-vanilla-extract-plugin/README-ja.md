@@ -86,6 +86,14 @@ export const component = framework.defineNestedLayer({ globalName: 'component' }
 | `identifiers` | `'short' \| 'debug' \| ((meta) => string)` | 生成されるクラス名などの識別子の形式。本番ビルドでは `'short'`、デバッグ時は `'debug'` を推奨します。 |
 | `esbuildOptions` | `EsbuildOptions` | `.css.ts` のコンパイルに使用する esbuild へ渡すオプション。 |
 
+### 予約された `css` オプション
+
+このプラグインは、登録されたワークスペースに対して plugboy の `css.splitting` と `css.fileName` を設定します。**これらを `plugboy.workspace.ts` / `plugboy.project.ts` で宣言しないでください。**
+
+パッケージは 2 つの独立した CSS 生成元を持ち得ます。プレーンな `.css` / `.scss` の import を扱う tsdown 自身のパイプラインと、`.css.ts` を扱うこのプラグインです。両者は単一の出力名で衝突するため、プラグインは tsdown 側の CSS を一時ファイルへ退避し、tsdown の CSS split を無効化した上で、ビルド後にエントリごとの 1 ファイルへマージします。この 2 つのオプション値はそのマージ処理の前提になっています。
+
+設定はプラグインのデフォルトより優先されるため、これらのキーを宣言するとその通りに適用され、マージは入力を見失ったまま黙って素通りします。多くの場合、公開された CSS からコンポーネントのスタイルが欠落する形で顕在化します。その他の `css` オプション（`target`、`preprocessorOptions`、`lightningcss`、`modules` など）は自由に利用できます。
+
 ## ライセンス
 
 [MIT](https://github.com/dadajam4/fastkit/blob/main/LICENSE)

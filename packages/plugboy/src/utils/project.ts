@@ -35,6 +35,7 @@ export async function resolveUserProjectConfig(
     optimizeCSS = true,
     hooks,
     target,
+    css,
   } = userConfig;
   return {
     workspacesDir,
@@ -46,6 +47,7 @@ export async function resolveUserProjectConfig(
     optimizeCSS: optimizeCSS === true ? {} : optimizeCSS,
     hooks,
     target,
+    css,
   };
 }
 

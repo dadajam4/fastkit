@@ -70,11 +70,17 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
         // targets `cssFileName`; the two are merged into a single `cssFileName`
         // by the `writeBundle` hook below. Without vanilla-extract there is no
         // second producer, so tsdown emits `cssFileName` directly.
+        //
+        // These are defaults, not overrides: `...ctx.css` comes last so anything
+        // the workspace/project configuration declares wins. `splitting` and
+        // `fileName` are load-bearing for the merge below, though — the README
+        // tells consumers to leave them to this plugin.
         ctx.css = {
           splitting: false,
           fileName: ctx.meta.hasVanillaExtract
             ? TSDOWN_CSS_FILE_NAME
             : cssFileName,
+          ...ctx.css,
         };
 
         if (ctx.meta.hasVanillaExtract) {

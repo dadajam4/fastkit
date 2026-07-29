@@ -139,6 +139,24 @@ export interface UserWorkspaceConfig extends TSDownSyncOptions {
    */
   target?: TSDownConfig['target'];
   /**
+   * tsdown's `css` option — how stylesheets are processed and emitted.
+   *
+   * @remarks
+   * Shallow-merged over the project configuration, so a workspace only needs to
+   * restate the keys it changes.
+   *
+   * Plugins may seed defaults here during workspace setup (e.g. the
+   * vanilla-extract plugin sets `splitting` / `fileName`, which it needs to own
+   * to keep its CSS pipeline intact). A value declared in the configuration
+   * always wins over such a default — consult the plugin's documentation before
+   * overriding a key it manages.
+   *
+   * `css.target` defaults to {@link UserWorkspaceConfig.target}.
+   *
+   * @see {@link CssOptions}
+   */
+  css?: CssOptions;
+  /**
    * CSS optimization options
    *
    * Disable the operation with `false`.
@@ -164,6 +182,7 @@ export interface ResolvedWorkspaceConfig
         | 'dts'
         | 'publicDir'
         | 'optimizeCSS'
+        | 'css'
         | TSDownSyncOption
       >
     >,
@@ -195,6 +214,12 @@ export interface ResolvedWorkspaceConfig
    * (`true` → `'public'`).
    */
   publicDir: string | false;
+  /**
+   * tsdown's `css` option — how stylesheets are processed and emitted.
+   *
+   * @see {@link CssOptions}
+   */
+  css?: CssOptions;
   /**
    * CSS optimization options
    *
@@ -279,6 +304,17 @@ export interface WorkspaceSetupContext {
    * @see {@link NormalizedDTSSettings}
    */
   dts: NormalizedDTSSettings;
+  /**
+   * tsdown's `css` option, seeded from the project and workspace
+   * configurations.
+   *
+   * @remarks
+   * Plugins may extend this during workspace setup, but must merge rather than
+   * assign, and must let the configured value win — a plugin default belongs
+   * *under* `...ctx.css`, never over it.
+   *
+   * @see {@link CssOptions}
+   */
   css?: CssOptions;
   /**
    * CSS optimization options
