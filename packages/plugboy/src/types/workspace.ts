@@ -60,6 +60,7 @@ export const TSDOWN_SYNC_OPTIONS = [
   'onSuccess',
   'copy',
   'deps',
+  'target',
 ] as const satisfies (keyof TSDownConfig)[];
 
 type TSDownSyncOption = (typeof TSDOWN_SYNC_OPTIONS)[number];
@@ -121,6 +122,22 @@ export interface UserWorkspaceConfig extends TSDownSyncOptions {
    * `stub`.
    */
   copy?: TSDownConfig['copy'];
+  /**
+   * tsdown's `target` option — the environment(s) the output syntax is
+   * downleveled for.
+   *
+   * @remarks
+   * Inherited from the project configuration when omitted. A value set here
+   * replaces the project default outright (a target list describes one
+   * environment set, so merging the two would be meaningless).
+   *
+   * Note that this only lowers *syntax*; runtime APIs are never polyfilled.
+   * Unset at both layers, tsdown falls back to `engines.node` of the package,
+   * and applies no transformation at all when that field is absent.
+   *
+   * @example `['node20.19', 'chrome111']`
+   */
+  target?: TSDownConfig['target'];
   /**
    * CSS optimization options
    *

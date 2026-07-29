@@ -441,6 +441,12 @@ export async function getWorkspace<
     };
   }
 
+  // Inherit the project's `target` unless the workspace declares its own. A
+  // target list describes one environment set, so the workspace value replaces
+  // the project default rather than merging with it. `??` (not `||`) keeps an
+  // explicit `false` — tsdown's "apply no transformation" — intact.
+  config.target ??= project?.config.target;
+
   const ctx: WorkspaceSetupContext = {
     dir,
     json,

@@ -144,6 +144,22 @@ export default defineWorkspaceConfig({
 });
 ```
 
+#### ビルドターゲット
+
+`target` はそのまま tsdown に渡され、どの JavaScript 構文をダウンレベルするかを決定します。単一のターゲット、ターゲットの配列、または全ての変換を無効化する `false` を指定できます。
+
+```typescript
+export default defineWorkspaceConfig({
+  // Node.js とブラウザの双方で動作するライブラリは、それぞれの下限を宣言します。
+  // 出力は列挙した全ての環境を満たすものになります。
+  target: ['node20.19', 'chrome111', 'firefox114', 'safari16.4']
+});
+```
+
+`plugboy.project.ts` に設定すれば全ワークスペースに適用されます。ワークスペース側で `target` を宣言した場合はプロジェクトの値を完全に置き換えます（ターゲットのリストはマージされません）。どちらのレイヤーでも未設定の場合、tsdown はパッケージの `engines.node` フィールドにフォールバックし、そのフィールドも無い場合は一切変換を行いません。
+
+ダウンレベルされるのは*構文*のみで、ランタイム API（`structuredClone`、`Array#at` など）がポリフィルされることはありません。この値は CSS の構文ダウンレベルのデフォルトにもなります（リストのうちブラウザ以外のエントリは無視されます）。
+
 ### defineProjectConfig
 
 #### ワークスペース管理
