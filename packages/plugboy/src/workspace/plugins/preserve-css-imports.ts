@@ -22,10 +22,15 @@ import { definePlugin } from '../../utils';
  * `@layer vui-normalize, vui-color-scheme, …, vui;`, and losing `vui-normalize`
  * from it promoted the reset layer above the packages it is supposed to lose to.
  *
- * Neither can be intercepted in a `transform` hook — tsdown's CSS handling is a
- * *pre* plugin, so by then the imports are inlined and the statement is pruned.
- * Both are therefore recorded in `load` (which runs first) and re-emitted in
- * `writeBundle`, after every CSS producer has written its final file to disk.
+ * Both are captured from a `transform` hook declared `order: 'pre'`, which runs
+ * ahead of tsdown's CSS handling even though that is registered as a *pre plugin*
+ * — hook order wins over plugin order. It is the only point that sees the CSS of
+ * **every** stylesheet in the graph, including a virtual one another plugin
+ * supplies from `load`: vanilla-extract generates its `@layer` statements into
+ * such a module, so a `load`-based capture would miss exactly the case where the
+ * generated statement is the only record of the intended order. The captured
+ * values are re-emitted in `writeBundle`, after every CSS producer has written
+ * its final file to disk.
  */
 
 /**
@@ -47,8 +52,8 @@ function isInternalImportSpecifier(spec: string): boolean {
 /** Matches a top-level `@layer <names>;` statement (declaration, not a block). */
 const LAYER_STATEMENT_RE = /@layer\s+([^{};]+);[ \t]*\n?/g;
 
-/** Sources whose `@layer` statements are authored rather than generated. */
-const STYLE_SOURCE_RE = /\.(?:css|scss|sass|less|styl|stylus)$/;
+/** Stylesheet ids, with any query (`?source=…`, `?inline`) still attached. */
+const STYLE_ID_RE = /\.(?:css|scss|sass|less|styl|stylus)(?:$|\?)/;
 
 /** Collect the layer names of every `@layer a, b;` statement, in order. */
 function collectLayerNames(css: string, into: string[]): void {
@@ -63,8 +68,11 @@ function collectLayerNames(css: string, into: string[]): void {
 export function createPreserveCssImportsPlugin() {
   // External `@import` statements, kept verbatim and in first-seen order.
   const externalImports: string[] = [];
-  // Layer names as authored, in first-seen order, read before lightningcss can
-  // prune the statements they came from.
+  // Layer names per stylesheet module, captured before lightningcss can prune the
+  // statements they came from. Keyed by module id, because the order modules are
+  // transformed in is not the order their CSS ends up in.
+  const layersByModule = new Map<string, string[]>();
+  // The same names flattened into declaration order, filled in `generateBundle`.
   const declaredLayers: string[] = [];
   // Absolute paths already rewritten, to stay idempotent across output passes.
   const processed = new Set<string>();
@@ -73,40 +81,60 @@ export function createPreserveCssImportsPlugin() {
     name: 'preserve-css-imports',
     buildStart() {
       externalImports.length = 0;
+      layersByModule.clear();
       declaredLayers.length = 0;
       processed.clear();
     },
-    // `load` runs before the CSS `transform` that inlines the imports and prunes
+    // Runs ahead of tsdown's CSS transform, which inlines the imports and prunes
     // the layer statements, so this is where both have to be captured.
-    async load(id: string) {
-      const file = id.split('?')[0];
-      if (!STYLE_SOURCE_RE.test(file)) return null;
+    transform: {
+      order: 'pre' as const,
+      filter: { id: STYLE_ID_RE },
+      handler(code: string, id: string) {
+        const file = id.split('?')[0];
+        if (!STYLE_ID_RE.test(file)) return null;
 
-      let code: string;
-      try {
-        code = await fs.readFile(file, 'utf8');
-      } catch {
-        return null;
-      }
+        const names: string[] = [];
+        collectLayerNames(code, names);
+        if (names.length) layersByModule.set(id, names);
 
-      collectLayerNames(code, declaredLayers);
+        // Only plain CSS is rewritten here. A preprocessor's `@import` is its own
+        // module system, resolved before any CSS ever reaches tsdown.
+        if (!file.endsWith('.css') || !code.includes('@import')) return null;
 
-      // Only plain CSS is rewritten here. A preprocessor's `@import` is its own
-      // module system, resolved before any CSS ever reaches tsdown.
-      if (!file.endsWith('.css') || !code.includes('@import')) return null;
-
-      let changed = false;
-      const stripped = code.replace(IMPORT_RE, (statement, _quote, spec) => {
-        if (isInternalImportSpecifier(spec)) return statement;
-        changed = true;
-        const normalized = statement.trim();
-        if (!externalImports.includes(normalized)) {
-          externalImports.push(normalized);
+        let changed = false;
+        const stripped = code.replace(IMPORT_RE, (statement, _quote, spec) => {
+          if (isInternalImportSpecifier(spec)) return statement;
+          changed = true;
+          const normalized = statement.trim();
+          if (!externalImports.includes(normalized)) {
+            externalImports.push(normalized);
+          }
+          return '';
+        });
+        if (!changed) return null;
+        return { code: stripped, map: null };
+      },
+    },
+    // Flatten the per-module layer names into one declaration order.
+    //
+    // A module's position in `chunk.moduleIds` is its execution order, which is
+    // also the order tsdown concatenates the modules' CSS in — so walking the
+    // chunks and their modules reproduces the order the statements were authored
+    // in. The order the `transform` hook happened to visit the modules in does
+    // not: a layer's *users* are frequently transformed before the module that
+    // declares the order.
+    generateBundle(_options, bundle) {
+      if (!layersByModule.size) return;
+      declaredLayers.length = 0;
+      for (const chunk of Object.values(bundle)) {
+        if (chunk.type !== 'chunk') continue;
+        for (const id of chunk.moduleIds) {
+          for (const name of layersByModule.get(id) ?? []) {
+            if (!declaredLayers.includes(name)) declaredLayers.push(name);
+          }
         }
-        return '';
-      });
-      if (!changed) return null;
-      return { code: stripped, map: null };
+      }
     },
     // Re-emit the preserved imports and layer order into the final CSS files on
     // disk. Running in `writeBundle` (rather than `generateBundle`) lets every
@@ -142,9 +170,9 @@ export function createPreserveCssImportsPlugin() {
           // order is fixed before any layered `@import` adds to a layer, then
           // place the imports right after (they must precede every style rule).
           //
-          // The authored names come first and in their authored order; anything
-          // the emitted stylesheet declares on its own (a generated `@layer`
-          // statement, e.g. from vanilla-extract) is appended after them.
+          // The captured names come first and in the order they were declared;
+          // anything the emitted stylesheet still declares on its own is appended
+          // after them.
           const layerNames = [...declaredLayers];
           collectLayerNames(css, layerNames);
 

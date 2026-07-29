@@ -240,6 +240,32 @@ globalStyle(':root', { vars: { '--${name}': '1' } });
     expect(css).toContain('--b:1');
   }, 60_000);
 
+  test('a generated @layer statement keeps its declared order', () => {
+    // The layers are declared `outer` then `inner`, but only `inner` gets a
+    // block. lightningcss prunes a name whose block follows in the same
+    // stylesheet, so `inner` would be dropped from the statement and end up
+    // established *after* `outer` — reversing the cascade the `.css.ts` declared.
+    const { read } = buildFixture({
+      target: ['safari16'],
+      files: {
+        'layers.css.ts': `import { globalLayer } from '@vanilla-extract/css';
+
+export const outer = globalLayer('e2e-outer');
+export const inner = globalLayer('e2e-inner');
+`,
+        'layered.css.ts': `import { style } from '@vanilla-extract/css';
+import { inner } from './layers.css';
+
+export const layered = style({
+  '@layer': { [inner]: { color: 'red' } },
+});
+`,
+      },
+    });
+    const css = read('pkg.css');
+    expect(css.split('\n')[0]).toBe('@layer e2e-outer, e2e-inner;');
+  }, 60_000);
+
   test('plain CSS and extracted CSS land in one stylesheet', () => {
     const { cssFiles, read } = buildFixture({
       files: { 'plain.css': '.plain { color: green }\n' },
