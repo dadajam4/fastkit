@@ -191,9 +191,9 @@ value is shallow-merged over the project one, so it only needs to restate the
 keys it changes.
 
 Plugins may seed defaults here during workspace setup — the vanilla-extract
-plugin, for instance, owns `splitting` and `fileName` because its CSS merge
-depends on them. A configured value always wins over a plugin default, so check
-the plugin's documentation before overriding a key it manages.
+plugin, for instance, owns `splitting` and `fileName` so the emitted file matches
+the CSS export plugboy declares. A configured value always wins over a plugin
+default, so check the plugin's documentation before overriding a key it manages.
 
 #### CSS Optimization
 
