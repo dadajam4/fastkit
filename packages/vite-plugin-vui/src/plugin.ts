@@ -259,7 +259,12 @@ export {};
 
   fs.ensureDirSync(dynamicDest);
   fs.writeFileSync(path.join(dynamicDest, 'setup.scss'), COLOR_DUMP_STYLE);
-  fs.writeFileSync(path.join(dynamicDest, 'vui.d.mts'), dts);
+  // `vui.d.ts`, not `.d.mts`: this file exists to be named in a project's
+  // `compilerOptions.types` (`["./.vui/vui"]`), and that lookup only considers
+  // `.d.ts`. It carries nothing but `/// <reference path>` lines pointing at the
+  // generated declarations, so it has to be reachable for their `declare module`
+  // augmentations to apply at all.
+  fs.writeFileSync(path.join(dynamicDest, 'vui.d.ts'), dts);
 
   let iconFontEntries: RawIconFontEntry[] = iconFont || [
     {
