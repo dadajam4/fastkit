@@ -1,5 +1,16 @@
 # @fastkit/vue-location
 
+## 0.7.4
+
+### Patch Changes
+
+- [#194](https://github.com/dadajam4/fastkit/pull/194) [`d224120`](https://github.com/dadajam4/fastkit/commit/d224120639a248468c69d83f2791983cb61c248c) Thanks [@dadajam4](https://github.com/dadajam4)! - Rename the `Scheme` type parameter of `ExtractQueryInputs` to `Schema`.
+
+  It stands for a query definition object — a description of structure — so the word is **schema**. The name of a type parameter is not referenceable, so nothing can break; it shows up in the published declaration file and in editor hints, which is the only reason to release it.
+
+- Updated dependencies []:
+  - @fastkit/vue-utils@0.18.4
+
 ## 0.7.3
 
 ### Patch Changes

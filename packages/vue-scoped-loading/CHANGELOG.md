@@ -1,5 +1,12 @@
 # @fastkit/vue-scoped-loading
 
+## 0.4.4
+
+### Patch Changes
+
+- Updated dependencies [[`d224120`](https://github.com/dadajam4/fastkit/commit/d224120639a248468c69d83f2791983cb61c248c)]:
+  - @fastkit/helpers@0.17.0
+
 ## 0.4.3
 
 ### Patch Changes

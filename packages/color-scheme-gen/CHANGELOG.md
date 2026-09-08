@@ -1,5 +1,31 @@
 # @fastkit/color-scheme-gen
 
+## 1.3.0
+
+### Minor Changes
+
+- [#199](https://github.com/dadajam4/fastkit/pull/199) [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838) Thanks [@dadajam4](https://github.com/dadajam4)! - Add `runtimeModule`, and re-export the whole color-scheme authoring API.
+
+  **`runtimeModule`.** The generated info file imported `ColorSchemeInfo` from — and augmented `ThemeSettings` / `PaletteSettings` / `ScopeSettings` / `ColorVariantSettings` in — `@fastkit/color-scheme` by a hard-coded name. That file lands in the _consuming_ project, so the specifier resolves from there, and pnpm places into a project's `node_modules` only what the project itself declares. Naming the leaf package therefore forced every project to declare `@fastkit/color-scheme` as well.
+
+  ```ts
+  new LoadColorSchemeRunner({ entry, dest, runtimeModule: '@acme/ui' });
+  ```
+
+  The module it names has to re-export the four `*Settings` interfaces and `ColorSchemeInfo`. Module augmentation follows a re-export to the interface it aliases, so the settings still merge into the ones `@fastkit/color-scheme` declares and `ThemeName`, `PaletteName`, `ScopeName` and `ColorVariant` agree everywhere.
+
+  The default is unchanged (`@fastkit/color-scheme`), so standalone use emits exactly what it did before.
+
+  **`export * from '@fastkit/color-scheme'`.** Only `createSimpleColorScheme` was reachable from here, so writing a fully custom scheme meant importing `createColorScheme` and the source types from `@fastkit/color-scheme` directly — a second package to declare for something this one exists to do. The authoring API is now re-exported in full, so a project's scheme definition needs nothing but this package, as a `devDependency`.
+
+  `@fastkit/color-scheme` stays a real `dependency`: unlike the icon-font and media-match generators, this package genuinely imports it, and now re-exports it deliberately rather than exposing its types by accident.
+
+### Patch Changes
+
+- Updated dependencies [[`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795), [`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795), [`cb976bf`](https://github.com/dadajam4/fastkit/commit/cb976bf88268aca5d6101377644ec328e5730c02)]:
+  - @fastkit/node-util@0.17.0
+  - @fastkit/tiny-logger@0.16.3
+
 ## 1.2.2
 
 ### Patch Changes

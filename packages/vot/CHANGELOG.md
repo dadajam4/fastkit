@@ -1,5 +1,31 @@
 # @fastkit/vot
 
+## 1.3.3
+
+### Patch Changes
+
+- [#199](https://github.com/dadajam4/fastkit/pull/199) [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix `vot generate`, which could not start.
+
+  `bin/generate.mjs` imported the CLI without a file extension:
+
+  ```js
+  import { cli } from '../dist/tool';
+  ```
+
+  ESM does no extension guessing, so Node threw before anything ran:
+
+  ```
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '.../packages/vot/dist/tool'
+    imported from .../packages/vot/bin/generate.mjs
+  ```
+
+  `bin/build.mjs` and `bin/dev.mjs` name `../dist/tool.mjs` correctly; only this one did not, so `vot dev`, `vot build` and `vot serve` were unaffected and `vot generate` had never worked. Present since the first commit.
+
+- Updated dependencies [[`d224120`](https://github.com/dadajam4/fastkit/commit/d224120639a248468c69d83f2791983cb61c248c)]:
+  - @fastkit/helpers@0.17.0
+  - @fastkit/vue-page@0.18.4
+  - @fastkit/vue-utils@0.18.4
+
 ## 1.3.2
 
 ### Patch Changes

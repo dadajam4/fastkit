@@ -1,5 +1,63 @@
 # @fastkit/icon-font-gen
 
+## 0.16.3
+
+### Patch Changes
+
+- [#198](https://github.com/dadajam4/fastkit/pull/198) [`cb976bf`](https://github.com/dadajam4/fastkit/commit/cb976bf88268aca5d6101377644ec328e5730c02) Thanks [@dadajam4](https://github.com/dadajam4)! - Include the generator's version and options in the regeneration check.
+
+  The decision to skip work compared only the source directory against the hash stored beside the output:
+
+  ```ts
+  const hash = new HashComparator(options.src, options.dest);
+  ```
+
+  so nothing about the generator itself entered into it. After upgrading `@fastkit/icon-font-gen` (or `@fastkit/vite-plugin-vui`), a project whose icon sources had not changed kept the **previously generated** output — indefinitely, even where the new version would emit something different. The same held for an option change: switching `formats` or `startUnicode` alone did not trigger a regeneration.
+
+  Consumers were left deleting the output directory themselves whenever any `@fastkit/*` version moved, which is a workaround that has to guess which directories are generated and compares version strings rather than ranges.
+
+  The comparison now also covers this package's version and the effective options for the entry. `src` and `dest` stay out of it: `src` has its own content hash, `dest` holds the meta file, and keeping absolute paths out leaves the meta file portable between machines and CI.
+
+  Upgrading to this version regenerates each entry once, because a meta file written by an earlier version carries no record of these inputs.
+
+- [#199](https://github.com/dadajam4/fastkit/pull/199) [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838) Thanks [@dadajam4](https://github.com/dadajam4)! - Add `runtimeModule`, so the generated code can name a module the project already declares.
+
+  The emitted `.ts` imported `registerIconNames` from — and augmented — `@fastkit/icon-font` by a hard-coded name:
+
+  ```ts
+  import { registerIconNames } from '@fastkit/icon-font';
+  declare module '@fastkit/icon-font' {
+    export interface IconNameMap { 'mdi-check': true, … }
+  }
+  ```
+
+  That file lands in the _consuming_ project, so the specifier resolves from there, and pnpm places into a project's `node_modules` only what the project itself declares. Naming the leaf package therefore forced every project to declare `@fastkit/icon-font`, on top of whatever kit it was already using. A peer declaration cannot lift that: an auto-installed peer lands in the virtual store, where the generated tree cannot see it.
+
+  `runtimeModule` names the module instead:
+
+  ```ts
+  generate({ entries, dest, runtimeModule: '@acme/ui' });
+  ```
+
+  The module it names has to re-export `@fastkit/icon-font`'s `registerIconNames`, `ICON_NAMES`, `IconName` and `IconNameMap`. Module augmentation follows a re-export to the interface it aliases, so `IconNameMap` still merges into the one `@fastkit/icon-font` declares and every derived type agrees — the project just never has to name it.
+
+  The default is unchanged (`@fastkit/icon-font`), so standalone use, including the `icon-font` CLI, emits exactly what it did before.
+
+  `runtimeModule` is part of the regeneration check, so changing it regenerates rather than leaving the old module name in place.
+
+  **`@fastkit/icon-font` moves from `dependencies` to an optional peer dependency.** This package never imported it: the specifier existed only inside the emitted template, and what a package _emits_ is the consumer's to resolve, not something to install beside itself. It is optional because a project that points `runtimeModule` elsewhere does not need it at all.
+
+  Under pnpm nothing changes — a nested copy was never visible to the generated tree, so a project using the default already had to declare `@fastkit/icon-font` itself. Under npm or Yarn it did resolve, by hoisting, and it will not any more: npm does not auto-install _optional_ peers. If you use this package standalone with the default `runtimeModule` on either, declare it:
+
+  ```sh
+  npm install @fastkit/icon-font
+  ```
+
+- Updated dependencies [[`d224120`](https://github.com/dadajam4/fastkit/commit/d224120639a248468c69d83f2791983cb61c248c), [`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795), [`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795), [`cb976bf`](https://github.com/dadajam4/fastkit/commit/cb976bf88268aca5d6101377644ec328e5730c02)]:
+  - @fastkit/helpers@0.17.0
+  - @fastkit/node-util@0.17.0
+  - @fastkit/tiny-logger@0.16.3
+
 ## 0.16.2
 
 ### Patch Changes

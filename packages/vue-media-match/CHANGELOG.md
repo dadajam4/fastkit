@@ -1,5 +1,18 @@
 # @fastkit/vue-media-match
 
+## 0.18.0
+
+### Minor Changes
+
+- [#196](https://github.com/dadajam4/fastkit/pull/196) [`2fcdd66`](https://github.com/dadajam4/fastkit/commit/2fcdd6634e2583235f710074adf1c0cb648a9099) Thanks [@dadajam4](https://github.com/dadajam4)! - Declare `@fastkit/media-match` as a peer dependency instead of a dependency.
+
+  This package re-exposes `MediaMatchKey` and `MediaMatchConditions` in its published types, and a project's generated breakpoint definition augments `@fastkit/media-match` to replace the placeholder key type. A module augmentation only applies to the copy it resolves, so the project and this package have to resolve the same one; as a `dependency` a version skew silently produced two copies, and every breakpoint key fell back to the placeholder.
+
+### Patch Changes
+
+- Updated dependencies [[`d224120`](https://github.com/dadajam4/fastkit/commit/d224120639a248468c69d83f2791983cb61c248c)]:
+  - @fastkit/helpers@0.17.0
+
 ## 0.17.2
 
 ### Patch Changes

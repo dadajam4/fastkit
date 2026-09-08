@@ -1,5 +1,13 @@
 # @fastkit/nodepack
 
+## 0.17.3
+
+### Patch Changes
+
+- Updated dependencies [[`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795), [`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795), [`cb976bf`](https://github.com/dadajam4/fastkit/commit/cb976bf88268aca5d6101377644ec328e5730c02)]:
+  - @fastkit/node-util@0.17.0
+  - @fastkit/tiny-logger@0.16.3
+
 ## 0.17.2
 
 ### Patch Changes
