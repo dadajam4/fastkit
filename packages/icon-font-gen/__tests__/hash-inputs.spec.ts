@@ -39,6 +39,17 @@ describe('toHashInputs', () => {
     }
   });
 
+  it('should carry the runtime module, so pointing it elsewhere regenerates', () => {
+    // The specifier is written into the generated `.ts`, but it is not part of
+    // the entry, so without this the watch-mode runner would skip an unchanged
+    // source directory and leave the old module name in place -- the same
+    // staleness the generator version fixed (issue #191).
+    expect(toHashInputs(entry()).runtimeModule).toBe('@fastkit/icon-font');
+    expect(JSON.stringify(toHashInputs(entry()))).not.toBe(
+      JSON.stringify(toHashInputs(entry(), '@fastkit/vui')),
+    );
+  });
+
   it('should not differ when only the paths change', () => {
     expect(JSON.stringify(toHashInputs(entry()))).toBe(
       JSON.stringify(
