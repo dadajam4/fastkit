@@ -1,5 +1,13 @@
 # @fastkit/vue-utils
 
+## 0.18.4
+
+### Patch Changes
+
+- Updated dependencies [[`d224120`](https://github.com/dadajam4/fastkit/commit/d224120639a248468c69d83f2791983cb61c248c)]:
+  - @fastkit/helpers@0.17.0
+  - @fastkit/visibility@0.16.3
+
 ## 0.18.3
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @fastkit/vue-loading
 
+## 0.18.6
+
+### Patch Changes
+
+- Updated dependencies [[`d224120`](https://github.com/dadajam4/fastkit/commit/d224120639a248468c69d83f2791983cb61c248c), [`2fcdd66`](https://github.com/dadajam4/fastkit/commit/2fcdd6634e2583235f710074adf1c0cb648a9099), [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838)]:
+  - @fastkit/helpers@0.17.0
+  - @fastkit/vue-color-scheme@0.19.0
+  - @fastkit/tiny-logger@0.16.3
+  - @fastkit/vue-utils@0.18.4
+
 ## 0.18.5
 
 ### Patch Changes

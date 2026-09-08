@@ -1,5 +1,118 @@
 # @fastkit/vite-plugin-vui
 
+## 3.6.0
+
+### Minor Changes
+
+- [#199](https://github.com/dadajam4/fastkit/pull/199) [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838) Thanks [@dadajam4](https://github.com/dadajam4)! - Discard a generated tree that a different toolchain produced, instead of leaving it to the project.
+
+  Only `@fastkit/icon-font-gen` skips work when nothing changed, and since [#191](https://github.com/dadajam4/fastkit/issues/191) it decides that from its own version and options. Nothing else was accounted for:
+
+  - a change in `@fastkit/vite-plugin-vui` or `@fastkit/vite-kit` did not reach that decision at all;
+  - output that is no longer generated was never removed. The watch-mode runner only adds, so dropping an icon-font entry or renaming one left `icon-font/<old-name>/` in place indefinitely.
+
+  Projects worked around both by deleting `.vui/` by hand whenever a `@fastkit/*` version moved — a workaround that has to know which directories are generated, and to notice the upgrade in the first place.
+
+  `.vui/.manifest.json` now records what produced the tree: the versions of this package, `@fastkit/vite-kit` and the three generators, the module the generated code is written against, and the icon-font entry names. When any of it no longer matches, the directory is emptied before anything is generated into it.
+
+  It is written only once every generator has booted, so a run that failed leaves the directory it emptied without a manifest and the next one starts clean again. In the steady state nothing changes: the manifest matches, the directory is left alone, and `@fastkit/icon-font-gen` still skips the expensive work.
+
+  The one visible cost is that the first build after any `@fastkit/*` upgrade regenerates the icon font. That is the same work the manual workaround did, now without having to remember it.
+
+- [#196](https://github.com/dadajam4/fastkit/pull/196) [`2fcdd66`](https://github.com/dadajam4/fastkit/commit/2fcdd6634e2583235f710074adf1c0cb648a9099) Thanks [@dadajam4](https://github.com/dadajam4)! - Generate code that names only packages the project already declares.
+
+  `viteVuiPlugin` writes code into the **consumer's** project — `.vui/installer.ts`, `.vui/setup.scss`, and through `@fastkit/vite-kit` the generated `icon-font/`, `color-scheme/` and `media-match/` modules. Those files import by bare specifier, so every package they name has to resolve from the consumer's project. `dependencies` is the wrong section for such a package: it installs beside _this_ one, where the consumer's `.vui/` cannot see it. And a peer declaration cannot place it either — pnpm puts into a project's `node_modules` only what the project itself declares, and an auto-installed peer lands in the virtual store.
+
+  So the generated tree's imports are, unavoidably, requirements of the consuming project. The fix is to have it name fewer of them. Each generator now takes the runtime module as an option, and this plugin passes `@fastkit/vui`, which re-exports all three leaf packages:
+
+  | package                 | before         | after            |
+  | ----------------------- | -------------- | ---------------- |
+  | `@fastkit/icon-font`    | undeclared     | not named at all |
+  | `@fastkit/color-scheme` | undeclared     | not named at all |
+  | `@fastkit/media-match`  | undeclared     | not named at all |
+  | `@fastkit/vue-page`     | `dependencies` | required peer    |
+  | `@fastkit/vui`          | `dependencies` | required peer    |
+
+  `@fastkit/vue-page` was never imported by this package at all — the specifier existed only inside the generated template.
+
+  **Migration.** Your project now needs `@fastkit/vui`, `@fastkit/vue-page`, `vue` and `vue-router`, and nothing else on this account:
+
+  ```sh
+  pnpm remove @fastkit/icon-font @fastkit/color-scheme @fastkit/media-match
+  ```
+
+  Regenerate afterwards (delete `.vui/`, or just run the build). Authoring a custom color scheme or breakpoint set still uses `@fastkit/color-scheme-gen` / `@fastkit/media-match-gen` as `devDependencies`; `@fastkit/color-scheme-gen` now re-exports the full authoring API, so that path needs no other package either.
+
+- [#196](https://github.com/dadajam4/fastkit/pull/196) [`2fcdd66`](https://github.com/dadajam4/fastkit/commit/2fcdd6634e2583235f710074adf1c0cb648a9099) Thanks [@dadajam4](https://github.com/dadajam4)! - Fail with the list when the generated tree's imports cannot be resolved from the project.
+
+  `viteVuiPlugin()` now checks, before generating anything, that each package the generated code imports by name — `@fastkit/vui`, `@fastkit/vue-page`, `vue`, `vue-router` — resolves from the directory it generates into, and throws naming the missing ones:
+
+  ```
+  [vite-plugin-vui] Cannot resolve `@fastkit/vue-page` from /path/to/app/.vui.
+
+  The code this plugin generates there imports them by name, so they have to be
+  resolvable from your project — a transitive install is not enough, and neither is
+  an auto-installed peer dependency. Add them to your project:
+
+    pnpm add @fastkit/vue-page
+  ```
+
+  Declaring them as peer dependencies documents the requirement, but nothing enforces it: pnpm places only what a project declares into its `node_modules`, and with `auto-install-peers` on (the default) the install is silent. Until now the consequence surfaced far from the cause — the generator and `vite build` both succeed, the `declare module` augmentations in the generated tree resolve nothing, every icon name falls back to its placeholder union, and `tsc` reports hundreds of `TS2322` pointing at the app's own code.
+
+  The list is short because the generated tree now names `@fastkit/vui` rather than the three leaf packages behind it.
+
+  A project that already declares them sees no change.
+
+### Patch Changes
+
+- [#196](https://github.com/dadajam4/fastkit/pull/196) [`2fcdd66`](https://github.com/dadajam4/fastkit/commit/2fcdd6634e2583235f710074adf1c0cb648a9099) Thanks [@dadajam4](https://github.com/dadajam4)! - Resolve the default color-scheme and media-match sources through `@fastkit/vui`'s exports.
+
+  `getBuiltinsDir()` assembled the path by hand:
+
+  ```ts
+  path.join(pkgDir, 'node_modules/@fastkit/vui/dist/builtins');
+  ```
+
+  That directory only exists when vui happens to be installed _inside_ this package's own directory, which no package manager guarantees. pnpm puts a package's dependencies beside it in the virtual store and leaves no `node_modules` in the package directory at all; npm hoists them to the root. So for anyone who installed this plugin the assembled path was simply absent, and the default `colorScheme` / `mediaMatch` options pointed at nothing — the defaults were usable only from inside this repository, where the workspace link makes the path real.
+
+  The directory is now derived from `require.resolve('@fastkit/vui/builtins/color-scheme.ts')`, which goes through vui's own `exports` map and therefore works under any layout. Passing `colorScheme` / `mediaMatch` explicitly, as a project had to do to work around this, keeps behaving exactly as before.
+
+- [#196](https://github.com/dadajam4/fastkit/pull/196) [`2fcdd66`](https://github.com/dadajam4/fastkit/commit/2fcdd6634e2583235f710074adf1c0cb648a9099) Thanks [@dadajam4](https://github.com/dadajam4)! - Generate the declaration entry as `vui.d.ts` again, not `vui.d.mts`.
+
+  The plugin writes one file whose only content is `/// <reference path>` lines pointing at the generated color-scheme, icon-font and media-match declarations. It exists to be named in a project's `compilerOptions.types`:
+
+  ```json
+  "types": ["./.vui/vui"]
+  ```
+
+  That lookup only considers `.d.ts`. The file was renamed to `vui.d.mts` in 0fb7b9f9 (the tsdown migration, [#161](https://github.com/dadajam4/fastkit/issues/161)), along with the package's own sources, so since then a freshly generated tree has had nothing for that entry to resolve and `tsc` fails with:
+
+  ```
+  error TS2688: Cannot find type definition file for './.vui/vui'.
+  ```
+
+  It went unnoticed because the file left behind by an earlier version keeps satisfying the lookup — including in this repository, where deleting `.vui` and regenerating it is what surfaced this. Any project that generated its tree after upgrading past that release, or cleaned the directory, would have hit it: without the entry the `declare module` augmentations are never loaded, so this is also the difference between typed icon names and the placeholder union.
+
+  `vui.d.mts` is no longer written. Nothing could have referenced it through `types`; a project that pointed at it some other way should use `./.vui/vui`.
+
+- [#199](https://github.com/dadajam4/fastkit/pull/199) [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838) Thanks [@dadajam4](https://github.com/dadajam4)! - Generate `.vui/installer.ts` with relative imports instead of absolute paths.
+
+  Two of its three generated imports carried the absolute path of the machine that ran the build:
+
+  ```ts
+  import { colorScheme } from '/Users/someone/work/app/.vui/color-scheme/color-scheme.info';
+  import '/Users/someone/work/app/.vui/media-match/media-match';
+  import './icon-font';
+  ```
+
+  All three files are written into the same directory as `installer.ts`, so all three can be relative — the third already was. Committing `.vui/` therefore produced a file that resolved nowhere on any other checkout, the emitted output differed between a developer's machine and CI, and on Windows the specifier came out with backslashes.
+
+  `ViteVuiPluginResult.settings` still reports absolute paths: those are for programmatic use, not for embedding in generated code.
+
+- Updated dependencies [[`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838)]:
+  - @fastkit/vite-kit@1.4.0
+  - @fastkit/tiny-logger@0.16.3
+
 ## 3.5.1
 
 ### Patch Changes

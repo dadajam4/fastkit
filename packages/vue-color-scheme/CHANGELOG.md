@@ -1,5 +1,29 @@
 # @fastkit/vue-color-scheme
 
+## 0.19.0
+
+### Minor Changes
+
+- [#196](https://github.com/dadajam4/fastkit/pull/196) [`2fcdd66`](https://github.com/dadajam4/fastkit/commit/2fcdd6634e2583235f710074adf1c0cb648a9099) Thanks [@dadajam4](https://github.com/dadajam4)! - Declare `@fastkit/color-scheme` as a peer dependency instead of a dependency.
+
+  This package re-exposes `ThemeName`, `PaletteName`, `ScopeName` and `ColorVariant` in its published types, and a project's generated color-scheme info augments `@fastkit/color-scheme` to replace those placeholders with its real scheme. A module augmentation only applies to the copy it resolves, so the project and this package have to resolve the same one; as a `dependency` a version skew silently produced two copies and the customized types were lost.
+
+  The README already told you to install `@fastkit/color-scheme` alongside this package; the manifest now says the same thing.
+
+- [#199](https://github.com/dadajam4/fastkit/pull/199) [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838) Thanks [@dadajam4](https://github.com/dadajam4)! - Re-export `ThemeSettings`, `PaletteSettings`, `ScopeSettings`, `ColorVariantSettings` and `ColorSchemeInfo` from `@fastkit/color-scheme`.
+
+  Only the derived names (`ThemeName`, `PaletteName`, `ScopeName`, `ColorVariant`) were re-exported, so the four interfaces they are computed from were not reachable through this package — nor through anything built on it.
+
+  That mattered because those interfaces are the augmentation anchors. A project's generated color-scheme definition adds its real theme, palette, scope and variant names to them. TypeScript resolves an augmentation target through a re-export to the interface it aliases, so a kit that re-exports these can be named as the augmentation target itself, and the augmentation still lands on the declarations `@fastkit/color-scheme` owns. Without the re-export, `declare module` against that kit silently creates a _new_ interface, the derived names keep their placeholders, and the consumer sees `TS2322: Type '"primary"' is not assignable to type '"__ScopeName__"'` pointing at code that is fine.
+
+  `ColorSchemeInfo` is included because the generated info file's own types are written against it.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.16.3
+  - @fastkit/vue-utils@0.18.4
+
 ## 0.18.3
 
 ### Patch Changes

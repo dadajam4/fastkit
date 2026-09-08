@@ -1,5 +1,25 @@
 # @fastkit/vite-kit
 
+## 1.4.0
+
+### Minor Changes
+
+- [#199](https://github.com/dadajam4/fastkit/pull/199) [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838) Thanks [@dadajam4](https://github.com/dadajam4)! - Pass `runtimeModule` through to the color-scheme and media-match generators.
+
+  `colorSchemeVitePlugin` and `mediaMatchVitePlugin` now accept `runtimeModule` and forward it. `iconFontVitePlugin` already did, since its options extend `IconFontOptions`.
+
+  The option decides which module the generated code imports from and augments. It defaults to the leaf runtime package, so nothing changes unless you set it.
+
+### Patch Changes
+
+- Updated dependencies [[`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838), [`d224120`](https://github.com/dadajam4/fastkit/commit/d224120639a248468c69d83f2791983cb61c248c), [`cb976bf`](https://github.com/dadajam4/fastkit/commit/cb976bf88268aca5d6101377644ec328e5730c02), [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838), [`a879812`](https://github.com/dadajam4/fastkit/commit/a8798127ed358898d3e7315d54fff9f6d61e5838), [`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795), [`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795), [`cb976bf`](https://github.com/dadajam4/fastkit/commit/cb976bf88268aca5d6101377644ec328e5730c02)]:
+  - @fastkit/color-scheme-gen@1.3.0
+  - @fastkit/helpers@0.17.0
+  - @fastkit/icon-font-gen@0.16.3
+  - @fastkit/media-match-gen@1.3.0
+  - @fastkit/node-util@0.17.0
+  - @fastkit/tiny-logger@0.16.3
+
 ## 1.3.1
 
 ### Patch Changes

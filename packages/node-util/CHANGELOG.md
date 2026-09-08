@@ -1,5 +1,65 @@
 # @fastkit/node-util
 
+## 0.17.0
+
+### Minor Changes
+
+- [#198](https://github.com/dadajam4/fastkit/pull/198) [`cb976bf`](https://github.com/dadajam4/fastkit/commit/cb976bf88268aca5d6101377644ec328e5730c02) Thanks [@dadajam4](https://github.com/dadajam4)! - `HashComparator` can fold extra inputs into its comparison.
+
+  A directory hash of `src` answers "did the sources change". It cannot answer "would this run produce something different", which is also decided by the generator's own version and its effective options — neither of which appears in a directory hash. So output could stay in place across an upgrade that would have produced something else.
+
+  `inputs` covers that:
+
+  ```ts
+  const hash = new HashComparator(src, dest, {
+    inputs: { generator: pkg.version, options },
+  });
+  ```
+
+  Anything passed is serialized with object keys sorted — so the order an options object happened to be built in is not a change — hashed, and stored beside the source hash as `inputsHash`. `hasChanged()` compares both. The source hash itself keeps its exact previous meaning, and a meta file written before this existed has no `inputsHash`, which compares unequal to any inputs and therefore regenerates once.
+
+  Arrays keep their order significant, since `['woff2', 'otf']` and `['otf', 'woff2']` are different requests.
+
+  Omitting `inputs` behaves exactly as before.
+
+### Patch Changes
+
+- [#195](https://github.com/dadajam4/fastkit/pull/195) [`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795) Thanks [@dadajam4](https://github.com/dadajam4)! - Keep the `esbuildRequire` cache directory name within the filename length limit.
+
+  The name was the entry point's **absolute path** with every separator replaced by `_`, collapsing the whole path into one segment. Most filesystems cap a single path segment at 255 bytes (`NAME_MAX`), so a deep enough entry point failed the build outright:
+
+  ```
+  ✘ [ERROR] Failed to create output directory: mkdir
+    .../node_modules/.esbuild-require/_Users_me_projects_app_node_modules_.pnpm_@fastkit+vui@0.19.23_…_dist_builtins_color-scheme.ts:
+    file name too long
+  ```
+
+  Any consumer passing a path from `require.resolve()` reaches this quickly, because Node returns the realpath — under pnpm that means the virtual store directory, peer-dependency hash included. Measured in a real monorepo, the same entry point flattens to 92 bytes as a symlink path under the repository root and 232 as a realpath, so checking the repository out one directory deeper was enough to break it.
+
+  The name is now the entry point's basename plus a 16-character hash of its absolute path: unique per entry point, stable across runs, readable, and at most 77 bytes. Everything outside `[A-Za-z0-9_.-]` in the basename is replaced, so each character is one byte and the bound holds for a non-ASCII path too. This also fixes Windows in passing — only `/` was replaced, so a `C:\…` path kept its separators and its drive colon.
+
+  Cache directories written by earlier versions are left behind under `node_modules/.esbuild-require/`; they are a cache and can be deleted.
+
+- [#195](https://github.com/dadajam4/fastkit/pull/195) [`0c77aba`](https://github.com/dadajam4/fastkit/commit/0c77aba5e0256661de80a6e8c1f49515a73ea795) Thanks [@dadajam4](https://github.com/dadajam4)! - Resolve `esbuild` from this package rather than from the consumer.
+
+  `esbuildRequire()` marks `esbuild` external and writes the resulting CommonJS bundle into the **consumer's** `node_modules/.esbuild-require/`. The bare specifier left in it therefore resolved from the consumer's package at require time, not from `@fastkit/node-util` — so with pnpm's default layout, a consumer that did not declare `esbuild` itself got:
+
+  ```
+  Error: Cannot find module 'esbuild'
+  Require stack:
+  - <pkg>/node_modules/.esbuild-require/<flattened path>/index.js
+  - <root>/node_modules/.pnpm/@fastkit+node-util@…/node_modules/@fastkit/node-util/dist/node-util.mjs
+  ```
+
+  `@fastkit/node-util` already depends on `esbuild`, so the requirement should never have reached the consumer. It also could not be satisfied honestly: the consumer had to pick a version, and any mismatch meant one esbuild produced the bundle while another executed it.
+
+  The specifier is now resolved to the absolute path of the esbuild this package itself uses, so the emitted bundle carries no bare `esbuild` and the two are always the same copy. Resolution happens only when an entry point actually imports esbuild, so nothing changes for one that does not.
+
+  A project that added `esbuild` to a package's `devDependencies` purely to satisfy this — the reporter had to do so in five of them, none of which imports esbuild — can drop it, along with any range pinned to match `@fastkit/node-util`.
+
+- Updated dependencies []:
+  - @fastkit/tiny-logger@0.16.3
+
 ## 0.16.2
 
 ### Patch Changes
