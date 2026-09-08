@@ -159,6 +159,6 @@ export type ExtractQueryTypes<O> = {
   [K in keyof Pick<O, OptionalKeys<O>>]?: InferQueryType<O[K]>;
 };
 
-export type ExtractQueryInputs<Scheme, Types = ExtractQueryTypes<Scheme>> = {
+export type ExtractQueryInputs<Schema, Types = ExtractQueryTypes<Schema>> = {
   [K in keyof Types]?: Types[K] | null;
 };
