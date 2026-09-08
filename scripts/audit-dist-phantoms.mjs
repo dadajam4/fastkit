@@ -1,4 +1,4 @@
-// Consumer-facing phantom dependency audit (dist-based).
+// Consumer-facing phantom dependency audit.
 //
 // Scans every published package's built `dist` for import specifiers that are
 // NOT declared in its own dependencies / peerDependencies / optionalDependencies.
@@ -9,6 +9,17 @@
 // It also detects the inverse leak: an undeclared external package whose types
 // are INLINED into a published `.d.ts` (no import specifier to catch). See the
 // REGION_RE block below.
+//
+// Packages that publish their source as-is instead of a `dist` build (the
+// `@fastkit/*-config` lint configs, `ts-type-utils`, `stylebase`) get a second,
+// source-based pass — see the "source-shipped" section below. Their published
+// files reference modules two ways: real `import`s, and plain STRINGS that the
+// lint runner resolves at load time (`extends`, `plugins`, `customSyntax`, ...).
+// Those strings are invisible to any import scan, and a missing declaration
+// there breaks the consumer just as hard: an undeclared `extends` entry made
+// `@fastkit/stylelint-config` fail to load for every consumer (issue #186)
+// while this repository stayed green, because the same package sits in the root
+// devDependencies here.
 //
 // Severity:
 //   - static runtime import (`import … from` / `require`) -> HARD runtime break
@@ -35,7 +46,7 @@
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pkgsBase = join(ROOT, 'packages');
@@ -102,7 +113,7 @@ const DT = /\.d\.(m|c)?ts$/;
 
 const rows = [];
 let nStatic = 0, nDynamic = 0, nType = 0, nInline = 0, nVia = 0, scanned = 0, publishable = 0;
-const skipped = [], nonDist = [];
+const skipped = [], nonDist = [], configLoadFailures = [];
 
 // What each workspace package *provides* to whoever depends on it: its own
 // `dependencies` (auto-installed with it) plus `peerDependencies` (which the
@@ -148,8 +159,9 @@ for (const name of readdirSync(pkgsBase)) {
   const dist = join(dir, 'dist');
   if (!existsSync(dist)) {
     // Ships from dist but has none -> not built (real problem, warn).
-    // Doesn't ship from dist (config / source-shipped) -> outside this audit.
-    (expectsDist(pkg) ? skipped : nonDist).push(pkg.name);
+    // Doesn't ship from dist -> source-shipped; audited by the second pass.
+    if (expectsDist(pkg)) skipped.push(pkg.name);
+    else nonDist.push({ name: pkg.name, dir, pkg });
     continue;
   }
   scanned += 1;
@@ -231,7 +243,169 @@ for (const name of readdirSync(pkgsBase)) {
   }
 }
 
-console.log('Consumer-facing phantom audit (dist-based)\n');
+// ---------------------------------------------------------------------------
+// Source-shipped packages (no `dist`: the published files ARE the source).
+//
+// Two kinds of reference are checked against the package's own declarations:
+//   - `import` / `require` specifiers, exactly as in the dist pass
+//   - module names given as STRINGS in a config the runner resolves at load
+//     time (`extends`, `plugins`, `customSyntax`, `parser`, `processor`)
+//
+// The strings are read from the loaded module rather than matched in the text,
+// so a name assembled or nested (a stylelint `overrides[].customSyntax`) is
+// still seen. A string is only reported when the package it names is actually
+// present in this workspace's `node_modules` tree: that is what tells a real
+// module reference apart from a plugin-namespaced rule name, and it is exactly
+// the situation that hides the bug here (resolvable via the root, undeclared by
+// the package, missing for the consumer).
+// Cheap gate on the file text: does any module-ref key have a STRING literal
+// value here? Only then is the module loaded. It keeps the load out of
+// plugin-laden configs that reference everything by import (an eslint flat
+// config's `plugins` / `parser` hold imported objects — importing
+// `@fastkit/eslint-config` alone costs ~0.5s, and its specifiers are already
+// covered by the import scan above). A name assembled at runtime rather than
+// written as a literal is therefore not seen; no config here has one.
+const CONFIG_REF_LITERAL =
+  /\b(?:extends|plugins|customSyntax|parser|processors?)\s*:\s*(?:\[\s*)?['"`]/;
+
+const CONFIG_REF_KEYS = new Set([
+  'extends',
+  'plugins',
+  'customSyntax',
+  'parser',
+  'processor',
+  'processors',
+]);
+
+// Collect the module-name strings from a loaded config. Values under a
+// CONFIG_REF_KEY are taken as names (string, or array of strings) and never
+// descended into — an eslint flat config's `plugins` holds the imported plugin
+// OBJECTS, whose rule metadata is large and self-referential.
+function collectConfigRefs(node, out, depth = 0, seen = new Set()) {
+  if (!node || typeof node !== 'object' || depth > 6 || seen.has(node)) return;
+  seen.add(node);
+  if (Array.isArray(node)) {
+    for (const v of node) collectConfigRefs(v, out, depth + 1, seen);
+    return;
+  }
+  for (const [k, v] of Object.entries(node)) {
+    if (CONFIG_REF_KEYS.has(k)) {
+      if (typeof v === 'string') out.add(v);
+      else if (Array.isArray(v)) for (const x of v) if (typeof x === 'string') out.add(x);
+      continue;
+    }
+    // stylelint nests full configs under `overrides`.
+    if (k === 'overrides') collectConfigRefs(v, out, depth + 1, seen);
+  }
+}
+
+// The package's published file set, from `files` (a name, or a directory to walk).
+function publishedFiles(dir, pkg) {
+  const out = [];
+  for (const entry of Array.isArray(pkg.files) ? pkg.files : []) {
+    if (/[*?[\]{}]/.test(entry)) {
+      globbedFiles.add(pkg.name);
+      continue;
+    }
+    const p = join(dir, entry);
+    if (!existsSync(p)) continue;
+    if (statSync(p).isDirectory()) out.push(...walk(p));
+    else out.push(p);
+  }
+  return out;
+}
+
+// Is `name` installed anywhere in the tree above `fromDir`?
+function inNodeModulesTree(fromDir, name) {
+  let d = fromDir;
+  for (;;) {
+    if (existsSync(join(d, 'node_modules', name, 'package.json'))) return true;
+    const up = dirname(d);
+    if (up === d || !d.startsWith(ROOT)) return false;
+    d = up;
+  }
+}
+
+const globbedFiles = new Set();
+const srcRows = [];
+let nSrcStatic = 0, nSrcType = 0, nSrcConfig = 0, nSrcDynamic = 0, nSrcVia = 0;
+
+for (const { name: self, dir, pkg } of nonDist) {
+  const declared = new Set([
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
+    ...Object.keys(pkg.optionalDependencies || {}),
+  ]);
+  const optionalPeers = new Set(
+    Object.entries(pkg.peerDependenciesMeta || {})
+      .filter(([, m]) => m && m.optional)
+      .map(([k]) => k),
+  );
+  const providedVia = new Map();
+  for (const d of [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}).filter((d) => !optionalPeers.has(d)),
+  ]) {
+    for (const x of wsProvides.get(d) || []) if (!providedVia.has(x)) providedVia.set(x, d);
+  }
+
+  const stat = new Map(), dyn = new Map(), typ = new Map(), cfg = new Map(), via = new Map();
+  const add = (bucket, dep, file) => {
+    if (!dep || dep === self || declared.has(dep)) return;
+    if (providedVia.has(dep)) {
+      if (!via.has(dep)) via.set(dep, { by: providedVia.get(dep), files: new Set() });
+      via.get(dep).files.add(file);
+      return;
+    }
+    if (!bucket.has(dep)) bucket.set(dep, new Set());
+    bucket.get(dep).add(file);
+  };
+
+  for (const f of publishedFiles(dir, pkg)) {
+    const rel = relative(dir, f);
+    const isRT = RT.test(f), isDT = DT.test(f);
+    if (!isRT && !isDT) continue;
+    let code;
+    try { code = stripComments(readFileSync(f, 'utf8')); } catch { continue; }
+    const staticSpecs = new Set(), dynSpecs = new Set();
+    for (const re of STATIC_RES) collect(re, code, staticSpecs);
+    collect(DYNAMIC_RE, code, dynSpecs);
+    if (isDT) {
+      for (const spec of [...staticSpecs, ...dynSpecs]) add(typ, toPkg(spec), rel);
+      continue;
+    }
+    for (const spec of staticSpecs) add(stat, toPkg(spec), rel);
+    for (const spec of dynSpecs) add(dyn, toPkg(spec), rel);
+
+    if (!CONFIG_REF_LITERAL.test(code)) continue;
+    let mod;
+    try {
+      mod = await import(pathToFileURL(f).href);
+    } catch (err) {
+      configLoadFailures.push(`${self} (${rel}): ${err.message.split('\n')[0]}`);
+      continue;
+    }
+    const refs = new Set();
+    collectConfigRefs(mod.default ?? mod, refs);
+    for (const spec of refs) {
+      const dep = toPkg(spec);
+      if (!dep || dep === self || declared.has(dep)) continue;
+      // `add` routes a name provided through a declared dep to `via` itself.
+      if (providedVia.has(dep) || inNodeModulesTree(dir, dep)) add(cfg, dep, rel);
+    }
+  }
+
+  if (stat.size || dyn.size || typ.size || cfg.size || via.size) {
+    srcRows.push([self, stat, typ, cfg, dyn, via]);
+    nSrcStatic += stat.size;
+    nSrcType += typ.size;
+    nSrcConfig += cfg.size;
+    nSrcDynamic += dyn.size;
+    nSrcVia += via.size;
+  }
+}
+
+console.log('Consumer-facing phantom audit\n');
 
 if (scanned === 0) {
   console.error('ERROR: no built package `dist` found. Run `pnpm build` first.');
@@ -240,7 +414,7 @@ if (scanned === 0) {
 
 console.log(`Scanned ${scanned} of ${publishable} publishable packages.`);
 if (nonDist.length) {
-  console.log(`  (${nonDist.length} ship without a dist build and are outside this dist-based audit: ${nonDist.join(', ')})`);
+  console.log(`  Plus ${nonDist.length} source-shipped package(s), scanned as published: ${nonDist.map((p) => p.name).join(', ')}`);
 }
 if (skipped.length) {
   console.warn(`WARNING: ${skipped.length} dist-shipping package(s) had no dist (not built?) and were NOT audited: ${skipped.join(', ')}`);
@@ -261,14 +435,42 @@ for (const [name, stat, dyn, typ, inl, via] of rows) {
   for (const [dep, files] of [...dyn].sort()) console.log(`  [dynamic] ${dep}  (${[...files].slice(0, 2).join(', ')})`);
 }
 
-if (nStatic > 0 || nType > 0 || nInline > 0) {
-  if (nStatic > 0 || nType > 0) {
-    console.error('\nFAIL: undeclared static-runtime or type imports remain in published dist.');
+if (nonDist.length) {
+  console.log(`\nSource-shipped packages (${nonDist.length}):`);
+  console.log(`  static runtime (import/require):    ${nSrcStatic}   <- must be 0`);
+  console.log(`  type import (.d.ts):                ${nSrcType}   <- must be 0`);
+  console.log(`  config string reference:            ${nSrcConfig}   <- must be 0`);
+  console.log(`  via declared dep (informational):   ${nSrcVia}`);
+  console.log(`  dynamic import() (informational):   ${nSrcDynamic}`);
+  for (const [name, stat, typ, cfg, dyn, via] of srcRows) {
+    console.log(`\n${name}`);
+    for (const [dep, files] of [...stat].sort()) console.log(`  [static]  ${dep}  (${[...files].slice(0, 2).join(', ')})`);
+    for (const [dep, files] of [...typ].sort()) console.log(`  [type]    ${dep}  (${[...files].slice(0, 2).join(', ')})`);
+    for (const [dep, files] of [...cfg].sort()) console.log(`  [config]  ${dep}  (referenced as a string in ${[...files].slice(0, 2).join(', ')})`);
+    for (const [dep, info] of [...via].sort()) console.log(`  [via]     ${dep}  (provided by ${info.by}; ${[...info.files].slice(0, 1).join('')})`);
+    for (const [dep, files] of [...dyn].sort()) console.log(`  [dynamic] ${dep}  (${[...files].slice(0, 2).join(', ')})`);
+  }
+  if (globbedFiles.size) {
+    console.warn(`\nWARNING: glob pattern in \`files\` — published set only partly scanned: ${[...globbedFiles].join(', ')}`);
+  }
+  if (configLoadFailures.length) {
+    console.warn(`\nWARNING: could not load ${configLoadFailures.length} published module(s); their config strings were NOT checked:`);
+    for (const f of configLoadFailures) console.warn(`  ${f}`);
+  }
+}
+
+if (nStatic > 0 || nType > 0 || nInline > 0 || nSrcStatic > 0 || nSrcType > 0 || nSrcConfig > 0) {
+  if (nStatic > 0 || nType > 0 || nSrcStatic > 0 || nSrcType > 0) {
+    console.error('\nFAIL: undeclared static-runtime or type imports remain in published files.');
     console.error('Declare them in the package (dependencies / peerDependencies), see docs/dependency-management.md.');
   }
   if (nInline > 0) {
     console.error('\nFAIL: an undeclared external package\'s types are INLINED into a published `.d.ts`.');
     console.error('Declare that package (dependencies / peerDependencies) so the bundler emits an `import(\'pkg\')` reference instead of copying its types in. See docs/dependency-management.md ("inlined external types").');
+  }
+  if (nSrcConfig > 0) {
+    console.error('\nFAIL: a source-shipped config names an undeclared package as a STRING (`extends` / `plugins` / `customSyntax` / ...).');
+    console.error('It resolves here through the root, so nothing in this repository fails — the consumer gets a load error. Declare it, or drop the reference. See docs/dependency-management.md.');
   }
   process.exit(1);
 }
