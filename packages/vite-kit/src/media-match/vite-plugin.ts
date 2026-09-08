@@ -9,6 +9,14 @@ import { resolveAdditionalData } from '~/utils';
 export interface MediaMatchVitePluginOptions {
   src: string;
   dest?: string;
+  /**
+   * Module the generated code imports from and augments.
+   *
+   * Defaults to the leaf runtime package. Point it at a module the consuming
+   * project already declares -- one that re-exports that package -- and the
+   * project does not have to declare the leaf itself.
+   */
+  runtimeModule?: string;
   onBooted?: (() => any) | (() => Promise<any>);
   onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
 }
@@ -21,7 +29,7 @@ let runnerExports: UnPromisify<
 export function mediaMatchVitePlugin(
   opts: MediaMatchVitePluginOptions,
 ): Plugin {
-  const { src, onBooted, onBootError } = opts;
+  const { src, runtimeModule, onBooted, onBootError } = opts;
   const rawEntryPoint = path.resolve(src);
   const { dest: _dest } = opts;
 
@@ -44,6 +52,7 @@ export function mediaMatchVitePlugin(
             src: rawEntryPoint,
             dest,
             watch: command === 'serve',
+            runtimeModule,
           });
         }
 

@@ -124,21 +124,12 @@ importers:
 
   apps/docs:
     dependencies:
-      '@fastkit/color-scheme':
-        specifier: workspace:^
-        version: link:../../packages/color-scheme
       '@fastkit/cookies':
         specifier: workspace:^
         version: link:../../packages/cookies
       '@fastkit/helpers':
         specifier: workspace:^
         version: link:../../packages/helpers
-      '@fastkit/icon-font':
-        specifier: workspace:^
-        version: link:../../packages/icon-font
-      '@fastkit/media-match':
-        specifier: workspace:^
-        version: link:../../packages/media-match
       '@fastkit/vite-plugin-vui':
         specifier: workspace:^
         version: link:../../packages/vite-plugin-vui
@@ -215,8 +206,6 @@ importers:
       fs-extra:
         specifier: ^11.4.0
         version: 11.4.0
-
-  apps/docs/dist/server: {}
 
   packages/accept-language:
     dependencies:
@@ -878,18 +867,9 @@ importers:
         specifier: ^11.4.0
         version: 11.4.0
     devDependencies:
-      '@fastkit/color-scheme':
-        specifier: workspace:^
-        version: link:../color-scheme
-      '@fastkit/icon-font':
-        specifier: workspace:^
-        version: link:../icon-font
       '@fastkit/icon-font-gen':
         specifier: workspace:^
         version: link:../icon-font-gen
-      '@fastkit/media-match':
-        specifier: workspace:^
-        version: link:../media-match
       '@fastkit/vue-page':
         specifier: workspace:^
         version: link:../vue-page
@@ -1390,6 +1370,9 @@ importers:
 
   packages/vui:
     dependencies:
+      '@fastkit/color-scheme':
+        specifier: workspace:^
+        version: link:../color-scheme
       '@fastkit/color-scheme-gen':
         specifier: workspace:^
         version: link:../color-scheme-gen
@@ -1399,6 +1382,12 @@ importers:
       '@fastkit/helpers':
         specifier: workspace:^
         version: link:../helpers
+      '@fastkit/icon-font':
+        specifier: workspace:^
+        version: link:../icon-font
+      '@fastkit/media-match':
+        specifier: workspace:^
+        version: link:../media-match
       '@fastkit/media-match-gen':
         specifier: workspace:^
         version: link:../media-match-gen
@@ -1460,15 +1449,6 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
     devDependencies:
-      '@fastkit/color-scheme':
-        specifier: workspace:^
-        version: link:../color-scheme
-      '@fastkit/icon-font':
-        specifier: workspace:^
-        version: link:../icon-font
-      '@fastkit/media-match':
-        specifier: workspace:^
-        version: link:../media-match
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)

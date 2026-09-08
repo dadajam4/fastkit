@@ -14,7 +14,7 @@ pnpm add @fastkit/vite-plugin-vui
 **名前で** import します。
 
 ```bash
-pnpm add @fastkit/vui @fastkit/vue-page @fastkit/icon-font @fastkit/color-scheme @fastkit/media-match vue vue-router
+pnpm add @fastkit/vui @fastkit/vue-page vue vue-router
 ```
 
 これらは**プロジェクトから解決できる**必要があるため、直接インストールしてください。
@@ -22,14 +22,35 @@ pnpm add @fastkit/vui @fastkit/vue-page @fastkit/icon-font @fastkit/color-scheme
 プロジェクトの `node_modules` に置くのは、プロジェクト自身が宣言したものだけで、
 自動インストールされたピアは仮想ストアに入るため生成コードからは見えません。
 
-さらに、アプリの他の部分が使うものと**同じコピー**である必要があります。生成コードは
-`@fastkit/icon-font` / `@fastkit/color-scheme` / `@fastkit/media-match` を拡張して
-プレースホルダ型を実際のアイコン名・カラースコープ・ブレイクポイントに差し替えますが、
-モジュール拡張は解決されたコピーにしか適用されません。
+生成コードがこれ以外のパッケージを名指しすることはありません。プレースホルダ型を実際の
+アイコン名・カラースコープ・ブレイクポイントに差し替えるために拡張するのは `@fastkit/vui`
+自身であり、これはプロジェクトが必ず宣言しているモジュールです。
 
 いずれかが不足している場合、`viteVuiPlugin()` は不足分を列挙して失敗します。この検査が
 ないと原因から遠い症状だけが出ます（ジェネレータも `vite build` も成功し、アイコン名は
 すべてプレースホルダの union に落ちて `tsc` が数百件の `TS2322` を報告する）。
+
+### カラースキームとブレイクポイントのカスタマイズ
+
+値はビルド時に記述するため、ジェネレータはアプリに同梱されるものではなく
+`devDependencies` に入ります。
+
+```bash
+pnpm add -D @fastkit/color-scheme-gen @fastkit/media-match-gen @fastkit/icon-font-gen
+```
+
+`@fastkit/color-scheme-gen` はカラースキーム記述用の API（`createColorScheme`、
+`createSimpleColorScheme`、ソース型）をすべて再エクスポートしているため、完全な独自スキーム
+でもこれ以外は不要です。定義したテーマ、パレット、スコープ、バリアントは、
+`@fastkit/vui` からエクスポートされる `ThemeName` / `PaletteName` / `ScopeName` /
+`ColorVariant` にそのまま現れます。
+
+### 生成ディレクトリについて
+
+`.vui/` は生成物です。編集しないでください。また、削除する必要もありません。`.vui/.manifest.json` に生成したバージョンが記録されており、変化があればディレクトリを空にして作り直します。関係する `@fastkit/*` パッケージのアップグレードはこれで吸収され、生成されなくなった出力（削除したアイコンフォントのエントリなど）も取り除かれます。
+
+コミットするかどうかは任意です。コミットする場合、内部の import は相対パスなのでどのチェックアウトでも解決できます。
+
 
 ## ドキュメント
 https://dadajam4.github.io/fastkit/vite-plugin-vui/

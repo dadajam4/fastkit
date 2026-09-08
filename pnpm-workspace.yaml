@@ -1,6 +1,11 @@
 packages:
   - 'packages/**'
   - 'apps/**'
+  # `apps/**` otherwise matches build output: `vot generate` writes
+  # `apps/docs/dist/server/package.json`, which pnpm then treats as a workspace
+  # project and records in the lockfile -- present or absent depending on whether
+  # anyone had built before installing.
+  - '!apps/**/dist/**'
 
 allowBuilds:
   '@parcel/watcher': true

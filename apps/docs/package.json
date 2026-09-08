@@ -18,11 +18,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@fastkit/color-scheme": "workspace:^",
     "@fastkit/cookies": "workspace:^",
     "@fastkit/helpers": "workspace:^",
-    "@fastkit/icon-font": "workspace:^",
-    "@fastkit/media-match": "workspace:^",
     "@fastkit/vite-plugin-vui": "workspace:^",
     "@fastkit/vot": "workspace:^",
     "@fastkit/vot-i18n": "workspace:^",

@@ -187,6 +187,34 @@ export default defineConfig({
 })
 ```
 
+### Pointing the generated code at another module
+
+The generated info file imports `ColorSchemeInfo` from `@fastkit/color-scheme` and
+augments that module's `ThemeSettings` / `PaletteSettings` / `ScopeSettings` /
+`ColorVariantSettings` with your real names. Because the file lands in the *consuming*
+project, that specifier is resolved from there — so the project has to declare
+`@fastkit/color-scheme` itself. A peer declaration cannot do it for them: pnpm places
+into a project's `node_modules` only what the project declares.
+
+`runtimeModule` moves that requirement onto a module the project already has:
+
+```typescript
+const runner = new LoadColorSchemeRunner({
+  entry: './src/theme/color-scheme.ts',
+  dest: './src/theme/generated',
+  runtimeModule: '@acme/ui', // re-exports @fastkit/color-scheme
+})
+```
+
+The module named here must re-export the four `*Settings` interfaces and
+`ColorSchemeInfo`. Module augmentation follows a re-export to the interface it aliases,
+so the settings still merge into the ones `@fastkit/color-scheme` declares and
+`ThemeName` and friends agree everywhere. `@fastkit/vite-plugin-vui` uses this to point
+at `@fastkit/vui`.
+
+Leave it unset and the generated code names `@fastkit/color-scheme`, as before.
+
+
 ## Generated Files
 
 ### JSON Output Example

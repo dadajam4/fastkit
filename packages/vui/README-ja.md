@@ -28,15 +28,18 @@ pnpm add @fastkit/vui
 ### ピア依存関係
 
 ```bash
-pnpm add @fastkit/icon-font @fastkit/color-scheme @fastkit/media-match vue vue-router
+pnpm add vue vue-router
 ```
 
-`@fastkit/vui` は `@fastkit/icon-font` / `@fastkit/color-scheme` / `@fastkit/media-match`
-の型（アイコン名、カラースコープ、メディアマッチのキー）を自身の公開型に露出しており、
-プロジェクト向けに生成されるコードはそれらのモジュールを拡張してプレースホルダ型を実際の
-値に差し替えます。モジュール拡張は解決されたコピーにしか適用されないため、プロジェクト側が
-`@fastkit/vui` と同じコピーを解決する必要があります。直接インストールすることがその保証に
-なります（推移的なインストールでは不十分です）。
+`@fastkit/vui` はアイコン名、カラースコープ、メディアマッチのキーを自身の公開型に露出して
+います。プロジェクト向けに生成されるコード（`@fastkit/vite-plugin-vui` を参照）は
+`@fastkit/vui` 自身を拡張して、それらのプレースホルダ型を実際の値に差し替えます。型の出自と
+なるパッケージ（`@fastkit/icon-font` / `@fastkit/color-scheme` / `@fastkit/media-match`）は
+`@fastkit/vui` の依存関係なので、プロジェクト側で宣言する必要はありません。
+
+`@fastkit/color-scheme` や `@fastkit/media-match` を宣言するのは、自分のコードから直接
+import する場合だけです。`@fastkit/vui` を経由せず `@fastkit/vue-color-scheme` や
+`@fastkit/vue-media-match` を直接使う場合は、従来どおりそれぞれのピアが必要です。
 
 ## 基本的な使い方
 

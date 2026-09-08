@@ -186,6 +186,35 @@ export default defineConfig({
 })
 ```
 
+### 生成コードの参照先を変える
+
+生成される info ファイルは `@fastkit/color-scheme` から `ColorSchemeInfo` を import し、
+同モジュールの `ThemeSettings` / `PaletteSettings` / `ScopeSettings` /
+`ColorVariantSettings` を実際の名前で拡張します。このファイルは**消費者側**の
+プロジェクトに置かれるため、その指定子はプロジェクトから解決されます。つまり
+プロジェクト自身が `@fastkit/color-scheme` を宣言する必要があります。ピア依存の宣言では
+代替できません。pnpm がプロジェクトの `node_modules` に置くのは、プロジェクトが自分で
+宣言したものだけです。
+
+`runtimeModule` は、この要件をプロジェクトが既に持っているモジュールへ移します。
+
+```typescript
+const runner = new LoadColorSchemeRunner({
+  entry: './src/theme/color-scheme.ts',
+  dest: './src/theme/generated',
+  runtimeModule: '@acme/ui', // @fastkit/color-scheme を再エクスポートしている
+})
+```
+
+ここで指定するモジュールは、4つの `*Settings` インターフェースと `ColorSchemeInfo` を
+再エクスポートしている必要があります。モジュール拡張は再エクスポートの別名をたどって元の
+インターフェースにマージされるため、設定は `@fastkit/color-scheme` が宣言したものに
+統合され、`ThemeName` などもすべて一致します。`@fastkit/vite-plugin-vui` はこれを使って
+`@fastkit/vui` を指しています。
+
+未指定の場合は従来どおり `@fastkit/color-scheme` を名指しします。
+
+
 ## 生成されるファイル
 
 ### JSON出力例

@@ -66,13 +66,20 @@
   "dependencies": {
     "@fastkit/ev": "workspace:^",
     "@fastkit/helpers": "workspace:^",
-    "@fastkit/icon-font": "workspace:^",
     "@fastkit/node-util": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
     "cac": "^7.0.0",
     "chokidar": "^5.0.0",
     "fs-extra": "^11.4.0",
     "webfont": "^12.5.0"
+  },
+  "peerDependencies": {
+    "@fastkit/icon-font": "workspace:^"
+  },
+  "peerDependenciesMeta": {
+    "@fastkit/icon-font": {
+      "optional": true
+    }
   },
   "buildOptions": {
     "name": "IconFont"

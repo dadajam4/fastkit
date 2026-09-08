@@ -12,6 +12,11 @@ export type {
   PaletteName,
   ScopeName,
   ColorVariant,
+  ThemeSettings,
+  PaletteSettings,
+  ScopeSettings,
+  ColorVariantSettings,
+  ColorSchemeInfo,
 } from '@fastkit/color-scheme';
 
 export type PropKey = string | null | false | undefined;

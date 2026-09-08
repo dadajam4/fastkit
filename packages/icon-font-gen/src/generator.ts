@@ -15,6 +15,7 @@ import {
   ICON_FONT_FORMATS,
   IconFontFormat,
   ICON_FONT_FORMAT_MAP,
+  DEFAULT_ICON_FONT_RUNTIME_MODULE,
 } from './schema';
 
 export type IconFontEntryResult = {
@@ -44,14 +45,18 @@ export function mergeDefaults(entry: IconFontEntry): IconFontEntry {
   };
 }
 
-async function generateTS(entry: IconFontEntry, ids: string[]) {
+async function generateTS(
+  entry: IconFontEntry,
+  ids: string[],
+  runtimeModule: string,
+) {
   const code = `
 /* eslint-disable */
 // @ts-nocheck
 ${BANNER}
-import type { IconName, IconNameMap } from '@fastkit/icon-font';
-import { registerIconNames } from '@fastkit/icon-font';
-declare module "@fastkit/icon-font" {
+import type { IconName, IconNameMap } from '${runtimeModule}';
+import { registerIconNames } from '${runtimeModule}';
+declare module "${runtimeModule}" {
   export interface IconNameMap {
 ${ids.map((id) => `    '${id}': true,`).join('\n')}
   }
@@ -59,7 +64,7 @@ ${ids.map((id) => `    '${id}': true,`).join('\n')}
 export const ICON_NAMES = registerIconNames([
   ${ids.map((id) => `'${id}'`).join(',\n  ')}
 ]);
-export type { IconName, IconNameMap } from '@fastkit/icon-font';
+export type { IconName, IconNameMap } from '${runtimeModule}';
   `.trim();
   const fileName = `${entry.name || 'icons'}.ts`;
   const dest = path.resolve(entry.dest, fileName);
@@ -85,13 +90,17 @@ export type { IconName, IconNameMap } from '@fastkit/icon-font';
  * compare against anyway, and keeping absolute paths out of the fingerprint
  * keeps the meta file portable between machines and CI.
  */
-export function toHashInputs(options: IconFontEntry) {
+export function toHashInputs(
+  options: IconFontEntry,
+  runtimeModule: string = DEFAULT_ICON_FONT_RUNTIME_MODULE,
+) {
   const { src, dest, ...rest } = options;
-  return { generator: pkg.version, options: rest };
+  return { generator: pkg.version, runtimeModule, options: rest };
 }
 
 export async function generateEntry(
   entry: IconFontEntry,
+  runtimeModule: string = DEFAULT_ICON_FONT_RUNTIME_MODULE,
 ): Promise<IconFontEntryResult> {
   const options = mergeDefaults(entry);
 
@@ -100,7 +109,7 @@ export async function generateEntry(
   const cssPrefix = `icon-${options.prefix}`;
 
   const hash = new HashComparator(options.src, options.dest, {
-    inputs: toHashInputs(options),
+    inputs: toHashInputs(options, runtimeModule),
   });
   const srcHash = await hash.hasChanged();
   if (!srcHash) {
@@ -208,7 +217,7 @@ ${glyphs
 
   // const prefix = options.prefix ? `${options.prefix}-` : '';
   const ids = glyphs.map(({ name }) => `${options.prefix}${name}`);
-  await generateTS(options, ids);
+  await generateTS(options, ids, runtimeModule);
   await hash.commit(srcHash);
   return {
     entry,
@@ -216,7 +225,11 @@ ${glyphs
   };
 }
 
-export async function generateIndex(dest: string, entries: IconFontEntry[]) {
+export async function generateIndex(
+  dest: string,
+  entries: IconFontEntry[],
+  runtimeModule: string = DEFAULT_ICON_FONT_RUNTIME_MODULE,
+) {
   const names = entries.map(({ name }) => name);
   const tsCode = `
 /* eslint-disable */
@@ -230,8 +243,8 @@ ${names
       `import './${name}/${name}';`,
   )
   .join('\n')}
-export type { IconName } from '@fastkit/icon-font';
-export { ICON_NAMES } from '@fastkit/icon-font';
+export type { IconName } from '${runtimeModule}';
+export { ICON_NAMES } from '${runtimeModule}';
   `.trim();
   const tsDest = path.join(dest, 'index.ts');
   await fs.writeFile(tsDest, tsCode);
@@ -246,16 +259,17 @@ ${names.map((name) => `@import './${name}/${name}.css';`).join('\n')}
 }
 
 export async function generate(opts: IconFontOptions) {
+  const runtimeModule = opts.runtimeModule ?? DEFAULT_ICON_FONT_RUNTIME_MODULE;
   await fs.emptyDir(opts.dest);
   const results = await Promise.all(
     opts.entries.map((entry) =>
       resolveRawIconFontEntry(opts.dest, entry).then((_entry) =>
-        generateEntry(_entry),
+        generateEntry(_entry, runtimeModule),
       ),
     ),
   );
   const entries = results.map(({ entry }) => entry);
-  await generateIndex(opts.dest, entries);
+  await generateIndex(opts.dest, entries, runtimeModule);
 }
 
 export class IconFontRunnerItem extends EV<{
@@ -305,7 +319,7 @@ export class IconFontRunnerItem extends EV<{
 
   async build() {
     const entry = await this.resolveEntry();
-    const result = await generateEntry(entry);
+    const result = await generateEntry(entry, this.ctx.runtimeModule);
     this.emit('build', result);
     return { entry };
   }
@@ -332,10 +346,14 @@ export class IconFontRunner extends EV<{
 
   readonly dest: string;
 
+  /** @see {@link IconFontOptions.runtimeModule} */
+  readonly runtimeModule: string;
+
   constructor(opts: IconFontOptions, watch?: boolean) {
     super();
 
     this.dest = opts.dest;
+    this.runtimeModule = opts.runtimeModule ?? DEFAULT_ICON_FONT_RUNTIME_MODULE;
 
     opts.entries.forEach((entry) => {
       const item = new IconFontRunnerItem(this, entry, watch);
@@ -350,7 +368,7 @@ export class IconFontRunner extends EV<{
     const entries = await Promise.all(
       this.items.map((item) => item.resolveEntry()),
     );
-    return generateIndex(this.dest, entries);
+    return generateIndex(this.dest, entries, this.runtimeModule);
   }
 
   async run() {
