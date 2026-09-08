@@ -6,6 +6,7 @@ import { HashComparator } from '@fastkit/node-util';
 import { UnPromisify } from '@fastkit/helpers';
 import type webfont from 'webfont';
 import { logger } from './logger';
+import pkg from '../package.json';
 import {
   IconFontOptions,
   IconFontEntry,
@@ -70,6 +71,25 @@ export type { IconName, IconNameMap } from '@fastkit/icon-font';
   };
 }
 
+/**
+ * What the generated output depends on besides the contents of `src`.
+ *
+ * The source files are hashed separately; this covers the rest, so that an
+ * upgrade of this package — or a change to an option — regenerates instead of
+ * leaving the previous output in place. Without it a project whose icons had not
+ * changed kept output from an older generator indefinitely, and the only way out
+ * was to delete the destination by hand.
+ *
+ * `src` and `dest` are left out on purpose. `src` is already covered by its own
+ * content hash, `dest` holds the meta file so a change to it has nothing to
+ * compare against anyway, and keeping absolute paths out of the fingerprint
+ * keeps the meta file portable between machines and CI.
+ */
+export function toHashInputs(options: IconFontEntry) {
+  const { src, dest, ...rest } = options;
+  return { generator: pkg.version, options: rest };
+}
+
 export async function generateEntry(
   entry: IconFontEntry,
 ): Promise<IconFontEntryResult> {
@@ -79,7 +99,9 @@ export async function generateEntry(
   // const namePrefix = options.name;
   const cssPrefix = `icon-${options.prefix}`;
 
-  const hash = new HashComparator(options.src, options.dest);
+  const hash = new HashComparator(options.src, options.dest, {
+    inputs: toHashInputs(options),
+  });
   const srcHash = await hash.hasChanged();
   if (!srcHash) {
     logger.info(`Has not changed files. Skip process. >>> ${options.src}`);
