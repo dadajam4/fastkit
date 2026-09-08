@@ -1,6 +1,6 @@
 /* eslint-disable */
 // @ts-nocheck
-import { ColorSchemeInfo } from '@fastkit/color-scheme';
+import { ColorSchemeInfo } from '<%~ it.runtimeModule %>';
 
 export interface ThemeSettings {
 <% it.scheme.themeNames.forEach((name) => { %>
@@ -31,7 +31,7 @@ export type PaletteName = keyof PaletteSettings;
 export type ScopeName = keyof ScopeSettings;
 export type ColorVariant = keyof ColorVariantSettings;
 
-declare module '@fastkit/color-scheme' {
+declare module '<%~ it.runtimeModule %>' {
   export interface ThemeSettings {
   <% it.scheme.themeNames.forEach((name) => { %>
     <%~ name %>: true;

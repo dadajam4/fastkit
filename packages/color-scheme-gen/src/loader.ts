@@ -28,10 +28,38 @@ export type ColorSchemeLoaderResult = {
   };
 };
 
+/**
+ * Module the generated color-scheme info imports its types from, and augments
+ * with the scheme's theme / palette / scope / variant names.
+ *
+ * @see {@link LoadColorSchemeRunnerOptions.runtimeModule}
+ */
+export const DEFAULT_COLOR_SCHEME_RUNTIME_MODULE = '@fastkit/color-scheme';
+
 export interface LoadColorSchemeRunnerOptions {
   entry: string;
   dest: string;
   watch?: boolean;
+  /**
+   * Module the generated info file imports `ColorSchemeInfo` from, and whose
+   * `ThemeSettings` / `PaletteSettings` / `ScopeSettings` /
+   * `ColorVariantSettings` it augments with the scheme's real names.
+   *
+   * The generated files live in the *consuming* project, so this specifier is
+   * resolved from there -- and pnpm places into a project's `node_modules` only
+   * what the project itself declares, not what a peer declaration asks for. So
+   * whatever this names becomes a package the project has to declare.
+   *
+   * Point it at a module the project already declares and that re-exports the
+   * four `*Settings` interfaces and `ColorSchemeInfo` -- a UI kit built on
+   * `@fastkit/color-scheme`, say -- and the project needs nothing beyond that
+   * kit. Module augmentation follows a re-export to the interface it aliases,
+   * so the settings still merge into the ones `@fastkit/color-scheme` declares,
+   * and `ThemeName` and friends agree everywhere.
+   *
+   * @default '@fastkit/color-scheme'
+   */
+  runtimeModule?: string;
 }
 
 export interface LoadColorSchemeRunnerLoadResult {
@@ -51,11 +79,16 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
 
   readonly dest: string;
 
+  /** @see {@link LoadColorSchemeRunnerOptions.runtimeModule} */
+  readonly runtimeModule: string;
+
   constructor(opts: LoadColorSchemeRunnerOptions) {
     super();
 
     this.resolver = this.resolver.bind(this);
     this.dest = opts.dest;
+    this.runtimeModule =
+      opts.runtimeModule ?? DEFAULT_COLOR_SCHEME_RUNTIME_MODULE;
 
     this.runner = new ESbuildRunner({
       entry: opts.entry,
@@ -75,7 +108,7 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
     const { entryPoint, exports } = result;
     const { name: entryName } = path.parse(entryPoint);
     const scheme = exports.default;
-    const { dest } = this;
+    const { dest, runtimeModule } = this;
     const json = scheme.toJSON();
     const scssValues = toScssValues(scheme);
     const templateScope: TemplateScope = {
@@ -141,7 +174,9 @@ export class LoadColorSchemeRunner extends EV<LoadColorSchemeRunnerEventMap> {
     async function generateInfoCache() {
       const fileName = `${entryName}.info.ts`;
       const cachePath = path.join(dest, fileName);
-      const content = await renderTemplate('info', templateScope);
+      const content = await renderTemplate('info', templateScope, {
+        runtimeModule,
+      });
       await fs.writeFile(cachePath, content);
       return {
         content,
@@ -197,9 +232,18 @@ async function getVariantTemplate(name: BuiltinColorVariant) {
   return fs.readFile(filePath, 'utf-8');
 }
 
-async function renderTemplate(name: TemplateName, scope: TemplateScope) {
+/**
+ * `data` is merged over the scope so a template can read values that are not
+ * part of `TemplateScope` -- that interface belongs to `@fastkit/color-scheme`
+ * and describes the SCSS rendering helpers, not this package's options.
+ */
+async function renderTemplate(
+  name: TemplateName,
+  scope: TemplateScope,
+  data?: Record<string, unknown>,
+) {
   const tmpl = await getTemplate(name);
   const eta = new Eta();
-  const result = await eta.renderStringAsync(tmpl, scope);
+  const result = await eta.renderStringAsync(tmpl, { ...scope, ...data });
   return result || '';
 }
