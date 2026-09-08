@@ -5,7 +5,7 @@ import {
   ColorInfo,
   RawMixOptions,
   MixOptions,
-} from './schemes';
+} from './schema';
 import { w3cx11 } from './colors/w3cx11';
 import { ColorError } from './error';
 

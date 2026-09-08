@@ -27,7 +27,7 @@ export default defineComponent({
           <VTSDocsAnyMeta value={meta.types.LoggerMeta} />
         </VDocsSection>
 
-        <VDocsSection title="Schemes">
+        <VDocsSection title="Schemas">
           <VTSDocsAnyMeta value={meta.types.LogLevelMeta} />
           <VTSDocsAnyMeta value={meta.types.LogLevelThresholdMeta} />
           <VTSDocsAnyMeta value={meta.types.LoggerOptionsMeta} />

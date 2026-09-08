@@ -1,5 +1,5 @@
 import { IN_WINDOW } from '@fastkit/helpers';
-import { KeyType, Key } from './schemes';
+import { KeyType, Key } from './schema';
 
 export type KBEventName = 'keydown' | 'keypress' | 'keyup';
 

@@ -9,7 +9,7 @@ import {
   CookiesBucket,
   SerializeOptions,
   CookiesEventMap,
-} from './schemes';
+} from './schema';
 import {
   isCookiesBrowserContext,
   isIncomingMessage,

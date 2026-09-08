@@ -3,11 +3,11 @@ import path from 'node:path';
 import { resolveConfig, ResolvedConfig, Plugin } from 'vite';
 import type { RouteRecord } from 'vue-router';
 import { VotPluginOptions } from '../vot';
-import type { VotExtractedPage } from '../schemes/page';
+import type { VotExtractedPage } from '../schema/page';
 import {
   resolveRawVotGenerateOptions,
   VotGenerateOptions,
-} from '../schemes/generate';
+} from '../schema/generate';
 
 export const INDEX_HTML = 'index.html';
 

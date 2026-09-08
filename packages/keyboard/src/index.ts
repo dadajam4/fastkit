@@ -1,2 +1,2 @@
-export * from './schemes';
+export * from './schema';
 export * from './event';

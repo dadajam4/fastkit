@@ -4,7 +4,7 @@ import {
   VStackAction,
   VStackActionProps,
   VStackActionControl,
-} from '../schemes';
+} from '../schema';
 
 export interface UseStackActionOptions {
   resolver?: (actions: VStackAction[]) => VStackAction[];

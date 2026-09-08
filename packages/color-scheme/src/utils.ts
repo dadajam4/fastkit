@@ -1,5 +1,5 @@
-import { Bucket } from './schemes/bucket';
-import { ColorScopeOptionalKey, ColorScopeResolvers } from './schemes';
+import { Bucket } from './schema/bucket';
+import { ColorScopeOptionalKey, ColorScopeResolvers } from './schema';
 import { ColorSchemeError } from './logger';
 
 export function createBucket<RN, T, G, C, J, I extends Bucket<RN, T, G, C, J>>(

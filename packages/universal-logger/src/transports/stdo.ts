@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { consoleColorString } from '@fastkit/tiny-logger';
 import { safeJSONStringify } from '@fastkit/json';
-import { Transport, DEFAULT_COLOR_LEVEL_MAP } from '../schemes';
+import { Transport, DEFAULT_COLOR_LEVEL_MAP } from '../schema';
 import { CloneTransformer, CloneOptions } from '../transformers/clone';
 
 /**

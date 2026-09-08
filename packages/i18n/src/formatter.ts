@@ -10,7 +10,7 @@ import {
   I18nNumberFormatArg,
   I18nNormalizedFormats,
   I18nListFormatArg,
-} from './schemes';
+} from './schema';
 
 import type { I18nComponentSchema } from './component-schema';
 import type { I18nComponentLocale } from './component-locale';

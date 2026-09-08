@@ -1,5 +1,5 @@
 import type { Plugin } from 'esbuild';
-import { ExternalPluginOptions } from './schemes';
+import { ExternalPluginOptions } from './schema';
 
 // Must not start with "/" or "./" or "../" or "C:\" or be the exact strings ".." or "."
 const NON_NODE_MODULE_RE = /^[A-Z]:[\\/]|^\.{0,2}[/]|^\.{1,2}$/;

@@ -1,6 +1,6 @@
 import { defineComponent, PropType } from 'vue';
 import { defineSlots } from '@fastkit/vui';
-import { PackageInfo } from '../../schemes';
+import { PackageInfo } from '../../schema';
 import { PackageProvide } from '../../package-provide';
 
 const slots = defineSlots<{

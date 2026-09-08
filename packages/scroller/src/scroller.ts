@@ -34,7 +34,7 @@ import {
   ScrollToElementOptions,
 } from './scroll';
 
-import { defaultBaseSettings } from './scroll/schemes';
+import { defaultBaseSettings } from './scroll/schema';
 
 export * from './prevent-scroll';
 

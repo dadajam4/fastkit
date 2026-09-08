@@ -12,7 +12,7 @@ import {
   CONTROL_SIZES,
   ControlFieldVariant,
   CONTROL_FIELD_VARIANTS,
-} from '../schemes';
+} from '../schema';
 import {
   VuiControlInjectionKey,
   VuiControlFieldInjectionKey,

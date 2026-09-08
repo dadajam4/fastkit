@@ -8,7 +8,7 @@ import {
   ColorPaletteItem,
   ColorPaletteContext,
   ColorPaletteBucket,
-} from './schemes';
+} from './schema';
 
 export function createPaletteItem<
   TN extends string = string,

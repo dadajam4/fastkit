@@ -41,7 +41,7 @@ import {
   StackableTabCloseSetting,
   type VStackActivatorAttrsSpec,
   type VStackActivatorAttrsObject,
-} from '../schemes';
+} from '../schema';
 import { useVueStack } from './service';
 import { useTeleport } from './teleport';
 import { V_STACK_ACTIVATED_ATTR, V_STACK_TYPE_ATTR } from '../constants';

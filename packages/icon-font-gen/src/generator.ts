@@ -14,7 +14,7 @@ import {
   ICON_FONT_FORMATS,
   IconFontFormat,
   ICON_FONT_FORMAT_MAP,
-} from './schemes';
+} from './schema';
 
 export type IconFontEntryResult = {
   entry: IconFontEntry;

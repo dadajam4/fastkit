@@ -8,7 +8,7 @@ import {
   I18nDependencies,
   I18nInstantiatedDependencies,
   I18nSpaceFallbackLocale,
-} from './schemes';
+} from './schema';
 import { I18nLocaleSource, I18nLocale, I18nLocales } from './locale';
 import {
   I18nComponentSchema,

@@ -13,7 +13,7 @@ import {
 import { i18n } from '@@/i18n';
 import { inNonNullable } from '@fastkit/helpers';
 import { PackageExploerI18nSpace, FilterInfo } from './i18n';
-import { PackageInfo } from '../../schemes';
+import { PackageInfo } from '../../schema';
 
 const DEFAULT_SCOPE = 'anywhere';
 

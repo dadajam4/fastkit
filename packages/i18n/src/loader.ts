@@ -7,7 +7,7 @@ import {
   I18nListFormats,
   I18nDependencies,
   resolveI18nTypedImported,
-} from './schemes';
+} from './schema';
 import { I18nComponentLocaleOrLoader, I18nComponentLocales } from './component';
 import { I18nComponentLocale } from './component-locale';
 

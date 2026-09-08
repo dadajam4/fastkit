@@ -1,3 +1,3 @@
-export * from './schemes';
+export * from './schema';
 export * from './resolvers';
 export * from './catcher';

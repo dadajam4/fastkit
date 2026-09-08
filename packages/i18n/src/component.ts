@@ -9,7 +9,7 @@ import {
   I18nDependencies,
   I18nInstantiatedDependencies,
   I18nTypedImported,
-} from './schemes';
+} from './schema';
 import {
   I18nComponentSchema,
   I18nComponentSchemaImpl,

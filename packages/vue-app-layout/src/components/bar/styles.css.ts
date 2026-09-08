@@ -7,7 +7,7 @@ import {
   VueAppLayoutPositionY,
   VAL_X_POSITIONS,
   VueAppLayoutBarType,
-} from '../../schemes';
+} from '../../schema';
 import { booting } from '../../composables/booting.css';
 
 interface PositionContext {

@@ -3,7 +3,7 @@ import {
   ValidationError,
   isValidateCancelSymbol,
   VALIDATION_ERROR_SYMBOL,
-} from '../schemes';
+} from '../schema';
 import { Rule, RuleValidationOptions } from '../factories';
 import { FN_RULE_DEFAULT_NAME, RULE_DEFAULT_MESSAGE } from '../constants';
 

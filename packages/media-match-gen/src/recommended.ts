@@ -1,4 +1,4 @@
-import { createMediaMatchSettings } from './schemes';
+import { createMediaMatchSettings } from './schema';
 
 export interface RecommendedSettingsOptions {
   sm?: number;

@@ -22,7 +22,7 @@ import {
   TextInputMode,
   IMaskTypedValue,
   IMaskEvent,
-} from '../schemes';
+} from '../schema';
 import { createMaskControlProps, IMaskInstance } from './imask';
 import {
   useIMaskControl,

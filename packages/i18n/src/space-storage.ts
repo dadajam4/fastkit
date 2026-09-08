@@ -1,6 +1,6 @@
 import { I18nSpace } from './space';
 import { I18nComponentStatic, I18nComponent } from './component';
-import { I18nLocaleMeta } from './schemes';
+import { I18nLocaleMeta } from './schema';
 import { I18nStorage, I18nStorageOrFactory } from './storage';
 
 /**

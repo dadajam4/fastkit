@@ -28,7 +28,7 @@ import {
   MergeStackBaseSlots,
   StackableTabCloseSpec,
   VStackControl,
-} from '../schemes';
+} from '../schema';
 import {
   DefineStackableSettings,
   setupStackableComponent,

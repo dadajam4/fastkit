@@ -11,7 +11,7 @@ import {
 import path from 'node:path';
 import fs from 'fs-extra';
 import { FileCacheStorage } from '../file';
-import { CacheDetails } from '../../schemes';
+import { CacheDetails } from '../../schema';
 
 /**
  * Expiry is driven by a `setTimeout` scheduled in `set()`. Only those APIs are

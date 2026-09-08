@@ -2,7 +2,7 @@
  * @file Resolver to resolve Fetch API Exceptions
  */
 
-import { createCatcherResolver } from '../schemes';
+import { createCatcherResolver } from '../schema';
 
 /**
  * JSON serializable Fetch Response

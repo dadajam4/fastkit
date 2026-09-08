@@ -6,7 +6,7 @@ import {
   AsyncHandlerRequestResolver,
   AsyncHandlerRequestState,
   AsyncFn,
-} from './schemes';
+} from './schema';
 
 /**
  * Asynchronous processing request.

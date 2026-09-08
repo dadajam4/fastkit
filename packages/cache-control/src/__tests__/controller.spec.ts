@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Duration } from '@fastkit/duration';
 import { CacheController } from '../controller';
 import { MemoryCacheStorage } from '../storages';
-import { CacheStorage } from '../schemes';
+import { CacheStorage } from '../schema';
 
 /**
  * Expiry is decided by comparing `expiredAt` against the current time, and the

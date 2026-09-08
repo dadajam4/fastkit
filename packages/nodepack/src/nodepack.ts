@@ -5,7 +5,7 @@ import nodemon, { type Nodemon } from 'nodemon';
 import { inferPackageFormat } from '@fastkit/node-util';
 import { logger } from './logger';
 import { externalPlugin } from './esbuild-plugin';
-import { NodepackOptions } from './schemes';
+import { NodepackOptions } from './schema';
 
 function log(type: 'warn' | 'error', messages: Message[]) {
   messages.forEach(({ text, detail, location }) => {

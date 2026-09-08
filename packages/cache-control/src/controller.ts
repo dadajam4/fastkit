@@ -8,7 +8,7 @@ import {
   DeleteCacheRequest,
   CacheControllerBehavior,
   CacheDetailsWithRemainingTimes,
-} from './schemes';
+} from './schema';
 import {
   createCacheDetails,
   toCacheDetailsWithRemainingTimes,

@@ -1,6 +1,6 @@
 import { defineComponent, h, cloneVNode } from 'vue';
 import { useVueStack } from '../composables';
-import { VStackControl } from '../schemes/control';
+import { VStackControl } from '../schema/control';
 
 export const VDynamicStacks = defineComponent({
   name: 'VDynamicStacks',

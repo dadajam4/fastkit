@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CacheDetails } from '../schemes';
+import { CacheDetails } from '../schema';
 import {
   toCacheDetailsWithRemainingTimes,
   createCacheDetails,

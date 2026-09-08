@@ -18,7 +18,7 @@ import {
   createSystemBarState,
   createToolbarState,
   createDrawerState,
-} from './-schemes';
+} from './-schema';
 import { PLAYGROUND_CONTEXT_INJECTION_KEY } from './-injections';
 
 export class PlaygroundContext {

@@ -1,5 +1,5 @@
-import { VueI18nStrategyFactory, defineStrategy } from '../../schemes';
-import { StorageStrategySettings, DEFAULT_LOCALE_STORAGE_KEY } from './schemes';
+import { VueI18nStrategyFactory, defineStrategy } from '../../schema';
+import { StorageStrategySettings, DEFAULT_LOCALE_STORAGE_KEY } from './schema';
 
 /**
  * Create a strategy to save client locale in storage

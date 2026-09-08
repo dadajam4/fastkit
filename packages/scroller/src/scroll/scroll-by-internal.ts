@@ -6,7 +6,7 @@ import {
   ScrollCallbackValues,
   ScrollOptions,
   defaultSettings,
-} from './schemes';
+} from './schema';
 import {
   $,
   on,

@@ -2,7 +2,7 @@ import {
   OrderedList,
   OrderedListOptions,
 } from '@tiptap/extension-ordered-list';
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schema';
 
 export const WysiwygOrderedListTool: WysiwygEditorToolFactory<
   OrderedListOptions

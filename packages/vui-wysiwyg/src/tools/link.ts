@@ -1,6 +1,6 @@
 import { Link, LinkOptions } from '@tiptap/extension-link';
 import { validateIf, url } from '@fastkit/vui';
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schema';
 
 export const WysiwygLinkTool: WysiwygEditorToolFactory<LinkOptions> = (
   vui,

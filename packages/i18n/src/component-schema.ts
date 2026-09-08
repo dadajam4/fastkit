@@ -7,7 +7,7 @@ import {
   I18nListFormats,
   I18nDependencies,
   I18nNormalizedFormats,
-} from './schemes';
+} from './schema';
 import {
   I18nComponentLocale,
   I18nComponentLocaleSettings,

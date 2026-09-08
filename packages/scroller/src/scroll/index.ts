@@ -1,4 +1,4 @@
-export * from './schemes';
+export * from './schema';
 
 export * from './scroll-by';
 export * from './scroll-to';

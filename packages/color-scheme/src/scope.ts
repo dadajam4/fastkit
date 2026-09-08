@@ -12,7 +12,7 @@ import {
   ColorScopeJSON,
   ColorScopesContext,
   ColorScopesBucket,
-} from './schemes';
+} from './schema';
 
 export function createColorScope<
   TN extends string = string,

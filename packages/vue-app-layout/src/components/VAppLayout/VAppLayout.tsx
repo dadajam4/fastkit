@@ -9,7 +9,7 @@ import {
   VAL_POSITIONS,
   VueAppLayoutPositionY,
   VAL_BAR_TYPES,
-} from '../../schemes';
+} from '../../schema';
 import { hasParentLayout, provideLayout } from './injections';
 import { VAL_BOTTOM_ID } from '../../constants';
 

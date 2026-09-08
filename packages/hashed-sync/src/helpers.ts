@@ -1,4 +1,4 @@
-import { HashedSyncProcessor } from './schemes';
+import { HashedSyncProcessor } from './schema';
 
 export function createProcessor(info: HashedSyncProcessor) {
   return info;

@@ -14,7 +14,7 @@ import { VUE_I18N_INJECTION_KEY, useI18nSpace } from './injections';
 import { VueI18nContext } from './context';
 import { RawVueI18nStrategyFactory, defineStrategy } from './strategies';
 import { VueI18nClient, VueI18nClientSettings } from './client';
-import { AnySpaceStatic } from './schemes';
+import { AnySpaceStatic } from './schema';
 
 /**
  * Service interface to provide internationalization capabilities throughout Vue applications

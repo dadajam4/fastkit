@@ -1,4 +1,4 @@
-import { I18nLocaleMeta, I18nSpaceFallbackLocale } from './schemes';
+import { I18nLocaleMeta, I18nSpaceFallbackLocale } from './schema';
 import { safeGetCanonicalLocales } from './helpers';
 
 /**

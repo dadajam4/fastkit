@@ -1,6 +1,6 @@
 import { PropType, ExtractPropTypes, computed } from 'vue';
 import { createPropsOptions } from '@fastkit/vue-utils';
-import { VuiElevationValue } from '../schemes';
+import { VuiElevationValue } from '../schema';
 
 export function createElevationProps() {
   return createPropsOptions({

@@ -18,9 +18,9 @@ import {
   createIMaskEvent,
   MaskedDynamicOptionsWithMeta,
   AnyMaskedOptions,
-} from '../schemes';
+} from '../schema';
 
-export type { AnyMaskedOptions } from '../schemes';
+export type { AnyMaskedOptions } from '../schema';
 
 export type { InputMask as IMaskInstance } from 'imask';
 

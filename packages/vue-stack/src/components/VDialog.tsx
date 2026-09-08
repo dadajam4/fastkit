@@ -5,7 +5,7 @@ import {
   EmitsOptions,
   SlotsType,
 } from 'vue';
-import { createStackableDefine, MergeStackBaseSlots } from '../schemes';
+import { createStackableDefine, MergeStackBaseSlots } from '../schema';
 import {
   DefineStackableSettings,
   setupStackableComponent,

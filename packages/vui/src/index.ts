@@ -22,7 +22,7 @@ export * from '@fastkit/vue-loading';
 // @MEMO Alias export
 export { VAction as VLink } from '@fastkit/vue-action';
 
-export * from './schemes';
+export * from './schema';
 export * from './composables';
 export * from './components';
 export * from './service';

@@ -5,7 +5,7 @@ import {
   DEFAULT_DEST_DIRNAME,
   DEFAULT_CONFIG_FILENAME,
   IconFontConfig,
-} from './schemes';
+} from './schema';
 import { generate } from './generator';
 import { IconFontGenError } from './logger';
 import pkg from '../package.json';

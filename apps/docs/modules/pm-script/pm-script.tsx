@@ -2,7 +2,7 @@ import { Ref, ref, inject } from 'vue';
 import { Cookies } from '@fastkit/cookies';
 import { VuePageControl } from '@fastkit/vot';
 import { VTabs, VTabsItem } from '@fastkit/vui';
-import { PackageManagerName } from './schemes';
+import { PackageManagerName } from './schema';
 import {
   PACKAGE_MANAGER_NAMES,
   COOKIE_STORE_KEY,

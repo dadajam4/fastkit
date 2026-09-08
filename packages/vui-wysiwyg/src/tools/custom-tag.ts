@@ -1,4 +1,4 @@
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schema';
 import {
   createWysiwygCustomTagMark,
   WysiwygCustomTagSettings,

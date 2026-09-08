@@ -1,5 +1,5 @@
 import { Underline, UnderlineOptions } from '@tiptap/extension-underline';
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schema';
 
 export const WysiwygFormatUnderlineTool: WysiwygEditorToolFactory<
   UnderlineOptions

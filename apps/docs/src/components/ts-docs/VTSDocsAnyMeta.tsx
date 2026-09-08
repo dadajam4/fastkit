@@ -3,7 +3,7 @@ import { defineComponent, PropType, computed } from 'vue';
 import { ScopeName, ColorVariant, VChip } from '@fastkit/vui';
 import { VTSMetaDocs } from './VTSMetaDocs';
 import { VDocsSection, VCode } from '~/components';
-import { normalizeMeta, MetaInfo } from './schemes';
+import { normalizeMeta, MetaInfo } from './schema';
 import { VTSSignaturesMeta } from './VTSSignaturesMeta';
 
 interface ChipInfo {

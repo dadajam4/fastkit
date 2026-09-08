@@ -1,5 +1,5 @@
 export * from 'imask';
-export * from './schemes';
+export * from './schema';
 export * from './injections';
 export * from './composables';
 export * from './directives';

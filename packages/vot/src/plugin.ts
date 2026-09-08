@@ -10,8 +10,8 @@ import {
 } from '@fastkit/vue-page';
 import { withCtx } from '@fastkit/vue-utils';
 import { createEntry } from './entry';
-import { CreateEntryOptions } from './schemes';
-import { VOT_GENERATE_PAGES_PATH } from './schemes/generate';
+import { CreateEntryOptions } from './schema';
+import { VOT_GENERATE_PAGES_PATH } from './schema/generate';
 
 export * from '@fastkit/vue-page';
 

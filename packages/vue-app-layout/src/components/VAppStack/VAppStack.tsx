@@ -16,7 +16,7 @@ import {
   VAL_Y_POSITIONS,
   VueAppLayoutPositionY,
   VAL_BAR_TYPES,
-} from '../../schemes';
+} from '../../schema';
 import {
   useVueAppLayout,
   VueAppStack,

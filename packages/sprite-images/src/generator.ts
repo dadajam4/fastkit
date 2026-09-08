@@ -3,7 +3,7 @@ import path from 'node:path';
 import chokidar, { FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
 import module from 'node:module';
-import { SpriteImagesOptions, SpriteImagesSettings } from './schemes';
+import { SpriteImagesOptions, SpriteImagesSettings } from './schema';
 import { logger } from './logger';
 
 const require = module.createRequire(import.meta.url);

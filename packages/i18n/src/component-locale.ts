@@ -8,7 +8,7 @@ import {
   I18nListFormats,
   I18nDependencies,
   I18nNormalizedFormats,
-} from './schemes';
+} from './schema';
 import { I18nComponent } from './component';
 
 /**

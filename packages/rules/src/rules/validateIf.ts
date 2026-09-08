@@ -1,5 +1,5 @@
 import { createRule, Rule } from '../factories';
-import { VALIDATE_CANCEL_SYMBOL } from '../schemes';
+import { VALIDATE_CANCEL_SYMBOL } from '../schema';
 import { REQUIRED_SYMBOL } from './required';
 import { isRequired } from '../validators/general';
 

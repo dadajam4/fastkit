@@ -1,7 +1,7 @@
 import './VGridContainer.scss';
 
 import { defineComponent, computed } from 'vue';
-import { RawGridValueProp, extractRawGridValueClasses } from './schemes';
+import { RawGridValueProp, extractRawGridValueClasses } from './schema';
 
 export type GridContainerSpacingValue =
   | 0

@@ -9,7 +9,7 @@ import {
   WysiwygLinterResult as Issue,
   WysiwygLinterFixMessage,
 } from './LinterPlugin';
-import { createWysiwygExtension } from '../../schemes';
+import { createWysiwygExtension } from '../../schema';
 
 const PROBLEM_CLASS_NAME = 'v-linter__problem';
 const ISSUE_ICON_CLASS_NAME = 'v-linter__issue-icon';

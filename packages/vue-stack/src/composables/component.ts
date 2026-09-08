@@ -13,7 +13,7 @@ import {
   VStackControl,
   StackablePropsOptions,
   StackableEmits,
-} from '../schemes';
+} from '../schema';
 import { useStackControl, UseStackControlOptions } from './control';
 
 export type StackableSetupContext<

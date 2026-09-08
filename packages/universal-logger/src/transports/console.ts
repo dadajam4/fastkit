@@ -5,7 +5,7 @@ import {
   LogLevel,
   DEFAULT_COLOR_LEVEL_MAP,
   DEFAULT_LOGGER_NAME,
-} from '../schemes';
+} from '../schema';
 
 const CONSOLE_METHODS = [
   'error',

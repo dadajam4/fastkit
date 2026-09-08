@@ -29,7 +29,7 @@ import {
 import { EV } from '@fastkit/ev';
 import type { ServerResponse, IncomingMessage } from 'node:http';
 import { Cookies, CookiesContext } from '@fastkit/cookies';
-import { ResolvedRouteLocation, WatchQueryOption } from '../schemes';
+import { ResolvedRouteLocation, WatchQueryOption } from '../schema';
 import {
   routeKeyWithWatchQueryByRouteItem,
   setForcePrefetchStates,

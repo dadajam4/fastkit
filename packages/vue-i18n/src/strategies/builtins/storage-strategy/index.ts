@@ -1,2 +1,2 @@
-export type { StorageStrategySettings } from './schemes';
+export type { StorageStrategySettings } from './schema';
 export { createStorageStrategy } from './storage-strategy';

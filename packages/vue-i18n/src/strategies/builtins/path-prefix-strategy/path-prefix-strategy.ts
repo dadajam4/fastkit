@@ -1,11 +1,11 @@
 import type { RouteLocationRaw } from 'vue-router';
-import { VueI18nStrategyFactory, defineStrategy } from '../../schemes';
+import { VueI18nStrategyFactory, defineStrategy } from '../../schema';
 import { PathPrefixContext, PathPrefixContextSettings } from './context';
 import {
   ResolvedLocation,
   PathBaseLocation,
   RelativeTypeLocation,
-} from './schemes';
+} from './schema';
 import { LocaleLink } from './components/LocaleLink';
 
 /**

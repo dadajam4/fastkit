@@ -10,7 +10,7 @@ export type {
   I18nInstantiatedDependencies,
   I18nSpaceFallbackLocale,
   I18nFormatType,
-} from './schemes';
+} from './schema';
 export type {
   I18nStorage,
   I18nStorageFactory,

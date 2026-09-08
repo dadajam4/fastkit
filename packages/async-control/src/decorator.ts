@@ -1,5 +1,5 @@
 import { AsyncHandler } from './handler';
-import { AsyncFn, AsyncHandlerOptions } from './schemes';
+import { AsyncFn, AsyncHandlerOptions } from './schema';
 
 export const ASYNC_HANDLER_SYMBOL = Symbol('ASYNC_HANDLER');
 

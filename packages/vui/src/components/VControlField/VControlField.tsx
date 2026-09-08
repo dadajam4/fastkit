@@ -18,7 +18,7 @@ import {
 } from '../../composables';
 import { useVuiColorProvider } from '../../injections';
 import { VProgressCircular } from '../loading';
-import { CONTROL_LOADING_SPINNER_SIZES } from '../../schemes';
+import { CONTROL_LOADING_SPINNER_SIZES } from '../../schema';
 
 const ADORNMENT_POSITIONS = ['start', 'end'] as const;
 

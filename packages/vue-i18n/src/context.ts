@@ -1,4 +1,4 @@
-import type { AnySpaceStatic } from './schemes';
+import type { AnySpaceStatic } from './schema';
 
 /**
  * Context object to control & support strategy behavior
