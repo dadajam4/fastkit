@@ -1,6 +1,6 @@
-import { commonScheme } from './scheme';
+import { commonSchema } from './schema';
 
-export const Common = commonScheme.defineComponent({
+export const Common = commonSchema.defineComponent({
   name: 'Common',
   locales: {
     ja: () => import('./ja'),

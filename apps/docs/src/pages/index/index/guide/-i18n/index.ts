@@ -1,7 +1,7 @@
-import { scheme } from './scheme';
+import { schema } from './schema';
 import { i18n } from '@@';
 
-export const guide = scheme.defineComponent({
+export const guide = schema.defineComponent({
   locales: {
     ja: () => import('./ja'),
     en: () => import('./en'),

@@ -1,6 +1,6 @@
-import { scheme } from './scheme';
+import { schema } from './schema';
 
-export const en = scheme.defineLocale.strict({
+export const en = schema.defineLocale.strict({
   translations: {
     concept: {
       title: 'Concept',

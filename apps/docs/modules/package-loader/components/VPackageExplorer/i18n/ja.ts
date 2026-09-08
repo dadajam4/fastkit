@@ -1,6 +1,6 @@
-import { packageExploerI18nScheme } from './scheme';
+import { packageExploerI18nSchema } from './schema';
 
-export default packageExploerI18nScheme.defineLocale.strict({
+export default packageExploerI18nSchema.defineLocale.strict({
   translations: {
     scopes: {
       anywhere: {

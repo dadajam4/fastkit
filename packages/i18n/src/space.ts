@@ -11,10 +11,10 @@ import {
 } from './schemes';
 import { I18nLocaleSource, I18nLocale, I18nLocales } from './locale';
 import {
-  I18nComponentScheme,
-  I18nComponentSchemeSettings,
-  defineI18nComponentScheme,
-} from './component-scheme';
+  I18nComponentSchema,
+  I18nComponentSchemaSettings,
+  defineI18nComponentSchema,
+} from './component-schema';
 import {
   I18nStorage,
   I18nStorageOrFactory,
@@ -376,7 +376,7 @@ export interface I18nSpaceStatic<
    *
    * @param settings - Component Schema Settings
    */
-  defineScheme<
+  defineSchema<
     Translations extends I18nTranslations,
     DateTimeFormats extends I18nDateTimeFormats,
     RelativeTimeFormats extends I18nRelativeTimeFormats,
@@ -385,7 +385,7 @@ export interface I18nSpaceStatic<
     Dependencies extends I18nDependencies<LocaleName, BaseLocale, LocaleMeta>,
   >(
     settings: Omit<
-      I18nComponentSchemeSettings<
+      I18nComponentSchemaSettings<
         LocaleName,
         BaseLocale,
         LocaleMeta,
@@ -398,7 +398,7 @@ export interface I18nSpaceStatic<
       >,
       'Space'
     >,
-  ): I18nComponentScheme<
+  ): I18nComponentSchema<
     LocaleName,
     BaseLocale,
     LocaleMeta,
@@ -655,8 +655,8 @@ export function defineI18nSpace<
   const impl = createStaticImpl(settings);
   const Space: I18nSpaceStatic<LocaleName, BaseLocale, LocaleMeta> = {
     ...impl,
-    defineScheme(_settings) {
-      return defineI18nComponentScheme({
+    defineSchema(_settings) {
+      return defineI18nComponentSchema({
         Space,
         ..._settings,
       });

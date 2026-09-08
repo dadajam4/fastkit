@@ -1,17 +1,17 @@
 import { describe, it, expect } from 'vitest';
 import { TestI18nSpace, Generic, Sub1 } from './data';
 
-const MockSubComponentScheme = TestI18nSpace.defineScheme({
+const MockSubComponentSchema = TestI18nSpace.defineSchema({
   translations: (trans: any) => true,
 });
 
-const MockSubComponent = MockSubComponentScheme.defineComponent({
+const MockSubComponent = MockSubComponentSchema.defineComponent({
   name: 'MockSubComponent',
   locales: {
-    ja: MockSubComponentScheme.defineLocale.strict({ translations: {} }),
-    en: MockSubComponentScheme.defineLocale({ translations: {} }),
-    'zh-cn': MockSubComponentScheme.defineLocale({ translations: {} }),
-    'zh-tw': MockSubComponentScheme.defineLocale({ translations: {} }),
+    ja: MockSubComponentSchema.defineLocale.strict({ translations: {} }),
+    en: MockSubComponentSchema.defineLocale({ translations: {} }),
+    'zh-cn': MockSubComponentSchema.defineLocale({ translations: {} }),
+    'zh-tw': MockSubComponentSchema.defineLocale({ translations: {} }),
   },
 });
 

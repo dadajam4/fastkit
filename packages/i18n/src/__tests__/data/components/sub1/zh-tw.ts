@@ -1,5 +1,5 @@
-import { sub1Scheme } from './scheme';
+import { sub1Schema } from './schema';
 
-export const zhtw = sub1Scheme.defineLocale({
+export const zhtw = sub1Schema.defineLocale({
   translations: {},
 });

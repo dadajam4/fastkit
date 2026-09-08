@@ -1,10 +1,10 @@
-import { sub1Scheme } from './scheme';
+import { sub1Schema } from './schema';
 import { ja } from './ja';
 import { en } from './en';
 import { zhtw } from './zh-tw';
 import { zhcn } from './zh-cn';
 
-export const Sub1 = sub1Scheme.defineComponent({
+export const Sub1 = sub1Schema.defineComponent({
   name: 'sub1',
   locales: {
     ja,

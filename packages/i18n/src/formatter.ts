@@ -12,7 +12,7 @@ import {
   I18nListFormatArg,
 } from './schemes';
 
-import type { I18nComponentScheme } from './component-scheme';
+import type { I18nComponentSchema } from './component-schema';
 import type { I18nComponentLocale } from './component-locale';
 import type { I18nSpace } from './space';
 
@@ -58,7 +58,7 @@ function createMergedOptions<
   NumberFormats extends I18nNumberFormats,
   ListFormats extends I18nListFormats,
 >(
-  scheme: I18nComponentScheme<
+  schema: I18nComponentSchema<
     LocaleName,
     any,
     any,
@@ -77,11 +77,11 @@ function createMergedOptions<
   const mergedOptions: MergedFormatOptions<LocaleName> = {} as any;
 
   for (const type of I18N_FORMAT_TYPES) {
-    const baseOptions = scheme[`${type}Formats`];
+    const baseOptions = schema[`${type}Formats`];
     const cacheBucket = {} as any;
     const optionsBucket = {} as any;
 
-    for (const localeName of scheme.Space.availableLocales) {
+    for (const localeName of schema.Space.availableLocales) {
       optionsBucket[localeName] = { ...baseOptions };
       cacheBucket[localeName] = {};
     }
@@ -802,7 +802,7 @@ export class I18nFormatter<
   ListFormats extends I18nListFormats,
 > {
   /** component schema */
-  readonly scheme: I18nComponentScheme<
+  readonly schema: I18nComponentSchema<
     LocaleName,
     any,
     any,
@@ -821,7 +821,7 @@ export class I18nFormatter<
   readonly mergedOptions: MergedFormatOptions<LocaleName>;
 
   constructor(
-    scheme: I18nComponentScheme<
+    schema: I18nComponentSchema<
       LocaleName,
       any,
       any,
@@ -833,9 +833,9 @@ export class I18nFormatter<
       any
     >,
   ) {
-    this.scheme = scheme;
+    this.schema = schema;
 
-    const { cache, mergedOptions } = createMergedOptions(scheme);
+    const { cache, mergedOptions } = createMergedOptions(schema);
     this.cache = cache;
     this.mergedOptions = mergedOptions;
   }

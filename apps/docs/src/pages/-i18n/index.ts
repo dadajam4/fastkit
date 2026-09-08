@@ -1,6 +1,6 @@
-import { scheme } from './scheme';
+import { schema } from './schema';
 
-export const Home = scheme.defineComponent({
+export const Home = schema.defineComponent({
   locales: {
     ja: () => import('./ja'),
     en: () => import('./en'),

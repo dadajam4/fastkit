@@ -70,7 +70,7 @@ const numberFormats = {
 } as const;
 
 // Schema definition
-const scheme = Space.defineScheme({
+const schema = Space.defineSchema({
   translations: (t: Translations) => true,
   dateTimeFormats,
   numberFormats
@@ -81,7 +81,7 @@ const scheme = Space.defineScheme({
 
 ```typescript
 // Japanese
-const ja = scheme.defineLocale.strict({
+const ja = schema.defineLocale.strict({
   translations: {
     greeting: 'Hello',
     farewell: 'Goodbye',
@@ -96,7 +96,7 @@ const ja = scheme.defineLocale.strict({
 });
 
 // English
-const en = scheme.defineLocale.strict({
+const en = schema.defineLocale.strict({
   translations: {
     greeting: 'Hello',
     farewell: 'Goodbye',
@@ -112,7 +112,7 @@ const en = scheme.defineLocale.strict({
 
 ```typescript
 // Component definition
-const Component = scheme.defineComponent({
+const Component = schema.defineComponent({
   locales: { ja, en }
 });
 
@@ -140,7 +140,7 @@ const price = i18n.n(1500, 'currency'); // → '¥1,500'
 ### Asynchronous Loading
 
 ```typescript
-const Component = scheme.defineComponent({
+const Component = schema.defineComponent({
   locales: {
     ja: () => import('./locales/ja'),
     en: () => import('./locales/en'),
@@ -159,19 +159,19 @@ console.log(i18n.t.greeting); // Displays Chinese translation
 
 ```typescript
 // Common component
-const CommonComponent = scheme.defineComponent({
+const CommonComponent = schema.defineComponent({
   locales: { ja: commonJa, en: commonEn }
 });
 
 // Schema with dependencies
-const pageScheme = Space.defineScheme({
+const pageSchema = Space.defineSchema({
   translations: (t: PageTranslations) => true,
   dependencies: {
     common: CommonComponent
   }
 });
 
-const PageComponent = pageScheme.defineComponent({
+const PageComponent = pageSchema.defineComponent({
   locales: { ja: pageJa, en: pageEn }
 });
 
@@ -197,7 +197,7 @@ const redisStorage = createI18nObjectStorage({
   }
 });
 
-const Component = scheme.defineComponent({
+const Component = schema.defineComponent({
   locales: { ja, en },
   storage: redisStorage
 });
@@ -218,12 +218,12 @@ const Space = defineI18nSpace({
 });
 ```
 
-### Space.defineScheme
+### Space.defineSchema
 
 Defines a component schema.
 
 ```typescript
-const scheme = Space.defineScheme({
+const schema = Space.defineSchema({
   translations: (t: T) => boolean,            // Translation type definition
   dateTimeFormats?: DateTimeFormats,          // Date/time formats
   relativeTimeFormats?: RelativeTimeFormats,  // Relative time formats
@@ -233,12 +233,12 @@ const scheme = Space.defineScheme({
 });
 ```
 
-### scheme.defineLocale
+### schema.defineLocale
 
 Defines locale-specific data.
 
 ```typescript
-const locale = scheme.defineLocale({
+const locale = schema.defineLocale({
   translations: TranslationsData,     // Translation data
   dateTimeFormats?: DateTimeFormats,  // Date/time formats
   numberFormats?: NumberFormats,      // Number formats
@@ -246,12 +246,12 @@ const locale = scheme.defineLocale({
 });
 ```
 
-### scheme.defineComponent
+### schema.defineComponent
 
 Defines a component.
 
 ```typescript
-const Component = scheme.defineComponent({
+const Component = schema.defineComponent({
   locales: LocaleMap,          // Locale map
   storage?: Storage,           // Storage settings
   strict?: boolean            // Strict mode
@@ -337,7 +337,7 @@ interface AppTranslations {
   };
 }
 
-const scheme = Space.defineScheme({
+const schema = Space.defineSchema({
   translations: (t: AppTranslations) => true
 });
 

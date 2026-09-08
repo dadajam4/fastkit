@@ -1,6 +1,6 @@
-import { genericScheme } from './scheme';
+import { genericSchema } from './schema';
 
-export const ja = genericScheme.defineLocale.strict({
+export const ja = genericSchema.defineLocale.strict({
   translations: {
     num: 1,
     str: 'str',

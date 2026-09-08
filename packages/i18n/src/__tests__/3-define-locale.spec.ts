@@ -19,7 +19,7 @@ describe('コンポーネントロケールを定義する時', () => {
     type: 'conjunction',
   } as const;
 
-  const scheme = Space.defineScheme({
+  const schema = Space.defineSchema({
     translations: (t: Trans) => true,
     dateTimeFormats: {
       d,
@@ -33,7 +33,7 @@ describe('コンポーネントロケールを定義する時', () => {
   });
 
   describe('厳格にロケールを定義した時', () => {
-    const translations = scheme.defineTranslations.strict({
+    const translations = schema.defineTranslations.strict({
       str: '',
       num: 2,
       bool: false,
@@ -41,7 +41,7 @@ describe('コンポーネントロケールを定義する時', () => {
 
     const n = {} as const;
 
-    const ja = scheme.defineLocale.strict({
+    const ja = schema.defineLocale.strict({
       translations,
       numberFormats: {
         n,

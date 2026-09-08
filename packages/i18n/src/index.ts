@@ -34,9 +34,9 @@ export type {
 export { defineI18nSpace } from './space';
 export type { I18nSpaceStorageData } from './space-storage';
 export type {
-  I18nComponentSchemeSettings,
-  I18nComponentScheme,
-} from './component-scheme';
+  I18nComponentSchemaSettings,
+  I18nComponentSchema,
+} from './component-schema';
 export type {
   I18nTranslationsData,
   I18nTranslationsFactory,

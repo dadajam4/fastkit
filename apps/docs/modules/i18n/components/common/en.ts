@@ -1,6 +1,6 @@
-import { commonScheme } from './scheme';
+import { commonSchema } from './schema';
 
-export const en = commonScheme.defineLocale.strict({
+export const en = commonSchema.defineLocale.strict({
   translations: (component) => ({
     appName: 'Fastkit',
     guide: 'Guide',
