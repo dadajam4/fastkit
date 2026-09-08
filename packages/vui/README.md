@@ -29,15 +29,19 @@ pnpm add @fastkit/vui
 ### Peer dependencies
 
 ```bash
-pnpm add @fastkit/icon-font @fastkit/color-scheme @fastkit/media-match vue vue-router
+pnpm add vue vue-router
 ```
 
-`@fastkit/vui` exposes types from `@fastkit/icon-font`, `@fastkit/color-scheme` and
-`@fastkit/media-match` in its own public types — icon names, color scopes, media-match
-keys — and the code generated for your project augments those modules to replace their
-placeholder types with your real values. A module augmentation only applies to the copy it
-resolves, so your project has to resolve the same copies `@fastkit/vui` does. Installing
-them directly is what guarantees that; a transitive install does not.
+`@fastkit/vui` exposes icon names, color scopes and media-match keys in its own public
+types, and the code generated for your project (see `@fastkit/vite-plugin-vui`) augments
+`@fastkit/vui` itself to replace their placeholder types with your real values. The
+packages those types originate from — `@fastkit/icon-font`, `@fastkit/color-scheme`,
+`@fastkit/media-match` — are `@fastkit/vui`'s own dependencies, so you do not declare
+them.
+
+Declare `@fastkit/color-scheme` or `@fastkit/media-match` only if you import from them in
+your own code. Using `@fastkit/vue-color-scheme` or `@fastkit/vue-media-match` directly,
+rather than through `@fastkit/vui`, still requires their respective peer.
 
 ## Basic Usage
 
