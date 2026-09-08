@@ -1,3 +1,11 @@
+/**
+ * Module the generated code imports the media-match registry from, and augments
+ * with the keys it generated.
+ *
+ * @see {@link MediaMatchGeneratorOptions.runtimeModule}
+ */
+export const DEFAULT_MEDIA_MATCH_RUNTIME_MODULE = '@fastkit/media-match';
+
 // export type { MediaMatchDefine } from '@fastkit/media-match';
 export interface MediaMatchDefine<K extends string = string> {
   key: K;

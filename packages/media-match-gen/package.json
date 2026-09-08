@@ -53,10 +53,17 @@
   },
   "dependencies": {
     "@fastkit/ev": "workspace:^",
-    "@fastkit/media-match": "workspace:^",
     "@fastkit/node-util": "workspace:^",
     "@fastkit/tiny-logger": "workspace:^",
     "fs-extra": "^11.4.0"
+  },
+  "peerDependencies": {
+    "@fastkit/media-match": "workspace:^"
+  },
+  "peerDependenciesMeta": {
+    "@fastkit/media-match": {
+      "optional": true
+    }
   },
   "buildOptions": {
     "name": "MediaMatchGen"

@@ -6,7 +6,11 @@ import {
   ESbuildRequireResult,
 } from '@fastkit/node-util';
 import { EV } from '@fastkit/ev';
-import { MediaMatchSettings, MediaMatchDefine } from './schema';
+import {
+  MediaMatchSettings,
+  MediaMatchDefine,
+  DEFAULT_MEDIA_MATCH_RUNTIME_MODULE,
+} from './schema';
 import { logger } from './logger';
 
 const BANNER = `
@@ -21,6 +25,25 @@ const BANNER = `
 export interface MediaMatchGeneratorOptions {
   src: string | MediaMatchSettings;
   dest: string;
+  /**
+   * Module the generated code imports `registerMediaMatchConditions` /
+   * `MediaMatchKey` from, and whose `MediaMatchKeyMap` it augments with the
+   * generated keys.
+   *
+   * The generated files live in the *consuming* project, so this specifier is
+   * resolved from there -- and pnpm places into a project's `node_modules` only
+   * what the project itself declares, not what a peer declaration asks for. So
+   * whatever this names becomes a package the project has to declare.
+   *
+   * Point it at a module the project already declares and that re-exports
+   * `@fastkit/media-match` -- a UI kit built on it, say -- and the project needs
+   * nothing beyond that kit. Module augmentation follows a re-export to the
+   * interface it aliases, so `MediaMatchKeyMap` still merges into the one
+   * `@fastkit/media-match` declares.
+   *
+   * @default '@fastkit/media-match'
+   */
+  runtimeModule?: string;
 }
 
 export interface MediaMatchGeneratorResult {
@@ -36,6 +59,8 @@ export async function generator(
   opts: MediaMatchGeneratorOptions,
 ): Promise<MediaMatchGeneratorResult> {
   const { src, dest } = opts;
+  const runtimeModule =
+    opts.runtimeModule ?? DEFAULT_MEDIA_MATCH_RUNTIME_MODULE;
   let settings: MediaMatchSettings;
   if (typeof src === 'string') {
     const { exports } = await esbuildRequire<{ default: MediaMatchSettings }>(
@@ -130,10 +155,10 @@ export async function generator(
 // @ts-nocheck
 ${BANNER}
 
-import type { MediaMatchKey, MediaMatchKeyMap } from '@fastkit/media-match';
-import { registerMediaMatchConditions } from '@fastkit/media-match';
+import type { MediaMatchKey, MediaMatchKeyMap } from '${runtimeModule}';
+import { registerMediaMatchConditions } from '${runtimeModule}';
 
-declare module "@fastkit/media-match" {
+declare module "${runtimeModule}" {
   export interface MediaMatchKeyMap {
 ${mediaMatches.map(({ key }) => `    '${key}': true,`).join('\n')}
   }
@@ -151,7 +176,7 @@ export const mediaMatches = registerMediaMatchConditions(${JSON.stringify(
     2,
   )});
 
-export type { MediaMatchKey } from '@fastkit/media-match';
+export type { MediaMatchKey } from '${runtimeModule}';
   `.trim();
 
   const SCSS_SOURCE = `
@@ -273,6 +298,25 @@ export interface MediaMatchGeneratorRunnerOptions {
   src: string;
   dest: string;
   watch?: boolean;
+  /**
+   * Module the generated code imports `registerMediaMatchConditions` /
+   * `MediaMatchKey` from, and whose `MediaMatchKeyMap` it augments with the
+   * generated keys.
+   *
+   * The generated files live in the *consuming* project, so this specifier is
+   * resolved from there -- and pnpm places into a project's `node_modules` only
+   * what the project itself declares, not what a peer declaration asks for. So
+   * whatever this names becomes a package the project has to declare.
+   *
+   * Point it at a module the project already declares and that re-exports
+   * `@fastkit/media-match` -- a UI kit built on it, say -- and the project needs
+   * nothing beyond that kit. Module augmentation follows a re-export to the
+   * interface it aliases, so `MediaMatchKeyMap` still merges into the one
+   * `@fastkit/media-match` declares.
+   *
+   * @default '@fastkit/media-match'
+   */
+  runtimeModule?: string;
 }
 
 export interface MediaMatchGeneratorRunnerEventMap {
@@ -286,10 +330,15 @@ export class MediaMatchGeneratorRunner extends EV {
 
   readonly dest: string;
 
+  /** @see {@link MediaMatchGeneratorOptions.runtimeModule} */
+  readonly runtimeModule: string;
+
   constructor(opts: MediaMatchGeneratorRunnerOptions) {
     super();
     this.src = opts.src;
     this.dest = opts.dest;
+    this.runtimeModule =
+      opts.runtimeModule ?? DEFAULT_MEDIA_MATCH_RUNTIME_MODULE;
     this.resolver = this.resolver.bind(this);
     this.runner = new ESbuildRunner({
       entry: opts.src,
@@ -314,6 +363,7 @@ export class MediaMatchGeneratorRunner extends EV {
     const _result = await generator({
       src: settings,
       dest: this.dest,
+      runtimeModule: this.runtimeModule,
     });
     return _result;
   }
