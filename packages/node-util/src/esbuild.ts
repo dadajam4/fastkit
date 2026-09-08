@@ -85,6 +85,32 @@ const nativeNodeModulesPlugin: Plugin = {
 };
 
 /**
+ * Resolve `esbuild` to the copy this package itself uses.
+ *
+ * The bundle is written into the *consumer's*
+ * `node_modules/.esbuild-require/` and required from there, so a bare
+ * `require('esbuild')` inside it resolves from the consumer's package — which
+ * has no esbuild unless it declares one, and would anyway be free to declare a
+ * version other than the one that produced the bundle. Resolving to an absolute
+ * path here leaves no bare specifier in the output and takes the requirement off
+ * the consumer.
+ *
+ * The path is resolved lazily, so an entry point that never imports esbuild
+ * neither pays for it nor fails on it. Subpaths (`esbuild/…`) are left to the
+ * `external` option below, since esbuild's own `exports` map does not publish
+ * them.
+ */
+const ownESbuildPlugin: Plugin = {
+  name: 'own-esbuild',
+  setup({ onResolve }) {
+    onResolve({ filter: /^esbuild$/ }, () => ({
+      path: require.resolve('esbuild'),
+      external: true,
+    }));
+  },
+};
+
+/**
  * Directory name for an entry point's build cache.
  *
  * The name has to be unique per entry point, stable across runs, and short
@@ -184,7 +210,7 @@ export async function esbuildRequire<T = any>(
     metafile: true,
     // logLevel: 'warning',
     // external: ['module'],
-    plugins: [jsFileLocationPlugin, nativeNodeModulesPlugin],
+    plugins: [ownESbuildPlugin, jsFileLocationPlugin, nativeNodeModulesPlugin],
     outfile,
   });
 

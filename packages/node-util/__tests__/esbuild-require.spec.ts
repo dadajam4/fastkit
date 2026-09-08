@@ -2,10 +2,17 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import module from 'node:module';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { esbuildRequire } from '../src';
 
 const require = module.createRequire(import.meta.url);
+const execFileAsync = promisify(execFile);
+
+/** The esbuild `@fastkit/node-util` itself depends on. */
+const ownESbuildVersion = () =>
+  (require('esbuild/package.json') as { version: string }).version;
 
 /**
  * A stand-in for a consumer package: outside this workspace (so
@@ -26,6 +33,15 @@ async function writeEntry(relative: string, contents: string) {
 }
 
 const cacheEntries = () => fs.readdir(path.join(consumerDir, CACHE_ROOT));
+
+/** The bundle `esbuildRequire` wrote for the entry point with this basename. */
+async function outfileOf(basename: string) {
+  const dir = (await cacheEntries()).find((name) =>
+    name.startsWith(`${basename}-`),
+  );
+  if (!dir) throw new Error(`no cache directory for ${basename}`);
+  return path.join(consumerDir, CACHE_ROOT, dir, 'index.js');
+}
 
 beforeAll(async () => {
   originalCwd = process.cwd();
@@ -95,5 +111,57 @@ describe('cache directory name', () => {
     const after = await cacheEntries();
     expect(after.length).toBe(before.length + 2);
     expect(after.filter((name) => name.startsWith('same.ts-'))).toHaveLength(2);
+  });
+});
+
+describe('esbuild resolution', () => {
+  it('should leave no bare esbuild specifier in the emitted bundle', async () => {
+    const entry = await writeEntry(
+      'uses-esbuild.ts',
+      [
+        `import esbuild from 'esbuild';`,
+        `export const version = esbuild.version;`,
+        '',
+      ].join('\n'),
+    );
+
+    const result = await esbuildRequire<{ version: string }>(entry);
+    expect(result.exports.version).toBe(ownESbuildVersion());
+
+    const bundle = await fs.readFile(
+      await outfileOf('uses-esbuild.ts'),
+      'utf8',
+    );
+    expect(bundle).not.toMatch(/require\(\s*["']esbuild["']\s*\)/);
+    expect(bundle).toContain(require.resolve('esbuild'));
+  });
+
+  it('should be requirable by a consumer that has no esbuild of its own', async () => {
+    const entry = await writeEntry(
+      'consumer-side.ts',
+      [
+        `import esbuild from 'esbuild';`,
+        `export const version = esbuild.version;`,
+        '',
+      ].join('\n'),
+    );
+    await esbuildRequire(entry);
+
+    // The `require` inside `esbuildRequire` cannot show this on its own: run
+    // from inside this workspace, `NODE_PATH` carries pnpm's hidden store (tsx
+    // and vitest both set it), so a bare `require('esbuild')` resolves here
+    // even though the consumer has nothing. A child process with `NODE_PATH`
+    // cleared, from the consumer's directory, is the layout the bug was
+    // reported from.
+    const outfile = await outfileOf('consumer-side.ts');
+    const { stdout } = await execFileAsync(
+      process.execPath,
+      [
+        '-e',
+        `process.stdout.write(String(require(${JSON.stringify(outfile)}).version))`,
+      ],
+      { cwd: consumerDir, env: { ...process.env, NODE_PATH: '' } },
+    );
+    expect(stdout).toBe(ownESbuildVersion());
   });
 });
