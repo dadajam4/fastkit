@@ -1,4 +1,4 @@
-import { createCatcherResolver } from '../schemes';
+import { createCatcherResolver } from '../schema';
 
 /**
  * Override Native Error

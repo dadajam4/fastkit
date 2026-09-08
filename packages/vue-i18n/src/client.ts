@@ -1,7 +1,7 @@
 import { App } from 'vue';
 import type { Router, RouteLocationRaw } from 'vue-router';
 import { IN_WINDOW } from '@fastkit/helpers';
-import type { AnySpace } from './schemes';
+import type { AnySpace } from './schema';
 import type { VueI18nContext } from './context';
 import { VueI18nSubSpaceProvider } from './provider';
 import { VueI18nStrategy } from './strategies';

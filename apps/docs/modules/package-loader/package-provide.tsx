@@ -4,7 +4,7 @@ import { useVuePageControl, VuePageControl } from '@fastkit/vot';
 import { arrayUnique } from '@fastkit/helpers';
 import { VHero } from '@fastkit/vui';
 import { PMScript } from '@@/pm-script';
-import type { PackageInfo } from './schemes';
+import type { PackageInfo } from './schema';
 import fastkitPackageJson from '../../../../package.json';
 import { PACKAGE_PROVIDE_INJECTION_KEY } from './injections';
 import { i18n } from '../i18n';

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import fs from 'fs-extra';
 import { hashElement, HashElementNode } from 'folder-hash';
-import { CompareResult, SyncItem, UpdateInfo, UpdateType } from './schemes';
+import { CompareResult, SyncItem, UpdateInfo, UpdateType } from './schema';
 
 export const META_DIR_NAME = '.sync';
 

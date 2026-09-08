@@ -7,7 +7,7 @@ export type {
   CookiesContext,
   CookiesBucket,
   OnCookiesChangeEvent,
-} from './schemes';
+} from './schema';
 
 export {
   isCookiesBrowserContext,

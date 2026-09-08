@@ -7,7 +7,7 @@ import {
   VueAppLayoutStickPositionY,
   VAL_STACK_DEFAULT_POSITION_X,
   VAL_STACK_DEFAULT_POSITION_Y,
-} from '../schemes';
+} from '../schema';
 
 export type VueAppStackTransitionSettings = string | TransitionProps;
 

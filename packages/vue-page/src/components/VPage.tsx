@@ -9,7 +9,7 @@ import {
 } from 'vue';
 import { RouterView } from 'vue-router';
 import { withCtx } from '@fastkit/vue-utils';
-import { RouterViewSlotProps, VuePageKeyOverride } from '../schemes';
+import { RouterViewSlotProps, VuePageKeyOverride } from '../schema';
 import {
   generateRouteKeyWithWatchQuery,
   consumeForcePrefetchStates,

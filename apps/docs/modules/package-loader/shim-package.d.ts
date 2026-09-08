@@ -1,4 +1,4 @@
-declare const PackageInfo: Awaited<import('./schemes').PackageInfo>;
+declare const PackageInfo: Awaited<import('./schema').PackageInfo>;
 
 declare const PackageProvide: Awaited<
   import('./package-provide').PackageProvide

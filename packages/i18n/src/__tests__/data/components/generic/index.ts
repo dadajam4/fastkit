@@ -1,10 +1,10 @@
-import { genericScheme } from './scheme';
+import { genericSchema } from './schema';
 import { ja } from './ja';
 import { en } from './en';
 import { zhtw } from './zh-tw';
 import { zhcn } from './zh-cn';
 
-export const Generic = genericScheme.defineComponent({
+export const Generic = genericSchema.defineComponent({
   name: 'generic',
   locales: {
     ja,

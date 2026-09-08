@@ -1,5 +1,5 @@
 import type { FormNodeError, FormNodeControl } from './composables/node';
-import type { FormAutoComplete } from './schemes';
+import type { FormAutoComplete } from './schema';
 import { registerAutocompleteDefault } from './composables/autocompletable';
 
 export type FormErrorMessageResolver = (

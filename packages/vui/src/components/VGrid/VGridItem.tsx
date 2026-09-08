@@ -1,7 +1,7 @@
 import './VGridItem.scss';
 
 import { defineComponent, computed } from 'vue';
-import { RawGridValueProp, extractRawGridValueClasses } from './schemes';
+import { RawGridValueProp, extractRawGridValueClasses } from './schema';
 
 export type GridItemNumberSizeValue =
   1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;

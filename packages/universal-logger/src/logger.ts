@@ -14,7 +14,7 @@ import {
   levelToIndex,
   isAvailableLogLevel,
   DEFAULT_LOGGER_NAME,
-} from './schemes';
+} from './schema';
 
 /**
  * Logger

@@ -69,7 +69,7 @@ const numberFormats = {
 } as const;
 
 // スキーマ定義
-const scheme = Space.defineScheme({
+const schema = Space.defineSchema({
   translations: (t: Translations) => true,
   dateTimeFormats,
   numberFormats
@@ -80,7 +80,7 @@ const scheme = Space.defineScheme({
 
 ```typescript
 // 日本語
-const ja = scheme.defineLocale.strict({
+const ja = schema.defineLocale.strict({
   translations: {
     greeting: 'こんにちは',
     farewell: 'さようなら',
@@ -95,7 +95,7 @@ const ja = scheme.defineLocale.strict({
 });
 
 // 英語
-const en = scheme.defineLocale.strict({
+const en = schema.defineLocale.strict({
   translations: {
     greeting: 'Hello',
     farewell: 'Goodbye',
@@ -111,7 +111,7 @@ const en = scheme.defineLocale.strict({
 
 ```typescript
 // コンポーネント定義
-const Component = scheme.defineComponent({
+const Component = schema.defineComponent({
   locales: { ja, en }
 });
 
@@ -139,7 +139,7 @@ const price = i18n.n(1500, 'currency'); // → '¥1,500'
 ### 非同期ローディング
 
 ```typescript
-const Component = scheme.defineComponent({
+const Component = schema.defineComponent({
   locales: {
     ja: () => import('./locales/ja'),
     en: () => import('./locales/en'),
@@ -158,19 +158,19 @@ console.log(i18n.t.greeting); // 中国語の翻訳が表示
 
 ```typescript
 // 共通コンポーネント
-const CommonComponent = scheme.defineComponent({
+const CommonComponent = schema.defineComponent({
   locales: { ja: commonJa, en: commonEn }
 });
 
 // 依存関係を持つスキーマ
-const pageScheme = Space.defineScheme({
+const pageSchema = Space.defineSchema({
   translations: (t: PageTranslations) => true,
   dependencies: {
     common: CommonComponent
   }
 });
 
-const PageComponent = pageScheme.defineComponent({
+const PageComponent = pageSchema.defineComponent({
   locales: { ja: pageJa, en: pageEn }
 });
 
@@ -196,7 +196,7 @@ const redisStorage = createI18nObjectStorage({
   }
 });
 
-const Component = scheme.defineComponent({
+const Component = schema.defineComponent({
   locales: { ja, en },
   storage: redisStorage
 });
@@ -217,12 +217,12 @@ const Space = defineI18nSpace({
 });
 ```
 
-### Space.defineScheme
+### Space.defineSchema
 
 コンポーネントスキーマを定義します。
 
 ```typescript
-const scheme = Space.defineScheme({
+const schema = Space.defineSchema({
   translations: (t: T) => boolean,            // 翻訳型定義
   dateTimeFormats?: DateTimeFormats,          // 日時フォーマット
   relativeTimeFormats?: RelativeTimeFormats,  // 相対時間フォーマット
@@ -232,12 +232,12 @@ const scheme = Space.defineScheme({
 });
 ```
 
-### scheme.defineLocale
+### schema.defineLocale
 
 ロケール固有データを定義します。
 
 ```typescript
-const locale = scheme.defineLocale({
+const locale = schema.defineLocale({
   translations: TranslationsData,     // 翻訳データ
   dateTimeFormats?: DateTimeFormats,  // 日時フォーマット
   numberFormats?: NumberFormats,      // 数値フォーマット
@@ -245,12 +245,12 @@ const locale = scheme.defineLocale({
 });
 ```
 
-### scheme.defineComponent
+### schema.defineComponent
 
 コンポーネントを定義します。
 
 ```typescript
-const Component = scheme.defineComponent({
+const Component = schema.defineComponent({
   locales: LocaleMap,          // ロケールマップ
   storage?: Storage,           // ストレージ設定
   strict?: boolean            // 厳密モード
@@ -336,7 +336,7 @@ interface AppTranslations {
   };
 }
 
-const scheme = Space.defineScheme({
+const schema = Space.defineSchema({
   translations: (t: AppTranslations) => true
 });
 

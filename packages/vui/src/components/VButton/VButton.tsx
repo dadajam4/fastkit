@@ -16,7 +16,7 @@ import { VAction, actionableInheritProps } from '@fastkit/vue-action';
 import { useVui } from '../../injections';
 import { createControlProps, useControl } from '../../composables';
 import { VProgressCircular } from '../loading';
-import { ControlSize } from '../../schemes/control';
+import { ControlSize } from '../../schema/control';
 import { VIcon } from '../VIcon';
 import type { IconName } from '../VIcon';
 

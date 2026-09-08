@@ -28,7 +28,7 @@ import { getDocumentScroller, UseScroller } from '@fastkit/vue-scroller';
 import { VForm } from './components/VForm';
 import { VTextField, TextFieldInput } from './components/VTextField';
 import type { IconName, RawIconProp } from './components/VIcon';
-import { ControlSize } from './schemes';
+import { ControlSize } from './schema';
 import { VButton } from './components/VButton';
 import { VDialog } from './components/VDialog';
 import { VSnackbar } from './components/VSnackbar';

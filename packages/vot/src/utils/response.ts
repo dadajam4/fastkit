@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { defer } from './defer';
-import type { WrittenResponse, WriteResponseFn, RedirectFn } from '../schemes';
+import type { WrittenResponse, WriteResponseFn, RedirectFn } from '../schema';
 
 const isRedirect = ({ status = 0 }) => status >= 300 && status < 400;
 

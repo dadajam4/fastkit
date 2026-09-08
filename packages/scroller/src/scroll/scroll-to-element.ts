@@ -1,5 +1,5 @@
 import { scroll } from './scroll-by-internal';
-import { ScrollOptions, ScrollResult, defaultSettings } from './schemes';
+import { ScrollOptions, ScrollResult, defaultSettings } from './schema';
 import { $, cumulativeOffset, error } from './util';
 
 /**

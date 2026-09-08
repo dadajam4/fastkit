@@ -4,7 +4,7 @@ import { component } from '~/styles/layers.css';
 import { tokens, computedTokens, extractTokenName } from '../../styles';
 import { horizontals, verticals } from '../../helpers';
 import { createSimpleVueTransition } from '../../styles/transition';
-import { VAL_Y_POSITIONS, VAL_STICK_Y_POSITIONS } from '../../schemes';
+import { VAL_Y_POSITIONS, VAL_STICK_Y_POSITIONS } from '../../schema';
 import { booting } from '../../composables/booting.css';
 
 const stickes = objectFromArray.build(VAL_STICK_Y_POSITIONS);

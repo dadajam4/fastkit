@@ -11,7 +11,7 @@ import { installResizeDirective, useWindow } from '@fastkit/vue-resize';
 import { installBodyScrollLockDirective } from '@fastkit/vue-body-scroll-lock';
 import { getDocumentScroller, UseScroller } from '@fastkit/vue-scroller';
 import { IN_WINDOW } from '@fastkit/helpers';
-import { VueAppLayoutPositionX, VueAppDrawerId } from '../schemes';
+import { VueAppLayoutPositionX, VueAppDrawerId } from '../schema';
 import { VAL_INJECTION_KEY } from './injections';
 import { VueAppLayoutError } from '../logger';
 import { VueAppStack, VueAppStackSettings } from './stack';

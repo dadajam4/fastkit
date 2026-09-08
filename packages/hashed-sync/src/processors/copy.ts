@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { UpdateInfo } from '../schemes';
+import { UpdateInfo } from '../schema';
 import { createProcessor } from '../helpers';
 import { logger } from '../logger';
 

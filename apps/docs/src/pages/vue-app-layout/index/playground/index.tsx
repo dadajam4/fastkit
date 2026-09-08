@@ -9,7 +9,7 @@ import {
 import { VHero, VButton, VDialog, VBreadcrumbs } from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
 import * as styles from './index.css';
-import { ItemLevel } from './-schemes';
+import { ItemLevel } from './-schema';
 import { PlaygroundContext } from './-context';
 import { PlaygroundEditor } from './-components';
 

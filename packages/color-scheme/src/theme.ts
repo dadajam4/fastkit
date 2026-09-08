@@ -15,7 +15,7 @@ import {
   ColorScopeDefaults,
   ColorScopeDefaultsJSON,
   COLOR_SCOPE_DEFAULTS_KEYS,
-} from './schemes';
+} from './schema';
 
 export function createTheme<
   TN extends string,

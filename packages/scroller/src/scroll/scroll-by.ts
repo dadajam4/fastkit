@@ -1,5 +1,5 @@
 import { scroll } from './scroll-by-internal';
-import { ScrollOptions, ScrollResult } from './schemes';
+import { ScrollOptions, ScrollResult } from './schema';
 
 /**
  * 指定の差分だけコンテナをスクロールします。

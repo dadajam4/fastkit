@@ -6,7 +6,7 @@ import {
   HashedSyncProcessor,
   HashedSyncProcessorStack,
   CompareResult,
-} from './schemes';
+} from './schema';
 import { HashedSyncError } from './logger';
 import { processors } from './processors';
 

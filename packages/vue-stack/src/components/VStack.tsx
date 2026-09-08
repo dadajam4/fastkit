@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import { createStackableDefine, V_STACK_SLOTS } from '../schemes';
+import { createStackableDefine, V_STACK_SLOTS } from '../schema';
 
 import { useStackControl } from '../composables';
 

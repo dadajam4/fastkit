@@ -1,7 +1,7 @@
 import { TextAlign, TextAlignOptions } from '@tiptap/extension-text-align';
 import { type Editor } from '@tiptap/vue-3';
 import { VuiServiceIconSettings, VButtonGroup, VButton } from '@fastkit/vui';
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schema';
 
 /**
  * A list of available options for the text align attribute.

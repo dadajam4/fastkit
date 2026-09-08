@@ -5,7 +5,7 @@ import {
   VueAppLayoutPositionX,
   VAL_Y_POSITIONS,
   VueAppDrawerId,
-} from '../../schemes';
+} from '../../schema';
 import {
   useVueAppLayout,
   VueAppDrawer,

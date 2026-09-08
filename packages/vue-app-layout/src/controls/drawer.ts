@@ -8,7 +8,7 @@ import {
   VueAppLayoutStickPositionY,
   VueAppDrawerId,
   VAL_STACK_DEFAULT_POSITION_Y,
-} from '../schemes';
+} from '../schema';
 
 export type VueAppDrawerStaticCondition = boolean | (() => boolean);
 

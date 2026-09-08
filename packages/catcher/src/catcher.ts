@@ -7,7 +7,7 @@ import {
   Catcher,
   CatcherData,
   ResolverContext,
-} from './schemes';
+} from './schema';
 import { nativeErrorResolver } from './resolvers/native';
 
 /**

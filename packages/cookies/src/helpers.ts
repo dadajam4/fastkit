@@ -6,7 +6,7 @@ import type {
 import { stringifySetCookie } from 'cookie';
 import type { Cookie } from 'set-cookie-parser';
 import { isObject } from '@fastkit/helpers';
-import { CookiesBrowserContext, SerializeOptions } from './schemes';
+import { CookiesBrowserContext, SerializeOptions } from './schema';
 
 export function isCookiesBrowserContext(
   source: any,

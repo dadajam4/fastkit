@@ -5,12 +5,12 @@ import { createMockPathRoute } from '@fastkit/vue-utils';
 import { deserializeState } from './utils/deserialize-state';
 import { useClientRedirect } from './utils/response';
 import { getFullPath, withoutSuffix } from './utils/route';
-import { setupVotPluginsAndHooks } from './schemes';
+import { setupVotPluginsAndHooks } from './schema';
 import type {
   ClientHandler,
   VotContext,
   VotBeforeRouterSetupParams,
-} from './schemes';
+} from './schema';
 import { provideContext } from './injections';
 
 export const createEntry: ClientHandler = async function createClientEntry(

@@ -1,5 +1,5 @@
 import type { datadogLogs, LogsInitConfiguration } from '@datadog/browser-logs';
-import { Transport, LogLevel } from '../schemes';
+import { Transport, LogLevel } from '../schema';
 import { CloneTransformer, CloneOptions } from '../transformers/clone';
 
 let dd: typeof datadogLogs | undefined;

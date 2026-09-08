@@ -3,7 +3,7 @@ import {
   VALIDATE_CANCEL_SYMBOL,
   ValidationError,
   VALIDATION_ERROR_SYMBOL,
-} from '../schemes';
+} from '../schema';
 import { objectPathJoin } from '../utils';
 import { RuleMessageService } from '../services';
 import { RULE_DEFAULT_NAME, RULE_DEFAULT_MESSAGE } from '../constants';

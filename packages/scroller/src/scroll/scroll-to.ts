@@ -4,7 +4,7 @@ import {
   defaultSettings,
   ScrollPosition,
   ScrollResult,
-} from './schemes';
+} from './schema';
 import { $, error } from './util';
 
 /**

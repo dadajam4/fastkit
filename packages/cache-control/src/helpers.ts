@@ -6,7 +6,7 @@ import {
   CacheDetails,
   CacheRemainingTimes,
   CacheDetailsWithRemainingTimes,
-} from './schemes';
+} from './schema';
 
 export function toCacheRemainingTimes<T = any>(
   source: CacheDetails<T>,

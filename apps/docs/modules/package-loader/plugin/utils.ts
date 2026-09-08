@@ -12,7 +12,7 @@ import {
   PROVIDER_TEMPLATE_PATH,
   MODULES_ROOT,
 } from './constants';
-import { FastkitPackage, PackageDep, PackageInfo } from '../schemes';
+import { FastkitPackage, PackageDep, PackageInfo } from '../schema';
 
 export function toLoadResult(source: string | Record<string, any>): LoadResult {
   const chunk = JSON.stringify(source);

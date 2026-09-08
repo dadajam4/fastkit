@@ -1,10 +1,10 @@
 import { i18n } from '@@/i18n';
 
-import { packageExploerI18nScheme } from './scheme';
+import { packageExploerI18nSchema } from './schema';
 
-export type { FilterInfo } from './scheme';
+export type { FilterInfo } from './schema';
 
-export const PackageExploerI18n = packageExploerI18nScheme.defineComponent({
+export const PackageExploerI18n = packageExploerI18nSchema.defineComponent({
   name: 'PackageExploer',
   locales: {
     en: () => import('./en'),

@@ -6,7 +6,7 @@ import {
   ESbuildRequireResult,
 } from '@fastkit/node-util';
 import { EV } from '@fastkit/ev';
-import { MediaMatchSettings, MediaMatchDefine } from './schemes';
+import { MediaMatchSettings, MediaMatchDefine } from './schema';
 import { logger } from './logger';
 
 const BANNER = `

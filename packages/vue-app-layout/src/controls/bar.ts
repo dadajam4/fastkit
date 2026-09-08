@@ -1,6 +1,6 @@
 import { computed, ComputedRef } from 'vue';
 import type { VueAppLayout } from './layout';
-import { VueAppLayoutPositionY, VAL_BAR_DEFAULT_POSITION } from '../schemes';
+import { VueAppLayoutPositionY, VAL_BAR_DEFAULT_POSITION } from '../schema';
 
 export type VueAppBarActivateCondition =
   boolean | ((layout: VueAppLayout) => boolean);

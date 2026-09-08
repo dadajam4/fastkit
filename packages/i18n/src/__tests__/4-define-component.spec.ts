@@ -19,7 +19,7 @@ describe('コンポーネントを定義する時', () => {
     type: 'conjunction',
   } as const;
 
-  const scheme = Space.defineScheme({
+  const schema = Space.defineSchema({
     translations: (t: Trans) => true,
     dateTimeFormats: {
       d,
@@ -32,7 +32,7 @@ describe('コンポーネントを定義する時', () => {
     },
   });
 
-  const jaTranslations = scheme.defineTranslations.strict({
+  const jaTranslations = schema.defineTranslations.strict({
     str: '',
     num: 2,
     bool: false,
@@ -42,23 +42,23 @@ describe('コンポーネントを定義する時', () => {
     n: {},
   } as const;
 
-  const ja = scheme.defineLocale.strict({
+  const ja = schema.defineLocale.strict({
     translations: jaTranslations,
     numberFormats: jaNumberFormats,
   });
 
-  const l2 = scheme.defineLocale({
-    translations: scheme.defineTranslations({}),
+  const l2 = schema.defineLocale({
+    translations: schema.defineTranslations({}),
     numberFormats: {},
   });
 
   describe('シンプルなコンポーネントを定義した時', () => {
-    const Component = scheme.defineComponent({
+    const Component = schema.defineComponent({
       locales: { ja, l2 },
     });
 
     it('スキーマが参照できること', () => {
-      expect(Component.scheme).toBe(scheme);
+      expect(Component.schema).toBe(schema);
     });
 
     it('依存コンポーネントが取得できること', () => {
@@ -66,9 +66,9 @@ describe('コンポーネントを定義する時', () => {
     });
 
     it('フォーマッタ用のオプションが取得できること', () => {
-      expect(Component.dateTimeFormats).toStrictEqual(scheme.dateTimeFormats);
-      expect(Component.numberFormats).toStrictEqual(scheme.numberFormats);
-      expect(Component.listFormats).toStrictEqual(scheme.listFormats);
+      expect(Component.dateTimeFormats).toStrictEqual(schema.dateTimeFormats);
+      expect(Component.numberFormats).toStrictEqual(schema.numberFormats);
+      expect(Component.listFormats).toStrictEqual(schema.listFormats);
     });
 
     describe('コンポーネントスキーマにコンポーネントを依存関係として登録した時', () => {
@@ -80,29 +80,29 @@ describe('コンポーネントを定義する時', () => {
 
       const dependencies = { dep1: Component } as const;
 
-      const scheme2 = Space.defineScheme({
+      const schema2 = Space.defineSchema({
         translations: (t: Trans2) => true,
         dependencies,
       });
 
       it('依存コンポーネントが設定されていること', () => {
-        expect(scheme2.dependencies).toStrictEqual(dependencies);
+        expect(schema2.dependencies).toStrictEqual(dependencies);
       });
 
-      const ja = scheme2.defineLocale.strict({
+      const ja = schema2.defineLocale.strict({
         translations: { str2: '', num2: 2, bool2: true },
       });
 
-      const l2 = scheme2.defineLocale({
+      const l2 = schema2.defineLocale({
         translations: { bool2: false },
       });
 
-      const Component2 = scheme2.defineComponent({
+      const Component2 = schema2.defineComponent({
         locales: { ja, l2 },
       });
 
       it('スキーマが参照できること', () => {
-        expect(Component2.scheme).toBe(scheme2);
+        expect(Component2.schema).toBe(schema2);
       });
 
       it('依存コンポーネントが取得できること', () => {
@@ -111,10 +111,10 @@ describe('コンポーネントを定義する時', () => {
 
       it('フォーマッタ用のオプションが取得できること', () => {
         expect(Component2.dateTimeFormats).toStrictEqual(
-          scheme2.dateTimeFormats,
+          schema2.dateTimeFormats,
         );
-        expect(Component2.numberFormats).toStrictEqual(scheme2.numberFormats);
-        expect(Component2.listFormats).toStrictEqual(scheme2.listFormats);
+        expect(Component2.numberFormats).toStrictEqual(schema2.numberFormats);
+        expect(Component2.listFormats).toStrictEqual(schema2.listFormats);
       });
     });
 
@@ -137,13 +137,13 @@ describe('コンポーネントを定義する時', () => {
       });
 
       it('コンポーネントからスキーマが取得できること', () => {
-        expect(c1.scheme).toBe(scheme);
+        expect(c1.schema).toBe(schema);
       });
 
       it('フォーマッタ用のオプションが取得できること', () => {
-        expect(c1.dateTime.settings()).toStrictEqual(scheme.dateTimeFormats);
-        expect(c1.number.settings()).toStrictEqual(scheme.numberFormats);
-        expect(c1.list.settings()).toStrictEqual(scheme.listFormats);
+        expect(c1.dateTime.settings()).toStrictEqual(schema.dateTimeFormats);
+        expect(c1.number.settings()).toStrictEqual(schema.numberFormats);
+        expect(c1.list.settings()).toStrictEqual(schema.listFormats);
       });
     });
   });

@@ -3,7 +3,7 @@ import imageminPngquant from 'imagemin-pngquant';
 import imageminMozjpeg from 'imagemin-mozjpeg';
 import { createProcessor } from '../helpers';
 import { logger } from '../logger';
-import { UpdateInfo } from '../schemes';
+import { UpdateInfo } from '../schema';
 
 const targetExtensions = ['jpg', 'png'];
 const targetExtensionsRe = new RegExp(`.(${targetExtensions.join('|')})$`, 'i');

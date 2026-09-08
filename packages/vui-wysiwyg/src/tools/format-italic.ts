@@ -1,5 +1,5 @@
 import { Italic, ItalicOptions } from '@tiptap/extension-italic';
-import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schemes';
+import { WysiwygEditorToolFactory, WysiwygEditorTool } from '../schema';
 
 export const WysiwygFormatItalicTool: WysiwygEditorToolFactory<
   ItalicOptions

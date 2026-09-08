@@ -9,11 +9,11 @@ import {
   I18nDependencies,
   I18nInstantiatedDependencies,
   I18nTypedImported,
-} from './schemes';
+} from './schema';
 import {
-  I18nComponentScheme,
-  I18nComponentSchemeImpl,
-} from './component-scheme';
+  I18nComponentSchema,
+  I18nComponentSchemaImpl,
+} from './component-schema';
 import { I18nComponentLocale } from './component-locale';
 import { I18nSpace } from './space';
 import { I18nLocalesLoader } from './loader';
@@ -186,7 +186,7 @@ export type I18nComponentStaticSettings<
   name?: string;
 
   /** component schema */
-  scheme: I18nComponentScheme<
+  schema: I18nComponentSchema<
     LocaleName,
     BaseLocale,
     LocaleMeta,
@@ -235,7 +235,7 @@ export interface I18nComponentStaticImpl<
   readonly name?: string;
 
   /** component schema */
-  readonly scheme: I18nComponentScheme<
+  readonly schema: I18nComponentSchema<
     LocaleName,
     BaseLocale,
     LocaleMeta,
@@ -361,7 +361,7 @@ export interface I18nComponentStatic<
       ListFormats,
       Dependencies
     >,
-    I18nComponentSchemeImpl<
+    I18nComponentSchemaImpl<
       DateTimeFormats,
       RelativeTimeFormats,
       NumberFormats,
@@ -451,7 +451,7 @@ export function defineI18nComponent<
   ListFormats,
   Dependencies
 > {
-  const { name, scheme, locales } = settings;
+  const { name, schema, locales } = settings;
   const {
     Space,
     dependencies,
@@ -459,8 +459,8 @@ export function defineI18nComponent<
     relativeTimeFormats,
     numberFormats,
     listFormats,
-  } = scheme;
-  const formatterCache = new I18nFormatter(scheme);
+  } = schema;
+  const formatterCache = new I18nFormatter(schema);
 
   const loader = new I18nLocalesLoader(locales, (localeName, locale) => {
     formatterCache.applyLocale(localeName, locale);
@@ -479,7 +479,7 @@ export function defineI18nComponent<
   > = {
     name,
     locales,
-    scheme,
+    schema,
     dependencies,
     dateTimeFormats,
     relativeTimeFormats,
@@ -531,7 +531,7 @@ export function defineI18nComponent<
         name,
         Ctor,
         space,
-        scheme,
+        schema,
         get trans() {
           return getTranslations();
         },

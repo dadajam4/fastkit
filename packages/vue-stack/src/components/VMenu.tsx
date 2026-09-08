@@ -28,7 +28,7 @@ import {
   MergeStackBaseSlots,
   StackableTabCloseSpec,
   VStackControl,
-} from '../schemes';
+} from '../schema';
 import {
   DefineStackableSettings,
   setupStackableComponent,
@@ -58,7 +58,7 @@ export type MenuOverlapSettings = 'allow' | 'disallow' | 'overlap';
 
 type RawMenuOverlapSettings = MenuOverlapSettings | boolean;
 
-interface CreateMenuSchemeOptions {
+interface CreateMenuSchemaOptions {
   /**
    * @default "v-menu-auto"
    */
@@ -105,7 +105,7 @@ const RAW_MENU_MAX_SIZE_PROP = [
   Function,
 ] as PropType<RawMenuMaxSize>;
 
-export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
+export function createMenuProps(options: CreateMenuSchemaOptions = {}) {
   const {
     defaultDistance = DEFAULT_DISTANCE,
     defaultEdgeMargin = DEFAULT_EDGE_MARGIN,
@@ -256,7 +256,7 @@ export function createMenuProps(options: CreateMenuSchemeOptions = {}) {
   };
 }
 
-function createMenuScheme(options: CreateMenuSchemeOptions = {}) {
+function createMenuSchema(options: CreateMenuSchemaOptions = {}) {
   const {
     defaultTransition = DEFAULT_TRANSITION,
     defaultScrollLock = false,
@@ -284,7 +284,7 @@ export type MenuPropsOptions = ReturnType<typeof createMenuProps>;
 
 export type MenuInput = ExtractPropInput<MenuPropsOptions>;
 
-export type MenuEmits = ReturnType<typeof createMenuScheme>['emits'];
+export type MenuEmits = ReturnType<typeof createMenuSchema>['emits'];
 
 export type VMenuXPosition =
   'left' | 'left-inner' | 'center' | 'right' | 'right-inner';
@@ -358,7 +358,7 @@ export interface DefineMenuSettings<
 >
   extends
     DefineStackableSettings<Props & MenuPropsOptions, Emits, Slots, MenuAPI>,
-    CreateMenuSchemeOptions,
+    CreateMenuSchemaOptions,
     Pick<UseStackControlOptions, 'activatorAttrs' | 'stackType'> {
   props?: Props;
   emits?: Emits;
@@ -384,7 +384,7 @@ export function defineMenuComponent<
   Emits extends EmitsOptions = {},
   Slots extends SlotsType = SlotsType<{}>,
 >(settings: DefineMenuSettings<Props, Emits, Slots>) {
-  const baseScheme = createMenuScheme(settings);
+  const baseSchema = createMenuSchema(settings);
   const {
     name,
     props: customProps,
@@ -397,18 +397,18 @@ export function defineMenuComponent<
     name,
     inheritAttrs: false,
     props: {
-      ...baseScheme.props,
+      ...baseSchema.props,
       ...customProps,
-    } as typeof baseScheme.props &
+    } as typeof baseSchema.props &
       Props &
-      EmitsToPropOptions<typeof baseScheme.emits & Emits>,
+      EmitsToPropOptions<typeof baseSchema.emits & Emits>,
     emits: {
-      ...baseScheme.emits,
+      ...baseSchema.emits,
       ...emits,
-    } as typeof baseScheme.emits & Emits,
+    } as typeof baseSchema.emits & Emits,
     slots: settings.slots as MergeStackBaseSlots<Slots>,
     setup(_props: any, _ctx) {
-      const __props = _props as ExtractPropTypes<typeof baseScheme.props>;
+      const __props = _props as ExtractPropTypes<typeof baseSchema.props>;
 
       let _intersectionObserver: IntersectionObserver | undefined;
 

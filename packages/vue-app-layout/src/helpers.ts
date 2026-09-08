@@ -5,7 +5,7 @@ import {
   VAL_STICK_X_POSITIONS,
   VAL_STICK_Y_POSITIONS,
   VAL_BAR_TYPES,
-} from './schemes';
+} from './schema';
 
 export const verticals = objectFromArray.build(VAL_Y_POSITIONS);
 

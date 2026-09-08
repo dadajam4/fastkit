@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import {
   generateVotGeneratePagePaths,
   VOT_GENERATE_PAGES_PATH,
-} from '../../schemes/generate';
+} from '../../schema/generate';
 import {
   resolveViteConfig,
   findVotPlugin,

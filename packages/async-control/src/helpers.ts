@@ -8,7 +8,7 @@ import {
   AsyncHandlerCacheBehavior,
   AsyncHandlerCacheErrorHandlerMap,
   AsyncHandlerCacheRevalidateChecker,
-} from './schemes';
+} from './schema';
 
 export function normalizeAsyncHandlerCacheRevalidateCondition<T = any>(
   source: AsyncHandlerCacheRevalidateCondition<T>,

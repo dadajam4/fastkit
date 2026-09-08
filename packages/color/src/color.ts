@@ -5,7 +5,7 @@ import {
   ColorSource,
   ColorInfo,
   RawMixOptions,
-} from './schemes';
+} from './schema';
 import {
   parseHue2deg,
   parseColorSource,

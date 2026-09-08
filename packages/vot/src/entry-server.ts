@@ -12,12 +12,12 @@ import {
   renderPreloadLinks,
   extractHeadAssets,
 } from './utils/html';
-import { setupVotPluginsAndHooks } from './schemes';
+import { setupVotPluginsAndHooks } from './schema';
 import type {
   SsrHandler,
   VotContext,
   VotBeforeRouterSetupParams,
-} from './schemes';
+} from './schema';
 
 import { provideContext } from './injections';
 

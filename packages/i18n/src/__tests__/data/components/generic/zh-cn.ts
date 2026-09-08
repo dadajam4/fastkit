@@ -1,6 +1,6 @@
-import { genericScheme } from './scheme';
+import { genericSchema } from './schema';
 
-export const zhcn = genericScheme.defineLocale({
+export const zhcn = genericSchema.defineLocale({
   translations: (component) => ({
     str: '简体中文 str',
     nested: {

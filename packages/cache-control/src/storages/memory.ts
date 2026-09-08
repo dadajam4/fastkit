@@ -4,7 +4,7 @@ import {
   CacheStorage,
   DeleteCacheRequest,
   GetCacheRequest,
-} from '../schemes';
+} from '../schema';
 
 const DEFAULT_MAX_KEYS = 32767;
 

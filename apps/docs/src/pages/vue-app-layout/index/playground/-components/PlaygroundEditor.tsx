@@ -17,7 +17,7 @@ import {
 } from '@fastkit/vui';
 import * as styles from './PlaygroundEditor.css';
 import { PlaygroundContext } from '../-context';
-import { ItemLevel } from '../-schemes';
+import { ItemLevel } from '../-schema';
 
 export const PlaygroundEditor = defineComponent({
   name: 'PlaygroundEditor',

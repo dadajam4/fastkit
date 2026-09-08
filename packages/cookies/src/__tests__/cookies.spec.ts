@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { Cookies } from '../cookies';
-import type { CookiesServerContext } from '../schemes';
+import type { CookiesServerContext } from '../schema';
 
 function createRequest(cookie = ''): IncomingMessage {
   return { headers: { cookie } } as unknown as IncomingMessage;

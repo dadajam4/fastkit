@@ -9,7 +9,7 @@ import {
   WatchQueryOption,
   RouterViewSlotProps,
   VuePageKeyOverride,
-} from './schemes';
+} from './schema';
 
 export function parseWatchQueryOption(
   route: RouteLocationNormalized,

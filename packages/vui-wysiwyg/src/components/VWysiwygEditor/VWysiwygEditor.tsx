@@ -47,7 +47,7 @@ import {
   WysiwygEditorContext,
   // EditorEventsOptions,
   WysiwygEditorInitializeContext,
-} from '../../schemes';
+} from '../../schema';
 
 const slots = defineSlots<FormNodeWrapperSlots & InputBoxSlots>();
 

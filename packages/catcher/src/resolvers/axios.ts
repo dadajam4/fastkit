@@ -3,7 +3,7 @@
  */
 
 import type { AxiosError, AxiosRequestConfig } from 'axios';
-import { createCatcherResolver } from '../schemes';
+import { createCatcherResolver } from '../schema';
 
 /**
  * Verify that the value of the specified argument is an axios error

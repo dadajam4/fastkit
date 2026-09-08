@@ -4,9 +4,9 @@ import {
   ColorSchemeSource,
   ColorSchemeJSON,
   ColorScheme,
-} from './schemes';
+} from './schema';
 
-export * from './schemes';
+export * from './schema';
 
 export function createColorScheme<
   TN extends string,

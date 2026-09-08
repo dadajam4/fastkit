@@ -1,5 +1,5 @@
 import { RecursiveArray } from '@fastkit/helpers';
-import { ValidationError } from '../schemes';
+import { ValidationError } from '../schema';
 import { objectPathJoin } from '../utils';
 import { validate } from '../services';
 import { Rule, createRule, RuleBasicSettings } from './rule';

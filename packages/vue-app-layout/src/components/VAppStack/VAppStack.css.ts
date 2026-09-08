@@ -2,7 +2,7 @@ import { calc } from '@vanilla-extract/css-utils';
 import { component } from '~/styles/layers.css';
 import { tokens, computedTokens } from '../../styles';
 import { verticals, horizontals, sticks, bars } from '../../helpers';
-import { VAL_Y_POSITIONS, VAL_BAR_TYPES } from '../../schemes';
+import { VAL_Y_POSITIONS, VAL_BAR_TYPES } from '../../schema';
 
 export const host = component.style({
   position: 'fixed',

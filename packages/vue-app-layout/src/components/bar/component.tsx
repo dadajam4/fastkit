@@ -1,7 +1,7 @@
 import { defineComponent, PropType, computed, Teleport, Transition } from 'vue';
 import { defineSlots } from '@fastkit/vue-utils';
 import * as _styles from './styles.css';
-import { VueAppLayoutPositionY, VueAppLayoutBarType } from '../../schemes';
+import { VueAppLayoutPositionY, VueAppLayoutBarType } from '../../schema';
 import {
   useVueAppLayout,
   VueAppBar,

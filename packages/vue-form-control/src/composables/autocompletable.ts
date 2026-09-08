@@ -1,7 +1,7 @@
 import { ExtractPropTypes, computed, PropType } from 'vue';
 import { createPropsOptions } from '@fastkit/vue-utils';
 import { FormNodeControlBaseOptions } from './node';
-import { FormAutoComplete } from '../schemes';
+import { FormAutoComplete } from '../schema';
 
 let _defaultAutocomplete: FormAutoComplete | boolean | undefined;
 

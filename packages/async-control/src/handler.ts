@@ -6,7 +6,7 @@ import {
   AsyncHandlerHashArgs,
   AsyncHandlerCacheSettings,
   AsyncHandlerErrorLogger,
-} from './schemes';
+} from './schema';
 import { resolveRawAsyncHandlerCacheBehavior } from './helpers';
 import { AsyncHandlerRequest } from './request';
 

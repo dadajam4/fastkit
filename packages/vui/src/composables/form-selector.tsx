@@ -20,7 +20,7 @@ import { createControlProps, useControl } from './control';
 import { VFormControl } from '../components/VFormControl';
 import { useVui } from '../injections';
 import { VProgressCircular } from '../components/loading';
-import { CONTROL_LOADING_SPINNER_SIZES } from '../schemes';
+import { CONTROL_LOADING_SPINNER_SIZES } from '../schema';
 
 export interface DefineFormSelectorComponentOptions {
   name: string;

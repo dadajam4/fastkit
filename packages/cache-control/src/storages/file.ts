@@ -6,7 +6,7 @@ import {
   CacheStorage,
   DeleteCacheRequest,
   GetCacheRequest,
-} from '../schemes';
+} from '../schema';
 
 /**
  * @see https://developer.mozilla.org/docs/Web/API/setTimeout#maximum_delay_value

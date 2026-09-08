@@ -31,7 +31,7 @@ import {
   BuiltinTextFinalizerName,
   BUILTIN_TEXT_FINALIZERS,
   FormAutoComplete,
-} from '../schemes';
+} from '../schema';
 import { logger } from '../logger';
 
 export type TextableFinalizerSpec =

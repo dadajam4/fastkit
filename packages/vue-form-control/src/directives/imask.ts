@@ -5,7 +5,7 @@ import {
   IMaskEventType,
   IMaskInput,
   resolveIMaskInput,
-} from '../schemes';
+} from '../schema';
 
 type AnyMaskedOptions = any;
 export type IMaskDirectiveBindingValue = IMaskInput;

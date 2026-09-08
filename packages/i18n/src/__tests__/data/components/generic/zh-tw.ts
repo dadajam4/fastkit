@@ -1,5 +1,5 @@
-import { genericScheme } from './scheme';
+import { genericSchema } from './schema';
 
-export const zhtw = genericScheme.defineLocale({
+export const zhtw = genericSchema.defineLocale({
   translations: {},
 });

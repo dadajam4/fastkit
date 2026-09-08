@@ -3,7 +3,7 @@ import {
   ScrollResult,
   defaultSettings,
   ScrollPosition,
-} from './schemes';
+} from './schema';
 import { $, error } from './util';
 import { scrollTo } from './scroll-to';
 

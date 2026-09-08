@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { MemoryCacheStorage } from '../memory';
-import { CacheDetails } from '../../schemes';
+import { CacheDetails } from '../../schema';
 
 /**
  * Expiry is driven by a `setTimeout` scheduled in `set()`, so only the timer

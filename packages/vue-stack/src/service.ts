@@ -1,5 +1,5 @@
 import { Ref, ref, markRaw, ComputedRef, computed } from 'vue';
-import { VStackControl } from './schemes/control';
+import { VStackControl } from './schema/control';
 import {
   DynamicStackInternalSetting,
   StackableComponent,
@@ -9,9 +9,9 @@ import {
   DynamicStackPayload,
   resolveDynamicStackSettings,
   StackableLauncher,
-} from './schemes/dynamic';
+} from './schema/dynamic';
 
-export type { VStackControl } from './schemes/control';
+export type { VStackControl } from './schema/control';
 
 export { VueStackInjectionKey } from './injections';
 

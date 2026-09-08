@@ -1,3 +1,3 @@
-export * from './schemes';
+export * from './schema';
 export * from './generator';
 export * from './recommended';
