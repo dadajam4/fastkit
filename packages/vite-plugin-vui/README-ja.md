@@ -45,5 +45,12 @@ pnpm add -D @fastkit/color-scheme-gen @fastkit/media-match-gen @fastkit/icon-fon
 `@fastkit/vui` からエクスポートされる `ThemeName` / `PaletteName` / `ScopeName` /
 `ColorVariant` にそのまま現れます。
 
+### 生成ディレクトリについて
+
+`.vui/` は生成物です。編集しないでください。また、削除する必要もありません。`.vui/.manifest.json` に生成したバージョンが記録されており、変化があればディレクトリを空にして作り直します。関係する `@fastkit/*` パッケージのアップグレードはこれで吸収され、生成されなくなった出力（削除したアイコンフォントのエントリなど）も取り除かれます。
+
+コミットするかどうかは任意です。コミットする場合、内部の import は相対パスなのでどのチェックアウトでも解決できます。
+
+
 ## ドキュメント
 https://dadajam4.github.io/fastkit/vite-plugin-vui/

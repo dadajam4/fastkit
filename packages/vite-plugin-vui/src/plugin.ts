@@ -7,6 +7,7 @@ import { VuiServiceOptions } from '@fastkit/vui';
 import { Eta } from 'eta';
 import module from 'node:module';
 import { VitePluginVuiError } from './logger';
+import pkg from '../package.json';
 
 const COLOR_DUMP_STYLE = `${`
 /* stylelint-disable */
@@ -95,6 +96,94 @@ const require = module.createRequire(import.meta.url);
  */
 function getBuiltinsDir() {
   return path.dirname(require.resolve('@fastkit/vui/builtins/color-scheme.ts'));
+}
+
+/**
+ * Name of the file recording what produced the generated tree.
+ *
+ * Dot-prefixed to sit alongside the generators' own `.hash` meta files rather
+ * than looking like something the project wrote.
+ */
+const MANIFEST_NAME = '.manifest.json';
+
+/**
+ * Packages whose version decides what the generated tree looks like.
+ *
+ * `@fastkit/vite-kit` and the three generators are resolved through vite-kit
+ * rather than from here: under pnpm a package's dependencies sit beside *it*,
+ * not beside its dependents, so `@fastkit/color-scheme-gen` does not resolve
+ * from this package's directory at all. vite-kit does, being a direct
+ * dependency, and the generators are its own.
+ */
+const GENERATOR_PACKAGES = [
+  '@fastkit/icon-font-gen',
+  '@fastkit/color-scheme-gen',
+  '@fastkit/media-match-gen',
+];
+
+interface GeneratedTreeManifest {
+  /** Bumped when the manifest's own shape changes, to force one rebuild. */
+  manifest: number;
+  generators: Record<string, string | undefined>;
+  runtimeModule: string;
+  /** Directory names under `icon-font/`, so a removed entry leaves nothing behind. */
+  iconFonts: string[];
+}
+
+function readVersion(from: NodeRequire, name: string): string | undefined {
+  try {
+    return fs.readJsonSync(from.resolve(`${name}/package.json`)).version;
+  } catch {
+    return undefined;
+  }
+}
+
+function collectGeneratorVersions(): Record<string, string | undefined> {
+  const versions: Record<string, string | undefined> = {
+    '@fastkit/vite-plugin-vui': pkg.version,
+    '@fastkit/vite-kit': readVersion(require, '@fastkit/vite-kit'),
+  };
+  let fromViteKit: NodeRequire | undefined;
+  try {
+    fromViteKit = module.createRequire(
+      require.resolve('@fastkit/vite-kit/package.json'),
+    );
+  } catch {
+    fromViteKit = undefined;
+  }
+  for (const name of GENERATOR_PACKAGES) {
+    versions[name] = fromViteKit ? readVersion(fromViteKit, name) : undefined;
+  }
+  return versions;
+}
+
+/**
+ * Discard a generated tree that a different toolchain produced.
+ *
+ * Only `@fastkit/icon-font-gen` skips work when nothing changed, and it decides
+ * that from its own version and options alone (#191). Nothing accounted for a
+ * change in this package, in `@fastkit/vite-kit`, or in what the generators are
+ * asked to emit -- and nothing removed output that is no longer generated at
+ * all, such as `icon-font/<name>/` for an entry that has since been dropped:
+ * the watch-mode runner only ever adds. Projects worked around both by deleting
+ * the directory by hand whenever a `@fastkit/*` version moved.
+ *
+ * So record what produced the tree, and empty it when that no longer matches.
+ * The manifest is written only after generation succeeds, so a failed run
+ * leaves no claim and the next one starts clean again.
+ */
+function resetGeneratedTreeOnToolchainChange(
+  dynamicDest: string,
+  manifest: GeneratedTreeManifest,
+): void {
+  const manifestPath = path.join(dynamicDest, MANIFEST_NAME);
+  // The manifest is built with a fixed key order, so comparing the serialized
+  // form is enough and keeps this free of a deep-equal dependency.
+  const previous = fs.existsSync(manifestPath)
+    ? fs.readFileSync(manifestPath, 'utf-8')
+    : undefined;
+  if (previous === JSON.stringify(manifest, null, 2)) return;
+  fs.emptyDirSync(dynamicDest);
 }
 
 /**
@@ -281,15 +370,6 @@ export async function viteVuiPlugin(
 export {};
   `.trim();
 
-  fs.ensureDirSync(dynamicDest);
-  fs.writeFileSync(path.join(dynamicDest, 'setup.scss'), COLOR_DUMP_STYLE);
-  // `vui.d.ts`, not `.d.mts`: this file exists to be named in a project's
-  // `compilerOptions.types` (`["./.vui/vui"]`), and that lookup only considers
-  // `.d.ts`. It carries nothing but `/// <reference path>` lines pointing at the
-  // generated declarations, so it has to be reachable for their `declare module`
-  // augmentations to apply at all.
-  fs.writeFileSync(path.join(dynamicDest, 'vui.d.ts'), dts);
-
   let iconFontEntries: RawIconFontEntry[] = iconFont || [
     {
       src: '@mdi',
@@ -302,6 +382,32 @@ export {};
       ...entry,
     }));
   }
+
+  const manifest: GeneratedTreeManifest = {
+    manifest: 1,
+    generators: collectGeneratorVersions(),
+    runtimeModule: RUNTIME_MODULE,
+    // `resolveRawIconFontEntry` derives the same name, from `src` when none is
+    // given; `@mdi` is its one special case. Absolute paths stay out, so the
+    // manifest does not differ between a developer's machine and CI.
+    iconFonts: iconFontEntries
+      .map(
+        ({ name, src }) =>
+          name || (src === '@mdi' ? 'mdi' : path.basename(src)),
+      )
+      .sort(),
+  };
+
+  resetGeneratedTreeOnToolchainChange(dynamicDest, manifest);
+
+  fs.ensureDirSync(dynamicDest);
+  fs.writeFileSync(path.join(dynamicDest, 'setup.scss'), COLOR_DUMP_STYLE);
+  // `vui.d.ts`, not `.d.mts`: this file exists to be named in a project's
+  // `compilerOptions.types` (`["./.vui/vui"]`), and that lookup only considers
+  // `.d.ts`. It carries nothing but `/// <reference path>` lines pointing at the
+  // generated declarations, so it has to be reachable for their `declare module`
+  // augmentations to apply at all.
+  fs.writeFileSync(path.join(dynamicDest, 'vui.d.ts'), dts);
 
   plugins.push(
     ...dynamicSrcVitePlugin({
@@ -320,7 +426,19 @@ export {};
         dest: path.join(dynamicDest, 'icon-font'),
         runtimeModule: RUNTIME_MODULE,
       },
-      onBooted,
+      // The manifest is written here, not in this plugin's own `config` hook:
+      // that hook is `enforce: 'pre'`, so it runs *before* the generators. This
+      // fires once they have all booted, which is the only point where the tree
+      // on disk is known to match what the manifest claims. A failed run
+      // therefore leaves the directory it emptied without a manifest, and the
+      // next one regenerates from scratch.
+      onBooted: async () => {
+        await fs.writeFile(
+          path.join(dynamicDest, MANIFEST_NAME),
+          JSON.stringify(manifest, null, 2),
+        );
+        await onBooted?.();
+      },
       onBootError,
     }),
   );

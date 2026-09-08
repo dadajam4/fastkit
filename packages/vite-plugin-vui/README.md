@@ -45,5 +45,12 @@ scheme needs nothing else. Whatever themes, palettes, scopes and variants you de
 up in `ThemeName`, `PaletteName`, `ScopeName` and `ColorVariant` as exported from
 `@fastkit/vui`.
 
+### The generated directory
+
+`.vui/` is generated. Do not edit it, and there is no need to delete it either: `.vui/.manifest.json` records the versions that produced it, and the directory is emptied and rebuilt whenever they change. That covers upgrades of any `@fastkit/*` package involved, and removes output that is no longer generated — an icon-font entry you dropped, for instance.
+
+Committing it is optional. If you do, the imports inside it are relative, so it resolves on any checkout.
+
+
 ## Documentation
 https://dadajam4.github.io/fastkit/vite-plugin-vui/
