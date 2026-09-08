@@ -9,6 +9,14 @@ import { resolveAdditionalData } from '~/utils';
 export interface ColorSchemeVitePluginOptions {
   src: string;
   dest?: string;
+  /**
+   * Module the generated code imports from and augments.
+   *
+   * Defaults to the leaf runtime package. Point it at a module the consuming
+   * project already declares -- one that re-exports that package -- and the
+   * project does not have to declare the leaf itself.
+   */
+  runtimeModule?: string;
   onBooted?: (() => any) | (() => Promise<any>);
   onBootError?: (err: unknown) => any;
 }
@@ -21,7 +29,7 @@ let cachePaths: UnPromisify<
 export function colorSchemeVitePlugin(
   opts: ColorSchemeVitePluginOptions,
 ): Plugin {
-  const { src, dest: _dest, onBooted, onBootError } = opts;
+  const { src, dest: _dest, runtimeModule, onBooted, onBootError } = opts;
 
   const rawEntryPoint = path.resolve(src);
 
@@ -44,6 +52,7 @@ export function colorSchemeVitePlugin(
             entry: rawEntryPoint,
             dest,
             watch: command === 'serve',
+            runtimeModule,
           });
         }
 
