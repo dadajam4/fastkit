@@ -1,6 +1,7 @@
 import esbuild, { Plugin } from 'esbuild';
 import path from 'node:path';
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import chokidar, { type FSWatcher } from 'chokidar';
 import { EV } from '@fastkit/ev';
 import module from 'node:module';
@@ -83,6 +84,59 @@ const nativeNodeModulesPlugin: Plugin = {
   },
 };
 
+/**
+ * Resolve `esbuild` to the copy this package itself uses.
+ *
+ * The bundle is written into the *consumer's*
+ * `node_modules/.esbuild-require/` and required from there, so a bare
+ * `require('esbuild')` inside it resolves from the consumer's package — which
+ * has no esbuild unless it declares one, and would anyway be free to declare a
+ * version other than the one that produced the bundle. Resolving to an absolute
+ * path here leaves no bare specifier in the output and takes the requirement off
+ * the consumer.
+ *
+ * The path is resolved lazily, so an entry point that never imports esbuild
+ * neither pays for it nor fails on it. Subpaths (`esbuild/…`) are left to the
+ * `external` option below, since esbuild's own `exports` map does not publish
+ * them.
+ */
+const ownESbuildPlugin: Plugin = {
+  name: 'own-esbuild',
+  setup({ onResolve }) {
+    onResolve({ filter: /^esbuild$/ }, () => ({
+      path: require.resolve('esbuild'),
+      external: true,
+    }));
+  },
+};
+
+/**
+ * Directory name for an entry point's build cache.
+ *
+ * The name has to be unique per entry point, stable across runs, and short
+ * enough to be a single path segment: most filesystems cap one at 255 bytes
+ * (`NAME_MAX`). Flattening the absolute path — which is what this used to do —
+ * satisfies the first two and fails the third, and a path from
+ * `require.resolve()` gets there easily, since Node returns the realpath and
+ * pnpm's virtual store puts a peer-dependency hash in it.
+ *
+ * So: the basename for the reader, and a hash of the absolute path for
+ * uniqueness. Everything outside `[A-Za-z0-9_.-]` is replaced, so each
+ * character is one byte and the name is at most 77 of them.
+ */
+function toCacheName(entryPoint: string): string {
+  const readable = path
+    .basename(entryPoint)
+    .replace(/[^\w.-]/g, '_')
+    .slice(0, 60);
+  const hash = crypto
+    .createHash('sha256')
+    .update(entryPoint)
+    .digest('hex')
+    .slice(0, 16);
+  return `${readable}-${hash}`;
+}
+
 export interface ESbuildRequireResult<T = any> {
   entryPoint: string;
   exports: T;
@@ -137,7 +191,7 @@ export async function esbuildRequire<T = any>(
   const pkgDir = await findPackageDir();
   if (!pkgDir) throw new NodeUtilError('missing package.');
   const tsconfig = await findTSConfigPath(pkgDir);
-  const cacheName = entryPoint.replace(/\//g, '_');
+  const cacheName = toCacheName(entryPoint);
   const cacheDir = path.join(
     pkgDir,
     'node_modules/.esbuild-require',
@@ -156,7 +210,7 @@ export async function esbuildRequire<T = any>(
     metafile: true,
     // logLevel: 'warning',
     // external: ['module'],
-    plugins: [jsFileLocationPlugin, nativeNodeModulesPlugin],
+    plugins: [ownESbuildPlugin, jsFileLocationPlugin, nativeNodeModulesPlugin],
     outfile,
   });
 
