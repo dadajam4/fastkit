@@ -26,6 +26,19 @@ npm install @fastkit/vui
 pnpm add @fastkit/vui
 ```
 
+### Peer dependencies
+
+```bash
+pnpm add @fastkit/icon-font @fastkit/color-scheme @fastkit/media-match vue vue-router
+```
+
+`@fastkit/vui` exposes types from `@fastkit/icon-font`, `@fastkit/color-scheme` and
+`@fastkit/media-match` in its own public types — icon names, color scopes, media-match
+keys — and the code generated for your project augments those modules to replace their
+placeholder types with your real values. A module augmentation only applies to the copy it
+resolves, so your project has to resolve the same copies `@fastkit/vui` does. Installing
+them directly is what guarantees that; a transitive install does not.
+
 ## Basic Usage
 
 ### Plugin Setup

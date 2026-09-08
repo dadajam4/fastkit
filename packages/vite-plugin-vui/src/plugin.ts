@@ -5,8 +5,8 @@ import fs from 'fs-extra';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
 import { VuiServiceOptions } from '@fastkit/vui';
 import { Eta } from 'eta';
+import module from 'node:module';
 import { VitePluginVuiError } from './logger';
-import { getPackageDir } from '@fastkit/plugboy/runtime-utils';
 
 const COLOR_DUMP_STYLE = `${`
 /* stylelint-disable */
@@ -65,9 +65,84 @@ function defaultDynamicDest() {
   return path.resolve('.vui');
 }
 
-async function getBuiltinsDir() {
-  const pkgDir = await getPackageDir();
-  return path.join(pkgDir, 'node_modules/@fastkit/vui/dist/builtins');
+const require = module.createRequire(import.meta.url);
+
+/**
+ * Where `@fastkit/vui` keeps the default color-scheme and media-match sources.
+ *
+ * Resolved through vui's own exports rather than assembled as
+ * `<pkgDir>/node_modules/@fastkit/vui/dist/builtins`: that path only exists when
+ * vui happens to be installed *inside* this package's directory, which no
+ * package manager guarantees. pnpm puts a package's dependencies beside it in
+ * the virtual store, with no `node_modules` in the package directory at all, and
+ * npm hoists them to the root — so the assembled path was simply absent for
+ * anyone who installed this plugin, and the defaults could not be used.
+ */
+function getBuiltinsDir() {
+  return path.dirname(require.resolve('@fastkit/vui/builtins/color-scheme.ts'));
+}
+
+/**
+ * Packages the generated tree imports by name.
+ *
+ * The files this plugin writes live in the consumer's project, so these resolve
+ * from there — not from this package. They are declared as required peers for
+ * exactly that reason, but a peer declaration cannot place them: pnpm only puts
+ * what the project itself declares into its `node_modules`, and an
+ * auto-installed peer lands in the virtual store where the generated tree cannot
+ * see it. So check, and say what is missing.
+ *
+ * Left unchecked, the consumer gets the symptom instead of the cause: the
+ * `declare module` augmentations in the generated tree resolve nothing, every
+ * icon name and color scope falls back to its placeholder type, and `tsc`
+ * reports hundreds of `TS2322` while the generator and `vite build` both
+ * succeed.
+ */
+const GENERATED_TREE_IMPORTS = [
+  '@fastkit/color-scheme',
+  '@fastkit/icon-font',
+  '@fastkit/media-match',
+  '@fastkit/vue-page',
+  '@fastkit/vui',
+  'vue',
+  'vue-router',
+];
+
+function assertGeneratedTreeIsResolvable(dynamicDest: string) {
+  // Resolution is attempted from the generated tree itself, since that is where
+  // the imports will be resolved from.
+  const from = module.createRequire(path.join(dynamicDest, 'index.js'));
+  const missing = GENERATED_TREE_IMPORTS.filter((name) => {
+    try {
+      // `<name>/package.json`, not `<name>`: these packages export only the
+      // `import` condition, so a bare specifier throws under `createRequire`
+      // even when installed.
+      from.resolve(`${name}/package.json`);
+      return false;
+    } catch (err) {
+      // Present, but not exporting `./package.json`.
+      return (
+        (err as NodeJS.ErrnoException).code !== 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+      );
+    }
+  });
+  if (!missing.length) return;
+
+  throw new VitePluginVuiError(
+    [
+      `Cannot resolve ${missing.map((name) => `\`${name}\``).join(', ')} from ${dynamicDest}.`,
+      '',
+      'The code this plugin generates there imports them by name, so they have to be',
+      'resolvable from your project — a transitive install is not enough, and neither is',
+      'an auto-installed peer dependency. Add them to your project:',
+      '',
+      `  pnpm add ${missing.join(' ')}`,
+      '',
+      'They must be the same copies the rest of your app uses: the generated code augments',
+      'their module declarations to replace placeholder types with your real icon names,',
+      'color scopes and media-match keys.',
+    ].join('\n'),
+  );
 }
 
 export interface ViteVuiPluginOptions extends Partial<
@@ -101,7 +176,7 @@ export async function viteVuiPlugin(
 ): Promise<ViteVuiPluginResult> {
   const plugins: (Plugin | Plugin[])[] = [];
 
-  const builtinsDir = await getBuiltinsDir();
+  const builtinsDir = getBuiltinsDir();
   const {
     colorScheme = path.join(builtinsDir, 'color-scheme'),
     mediaMatch = path.join(builtinsDir, 'media-match'),
@@ -170,6 +245,8 @@ export async function viteVuiPlugin(
     dynamicDest = _dynamicDest;
   }
 
+  assertGeneratedTreeIsResolvable(dynamicDest);
+
   const colorSchemeSrc = path.resolve(colorScheme);
   const colorSchemeDest = path.join(dynamicDest, 'color-scheme');
   const mediaMatchDest = path.join(dynamicDest, 'media-match');
@@ -182,7 +259,12 @@ export {};
 
   fs.ensureDirSync(dynamicDest);
   fs.writeFileSync(path.join(dynamicDest, 'setup.scss'), COLOR_DUMP_STYLE);
-  fs.writeFileSync(path.join(dynamicDest, 'vui.d.mts'), dts);
+  // `vui.d.ts`, not `.d.mts`: this file exists to be named in a project's
+  // `compilerOptions.types` (`["./.vui/vui"]`), and that lookup only considers
+  // `.d.ts`. It carries nothing but `/// <reference path>` lines pointing at the
+  // generated declarations, so it has to be reachable for their `declare module`
+  // augmentations to apply at all.
+  fs.writeFileSync(path.join(dynamicDest, 'vui.d.ts'), dts);
 
   let iconFontEntries: RawIconFontEntry[] = iconFont || [
     {

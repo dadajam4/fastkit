@@ -25,6 +25,19 @@ npm install @fastkit/vui
 pnpm add @fastkit/vui
 ```
 
+### ピア依存関係
+
+```bash
+pnpm add @fastkit/icon-font @fastkit/color-scheme @fastkit/media-match vue vue-router
+```
+
+`@fastkit/vui` は `@fastkit/icon-font` / `@fastkit/color-scheme` / `@fastkit/media-match`
+の型（アイコン名、カラースコープ、メディアマッチのキー）を自身の公開型に露出しており、
+プロジェクト向けに生成されるコードはそれらのモジュールを拡張してプレースホルダ型を実際の
+値に差し替えます。モジュール拡張は解決されたコピーにしか適用されないため、プロジェクト側が
+`@fastkit/vui` と同じコピーを解決する必要があります。直接インストールすることがその保証に
+なります（推移的なインストールでは不十分です）。
+
 ## 基本的な使い方
 
 ### プラグイン設定

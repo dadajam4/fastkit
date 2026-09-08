@@ -25,7 +25,8 @@ npm install @fastkit/vue-color-scheme
 # or
 pnpm add @fastkit/vue-color-scheme
 
-# Dependencies
+# Peer dependencies (install directly: a module augmentation only applies to
+# the copy it resolves, so your project needs the same @fastkit/color-scheme)
 npm install @fastkit/color-scheme vue @unhead/vue
 ```
 

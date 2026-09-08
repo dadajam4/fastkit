@@ -24,7 +24,8 @@ npm install @fastkit/vue-color-scheme
 # or
 pnpm add @fastkit/vue-color-scheme
 
-# 依存関係
+# ピア依存関係（直接インストールしてください。モジュール拡張は解決された
+# コピーにしか適用されないため、同じ @fastkit/color-scheme が必要です）
 npm install @fastkit/color-scheme vue @unhead/vue
 ```
 
