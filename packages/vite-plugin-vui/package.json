@@ -54,10 +54,7 @@
     "fs-extra": "^11.4.0"
   },
   "devDependencies": {
-    "@fastkit/color-scheme": "workspace:^",
-    "@fastkit/icon-font": "workspace:^",
     "@fastkit/icon-font-gen": "workspace:^",
-    "@fastkit/media-match": "workspace:^",
     "@fastkit/vue-page": "workspace:^",
     "@fastkit/vui": "workspace:^",
     "vite": "^8.1.5",
@@ -65,10 +62,7 @@
     "vue-router": "^5.2.0"
   },
   "peerDependencies": {
-    "@fastkit/color-scheme": "workspace:^",
-    "@fastkit/icon-font": "workspace:^",
     "@fastkit/icon-font-gen": "workspace:^",
-    "@fastkit/media-match": "workspace:^",
     "@fastkit/vue-page": "workspace:^",
     "@fastkit/vui": "workspace:^",
     "vite": "^6.0.0 || ^7.0.0 || ^8.0.0",

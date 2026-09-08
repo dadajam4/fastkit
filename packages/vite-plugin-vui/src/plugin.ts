@@ -98,6 +98,20 @@ function getBuiltinsDir() {
 }
 
 /**
+ * The single module the generated tree imports from and augments.
+ *
+ * Each generator defaults to its own leaf package (`@fastkit/icon-font`,
+ * `@fastkit/color-scheme`, `@fastkit/media-match`), which is right for using
+ * them standalone. Here they are pointed at `@fastkit/vui` instead: it
+ * re-exports all three, and a project using this plugin declares it by
+ * definition, so the generated tree resolves without the project having to
+ * declare the leaves as well. Module augmentation follows a re-export to the
+ * interface it aliases, so the augmentations still land on the leaves' own
+ * declarations and every derived type agrees.
+ */
+const RUNTIME_MODULE = '@fastkit/vui';
+
+/**
  * Packages the generated tree imports by name.
  *
  * The files this plugin writes live in the consumer's project, so these resolve
@@ -108,15 +122,14 @@ function getBuiltinsDir() {
  * see it. So check, and say what is missing.
  *
  * Left unchecked, the consumer gets the symptom instead of the cause: the
- * `declare module` augmentations in the generated tree resolve nothing, every
- * icon name and color scope falls back to its placeholder type, and `tsc`
- * reports hundreds of `TS2322` while the generator and `vite build` both
- * succeed.
+ * generator and `vite build` both succeed while the generated tree's imports
+ * resolve nothing.
+ *
+ * Kept to what {@link RUNTIME_MODULE} does not cover: the icon-font,
+ * color-scheme and media-match packages are reached through `@fastkit/vui`, so
+ * they are not listed here.
  */
 const GENERATED_TREE_IMPORTS = [
-  '@fastkit/color-scheme',
-  '@fastkit/icon-font',
-  '@fastkit/media-match',
   '@fastkit/vue-page',
   '@fastkit/vui',
   'vue',
@@ -152,10 +165,6 @@ function assertGeneratedTreeIsResolvable(dynamicDest: string) {
       'an auto-installed peer dependency. Add them to your project:',
       '',
       `  pnpm add ${missing.join(' ')}`,
-      '',
-      'They must be the same copies the rest of your app uses: the generated code augments',
-      'their module declarations to replace placeholder types with your real icon names,',
-      'color scopes and media-match keys.',
     ].join('\n'),
   );
 }
@@ -299,14 +308,17 @@ export {};
       colorScheme: {
         src: colorSchemeSrc,
         dest: colorSchemeDest,
+        runtimeModule: RUNTIME_MODULE,
       },
       mediaMatch: {
         src: path.resolve(mediaMatch),
         dest: mediaMatchDest,
+        runtimeModule: RUNTIME_MODULE,
       },
       iconFont: {
         entries: iconFontEntries,
         dest: path.join(dynamicDest, 'icon-font'),
+        runtimeModule: RUNTIME_MODULE,
       },
       onBooted,
       onBootError,
