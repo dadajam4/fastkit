@@ -21,6 +21,18 @@ VueアプリケーションでTypeセーフなメディアクエリブレイク�
 npm install @fastkit/vue-media-match
 ```
 
+### ピア依存関係
+
+```bash
+pnpm add @fastkit/media-match vue
+```
+
+`@fastkit/vue-media-match` は `@fastkit/media-match` の型（`MediaMatchKey` /
+`MediaMatchConditions`）を自身の型に露出しており、生成されたブレイクポイント定義はその
+モジュールを拡張してプレースホルダのキー型を差し替えます。モジュール拡張は解決された
+コピーにしか適用されないため、`@fastkit/media-match` は推移的に入るのを頼らず直接
+インストールしてください。
+
 ## 基本的な使用方法
 
 ### ブレイクポイントの定義

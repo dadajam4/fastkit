@@ -53,13 +53,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/helpers": "workspace:^",
-    "@fastkit/media-match": "workspace:^"
+    "@fastkit/helpers": "workspace:^"
   },
   "devDependencies": {
+    "@fastkit/media-match": "workspace:^",
     "vue": "^3.5.40"
   },
   "peerDependencies": {
+    "@fastkit/media-match": "workspace:^",
     "vue": "^3.5.0"
   },
   "buildOptions": {

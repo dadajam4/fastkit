@@ -22,6 +22,18 @@ A library for handling type-safe media query breakpoint schemas in Vue applicati
 npm install @fastkit/vue-media-match
 ```
 
+### Peer dependencies
+
+```bash
+pnpm add @fastkit/media-match vue
+```
+
+`@fastkit/vue-media-match` exposes `@fastkit/media-match`'s types (`MediaMatchKey`,
+`MediaMatchConditions`) in its own, and a generated breakpoint definition augments that
+module to replace its placeholder key type. The augmentation only applies to the copy it
+resolves, so install `@fastkit/media-match` directly rather than relying on it arriving
+transitively.
+
 ## Basic Usage
 
 ### Defining Breakpoints

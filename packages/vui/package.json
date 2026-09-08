@@ -57,12 +57,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fastkit/color-scheme": "workspace:^",
     "@fastkit/color-scheme-gen": "workspace:^",
     "@fastkit/dom": "workspace:^",
     "@fastkit/helpers": "workspace:^",
-    "@fastkit/icon-font": "workspace:^",
-    "@fastkit/media-match": "workspace:^",
     "@fastkit/media-match-gen": "workspace:^",
     "@fastkit/rules": "workspace:^",
     "@fastkit/stylebase": "workspace:^",
@@ -85,10 +82,16 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
+    "@fastkit/color-scheme": "workspace:^",
+    "@fastkit/icon-font": "workspace:^",
+    "@fastkit/media-match": "workspace:^",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
   },
   "peerDependencies": {
+    "@fastkit/color-scheme": "workspace:^",
+    "@fastkit/icon-font": "workspace:^",
+    "@fastkit/media-match": "workspace:^",
     "vue": "^3.5.0",
     "vue-router": "^4.4.0 || ^5.0.0"
   },
