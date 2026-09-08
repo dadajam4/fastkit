@@ -2,7 +2,6 @@
 export default {
   extends: [
     'stylelint-config-standard',
-    'stylelint-prettier/recommended',
     'stylelint-config-standard-scss',
     'stylelint-config-recess-order',
   ],
