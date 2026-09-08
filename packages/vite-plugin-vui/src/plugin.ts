@@ -42,16 +42,31 @@ export function installVui(settings: { app: App, router: Router }, options?: Raw
 export default installVui;
 `.trim();
 
-async function renderTemplate({
-  colorScheme,
-  mediaMatch,
-  uiSettings,
-  icons,
-}: ViteVuiPluginResultSettings) {
+/**
+ * Turn a generated file's path into an import specifier for `installer.ts`.
+ *
+ * Every generated module lives inside `dest`, the same directory `installer.ts`
+ * is written to, so the installer can always reach them relatively. Emitting the
+ * absolute path instead baked the generating machine's layout into a file
+ * projects do commit -- `/Users/someone/...` resolves nowhere on anyone else's
+ * checkout -- and on Windows produced a specifier full of backslashes.
+ *
+ * `ViteVuiPluginResult.settings` keeps the absolute paths: those are for
+ * programmatic use, not for embedding in emitted code.
+ */
+function toInstallerSpecifier(dest: string, target: string) {
+  const relative = path.relative(dest, target).split(path.sep).join('/');
+  return relative.startsWith('.') ? relative : `./${relative}`;
+}
+
+async function renderTemplate(
+  { colorScheme, mediaMatch, uiSettings, icons }: ViteVuiPluginResultSettings,
+  dest: string,
+) {
   const eta = new Eta();
   const result = await eta.renderStringAsync(TEMPLATE, {
-    colorScheme,
-    mediaMatch,
+    colorScheme: toInstallerSpecifier(dest, colorScheme),
+    mediaMatch: toInstallerSpecifier(dest, mediaMatch),
     uiSettings: JSON.stringify(uiSettings),
     icons: JSON.stringify(icons),
   });
@@ -304,7 +319,7 @@ export {};
     async config(config) {
       await fs.writeFile(
         path.join(dynamicDest, 'installer.ts'),
-        await renderTemplate(settings),
+        await renderTemplate(settings, dynamicDest),
       );
 
       if (config.ssr?.noExternal !== true) {
