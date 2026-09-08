@@ -5,8 +5,8 @@ import fs from 'fs-extra';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
 import { VuiServiceOptions } from '@fastkit/vui';
 import { Eta } from 'eta';
+import module from 'node:module';
 import { VitePluginVuiError } from './logger';
-import { getPackageDir } from '@fastkit/plugboy/runtime-utils';
 
 const COLOR_DUMP_STYLE = `${`
 /* stylelint-disable */
@@ -65,9 +65,21 @@ function defaultDynamicDest() {
   return path.resolve('.vui');
 }
 
-async function getBuiltinsDir() {
-  const pkgDir = await getPackageDir();
-  return path.join(pkgDir, 'node_modules/@fastkit/vui/dist/builtins');
+const require = module.createRequire(import.meta.url);
+
+/**
+ * Where `@fastkit/vui` keeps the default color-scheme and media-match sources.
+ *
+ * Resolved through vui's own exports rather than assembled as
+ * `<pkgDir>/node_modules/@fastkit/vui/dist/builtins`: that path only exists when
+ * vui happens to be installed *inside* this package's directory, which no
+ * package manager guarantees. pnpm puts a package's dependencies beside it in
+ * the virtual store, with no `node_modules` in the package directory at all, and
+ * npm hoists them to the root — so the assembled path was simply absent for
+ * anyone who installed this plugin, and the defaults could not be used.
+ */
+function getBuiltinsDir() {
+  return path.dirname(require.resolve('@fastkit/vui/builtins/color-scheme.ts'));
 }
 
 export interface ViteVuiPluginOptions extends Partial<
@@ -101,7 +113,7 @@ export async function viteVuiPlugin(
 ): Promise<ViteVuiPluginResult> {
   const plugins: (Plugin | Plugin[])[] = [];
 
-  const builtinsDir = await getBuiltinsDir();
+  const builtinsDir = getBuiltinsDir();
   const {
     colorScheme = path.join(builtinsDir, 'color-scheme'),
     mediaMatch = path.join(builtinsDir, 'media-match'),
