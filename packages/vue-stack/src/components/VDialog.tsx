@@ -13,7 +13,7 @@ import {
 } from '../composables';
 import { VueStackError } from '../logger';
 
-interface CreateDialogSchemeOptions {
+interface CreateDialogSchemaOptions {
   /**
    * @default "v-stack-slide-y"
    */
@@ -32,7 +32,7 @@ interface CreateDialogSchemeOptions {
   defaultPersistent?: boolean;
 }
 
-function createDialogScheme(options: CreateDialogSchemeOptions = {}) {
+function createDialogSchema(options: CreateDialogSchemaOptions = {}) {
   const {
     defaultTransition = 'v-stack-slide-y',
     defaultScrollLock = true,
@@ -64,7 +64,7 @@ export interface DefineDialogSettings<
 >
   extends
     DefineStackableSettings<Props, Emits, Slots>,
-    CreateDialogSchemeOptions {
+    CreateDialogSchemaOptions {
   props?: Props;
   emits?: Emits;
   slots?: Slots;
@@ -77,25 +77,25 @@ export function defineDialogComponent<
   Emits extends EmitsOptions = {},
   Slots extends SlotsType = SlotsType<{}>,
 >(settings: DefineDialogSettings<Props, Emits, Slots>) {
-  const baseScheme = createDialogScheme(settings);
+  const baseSchema = createDialogSchema(settings);
   const { name, props, emits, manualAttrs } = settings;
 
   const Component = defineComponent({
     name,
     inheritAttrs: false,
     props: {
-      ...baseScheme.props,
+      ...baseSchema.props,
       ...props,
-    } as typeof baseScheme.props &
+    } as typeof baseSchema.props &
       Props &
-      EmitsToPropOptions<typeof baseScheme.emits & Emits>,
+      EmitsToPropOptions<typeof baseSchema.emits & Emits>,
     emits: {
-      ...baseScheme.emits,
+      ...baseSchema.emits,
       ...emits,
-    } as typeof baseScheme.emits & Emits,
+    } as typeof baseSchema.emits & Emits,
     slots: settings.slots as MergeStackBaseSlots<Slots>,
     setup(_props: any, _ctx) {
-      const dialogCtx = setupStackableComponent<typeof baseScheme.props>(
+      const dialogCtx = setupStackableComponent<typeof baseSchema.props>(
         _props,
         _ctx,
         {
