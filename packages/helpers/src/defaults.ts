@@ -5,59 +5,59 @@ interface AnyObject {
   [key: string | number | symbol]: any;
 }
 
-export type DefaultsSchemeSource<V> =
+export type DefaultsSchemaSource<V> =
   V extends Array<infer U>
     ? U extends AnyObject
-      ? | [DefaultsScheme<U>]
-        | [DefaultsScheme<U>, (notObject: unknown) => Partial<U> | void]
+      ? | [DefaultsSchema<U>]
+        | [DefaultsSchema<U>, (notObject: unknown) => Partial<U> | void]
       : [() => U[]]
     : V extends AnyObject
-      ? DefaultsScheme<V>
+      ? DefaultsSchema<V>
       : () => V;
 
-export type DefaultsScheme<T> = {
-  [K in WritableKeysOf<T>]?: DefaultsSchemeSource<T[K]>;
+export type DefaultsSchema<T> = {
+  [K in WritableKeysOf<T>]?: DefaultsSchemaSource<T[K]>;
 };
 
 export const MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL = Symbol(
   'MERGE_DEFAULTS_INDEX_SIGNATURE',
 );
 
-function getIndexSignatureScheme(
-  scheme: unknown,
-): DefaultsSchemeSource<any> | undefined {
-  if (!scheme || Array.isArray(scheme) || typeof scheme !== 'object') {
+function getIndexSignatureSchema(
+  schema: unknown,
+): DefaultsSchemaSource<any> | undefined {
+  if (!schema || Array.isArray(schema) || typeof schema !== 'object') {
     return;
   }
 
-  const symbols = Object.getOwnPropertySymbols(scheme);
+  const symbols = Object.getOwnPropertySymbols(schema);
   if (symbols.some((s) => s === MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL)) {
-    return (scheme as any)[MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL];
+    return (schema as any)[MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL];
   }
 }
 
-export function createIndexSignatureDefaultsScheme<T>(
-  scheme: DefaultsSchemeSource<T>,
+export function createIndexSignatureDefaultsSchema<T>(
+  schema: DefaultsSchemaSource<T>,
 ) {
   return {
-    [MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL]: scheme,
+    [MERGE_DEFAULTS_INDEX_SIGNATURE_SYMBOL]: schema,
   };
 }
 
-export function mergeDefaults<T>(base: T, scheme: DefaultsScheme<T>): T {
-  const indexSignatureScheme = getIndexSignatureScheme(scheme);
-  if (indexSignatureScheme) {
+export function mergeDefaults<T>(base: T, schema: DefaultsSchema<T>): T {
+  const indexSignatureSchema = getIndexSignatureSchema(schema);
+  if (indexSignatureSchema) {
     const baseKeys = Object.keys(base as any); // @FIXME
-    const _scheme: any = {};
+    const _schema: any = {};
     baseKeys.forEach((key) => {
-      _scheme[key] = indexSignatureScheme;
+      _schema[key] = indexSignatureSchema;
     });
-    return mergeDefaults(base, _scheme as any);
+    return mergeDefaults(base, _schema as any);
   }
 
-  const keys = Object.keys(scheme) as (keyof T)[];
+  const keys = Object.keys(schema) as (keyof T)[];
   for (const key of keys) {
-    const source = (scheme as any)[key];
+    const source = (schema as any)[key];
     if (!source) {
       continue;
     }
@@ -66,18 +66,18 @@ export function mergeDefaults<T>(base: T, scheme: DefaultsScheme<T>): T {
         base[key] = source() as T[typeof key];
       }
     } else if (Array.isArray(source)) {
-      const schemeOrFn = source[0] as DefaultsScheme<any> | (() => any);
+      const schemaOrFn = source[0] as DefaultsSchema<any> | (() => any);
       if (!base[key] || !Array.isArray(base[key])) {
         base[key] = [] as any;
       }
 
       const bucket = base[key] as unknown as any[];
 
-      if (typeof schemeOrFn === 'function' && !bucket.length) {
-        bucket.push(...schemeOrFn());
+      if (typeof schemaOrFn === 'function' && !bucket.length) {
+        bucket.push(...schemaOrFn());
       }
 
-      if (typeof schemeOrFn === 'object') {
+      if (typeof schemaOrFn === 'object') {
         const fallbackFn = (source as any)[1] as unknown as
           ((notObject: unknown) => any) | undefined;
         const newItems: any[] = [];
@@ -92,7 +92,7 @@ export function mergeDefaults<T>(base: T, scheme: DefaultsScheme<T>): T {
               return;
             }
           }
-          newItems.push(mergeDefaults(row, schemeOrFn));
+          newItems.push(mergeDefaults(row, schemaOrFn));
         });
         base[key] = newItems as any;
       }
