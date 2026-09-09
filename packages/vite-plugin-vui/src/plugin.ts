@@ -4,6 +4,12 @@ import path from 'node:path';
 import fs from 'fs-extra';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
 import { VuiServiceOptions } from '@fastkit/vui';
+// The `IconNameMap` augmentation for the webfont `@fastkit/vui` ships, so the
+// default `icons` below are checked against the real names instead of being
+// cast past `IconName`'s placeholder. Type-only: nothing is imported at runtime,
+// and a project generating its own font (`iconFont`) is unaffected -- it never
+// imports this module, so its own names remain the whole of `IconName`.
+import type {} from '@fastkit/vui/icon-font/index.mjs';
 import { Eta } from 'eta';
 import module from 'node:module';
 import { VitePluginVuiError } from './logger';
@@ -363,37 +369,37 @@ export async function viteVuiPlugin(
       },
     },
     icons = {
-      menuDown: 'mdi-menu-down' as any,
-      navigationExpand: 'mdi-menu-down' as any,
-      prev: 'mdi-chevron-left' as any,
-      next: 'mdi-chevron-right' as any,
-      sort: 'mdi-chevron-down' as any,
-      editorTextColor: 'mdi-format-color-text' as any,
-      editorformatBold: 'mdi-format-bold' as any,
-      editorformatUnderline: 'mdi-format-underline' as any,
-      editorformatItalic: 'mdi-format-italic' as any,
-      editorformatListBulleted: 'mdi-format-list-bulleted' as any,
-      editorformatListNumbered: 'mdi-format-list-numbered' as any,
-      editorAlignLeft: 'mdi-format-align-left' as any,
-      editorAlignCenter: 'mdi-format-align-center' as any,
-      editorAlignRight: 'mdi-format-align-right' as any,
-      editorAlignJustify: 'mdi-format-align-justify' as any,
-      editorLink: 'mdi-link' as any,
-      editorLinkOff: 'mdi-link-off' as any,
-      editorUndo: 'mdi-undo-variant' as any,
-      editorRedo: 'mdi-redo-variant' as any,
-      hinttip: 'mdi-help-circle-outline' as any,
-      clear: 'mdi-close' as any,
-      reload: 'mdi-reload' as any,
-      fileUpload: 'mdi-file-upload' as any,
+      menuDown: 'mdi-menu-down',
+      navigationExpand: 'mdi-menu-down',
+      prev: 'mdi-chevron-left',
+      next: 'mdi-chevron-right',
+      sort: 'mdi-chevron-down',
+      editorTextColor: 'mdi-format-color-text',
+      editorformatBold: 'mdi-format-bold',
+      editorformatUnderline: 'mdi-format-underline',
+      editorformatItalic: 'mdi-format-italic',
+      editorformatListBulleted: 'mdi-format-list-bulleted',
+      editorformatListNumbered: 'mdi-format-list-numbered',
+      editorAlignLeft: 'mdi-format-align-left',
+      editorAlignCenter: 'mdi-format-align-center',
+      editorAlignRight: 'mdi-format-align-right',
+      editorAlignJustify: 'mdi-format-align-justify',
+      editorLink: 'mdi-link',
+      editorLinkOff: 'mdi-link-off',
+      editorUndo: 'mdi-undo-variant',
+      editorRedo: 'mdi-redo-variant',
+      hinttip: 'mdi-help-circle-outline',
+      clear: 'mdi-close',
+      reload: 'mdi-reload',
+      fileUpload: 'mdi-file-upload',
       // navigationExpand: (gen, active) => {
       //   return gen({
-      //     name: 'mdi-menu-down' as any,
+      //     name: 'mdi-menu-down',
       //     rotate: active ? 180 : 0,
       //   });
       // },
       ...options.icons,
-    } as VuiServiceOptions['icons'],
+    },
   } = options;
 
   let dynamicDest: string;
