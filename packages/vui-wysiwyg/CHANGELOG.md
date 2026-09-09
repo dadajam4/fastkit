@@ -1,5 +1,15 @@
 # @fastkit/vui-wysiwyg
 
+## 8.3.6
+
+### Patch Changes
+
+- [#202](https://github.com/dadajam4/fastkit/pull/202) [`71bba8f`](https://github.com/dadajam4/fastkit/commit/71bba8fdfb1dbaeb0f337814c0f067402f294cb5) Thanks [@dadajam4](https://github.com/dadajam4)! - Drop an unnecessary `as any` on the resolved toolbar icon name.
+
+  A tool's `icon` may be a function returning `IconName | (() => VNodeChild) | undefined`. The `typeof _child === 'function'` check already narrows that to `IconName | undefined` in the `else` branch, so the assignment needed no cast — it just turned off checking on the one line where a tool's icon name is decided at runtime.
+
+  No behaviour change; the value was always an `IconName`.
+
 ## 8.3.5
 
 ### Patch Changes

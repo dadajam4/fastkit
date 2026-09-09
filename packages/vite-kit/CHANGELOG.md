@@ -1,5 +1,12 @@
 # @fastkit/vite-kit
 
+## 1.4.1
+
+### Patch Changes
+
+- Updated dependencies [[`71bba8f`](https://github.com/dadajam4/fastkit/commit/71bba8fdfb1dbaeb0f337814c0f067402f294cb5)]:
+  - @fastkit/icon-font-gen@1.0.0
+
 ## 1.4.0
 
 ### Minor Changes
