@@ -945,6 +945,32 @@ interface VuiPluginOptions {
 
 詳細なドキュメントは[こちら](https://dadajam4.github.io/fastkit/vui/)をご覧ください。
 
+## 同梱アイコンフォント
+
+`@fastkit/vui` は生成済みの Material Design Icons ウェブフォントを
+`dist/icon-font/` に同梱しています。`@fastkit/vite-plugin-vui` の既定構成であれば
+`@mdi/svg` も生成ステップも不要です。読み込み方は次のとおりです。
+
+```ts
+import '@fastkit/vui/icon-font/index.css'; // @font-face とアイコンクラス
+import '@fastkit/vui/icon-font/index.mjs'; // 名前の登録。型もここが持つ
+```
+
+（`@fastkit/vite-plugin-vui` はこの 2 行を `.vui/installer.ts` に書き出します。）
+
+`IconName` がプレースホルダではなく MDI の名前に解決されるのは 2 行目の import に
+よります。独自のアイコンを追加するプロジェクト（`viteVuiPlugin({ iconFont: [...] })`）
+では、それが **追加** で生成され、`IconName` は両者の合併になります。
+
+このフォントは [Pictogrammers](https://pictogrammers.com/) による
+[`@mdi/svg`](https://www.npmjs.com/package/@mdi/svg) から生成したもので、本パッケージ
+自身の MIT ライセンスとは別に Apache License 2.0 で配布されます。全文、Apache-2.0
+第 4 条 (b) が要求する改変の告知、およびセット内のブランドマークに関する商標の注意書きは
+`dist/icon-font/LICENSE` と `dist/icon-font/NOTICE.md` にあります。
+
 ## ライセンス
 
-MIT
+MIT。
+
+`dist/icon-font/` に同梱される Material Design Icons ウェブフォントは Apache-2.0 です。
+[同梱アイコンフォント](#同梱アイコンフォント)を参照してください。

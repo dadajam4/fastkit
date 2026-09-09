@@ -4,6 +4,12 @@ import path from 'node:path';
 import fs from 'fs-extra';
 import { RawIconFontEntry, IconFontSettings } from '@fastkit/icon-font-gen';
 import { VuiServiceOptions } from '@fastkit/vui';
+// The `IconNameMap` augmentation for the webfont `@fastkit/vui` ships, so the
+// default `icons` below are checked against the real names instead of being
+// cast past `IconName`'s placeholder. Type-only: nothing is imported at runtime,
+// and a project generating its own font (`iconFont`) is unaffected -- it never
+// imports this module, so its own names remain the whole of `IconName`.
+import type {} from '@fastkit/vui/icon-font/index.mjs';
 import { Eta } from 'eta';
 import module from 'node:module';
 import { VitePluginVuiError } from './logger';
@@ -26,7 +32,7 @@ import { VPageLink } from '@fastkit/vue-page';
 import { installVuiPlugin as _installVuiPlugin, RawVuiPluginOptions, mergeVuiPluginOptions } from '@fastkit/vui';
 import { colorScheme } from '<%~ it.colorScheme %>';
 import '<%~ it.mediaMatch %>';
-import './icon-font';
+<%~ it.iconFont %>
 import '@fastkit/vui/after-effects.scss';
 
 export function installVui(settings: { app: App, router: Router }, options?: RawVuiPluginOptions) {
@@ -60,9 +66,48 @@ function toInstallerSpecifier(dest: string, target: string) {
   return relative.startsWith('.') ? relative : `./${relative}`;
 }
 
+/**
+ * How `installer.ts` pulls in the icon webfonts.
+ *
+ * The font `@fastkit/vui` ships is always loaded: this kit's own defaults are
+ * named in it -- `menuDown: 'mdi-menu-down'`, `clear: 'mdi-close'`, twenty-odd
+ * more -- so a project that dropped it would have to redefine every one of them
+ * before anything rendered. Its module is imported, not just its stylesheet,
+ * because that module also carries the `IconNameMap` augmentation for those
+ * names; importing it puts the declaration in the project's program.
+ *
+ * The specifiers reach into `dist` through vui's `"./*"` export -- the same way
+ * `@fastkit/vui/builtins/color-scheme.ts` and `@fastkit/vui/after-effects.scss`
+ * are reached -- because plugboy rebuilds the `exports` map from the workspace
+ * entries on every build and a hand-written key would not survive.
+ */
+const SHIPPED_ICON_FONT_IMPORTS = [
+  `import '@fastkit/vui/icon-font/index.css';`,
+  `import '@fastkit/vui/icon-font/index.mjs';`,
+];
+
+/**
+ * Anything `iconFont` asked for, loaded *in addition* to the shipped font.
+ *
+ * Both augment `IconNameMap`, so `IconName` ends up the union of the two and
+ * matches what is actually loaded at runtime.
+ */
+const GENERATED_ICON_FONT_IMPORT = `import './icon-font';`;
+
+function renderIconFontImports(generatesIconFont: boolean) {
+  return [
+    ...SHIPPED_ICON_FONT_IMPORTS,
+    ...(generatesIconFont ? [GENERATED_ICON_FONT_IMPORT] : []),
+    // Eta trims the newline that follows an interpolation tag, so the value has
+    // to carry its own or the next import runs onto the same line.
+    '',
+  ].join('\n');
+}
+
 async function renderTemplate(
   { colorScheme, mediaMatch, uiSettings, icons }: ViteVuiPluginResultSettings,
   dest: string,
+  generatesIconFont: boolean,
 ) {
   const eta = new Eta();
   const result = await eta.renderStringAsync(TEMPLATE, {
@@ -70,6 +115,7 @@ async function renderTemplate(
     mediaMatch: toInstallerSpecifier(dest, mediaMatch),
     uiSettings: JSON.stringify(uiSettings),
     icons: JSON.stringify(icons),
+    iconFont: renderIconFontImports(generatesIconFont),
   });
   if (!result) {
     throw new VitePluginVuiError('template render error.');
@@ -264,7 +310,29 @@ export interface ViteVuiPluginOptions extends Partial<
   dynamicDest?: string;
   colorScheme?: string;
   mediaMatch?: string;
+  /**
+   * Additional icon webfonts to generate for this project, from your own SVGs.
+   *
+   * These are generated *in addition to* the Material Design Icons webfont
+   * `@fastkit/vui` ships, not instead of it -- this is the slot for adding your
+   * own icons to the kit. `IconName` becomes the union of both, which is exactly
+   * what is loaded at runtime.
+   *
+   * Leave it unset -- the common case -- and nothing is generated at all, so the
+   * project needs no `@fastkit/icon-font-gen`.
+   *
+   * ```ts
+   * viteVuiPlugin({ iconFont: [{ src: './assets/icons' }] });
+   * ```
+   */
   iconFont?: RawIconFontEntry[];
+  /**
+   * Font-generation settings merged into every {@link iconFont} entry.
+   *
+   * These are metrics for fonts generated *here*. The shipped MDI font is built
+   * once, by `@fastkit/vui`, with fixed metrics, so with no `iconFont` entries
+   * there is nothing for them to apply to.
+   */
   iconFontDefaults?: IconFontSettings;
   onBooted?: (() => any) | (() => Promise<any>);
   onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
@@ -315,37 +383,37 @@ export async function viteVuiPlugin(
       },
     },
     icons = {
-      menuDown: 'mdi-menu-down' as any,
-      navigationExpand: 'mdi-menu-down' as any,
-      prev: 'mdi-chevron-left' as any,
-      next: 'mdi-chevron-right' as any,
-      sort: 'mdi-chevron-down' as any,
-      editorTextColor: 'mdi-format-color-text' as any,
-      editorformatBold: 'mdi-format-bold' as any,
-      editorformatUnderline: 'mdi-format-underline' as any,
-      editorformatItalic: 'mdi-format-italic' as any,
-      editorformatListBulleted: 'mdi-format-list-bulleted' as any,
-      editorformatListNumbered: 'mdi-format-list-numbered' as any,
-      editorAlignLeft: 'mdi-format-align-left' as any,
-      editorAlignCenter: 'mdi-format-align-center' as any,
-      editorAlignRight: 'mdi-format-align-right' as any,
-      editorAlignJustify: 'mdi-format-align-justify' as any,
-      editorLink: 'mdi-link' as any,
-      editorLinkOff: 'mdi-link-off' as any,
-      editorUndo: 'mdi-undo-variant' as any,
-      editorRedo: 'mdi-redo-variant' as any,
-      hinttip: 'mdi-help-circle-outline' as any,
-      clear: 'mdi-close' as any,
-      reload: 'mdi-reload' as any,
-      fileUpload: 'mdi-file-upload' as any,
+      menuDown: 'mdi-menu-down',
+      navigationExpand: 'mdi-menu-down',
+      prev: 'mdi-chevron-left',
+      next: 'mdi-chevron-right',
+      sort: 'mdi-chevron-down',
+      editorTextColor: 'mdi-format-color-text',
+      editorformatBold: 'mdi-format-bold',
+      editorformatUnderline: 'mdi-format-underline',
+      editorformatItalic: 'mdi-format-italic',
+      editorformatListBulleted: 'mdi-format-list-bulleted',
+      editorformatListNumbered: 'mdi-format-list-numbered',
+      editorAlignLeft: 'mdi-format-align-left',
+      editorAlignCenter: 'mdi-format-align-center',
+      editorAlignRight: 'mdi-format-align-right',
+      editorAlignJustify: 'mdi-format-align-justify',
+      editorLink: 'mdi-link',
+      editorLinkOff: 'mdi-link-off',
+      editorUndo: 'mdi-undo-variant',
+      editorRedo: 'mdi-redo-variant',
+      hinttip: 'mdi-help-circle-outline',
+      clear: 'mdi-close',
+      reload: 'mdi-reload',
+      fileUpload: 'mdi-file-upload',
       // navigationExpand: (gen, active) => {
       //   return gen({
-      //     name: 'mdi-menu-down' as any,
+      //     name: 'mdi-menu-down',
       //     rotate: active ? 180 : 0,
       //   });
       // },
       ...options.icons,
-    } as VuiServiceOptions['icons'],
+    },
   } = options;
 
   let dynamicDest: string;
@@ -363,18 +431,15 @@ export async function viteVuiPlugin(
   const colorSchemeSrc = path.resolve(colorScheme);
   const colorSchemeDest = path.join(dynamicDest, 'color-scheme');
   const mediaMatchDest = path.join(dynamicDest, 'media-match');
-  const dts = `
-/// <reference path="./color-scheme/color-scheme.info.ts" />
-/// <reference path="./icon-font/index.ts" />
-/// <reference path="./media-match/media-match.ts" />
-export {};
-  `.trim();
 
-  let iconFontEntries: RawIconFontEntry[] = iconFont || [
-    {
-      src: '@mdi',
-    },
-  ];
+  // The default used to be `[{ src: '@mdi' }]`, which made every project on the
+  // stock configuration obtain `@mdi/svg` (7,447 SVGs, ~31MB) and generate a
+  // 1.7MB tree from it at build time -- and `@fastkit/icon-font-gen` would run
+  // `pnpm add @mdi/svg` to get there, which fails outright in a `--prod` image
+  // where the devDependency was pruned. `@fastkit/vui` ships that font now and
+  // is the only package that knows `@mdi/svg` exists, so there is no default
+  // entry: what is listed here is what a project adds on top.
+  let iconFontEntries: RawIconFontEntry[] = iconFont || [];
 
   if (iconFontDefaults) {
     iconFontEntries = iconFontEntries.map((entry) => ({
@@ -383,18 +448,30 @@ export {};
     }));
   }
 
+  const generatesIconFont = iconFontEntries.length > 0;
+
+  // Only the generated tree is referenced here. The shipped font's
+  // `IconNameMap` augmentation reaches the project through `installer.ts`'s
+  // import of `@fastkit/vui/icon-font/index.mjs`, so both apply and `IconName`
+  // is the union of the two.
+  const dts = [
+    '/// <reference path="./color-scheme/color-scheme.info.ts" />',
+    ...(generatesIconFont
+      ? ['/// <reference path="./icon-font/index.ts" />']
+      : []),
+    '/// <reference path="./media-match/media-match.ts" />',
+    'export {};',
+  ].join('\n');
+
   const manifest: GeneratedTreeManifest = {
     manifest: 1,
     generators: collectGeneratorVersions(),
     runtimeModule: RUNTIME_MODULE,
     // `resolveRawIconFontEntry` derives the same name, from `src` when none is
-    // given; `@mdi` is its one special case. Absolute paths stay out, so the
-    // manifest does not differ between a developer's machine and CI.
+    // given. Absolute paths stay out, so the manifest does not differ between a
+    // developer's machine and CI.
     iconFonts: iconFontEntries
-      .map(
-        ({ name, src }) =>
-          name || (src === '@mdi' ? 'mdi' : path.basename(src)),
-      )
+      .map(({ name, src }) => name || path.basename(src))
       .sort(),
   };
 
@@ -421,11 +498,13 @@ export {};
         dest: mediaMatchDest,
         runtimeModule: RUNTIME_MODULE,
       },
-      iconFont: {
-        entries: iconFontEntries,
-        dest: path.join(dynamicDest, 'icon-font'),
-        runtimeModule: RUNTIME_MODULE,
-      },
+      iconFont: generatesIconFont
+        ? {
+            entries: iconFontEntries,
+            dest: path.join(dynamicDest, 'icon-font'),
+            runtimeModule: RUNTIME_MODULE,
+          }
+        : undefined,
       // The manifest is written here, not in this plugin's own `config` hook:
       // that hook is `enforce: 'pre'`, so it runs *before* the generators. This
       // fires once they have all booted, which is the only point where the tree
@@ -449,7 +528,7 @@ export {};
     async config(config) {
       await fs.writeFile(
         path.join(dynamicDest, 'installer.ts'),
-        await renderTemplate(settings, dynamicDest),
+        await renderTemplate(settings, dynamicDest, generatesIconFont),
       );
 
       if (config.ssr?.noExternal !== true) {

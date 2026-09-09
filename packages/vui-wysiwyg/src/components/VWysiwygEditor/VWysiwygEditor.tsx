@@ -236,7 +236,7 @@ export const VWysiwygEditor = defineComponent({
                 if (typeof _child === 'function') {
                   child = _child();
                 } else {
-                  iconName = _child as any;
+                  iconName = _child;
                 }
               }
             } else {

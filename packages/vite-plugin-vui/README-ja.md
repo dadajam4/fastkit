@@ -30,6 +30,31 @@ pnpm add @fastkit/vui @fastkit/vue-page vue vue-router
 ないと原因から遠い症状だけが出ます（ジェネレータも `vite build` も成功し、アイコン名は
 すべてプレースホルダの union に落ちて `tsc` が数百件の `TS2322` を報告する）。
 
+### アイコン
+
+既定では何も生成しません。`@fastkit/vui` が生成済みの Material Design Icons
+ウェブフォントを同梱しており、`installer.ts` がそれを import します。つまり既定構成では
+`@mdi/svg`（SVG 7,447 ファイル、約 31MB）も `@fastkit/icon-font-gen` も生成ステップも
+不要です。
+
+`iconFont` は、そこへ **独自のアイコンを追加する** ための口です。
+
+```ts
+const viteVui = await viteVuiPlugin({
+  iconFont: [{ src: './assets/icons' }],
+});
+```
+
+このエントリは同梱フォントを置き換えるのではなく、それに **追加** して生成されます。
+このキット自身の既定（`menuDown: 'mdi-menu-down'`、`clear: 'mdi-close'` ほか 20 数個）が
+同梱フォントの名前を指しているためです。`IconName` は両者の合併になり、実行時に読み込まれる
+ものと一致します。生成には `devDependencies` の `@fastkit/icon-font-gen` が必要です
+（既定の経路では使わないので optional peer にしてあります）。
+
+`iconFontDefaults` はここで生成するエントリのフォントメトリクスです。同梱の MDI フォントは
+`@fastkit/vui` 側で固定のメトリクスで一度だけビルドされるため、`iconFont` のエントリが
+無ければ適用対象がありません。
+
 ### カラースキームとブレイクポイントのカスタマイズ
 
 値はビルド時に記述するため、ジェネレータはアプリに同梱されるものではなく

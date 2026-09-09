@@ -947,6 +947,34 @@ interface VuiPluginOptions {
 
 For detailed documentation, please visit [here](https://dadajam4.github.io/fastkit/vui/).
 
+## Bundled icon font
+
+`@fastkit/vui` ships a pre-generated Material Design Icons webfont in
+`dist/icon-font/`, so a project on the default `@fastkit/vite-plugin-vui`
+configuration needs neither `@mdi/svg` nor any generation step. Pull it in with:
+
+```ts
+import '@fastkit/vui/icon-font/index.css'; // @font-face + the icon classes
+import '@fastkit/vui/icon-font/index.mjs'; // registers the names; carries their types
+```
+
+(`@fastkit/vite-plugin-vui` writes both lines into `.vui/installer.ts` for you.)
+
+Importing the second one is what makes `IconName` resolve to the MDI names rather
+than its placeholder. A project that adds its own icons —
+`viteVuiPlugin({ iconFont: [...] })` — gets those *in addition*, and `IconName`
+becomes the union of both.
+
+The font is generated from [`@mdi/svg`](https://www.npmjs.com/package/@mdi/svg)
+by the [Pictogrammers](https://pictogrammers.com/) icon group and is distributed
+under the Apache License 2.0, separately from this package's own MIT license. The
+full terms, the modification notice required by Apache-2.0 section 4(b), and the
+trademark note for the brand marks in the set are in
+`dist/icon-font/LICENSE` and `dist/icon-font/NOTICE.md`.
+
 ## License
 
-MIT
+MIT.
+
+The bundled Material Design Icons webfont in `dist/icon-font/` is Apache-2.0; see
+[Bundled icon font](#bundled-icon-font).
