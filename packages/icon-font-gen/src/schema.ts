@@ -1,6 +1,6 @@
 import type { webfont } from 'webfont';
 import path from 'node:path';
-import { installPackage } from '@fastkit/node-util';
+import { IconFontGenError } from './logger';
 
 /**
  * Derived from webfont's public signature. webfont 12 added an `exports` map
@@ -104,6 +104,23 @@ export interface IconFontOptions {
   runtimeModule?: string;
 }
 
+/**
+ * Removed source sentinel.
+ *
+ * `src: '@mdi'` used to mean "find `@mdi/svg`, and `pnpm add` it if it is not
+ * there", then build a font from its SVGs. Installing a package as a side effect
+ * of a build is a bad bargain wherever the build is not also the place
+ * dependencies are managed: in a container image built with `--prod`, where that
+ * devDependency was pruned, it failed with `ERR_PNPM_INCLUDED_DEPS_CONFLICT`
+ * rather than anything a reader could act on.
+ *
+ * `@fastkit/vui` now ships a Material Design Icons webfont it generated at its
+ * own build time, so nothing has to build one at a consumer's, and this package
+ * has no reason to know that `@mdi/svg` exists. `src` is a directory of SVGs,
+ * with no special cases.
+ */
+const REMOVED_MDI_SENTINEL = '@mdi';
+
 export async function resolveRawIconFontEntry(
   rootDir: string,
   rawEntry: RawIconFontEntry,
@@ -112,19 +129,22 @@ export async function resolveRawIconFontEntry(
     ...rawEntry,
   };
 
-  // mdi support
-  if (entry.src === '@mdi') {
-    const installedDir = await findOrInstallMDI();
-    entry.src = path.join(installedDir, 'svg');
-    if (entry.fontHeight == null) {
-      entry.fontHeight = 512;
-    }
-    if (entry.descent == null) {
-      entry.descent = 64;
-    }
-    if (entry.name == null) {
-      entry.name = 'mdi';
-    }
+  if (entry.src === REMOVED_MDI_SENTINEL) {
+    // Worth naming explicitly: left alone, `'@mdi'` is just a directory that
+    // does not exist, and this generator skips an entry whose source is
+    // missing -- so the failure mode is a silently empty font, not an error.
+    throw new IconFontGenError(
+      [
+        `The \`src: '${REMOVED_MDI_SENTINEL}'\` sentinel has been removed.`,
+        '',
+        '`@fastkit/vui` ships a pre-generated Material Design Icons webfont, so a',
+        'project using it needs no entry at all. Using this generator on its own,',
+        'point `src` at a directory of SVG files -- for MDI, install `@mdi/svg`',
+        'yourself and name its `svg` directory:',
+        '',
+        "  { src: './node_modules/@mdi/svg/svg', name: 'mdi', fontHeight: 512, descent: 64 }",
+      ].join('\n'),
+    );
   }
 
   const name = entry.name || path.basename(entry.src);
@@ -140,10 +160,6 @@ export async function resolveRawIconFontEntry(
     dest,
     display,
   };
-}
-
-function findOrInstallMDI() {
-  return installPackage('@mdi/svg', { dev: true });
 }
 
 export const DEFAULT_CONFIG_FILENAME = 'icon-font.config';

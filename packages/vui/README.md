@@ -961,9 +961,9 @@ import '@fastkit/vui/icon-font/index.mjs'; // registers the names; carries their
 (`@fastkit/vite-plugin-vui` writes both lines into `.vui/installer.ts` for you.)
 
 Importing the second one is what makes `IconName` resolve to the MDI names rather
-than its placeholder, so a project that generates its own icon font instead —
-`viteVuiPlugin({ iconFont: [...] })` — gets exactly its own names and none of
-these.
+than its placeholder. A project that adds its own icons —
+`viteVuiPlugin({ iconFont: [...] })` — gets those *in addition*, and `IconName`
+becomes the union of both.
 
 The font is generated from [`@mdi/svg`](https://www.npmjs.com/package/@mdi/svg)
 by the [Pictogrammers](https://pictogrammers.com/) icon group and is distributed

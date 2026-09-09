@@ -37,7 +37,7 @@ Design Icons webfont, and `installer.ts` imports it. So the stock configuration
 needs no `@mdi/svg` (7,447 SVGs, ~31MB), no `@fastkit/icon-font-gen`, and no
 generation step at all.
 
-Pass `iconFont` to generate from your own SVGs instead:
+`iconFont` is the slot for adding **your own** icons to that:
 
 ```ts
 const viteVui = await viteVuiPlugin({
@@ -45,12 +45,16 @@ const viteVui = await viteVuiPlugin({
 });
 ```
 
-Those entries replace the shipped font rather than adding to it, so `IconName`
-ends up being exactly your own names — no MDI glyph types for a font you do not
-load. Generating requires `@fastkit/icon-font-gen` in your `devDependencies`; it
-is an optional peer precisely because the default path does not use it. The
-`"@mdi"` sentinel (`{ src: '@mdi' }`) still works if you want the old behaviour
-of building the MDI font yourself.
+Those entries are generated *in addition to* the shipped font, not instead of
+it — this kit's own defaults (`menuDown: 'mdi-menu-down'`, `clear: 'mdi-close'`,
+twenty-odd more) are named in it. `IconName` becomes the union of both, which is
+exactly what is loaded at runtime. Generating requires `@fastkit/icon-font-gen`
+in your `devDependencies`; it is an optional peer precisely because the default
+path does not use it.
+
+`iconFontDefaults` sets font metrics for the entries generated here. The shipped
+MDI font is built once, by `@fastkit/vui`, with fixed metrics, so with no
+`iconFont` entries there is nothing for it to apply to.
 
 ### Customizing the color scheme and breakpoints
 

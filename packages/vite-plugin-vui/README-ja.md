@@ -37,7 +37,7 @@ pnpm add @fastkit/vui @fastkit/vue-page vue vue-router
 `@mdi/svg`（SVG 7,447 ファイル、約 31MB）も `@fastkit/icon-font-gen` も生成ステップも
 不要です。
 
-独自の SVG から生成する場合は `iconFont` を渡します。
+`iconFont` は、そこへ **独自のアイコンを追加する** ための口です。
 
 ```ts
 const viteVui = await viteVuiPlugin({
@@ -45,11 +45,15 @@ const viteVui = await viteVuiPlugin({
 });
 ```
 
-このエントリは同梱フォントに追加されるのではなく置き換えます。したがって `IconName` は
-そのプロジェクト自身の名前だけになり、読み込んでいない MDI グリフの型が混ざりません。
-生成には `devDependencies` の `@fastkit/icon-font-gen` が必要です（既定の経路では使わない
-ので optional peer にしてあります）。従来どおり MDI フォントを自分でビルドしたい場合は
-`"@mdi"` センチネル（`{ src: '@mdi' }`）がそのまま使えます。
+このエントリは同梱フォントを置き換えるのではなく、それに **追加** して生成されます。
+このキット自身の既定（`menuDown: 'mdi-menu-down'`、`clear: 'mdi-close'` ほか 20 数個）が
+同梱フォントの名前を指しているためです。`IconName` は両者の合併になり、実行時に読み込まれる
+ものと一致します。生成には `devDependencies` の `@fastkit/icon-font-gen` が必要です
+（既定の経路では使わないので optional peer にしてあります）。
+
+`iconFontDefaults` はここで生成するエントリのフォントメトリクスです。同梱の MDI フォントは
+`@fastkit/vui` 側で固定のメトリクスで一度だけビルドされるため、`iconFont` のエントリが
+無ければ適用対象がありません。
 
 ### カラースキームとブレイクポイントのカスタマイズ
 

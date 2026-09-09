@@ -959,9 +959,8 @@ import '@fastkit/vui/icon-font/index.mjs'; // 名前の登録。型もここが�
 （`@fastkit/vite-plugin-vui` はこの 2 行を `.vui/installer.ts` に書き出します。）
 
 `IconName` がプレースホルダではなく MDI の名前に解決されるのは 2 行目の import に
-よります。したがって独自のアイコンフォントを生成するプロジェクト
-（`viteVuiPlugin({ iconFont: [...] })`）では、`IconName` はそのプロジェクト自身の
-名前だけになり、ここの MDI の名前は含まれません。
+よります。独自のアイコンを追加するプロジェクト（`viteVuiPlugin({ iconFont: [...] })`）
+では、それが **追加** で生成され、`IconName` は両者の合併になります。
 
 このフォントは [Pictogrammers](https://pictogrammers.com/) による
 [`@mdi/svg`](https://www.npmjs.com/package/@mdi/svg) から生成したもので、本パッケージ
