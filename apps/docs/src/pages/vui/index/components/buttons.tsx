@@ -14,7 +14,7 @@ import {
   VTooltip,
   VButtonGroup,
 } from '@fastkit/vui';
-import { useHead } from '@unhead/vue';
+import { useHead } from '@fastkit/vot/head';
 import { DocsSection } from '../../../-components';
 
 export default defineComponent({

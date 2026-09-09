@@ -21,6 +21,23 @@ A comprehensive orchestration tool and framework for building Vue applications. 
 npm install @fastkit/vot
 ```
 
+### Peer dependencies
+
+`vue` and `vue-router` are `peerDependencies`, so your project declares them and
+this package links the copy you resolve. Both are singletons -- vot calls into
+your router and mounts into your Vue -- and two copies break `provide`/`inject`,
+`app.use()` and every type that Vue derives through declaration merging.
+
+`@types/node` is a peer as well: the published types expose `IncomingMessage`,
+`ServerResponse` and `Server` from `node:http`, so your `tsc` has to resolve
+Node's types -- but they should be the ones matching the Node **you** run, which
+only you can decide.
+
+```bash
+npm install vue vue-router
+npm install -D @types/node
+```
+
 ## CLI Usage
 
 ```bash
@@ -107,7 +124,6 @@ export default defineVotConfig({
 
 ```typescript
 import { createVotApp } from '@fastkit/vot'
-import { createHead } from '@unhead/vue'
 import App from './App.vue'
 
 // Create Vot application
@@ -119,9 +135,8 @@ export const { createApp } = createVotApp({
   async setupApp(ctx) {
     const { app, router } = ctx
 
-    // Setup head management
-    const head = createHead()
-    app.use(head)
+    // Head management is already installed by vot -- call `useHead()` from
+    // `@fastkit/vot/head` inside any component.
 
     // Register global components
     // app.component('MyComponent', MyComponent)
@@ -240,7 +255,7 @@ export const { createApp } = createVotApp({
 </template>
 
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
+import { useHead } from '@fastkit/vot/head'
 
 // Page metadata
 useHead({
@@ -602,7 +617,7 @@ my-vot-app/
 - `vite` - Build tool
 - `vue` - Vue.js framework
 - `vue-router` - Vue Router
-- `@unhead/vue` - Head management
+- `@unhead/vue` - Head management (re-exported from `@fastkit/vot/head`; you do not declare it)
 
 ## License
 

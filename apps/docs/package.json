@@ -34,7 +34,6 @@
     "@fastkit/vue-transitions": "workspace:^",
     "@fastkit/vui": "workspace:^",
     "@fastkit/vui-wysiwyg": "workspace:^",
-    "@unhead/vue": "^3.2.3",
     "marked": "^18.0.7",
     "prismjs": "^1.30.0",
     "vue": "^3.5.0",

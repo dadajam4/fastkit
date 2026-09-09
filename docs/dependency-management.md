@@ -143,6 +143,12 @@ particular breaks its public API in minor and major releases**, so:
 This matches the repo's existing peers (cf. the `vite` peer
 `^6.0.0 || ^7.0.0 || ^8.0.0` — enumerated majors, explicit upper bound).
 
+**Exception: `@types/node`.** Its majors track Node's, not an API this repo
+consumes — a package that only needs `node:http` to resolve is not verifying
+anything per-major. Capping it would push a consumer off the types matching the
+Node they actually run, which is the opposite of what the cap is for, so declare
+it open at the top (`>=20`) with the floor at the oldest Node supported.
+
 ### Internal peers: an explicit range, never `workspace:^`
 
 A **workspace** package declared as a `peerDependency` of another workspace
@@ -441,12 +447,24 @@ pnpm test
   > **Blind spot — ambient `@types/*`.** An import-specifier scan cannot see
   > `@types/*` packages: they are pulled in implicitly by `import … from 'x'`,
   > never referenced by name. Dev-only `@types/*` whose types do **not** appear
-  > in any published `.d.ts` are fine root-aggregated (like `@types/node`). But
-  > if a published `.d.ts` exposes a type from `@types/X` (i.e. `X`'s types are
-  > part of the public API), the package must declare `@types/X` itself
-  > (`dependencies`) — the consumer needs it to type-check. Check this by
-  > grepping published `.d.ts` for the module (`grep -r "from 'x'" dist/*.d.mts`),
-  > not by the import audit.
+  > in any published `.d.ts` are fine root-aggregated. But if a published
+  > `.d.ts` exposes a type from `@types/X` (i.e. `X`'s types are part of the
+  > public API), the package must declare `@types/X` itself — the consumer needs
+  > it to type-check. Which side depends on whether the consumer's own
+  > environment decides the right version:
+  >
+  > - **`@types/node` → `peerDependencies`** (`>=20`, + root-aggregated for dev).
+  >   It describes the Node the consumer *runs*; holding it as a `dependency`
+  >   pushed this repo's choice onto a project whose runtime may be two majors
+  >   behind, with no way for it to say otherwise. `@fastkit/vot` exposes
+  >   `IncomingMessage` / `ServerResponse` / `Server` from `node:http` and
+  >   declares it this way.
+  > - **every other `@types/X` → `dependencies`**, alongside the `X` it types
+  >   (e.g. `@types/connect` in `@fastkit/vot`, whose `Server` and
+  >   `IncomingMessage` appear in the published types).
+  >
+  > Check this by grepping published `.d.ts` for the module
+  > (`grep -r "from 'x'" dist/*.d.mts`), not by the import audit.
 
   > **Do not declare a guarded optional dynamic dependency just to silence the
   > audit.** Declaring it as a peer with `auto-install-peers` on (pnpm default)
