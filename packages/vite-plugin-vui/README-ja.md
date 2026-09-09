@@ -30,6 +30,27 @@ pnpm add @fastkit/vui @fastkit/vue-page vue vue-router
 ないと原因から遠い症状だけが出ます（ジェネレータも `vite build` も成功し、アイコン名は
 すべてプレースホルダの union に落ちて `tsc` が数百件の `TS2322` を報告する）。
 
+### アイコン
+
+既定では何も生成しません。`@fastkit/vui` が生成済みの Material Design Icons
+ウェブフォントを同梱しており、`installer.ts` がそれを import します。つまり既定構成では
+`@mdi/svg`（SVG 7,447 ファイル、約 31MB）も `@fastkit/icon-font-gen` も生成ステップも
+不要です。
+
+独自の SVG から生成する場合は `iconFont` を渡します。
+
+```ts
+const viteVui = await viteVuiPlugin({
+  iconFont: [{ src: './assets/icons' }],
+});
+```
+
+このエントリは同梱フォントに追加されるのではなく置き換えます。したがって `IconName` は
+そのプロジェクト自身の名前だけになり、読み込んでいない MDI グリフの型が混ざりません。
+生成には `devDependencies` の `@fastkit/icon-font-gen` が必要です（既定の経路では使わない
+ので optional peer にしてあります）。従来どおり MDI フォントを自分でビルドしたい場合は
+`"@mdi"` センチネル（`{ src: '@mdi' }`）がそのまま使えます。
+
 ### カラースキームとブレイクポイントのカスタマイズ
 
 値はビルド時に記述するため、ジェネレータはアプリに同梱されるものではなく

@@ -26,7 +26,7 @@ import { VPageLink } from '@fastkit/vue-page';
 import { installVuiPlugin as _installVuiPlugin, RawVuiPluginOptions, mergeVuiPluginOptions } from '@fastkit/vui';
 import { colorScheme } from '<%~ it.colorScheme %>';
 import '<%~ it.mediaMatch %>';
-import './icon-font';
+<%~ it.iconFont %>
 import '@fastkit/vui/after-effects.scss';
 
 export function installVui(settings: { app: App, router: Router }, options?: RawVuiPluginOptions) {
@@ -60,9 +60,34 @@ function toInstallerSpecifier(dest: string, target: string) {
   return relative.startsWith('.') ? relative : `./${relative}`;
 }
 
+/**
+ * How `installer.ts` pulls in the icon webfont.
+ *
+ * With no `iconFont` entries nothing is generated, so the installer names the
+ * font `@fastkit/vui` already ships. That module also carries the `IconNameMap`
+ * augmentation for those names, which is why it is imported rather than only its
+ * stylesheet: importing it puts the declaration in the project's program, the
+ * same way the generated tree's own `.ts` did.
+ *
+ * The specifiers reach into `dist` through vui's `"./*"` export -- the same way
+ * `@fastkit/vui/builtins/color-scheme.ts` and `@fastkit/vui/after-effects.scss`
+ * are reached -- because plugboy rebuilds the `exports` map from the workspace
+ * entries on every build and a hand-written key would not survive.
+ */
+const SHIPPED_ICON_FONT_IMPORT = [
+  `import '@fastkit/vui/icon-font/index.css';`,
+  `import '@fastkit/vui/icon-font/index.mjs';`,
+  // Eta trims the newline that follows an interpolation tag, so the value has to
+  // carry its own or the next import runs onto the same line.
+  '',
+].join('\n');
+
+const GENERATED_ICON_FONT_IMPORT = `import './icon-font';\n`;
+
 async function renderTemplate(
   { colorScheme, mediaMatch, uiSettings, icons }: ViteVuiPluginResultSettings,
   dest: string,
+  generatesIconFont: boolean,
 ) {
   const eta = new Eta();
   const result = await eta.renderStringAsync(TEMPLATE, {
@@ -70,6 +95,9 @@ async function renderTemplate(
     mediaMatch: toInstallerSpecifier(dest, mediaMatch),
     uiSettings: JSON.stringify(uiSettings),
     icons: JSON.stringify(icons),
+    iconFont: generatesIconFont
+      ? GENERATED_ICON_FONT_IMPORT
+      : SHIPPED_ICON_FONT_IMPORT,
   });
   if (!result) {
     throw new VitePluginVuiError('template render error.');
@@ -264,7 +292,27 @@ export interface ViteVuiPluginOptions extends Partial<
   dynamicDest?: string;
   colorScheme?: string;
   mediaMatch?: string;
+  /**
+   * Icon webfonts to generate for this project.
+   *
+   * Leave it unset -- the common case -- and nothing is generated: the project
+   * uses the Material Design Icons webfont `@fastkit/vui` already ships, and
+   * needs neither `@mdi/svg` nor `@fastkit/icon-font-gen`.
+   *
+   * Passing entries here generates *those* instead of the shipped font, so a
+   * project that supplies its own SVGs gets exactly its own icon names, with no
+   * MDI glyphs it does not load still typing as valid.
+   */
   iconFont?: RawIconFontEntry[];
+  /**
+   * Font-generation settings merged into every {@link iconFont} entry.
+   *
+   * Given on its own, with no `iconFont`, it opts the project back into
+   * generating the MDI font (`{ src: '@mdi' }`) with those settings applied --
+   * the shipped font is built with fixed metrics, so there is nothing for these
+   * to act on otherwise, and silently dropping a project's font metrics would be
+   * worse than doing the build it asked for.
+   */
   iconFontDefaults?: IconFontSettings;
   onBooted?: (() => any) | (() => Promise<any>);
   onBootError?: ((err: unknown) => any) | ((err: unknown) => Promise<any>);
@@ -363,18 +411,19 @@ export async function viteVuiPlugin(
   const colorSchemeSrc = path.resolve(colorScheme);
   const colorSchemeDest = path.join(dynamicDest, 'color-scheme');
   const mediaMatchDest = path.join(dynamicDest, 'media-match');
-  const dts = `
-/// <reference path="./color-scheme/color-scheme.info.ts" />
-/// <reference path="./icon-font/index.ts" />
-/// <reference path="./media-match/media-match.ts" />
-export {};
-  `.trim();
 
-  let iconFontEntries: RawIconFontEntry[] = iconFont || [
-    {
-      src: '@mdi',
-    },
-  ];
+  // The default used to be `[{ src: '@mdi' }]`, which made every project on the
+  // stock configuration obtain `@mdi/svg` (7,447 SVGs, ~31MB) and generate a
+  // 1.7MB tree from it at build time -- and `@fastkit/icon-font-gen` would run
+  // `pnpm add @mdi/svg` to get there, which fails outright in a `--prod` image
+  // where the devDependency was pruned. `@fastkit/vui` ships that font now, so
+  // the stock configuration generates nothing at all.
+  //
+  // `iconFontDefaults` alone still means the old default entry: those settings
+  // are font metrics, and the shipped font's are fixed, so a project that tuned
+  // them is asking for a build of its own.
+  let iconFontEntries: RawIconFontEntry[] =
+    iconFont || (iconFontDefaults ? [{ src: '@mdi' }] : []);
 
   if (iconFontDefaults) {
     iconFontEntries = iconFontEntries.map((entry) => ({
@@ -382,6 +431,20 @@ export {};
       ...entry,
     }));
   }
+
+  const generatesIconFont = iconFontEntries.length > 0;
+
+  // Only what is generated is referenced: the shipped font's `IconNameMap`
+  // augmentation reaches the project through `installer.ts`'s import of
+  // `@fastkit/vui/icon-font`, not from here.
+  const dts = [
+    '/// <reference path="./color-scheme/color-scheme.info.ts" />',
+    ...(generatesIconFont
+      ? ['/// <reference path="./icon-font/index.ts" />']
+      : []),
+    '/// <reference path="./media-match/media-match.ts" />',
+    'export {};',
+  ].join('\n');
 
   const manifest: GeneratedTreeManifest = {
     manifest: 1,
@@ -421,11 +484,13 @@ export {};
         dest: mediaMatchDest,
         runtimeModule: RUNTIME_MODULE,
       },
-      iconFont: {
-        entries: iconFontEntries,
-        dest: path.join(dynamicDest, 'icon-font'),
-        runtimeModule: RUNTIME_MODULE,
-      },
+      iconFont: generatesIconFont
+        ? {
+            entries: iconFontEntries,
+            dest: path.join(dynamicDest, 'icon-font'),
+            runtimeModule: RUNTIME_MODULE,
+          }
+        : undefined,
       // The manifest is written here, not in this plugin's own `config` hook:
       // that hook is `enforce: 'pre'`, so it runs *before* the generators. This
       // fires once they have all booted, which is the only point where the tree
@@ -449,7 +514,7 @@ export {};
     async config(config) {
       await fs.writeFile(
         path.join(dynamicDest, 'installer.ts'),
-        await renderTemplate(settings, dynamicDest),
+        await renderTemplate(settings, dynamicDest, generatesIconFont),
       );
 
       if (config.ssr?.noExternal !== true) {

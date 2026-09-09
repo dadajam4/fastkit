@@ -1449,6 +1449,12 @@ importers:
         specifier: workspace:^
         version: link:../vue-utils
     devDependencies:
+      '@fastkit/icon-font-gen':
+        specifier: workspace:^
+        version: link:../icon-font-gen
+      '@mdi/svg':
+        specifier: ^7.4.47
+        version: 7.4.47
       vue:
         specifier: 3.5.40
         version: 3.5.40(typescript@6.0.3)

@@ -44,13 +44,13 @@
     "src"
   ],
   "scripts": {
-    "build": "plugboy build",
+    "build": "plugboy build && node scripts/generate-icon-font.mjs",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
     "format": "pnpm run \"/^(eslint:fix|stylelint:fix)$/\"",
     "lint": "pnpm run \"/^(eslint|stylelint)$/\"",
-    "stub": "plugboy stub",
+    "stub": "plugboy stub && node scripts/generate-icon-font.mjs",
     "stylelint": "stylelint \"**/*.{css,scss,vue,html}\" --allow-empty-input",
     "stylelint:fix": "stylelint \"**/*.{css,scss,vue,html}\" --fix --allow-empty-input",
     "test": "vitest run",
@@ -85,6 +85,8 @@
     "@fastkit/vue-utils": "workspace:^"
   },
   "devDependencies": {
+    "@fastkit/icon-font-gen": "workspace:^",
+    "@mdi/svg": "^7.4.47",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
   },
