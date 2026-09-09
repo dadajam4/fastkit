@@ -87,6 +87,7 @@ Work through these in order for any dependency `X` used by a package:
 | Build config (`plugboy.workspace.ts`) or bundled build helper | root toolchain / `devDependencies` — **never `dependencies`** | `@fastkit/plugboy` |
 | plugboy plugin (the package *is* a plugin) | required `peerDependencies` | `@fastkit/plugboy-sass-plugin` |
 | Dependency reachable only via an opt-in subpath export | **optional** `peerDependencies` | `@fastkit/plugboy` in `@fastkit/icon-font`; `vite` in `@fastkit/ts-tiny-meta` |
+| Workspace package declared as a peer | `peerDependencies` with an **explicit range** (+ `workspace:^` dev) — never `workspace:^` as the peer | `@fastkit/icon-font-gen: ^1.0.0` in `@fastkit/vite-plugin-vui` |
 | Optional feature via guarded dynamic import | `optionalDependencies` / `peerDependenciesMeta.optional` | `node-memwatcher` in `vot` |
 
 ## Special cases and established rules
@@ -141,6 +142,52 @@ particular breaks its public API in minor and major releases**, so:
 
 This matches the repo's existing peers (cf. the `vite` peer
 `^6.0.0 || ^7.0.0 || ^8.0.0` — enumerated majors, explicit upper bound).
+
+### Internal peers: an explicit range, never `workspace:^`
+
+A **workspace** package declared as a `peerDependency` of another workspace
+package gets an explicit range — `^1.0.0` — not `workspace:^`. Keep
+`workspace:^` in `devDependencies`, which is what links the local copy; the peer
+declaration is a compatibility statement and needs to say something true.
+
+`workspace:^` cannot. It publishes as `^<the version that happened to ship>`, so
+`@fastkit/vite-plugin-vui` would tell consumers "you need at least
+`@fastkit/icon-font-gen@1.4.2`" when any `1.x` does. No published package writes
+peers that way; the two shapes in the wild are lockstep-exact (`3.29.0`, as
+`@tiptap/*` do) and a major floor (`^7.0.0`, as `@babel/*` do at 7.29.x).
+
+**It also forces spurious majors, via changesets.** `assemble-release-plan`
+bumps a dependent to **major** — hard-coded, with no option to soften it, and
+overriding whatever the changeset itself declared — when:
+
+```js
+depType === "peerDependencies" && nextRelease.type !== "patch" &&
+  (!onlyUpdatePeerDependentsWhenOutOfRange ||
+   !semverSatisfies(incrementVersion(nextRelease), versionRange))
+```
+
+`workspace:^` expands to `^` + the version **before** the release, so it is
+*guaranteed* out of range on the very release that takes the peer to a new major
+— and on `0.x`, where a caret pins the minor, on every minor as well. So a `0.x`
+internal peer majors its dependents forever, for changes that break nothing in
+them. `@fastkit/icon-font-gen` did exactly this to `@fastkit/vite-plugin-vui`,
+which only re-exports two of its types and passes `iconFont` entries through.
+
+Consequences worth knowing:
+
+- **A `patch` bump never cascades** (`nextRelease.type !== "patch"`). That was
+  the workaround used while the ranges were wrong, but it understates a breaking
+  change and lands it on everyone's next `pnpm update`. Fix the range instead.
+- **Reaching `1.0.0` is what makes the problem go away.** With `^1.0.0`
+  declared, every `1.x` minor stays in range; a `2.0.0` goes out of range and
+  majors the dependent, which is the correct moment to review it.
+- **`pnpm` does not warn** while a declared range and the workspace version
+  disagree (it links the workspace copy regardless), so raising the floor to
+  `^1.0.0` in the same commit that bumps the package is safe — there is no
+  window where the repo looks broken.
+
+Still outstanding: `@fastkit/vue-page` (`0.18.x`) is a **required** peer of
+`@fastkit/vite-plugin-vui` on `workspace:^`, so the trap is still armed there.
 
 ### Framework singletons (the Vue family)
 
@@ -325,6 +372,10 @@ and `fs-extra` because its own build modules use them.
 - **`pnpm overrides`** pin a single resolved version workspace-wide at
   install time. Publishing rewrites `workspace:` / `catalog:` protocols but does
   not bake overrides into published manifests.
+- **changesets majors a dependent whose `peerDependencies` range the new version
+  leaves**, and `workspace:^` resolves to `^<pre-release version>` — so it is
+  always out of range on a major. See
+  [Internal peers](#internal-peers-an-explicit-range-never-workspace).
 - **`pnpm catalog:` was considered** for centralizing the Vue version but not
   adopted: converting ~26 packages × 2 references is high churn for marginal
   benefit over `overrides` + the per-package declarations that already exist.

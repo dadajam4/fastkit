@@ -1,5 +1,5 @@
 ---
-'@fastkit/vite-plugin-vui': major
+'@fastkit/vite-plugin-vui': minor
 ---
 
 Stop generating an icon font by default — use the one `@fastkit/vui` now ships.
@@ -22,6 +22,8 @@ and `.vui/vui.d.ts` no longer references a generated `icon-font/`. The icon *nam
 The default `icons` are now type-checked against the shipped names, rather than cast past `IconName`'s placeholder one field at a time (`'mdi-menu-down' as any`, ×23) and then cast again wholesale. A typo in one of them is a build error here with a `Did you mean …?` suggestion, instead of an icon that silently renders as a blank glyph in every project on the default configuration.
 
 **Migration.** Rebuild. `@fastkit/icon-font-gen` is only needed if you pass `iconFont` (it has always been an optional peer), and `@mdi/svg` is needed by nobody.
+
+The optional `@fastkit/icon-font-gen` peer is now declared as `^1.0.0` (it was `^0.16.x`), so if you generate icon fonts, upgrade it alongside this package. Nothing else about that dependency changed for you: it is still optional, and still only needed when you pass `iconFont`.
 
 Two configurations do change behaviour:
 
