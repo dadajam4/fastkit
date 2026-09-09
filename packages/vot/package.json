@@ -37,6 +37,12 @@
         "default": "./dist/server.mjs"
       }
     },
+    "./head": {
+      "types": "./dist/head.d.mts",
+      "import": {
+        "default": "./dist/head.mjs"
+      }
+    },
     "./*": "./dist/*"
   },
   "main": "./dist/vot.mjs",
@@ -51,6 +57,9 @@
       ],
       "server": [
         "./dist/server.d.mts"
+      ],
+      "head": [
+        "./dist/head.d.mts"
       ]
     }
   },
@@ -80,7 +89,6 @@
     "@types/connect": "^3.4.38",
     "@types/express": "^4.17.25",
     "@types/http-proxy": "^1.17.17",
-    "@types/node": "^24.13.2",
     "@unhead/vue": "^3.2.3",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vitejs/plugin-vue-jsx": "^5.1.6",
@@ -92,9 +100,16 @@
     "http-proxy": "^1.18.1",
     "unhead": "^3.2.3",
     "vite": "^8.1.5",
-    "vite-plugin-pages": "^0.33.3",
+    "vite-plugin-pages": "^0.33.3"
+  },
+  "devDependencies": {
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
+  },
+  "peerDependencies": {
+    "@types/node": ">=20",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0 || ^5.0.0"
   },
   "buildOptions": {
     "name": "Vot",

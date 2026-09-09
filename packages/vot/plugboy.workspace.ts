@@ -5,6 +5,7 @@ export default defineWorkspaceConfig({
     '.': './src/index.ts',
     tool: './src/tool/index.ts',
     server: './src/server/index.ts',
+    head: './src/head.ts',
   },
   deps: {
     neverBundle: [

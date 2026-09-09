@@ -21,6 +21,23 @@ Vueアプリケーションを構築するための包括的なオーケスト�
 npm install @fastkit/vot
 ```
 
+### ピア依存
+
+`vue` と `vue-router` は `peerDependencies` です。プロジェクト側が宣言し、そこで解決された
+コピーをこのパッケージがリンクします。どちらもシングルトンであり (vot はあなたのルーターを
+呼び出し、あなたの Vue にマウントします)、2 つのコピーが同居すると `provide`/`inject`、
+`app.use()`、そして Vue が宣言マージで導出するすべての型が壊れます。
+
+`@types/node` もピアです。公開される型が `node:http` の `IncomingMessage`・
+`ServerResponse`・`Server` を露出するため、利用側の `tsc` が Node の型を解決できる必要が
+あります。ただしそれは **あなたが実行する Node** に対応する型であるべきで、それを決められる
+のは利用側だけです。
+
+```bash
+npm install vue vue-router
+npm install -D @types/node
+```
+
 ## CLI使用方法
 
 ```bash
@@ -107,7 +124,6 @@ export default defineVotConfig({
 
 ```typescript
 import { createVotApp } from '@fastkit/vot'
-import { createHead } from '@unhead/vue'
 import App from './App.vue'
 
 // Votアプリケーションの作成
@@ -119,9 +135,8 @@ export const { createApp } = createVotApp({
   async setupApp(ctx) {
     const { app, router } = ctx
 
-    // Head管理の設定
-    const head = createHead()
-    app.use(head)
+    // Head管理は vot が既にインストール済みです。任意のコンポーネントから
+    // `@fastkit/vot/head` の `useHead()` を呼び出してください。
 
     // グローバルコンポーネントの登録
     // app.component('MyComponent', MyComponent)
@@ -240,7 +255,7 @@ export const { createApp } = createVotApp({
 </template>
 
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
+import { useHead } from '@fastkit/vot/head'
 
 // ページメタデータ
 useHead({
@@ -602,7 +617,7 @@ my-vot-app/
 - `vite` - ビルドツール
 - `vue` - Vue.js フレームワーク
 - `vue-router` - Vue Router
-- `@unhead/vue` - Head 管理
+- `@unhead/vue` - Head 管理 (`@fastkit/vot/head` から再エクスポート。利用側での宣言は不要)
 
 ## ライセンス
 

@@ -1,5 +1,5 @@
 import { inject, provide, isRef, computed } from 'vue';
-import { useHead, UseHeadInput, ReactiveHead } from '@unhead/vue';
+import { useHead, UseHeadInput, ReactiveHead } from '@fastkit/vot/head';
 import { useVuePageControl, VuePageControl } from '@fastkit/vot';
 import { arrayUnique } from '@fastkit/helpers';
 import { VHero } from '@fastkit/vui';

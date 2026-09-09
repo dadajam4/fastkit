@@ -9,7 +9,7 @@ import {
   VBusyImage,
   VLink,
 } from '@fastkit/vui';
-import { useHead } from '@unhead/vue';
+import { useHead } from '@fastkit/vot/head';
 import { capitalize } from '@fastkit/helpers';
 import { PackageProvide } from '@@';
 import { VLanguageSwitcher } from '~/components';

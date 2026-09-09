@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import { VApp } from '@fastkit/vui';
 import { VPage } from '@fastkit/vue-page';
-import { useHead } from '@unhead/vue';
+import { useHead } from '@fastkit/vot/head';
 import { i18n } from '@@';
 
 export const App = defineComponent({
