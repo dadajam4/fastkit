@@ -141,12 +141,17 @@ export const VWysiwygEditor = defineComponent({
     });
 
     const extensions = [
+      // Extensions that a tool registers itself must be disabled here, otherwise
+      // tiptap sees a duplicate extension name and silently drops one of the two
+      // registrations - together with the options passed to the tool.
       StarterKit.configure({
         bold: false,
         bulletList: false,
         orderedList: false,
         undoRedo: false,
         italic: false,
+        underline: false,
+        link: false,
       }),
       ...resolveRawWysiwygExtensions(props.extensions, initializeCtx),
       ...wysiwygSettings.value.extensions,
