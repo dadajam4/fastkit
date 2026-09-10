@@ -1,5 +1,92 @@
 # @fastkit/vui
 
+## 1.7.1
+
+### Patch Changes
+
+- [#213](https://github.com/dadajam4/fastkit/pull/213) [`02ed660`](https://github.com/dadajam4/fastkit/commit/02ed660f4e06be90dceb2664d341d67f1136fe6e) Thanks [@dadajam4](https://github.com/dadajam4)! - Declare `engines.node` on the packages that run in Node
+
+  None of these packages said which Node they needed, so a project on an older
+  Node installed cleanly and failed later. `@fastkit/node-util` reaches
+  `execa@10` (`engines: >=22`), and nothing in the chain up through
+  `@fastkit/vite-plugin-vui` declared anything, so Node 20 builds died with:
+
+  ```
+  TypeError: TEXT_ENCODINGS.union is not a function
+      at .../execa/lib/arguments/encoding-option.js:20
+  ```
+
+  `Set.prototype.union` is Node 22+ and `execa` calls it at import time. The
+  failure surfaced only during the build and vui's generation step -- `tsc` and
+  the tests passed -- so it showed up in CI and container images while a
+  developer on a newer Node saw everything green.
+
+  Each package now declares the highest floor its own shipped dependencies
+  impose, so `npm`/`pnpm` report an unsupported engine at install time and
+  `engine-strict` fails outright:
+
+  | Floor       | Packages                                                                                                                                  |
+  | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+  | `>=24.14.0` | `icon-font-gen`, `vite-kit`, `vite-plugin-vui` (`webfont@12.5.0`)                                                                         |
+  | `>=22.18.0` | `plugboy` and its four plugins (`@tsdown/css`, `unplugin-vue-jsx`)                                                                        |
+  | `>=22.12.0` | `stylelint-config-vue` (`postcss-html`)                                                                                                   |
+  | `>=22.0.0`  | `node-util`, `nodepack`, `color-scheme-gen`, `media-match-gen`, `vui` (`execa@10`); `cookies`, `vue-page`, `vot`, `vot-i18n` (`cookie@2`) |
+  | `>=20.19.0` | `eslint-config`, `eslint-config-vue`, `stylelint-config`, `sprite-images`, `ts-tiny-meta`, `vue-tiny-meta`                                |
+  | `>=18.0.0`  | `hashed-sync` (`imagemin`)                                                                                                                |
+
+  Note that `@fastkit/vite-plugin-vui` requires **Node 24.14**, not 22: its
+  `webfont` dependency does. Nothing here changes what any package needs at run
+  time -- these floors were already in force, just undeclared.
+
+  Browser-only packages are left alone even where a transitive dependency has a
+  floor: `@fastkit/vui-wysiwyg` inherits one from `@fastkit/vui`, but runs no
+  Node code of its own. Optional peers do not contribute a floor, since they are
+  reachable only through an opt-in subpath.
+
+  `pnpm audit:deps` now recomputes every floor and fails when a declaration is
+  missing or undershoots, so a future dependency bump cannot quietly reintroduce
+  the gap. The policy is written up in `docs/dependency-management.md`.
+
+- [#213](https://github.com/dadajam4/fastkit/pull/213) [`02ed660`](https://github.com/dadajam4/fastkit/commit/02ed660f4e06be90dceb2664d341d67f1136fe6e) Thanks [@dadajam4](https://github.com/dadajam4)! - Restore the breakpoint-suffixed after-effects classes
+
+  Since the after-effects stylesheets moved from the legacy `@import` to the
+  module system, `@fastkit/vui/after-effects.scss` emitted only the unsuffixed
+  utility classes. Every `--<breakpoint>` variant -- `grid-size-6--md`,
+  `grid-size-12--xs`, the responsive spacing and text classes -- was missing from
+  the built CSS.
+
+  A grid item declared per-breakpoint therefore matched no width rule at all:
+
+  ```tsx
+  <VGridItem size={{ xs: 12, md: 6 }} />
+  // class="... grid-size-12--xs grid-size-6--md" -- neither class existed
+  ```
+
+  The item collapsed to its content width with nothing logged, so the layout
+  broke silently.
+
+  `mq-each`, which loops over a project's own breakpoints, comes from the
+  media-match Sass that `@fastkit/vite-plugin-vui` generates and injects into
+  every entry stylesheet. Under `@import` that reached the sub-stylesheets;
+  under `@use` each of them has its own scope, and the `mixin-exists` guard they
+  carried turned the loss into missing CSS instead of a build error. The loop now
+  runs in `after-effects.scss` itself -- the entry the injection actually reaches
+  -- and the emitted CSS is identical to what the legacy `@import` produced,
+  declaration order included. When no `mq-each` is in scope the stylesheet now
+  warns rather than dropping the variants quietly.
+
+  No change is needed in projects that use `@fastkit/vite-plugin-vui`.
+
+  `@fastkit/vui/after-effects/{display-flow,text,spacing}.scss` are now
+  mixin-only: importing one directly no longer emits CSS on its own. Import
+  `@fastkit/vui/after-effects.scss` instead, or `@include` the mixin the module
+  exports (`display-flow.display-flow`, `text.text`, `spacing.spacing`), passing
+  a breakpoint suffix if you drive the loop yourself.
+
+- Updated dependencies [[`02ed660`](https://github.com/dadajam4/fastkit/commit/02ed660f4e06be90dceb2664d341d67f1136fe6e)]:
+  - @fastkit/color-scheme-gen@1.3.1
+  - @fastkit/media-match-gen@1.3.1
+
 ## 1.7.0
 
 ### Minor Changes
