@@ -24,7 +24,11 @@
 }
 
 @mixin palette-border($palette-name, $direction: '') {
-  $appends: if($direction == '', '', '-' + $direction);
+  $appends: '';
+
+  @if $direction != '' {
+    $appends: '-' + $direction;
+  }
 
   border#{$appends}-color: palette-color($palette-name);
 }
