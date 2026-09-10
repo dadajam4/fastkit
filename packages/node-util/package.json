@@ -62,6 +62,9 @@
   "devDependencies": {
     "@types/folder-hash": "^4.0.4"
   },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "buildOptions": {
     "name": "NodeUtil"
   },

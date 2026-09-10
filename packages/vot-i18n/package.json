@@ -66,6 +66,9 @@
   "peerDependencies": {
     "@fastkit/vot": "workspace:^"
   },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "_docs": {
     "scope": "vot",
     "feature": "i18n",

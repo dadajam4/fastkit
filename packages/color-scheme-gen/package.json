@@ -59,6 +59,9 @@
     "eta": "^4.6.0",
     "fs-extra": "^11.4.0"
   },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "buildOptions": {
     "name": "ColorSchemeGen"
   },

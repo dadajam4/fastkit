@@ -46,5 +46,8 @@
     "stylelint-config-recommended": "^18.0.0",
     "stylelint-config-recommended-scss": "^17.0.1",
     "stylelint-config-recommended-vue": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }
