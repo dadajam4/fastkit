@@ -1,6 +1,5 @@
 @use 'sass:map' as _vui_af_text_map;
 @use 'sass:string' as _vui_af_text_string;
-@use 'sass:meta' as _vui_af_text_meta;
 
 $props-map: (
   (
@@ -85,14 +84,5 @@ $props-map: (
     .font-weight-#{$weight}#{$breakpoint-suffix} {
       font-weight: $weight;
     }
-  }
-}
-
-@include text;
-
-// mq-eachミックスインが定義されている場合のみ実行
-@if _vui_af_text_meta.mixin-exists(mq-each) {
-  @include mq-each {
-    @include text($breakpoint-suffix: '--' + $mq-each-target);
   }
 }

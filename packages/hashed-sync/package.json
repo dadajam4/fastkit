@@ -66,6 +66,9 @@
     "@types/imagemin": "^9.0.1",
     "@types/imagemin-mozjpeg": "^8.0.4"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "buildOptions": {
     "name": "HashedSync"
   },

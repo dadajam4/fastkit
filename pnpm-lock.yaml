@@ -97,6 +97,9 @@ importers:
       rollup:
         specifier: ^4.62.2
         version: 4.62.2
+      sass:
+        specifier: ^1.102.0
+        version: 1.102.0
       stylelint:
         specifier: ^17.14.1
         version: 17.14.1(supports-color@5.5.0)(typescript@6.0.3)
@@ -5498,9 +5501,6 @@ packages:
   imask@7.6.1:
     resolution: {integrity: sha512-sJlIFM7eathUEMChTh9Mrfw/IgiWgJqBKq2VNbyXvBZ7ev/IlO6/KQTKlV/Fm+viQMLrFLG/zCuudrLIwgK2dg==}
     engines: {npm: '>=4.0.0'}
-
-  immutable@5.1.6:
-    resolution: {integrity: sha512-q1swsS8K7L8usSHuOqF2TAoCCkonYz0SG38wLAggaa4Wml70zixIvt2ql4coQ2C2B3hTjltJry4r6bULwgAXLQ==}
 
   immutable@5.1.9:
     resolution: {integrity: sha512-m8nVez3rwrgmWxtLMt1ZYXB2Lv7OKYn/disyxAlSDYAlKSlFoPPfIAmAM/M5xqL4m4C/wAPw7S2/CNaUii1Hxg==}
@@ -12702,10 +12702,7 @@ snapshots:
     dependencies:
       '@babel/runtime-corejs3': 7.24.6
 
-  immutable@5.1.6: {}
-
-  immutable@5.1.9:
-    optional: true
+  immutable@5.1.9: {}
 
   import-fresh@3.3.0:
     dependencies:
@@ -14371,7 +14368,7 @@ snapshots:
   sass@1.102.0:
     dependencies:
       chokidar: 5.0.0
-      immutable: 5.1.6
+      immutable: 5.1.9
       source-map-js: 1.2.1
     optionalDependencies:
       '@parcel/watcher': 2.5.6

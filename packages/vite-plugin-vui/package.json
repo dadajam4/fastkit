@@ -73,5 +73,8 @@
     "@fastkit/icon-font-gen": {
       "optional": true
     }
+  },
+  "engines": {
+    "node": ">=24.14.0"
   }
 }

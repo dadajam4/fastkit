@@ -89,6 +89,7 @@ Work through these in order for any dependency `X` used by a package:
 | Dependency reachable only via an opt-in subpath export | **optional** `peerDependencies` | `@fastkit/plugboy` in `@fastkit/icon-font`; `vite` in `@fastkit/ts-tiny-meta` |
 | Workspace package declared as a peer | `peerDependencies` with an **explicit range** (+ `workspace:^` dev) — never `workspace:^` as the peer | `@fastkit/icon-font-gen: ^1.0.0` in `@fastkit/vite-plugin-vui` |
 | Optional feature via guarded dynamic import | `optionalDependencies` / `peerDependenciesMeta.optional` | `node-memwatcher` in `vot` |
+| Package with code that executes in Node | declare `engines.node` at its dependencies' floor | `>=22.0.0` in `@fastkit/node-util` |
 
 ## Special cases and established rules
 
@@ -339,6 +340,69 @@ reference that is undeclared **but provided through a required declared dep** is
 reported as **`[via]`** (informational, non-failing) — the accepted `neverBundle`
 outcome.
 
+## Node version support (`engines.node`)
+
+A package that runs in Node declares the Node it needs. A package that only
+ever runs in a browser declares nothing.
+
+**Why this is a dependency-policy question.** `engines.node` is the only signal
+a consumer gets *at install time*. Without it a project on an older Node
+installs cleanly and then dies later, in a message that names a transitive
+package rather than the requirement it broke. `@fastkit/vui@1.7.0` reached
+`execa@10` (`engines: >=22`) through `@fastkit/node-util`, and no package in
+that chain declared anything — so Node 20 projects installed without a warning
+and failed during the build with `TEXT_ENCODINGS.union is not a function`
+(`Set.prototype.union` is Node 22+, and `execa` calls it at import time). It
+surfaced only in CI and in the container image: `tsc` and the tests passed, and
+a developer on a newer Node saw everything green.
+
+### The rule
+
+1. **Who declares.** Every package with code that executes in Node: build
+   tooling and CLIs, the lint config presets (the runner loads them in Node),
+   the build-time generators, and the SSR runtime. `@fastkit/vui` counts — it
+   ships `@fastkit/color-scheme-gen` and `@fastkit/media-match-gen` as
+   `dependencies` and they run during a consumer's build.
+2. **Who does not.** Browser-only libraries, even when a transitive dependency
+   carries a floor. `@fastkit/vui-wysiwyg` inherits one from `@fastkit/vui` and
+   runs nothing in Node itself; the warning belongs on `@fastkit/vui`, where the
+   Node code actually is.
+3. **What to declare.** The highest floor among the package's own **shipped**
+   dependencies — `dependencies` plus non-optional `peerDependencies` — walking
+   workspace packages transitively. Write the exact floor (`>=22.18.0`), not the
+   major: it is what the audit compares against.
+4. **Optional peers are excluded.** They are reachable only through an opt-in
+   subpath, so their floor is not imposed on every consumer. `@fastkit/plugboy`
+   is an optional peer of `@fastkit/color-scheme` and does not push that package
+   to Node 22.
+5. **Declare a floor only, not the full range.** A dependency range like
+   `^22.18.0 || >=24.11.0` excludes Node 23; reproducing that algebra would only
+   describe an odd-numbered release nobody deploys.
+6. **Never declare a floor lower than the real one to keep an older Node
+   nominally supported.** Either the dependency graph supports that Node — pin
+   the dependency back until it does — or the floor moves up. A declaration that
+   undershoots is worse than none: it promises something the install then fails
+   to deliver.
+
+### Bump type
+
+Adding `engines.node` is a **patch**. It changes no code; it states a
+requirement that already existed. It is also the only bump type that is safe
+here: `minor` on a package that other packages declare as a required internal
+peer makes changesets force those dependents to `major` (see "Internal peers"
+above), which turns a metadata fix into a workspace-wide major release.
+
+### Audit
+
+`pnpm audit:deps` runs `scripts/audit-engines.mjs`, which recomputes each
+package's floor from its shipped dependencies and fails when a Node-executing
+package omits `engines.node` or declares a floor below it. Hand-maintained
+version metadata drifts — that drift is what caused the incident above — so the
+list of Node-executing packages lives in `RUNS_IN_NODE` in that script. **Add a
+package there when it gains Node-executed code**; the audit also notes any
+package that declares `engines.node` while not being listed, so the two cannot
+silently diverge.
+
 ## Root-aggregated dev toolchain
 
 The shared build/lint/test toolchain lives in the workspace-root
@@ -401,6 +465,9 @@ pnpm test
   ignores caches across the whole graph and breaks plugboy's self-bootstrap
   (plugboy must build itself first); `pnpm build:force` clears the Turbo cache
   and runs `build:plugboy` before the rest.
+- **`engines.node`:** a dependency bump can raise a package's Node floor.
+  `pnpm audit:deps` recomputes it and fails if a declaration now undershoots —
+  see "Node version support" above.
 - **Consumer reproduction:** `pnpm add` a single package into a throwaway project
   with default settings (no `shamefully-hoist`) and confirm its imports resolve.
   A missing runtime `dependencies` / `peerDependencies` fails here.

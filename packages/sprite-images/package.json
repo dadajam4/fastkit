@@ -58,6 +58,9 @@
     "fs-extra": "^11.4.0",
     "spritesmith": "^3.5.1"
   },
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "buildOptions": {
     "name": "SpriteImages"
   },

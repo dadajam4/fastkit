@@ -43,5 +43,8 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^10.10.0",
     "vue-eslint-parser": "^10.4.1"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   }
 }
