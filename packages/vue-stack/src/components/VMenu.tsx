@@ -37,7 +37,7 @@ import {
   type UseStackControlOptions,
 } from '../composables';
 import { logger, VueStackError } from '../logger';
-import { getScrollParents } from '../utils';
+import { getScrollParents, isScrolledOutOfView } from '../utils';
 
 const DEFAULT_EDGE_MARGIN = 20;
 const DEFAULT_FORCE_EDGE_MARGIN = false;
@@ -248,6 +248,21 @@ export function createMenuProps(options: CreateMenuSchemaOptions = {}) {
     },
     /**
      * Hide the stack element when the activator is scrolled out of view.
+     *
+     * An activator that is not rendered at all (`display: none`, removed from
+     * the document, ...) does not count as scrolled out of view.
+     *
+     * Such an activator cannot be measured either, so the stack keeps the last
+     * position it resolved and stops following the activator. Prefer keeping
+     * the activator rendered for as long as its stack is open --
+     * `data-v-stack-activated` is set on the activator element for exactly
+     * that:
+     *
+     * ```scss
+     * .row:not(:hover) .row__menu-button:not([data-v-stack-activated]) {
+     *   display: none;
+     * }
+     * ```
      */
     hideOnInvisible: {
       type: Boolean,
@@ -475,8 +490,7 @@ export function defineMenuComponent<
           (entries) => {
             if (!control.isActive) return;
             for (const entry of entries) {
-              const inview = entry.isIntersecting;
-              if (!inview) {
+              if (isScrolledOutOfView(entry)) {
                 _control.close();
                 break;
               }
