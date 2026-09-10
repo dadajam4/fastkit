@@ -1,6 +1,5 @@
 @use 'sass:map' as _vui_af_display_flow_map;
 @use 'sass:string' as _vui_af_display_flow_string;
-@use 'sass:meta' as _vui_af_display_flow_meta;
 
 $props-map: (
   (
@@ -347,13 +346,4 @@ $props-map: (
   @include grid-spacing($breakpoint-suffix);
   @include grid-spacing($breakpoint-suffix, 'x');
   @include grid-spacing($breakpoint-suffix, 'y');
-}
-
-@include display-flow;
-
-// mq-eachミックスインが定義されている場合のみ実行
-@if _vui_af_display_flow_meta.mixin-exists(mq-each) {
-  @include mq-each {
-    @include display-flow($breakpoint-suffix: '--' + $mq-each-target);
-  }
 }

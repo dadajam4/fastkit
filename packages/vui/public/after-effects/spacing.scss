@@ -9,7 +9,6 @@
 // * .mt-1--xs: margin-top: 8px; (only xs media)
 // *************************
 @use 'sass:map' as _vui_af_spacing_map;
-@use 'sass:meta' as _vui_af_spacing_meta;
 
 $property-map: (
   (
@@ -160,14 +159,5 @@ $sides-map: (
         }
       }
     }
-  }
-}
-
-@include spacing;
-
-// mq-eachミックスインが定義されている場合のみ実行
-@if _vui_af_spacing_meta.mixin-exists(mq-each) {
-  @include mq-each {
-    @include spacing($breakpoint-suffix: '--' + $mq-each-target);
   }
 }

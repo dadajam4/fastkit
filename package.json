@@ -62,6 +62,7 @@
     "postcss": "^8.5.23",
     "prettier": "^3.9.6",
     "rollup": "^4.62.2",
+    "sass": "^1.102.0",
     "stylelint": "^17.14.1",
     "stylelint-prettier": "^5.0.3",
     "tsx": "^4.23.1",

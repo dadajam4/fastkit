@@ -1,3 +1,51 @@
-@use './after-effects/display-flow' as *;
-@use './after-effects/text' as *;
-@use './after-effects/spacing' as *;
+// The breakpoint-suffixed variants (`.grid-size-6--md`, `.mt-1--xs`, ...) are
+// emitted here rather than inside the three modules below, because `mq-each`
+// -- the loop over the project's own breakpoints -- is not something this
+// package can `@use`: it comes from the media-match Sass generated per project
+// by `@fastkit/vite-plugin-vui`, which injects it as `@use "..." as *` at the
+// top of every entry stylesheet.
+
+// That injection only reaches the *entry*. A file pulled in with `@use` gets
+// its own scope and never sees it, so the loop has to live in this file. Under
+// the legacy `@import` everything shared one scope and each module ran the
+// loop itself; the move to the module system silently cost every responsive
+// variant (#212).
+
+// Each module is emitted base-then-breakpoints in turn, which is the order the
+// legacy `@import` produced. That order decides the cascade between groups
+// that touch the same property -- `.text-h1--md` sets `margin`, `.mt-1` sets
+// `margin-top` -- so it is kept as it was.
+@use 'sass:meta';
+@use './after-effects/display-flow';
+@use './after-effects/text';
+@use './after-effects/spacing';
+
+$-has-media-match: meta.mixin-exists('mq-each');
+
+@include display-flow.display-flow;
+
+@if $-has-media-match {
+  @include mq-each {
+    @include display-flow.display-flow('--' + $mq-each-target);
+  }
+}
+
+@include text.text;
+
+@if $-has-media-match {
+  @include mq-each {
+    @include text.text('--' + $mq-each-target);
+  }
+}
+
+@include spacing.spacing;
+
+@if $-has-media-match {
+  @include mq-each {
+    @include spacing.spacing('--' + $mq-each-target);
+  }
+}
+
+@if not $-has-media-match {
+  @warn 'No `mq-each` mixin is in scope, so no breakpoint-suffixed after-effects class (`.grid-size-6--md`, `.mt-1--xs`, ...) was emitted. Load this stylesheet as an entry of a build configured by `@fastkit/vite-plugin-vui`, or prepend `@use "<your media-match>.scss" as *;` to the entry that loads it.';
+}
