@@ -216,11 +216,11 @@ $mq-each-prefix-org: null;
     @if _media_match_gen_meta.type-of($e) == list {
       $result: $result#{media-match-to-string($e, $glue, true)};
     } @else {
-      $result: if(
-        $i != _media_match_gen_list.length($list) or $is-nested,
-        $result#{$e}#{$glue},
-        $result#{$e}
-      );
+      @if $i != _media_match_gen_list.length($list) or $is-nested {
+        $result: $result#{$e}#{$glue};
+      } @else {
+        $result: $result#{$e};
+      }
     }
   }
 
@@ -259,7 +259,11 @@ $mq-each-prefix-org: null;
 
     $mq-each-target: $target !global;
     $mq-each-prefix-org: #{$target + '-'} !global;
-    $mq-each-prefix: if($is-first, '', $mq-each-prefix-org) !global;
+    @if $is-first {
+      $mq-each-prefix: '' !global;
+    } @else {
+      $mq-each-prefix: $mq-each-prefix-org !global;
+    }
     $is-first: false;
 
     @if $target-condition == null {
