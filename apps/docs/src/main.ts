@@ -10,7 +10,7 @@ import { App } from './App';
 import { i18n, pmScriptPlugin } from '@@';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
 
-declare module '@fastkit/vue-page' {
+declare module '@fastkit/vot' {
   interface VuePageControl {
     $vui: VuiService;
   }

@@ -19,7 +19,7 @@ import {
   NavigationInput,
   VMenu,
 } from '@fastkit/vui';
-import { VPageLink } from '@fastkit/vue-page';
+import { VPageLink } from '@fastkit/vot';
 import { VLanguageSwitcher } from '../VLanguageSwitcher';
 import { PackageProvide, i18n } from '@@';
 import fastkitPackageJSON from '../../../../../package.json';

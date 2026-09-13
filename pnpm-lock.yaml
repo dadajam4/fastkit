@@ -154,9 +154,6 @@ importers:
       '@fastkit/vue-loading':
         specifier: workspace:^
         version: link:../../packages/vue-loading
-      '@fastkit/vue-page':
-        specifier: workspace:^
-        version: link:../../packages/vue-page
       '@fastkit/vue-scroller':
         specifier: workspace:^
         version: link:../../packages/vue-scroller
@@ -870,9 +867,6 @@ importers:
       '@fastkit/icon-font-gen':
         specifier: workspace:^
         version: link:../icon-font-gen
-      '@fastkit/vue-page':
-        specifier: workspace:^
-        version: link:../vue-page
       '@fastkit/vui':
         specifier: workspace:^
         version: link:../vui

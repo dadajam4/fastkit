@@ -27,7 +27,6 @@
     "@fastkit/vue-disabled-reason": "workspace:^",
     "@fastkit/vue-i18n": "workspace:^",
     "@fastkit/vue-loading": "workspace:^",
-    "@fastkit/vue-page": "workspace:^",
     "@fastkit/vue-scroller": "workspace:^",
     "@fastkit/vue-sortable": "workspace:^",
     "@fastkit/vue-stack": "workspace:^",
