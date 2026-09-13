@@ -3,15 +3,26 @@
 import * as http from 'node:http';
 import chalk from 'chalk';
 import { isObject } from '@fastkit/helpers';
-import { ProxyOptions, ResolvedConfig, HttpProxy } from 'vite';
+import { ProxyOptions, Logger, HttpProxy } from 'vite';
 import { NextHandleFunction } from 'connect';
 import httpProxy from 'http-proxy';
 
+/**
+ * The slice of a resolved Vite config that the proxy actually needs.
+ *
+ * Narrowed on purpose: `vot serve` builds this by hand so that serving a
+ * prebuilt app never has to resolve the project's Vite config.
+ */
+export interface ProxyMiddlewareConfig {
+  proxy: Record<string, string | ProxyOptions>;
+  logger: Pick<Logger, 'error'>;
+}
+
 export function proxyMiddleware(
   httpServer: http.Server | null,
-  config: ResolvedConfig,
+  config: ProxyMiddlewareConfig,
 ): NextHandleFunction {
-  const options = config.server.proxy!;
+  const options = config.proxy;
 
   // lazy require only when proxy is used
   const proxies: Record<string, [HttpProxy.ProxyServer, ProxyOptions]> = {};

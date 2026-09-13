@@ -37,6 +37,12 @@
         "default": "./dist/server.mjs"
       }
     },
+    "./internal/serve": {
+      "types": "./dist/internal/serve.d.mts",
+      "import": {
+        "default": "./dist/internal/serve.mjs"
+      }
+    },
     "./head": {
       "types": "./dist/head.d.mts",
       "import": {
@@ -57,6 +63,9 @@
       ],
       "server": [
         "./dist/server.d.mts"
+      ],
+      "internal/serve": [
+        "./dist/internal/serve.d.mts"
       ],
       "head": [
         "./dist/head.d.mts"

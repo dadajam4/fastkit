@@ -5,6 +5,7 @@ export default defineWorkspaceConfig({
     '.': './src/index.ts',
     tool: './src/tool/index.ts',
     server: './src/server/index.ts',
+    'internal/serve': './src/internal/serve/index.ts',
     head: './src/head.ts',
   },
   deps: {

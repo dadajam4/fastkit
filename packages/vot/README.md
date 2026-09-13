@@ -14,6 +14,7 @@ A comprehensive orchestration tool and framework for building Vue applications. 
 - **Vue 3 + Vue Router 4**: Compatible with the latest Vue ecosystem
 - **Head Management**: Meta tag and SEO optimization with Unhead
 - **Proxy Support**: API proxy functionality during development
+- **Server Entry**: A single `vot.server.ts` owns host / port / proxy / middleware for both `vot dev` and `vot serve`, so a production image needs no build toolchain ([docs](./docs/server-entry.md))
 
 ## Installation
 
@@ -49,6 +50,9 @@ npx vot build
 
 # Static site generation
 npx vot generate
+
+# Serve a production build
+npx vot serve
 
 # Other options
 npx vot --help
@@ -296,7 +300,44 @@ onMounted(async () => {
 </script>
 ```
 
-## Development Server Customization
+## Server Configuration
+
+Host, port, proxy rules and server middleware live in a **server entry** at the
+project root. `vot dev` and `vot serve` both read it, and `vot build` bundles it
+into `dist/server` -- which is what lets `vot serve` run without evaluating
+`vite.config.ts`, so a production image needs none of the build-time plugins
+installed.
+
+```typescript
+// vot.server.ts
+import { defineVotServer } from '@fastkit/vot/server'
+import express from 'express'
+
+export default defineVotServer(({ dev }) => ({
+  host: '0.0.0.0',
+  port: dev ? 3000 : Number(process.env.PORT ?? 8080),
+  proxy: {
+    '/api': 'http://localhost:8080',
+  },
+  configureServer({ use }) {
+    use('/healthcheck', (_req, res) => {
+      res.writeHead(200).end()
+    })
+
+    // Serve static files
+    use('/uploads', express.static('uploads'))
+  },
+}))
+```
+
+See the [server entry guide](./docs/server-entry.md) for the full reference:
+the context passed to the function form, precedence against `vite.config.ts`,
+the build output, and what happens to applications that have no entry.
+
+### Development Server Customization (without an entry)
+
+`configureServer` can also be declared on the plugin. Prefer the server entry --
+this form is only read by `vot dev` and by the `vot serve` fallback path.
 
 ### src/server/dev.ts
 
@@ -574,6 +615,7 @@ interface VotConfig {
 | `vot dev` | Start development server |
 | `vot build` | Build for production |
 | `vot generate` | Generate static site |
+| `vot serve` | Serve a production build ([server entry](./docs/server-entry.md)) |
 | `vot preview` | Preview build result |
 
 ### CLI Options

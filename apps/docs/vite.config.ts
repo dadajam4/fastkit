@@ -23,13 +23,6 @@ export default defineConfig({
   },
   root: __dirname,
   base: '/fastkit/',
-  server: {
-    host: '0.0.0.0',
-    port: 3000,
-    proxy: {
-      '/google': 'https://google.com',
-    },
-  },
   resolve: {
     tsconfigPaths: true,
   },
@@ -90,11 +83,6 @@ export default defineConfig({
             props: true,
           });
         },
-      },
-      configureServer({ use }) {
-        use('/healthcheck', (req, res) => {
-          res.writeHead(200).end();
-        });
       },
       generate: USE_GENERATE
         ? {

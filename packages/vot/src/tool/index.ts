@@ -1,18 +1,71 @@
+/* eslint-disable no-console */
+import path from 'node:path';
 import Pages from 'vite-plugin-pages';
-import { Plugin } from 'vite';
+import { Plugin, UserConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { VotPluginOptions } from '../vot';
+import type { VotServerConfig } from '../schema/server';
 import { createSSRDevHandler } from './dev/server';
+import { loadServerEntry, resolveServerEntryPath } from './server-entry';
 
+export * from './server-entry';
 export * from './build';
 export * from './generate';
 export * from './dev';
 export * from './cli';
 export * from '../vot';
 
+/**
+ * Keys the server entry takes over from Vite's `server` config.
+ */
+const SERVER_ENTRY_KEYS = ['host', 'port', 'proxy'] as const;
+
+/**
+ * Fold the server entry's values into Vite's `server` config.
+ *
+ * The entry wins, because it is also what `vot serve` reads -- letting
+ * `vite.config.ts` win in dev is exactly how a project ends up with dev and
+ * production listening on different ports.
+ */
+function mergeServerEntryConfig(
+  userServer: UserConfig['server'],
+  entryConfig: VotServerConfig,
+  entryPath: string,
+): UserConfig['server'] {
+  const server: UserConfig['server'] = {};
+  const conflicts: string[] = [];
+
+  for (const key of SERVER_ENTRY_KEYS) {
+    const value = entryConfig[key];
+    if (value === undefined) continue;
+    if (userServer?.[key] !== undefined) conflicts.push(key);
+    (server as any)[key] = value;
+  }
+
+  if (conflicts.length) {
+    console.warn(
+      `[vot] ${conflicts
+        .map((key) => `\`server.${key}\``)
+        .join(
+          ', ',
+        )} ${conflicts.length > 1 ? 'are' : 'is'} set in both vite.config.ts and ${path.basename(
+        entryPath,
+      )}. The server entry wins -- remove the one in vite.config.ts.`,
+    );
+  }
+
+  return server;
+}
+
 export function votPlugin(options: VotPluginOptions = {}) {
   const { pages, configureServer } = options;
+
+  /**
+   * Resolved server entry, populated by the `config()` hook while the
+   * development server starts.
+   */
+  let serverEntryConfig: VotServerConfig | undefined;
 
   // @FIXME Not default exported on the CJS side for some reason.
   const _Pages: typeof Pages =
@@ -46,7 +99,46 @@ export function votPlugin(options: VotPluginOptions = {}) {
       };
       return options;
     },
-    config(config, env) {
+    async config(config, env) {
+      let entryServer: UserConfig['server'];
+
+      // The entry is bundled -- not evaluated -- at build time, so that values
+      // it reads from `process.env` come from the machine that runs the app.
+      if (env.command === 'serve') {
+        const root = config.root ? path.resolve(config.root) : process.cwd();
+        const entryPath = resolveServerEntryPath(root, options.server?.entry);
+
+        if (entryPath) {
+          // `vot serve` sets this before falling back to loading the Vite
+          // config, which is the only way this hook runs outside `vot dev`.
+          const isServe = !!process.env.__VOT_SERVE;
+
+          serverEntryConfig = await loadServerEntry(
+            entryPath,
+            {
+              command: isServe ? 'serve' : 'dev',
+              dev: !isServe,
+              mode: env.mode,
+            },
+            { root, resolve: config.resolve },
+          );
+
+          entryServer = mergeServerEntryConfig(
+            config.server,
+            serverEntryConfig,
+            entryPath,
+          );
+
+          if (configureServer && serverEntryConfig.configureServer) {
+            console.warn(
+              `[vot] \`configureServer\` is set in both votPlugin() and ${path.basename(
+                entryPath,
+              )}. Both run, votPlugin() first -- move the one in votPlugin() to the server entry.`,
+            );
+          }
+        }
+      }
+
       return {
         define: {
           __VOT_CONTAINER_ID__: JSON.stringify(options.containerId || 'app'),
@@ -58,14 +150,14 @@ export function votPlugin(options: VotPluginOptions = {}) {
         ssr: {
           noExternal: ['@fastkit/vot'],
         },
-        server:
+        server: {
           // Avoid displaying 'localhost' in terminal in MacOS:
           // https://github.com/vitejs/vite/issues/5605
-          process.platform === 'darwin'
-            ? {
-                host: config.server?.host || '127.0.0.1',
-              }
-            : undefined,
+          ...(process.platform === 'darwin' && entryServer?.host === undefined
+            ? { host: config.server?.host || '127.0.0.1' }
+            : undefined),
+          ...entryServer,
+        },
         optimizeDeps: {
           // exclude: ['virtual:generated-pages', '@fastkit/vot'],
           exclude: ['virtual:generated-pages'],
@@ -73,10 +165,14 @@ export function votPlugin(options: VotPluginOptions = {}) {
       };
     },
     async configureServer(server) {
+      const { middlewares } = server;
+      const use = middlewares.use.bind(middlewares);
+
       if (configureServer) {
-        const { middlewares } = server;
-        const use = middlewares.use.bind(middlewares);
         await configureServer({ use });
+      }
+      if (serverEntryConfig?.configureServer) {
+        await serverEntryConfig.configureServer({ use });
       }
       if (process.env.__DEV_MODE_SSR) {
         const handler = createSSRDevHandler(server, options);

@@ -1,6 +1,7 @@
 export * from './renderer';
 export * from './context';
 export * from './options';
+export * from './server';
 export * from './plugin';
 export type {
   VotBeforeRouterSetupParams,
