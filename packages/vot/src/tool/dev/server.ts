@@ -5,8 +5,10 @@ import { performance } from 'perf_hooks';
 import { NextHandleFunction } from 'connect';
 import {
   createServer as createViteServer,
+  isCSSRequest,
   InlineConfig,
   ViteDevServer,
+  EnvironmentModuleNode,
 } from 'vite';
 import chalk from 'chalk';
 import module from 'node:module';
@@ -43,6 +45,68 @@ function fixEntryPoint(vite: ViteDevServer) {
 
 const SCSS_MAP_MATCH_RE = /\.s?(a|c)ss\.map$/;
 
+/**
+ * Placeholder swapped for the stylesheets the rendered page uses.
+ *
+ * It is put into the template *before* rendering so that the styles end up
+ * where the client build puts its `<link rel="stylesheet">` tags: after the
+ * head of `index.html`, but ahead of the tags the renderer appends for the
+ * current route.
+ */
+const DEV_STYLES_PLACEHOLDER = '<!--vot-dev-styles-->';
+
+const HEAD_CLOSE_TAG = '</head>';
+
+/**
+ * Ask Vite for the stylesheet itself instead of the JavaScript module that
+ * injects it. `direct` has to come first so that the request still ends in a
+ * CSS extension for ids that already carry a query (`App.vue?vue&type=style`).
+ */
+function injectDirectQuery(id: string): string {
+  const queryIndex = id.indexOf('?');
+  return queryIndex === -1
+    ? `${id}?direct`
+    : `${id.slice(0, queryIndex)}?direct&${id.slice(queryIndex + 1)}`;
+}
+
+const ID_PREFIX_MATCH_RE = /^\/@id\//;
+
+const NULL_BYTE_PLACEHOLDER_MATCH_RE = /^__x00__/;
+
+const TIMESTAMP_QUERY_MATCH_RE = /[?&]t=\d+/;
+
+/**
+ * `dynamicDeps` records the specifier as the module runner addresses it, which
+ * is the module url with Vite's virtual module encoding still applied. Strip it
+ * back down so the two sides can be compared.
+ */
+function normalizeModuleUrl(url: string): string {
+  return url
+    .replace(ID_PREFIX_MATCH_RE, '')
+    .replace(NULL_BYTE_PLACEHOLDER_MATCH_RE, '\0')
+    .replace(TIMESTAMP_QUERY_MATCH_RE, '');
+}
+
+function escapeAttributeValue(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+}
+
+interface DevStyle {
+  id: string;
+  css: string;
+}
+
+function renderDevStyles(styles: DevStyle[]): string {
+  return styles
+    .map(
+      ({ id, css }) =>
+        `<style type="text/css" data-vite-dev-id="${escapeAttributeValue(
+          id,
+        )}">${css.replace(/<\/style>/gi, '<\\/style>')}</style>`,
+    )
+    .join('\n');
+}
+
 export const createSSRDevHandler = (
   server: ViteDevServer,
   options: SsrOptions = {},
@@ -63,6 +127,84 @@ export const createSSRDevHandler = (
       'utf-8',
     );
     return await server.transformIndexHtml(url, indexHtml);
+  }
+
+  /**
+   * Collect the stylesheets the rendered page pulled in.
+   *
+   * Vite serves stylesheets as JavaScript modules in dev, so nothing in the
+   * response carries CSS until the client entry has been fetched and executed —
+   * the window that shows up as a flash of unstyled content. Walking the SSR
+   * module graph tells us which stylesheets this particular route needs, and
+   * they are keyed by the module id Vite's HMR client uses so that it adopts
+   * the `<style>` elements instead of appending duplicates on hydration.
+   */
+  async function collectDevStyles(entryId: string): Promise<DevStyle[]> {
+    const ssrEnvironment = server.environments.ssr;
+    const clientEnvironment = server.environments.client;
+    if (!ssrEnvironment || !clientEnvironment) return [];
+
+    const { moduleGraph } = ssrEnvironment;
+    const entryModule =
+      moduleGraph.getModuleById(entryId) ||
+      (await moduleGraph.getModuleByUrl(entryId));
+    if (!entryModule) return [];
+
+    const cssIds: string[] = [];
+    const seen = new Set<EnvironmentModuleNode>();
+    const deferred: EnvironmentModuleNode[] = [];
+
+    // Stylesheets are leaves of the graph, so the order they are reached in is
+    // the order the client applies them in — and the cascade depends on it.
+    // Depth-first in import order gets that right for static imports; anything
+    // behind a dynamic import only runs once the static graph is done, so it is
+    // queued and walked afterwards.
+    const walk = (mod: EnvironmentModuleNode) => {
+      if (seen.has(mod)) return;
+      seen.add(mod);
+      if (mod.id && isCSSRequest(mod.id)) {
+        cssIds.push(mod.id);
+        return;
+      }
+      const dynamicDeps = new Set(
+        (mod.transformResult?.dynamicDeps || []).map(normalizeModuleUrl),
+      );
+      mod.importedModules.forEach((imported) => {
+        if (dynamicDeps.has(normalizeModuleUrl(imported.url))) {
+          deferred.push(imported);
+        } else {
+          walk(imported);
+        }
+      });
+    };
+
+    walk(entryModule);
+
+    // `deferred` grows while it is drained, which keeps nested dynamic imports
+    // in the order the client reaches them.
+    while (deferred.length) {
+      walk(deferred.shift() as EnvironmentModuleNode);
+    }
+
+    const styles = await Promise.all(
+      cssIds.map(async (id): Promise<DevStyle | undefined> => {
+        // The SSR transform of a stylesheet is an empty module, so the CSS has
+        // to come from the client environment.
+        const result = await clientEnvironment
+          .transformRequest(injectDirectQuery(id))
+          .catch((error) => {
+            server.config.logger.warn(
+              `[vot] Could not inline "${id}" into the SSR response: ${
+                (error as Error).message
+              }`,
+            );
+            return null;
+          });
+        return result?.code ? { id, css: result.code } : undefined;
+      }),
+    );
+
+    return styles.filter((style): style is DevStyle => !!style);
   }
 
   function writeHead(response: ServerResponse, params: WrittenResponse = {}) {
@@ -107,11 +249,19 @@ export const createSSRDevHandler = (
       return next(error);
     }
 
+    // Reserve the slot the collected styles go into. The placeholder is an HTML
+    // comment, so it is harmless on the paths that bypass the replacement.
+    template = template.replace(
+      HEAD_CLOSE_TAG,
+      `${DEV_STYLES_PLACEHOLDER}${HEAD_CLOSE_TAG}`,
+    );
+
     try {
       const entryPoint =
         options.ssrEntry || (await getEntryPoint(server.config, template));
 
-      let resolvedEntryPoint = await server.ssrLoadModule(resolve(entryPoint));
+      const resolvedEntryId = resolve(entryPoint);
+      let resolvedEntryPoint = await server.ssrLoadModule(resolvedEntryId);
       resolvedEntryPoint = resolvedEntryPoint.default || resolvedEntryPoint;
       const render = resolvedEntryPoint.render || resolvedEntryPoint;
 
@@ -156,12 +306,20 @@ export const createSSRDevHandler = (
         return response.end();
       }
 
+      // The set of stylesheets depends on what the render actually imported,
+      // so this has to happen per request, once the render is done.
+      const styles = await collectDevStyles(resolvedEntryId);
+
       response.setHeader('Content-Type', 'text/html');
-      response.end(result.html);
+      response.end(
+        (result.html as string).replace(DEV_STYLES_PLACEHOLDER, () =>
+          renderDevStyles(styles),
+        ),
+      );
     } catch (error) {
       // Send back template HTML to inject ViteErrorOverlay
       response.setHeader('Content-Type', 'text/html');
-      response.end(template);
+      response.end(template.replace(DEV_STYLES_PLACEHOLDER, ''));
 
       // Wait until browser injects ViteErrorOverlay
       // custom element from the previous template
