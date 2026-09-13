@@ -62,6 +62,21 @@ export type VotRoutesGenerated = (
   routes: RouteRecordRaw[],
 ) => Awaitable<RouteRecordRaw[] | void>;
 
+export interface VotServerEntryOptions {
+  /**
+   * Path to the server entry, relative to the project root.
+   *
+   * Defaults to `vot.server.{ts,mts,js,mjs}` at the project root when such a
+   * file exists. An explicit path that does not exist is an error.
+   *
+   * The entry owns `host` / `port` / `proxy` and the server middleware for both
+   * `vot dev` and `vot serve`, and `vot build` bundles it into `dist/server`.
+   * That is what lets `vot serve` run without evaluating `vite.config.ts`, so a
+   * production image needs no build-time plugin installed.
+   */
+  entry?: string;
+}
+
 export interface VotPluginPagesOptions extends PagesUserOptions {
   onRoutesGenerated?: VotRoutesGenerated;
 }
@@ -87,7 +102,16 @@ export interface VotPluginOptions extends SsrOptions {
   vue?: VuePluginOptions;
   jsx?: VueJsxOptions;
   pages?: VotPluginPagesOptions;
+  /**
+   * Prefer declaring this in the server entry -- see
+   * {@link VotServerEntryOptions}. Defining it in both places runs both, in
+   * this order, and warns.
+   */
   configureServer?: VotConfigureServerFn;
+  /**
+   * Server entry configuration.
+   */
+  server?: VotServerEntryOptions;
 
   /**
    * Options for Static Site Generation

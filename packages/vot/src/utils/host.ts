@@ -5,7 +5,7 @@
 
 import dns from 'node:dns/promises';
 import type { AddressInfo, Server } from 'node:net';
-import { CommonServerOptions, ResolvedConfig, ResolvedServerUrls } from 'vite';
+import { CommonServerOptions, ResolvedServerUrls } from 'vite';
 import os from 'node:os';
 
 export const loopbackHosts = new Set([
@@ -76,10 +76,20 @@ export async function resolveHostname(
   return { host, name };
 }
 
+/**
+ * The slice of a resolved Vite config that the URL banner actually needs.
+ *
+ * Narrowed on purpose: `vot serve` builds this by hand so that serving a
+ * prebuilt app never has to resolve the project's Vite config.
+ */
+export interface ResolveServerUrlsConfig {
+  rawBase?: string;
+}
+
 export async function resolveServerUrls(
   server: Server,
-  options: CommonServerOptions,
-  config: ResolvedConfig & { rawBase?: string },
+  options: Pick<CommonServerOptions, 'host' | 'https'>,
+  config: ResolveServerUrlsConfig,
 ): Promise<ResolvedServerUrls> {
   const address = server.address();
 

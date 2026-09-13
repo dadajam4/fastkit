@@ -14,6 +14,7 @@ Vueアプリケーションを構築するための包括的なオーケスト�
 - **Vue 3 + Vue Router 4**: 最新のVueエコシステム対応
 - **Head管理**: Unheadによるメタタグ・SEO最適化
 - **プロキシサポート**: 開発時のAPIプロキシ機能
+- **サーバーエントリ**: 1つの `vot.server.ts` が `vot dev` と `vot serve` 双方のホスト / ポート / プロキシ / ミドルウェアを所有。本番イメージにビルドツールチェーンが不要になります（[ドキュメント](./docs/server-entry-ja.md)）
 
 ## インストール
 
@@ -49,6 +50,9 @@ npx vot build
 
 # 静的サイト生成
 npx vot generate
+
+# 本番ビルドの配信
+npx vot serve
 
 # その他のオプション
 npx vot --help
@@ -296,7 +300,44 @@ onMounted(async () => {
 </script>
 ```
 
-## 開発サーバーのカスタマイズ
+## サーバー設定
+
+ホスト、ポート、プロキシ、サーバーミドルウェアは、プロジェクトルートの
+**サーバーエントリ**に置きます。`vot dev` と `vot serve` の両方がこれを読み、
+`vot build` が `dist/server` にバンドルします。これにより `vot serve` は
+`vite.config.ts` を評価せずに起動でき、本番イメージにビルド時プラグインを
+インストールする必要がなくなります。
+
+```typescript
+// vot.server.ts
+import { defineVotServer } from '@fastkit/vot/server'
+import express from 'express'
+
+export default defineVotServer(({ dev }) => ({
+  host: '0.0.0.0',
+  port: dev ? 3000 : Number(process.env.PORT ?? 8080),
+  proxy: {
+    '/api': 'http://localhost:8080',
+  },
+  configureServer({ use }) {
+    use('/healthcheck', (_req, res) => {
+      res.writeHead(200).end()
+    })
+
+    // 静的ファイルの配信
+    use('/uploads', express.static('uploads'))
+  },
+}))
+```
+
+関数形式に渡されるコンテキスト、`vite.config.ts` との優先順位、ビルド出力、
+エントリを持たないアプリケーションの扱いについては
+[サーバーエントリガイド](./docs/server-entry-ja.md)を参照してください。
+
+### 開発サーバーのカスタマイズ（エントリを使わない場合）
+
+`configureServer` はプラグイン側にも宣言できます。サーバーエントリを推奨します
+——こちらは `vot dev` と `vot serve` のフォールバック経路でしか読まれません。
 
 ### src/server/dev.ts
 
@@ -574,6 +615,7 @@ interface VotConfig {
 | `vot dev` | 開発サーバーを起動 |
 | `vot build` | 本番用にビルド |
 | `vot generate` | 静的サイトを生成 |
+| `vot serve` | 本番ビルドを配信（[サーバーエントリ](./docs/server-entry-ja.md)） |
 | `vot preview` | ビルド結果をプレビュー |
 
 ### CLIオプション

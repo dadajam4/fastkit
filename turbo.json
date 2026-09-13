@@ -8,6 +8,8 @@
       "inputs": [
         "src/**/*",
         "public/**/*",
+        "vite.config.ts",
+        "vot.server.ts",
         "plugboy.workspace.ts",
         "$TURBO_ROOT$/plugboy.project.ts"
       ],

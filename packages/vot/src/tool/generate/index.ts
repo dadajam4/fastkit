@@ -61,7 +61,7 @@ export async function generate(_config?: ResolvedConfig) {
     return;
   }
 
-  const { serve } = await import('../../server');
+  const { serve } = await import('../../internal/serve');
 
   const launched = await serve();
   const { server } = launched;

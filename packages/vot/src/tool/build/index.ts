@@ -18,6 +18,7 @@ import {
 } from '../utils';
 import { BuildOptions } from '../../vot';
 import { generate } from '../generate';
+import { resolveServerEntryPath, SERVER_ENTRY_OUTPUT } from '../server-entry';
 
 export async function build(inlineBuildOptions: BuildOptions = {}) {
   return new Promise(async (resolve) => {
@@ -113,6 +114,39 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
       ),
     ) as NonNullable<BuildOptions['serverOptions']>;
 
+    const serverEntryPath = resolveServerEntryPath(
+      viteConfig.root,
+      getPluginOptions(viteConfig).server?.entry,
+    );
+
+    /**
+     * Bundle the server entry next to the SSR bundle.
+     *
+     * Same externals policy as the SSR build, so `dist/server` stays the whole
+     * runtime surface: `vot serve` reads this instead of `vite.config.ts`.
+     * Output names are namespaced because both builds write to the same
+     * directory with `emptyOutDir: false`.
+     */
+    const serverEntryBuildOptions: InlineConfig | undefined = serverEntryPath
+      ? mergeConfig(
+          {
+            publicDir: false,
+            build: {
+              outDir: path.resolve(distDir, 'server'),
+              ssr: serverEntryPath,
+              emptyOutDir: false,
+              rollupOptions: {
+                output: {
+                  entryFileNames: SERVER_ENTRY_OUTPUT,
+                  chunkFileNames: 'vot.server-[hash].js',
+                },
+              },
+            },
+          } as InlineConfig,
+          pluginBuildOptions.serverOptions || {},
+        )
+      : undefined;
+
     const clientResult = await viteBuild(clientBuildOptions);
 
     const isWatching = Object.prototype.hasOwnProperty.call(
@@ -142,10 +176,14 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
 
           // Build SSR bundle with the new index.html
           await viteBuild(serverBuildOptions);
+          if (serverEntryBuildOptions) {
+            await viteBuild(serverEntryBuildOptions);
+          }
           await generatePackageJson(
             viteConfig,
             clientBuildOptions,
             serverBuildOptions,
+            !!serverEntryBuildOptions,
           );
 
           if (!resolved) {
@@ -171,6 +209,10 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
 
       await viteBuild(serverBuildOptions);
 
+      if (serverEntryBuildOptions) {
+        await viteBuild(serverEntryBuildOptions);
+      }
+
       // index.html file is not used in SSR and might be
       // served by mistake.
       // Let's remove it unless the user overrides this behavior.
@@ -186,6 +228,7 @@ export async function build(inlineBuildOptions: BuildOptions = {}) {
         viteConfig,
         clientBuildOptions,
         serverBuildOptions,
+        !!serverEntryBuildOptions,
       );
 
       await generate(viteConfig);
@@ -199,6 +242,7 @@ async function generatePackageJson(
   viteConfig: ResolvedConfig,
   clientBuildOptions: InlineConfig,
   serverBuildOptions: NonNullable<BuildOptions['serverOptions']>,
+  hasServerEntry: boolean,
 ) {
   if (serverBuildOptions.packageJson === false) return;
 
@@ -214,6 +258,14 @@ async function generatePackageJson(
   const packageJson = {
     exports: outputFile ? ssrOutput.base : `${ssrOutput.name}.js`, // Vite 3.0 default
     type: 'module', // Vite 3.0 default
+    // `vot serve` mounts its router here. Recorded at build time because the
+    // client bundle already has this baked into its asset URLs -- it is not an
+    // environment-derived value the server entry may disagree about.
+    base: viteConfig.base,
+    // Presence of this is what makes `vot serve` skip `vite.config.ts`.
+    ...(hasServerEntry
+      ? { server: { entry: SERVER_ENTRY_OUTPUT } }
+      : undefined),
     ssr: {
       // This can be used later to serve static assets
       assets: (
