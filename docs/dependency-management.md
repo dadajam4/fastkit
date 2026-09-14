@@ -191,6 +191,31 @@ dependent *should* be reviewed. It is still the wrong thing to publish, for the
 first reason above: it states a floor that is not the one meant. But the
 spurious-major trap is specific to `0.x`.
 
+**How to spot one after the fact.** changesets takes the CHANGELOG's section
+headings from the type the changeset *declared*, and the version number from the
+type it *computed*. A forced major therefore leaves a section whose heading
+contradicts its own version — and the repo has two:
+
+```markdown
+## 2.0.0
+
+### Minor Changes
+
+- This release includes no functional changes, but it contains the following
+  important updates: ...
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/icon-font-gen@0.14.0
+```
+
+That is `@fastkit/vite-plugin-vui@2.0.0`: a `## X.0.0` with no `### Major
+Changes` under it, released because a `0.x` internal peer stepped outside a
+caret. `1.0.0` there has the same shape. Of that package's three majors before
+this rule was applied, only `3.0.0` ("Now supports Vite 7 series") was one
+anybody intended.
+
 Consequences worth knowing:
 
 - **A `patch` bump never cascades** (`nextRelease.type !== "patch"`). That was
