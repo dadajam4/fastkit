@@ -1,5 +1,19 @@
 # @fastkit/vite-kit
 
+## 1.4.3
+
+### Patch Changes
+
+- Updated dependencies [[`023bebd`](https://github.com/dadajam4/fastkit/commit/023bebd6352f4bb18e6944dc72d2fd52e233e411)]:
+  - @fastkit/hashed-sync@1.0.0
+  - @fastkit/helpers@1.0.0
+  - @fastkit/node-util@1.0.0
+  - @fastkit/tiny-logger@1.0.0
+  - @fastkit/color-scheme-gen@1.3.3
+  - @fastkit/icon-font-gen@1.0.2
+  - @fastkit/media-match-gen@1.3.3
+  - @fastkit/sprite-images@1.2.4
+
 ## 1.4.2
 
 ### Patch Changes

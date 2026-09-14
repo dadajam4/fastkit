@@ -1,5 +1,35 @@
 # @fastkit/vui
 
+## 1.7.2
+
+### Patch Changes
+
+- Updated dependencies [[`023bebd`](https://github.com/dadajam4/fastkit/commit/023bebd6352f4bb18e6944dc72d2fd52e233e411)]:
+  - @fastkit/dom@1.0.0
+  - @fastkit/helpers@1.0.0
+  - @fastkit/rules@1.0.0
+  - @fastkit/stylebase@1.0.0
+  - @fastkit/tiny-logger@1.0.0
+  - @fastkit/vue-action@1.0.0
+  - @fastkit/vue-app-layout@1.0.0
+  - @fastkit/vue-body-scroll-lock@1.0.0
+  - @fastkit/vue-click-outside@1.0.0
+  - @fastkit/vue-color-scheme@1.0.0
+  - @fastkit/vue-disabled-reason@1.0.0
+  - @fastkit/vue-form-control@1.0.0
+  - @fastkit/vue-keyboard@1.0.0
+  - @fastkit/vue-loading@1.0.0
+  - @fastkit/vue-location@1.0.0
+  - @fastkit/vue-media-match@1.0.0
+  - @fastkit/vue-resize@1.0.0
+  - @fastkit/vue-scroller@1.0.0
+  - @fastkit/vue-stack@1.0.0
+  - @fastkit/vue-transitions@1.0.0
+  - @fastkit/vue-utils@1.0.0
+  - @fastkit/color-scheme@2.2.4
+  - @fastkit/color-scheme-gen@1.3.3
+  - @fastkit/media-match-gen@1.3.3
+
 ## 1.7.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @fastkit/color-scheme
 
+## 2.2.4
+
+### Patch Changes
+
+- Updated dependencies [[`023bebd`](https://github.com/dadajam4/fastkit/commit/023bebd6352f4bb18e6944dc72d2fd52e233e411)]:
+  - @fastkit/color@1.0.0
+  - @fastkit/tiny-logger@1.0.0
+
 ## 2.2.3
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @fastkit/vot
 
+## 1.5.1
+
+### Patch Changes
+
+- Updated dependencies [[`023bebd`](https://github.com/dadajam4/fastkit/commit/023bebd6352f4bb18e6944dc72d2fd52e233e411)]:
+  - @fastkit/helpers@1.0.0
+  - @fastkit/vue-page@1.0.0
+  - @fastkit/vue-utils@1.0.0
+
 ## 1.5.0
 
 ### Minor Changes
