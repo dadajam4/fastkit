@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/vue-utils",
-  "version": "0.18.4",
+  "version": "1.0.0",
   "description": "Utilities for efficient development of Vue applications.",
   "keywords": [
     "fastkit",
