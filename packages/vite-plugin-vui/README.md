@@ -14,7 +14,7 @@ The plugin generates code into your project (`.vui/` by default), and that code 
 the following **by name**:
 
 ```bash
-pnpm add @fastkit/vui @fastkit/vue-page vue vue-router
+pnpm add @fastkit/vui vue vue-router
 ```
 
 They have to be resolvable **from your project**, so install them directly. All of them

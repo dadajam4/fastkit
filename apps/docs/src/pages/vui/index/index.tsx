@@ -9,8 +9,8 @@ import {
   VTooltip,
   VButton,
   VSwitch,
+  defineMenuComponent,
 } from '@fastkit/vui';
-import { defineMenuComponent } from '@fastkit/vue-stack';
 import { range } from '@fastkit/helpers';
 
 // Test-only menu component that mimics consumers (e.g. Fabric's UIMenu)

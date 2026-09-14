@@ -142,33 +142,9 @@ importers:
       '@fastkit/vot-i18n':
         specifier: workspace:^
         version: link:../../packages/vot-i18n
-      '@fastkit/vue-app-layout':
-        specifier: workspace:^
-        version: link:../../packages/vue-app-layout
-      '@fastkit/vue-disabled-reason':
-        specifier: workspace:^
-        version: link:../../packages/vue-disabled-reason
-      '@fastkit/vue-i18n':
-        specifier: workspace:^
-        version: link:../../packages/vue-i18n
-      '@fastkit/vue-loading':
-        specifier: workspace:^
-        version: link:../../packages/vue-loading
-      '@fastkit/vue-page':
-        specifier: workspace:^
-        version: link:../../packages/vue-page
-      '@fastkit/vue-scroller':
-        specifier: workspace:^
-        version: link:../../packages/vue-scroller
       '@fastkit/vue-sortable':
         specifier: workspace:^
         version: link:../../packages/vue-sortable
-      '@fastkit/vue-stack':
-        specifier: workspace:^
-        version: link:../../packages/vue-stack
-      '@fastkit/vue-transitions':
-        specifier: workspace:^
-        version: link:../../packages/vue-transitions
       '@fastkit/vui':
         specifier: workspace:^
         version: link:../../packages/vui
@@ -870,9 +846,6 @@ importers:
       '@fastkit/icon-font-gen':
         specifier: workspace:^
         version: link:../icon-font-gen
-      '@fastkit/vue-page':
-        specifier: workspace:^
-        version: link:../vue-page
       '@fastkit/vui':
         specifier: workspace:^
         version: link:../vui

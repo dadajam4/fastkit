@@ -9,7 +9,7 @@ import {
   VContentSwitcher,
 } from '@fastkit/vui';
 import { range, objectFromArray } from '@fastkit/helpers';
-import { VPage } from '@fastkit/vue-page';
+import { VPage } from '@fastkit/vot';
 import { DocsSection } from '../../../../-components';
 import { MOCK_ITEMS_1 } from './-tabs';
 

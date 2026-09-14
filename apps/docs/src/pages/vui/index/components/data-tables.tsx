@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import { VHero, VDataTable, DataTableHeader, useVueStack } from '@fastkit/vui';
 // import { DocsSection } from '../../../-components';
 import { range } from '@fastkit/helpers';
-import { createPrefetch } from '@fastkit/vue-page';
+import { createPrefetch } from '@fastkit/vot';
 
 const prefetch = createPrefetch(
   'vui-data-table-prefetch',

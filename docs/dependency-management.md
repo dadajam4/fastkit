@@ -79,7 +79,7 @@ Work through these in order for any dependency `X` used by a package:
 | Situation | Section | Example |
 | --- | --- | --- |
 | Shared build/lint/test toolchain | **workspace-root `devDependencies`** | `vitest`, `typescript`, `plugboy`, `eslint` |
-| Runtime value import that ships | `dependencies` | `@fastkit/vue-page` in `vite-plugin-vui` |
+| Runtime value import that ships | `dependencies` | `@fastkit/vue-utils` in `vue-page` |
 | Framework singleton that ships | `peerDependencies` (+ `devDependencies`) | `vue`, `vue-router` |
 | Tool whose host provides it, used in shipped code | `peerDependencies` (+ `devDependencies`) | `typescript` in `ts-tiny-meta` |
 | `import type` only, not re-exposed | `devDependencies` | — |
@@ -173,12 +173,48 @@ depType === "peerDependencies" && nextRelease.type !== "patch" &&
    !semverSatisfies(incrementVersion(nextRelease), versionRange))
 ```
 
+`.changeset/config.json` sets `onlyUpdatePeerDependentsWhenOutOfRange: true`, so
+the second clause is live: the declared range actually gates the cascade, and a
+peer bump that stays inside it majors nobody. What the range says therefore
+decides how often this fires.
+
 `workspace:^` expands to `^` + the version **before** the release, so it is
 *guaranteed* out of range on the very release that takes the peer to a new major
 — and on `0.x`, where a caret pins the minor, on every minor as well. So a `0.x`
 internal peer majors its dependents forever, for changes that break nothing in
 them. `@fastkit/icon-font-gen` did exactly this to `@fastkit/vite-plugin-vui`,
 which only re-exports two of its types and passes `iconFont` entries through.
+
+On `1.x` and above the same `workspace:^` is far less destructive — a caret
+covers every minor, so only a real major leaves the range, which is the moment a
+dependent *should* be reviewed. It is still the wrong thing to publish, for the
+first reason above: it states a floor that is not the one meant. But the
+spurious-major trap is specific to `0.x`.
+
+**How to spot one after the fact.** changesets takes the CHANGELOG's section
+headings from the type the changeset *declared*, and the version number from the
+type it *computed*. A forced major therefore leaves a section whose heading
+contradicts its own version — and the repo has two:
+
+```markdown
+## 2.0.0
+
+### Minor Changes
+
+- This release includes no functional changes, but it contains the following
+  important updates: ...
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fastkit/icon-font-gen@0.14.0
+```
+
+That is `@fastkit/vite-plugin-vui@2.0.0`: a `## X.0.0` with no `### Major
+Changes` under it, released because a `0.x` internal peer stepped outside a
+caret. `1.0.0` there has the same shape. Of that package's three majors before
+this rule was applied, only `3.0.0` ("Now supports Vite 7 series") was one
+anybody intended.
 
 Consequences worth knowing:
 
@@ -193,8 +229,45 @@ Consequences worth knowing:
   `^1.0.0` in the same commit that bumps the package is safe — there is no
   window where the repo looks broken.
 
-Still outstanding: `@fastkit/vue-page` (`0.18.x`) is a **required** peer of
-`@fastkit/vite-plugin-vui` on `workspace:^`, so the trap is still armed there.
+**Every internal peer in this repo is now `1.x` or above, so the `0.x` trap is
+closed.** `@fastkit/vue-page` (`0.18.x`) was the last one on `0.x`, a required
+peer of `@fastkit/vite-plugin-vui`. #225 removed that peer rather than raising
+its floor, so the trap is gone with it. Keep the invariant: **do not declare a
+`0.x` workspace package as an internal peer** — take it to `1.0.0` first.
+
+The way it was removed is the more useful lesson, and it is about *whether* to
+declare a peer at all. That one existed so the plugin's generated installer
+could default `@fastkit/vui`'s `RouterLink` to `@fastkit/vue-page`'s
+`VPageLink`. A convenience — but the generated tree is written into the
+consumer's project, so naming a package there makes it a required peer of every
+consumer. The convenience turned out to be inert in most setups (the default
+resolves to the same vue-router `RouterLink` that `@fastkit/vui` already falls
+back to) and half-configured in the rest (it filled `RouterLink` but never
+`useLink`). It cost every consumer a declaration and bought almost none of them
+anything.
+
+Worse, it created a **second resolver**. `@fastkit/vot` already held
+`@fastkit/vue-page` under `dependencies`; the peer meant the application
+resolved a copy too. When the two ranges disagreed, the package manager
+installed both — and `@fastkit/vue-page` carries Vue injection identity, so the
+halves could not see each other and the failure was silent (#224). Removing the
+peer leaves one resolver and closes it structurally.
+
+Two rules come out of this:
+
+- **A package that carries identity — a module-local `Symbol` injection key,
+  static state, `instanceof` checks — must have exactly one resolver.** Either
+  one package owns it and re-exports what consumers need (`@fastkit/vue-page`
+  through `@fastkit/vot`; `@unhead/vue` through `@fastkit/vot/head`), or it is a
+  peer everyone declares. Never both.
+- **Generated code counts as the consumer's code.** Any bare specifier a
+  generator writes into a project becomes a required peer of that generator.
+  Weigh it as one.
+
+Several internal peers are still written as `workspace:^` (`@fastkit/plugboy`,
+`@fastkit/vui`, `@fastkit/vot`, …). Those are all `1.x`+, so they do not fire
+spurious majors; they are simply publishing a floor they do not mean, and should
+move to an explicit range when their package is next touched.
 
 ### Framework singletons (the Vue family)
 

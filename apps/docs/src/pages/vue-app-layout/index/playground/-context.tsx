@@ -3,7 +3,7 @@ import {
   VueAppLayout,
   VueAppLayoutPositionY,
   VueAppLayoutPositionX,
-} from '@fastkit/vue-app-layout';
+} from '@fastkit/vui';
 import {
   createDefaultState,
   State,

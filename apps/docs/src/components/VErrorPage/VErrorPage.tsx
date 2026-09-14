@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import { useVuePageControl, VuePageControlError } from '@fastkit/vue-page';
+import { useVuePageControl, VuePageControlError } from '@fastkit/vot';
 
 export const VErrorPage = defineComponent({
   name: 'VErrorPage',

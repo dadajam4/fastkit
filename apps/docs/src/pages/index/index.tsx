@@ -1,5 +1,5 @@
 import { defineComponent, computed } from 'vue';
-import { VPage } from '@fastkit/vue-page';
+import { VPage } from '@fastkit/vot';
 import { i18n } from '@@/i18n';
 import packages from 'virtual:packages';
 import { VDocsLayout, DocsLayoutNavigation } from '~/components';

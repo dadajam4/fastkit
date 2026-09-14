@@ -14,7 +14,7 @@ pnpm add @fastkit/vite-plugin-vui
 **名前で** import します。
 
 ```bash
-pnpm add @fastkit/vui @fastkit/vue-page vue vue-router
+pnpm add @fastkit/vui vue vue-router
 ```
 
 これらは**プロジェクトから解決できる**必要があるため、直接インストールしてください。

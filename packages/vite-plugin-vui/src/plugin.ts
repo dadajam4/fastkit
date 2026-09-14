@@ -28,7 +28,6 @@ const TEMPLATE = `
 // @ts-nocheck
 import type { App } from 'vue';
 import type { Router } from 'vue-router';
-import { VPageLink } from '@fastkit/vue-page';
 import { installVuiPlugin as _installVuiPlugin, RawVuiPluginOptions, mergeVuiPluginOptions } from '@fastkit/vui';
 import { colorScheme } from '<%~ it.colorScheme %>';
 import '<%~ it.mediaMatch %>';
@@ -37,7 +36,6 @@ import '@fastkit/vui/after-effects.scss';
 
 export function installVui(settings: { app: App, router: Router }, options?: RawVuiPluginOptions) {
   const merged = mergeVuiPluginOptions({
-    RouterLink: VPageLink,
     colorScheme,
     uiSettings: <%~ it.uiSettings %>,
     icons: <%~ it.icons %>,
@@ -264,12 +262,7 @@ const RUNTIME_MODULE = '@fastkit/vui';
  * color-scheme and media-match packages are reached through `@fastkit/vui`, so
  * they are not listed here.
  */
-const GENERATED_TREE_IMPORTS = [
-  '@fastkit/vue-page',
-  '@fastkit/vui',
-  'vue',
-  'vue-router',
-];
+const GENERATED_TREE_IMPORTS = ['@fastkit/vui', 'vue', 'vue-router'];
 
 function assertGeneratedTreeIsResolvable(dynamicDest: string) {
   // Resolution is attempted from the generated tree itself, since that is where

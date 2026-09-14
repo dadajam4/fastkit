@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
 import { VApp } from '@fastkit/vui';
-import { VPage } from '@fastkit/vue-page';
+import { VPage } from '@fastkit/vot';
 import { useHead } from '@fastkit/vot/head';
 import { i18n } from '@@';
 

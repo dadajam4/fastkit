@@ -4,7 +4,7 @@ import {
   VueAppDrawerResolvedStickedSettings,
   VAL_STACK_DEFAULT_POSITION_Y,
   VAL_DRAWER_DEFAULT_POSITION,
-} from '@fastkit/vue-app-layout';
+} from '@fastkit/vui';
 
 export const ITEM_LEVELS = ['main', 'sub'] as const;
 

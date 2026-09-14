@@ -5,8 +5,11 @@ import {
   VAppDrawer,
   VAppContainer,
   VueAppLayoutPositionX,
-} from '@fastkit/vue-app-layout';
-import { VHero, VButton, VDialog, VBreadcrumbs } from '@fastkit/vui';
+  VHero,
+  VButton,
+  VDialog,
+  VBreadcrumbs,
+} from '@fastkit/vui';
 import { range } from '@fastkit/helpers';
 import * as styles from './index.css';
 import { ItemLevel } from './-schema';

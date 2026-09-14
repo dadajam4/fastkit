@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import { VPage } from '@fastkit/vue-page';
+import { VPage } from '@fastkit/vot';
 import { VPackageProvider } from 'virtual:package-provider:vue-sortable';
 import { i18n } from '@@/i18n';
 import { pkg } from './-i18n';

@@ -2,7 +2,7 @@ import '~/main.scss';
 import '~/main.css';
 
 import { createVotEntry } from '@fastkit/vot';
-import { LocaleLink, useLink } from '@fastkit/vue-i18n';
+import { LocaleLink, useLink } from '@fastkit/vot-i18n';
 import type { VuiService } from '@fastkit/vui';
 import { installSortableDirective } from '@fastkit/vue-sortable';
 import { installVui } from '../.vui/installer';
@@ -10,7 +10,7 @@ import { App } from './App';
 import { i18n, pmScriptPlugin } from '@@';
 import { VErrorPage } from './components/VErrorPage/VErrorPage';
 
-declare module '@fastkit/vue-page' {
+declare module '@fastkit/vot' {
   interface VuePageControl {
     $vui: VuiService;
   }
