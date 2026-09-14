@@ -1,4 +1,4 @@
-import { defineI18nSpace } from '@fastkit/vue-i18n';
+import { defineI18nSpace } from '@fastkit/vot-i18n';
 
 export const I18nSpaceDefine = defineI18nSpace({
   locales: [
