@@ -229,11 +229,18 @@ Consequences worth knowing:
   `^1.0.0` in the same commit that bumps the package is safe — there is no
   window where the repo looks broken.
 
-**Every internal peer in this repo is now `1.x` or above, so the `0.x` trap is
-closed.** `@fastkit/vue-page` (`0.18.x`) was the last one on `0.x`, a required
-peer of `@fastkit/vite-plugin-vui`. #225 removed that peer rather than raising
-its floor, so the trap is gone with it. Keep the invariant: **do not declare a
-`0.x` workspace package as an internal peer** — take it to `1.0.0` first.
+**No package in this repo is on `0.x` any more, so the trap is closed by
+construction.** `@fastkit/vue-page` (`0.18.x`) was the last `0.x` package
+declared as an internal peer, and #225 removed that peer rather than raising its
+floor. The remaining `0.x` packages — 55 of them — then graduated to `1.0.0` in
+one release, so a caret means the same thing everywhere in the workspace.
+
+The invariant to keep is the one that made the graduation worth doing: **a
+workspace package must reach `1.0.0` before it can be declared as an internal
+peer.** If a new package is started at `0.x` and something later needs to
+declare it as a peer, take it to `1.0.0` first — do not declare the peer and
+hope, and do not work around the cascade by releasing breaking changes as
+patches.
 
 The way it was removed is the more useful lesson, and it is about *whether* to
 declare a peer at all. That one existed so the plugin's generated installer
