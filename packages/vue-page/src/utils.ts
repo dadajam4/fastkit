@@ -3,7 +3,7 @@ import {
   RouteLocationMatched,
   RouteLocationNormalized,
 } from 'vue-router';
-import { isObject, IN_WINDOW } from '@fastkit/helpers';
+import { isObject } from '@fastkit/helpers';
 import { RouteMatchedItem, RawRouteComponent } from '@fastkit/vue-utils';
 import {
   WatchQueryOption,
@@ -102,31 +102,4 @@ export function routeKeyWithWatchQueryByRouteItem(
     route,
   };
   return `${routeKey}${generateWatchQueryKeySuffix(routeProps)}`;
-}
-
-let __forcePrefetchStates: {
-  [pageKey: string]: boolean;
-} = {};
-
-export function getForcePrefetchStates(pageKey: string) {
-  return __forcePrefetchStates[pageKey];
-}
-
-export function consumeForcePrefetchStates(pageKey: string) {
-  const value = getForcePrefetchStates(pageKey);
-  setForcePrefetchStates(pageKey, false);
-  return value;
-}
-
-export function setForcePrefetchStates(pageKey: string, value: boolean) {
-  if (IN_WINDOW) return;
-  if (value) {
-    __forcePrefetchStates[pageKey] = value;
-  } else {
-    delete __forcePrefetchStates[pageKey];
-  }
-}
-
-export function resetForcePrefetchStates() {
-  __forcePrefetchStates = {};
 }

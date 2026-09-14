@@ -1,5 +1,6 @@
 import {
   defineComponent,
+  inject,
   VNode,
   Transition,
   ref,
@@ -10,11 +11,9 @@ import {
 import { RouterView } from 'vue-router';
 import { withCtx } from '@fastkit/vue-utils';
 import { RouterViewSlotProps, VuePageKeyOverride } from '../schema';
-import {
-  generateRouteKeyWithWatchQuery,
-  consumeForcePrefetchStates,
-} from '../utils';
+import { generateRouteKeyWithWatchQuery } from '../utils';
 import { ScrollBehaviorMessenger } from '../composables';
+import { VuePageControlInjectionKey } from '../injections';
 
 const DEFAULT_TRANSITION = 'page';
 
@@ -27,7 +26,10 @@ export const VPage = defineComponent({
     },
   },
   setup(props) {
-    // const pageControl = useVuePageControl();
+    // The control owns the force-prefetch flags. `VPage` has never required
+    // one -- it renders fine on its own -- so inject without demanding it and
+    // simply skip the remount path when there is none to read from.
+    const pageControl = inject(VuePageControlInjectionKey, null);
     const currentComponent = ref<VNode | null>(null);
 
     const transition = computed(() => {
@@ -55,7 +57,7 @@ export const VPage = defineComponent({
             const { Component } = routeProps;
             let key = generateRouteKeyWithWatchQuery(routeProps, props.pageKey);
 
-            if (consumeForcePrefetchStates(key)) {
+            if (pageControl?._consumeForcePrefetch(key)) {
               key = `${key}:${Date.now()}`;
             }
 

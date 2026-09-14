@@ -30,10 +30,7 @@ import { EV } from '@fastkit/ev';
 import type { ServerResponse, IncomingMessage } from 'node:http';
 import { Cookies, CookiesContext } from '@fastkit/cookies';
 import { ResolvedRouteLocation, WatchQueryOption } from '../schema';
-import {
-  routeKeyWithWatchQueryByRouteItem,
-  setForcePrefetchStates,
-} from '../utils';
+import { routeKeyWithWatchQueryByRouteItem } from '../utils';
 import { useVuePageControl } from '../injections';
 import { VuePageControlError } from './page-error';
 import { VErrorPage } from '../components/VErrorPage';
@@ -172,7 +169,7 @@ export function extractRouteMatchedItemsWithPrefetch(
       forcePrefetch = prefetchHandler(ctx);
     }
 
-    setForcePrefetchStates(pageKey, forcePrefetch || false);
+    control._setForcePrefetch(pageKey, forcePrefetch || false);
 
     if (!forcePrefetch && fromItem) {
       // 遷移前にすでに実行されているprefetchの場合（ネストされたルートにおけるルートビュー等）はpreftechをキャンセルする
@@ -324,6 +321,39 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   private _redirectSpec?: VuePageControlRedirectSpec;
 
   private _providedMap: Map<string | InjectionKey<any>, any> = new Map();
+
+  /**
+   * Page keys whose next render must remount the page component.
+   *
+   * Scoped to this control rather than the module, because the control is what
+   * owns a navigation. Only ever written in the browser: the flag's sole effect
+   * is to change the `key` passed to the page component, and a vnode key means
+   * nothing to a server render that happens once and never reconciles.
+   *
+   * @internal
+   */
+  private _forcePrefetchStates: { [pageKey: string]: boolean } = {};
+
+  /** @internal */
+  _setForcePrefetch(pageKey: string, value: boolean) {
+    if (!IN_WINDOW) return;
+    if (value) {
+      this._forcePrefetchStates[pageKey] = value;
+    } else {
+      delete this._forcePrefetchStates[pageKey];
+    }
+  }
+
+  /**
+   * Read and clear the force-prefetch flag for a page key.
+   *
+   * @internal
+   */
+  _consumeForcePrefetch(pageKey: string): boolean | undefined {
+    const value = this._forcePrefetchStates[pageKey];
+    delete this._forcePrefetchStates[pageKey];
+    return value;
+  }
 
   private _transitioning = ref(false);
 
