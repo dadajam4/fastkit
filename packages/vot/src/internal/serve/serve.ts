@@ -253,14 +253,16 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
     });
   }
 
-  let router: Express = server;
-  if (config.base && config.base !== '/') {
-    router = express.Router() as Express;
-    server.use(config.base, router);
-  }
-
+  // Proxy rules and `configureServer` middleware are mounted at the server
+  // root rather than inside `base`, so that the same source line answers at the
+  // same URL under `vot dev` and `vot serve`. `base` is where the application's
+  // assets and routes live; a health check, a metrics endpoint or a webhook
+  // receiver is not part of that.
+  //
+  // They also have to be registered before the `base` router, whose catch-all
+  // render route would otherwise claim every request below `base`.
   if (config.proxy) {
-    router.use(
+    server.use(
       proxyMiddleware(null, { proxy: config.proxy, logger: config.logger }),
     );
   }
@@ -268,8 +270,14 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
   // Express's `use` differs from connect's only in its return type, and
   // `VotConfigureServerFn` is declared against connect's.
   await config.configureServer?.(
-    router.use.bind(router) as unknown as ConnectServer['use'],
+    server.use.bind(server) as unknown as ConnectServer['use'],
   );
+
+  let router: Express = server;
+  if (config.base && config.base !== '/') {
+    router = express.Router() as Express;
+    server.use(config.base, router);
+  }
 
   // Serve every static asset route
   for (const asset of ssr.assets || []) {

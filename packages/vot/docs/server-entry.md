@@ -160,13 +160,21 @@ major version.
 
 ## `base` and middleware
 
-When `base` is something other than `/`, `vot dev` and `vot serve` mount
-`configureServer` middleware and proxy rules at different paths:
+`configureServer` middleware and proxy rules are mounted at the server root --
+outside `base` -- under both `vot dev` and `vot serve`:
 
 | | `base: '/app/'` |
 | --- | --- |
 | `vot dev` | `/healthcheck` |
-| `vot serve` | `/app/healthcheck` |
+| `vot serve` | `/healthcheck` |
 
-`vot serve` mounts them inside the router it creates for `base`. Applications
-with the default `base: '/'` are unaffected.
+`base` is where the application's assets and routes live, and a health check, a
+metrics endpoint or a webhook receiver is not part of that route tree. Keeping
+them at the root is what makes the same source line answer at the same URL in
+development and in production.
+
+Static assets and the rendering route are still served under `base`.
+
+Before `@fastkit/vot@1.6.0`, `vot serve` mounted both inside `base` while
+`vot dev` mounted them at the root. Applications with the default `base: '/'`
+are unaffected by the change.
