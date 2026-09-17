@@ -44,10 +44,15 @@ export interface VotServerConfig {
   port?: number;
   /**
    * Proxy rules, in the same shape as Vite's `server.proxy`.
+   *
+   * Matched at the server root, outside `base`.
    */
   proxy?: Record<string, string | ProxyOptions>;
   /**
    * Mount extra middleware on the server.
+   *
+   * Middleware is mounted at the server root, outside `base`, so a path such as
+   * `/healthcheck` answers at the same URL under `vot dev` and `vot serve`.
    */
   configureServer?: VotConfigureServerFn;
 }

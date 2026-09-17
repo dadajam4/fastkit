@@ -155,13 +155,20 @@ dist/
 
 ## `base` とミドルウェア
 
-`base` が `/` 以外のとき、`vot dev` と `vot serve` は `configureServer` の
-ミドルウェアとプロキシを別のパスにマウントします。
+`configureServer` のミドルウェアとプロキシは、`vot dev` と `vot serve` の
+どちらでも `base` の外側、サーバーのルートにマウントされます。
 
 | | `base: '/app/'` |
 | --- | --- |
 | `vot dev` | `/healthcheck` |
-| `vot serve` | `/app/healthcheck` |
+| `vot serve` | `/healthcheck` |
 
-`vot serve` は `base` 用に作るルーターの内側にマウントするためです。既定の
-`base: '/'` のアプリケーションには影響しません。
+`base` はアプリケーションのアセットとルートの置き場所であり、ヘルスチェックや
+メトリクスのエンドポイント、Webhook の受け口はそのルートツリーの一部ではありません。
+ルートに置くことで、同じソース行が開発と本番で同じ URL に応答します。
+
+静的アセットとレンダリングのルートは従来どおり `base` の下で配信されます。
+
+`@fastkit/vot@1.6.0` より前は、`vot dev` がルートにマウントするのに対して
+`vot serve` は両方を `base` の内側にマウントしていました。既定の `base: '/'` の
+アプリケーションはこの変更の影響を受けません。
