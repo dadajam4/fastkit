@@ -52,9 +52,6 @@ const KNOWN = {
   '@fastkit/tiny-logger': 240,
   '@fastkit/cookies': 240,
   '@fastkit/vue-page': 240,
-  // Type-only references to packages provided transitively by `@fastkit/vui`,
-  // which does not resolve under pnpm's layout.
-  '@fastkit/vui-wysiwyg': 241,
 };
 
 function readPackages() {

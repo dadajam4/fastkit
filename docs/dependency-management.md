@@ -394,16 +394,29 @@ is invisible to an import-specifier scan.
 1. **Declare the package** (`dependencies` / `peerDependencies`) — when it is a
    genuine dependency this package uses (runtime, or imported by name). Standard,
    self-describing.
-2. **`deps.neverBundle` in `plugboy.workspace.ts`** — when the type is type-only,
-   arrives *only* through structural expansion (the source never imports it by
-   name), and is already **provided by a REQUIRED declared dep**. Externalizing it
-   emits the reference; it resolves through that provider. Use this instead of
-   re-declaring a foundation the package doesn't itself use. Example:
+2. **`deps.neverBundle` in `plugboy.workspace.ts`** — when the type is type-only
+   and arrives *only* through structural expansion (the source never imports it by
+   name). Externalizing it emits a reference instead of a copy. Example:
    `@fastkit/vui-wysiwyg` never names `@fastkit/vue-form-control`, but its
    `VWysiwygEditor` props spread `createFormNodeWrapperProps()` (vui re-exports it),
    pulling `FormNodeControl` in. `neverBundle: ['@fastkit/vue-form-control',
-   '@fastkit/vue-utils']` makes the `.d.ts` reference them; they resolve via the
-   required `@fastkit/vui` peer (which depends on them).
+   '@fastkit/vue-utils']` makes the `.d.ts` reference them rather than inline them.
+
+   **`neverBundle` does not remove the need to declare the package.** It was
+   originally used on the assumption that a type reference resolves through the
+   provider — `@fastkit/vui`, which depends on both. It does not: a `.d.ts`
+   reference is resolved by the *consumer's* type checker starting from the
+   referencing package's own directory, and pnpm does not make a dependency's own
+   dependencies reachable from there. Measured — `@fastkit/vui-wysiwyg`'s published
+   declarations raised 25 `TS2307` in this very workspace (#241). `audit:deps` now
+   fails on a `.d.ts` reference that only a provider would supply.
+
+   **Declare it as a `dependency` when the reference is type-only**, as
+   `@fastkit/vui-wysiwyg` does for both: that asks nothing of the consumer under
+   any package manager, and the "one resolver" rule below does not apply — nothing
+   from those packages is executed from here, so there is no runtime identity to
+   keep single. Reach for a peer only when the package is also used at runtime.
+   Check which it is: the emitted `.mjs` names every runtime import.
 
 **`neverBundle` is only safe when a REQUIRED declared dep provides the package.**
 Externalizing something that nothing declared provides just moves the phantom to
@@ -416,9 +429,10 @@ origin instead); it is an acceptable, audited workaround.
 **Audit.** `audit:deps` fails on any `[inlined]` external type (both
 `node_modules/…` and workspace-relative `../pkg/dist/…` regions — goal:
 **inlined external = 0**), so a missing `neverBundle`/declaration is caught. A
-reference that is undeclared **but provided through a required declared dep** is
-reported as **`[via]`** (informational, non-failing) — the accepted `neverBundle`
-outcome.
+**runtime** reference that is undeclared but provided through a required declared
+dep is reported as **`[via]`** (informational, non-failing). The same reference
+from a `.d.ts` is a hard failure: the consumer's type checker cannot reach it
+(#241).
 
 ## Node version support (`engines.node`)
 

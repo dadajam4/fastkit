@@ -26,10 +26,11 @@
 //   - type import in `.d.ts`                              -> breaks consumer typecheck
 //   - inlined external type in `.d.ts`                    -> bloat + hidden type dep (approach A)
 //   - via declared dep (informational)                   -> undeclared, but genuinely
-//        provided through a REQUIRED declared dep (its dep/peer). Resolves wherever
-//        this package is usable; reported for visibility, not failed. Used e.g. when a
-//        `.d.ts` references types that arrive via a required peer (see the neverBundle
-//        note in docs/dependency-management.md).
+//        provided through a REQUIRED declared dep (its dep/peer), and reached by a
+//        RUNTIME import the bundler has already resolved; reported for visibility,
+//        not failed. A reference from a `.d.ts` never qualifies: the consumer's type
+//        checker resolves it from this package's own directory, and pnpm does not
+//        make a dep's own deps reachable from there (#241).
 //   - dynamic `import()`                                  -> usually optional / guarded
 //
 // Exit 1 if any static-runtime, type, or inlined-external-type phantom is found.
@@ -203,7 +204,14 @@ for (const name of readdirSync(pkgsBase)) {
       for (const s of specs) {
         const dep = toPkg(s);
         if (!dep || dep === self || declared.has(dep)) continue;
-        if (providedVia.has(dep)) {
+        // `providedVia` does NOT excuse a reference in a declaration file. A
+        // `.d.ts` reference is resolved by the CONSUMER's type checker, from
+        // this package's own directory, and under pnpm's layout a package
+        // nested inside a declared dep is not reachable from there. Measured:
+        // `@fastkit/vui-wysiwyg`'s declarations raised 25 `TS2307` for types
+        // that `@fastkit/vui` provides (#241). Only a runtime import, already
+        // resolved by the bundler, is genuinely covered.
+        if (providedVia.has(dep) && !isDT) {
           // Undeclared, but provided through a required declared dep -> acceptable.
           if (!via.has(dep)) via.set(dep, { by: providedVia.get(dep), files: new Set() });
           via.get(dep).files.add(relative(dir, f));

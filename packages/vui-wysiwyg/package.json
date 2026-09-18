@@ -254,6 +254,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@fastkit/vue-form-control": "workspace:^",
+    "@fastkit/vue-utils": "workspace:^",
     "@tiptap/extension-bold": "^3.29.0",
     "@tiptap/extension-bullet-list": "^3.29.0",
     "@tiptap/extension-history": "^3.29.0",
@@ -273,7 +275,7 @@
     "vue-router": "^5.2.0"
   },
   "peerDependencies": {
-    "@fastkit/vui": "workspace:^",
+    "@fastkit/vui": "^1.7.0",
     "vue": "^3.5.0",
     "vue-router": "^4.4.0 || ^5.0.0"
   }

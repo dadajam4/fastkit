@@ -1438,6 +1438,12 @@ importers:
 
   packages/vui-wysiwyg:
     dependencies:
+      '@fastkit/vue-form-control':
+        specifier: workspace:^
+        version: link:../vue-form-control
+      '@fastkit/vue-utils':
+        specifier: workspace:^
+        version: link:../vue-utils
       '@tiptap/extension-bold':
         specifier: ^3.29.0
         version: 3.29.0(@tiptap/core@3.29.0(@tiptap/pm@3.29.0))
