@@ -22,7 +22,7 @@ interface ErrorImplements {
 type ExcludeNullableReturnType<T> = T extends (...args: any[]) => any
   ? (
       args: Parameters<T>[0],
-    ) => Partial<Exclude<ReturnType<T>, void | undefined | null>>
+    ) => Partial<Exclude<Awaited<ReturnType<T>>, void | undefined | null>>
   : (...args: any[]) => {};
 
 export type ResolverContext = {
@@ -34,13 +34,42 @@ export type ResolverContext = {
    * Value extracted by an already executed resolver
    */
   readonly resolvedData: AnyData;
+  /**
+   * Whether the caller is able to await this resolver's result
+   *
+   * * `true` when the instance is being built through {@link
+   *   CatcherConstructor.fromAsync fromAsync} or {@link
+   *   CatcherConstructor.createAsync createAsync}: a promise returned from here
+   *   is awaited, and the normalizer sees the settled value
+   * * `false` for the synchronous entry points. An instance is an `Error` that
+   *   has to exist by the time it is thrown, so nothing can be awaited -- a
+   *   promise returned here is discarded, because the normalizer has already
+   *   run by the time it could settle
+   *
+   * A resolver that needs to await something reads this and returns whatever it
+   * can offer synchronously instead. See `fetchResponseResolver`, which reports
+   * the response metadata either way and the body only when it may await.
+   */
+  readonly canAwait: boolean;
 };
 
-/** Exception Resolver */
+/**
+ * Exception Resolver
+ *
+ * * May return a promise. It is only awaited when the instance is built through
+ *   {@link CatcherConstructor.fromAsync fromAsync} / {@link
+ *   CatcherConstructor.createAsync createAsync} -- check
+ *   {@link ResolverContext.canAwait ctx.canAwait} before returning one.
+ */
 export type AnyResolver = (
   exceptionInfo: unknown,
   ctx: ResolverContext,
-) => AnyData | void | undefined | null;
+) =>
+  | AnyData
+  | void
+  | undefined
+  | null
+  | Promise<AnyData | void | undefined | null>;
 
 /** List of Exception Resolver */
 export type AnyResolvers = AnyResolver[];
@@ -204,4 +233,47 @@ export interface CatcherConstructor<
     overrides?: Partial<ReturnType<ReturnType<Normalizer>> & ErrorImplements>,
   ): Catcher<Resolvers, ReturnType<ReturnType<Normalizer>>> &
     ReturnType<ReturnType<Normalizer>>;
+
+  /**
+   * {@link CatcherConstructor.from from}, awaiting every resolver
+   *
+   * Some of what an exception carries can only be reached asynchronously -- a
+   * `Response` hands out its body through a promise and no other way. A
+   * resolver cannot deliver that to a synchronous constructor: the instance has
+   * to exist by the time it is thrown, which is before the body could arrive.
+   *
+   * This entry point awaits the resolvers first and normalizes afterwards, so
+   * the normalizer sees everything. Prefer it wherever you can await -- a
+   * `catch` in an async function, which is where fetch errors live:
+   *
+   * ```ts
+   * try {
+   *   await api.getUser(id);
+   * } catch (e) {
+   *   throw await AppError.fromAsync(e);
+   * }
+   * ```
+   *
+   * Nothing else changes: you still hand it an unknown exception and let the
+   * resolvers work out what it is.
+   */
+  fromAsync(
+    unknownException: unknown,
+    overrides?: Partial<ReturnType<ReturnType<Normalizer>> & ErrorImplements>,
+  ): Promise<
+    Catcher<Resolvers, ReturnType<ReturnType<Normalizer>>> &
+      ReturnType<ReturnType<Normalizer>>
+  >;
+
+  /**
+   * {@link CatcherConstructor.create create}, awaiting every resolver
+   *
+   * See {@link CatcherConstructor.fromAsync fromAsync}.
+   */
+  createAsync(
+    errorInfo: Parameters<ReturnType<Normalizer>>[0],
+  ): Promise<
+    Catcher<Resolvers, ReturnType<ReturnType<Normalizer>>> &
+      ReturnType<ReturnType<Normalizer>>
+  >;
 }
