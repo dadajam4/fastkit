@@ -4,25 +4,14 @@
 // modules — they would silently fail to apply on the consumer side. Keeping the
 // file a script (plain top-level `declare const` / `declare module`) is what
 // makes both the constants and the module declarations below globally visible.
+//
+// A triple-slash reference keeps that script status, so the globals live in one
+// place while `@fastkit/plugboy/env` still provides everything on its own.
 
-/**
- * Whether the code is running in a development context.
- *
- * @remarks
- * - `stub`: always `true`.
- * - published `build`: replaced with a runtime check of the consumer's
- *   environment (`process.env.NODE_ENV === 'development'` or
- *   `import.meta.env.DEV === true`), so the branch is evaluated at the
- *   consumer's runtime rather than eliminated.
- */
-declare const __PLUGBOY_DEV__: boolean;
-
-/**
- * The bundle is in stub mode.
- *
- * @remarks In stub mode, source code is executed in the source directory. This flag is available because of the different way of loading files in relative paths.
- */
-declare const __PLUGBOY_STUB__: boolean;
+// `import` style is not an option here: it would make this file a module and
+// silently stop every declaration below from applying.
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="./globals.d.ts" />
 
 // The declarations below mirror the subset of Vite's `vite/client` module
 // declarations that Plugboy is compatible with, so that source that already

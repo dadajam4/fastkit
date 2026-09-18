@@ -3,7 +3,7 @@
   "compilerOptions": {
     "types": [
       "node",
-      "@fastkit/plugboy/env",
+      "@fastkit/plugboy/globals",
       "@fastkit/ts-tiny-meta/client",
       "vite/client",
       "./.vui/vui"
