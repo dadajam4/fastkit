@@ -46,8 +46,6 @@ const TSC = path.join(ROOT, 'node_modules/.bin/tsc');
  * that no longer reproduces is reported as stale.
  */
 const KNOWN = {
-  // `typeof VuePlugin` survives an import the emitter dropped.
-  '@fastkit/plugboy-vue-plugin': 239,
   // Node types in the public surface, with no `@types/node` declared.
   '@fastkit/helpers': 240,
   '@fastkit/plugboy': 240,
