@@ -1,5 +1,53 @@
 # @fastkit/plugboy
 
+## 1.5.0
+
+### Minor Changes
+
+- [#247](https://github.com/dadajam4/fastkit/pull/247) [`e2b0e91`](https://github.com/dadajam4/fastkit/commit/e2b0e91eb6ca77c42e564bf2835154af5a4c147c) Thanks [@dadajam4](https://github.com/dadajam4)! - Add `@fastkit/plugboy/globals`, for projects that also reference `vite/client`.
+
+  `@fastkit/plugboy/env` declares ambient modules for the non-JS imports plugboy bundles, mirroring a subset of Vite's. Every one of those 51 modules — plus the top-level `CSSModuleClasses` — is declared by `vite/client` as well, so a project referencing both got a duplicate identifier for each: 88 errors under `skipLibCheck: false`, and silence (with the types still overlapping) under the default `skipLibCheck: true`.
+
+  `@fastkit/plugboy/globals` declares only `__PLUGBOY_DEV__` and `__PLUGBOY_STUB__`. A project that needs `vite/client` — for `import.meta.env`, `?url`, `?worker` or anything else plugboy has no loader for — references that instead, and takes the module types from Vite, whose set is a superset of plugboy's.
+
+  ```jsonc
+  {
+    "compilerOptions": {
+      // plugboy only — unchanged
+      "types": ["@fastkit/plugboy/env"],
+      // plugboy and Vite
+      // "types": ["@fastkit/plugboy/globals", "vite/client"]
+    },
+  }
+  ```
+
+  Nothing is required of a project that references `@fastkit/plugboy/env` alone: it still provides both the globals and the module types, and the entry is unchanged.
+
+### Patch Changes
+
+- [#243](https://github.com/dadajam4/fastkit/pull/243) [`6195a84`](https://github.com/dadajam4/fastkit/commit/6195a846e39cd9bf81a50040a22557f02cf6389e) Thanks [@dadajam4](https://github.com/dadajam4)! - Stop the DTS type-preserve step from emitting a duplicate import.
+
+  When a declaration file already imported the names it needed, plugboy added a second import of the same module anyway, binding each name twice:
+
+  ```ts
+  import { ThemeName, PaletteName, ScopeName, ColorVariant } from '@fastkit/color-scheme';
+  import { ColorSchemeInfo, ..., ColorVariant, ColorVariant as ColorVariant$1, ... } from "@fastkit/color-scheme";
+  ```
+
+  Consumers type-checking with `skipLibCheck: false` got `TS2300: Duplicate identifier` for every name. It reproduced in `@fastkit/vue-color-scheme` (8 errors) and `@fastkit/vui` (6), and surfaced in anything depending on them — `@fastkit/vue-loading`, `@fastkit/vui-wysiwyg` and `@fastkit/vite-plugin-vui`.
+
+  The step looked for an existing import with a single-quoted specifier, while the declaration bundler emits double-quoted ones, so it never found the statement it was supposed to merge into. It now matches either quote style, merges into the existing statement keeping its quoting, and treats a name as already available when _any_ import in the file binds it — `ScopeName` reaches `@fastkit/vui` through both `@fastkit/color-scheme` and `@fastkit/vue-color-scheme`, so importing it again collided even though the modules differ.
+
+  `@fastkit/vue-color-scheme` and `@fastkit/vui` are released with it so the corrected declarations reach consumers; their emitted API is otherwise unchanged.
+
+- [#253](https://github.com/dadajam4/fastkit/pull/253) [`e9da85f`](https://github.com/dadajam4/fastkit/commit/e9da85f5a48cfb0d63459144262f77d62775e980) Thanks [@dadajam4](https://github.com/dadajam4)! - Declare `@types/node`, which the published declarations have always needed.
+
+  `@fastkit/plugboy` names `node:fs` and `NodeJS.ErrnoException`, and `@fastkit/cookies` and `@fastkit/vue-page` name `IncomingMessage` / `ServerResponse` from `node:http`. None of them said so, so a consumer without Node's types in scope got errors from inside these packages with `skipLibCheck: false`.
+
+  All three already run in Node — they are in the repo's own `RUNS_IN_NODE` set and declare `engines.node` — so `"@types/node": ">=20"` as a peer states an existing implicit requirement, in the shape `@fastkit/vot` already uses. No upper bound: it describes the consumer's Node types rather than an API these packages call.
+
+  Patch for the same reason the `engines` additions in [#212](https://github.com/dadajam4/fastkit/issues/212) were: no code changes, and nothing that was working stops working.
+
 ## 1.4.2
 
 ### Patch Changes
