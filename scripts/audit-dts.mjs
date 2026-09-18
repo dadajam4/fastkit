@@ -45,17 +45,47 @@ const TSC = path.join(ROOT, 'node_modules/.bin/tsc');
  * having to be silent about the rest. Remove an entry with its fix -- an entry
  * that no longer reproduces is reported as stale.
  */
-const KNOWN = {
-  // Node types in the public surface, with no `@types/node` declared.
-  '@fastkit/helpers': 240,
-  '@fastkit/plugboy': 240,
-  '@fastkit/tiny-logger': 240,
-  '@fastkit/cookies': 240,
-  '@fastkit/vue-page': 240,
-};
+const KNOWN = {};
+
+/**
+ * Whether `@types/node` is guaranteed wherever this package is usable.
+ *
+ * Its own declaration counts, and so does one from a package it requires:
+ * `@fastkit/color-scheme` ships a `plugboy-dts-preserve` entry that names
+ * `@fastkit/plugboy`'s types, and declares `@fastkit/plugboy` as a required
+ * peer -- which declares `@types/node`. A consumer who can use the entry at all
+ * has been told to install it.
+ */
+function requiresNodeTypes(name, manifests, seen = new Set()) {
+  if (seen.has(name)) return false;
+  seen.add(name);
+  const json = manifests.get(name);
+  if (!json) return false;
+  if (json.dependencies?.['@types/node'] || json.peerDependencies?.['@types/node']) {
+    return true;
+  }
+  // Optional peers count here, unlike in the phantom audit. The declarations
+  // that need Node's ambient types are exactly the ones behind such a peer --
+  // `@fastkit/color-scheme` names `@fastkit/plugboy` only from its opt-in
+  // `plugboy-dts-preserve` entry -- so a consumer who can reach them at all has
+  // installed the package that asks for `@types/node`.
+  const declared = [
+    ...Object.keys(json.dependencies || {}),
+    ...Object.keys(json.peerDependencies || {}),
+  ];
+  return declared.some((dep) => requiresNodeTypes(dep, manifests, seen));
+}
 
 function readPackages() {
   const out = [];
+  // Every workspace manifest, so the walk above can follow internal deps.
+  const manifests = new Map();
+  for (const name of fs.readdirSync(PACKAGES_DIR)) {
+    const manifest = path.join(PACKAGES_DIR, name, 'package.json');
+    if (!fs.existsSync(manifest)) continue;
+    const json = JSON.parse(fs.readFileSync(manifest, 'utf8'));
+    manifests.set(json.name, json);
+  }
   for (const name of fs.readdirSync(PACKAGES_DIR).sort()) {
     const dir = path.join(PACKAGES_DIR, name);
     const manifest = path.join(dir, 'package.json');
@@ -74,10 +104,8 @@ function readPackages() {
       dir,
       declarations,
       // Only give the checker the ambient Node types the package actually asks
-      // its consumers for.
-      node: !!(
-        json.dependencies?.['@types/node'] || json.peerDependencies?.['@types/node']
-      ),
+      // its consumers for -- directly, or through something it requires.
+      node: requiresNodeTypes(json.name, manifests),
     });
   }
   return out;

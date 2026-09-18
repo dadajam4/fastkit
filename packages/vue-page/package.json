@@ -64,6 +64,7 @@
     "vue-router": "^5.2.0"
   },
   "peerDependencies": {
+    "@types/node": ">=20",
     "vue": "^3.5.0",
     "vue-router": "^4.4.0 || ^5.0.0"
   },
