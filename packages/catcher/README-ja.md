@@ -223,20 +223,21 @@ const extractFetchError = (source: unknown) => {
 }
 
 // Fetchエラー用ノーマライザー
+//
+// ここで返したものだけがエラーと一緒に運ばれます。`toJSON()` が出力するのも
+// ログに残るのもこの戻り値で、`resolvedData` 自体はシリアライズされません。
+// 後述の「ノーマライザーで何を返すか」を参照してください。
 const fetchNormalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo) => {
-  if (resolvedData.fetchError) {
-    const { fetchError } = resolvedData
+  const { fetchError } = resolvedData
+
+  if (fetchError) {
+    const { response } = fetchError
     return {
-      message: fetchError.message || `HTTP ${fetchError.response.status} Error`,
-      url: fetchError.response.url,
-      status: fetchError.response.status,
-      statusText: fetchError.response.statusText,
-      headers: Object.fromEntries(fetchError.response.headers.entries()),
-      responseType: fetchError.response.type,
-      ok: fetchError.response.ok,
-      redirected: fetchError.response.redirected,
-      bodyText: fetchError.response.text,
-      bodyJson: fetchError.response.json,
+      // ボディは `fromAsync` で生成したときだけ存在します。
+      message: response.bodyRead
+        ? (response.json?.message ?? response.statusText)
+        : (fetchError.message || `HTTP ${response.status} Error`),
+      status: response.status,
       type: 'FETCH_ERROR'
     }
   }
@@ -266,12 +267,14 @@ async function safeFetch(url: string, options?: RequestInit) {
 
     return response
   } catch (error) {
-    const fetchError = FetchCatcher.from(error)
+    // `from` ではなく `fromAsync` です。`Response` はボディを Promise 経由でしか
+    // 渡さないため、上のノーマライザーが `response.json` を見られるのはこちらだけです。
+    // リゾルバがボディを奪うことはありません（クローンを読むので、この後も
+    // `response.json()` は使えます）。
+    const fetchError = await FetchCatcher.fromAsync(error)
 
-    console.log('フェッチエラー:', fetchError.message)
-    console.log('URL:', fetchError.url)
-    console.log('ステータス:', fetchError.status)
-    console.log('レスポンスヘッダー:', fetchError.headers)
+    console.log('Fetch error:', fetchError.message)
+    console.log('Status:', fetchError.status)
 
     throw fetchError
   }
@@ -284,11 +287,59 @@ async function loadApiData() {
     return await response.json()
   } catch (error) {
     if (error.type === 'FETCH_ERROR') {
-      console.error('API呼び出しに失敗:', error.message)
+      console.error('API呼び出しに失敗しました:', error.message)
     }
     throw error
   }
 }
+```
+
+#### `from` と `fromAsync`
+
+| | `from` / `create` | `fromAsync` / `createAsync` |
+| --- | --- | --- |
+| 戻り値 | インスタンス | インスタンスの Promise |
+| `response.bodyRead` | `false` | `true` |
+| `response.json` / `.text` | 型に存在しない | 参照できる |
+
+それ以外（status / statusText / url / headers / ok / redirected / type）は
+`Response` が同期で返すので、どちらでも取得できます。
+
+`bodyRead` は判別子なので、絞り込んだ後でのみボディに触れます。
+
+```typescript
+if (response.bodyRead) {
+  response.json // ここだけ
+}
+```
+
+#### ノーマライザーで何を返すか
+
+キャッチャーは2層構造で、その境界がノーマライザーです。
+
+| | 保持するもの | `toJSON()` が出力するか |
+| --- | --- | --- |
+| `resolvedData`（リゾルバの出力） | リゾルバが抽出した全て | **しない** |
+| `data`（ノーマライザーの出力） | あなたが返したもの | **する** |
+
+つまりリゾルバはレスポンスを丸ごと持っていて構わず、外に出すものはあなたが決めます。
+スプレッドで丸投げせず、必要なものを選んでコピーしてください。レスポンスには
+`set-cookie`（セッション／リフレッシュトークン。しかも 401 はまさにそれが
+ローテーションされる場面です）、署名付き URL の署名や `?token=` を含みうる `url`、
+そして目的のメッセージ以上のものを含みうるボディが乗っています。
+
+```typescript
+// 良い例: コードとメッセージだけ。
+return { status: response.status, message: response.json?.message }
+
+// セッションクッキー・署名付き URL・ボディ全体を、このエラーが記録される場所すべてに置く。
+return { ...response }
+```
+
+ヘッダーが必要なら、名前を指定します。
+
+```typescript
+return { requestId: response.headers['x-request-id'] }
 ```
 
 ### 複数リゾルバーとエラー履歴管理
@@ -541,6 +592,19 @@ interface Catcher<Resolvers, T> extends Error {
 }
 ```
 
+インスタンスは生成したコンストラクタ経由で作ります。
+
+```typescript
+Catcher.create(errorInfo)          // エラー情報から
+Catcher.from(unknownException)     // 任意の値から正規化して
+
+// 上の2つを、全リゾルバーを await してから実行する版。
+// `Response` のボディのように Promise 経由でしか得られないものを
+// リゾルバーが扱う場合に必要です。
+await Catcher.createAsync(errorInfo)
+await Catcher.fromAsync(unknownException)
+```
+
 ### 組み込みリゾルバー
 
 #### `nativeErrorResolver`
@@ -550,7 +614,9 @@ interface Catcher<Resolvers, T> extends Error {
 Axiosエラーを処理し、詳細な HTTP リクエスト・レスポンス情報を抽出します。
 
 #### `fetchResponseResolver`
-Fetch API のレスポンスエラーを処理します。
+Fetch API のレスポンスエラーを処理します。レスポンスボディを含めるには
+`fromAsync` / `createAsync` でインスタンスを生成してください
+（[Fetch API エラーハンドリング](#fetch-api-エラーハンドリング)を参照）。
 
 ### ユーティリティ関数
 
