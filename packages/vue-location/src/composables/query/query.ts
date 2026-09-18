@@ -327,7 +327,11 @@ const nullableValue = (source: unknown) =>
  */
 export function useTypedQuery<Schema extends QueriesSchema>(
   schema: Schema,
-  router = useRouter(),
+  // Annotated on purpose. Left to inference, the emitted declaration resolves
+  // `useRouter()`'s return through vue-router 5's conditional `Router` type and
+  // prints its `_RouterClassic` branch -- a name vue-router 4 does not have,
+  // although the peer range admits it (issue #235).
+  router: Router = useRouter(),
 ): TypedQuery<Schema> {
   const service = useLocationService();
   const sending = ref(false);
