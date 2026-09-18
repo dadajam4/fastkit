@@ -46,10 +46,6 @@ const TSC = path.join(ROOT, 'node_modules/.bin/tsc');
  * that no longer reproduces is reported as stale.
  */
 const KNOWN = {
-  // Declaration bundler emits a second, unmerged import of a module already
-  // imported at the top of the file, binding the same names twice.
-  '@fastkit/vue-color-scheme': 234,
-  '@fastkit/vui': 234,
   // `typeof VuePlugin` survives an import the emitter dropped.
   '@fastkit/plugboy-vue-plugin': 239,
   // Node types in the public surface, with no `@types/node` declared.

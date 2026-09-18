@@ -18,6 +18,56 @@ import { applyPlugboyEnvs, getPlugboyEnvCodeForStub } from '../env';
 
 const SHEBANG_MATCH_RE = /^(#!.+?)\n/;
 
+/**
+ * Escape a string for use inside a `RegExp`.
+ *
+ * Kept local: plugboy builds every other package, so it cannot depend on one.
+ */
+function escapeRegExp(source: string): string {
+  return source.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Every name the declaration file already binds -- imported from any module, or
+ * declared in the file itself.
+ *
+ * `X as Y` binds `Y`, so the local name is what matters rather than the
+ * exported one.
+ */
+function collectBoundNames(dts: string): Set<string> {
+  const names = new Set<string>();
+
+  for (const [, clause] of dts.matchAll(
+    /^import\s+([^;]+?)\s+from\s+['"][^'"]+['"];?$/gm,
+  )) {
+    const braced = clause.match(/\{([^{}]*)\}/);
+    if (braced) {
+      for (const specifier of braced[1].split(',')) {
+        const local = specifier.split(' as ').pop()?.trim();
+        if (local) names.add(local);
+      }
+    }
+    const head = clause
+      .replace(/\{[^{}]*\}/, '')
+      .replace(/,/g, ' ')
+      .trim();
+    const namespaced = head.match(/\*\s+as\s+([\w$]+)/);
+    if (namespaced) {
+      names.add(namespaced[1]);
+    } else if (/^[\w$]+$/.test(head)) {
+      names.add(head);
+    }
+  }
+
+  for (const [, name] of dts.matchAll(
+    /^(?:export\s+)?(?:declare\s+)?(?:type|interface|class|const|function)\s+([\w$]+)/gm,
+  )) {
+    names.add(name);
+  }
+
+  return names;
+}
+
 interface ResolvedOptions extends InlineConfig {}
 
 export class Builder {
@@ -158,19 +208,21 @@ export class Builder {
     const { targets, pkg } = settings;
     const myPackageName = this.workspace.json.name;
     const packageIsOwn = myPackageName === pkg;
-    const pkgImports = (() => {
+    // The statement this normalizer merges into, if the file already imports
+    // from the package. The declaration bundler quotes its specifiers with `"`
+    // while this normalizer wrote `'`, and matching only the latter made every
+    // bundled import invisible here -- the names were then prepended as a
+    // second import of the same module and each one ended up bound twice
+    // (issue #234).
+    const target = (() => {
       if (!pkg || packageIsOwn) return;
-
-      const importRe = new RegExp(`import {([^\\{\\}]+)} from '${pkg}'`);
-      const importMatched = dts.match(importRe);
-      const imports = importMatched && importMatched[1];
-      if (!imports) return;
-
-      return {
-        pkg,
-        importRe,
-        imports,
-      };
+      const re = new RegExp(
+        `import {([^{}]+)} from (['"])${escapeRegExp(pkg)}\\2`,
+      );
+      const matched = dts.match(re);
+      if (!matched) return;
+      const [statement, specifiers, quote] = matched;
+      return { statement, specifiers, quote };
     })();
 
     const hitTypeNames: string[] = [];
@@ -184,38 +236,27 @@ export class Builder {
 
     if (!hitTypeNames.length) return;
 
-    if (pkgImports) {
-      const { pkg, imports, importRe } = pkgImports;
-      const mods = imports
-        .trim()
-        .split(',')
-        .map((row) => {
-          row = row.split(' as ')[0].trim();
-          return row;
-        });
-      const appends: string[] = [];
-      hitTypeNames.forEach((typeName) => {
-        const re = new RegExp(`(^|\n)import { ${typeName} } from '${pkg}'`);
-        if (!re.test(dts) && !mods.includes(typeName)) {
-          appends.push(typeName);
-        }
-      });
-      if (appends.length) {
-        dts = dts.replace(
-          importRe,
-          `import { $1, ${appends.join(', ')} } from '${pkg}'`,
-        );
-      }
+    // Whether the file can already refer to a name, from any module -- these
+    // types are re-exported (`ScopeName` reaches `@fastkit/vui` through both
+    // `@fastkit/color-scheme` and `@fastkit/vue-color-scheme`), so importing
+    // one a second time binds it twice even though the modules differ.
+    const bound = collectBoundNames(dts);
+    const appends = [...new Set(hitTypeNames)].filter(
+      (typeName) => !bound.has(typeName),
+    );
+
+    if (!appends.length) return dts;
+
+    if (target) {
+      const { statement, specifiers, quote } = target;
+      const merged = `import { ${specifiers.trim()}, ${appends.join(
+        ', ',
+      )} } from ${quote}${pkg}${quote}`;
+      // A replacer function, because emitted names carry `$` suffixes
+      // (`ColorVariant$1`) that `String.replace` reads as group references.
+      dts = dts.replace(statement, () => merged);
     } else if (pkg && !packageIsOwn) {
-      const mods: string[] = [];
-      hitTypeNames.forEach((typeName) => {
-        if (!dts.includes(`export declare type ${typeName} = `)) {
-          mods.push(typeName);
-        }
-      });
-      if (mods.length) {
-        dts = `import { ${mods.join(', ')} } from '${pkg}';\n${dts}`;
-      }
+      dts = `import { ${appends.join(', ')} } from '${pkg}';\n${dts}`;
     }
     return dts;
   }
