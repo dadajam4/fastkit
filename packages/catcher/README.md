@@ -5,6 +5,87 @@
 
 A custom class library for implementing type-safe exception handling within applications. Provides unified processing of various exception types (Native Error, Axios Error, Fetch Error) while maintaining type safety and offering detailed error information extraction and normalization.
 
+## Why
+
+You want to write the happy path. Errors still have to be handled properly, but that work should not be smeared across every feature that makes a request.
+
+So decide, once and application-wide, how an exception is recognised and what an error looks like when it comes out. After that a feature throws whatever it caught, and whoever handles it reads a schema rather than re-deriving the same thing:
+
+```typescript
+// Without. Every feature reimplements the same guesswork, slightly differently.
+catch (e) {
+  if (axios.isAxiosError(e)) {
+    message = e.response?.data?.message ?? e.message
+    status = e.response?.status
+  } else if (e instanceof Response) {
+    message = e.statusText
+    status = e.status
+  } else if (e instanceof Error) {
+    message = e.message
+  } else {
+    message = String(e)
+  }
+}
+```
+
+```typescript
+// With. Declared once, in one file.
+export const AppError = build({
+  resolvers: [axiosErrorResolver, fetchResponseResolver()],
+  normalizer: (resolved) => () => ({
+    message: resolved.fetchError?.response.statusText ?? 'Something went wrong',
+    status: resolved.fetchError?.response.status,
+    code: 'APP_ERROR'
+  })
+})
+
+// Every feature, from then on.
+throw await AppError.fromAsync(e)
+```
+
+What that buys you:
+
+- **`from` takes anything.** `unknown`, an `Error`, a `Response`, an axios error, or a catcher you already built. A feature does not have to know which it caught, and does not have to branch to find out.
+- **One place defines the shape.** Resolvers say how each kind of exception is recognised and what is worth pulling out of it; the normalizer says what an error looks like in your application. Add a resolver and every call site gains it.
+- **Reading it is type-safe.** `err.status` is typed from the normalizer's return type. No `(e as any).response?.data?.message`, and no field that exists on one error kind and silently not on another.
+- **One place decides what gets reported.** See [The two layers](#the-two-layers) below — a resolver may hold everything it found, and only what the normalizer returns is serialized.
+- **The original is still there.** `resolvedData` keeps what the resolvers extracted, so the normalized shape is the default rather than a ceiling.
+
+An instance is a real `Error`, so `throw` it, `catch` it, and let it cross frameworks as usual.
+
+## The two layers
+
+This is the one thing worth knowing before anything else, because it decides where you put things and what ends up in your logs.
+
+| | holds | serialized by `toJSON()` |
+| --- | --- | --- |
+| `resolvedData` — what the **resolvers** extracted | everything they found | **no** |
+| `data` — what the **normalizer** returned | what you chose | **yes** |
+
+**The normalizer is the boundary.** A resolver may hold the whole response — headers, url, body — because none of it leaves on its own. Only what the normalizer returns is serialized, so "what this application calls an error" and "what is safe to log" are one decision, made once.
+
+```typescript
+const err = await AppError.fromAsync(response)
+
+err.toJSONString()
+// {"code":"HTTP_ERROR","message":"That item is gone.","status":404, ...}
+// ...and nothing else. The set-cookie, the url and the raw body stayed behind.
+
+err.resolvedData.fetchError.response.headers['set-cookie']
+// still here, for a normalizer that wants it
+```
+
+So copy from `resolvedData` deliberately rather than spreading it. A response carries `set-cookie` (session and refresh tokens — and a 401 is exactly when those get rotated), a `url` that may hold a signed-URL signature, and a body that may hold much more than the message you were after.
+
+```typescript
+// Fine: a code and a message.
+return { code: 'HTTP_ERROR', message: response.json?.message }
+
+// Puts the session cookie, the signed URL and the whole body wherever this
+// error is logged.
+return { ...response }
+```
+
 ## Features
 
 - **Type-Safe Exception Handling**: Safe exception handling through strict type definitions in TypeScript
@@ -315,35 +396,25 @@ if (response.bodyRead) {
 }
 ```
 
-#### Choosing what the normalizer returns
+#### Keeping the choice in one place
 
-A catcher has two layers, and the normalizer is the boundary between them:
-
-| | holds | serialized by `toJSON()` |
-| --- | --- | --- |
-| `resolvedData` (resolver output) | everything the resolvers extracted | **no** |
-| `data` (normalizer output) | what you returned | **yes** |
-
-So a resolver is free to carry the whole response, and you decide what leaves
-the process. Copy from it deliberately rather than spreading it: a response
-carries `set-cookie` (session and refresh tokens — and a 401 is exactly when
-they get rotated), a `url` that may hold a signed-URL signature or a `?token=`,
-and a body that may hold much more than the message you were after.
+`from` and `fromAsync` differ in what they can reach, not in what they mean, and picking the wrong one loses the body silently. Write one helper where the choice belongs and call that everywhere:
 
 ```typescript
-// Fine: a code and a message.
-return { status: response.status, message: response.json?.message }
+// One file, application-wide.
+export const toAppError = (e: unknown) => AppError.fromAsync(e)
 
-// Puts the session cookie, the signed URL and the whole body wherever this
-// error is logged.
-return { ...response }
+// Every feature.
+catch (e) {
+  throw await toAppError(e)
+}
 ```
 
-If you do want a header, name it:
+`from` is then left for what it is good at: an error boundary that cannot await, where the response metadata is all there is to report anyway.
 
-```typescript
-return { requestId: response.headers['x-request-id'] }
-```
+#### What to return from the normalizer
+
+See [The two layers](#the-two-layers). A response is exactly the kind of thing worth copying from deliberately: `set-cookie`, a `url` that may carry a signed-URL signature, and a body that may hold more than the message you were after.
 
 ### Multiple Resolvers and Error History Management
 

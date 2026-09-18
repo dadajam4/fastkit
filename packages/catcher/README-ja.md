@@ -4,6 +4,86 @@
 
 アプリケーション内でTypeセーフな例外処理を実現するためのカスタムクラスライブラリ。様々な例外タイプ（Native Error、Axios Error、Fetch Error）を統一的に処理し、型安全性を保ちながら詳細なエラー情報の抽出と正規化を提供します。
 
+## 何が得られるか
+
+書きたいのは正常フローです。例外はきちんと処理する必要がありますが、その仕事を通信する機能ごとに散らばらせたくはありません。
+
+そこで「例外をどう識別するか」と「エラーとして出てくる形」をアプリケーション全体で一度だけ決めます。以降、各機能は捕まえたものをそのまま投げ、受け取る側は同じ導出を書き直すのではなくスキーマを読みます。
+
+```typescript
+// なし。機能ごとに同じ推測を、少しずつ違う書き方で実装することになる。
+catch (e) {
+  if (axios.isAxiosError(e)) {
+    message = e.response?.data?.message ?? e.message
+    status = e.response?.status
+  } else if (e instanceof Response) {
+    message = e.statusText
+    status = e.status
+  } else if (e instanceof Error) {
+    message = e.message
+  } else {
+    message = String(e)
+  }
+}
+```
+
+```typescript
+// あり。1ファイルで一度だけ宣言する。
+export const AppError = build({
+  resolvers: [axiosErrorResolver, fetchResponseResolver()],
+  normalizer: (resolved) => () => ({
+    message: resolved.fetchError?.response.statusText ?? '問題が発生しました',
+    status: resolved.fetchError?.response.status,
+    code: 'APP_ERROR'
+  })
+})
+
+// 以降、各機能はこれだけ。
+throw await AppError.fromAsync(e)
+```
+
+これで得られるもの:
+
+- **`from` は何でも受け取ります。** `unknown`、`Error`、`Response`、axios のエラー、すでに生成済みのキャッチャー。機能側はどれを捕まえたか知る必要も、判別するために分岐する必要もありません。
+- **形の定義が1箇所に集まります。** リゾルバーが「各種の例外をどう識別し、何を取り出すか」を、ノーマライザーが「このアプリケーションにおけるエラーの形」を決めます。リゾルバーを1つ足せば、全ての呼び出し箇所がその恩恵を受けます。
+- **読み出しが型安全です。** `err.status` はノーマライザーの戻り値型から型付けされます。`(e as any).response?.data?.message` も、「ある種類のエラーには存在するが別の種類には黙って存在しない」フィールドもありません。
+- **何を報告するかの判断も1箇所です。** 下の[2つの層](#2つの層)を参照してください。リゾルバーは見つけたものを全部持っていて構わず、シリアライズされるのはノーマライザーが返したものだけです。
+- **元の情報も残ります。** `resolvedData` にリゾルバーが抽出したものが残るので、正規化された形は既定であって上限ではありません。
+
+インスタンスは本物の `Error` です。いつもどおり `throw` し、`catch` し、フレームワークをまたいで渡せます。
+
+## 2つの層
+
+最初に知る価値があるのはこれです。何をどこに置くか、そしてログに何が残るかが、これで決まります。
+
+| | 持つもの | `toJSON()` に出るか |
+| --- | --- | --- |
+| `resolvedData` — **リゾルバー**が抽出したもの | 見つけた全部 | **出ない** |
+| `data` — **ノーマライザー**が返したもの | あなたが選んだもの | **出る** |
+
+**境界はノーマライザーです。** リゾルバーはレスポンスを丸ごと持っていて構いません。それ自体が外に出ることはないからです。シリアライズされるのはノーマライザーが返したものだけなので、「このアプリケーションにおけるエラーとは何か」と「ログに出して良いものは何か」が、一度きりの1つの判断になります。
+
+```typescript
+const err = await AppError.fromAsync(response)
+
+err.toJSONString()
+// {"code":"HTTP_ERROR","message":"That item is gone.","status":404, ...}
+// それ以外は出ない。set-cookie も url も生のボディも残らない。
+
+err.resolvedData.fetchError.response.headers['set-cookie']
+// 必要とするノーマライザーのために、ここには残っている
+```
+
+ですから `resolvedData` からはスプレッドで丸投げせず、必要なものを選んでコピーしてください。レスポンスには `set-cookie`（セッション／リフレッシュトークン。しかも 401 はまさにそれがローテーションされる場面です）、署名付き URL の署名を含みうる `url`、そして目的のメッセージ以上のものを含みうるボディが乗っています。
+
+```typescript
+// 良い例: コードとメッセージだけ。
+return { code: 'HTTP_ERROR', message: response.json?.message }
+
+// セッションクッキー・署名付き URL・ボディ全体を、このエラーが記録される場所すべてに置く。
+return { ...response }
+```
+
 ## 機能
 
 - **型安全な例外処理**: TypeScriptでの厳密な型定義による安全な例外ハンドリング
@@ -313,34 +393,25 @@ if (response.bodyRead) {
 }
 ```
 
+#### 選択を1箇所に閉じ込める
+
+`from` と `fromAsync` は意味ではなく「届く範囲」が違うだけで、取り違えると黙ってボディを失います。選択が属する場所にヘルパーを1つ作り、各所はそれを呼ぶ形にしてください。
+
+```typescript
+// アプリケーション全体で1ファイル。
+export const toAppError = (e: unknown) => AppError.fromAsync(e)
+
+// 各機能はこれだけ。
+catch (e) {
+  throw await toAppError(e)
+}
+```
+
+`from` は本来の得意分野に残ります。await できないエラー境界で、そもそも報告できるのはレスポンスのメタ情報だけ、という場面です。
+
 #### ノーマライザーで何を返すか
 
-キャッチャーは2層構造で、その境界がノーマライザーです。
-
-| | 保持するもの | `toJSON()` が出力するか |
-| --- | --- | --- |
-| `resolvedData`（リゾルバの出力） | リゾルバが抽出した全て | **しない** |
-| `data`（ノーマライザーの出力） | あなたが返したもの | **する** |
-
-つまりリゾルバはレスポンスを丸ごと持っていて構わず、外に出すものはあなたが決めます。
-スプレッドで丸投げせず、必要なものを選んでコピーしてください。レスポンスには
-`set-cookie`（セッション／リフレッシュトークン。しかも 401 はまさにそれが
-ローテーションされる場面です）、署名付き URL の署名や `?token=` を含みうる `url`、
-そして目的のメッセージ以上のものを含みうるボディが乗っています。
-
-```typescript
-// 良い例: コードとメッセージだけ。
-return { status: response.status, message: response.json?.message }
-
-// セッションクッキー・署名付き URL・ボディ全体を、このエラーが記録される場所すべてに置く。
-return { ...response }
-```
-
-ヘッダーが必要なら、名前を指定します。
-
-```typescript
-return { requestId: response.headers['x-request-id'] }
-```
+[2つの層](#2つの層)を参照してください。レスポンスはまさに「選んでコピーすべきもの」の典型です。`set-cookie`、署名付き URL の署名を含みうる `url`、そして目的のメッセージ以上のものを含みうるボディが乗っています。
 
 ### 複数リゾルバーとエラー履歴管理
 
