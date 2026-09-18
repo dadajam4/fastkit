@@ -13,7 +13,13 @@ export interface SerializableFetchResponse {
   redirected: boolean;
   status: number;
   statusText: string;
-  type: ResponseType;
+  /**
+   * Derived from the standard `Response` rather than named directly: only
+   * `lib.dom.d.ts` publishes a global `ResponseType` alias, so naming it makes
+   * the published declarations unusable in a Node-only program (issue #255).
+   * `Response` itself is a global in both environments.
+   */
+  type: Response['type'];
   url: string;
   json: any;
   text: string;
