@@ -1,5 +1,82 @@
 # @fastkit/catcher
 
+## 1.2.0
+
+### Minor Changes
+
+- [#256](https://github.com/dadajam4/fastkit/pull/256) [`bac6c0b`](https://github.com/dadajam4/fastkit/commit/bac6c0baecbf90801abaa33301189591ee7f3e69) Thanks [@dadajam4](https://github.com/dadajam4)! - Add `fromAsync` / `createAsync`, so a resolver can reach for what only a promise can give.
+
+  `fetchResponseResolver` wanted the response body and could not have it. A resolver ran inside a synchronous constructor — an instance is an `Error` that has to exist by the time it is thrown — while a `Response` hands out its body through a promise and no other way. It read the body anyway and wrote the result in afterwards, which could never work: the normalizer had already produced `data` by then, so `json` and `text` never reached it. The documented example read `bodyText` / `bodyJson` and always got `''` / `null`.
+
+  Resolvers may now return a promise, and two entry points await them before normalizing:
+
+  ```ts
+  try {
+    await api.getUser(id);
+  } catch (e) {
+    throw await AppError.fromAsync(e); // the normalizer sees the body
+  }
+  ```
+
+  Nothing else about the model changes: you still hand it an unknown exception and let the resolvers work out what it is. `from` / `create` behave exactly as before. A resolver that needs to await reads the new `ctx.canAwait` and offers what it can synchronously instead — which is what `fetchResponseResolver` now does.
+
+  **`SerializableFetchResponse` is a discriminated union.** `bodyRead` says which half you have, so a missing body is no longer indistinguishable from a body that was not JSON:
+
+  ```ts
+  const { response } = resolvedData.fetchError;
+  if (response.bodyRead) {
+    response.json; // only in scope here
+  }
+  ```
+
+  `from` gives you `bodyRead: false` with the metadata a `Response` reports synchronously — status, statusText, url, headers, ok, redirected, type. `fromAsync` gives you `bodyRead: true`, plus `json` and `text`.
+
+  **Migration.** `json` and `text` are behind the discriminant, so code that read them unconditionally no longer compiles — which is the point: it was reading values that were never populated. Build with `fromAsync` and narrow on `bodyRead`.
+
+- [#256](https://github.com/dadajam4/fastkit/pull/256) [`bac6c0b`](https://github.com/dadajam4/fastkit/commit/bac6c0baecbf90801abaa33301189591ee7f3e69) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix `fetchResponseResolver`: stop the unhandled rejection, leave the caller their body, and make `headers` serializable.
+
+  The resolver read the same body twice:
+
+  ```ts
+  response.json().then((json) => {
+    fetchResponse.json = json;
+  });
+  response.text().then((text) => {
+    fetchResponse.text = text;
+  });
+  ```
+
+  A body can only be read once, so the second call rejected with `TypeError: Body is unusable` — every time, with no `catch`. An unhandled rejection terminates a Node process by default, so a resolver whose whole job is to make an error reportable could take the process down instead. It also left the application's own `response` drained: the code that threw could no longer read what it had fetched.
+
+  The body is now read once, from `response.clone()`, and only when the resolver may await (see `fromAsync`). `json` is derived from that text, `response.bodyUsed` stays `false`, and a body that is already consumed, locked, or fails mid-read degrades to `''` / `null` instead of throwing — a resolver runs while an error is being described and must not replace it with one of its own.
+
+  **`headers` is now `Record<string, string>` rather than `Headers`.** The type is named for being JSON-serializable and `headers` was the one field that was not: `JSON.stringify(new Headers({...}))` is `{}`, so the headers silently vanished from any serialized error. Repeated header names are combined with `, `, the same way `Headers.get()` combines them — `Object.fromEntries(headers.entries())` would have kept only the last `set-cookie`.
+
+  ```diff
+  - Object.fromEntries(fetchError.response.headers.entries())
+  + fetchError.response.headers
+  ```
+
+  This does not change what leaves your process. Resolver output is not serialized — `toJSON()` emits what the _normalizer_ returns — so the response reaching the normalizer in full is by design, and what you copy out of it is your decision. The README now says so, and says which fields are worth thinking twice about: `set-cookie` (a 401 is exactly when session and refresh tokens get rotated), a `url` that may carry a signed-URL signature, and a body that may hold more than the message you were after. The previous example spread all of them into the normalizer's return value.
+
+### Patch Changes
+
+- [#256](https://github.com/dadajam4/fastkit/pull/256) [`bac6c0b`](https://github.com/dadajam4/fastkit/commit/bac6c0baecbf90801abaa33301189591ee7f3e69) Thanks [@dadajam4](https://github.com/dadajam4)! - Stop `SerializableFetchResponse` from requiring the DOM lib.
+
+  `type` was declared as `ResponseType`, a name only `lib.dom.d.ts` publishes as a global. `@types/node` types the same property through `undici-types`, which exports the union as a _module_ type and never as a global — so in a Node-only program (`lib: ["esnext"]`, `types: ["node"]`) the declarations failed with `TS2552: Cannot find name 'ResponseType'`, while the `headers: Headers` on the line above resolved fine.
+
+  ```ts
+  // before
+  type: ResponseType;
+
+  // after
+  type: Response['type'];
+  ```
+
+  `Response` is a global in both environments, so the property now resolves in either — to `undici-types`' union in Node and to the DOM one in a browser. The six members are the same today, no spec union is restated, and each environment keeps its own definition if they ever diverge. Nothing changes for a consumer who already had the DOM lib.
+
+  Fixes [#255](https://github.com/dadajam4/fastkit/issues/255).
+
 ## 1.1.0
 
 ### Minor Changes
