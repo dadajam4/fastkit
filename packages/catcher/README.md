@@ -5,6 +5,87 @@
 
 A custom class library for implementing type-safe exception handling within applications. Provides unified processing of various exception types (Native Error, Axios Error, Fetch Error) while maintaining type safety and offering detailed error information extraction and normalization.
 
+## Why
+
+You want to write the happy path. Errors still have to be handled properly, but that work should not be smeared across every feature that makes a request.
+
+So decide, once and application-wide, how an exception is recognised and what an error looks like when it comes out. After that a feature throws whatever it caught, and whoever handles it reads a schema rather than re-deriving the same thing:
+
+```typescript
+// Without. Every feature reimplements the same guesswork, slightly differently.
+catch (e) {
+  if (axios.isAxiosError(e)) {
+    message = e.response?.data?.message ?? e.message
+    status = e.response?.status
+  } else if (e instanceof Response) {
+    message = e.statusText
+    status = e.status
+  } else if (e instanceof Error) {
+    message = e.message
+  } else {
+    message = String(e)
+  }
+}
+```
+
+```typescript
+// With. Declared once, in one file.
+export const AppError = build({
+  resolvers: [axiosErrorResolver, fetchResponseResolver()],
+  normalizer: (resolved) => () => ({
+    message: resolved.fetchError?.response.statusText ?? 'Something went wrong',
+    status: resolved.fetchError?.response.status,
+    code: 'APP_ERROR'
+  })
+})
+
+// Every feature, from then on.
+throw await AppError.fromAsync(e)
+```
+
+What that buys you:
+
+- **`from` takes anything.** `unknown`, an `Error`, a `Response`, an axios error, or a catcher you already built. A feature does not have to know which it caught, and does not have to branch to find out.
+- **One place defines the shape.** Resolvers say how each kind of exception is recognised and what is worth pulling out of it; the normalizer says what an error looks like in your application. Add a resolver and every call site gains it.
+- **Reading it is type-safe.** `err.status` is typed from the normalizer's return type. No `(e as any).response?.data?.message`, and no field that exists on one error kind and silently not on another.
+- **One place decides what gets reported.** See [The two layers](#the-two-layers) below — a resolver may hold everything it found, and only what the normalizer returns is serialized.
+- **The original is still there.** `resolvedData` keeps what the resolvers extracted, so the normalized shape is the default rather than a ceiling.
+
+An instance is a real `Error`, so `throw` it, `catch` it, and let it cross frameworks as usual.
+
+## The two layers
+
+This is the one thing worth knowing before anything else, because it decides where you put things and what ends up in your logs.
+
+| | holds | serialized by `toJSON()` |
+| --- | --- | --- |
+| `resolvedData` — what the **resolvers** extracted | everything they found | **no** |
+| `data` — what the **normalizer** returned | what you chose | **yes** |
+
+**The normalizer is the boundary.** A resolver may hold the whole response — headers, url, body — because none of it leaves on its own. Only what the normalizer returns is serialized, so "what this application calls an error" and "what is safe to log" are one decision, made once.
+
+```typescript
+const err = await AppError.fromAsync(response)
+
+err.toJSONString()
+// {"code":"HTTP_ERROR","message":"That item is gone.","status":404, ...}
+// ...and nothing else. The set-cookie, the url and the raw body stayed behind.
+
+err.resolvedData.fetchError.response.headers['set-cookie']
+// still here, for a normalizer that wants it
+```
+
+So copy from `resolvedData` deliberately rather than spreading it. A response carries `set-cookie` (session and refresh tokens — and a 401 is exactly when those get rotated), a `url` that may hold a signed-URL signature, and a body that may hold much more than the message you were after.
+
+```typescript
+// Fine: a code and a message.
+return { code: 'HTTP_ERROR', message: response.json?.message }
+
+// Puts the session cookie, the signed URL and the whole body wherever this
+// error is logged.
+return { ...response }
+```
+
 ## Features
 
 - **Type-Safe Exception Handling**: Safe exception handling through strict type definitions in TypeScript
@@ -224,20 +305,21 @@ const extractFetchError = (source: unknown) => {
 }
 
 // Normalizer for Fetch errors
+//
+// Return only what you want to travel with the error. Whatever you return here
+// is what `toJSON()` emits and what ends up in your logs; `resolvedData` itself
+// is never serialized. See "Choosing what the normalizer returns" below.
 const fetchNormalizer = createCatcherNormalizer((resolvedData) => (exceptionInfo) => {
-  if (resolvedData.fetchError) {
-    const { fetchError } = resolvedData
+  const { fetchError } = resolvedData
+
+  if (fetchError) {
+    const { response } = fetchError
     return {
-      message: fetchError.message || `HTTP ${fetchError.response.status} Error`,
-      url: fetchError.response.url,
-      status: fetchError.response.status,
-      statusText: fetchError.response.statusText,
-      headers: Object.fromEntries(fetchError.response.headers.entries()),
-      responseType: fetchError.response.type,
-      ok: fetchError.response.ok,
-      redirected: fetchError.response.redirected,
-      bodyText: fetchError.response.text,
-      bodyJson: fetchError.response.json,
+      // The body is only there when the instance was built with `fromAsync`.
+      message: response.bodyRead
+        ? (response.json?.message ?? response.statusText)
+        : (fetchError.message || `HTTP ${response.status} Error`),
+      status: response.status,
       type: 'FETCH_ERROR'
     }
   }
@@ -267,12 +349,14 @@ async function safeFetch(url: string, options?: RequestInit) {
 
     return response
   } catch (error) {
-    const fetchError = FetchCatcher.from(error)
+    // `fromAsync`, not `from`: a `Response` hands out its body through a
+    // promise and no other way, so this is what lets the normalizer above see
+    // `response.json`. The resolver never takes the body from you -- it reads
+    // a clone, and `response.json()` still works afterwards.
+    const fetchError = await FetchCatcher.fromAsync(error)
 
     console.log('Fetch error:', fetchError.message)
-    console.log('URL:', fetchError.url)
     console.log('Status:', fetchError.status)
-    console.log('Response headers:', fetchError.headers)
 
     throw fetchError
   }
@@ -291,6 +375,46 @@ async function loadApiData() {
   }
 }
 ```
+
+#### `from` vs `fromAsync`
+
+| | `from` / `create` | `fromAsync` / `createAsync` |
+| --- | --- | --- |
+| Returns | the instance | a promise of the instance |
+| `response.bodyRead` | `false` | `true` |
+| `response.json` / `.text` | not on the type | available |
+
+Everything else — status, statusText, url, headers, ok, redirected, type — is
+reported either way, because a `Response` gives those up synchronously.
+
+`bodyRead` is a discriminant, so the body is only in scope once you have
+narrowed on it:
+
+```typescript
+if (response.bodyRead) {
+  response.json // only here
+}
+```
+
+#### Keeping the choice in one place
+
+`from` and `fromAsync` differ in what they can reach, not in what they mean, and picking the wrong one loses the body silently. Write one helper where the choice belongs and call that everywhere:
+
+```typescript
+// One file, application-wide.
+export const toAppError = (e: unknown) => AppError.fromAsync(e)
+
+// Every feature.
+catch (e) {
+  throw await toAppError(e)
+}
+```
+
+`from` is then left for what it is good at: an error boundary that cannot await, where the response metadata is all there is to report anyway.
+
+#### What to return from the normalizer
+
+See [The two layers](#the-two-layers). A response is exactly the kind of thing worth copying from deliberately: `set-cookie`, a `url` that may carry a signed-URL signature, and a body that may hold more than the message you were after.
 
 ### Multiple Resolvers and Error History Management
 
@@ -542,6 +666,18 @@ interface Catcher<Resolvers, T> extends Error {
 }
 ```
 
+Instances are created through the constructor it was built with:
+
+```typescript
+Catcher.create(errorInfo)          // from error information
+Catcher.from(unknownException)     // from anything, normalized
+
+// The same two, awaiting every resolver first. Needed whenever a resolver
+// reaches for something only a promise can give -- a `Response` body.
+await Catcher.createAsync(errorInfo)
+await Catcher.fromAsync(unknownException)
+```
+
 ### Built-in Resolvers
 
 #### `nativeErrorResolver`
@@ -551,7 +687,9 @@ Processes native Error objects.
 Processes Axios errors and extracts detailed HTTP request/response information.
 
 #### `fetchResponseResolver`
-Processes Fetch API response errors.
+Processes Fetch API response errors. Build the instance with `fromAsync` /
+`createAsync` to include the response body — see
+[Fetch API Error Handling](#fetch-api-error-handling).
 
 ### Utility Functions
 

@@ -26,6 +26,12 @@
 // emitted against (#235) both pass here. Those need a packed install outside the
 // repo.
 //
+// Blind spot: `lib` always includes `DOM`, so a declaration that names a
+// DOM-only global passes here and fails in a Node-only program -- how
+// `ResponseType` survived in `@fastkit/catcher` (#255). Checking without `DOM`
+// needs a list of the packages that are browser-only by design; 26 of the 70
+// are.
+//
 // Requires `pnpm build` first -- it reads `dist`.
 
 import fs from 'node:fs';
@@ -124,6 +130,12 @@ function check(pkg, tmp) {
         noEmit: true,
         skipLibCheck: false,
         types: pkg.node ? ['node'] : [],
+        // The config lives outside the repo, and `types` resolves relative to
+        // the config -- without this, `['node']` raised TS2688, which aborts
+        // the program before a single declaration is read. The filter below
+        // only keeps errors under `packages/`, so those runs reported nothing
+        // and every Node-typed package looked clean.
+        typeRoots: [path.join(ROOT, 'node_modules/@types')],
         lib: ['esnext', 'DOM'],
       },
       files: pkg.declarations,
@@ -132,12 +144,19 @@ function check(pkg, tmp) {
 
   return new Promise((resolve) => {
     execFile(TSC, ['-p', config], { cwd: ROOT }, (_err, stdout, stderr) => {
-      const lines = `${stdout}${stderr}`
+      const errors = `${stdout}${stderr}`
         .split('\n')
-        .filter((l) => /error TS\d+/.test(l))
-        // Ours only. tsc prints paths relative to `cwd`.
-        .filter((l) => l.startsWith('packages/') && l.includes('/dist/'));
-      resolve({ pkg, lines });
+        .filter((l) => /error TS\d+/.test(l));
+      // Ours only. tsc prints paths relative to `cwd`.
+      const lines = errors.filter(
+        (l) => l.startsWith('packages/') && l.includes('/dist/'),
+      );
+      // An error with no file in front of it comes from the configuration, and
+      // tsc stops before reading a single declaration -- the run checked
+      // nothing. That is not a clean package, and the filter above cannot tell
+      // the two apart, so it is reported separately and fails the audit.
+      const setup = errors.filter((l) => /^error TS\d+/.test(l));
+      resolve({ pkg, lines, setup });
     });
   });
 }
@@ -179,6 +198,18 @@ for (const { pkg, lines } of checked) {
     const message = line.slice(line.indexOf('error '));
     entry.messages.set(message, (entry.messages.get(message) || 0) + 1);
   }
+}
+
+const broken = checked.filter((c) => c.setup.length);
+if (broken.length) {
+  console.log('Could not check -- the compiler rejected the configuration:');
+  for (const { pkg, setup } of broken) {
+    console.log(`  ${pkg.name}: ${setup[0]}`);
+  }
+  console.log(
+    `\n${broken.length} package(s) were not checked at all. Fix the setup before reading anything below.`,
+  );
+  process.exit(1);
 }
 
 const unexpected = [];

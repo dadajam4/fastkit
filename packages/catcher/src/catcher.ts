@@ -1,5 +1,6 @@
 import { isObject } from '@fastkit/helpers';
 import {
+  AnyData,
   AnyResolvers,
   AnyNormalizer,
   CatcherBuilderOptions,
@@ -32,6 +33,10 @@ export function isCatcherData<T extends Catcher>(
 
 const NATIVE_ERROR_PROPS = ['stack', 'message', 'name'] as const;
 
+function isPromiseLike(source: unknown): source is Promise<unknown> {
+  return typeof (source as Promise<unknown>)?.then === 'function';
+}
+
 /**
  * Generate exception catcher constructor
  *
@@ -51,6 +56,74 @@ export function build<
   if (!(resolvers as any).includes(nativeErrorResolver)) {
     // Native Error resolvers are forced to be inserted into the last stage of the resolver.
     (resolvers as any).unshift(nativeErrorResolver);
+  }
+
+  function createResolverContext(resolvedData: AnyData, canAwait: boolean) {
+    let stopped = false;
+    const ctx: ResolverContext = {
+      resolve: () => {
+        stopped = true;
+      },
+      get resolvedData() {
+        return resolvedData;
+      },
+      canAwait,
+    };
+    return { ctx, isStopped: () => stopped };
+  }
+
+  /**
+   * Run every resolver over an exception, without awaiting any of them
+   *
+   * This is what the synchronous entry points use. An instance is an `Error`
+   * that has to exist by the time it is thrown, so there is nowhere to await:
+   * a resolver that hands back a promise contributes nothing here, because the
+   * normalizer runs before it could settle. The rejection is swallowed rather
+   * than left to surface as an unhandled one, and the remaining resolvers still
+   * get their turn.
+   */
+  function runResolvers(infoOrException: unknown, resolvedData: AnyData): void {
+    const { ctx, isStopped } = createResolverContext(resolvedData, false);
+    for (const resolver of resolvers) {
+      const result = resolver(infoOrException, ctx);
+      if (isPromiseLike(result)) {
+        result.catch(() => undefined);
+        continue;
+      }
+      if (result) {
+        Object.assign(resolvedData, result);
+        if (isStopped()) {
+          break;
+        }
+      }
+    }
+  }
+
+  /**
+   * Run every resolver over an exception, awaiting each one
+   *
+   * Used by {@link CatcherConstructor.fromAsync fromAsync} /
+   * {@link CatcherConstructor.createAsync createAsync}, which normalize only
+   * once this has settled -- so a resolver may reach for something the
+   * synchronous path cannot, such as a `Response` body.
+   */
+  async function runResolversAsync(infoOrException: unknown): Promise<AnyData> {
+    const resolvedData: AnyData = {};
+    const { ctx, isStopped } = createResolverContext(resolvedData, true);
+    for (const resolver of resolvers) {
+      // Sequential on purpose, exactly like the synchronous pass: a resolver
+      // may read what an earlier one left in `ctx.resolvedData`, and
+      // `ctx.resolve()` is meant to stop the ones after it.
+
+      const result = await resolver(infoOrException, ctx);
+      if (result) {
+        Object.assign(resolvedData, result);
+        if (isStopped()) {
+          break;
+        }
+      }
+    }
+    return resolvedData;
   }
 
   class BuildedCatcher extends Error implements Catcher {
@@ -94,10 +167,36 @@ export function build<
       return new this(exceptionInfo);
     }
 
+    static async fromAsync(unknownException: unknown, overrides?: unknown) {
+      if (isCatcher(unknownException) && overrides === undefined) {
+        return unknownException;
+      }
+      // Recovering stored data does not run resolvers, so there is nothing to
+      // await for it.
+      const preResolved = isCatcherData(unknownException)
+        ? undefined
+        : await runResolversAsync(unknownException);
+      return new this(unknownException, overrides, true, preResolved);
+    }
+
+    static async createAsync(exceptionInfo: unknown) {
+      const preResolved = isCatcherData(exceptionInfo)
+        ? undefined
+        : await runResolversAsync(exceptionInfo);
+      return new this(exceptionInfo, undefined, undefined, preResolved);
+    }
+
     constructor(
       infoOrException: unknown,
       overrides?: unknown,
       isUnknown?: boolean,
+      /**
+       * What the resolvers already produced, when they were run ahead of time
+       * so they could be awaited
+       *
+       * @internal
+       */
+      preResolved?: AnyData,
     ) {
       if (isCatcher(infoOrException) && overrides === undefined) {
         // If the error information is the Catcher instance itself, it will return itself
@@ -111,33 +210,24 @@ export function build<
         this.data = infoOrException;
       } else if (overrides !== undefined) {
         // In the case of standardization for the original exception
-        this.source = new BuildedCatcher(infoOrException, undefined, true);
+        this.source = new BuildedCatcher(
+          infoOrException,
+          undefined,
+          true,
+          preResolved,
+        );
         this.resolvedData = this.source.resolvedData;
         this.data = {
           ...this.source.data,
           ...(overrides as any),
         };
       } else {
-        let resolved = false;
-
         const { resolvedData } = this;
-        const ctx: ResolverContext = {
-          resolve: () => {
-            resolved = true;
-          },
-          get resolvedData() {
-            return resolvedData;
-          },
-        };
-
-        for (const resolver of resolvers) {
-          const result = resolver(infoOrException, ctx);
-          if (result) {
-            Object.assign(resolvedData, result);
-            if (resolved) {
-              break;
-            }
-          }
+        if (preResolved) {
+          // Already produced by `runResolvers`, which was able to await.
+          Object.assign(resolvedData, preResolved);
+        } else {
+          runResolvers(infoOrException, resolvedData);
         }
 
         this.data = {
