@@ -1,8 +1,10 @@
 declare module '*.$types.json' {
-  type SourceFileExports = import('./dist/ts-tiny-meta').SourceFileExports;
+  type SourceFileExports = import('@fastkit/ts-tiny-meta').SourceFileExports;
 
   /**
-   * xxxxx
+   * The meta-information extracted for the source file this JSON was generated
+   * from.
+   *
    * @see {@link SourceFileExports}
    */
   const exports: SourceFileExports;
@@ -11,10 +13,12 @@ declare module '*.$types.json' {
 }
 
 declare module '*/$types.json' {
-  type SourceFileExports = import('./dist/ts-tiny-meta').SourceFileExports;
+  type SourceFileExports = import('@fastkit/ts-tiny-meta').SourceFileExports;
 
   /**
-   * xxxxx
+   * The meta-information extracted for the source file this JSON was generated
+   * from.
+   *
    * @see {@link SourceFileExports}
    */
   const exports: SourceFileExports;
