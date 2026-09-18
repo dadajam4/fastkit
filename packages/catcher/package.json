@@ -58,14 +58,6 @@
   "devDependencies": {
     "axios": "^1.18.1"
   },
-  "peerDependencies": {
-    "axios": "^1.6.0"
-  },
-  "peerDependenciesMeta": {
-    "axios": {
-      "optional": true
-    }
-  },
   "buildOptions": {
     "name": "Catcher"
   },
