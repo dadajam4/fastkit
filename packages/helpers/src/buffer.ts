@@ -9,7 +9,9 @@ const HAS_ARRAY_BUFFER = typeof ArrayBuffer !== 'undefined';
  * @param source - Value to be checked
  * @returns true if it is a Buffer instance
  */
-export function isBuffer(source: unknown): source is Buffer {
+export function isBuffer<T extends Uint8Array = Uint8Array>(
+  source: unknown,
+): source is T {
   return HAS_BUFFER && source instanceof Buffer;
 }
 
@@ -23,13 +25,21 @@ export function isArrayBufferView(source: unknown): source is ArrayBufferView {
 }
 
 /**
- * Buffer, and duplicate the ArrayBufferView to get a new Buffer
- * @param cur - Buffer from which to duplicate
- * @returns Copied buffer
+ * Copy the bytes a view spans into a newly allocated `ArrayBuffer`
+ *
+ * @param cur - View to copy from
+ * @returns A view over the new `ArrayBuffer`, sharing no memory with `cur`
+ *
+ * @remarks
+ * Returns a Node `Buffer` where the global exists, and a plain `Uint8Array`
+ * otherwise -- `Buffer` extends `Uint8Array`, so the declared return type
+ * covers both. The Node branch used to run unconditionally, which threw
+ * `ReferenceError: Buffer is not defined` in a browser (issue #252).
  */
-export function copyBuffer(cur: Buffer | ArrayBufferView): Buffer {
-  if (isBuffer(cur)) {
-    return Buffer.from(cur as unknown as ArrayBuffer);
-  }
-  return Buffer.from(cur.buffer.slice(0), cur.byteOffset, cur.byteLength);
+export function copyBuffer(cur: Uint8Array | ArrayBufferView): Uint8Array {
+  const bytes = cur.buffer.slice(
+    cur.byteOffset,
+    cur.byteOffset + cur.byteLength,
+  );
+  return HAS_BUFFER ? Buffer.from(bytes) : new Uint8Array(bytes);
 }

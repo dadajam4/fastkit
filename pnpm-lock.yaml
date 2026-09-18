@@ -311,6 +311,9 @@ importers:
       '@fastkit/tiny-logger':
         specifier: workspace:^
         version: link:../tiny-logger
+      '@types/node':
+        specifier: ^24.13.2
+        version: 24.13.3
       cookie:
         specifier: ^2.0.1
         version: 2.0.1
@@ -533,6 +536,9 @@ importers:
       '@tsdown/css':
         specifier: ^0.22.14
         version: 0.22.14(postcss-modules@6.0.1(postcss@8.5.23))(postcss@8.5.23)(sass-embedded@1.86.0)(sass@1.102.0)(tsdown@0.22.14)(tsx@4.23.1)(yaml@2.9.0)
+      '@types/node':
+        specifier: ^24.13.2
+        version: 24.13.3
       acorn:
         specifier: ^8.17.0
         version: 8.17.0
@@ -1172,6 +1178,9 @@ importers:
       '@fastkit/vue-utils':
         specifier: workspace:^
         version: link:../vue-utils
+      '@types/node':
+        specifier: ^24.13.2
+        version: 24.13.3
     devDependencies:
       vue:
         specifier: 3.5.40
