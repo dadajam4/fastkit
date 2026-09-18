@@ -59,6 +59,25 @@ Or add it to `tsconfig.json`:
 }
 ```
 
+## Projects that also use `vite/client`
+
+`@fastkit/plugboy/env` is all a plugboy project needs. If your project *also*
+references `vite/client` — for `import.meta.env`, `?url`, `?worker` or anything
+else plugboy has no loader for — reference `@fastkit/plugboy/globals` instead:
+
+```jsonc
+{
+  "compilerOptions": {
+    "types": ["@fastkit/plugboy/globals", "vite/client"]
+  }
+}
+```
+
+`globals` declares only `__PLUGBOY_DEV__` and `__PLUGBOY_STUB__`. Every module
+`env` declares is also declared by `vite/client`, so loading both gives a
+duplicate identifier for each one; with `globals` the module types come from
+Vite, whose set is a superset of plugboy's.
+
 ## Module types (assets, CSS, `?raw`)
 
 The same `@fastkit/plugboy/env` reference also declares ambient module types for

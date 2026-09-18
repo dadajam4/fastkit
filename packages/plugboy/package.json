@@ -51,6 +51,9 @@
     "./env": {
       "types": "./env.d.ts"
     },
+    "./globals": {
+      "types": "./globals.d.ts"
+    },
     ".": {
       "import": "./dist/plugboy.mjs",
       "types": "./dist/plugboy.d.ts"
@@ -61,6 +64,7 @@
   },
   "files": [
     "env.d.ts",
+    "globals.d.ts",
     "cli.mjs",
     "dist"
   ],

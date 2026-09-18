@@ -49,6 +49,25 @@ if (__PLUGBOY_STUB__) {
 }
 ```
 
+## `vite/client` も併用するプロジェクト
+
+plugboy のプロジェクトは `@fastkit/plugboy/env` だけで足ります。`import.meta.env` や
+`?url`・`?worker` など plugboy がローダーを持たない機能のために `vite/client` も
+参照する場合は、代わりに `@fastkit/plugboy/globals` を参照してください。
+
+```jsonc
+{
+  "compilerOptions": {
+    "types": ["@fastkit/plugboy/globals", "vite/client"]
+  }
+}
+```
+
+`globals` は `__PLUGBOY_DEV__` と `__PLUGBOY_STUB__` だけを宣言します。`env` が宣言する
+モジュールはすべて `vite/client` でも宣言されているため、両方を読み込むとその全件が
+重複識別子になります。`globals` を使えばモジュール型は Vite 側（plugboy のものを含む
+上位集合）から供給されます。
+
 ## モジュール型（assets・CSS・?raw）
 
 同じ `@fastkit/plugboy/env` の参照は、plugboy がバンドルできる非JSインポート向けの
