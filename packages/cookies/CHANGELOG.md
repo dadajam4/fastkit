@@ -1,5 +1,21 @@
 # @fastkit/cookies
 
+## 1.0.1
+
+### Patch Changes
+
+- [#253](https://github.com/dadajam4/fastkit/pull/253) [`e9da85f`](https://github.com/dadajam4/fastkit/commit/e9da85f5a48cfb0d63459144262f77d62775e980) Thanks [@dadajam4](https://github.com/dadajam4)! - Declare `@types/node`, which the published declarations have always needed.
+
+  `@fastkit/plugboy` names `node:fs` and `NodeJS.ErrnoException`, and `@fastkit/cookies` and `@fastkit/vue-page` name `IncomingMessage` / `ServerResponse` from `node:http`. None of them said so, so a consumer without Node's types in scope got errors from inside these packages with `skipLibCheck: false`.
+
+  All three already run in Node — they are in the repo's own `RUNS_IN_NODE` set and declare `engines.node` — so `"@types/node": ">=20"` as a peer states an existing implicit requirement, in the shape `@fastkit/vot` already uses. No upper bound: it describes the consumer's Node types rather than an API these packages call.
+
+  Patch for the same reason the `engines` additions in [#212](https://github.com/dadajam4/fastkit/issues/212) were: no code changes, and nothing that was working stops working.
+
+- Updated dependencies [[`e9da85f`](https://github.com/dadajam4/fastkit/commit/e9da85f5a48cfb0d63459144262f77d62775e980), [`e9da85f`](https://github.com/dadajam4/fastkit/commit/e9da85f5a48cfb0d63459144262f77d62775e980)]:
+  - @fastkit/helpers@1.1.0
+  - @fastkit/tiny-logger@1.1.0
+
 ## 1.0.0
 
 ### Major Changes

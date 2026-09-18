@@ -1,5 +1,39 @@
 # @fastkit/vot
 
+## 1.6.0
+
+### Minor Changes
+
+- [#237](https://github.com/dadajam4/fastkit/pull/237) [`ec4fbd2`](https://github.com/dadajam4/fastkit/commit/ec4fbd2abe2ec3aff18bb2516ac6d38829c2b05e) Thanks [@dadajam4](https://github.com/dadajam4)! - `vot serve` now mounts `configureServer` middleware and proxy rules at the server root instead of inside `base`, matching `vot dev`.
+
+  `base` is where the application's assets and routes live. A health check, a metrics endpoint or a webhook receiver is not part of that route tree, and until now the same source line answered at two different URLs depending on the command:
+
+  | `base`  | `vot dev`      | `vot serve` (before) | `vot serve` (now) |
+  | ------- | -------------- | -------------------- | ----------------- |
+  | `/`     | `/healthcheck` | `/healthcheck`       | `/healthcheck`    |
+  | `/app/` | `/healthcheck` | `/app/healthcheck`   | `/healthcheck`    |
+
+  Static assets and the rendering route are still served under `base`.
+
+  **Migration.** Only applications that set `base` to something other than `/` _and_ register middleware or proxy rules are affected. Applications on the default `base: '/'` need no change.
+
+  - Drop the `base` prefix from any path that points at them — load balancer and Kubernetes probes aimed at `/<base>/healthcheck` must move to `/healthcheck`.
+  - Middleware registered without a path (`use(handler)`) now runs for every request rather than only those below `base`, which is what it already did under `vot dev`.
+
+### Patch Changes
+
+- [#254](https://github.com/dadajam4/fastkit/pull/254) [`2e0d68f`](https://github.com/dadajam4/fastkit/commit/2e0d68ff726c4b03a21662420433370e43e50742) Thanks [@dadajam4](https://github.com/dadajam4)! - Make `ws: true` proxy rules work under `vot serve`.
+
+  `proxyMiddleware` installs its `upgrade` listener on the HTTP server it is handed, and `serve()` had none to hand it — the server only came into being at `app.listen()`, so the call passed `null` and the listener was never registered. A rule that opted into WebSocket forwarding therefore worked under `vot dev`, where Vite gives its proxy the dev server, and silently did nothing in production. Nothing threw and nothing was logged; a client just fell back to whatever transport it had.
+
+  `serve()` now builds the HTTP server with `http.createServer(app)` before mounting anything, which is what `express().listen()` does internally, and hands it to the proxy.
+
+  Unchanged: a rule written as a plain string target still forwards HTTP only. Both `vot dev` and `vot serve` forward an upgrade only when the rule sets `ws: true` or points at a `ws:` / `wss:` target, so the same config behaves the same either side.
+
+- Updated dependencies [[`e9da85f`](https://github.com/dadajam4/fastkit/commit/e9da85f5a48cfb0d63459144262f77d62775e980), [`e9da85f`](https://github.com/dadajam4/fastkit/commit/e9da85f5a48cfb0d63459144262f77d62775e980)]:
+  - @fastkit/helpers@1.1.0
+  - @fastkit/vue-page@1.1.1
+
 ## 1.5.1
 
 ### Patch Changes

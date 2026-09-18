@@ -1,5 +1,30 @@
 # @fastkit/vui
 
+## 1.7.3
+
+### Patch Changes
+
+- [#243](https://github.com/dadajam4/fastkit/pull/243) [`6195a84`](https://github.com/dadajam4/fastkit/commit/6195a846e39cd9bf81a50040a22557f02cf6389e) Thanks [@dadajam4](https://github.com/dadajam4)! - Stop the DTS type-preserve step from emitting a duplicate import.
+
+  When a declaration file already imported the names it needed, plugboy added a second import of the same module anyway, binding each name twice:
+
+  ```ts
+  import { ThemeName, PaletteName, ScopeName, ColorVariant } from '@fastkit/color-scheme';
+  import { ColorSchemeInfo, ..., ColorVariant, ColorVariant as ColorVariant$1, ... } from "@fastkit/color-scheme";
+  ```
+
+  Consumers type-checking with `skipLibCheck: false` got `TS2300: Duplicate identifier` for every name. It reproduced in `@fastkit/vue-color-scheme` (8 errors) and `@fastkit/vui` (6), and surfaced in anything depending on them — `@fastkit/vue-loading`, `@fastkit/vui-wysiwyg` and `@fastkit/vite-plugin-vui`.
+
+  The step looked for an existing import with a single-quoted specifier, while the declaration bundler emits double-quoted ones, so it never found the statement it was supposed to merge into. It now matches either quote style, merges into the existing statement keeping its quoting, and treats a name as already available when _any_ import in the file binds it — `ScopeName` reaches `@fastkit/vui` through both `@fastkit/color-scheme` and `@fastkit/vue-color-scheme`, so importing it again collided even though the modules differ.
+
+  `@fastkit/vue-color-scheme` and `@fastkit/vui` are released with it so the corrected declarations reach consumers; their emitted API is otherwise unchanged.
+
+- Updated dependencies [[`6195a84`](https://github.com/dadajam4/fastkit/commit/6195a846e39cd9bf81a50040a22557f02cf6389e), [`e9da85f`](https://github.com/dadajam4/fastkit/commit/e9da85f5a48cfb0d63459144262f77d62775e980), [`e9da85f`](https://github.com/dadajam4/fastkit/commit/e9da85f5a48cfb0d63459144262f77d62775e980), [`ee05da9`](https://github.com/dadajam4/fastkit/commit/ee05da94bf4d7de98c005c343441400126b3614d)]:
+  - @fastkit/vue-color-scheme@1.0.1
+  - @fastkit/helpers@1.1.0
+  - @fastkit/tiny-logger@1.1.0
+  - @fastkit/vue-location@1.1.0
+
 ## 1.7.2
 
 ### Patch Changes

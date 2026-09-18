@@ -1,6 +1,6 @@
 {
   "name": "@fastkit/catcher",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Custom classes for Type-safe handling of exceptions in your application.",
   "keywords": [
     "fastkit",
