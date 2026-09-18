@@ -1,8 +1,9 @@
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import http from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
-import type { AddressInfo } from 'node:net';
+import type { AddressInfo, Socket } from 'node:net';
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { serve } from '../serve';
 
@@ -41,7 +42,11 @@ function createDist(dir: string, base: string, proxyTarget: string) {
     `export default {
       host: '127.0.0.1',
       port: 0,
-      proxy: { '/api': ${JSON.stringify(proxyTarget)} },
+      proxy: {
+        '/api': ${JSON.stringify(proxyTarget)},
+        // Opting into WebSocket forwarding, the way Vite's proxy does.
+        '/ws': { target: ${JSON.stringify(proxyTarget)}, ws: true },
+      },
       configureServer({ use }) {
         use('/healthcheck', (req, res) => {
           res.writeHead(200, { 'content-type': 'text/plain' });
@@ -60,8 +65,27 @@ function listen(server: http.Server): Promise<number> {
   });
 }
 
-function close(server: http.Server): Promise<void> {
+/**
+ * Destroy every socket a server has accepted, then close it.
+ *
+ * An upgraded socket stays open by design and stops being tracked by the HTTP
+ * server, so neither `close()` -- which waits for connections -- nor
+ * `closeAllConnections()` releases it. Teardown hangs without this.
+ */
+function close(server: http.Server, sockets: Set<Socket>): Promise<void> {
+  for (const socket of sockets) socket.destroy();
+  sockets.clear();
   return new Promise((resolve) => server.close(() => resolve()));
+}
+
+/** Remember every socket a server accepts, so teardown can destroy them. */
+function trackSockets(server: http.Server): Set<Socket> {
+  const sockets = new Set<Socket>();
+  server.on('connection', (socket) => {
+    sockets.add(socket);
+    socket.on('close', () => sockets.delete(socket));
+  });
+  return sockets;
 }
 
 /**
@@ -75,9 +99,26 @@ function servedFixture(base: string) {
     res.writeHead(200, { 'content-type': 'text/plain' });
     res.end(`upstream:${req.url}`);
   });
+  // Completes a real WebSocket handshake, so an upgrade that arrives here is
+  // answered rather than merely accepted.
+  upstream.on('upgrade', (req, socket) => {
+    const accept = crypto
+      .createHash('sha1')
+      .update(
+        `${req.headers['sec-websocket-key']}258EAFA5-E914-47DA-95CA-C5AB0DC85B11`,
+      )
+      .digest('base64');
+    socket.write(
+      'HTTP/1.1 101 Switching Protocols\r\n' +
+        'Upgrade: websocket\r\nConnection: Upgrade\r\n' +
+        `Sec-WebSocket-Accept: ${accept}\r\n\r\n`,
+    );
+  });
 
   let origin: string;
   let served: Awaited<ReturnType<typeof serve>>;
+  const upstreamSockets = trackSockets(upstream);
+  let servedSockets: Set<Socket>;
 
   beforeAll(async () => {
     createDist(dir, base, `http://127.0.0.1:${await listen(upstream)}`);
@@ -88,28 +129,66 @@ function servedFixture(base: string) {
     vi.spyOn(console, 'log').mockImplementation(() => undefined);
 
     served = await serve();
+    servedSockets = trackSockets(served.server);
     origin = `http://127.0.0.1:${(served.server.address() as AddressInfo).port}`;
   }, 30_000);
 
   afterAll(async () => {
     process.chdir(cwd);
     vi.restoreAllMocks();
-    await close(served.server);
-    await close(upstream);
+    await close(served.server, servedSockets);
+    await close(upstream, upstreamSockets);
     fs.rmSync(dir, { recursive: true, force: true });
   });
 
-  return async function get(pathname: string) {
+  const get = async (pathname: string) => {
     const res = await fetch(`${origin}${pathname}`);
     return { status: res.status, body: await res.text() };
   };
+
+  /** Ask for a WebSocket upgrade and report what came back. */
+  const upgrade = (pathname: string) =>
+    new Promise<'upgraded' | 'not upgraded'>((resolve) => {
+      const { port } = new URL(origin);
+      const request = http.request({
+        host: '127.0.0.1',
+        port,
+        path: pathname,
+        headers: {
+          Connection: 'Upgrade',
+          Upgrade: 'websocket',
+          'Sec-WebSocket-Key': crypto.randomBytes(16).toString('base64'),
+          'Sec-WebSocket-Version': '13',
+        },
+      });
+      const done = (answer: 'upgraded' | 'not upgraded') => {
+        request.destroy();
+        resolve(answer);
+      };
+      const timer = setTimeout(() => done('not upgraded'), 2000);
+      request.on('upgrade', () => {
+        clearTimeout(timer);
+        done('upgraded');
+      });
+      request.on('response', () => {
+        clearTimeout(timer);
+        done('not upgraded');
+      });
+      request.on('error', () => {
+        clearTimeout(timer);
+        done('not upgraded');
+      });
+      request.end();
+    });
+
+  return { get, upgrade };
 }
 
 // The point of these: `vot dev` hands `configureServer` Vite's own connect
 // stack, which sits at the server root. `vot serve` has to agree, or the same
 // source line answers at two different URLs (#223).
 describe("serve, base '/app/'", () => {
-  const get = servedFixture('/app/');
+  const { get, upgrade } = servedFixture('/app/');
 
   it('mounts configureServer middleware at the server root, outside base', async () => {
     await expect(get('/healthcheck')).resolves.toEqual({
@@ -134,12 +213,20 @@ describe("serve, base '/app/'", () => {
     const { body } = await get('/app/some/page');
     expect(body).toBe('rendered:/app/some/page');
   });
+
+  // An upgrade never reaches Express -- the listener sits on the HTTP server --
+  // so `base` cannot apply to it, the same way proxy rules are matched at the
+  // root rather than inside `base`.
+  it('forwards a WebSocket upgrade at the root, not under base', async () => {
+    await expect(upgrade('/ws/socket')).resolves.toBe('upgraded');
+    await expect(upgrade('/app/ws/socket')).resolves.toBe('not upgraded');
+  });
 });
 
 // The default `base` builds no router at all, so the only thing that can break
 // it is the registration order the fix depends on.
 describe("serve, base '/'", () => {
-  const get = servedFixture('/');
+  const { get, upgrade } = servedFixture('/');
 
   it('answers configureServer middleware before the render route', async () => {
     await expect(get('/healthcheck')).resolves.toEqual({
@@ -158,5 +245,18 @@ describe("serve, base '/'", () => {
   it('renders everything else', async () => {
     const { body } = await get('/some/page');
     expect(body).toBe('rendered:/some/page');
+  });
+
+  // The proxy installs its `upgrade` listener on the HTTP server it is given,
+  // and `serve()` used to have none to give until `listen()` -- so a `ws: true`
+  // rule worked under `vot dev` and silently did nothing here (issue #236).
+  it('forwards a WebSocket upgrade for a rule that opts in', async () => {
+    await expect(upgrade('/ws/socket')).resolves.toBe('upgraded');
+  });
+
+  it('leaves an upgrade alone for a rule that does not', async () => {
+    // Matches Vite: a plain string target forwards HTTP only, so the same
+    // config behaves the same under `vot dev` and `vot serve`.
+    await expect(upgrade('/api/socket')).resolves.toBe('not upgraded');
   });
 });

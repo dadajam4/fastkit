@@ -11,7 +11,7 @@ import type {
   MinimalPluginContextWithoutEnvironment,
 } from 'vite';
 import module from 'node:module';
-import type { Server } from 'node:http';
+import { createServer, type Server } from 'node:http';
 import chalk from 'chalk';
 import { capitalize } from '@fastkit/helpers';
 import type { Server as ConnectServer } from 'connect';
@@ -243,10 +243,16 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
     path.join(serverDist, exports),
   );
 
-  const server = express();
+  const app = express();
+  // The HTTP server exists before anything is mounted, because the proxy needs
+  // it to answer `upgrade`: `proxyMiddleware` installs that listener on the
+  // server it is handed, and it used to be handed `null` since the server only
+  // came into being at `listen()` (issue #236). `express().listen()` does
+  // exactly this internally.
+  const server = createServer(app);
 
   if (memwatch) {
-    server.get('/__memwatch__/diff', async (request, response) => {
+    app.get('/__memwatch__/diff', async (request, response) => {
       memwatch.gc();
       const diff = memwatch.diff();
       response.json(diff);
@@ -262,21 +268,21 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
   // They also have to be registered before the `base` router, whose catch-all
   // render route would otherwise claim every request below `base`.
   if (config.proxy) {
-    server.use(
-      proxyMiddleware(null, { proxy: config.proxy, logger: config.logger }),
+    app.use(
+      proxyMiddleware(server, { proxy: config.proxy, logger: config.logger }),
     );
   }
 
   // Express's `use` differs from connect's only in its return type, and
   // `VotConfigureServerFn` is declared against connect's.
   await config.configureServer?.(
-    server.use.bind(server) as unknown as ConnectServer['use'],
+    app.use.bind(app) as unknown as ConnectServer['use'],
   );
 
-  let router: Express = server;
+  let router: Express = app;
   if (config.base && config.base !== '/') {
     router = express.Router() as Express;
-    server.use(config.base, router);
+    app.use(config.base, router);
   }
 
   // Serve every static asset route
