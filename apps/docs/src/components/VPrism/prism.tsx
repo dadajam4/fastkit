@@ -1,14 +1,7 @@
 import { VNode, h, VNodeChild, ref, SetupContext } from 'vue';
-import Prism from 'prismjs';
+import Prism from './prism-global';
+import './prism-grammars';
 import 'prismjs/themes/prism-okaidia.css';
-import 'prismjs/components/prism-bash';
-import 'prismjs/components/prism-css';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-json';
-import 'prismjs/components/prism-scss';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-tsx';
 import { trimCode } from './utils';
 
 Prism.manual = true;
