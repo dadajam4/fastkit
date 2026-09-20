@@ -11,21 +11,28 @@ import type { InlineConfig } from 'vite';
 import type vueJsx from '@vitejs/plugin-vue-jsx';
 import type { UserOptions as PagesUserOptions } from 'vite-plugin-pages';
 import type { Options as VuePluginOptions } from '@vitejs/plugin-vue';
-import type { Server, IncomingMessage } from 'connect';
-import type { ServerResponse } from 'node:http';
 import type { RawVotPlugin } from './plugin';
 import type { VotContext } from './context';
 import type { WrittenResponse } from './renderer';
+import type { VotRuntimeContext } from './adapter';
 import type { RawVotGenerateOptions } from './generate';
 
 type VueJsxOptions = Parameters<typeof vueJsx>[0];
 
-export interface VotConfigureServerContext {
-  use: Server['use'];
+/**
+ * What `configureServer` is handed.
+ *
+ * `app` is the adapter's own application object -- a `Hono` instance under the
+ * default adapter. vot deliberately does not invent a middleware abstraction
+ * of its own to sit in front of it: one more layer to learn, and one more place
+ * for `vot dev` and `vot serve` to disagree.
+ */
+export interface VotConfigureServerContext<App = unknown> {
+  app: App;
 }
 
-export type VotConfigureServerFn = (
-  ctx: VotConfigureServerContext,
+export type VotConfigureServerFn<App = unknown> = (
+  ctx: VotConfigureServerContext<App>,
 ) => (() => void) | void | Promise<(() => void) | void>;
 
 export interface BuildOptions {
@@ -50,8 +57,8 @@ export interface SsrOptions {
   ssrEntry?: string;
   getRenderContext?: (params: {
     url: string;
-    request: IncomingMessage;
-    response: ServerResponse;
+    request: Request;
+    runtime?: VotRuntimeContext;
     resolvedEntryPoint: Record<string, any>;
   }) => Promise<WrittenResponse>;
 }
@@ -107,7 +114,7 @@ export interface VotPluginOptions extends SsrOptions {
    * {@link VotServerEntryOptions}. Defining it in both places runs both, in
    * this order, and warns.
    */
-  configureServer?: VotConfigureServerFn;
+  configureServer?: VotConfigureServerFn<any>;
   /**
    * Server entry configuration.
    */

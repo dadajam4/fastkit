@@ -43,10 +43,8 @@ export default defineVotServer({
   proxy: {
     '/api': 'http://localhost:8080',
   },
-  configureServer({ use }) {
-    use('/healthcheck', (_req, res) => {
-      res.writeHead(200).end();
-    });
+  configureServer({ app }) {
+    app.get('/healthcheck', (c) => c.body(null, 200));
   },
 });
 ```
@@ -90,8 +88,8 @@ export default defineVotServer(({ command, dev, mode }) => ({
 | ----------------- | ----------------------------------------- | ------------------------------------------------- |
 | `host`            | `string \| boolean`                       | listen するホスト。`vot serve` の既定は `'0.0.0.0'` |
 | `port`            | `number`                                  | listen するポート。既定は `3000`                    |
-| `proxy`           | `Record<string, string \| ProxyOptions>`  | プロキシ設定。Vite の `server.proxy` と同じ形       |
-| `configureServer` | `(ctx: { use }) => void \| Promise<void>` | サーバーにミドルウェアをマウントする                |
+| `proxy`           | `Record<string, string \| VotProxyOptions>` | プロキシ設定。Vite の `server.proxy` より狭い（後述） |
+| `configureServer` | `(ctx: { app }) => void \| Promise<void>` | アダプタのアプリ（既定では `Hono`）にミドルウェアをマウントする |
 
 `base` はオプションに**含まれません**。ビルド時にクライアントバンドルのアセット
 URL へ焼き込まれる値なので `vite.config.ts` が持ち、`vot build` がその値を
@@ -152,6 +150,24 @@ dist/
 `server` と `votPlugin({ configureServer })` を読みます。本番にビルド時プラグインを
 要求するのはこの経路で、`vot serve` が `vite` を import する唯一の理由でもあります。
 将来のメジャーバージョンで削除される予定です。
+
+## プロキシ設定
+
+転送は `fetch` で行うため、ルールが持てるのは `target` / `changeOrigin` /
+`rewrite` / `headers` / `ws` だけです。
+
+Vite の `configure` と `bypass` はありません。前者は `http-proxy` のインスタンスを、
+後者は Node のリクエストとレスポンスを渡すもので、どちらも `fetch` に対応物がありません。
+残すと `vot dev` と `vot serve` が乖離することになり、それはこのエントリが防ぐために
+存在している唯一のものです。`secure` も同様の理由でありません ── `fetch` の TLS 検証を
+標準的な方法で切ることはできず、黙って効かないオプションを宣言するのは、無いことより
+悪いからです。自己署名の上流には `NODE_TLS_REJECT_UNAUTHORIZED=0` を使ってください。
+
+WebSocket の転送（`ws: true`、または `ws:` / `wss:` ターゲット）は vot ではなく
+**アダプタの能力**です。fetch モデルに upgrade の概念がないため、各ランタイムが自前の
+API で行う必要があります。既定の node アダプタは転送します。できないアダプタは
+`supports.proxyWebSocket: false` を宣言し、vot は起動時に警告します ── ルールが黙って
+何もしないままになるのを避けるためです。
 
 ## `base` とミドルウェア
 

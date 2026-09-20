@@ -1,4 +1,3 @@
-import type { IncomingMessage, ServerResponse } from 'node:http';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -42,32 +41,18 @@ function createFixture() {
   return root;
 }
 
-function request(
+/**
+ * Drive the handler the way its adapter does: a `Request` in, a `Response`
+ * out. The Node request and response objects the old handler was written
+ * against are gone -- that is the point of the rework.
+ */
+async function request(
   handler: ReturnType<typeof createSSRDevHandler>,
   url = '/',
 ): Promise<string> {
-  return new Promise((resolve, reject) => {
-    let body = '';
-    const response = {
-      headersSent: false,
-      setHeader: () => undefined,
-      end(chunk?: string) {
-        if (chunk) body += chunk;
-        response.headersSent = true;
-        resolve(body);
-      },
-    };
-
-    handler(
-      {
-        method: 'GET',
-        originalUrl: url,
-        headers: { host: 'localhost' },
-      } as unknown as IncomingMessage,
-      response as unknown as ServerResponse,
-      (error?: any) => reject(error || new Error('unexpectedly fell through')),
-    );
-  });
+  const response = await handler(new Request(`http://localhost${url}`));
+  if (!response) throw new Error('unexpectedly declined');
+  return response.text();
 }
 
 const styleIds = (html: string) =>

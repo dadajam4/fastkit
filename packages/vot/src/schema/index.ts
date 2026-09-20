@@ -1,3 +1,5 @@
+export * from './adapter';
+export * from './proxy';
 export * from './renderer';
 export * from './context';
 export * from './options';

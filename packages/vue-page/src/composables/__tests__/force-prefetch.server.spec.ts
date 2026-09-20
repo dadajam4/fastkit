@@ -13,7 +13,7 @@ import type { VuePageServerContext } from '../page-control';
  */
 function createServerContext(): VuePageServerContext {
   return {
-    request: {} as any,
+    request: new Request('https://example.com/'),
     response: { headers: new Headers() },
     cookies: new Cookies({}),
   };

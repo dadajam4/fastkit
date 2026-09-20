@@ -4,12 +4,13 @@ import { describe, it, expect } from 'vitest';
 import { createApp } from 'vue';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import { Cookies } from '@fastkit/cookies';
-import type { IncomingMessage } from 'node:http';
 import { VuePageControl } from '../page-control';
 import type { VuePageServerContext, PageResponseDraft } from '../page-control';
 
-function createRequest(cookie = ''): IncomingMessage {
-  return { headers: { cookie } } as unknown as IncomingMessage;
+function createRequest(cookie = ''): Request {
+  return new Request('https://example.com/', {
+    headers: cookie ? { cookie } : {},
+  });
 }
 
 function createControl(server?: VuePageServerContext) {
@@ -30,7 +31,7 @@ describe('server context injection', () => {
   it('takes the cookie jar the transport built rather than building one', () => {
     const request = createRequest('sid=abc');
     const headers = new Headers();
-    const cookies = new Cookies({ req: request, headers });
+    const cookies = new Cookies({ request, headers });
     const response: PageResponseDraft = { headers };
 
     const control = createControl({ request, response, cookies });
@@ -46,7 +47,7 @@ describe('server context injection', () => {
     const control = createControl({
       request: createRequest(),
       response: { headers },
-      cookies: new Cookies({ req: createRequest(), headers }),
+      cookies: new Cookies({ request: createRequest(), headers }),
     });
 
     control.cookies.set('sid', 'abc', { path: '/', httpOnly: true });

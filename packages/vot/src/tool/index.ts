@@ -165,19 +165,51 @@ export function votPlugin(options: VotPluginOptions = {}) {
       };
     },
     async configureServer(server) {
-      const { middlewares } = server;
-      const use = middlewares.use.bind(middlewares);
+      /**
+       * dev and serve build the *same* application, through the same adapter.
+       * That is the only way `configureServer` can keep its promise that one
+       * source line answers at one URL under both (#223) -- and it is why the
+       * hook now receives the adapter's app rather than connect's `use`.
+       *
+       * Proxy rules are the exception: in dev they are merged into Vite's own
+       * `server.proxy` (see {@link mergeServerEntryConfig}), which runs well
+       * before this, so the adapter is given none here.
+       */
+      const { nodeAdapter } = await import('../adapters/node');
+      const { createDevMiddleware } = await import('./dev/mount');
 
-      if (configureServer) {
-        await configureServer({ use });
-      }
-      if (serverEntryConfig?.configureServer) {
-        await serverEntryConfig.configureServer({ use });
-      }
-      if (process.env.__DEV_MODE_SSR) {
-        const handler = createSSRDevHandler(server, options);
-        return () => server.middlewares.use(handler);
-      }
+      const ssr = !!process.env.__DEV_MODE_SSR;
+      const handler = ssr
+        ? createSSRDevHandler(server, options)
+        : async () => undefined;
+
+      const votApp = await nodeAdapter.createApp({
+        command: 'dev',
+        host: String(server.config.server.host ?? 'localhost'),
+        port: server.config.server.port ?? 3000,
+        base: server.config.base || '/',
+        proxy: [],
+        logger: server.config.logger,
+        handler,
+        configureServer: async ({ app }) => {
+          if (configureServer) {
+            await configureServer({ app });
+          }
+          if (serverEntryConfig?.configureServer) {
+            await serverEntryConfig.configureServer({ app });
+          }
+        },
+      });
+
+      /**
+       * Returning a function defers the mount until after Vite has installed
+       * its own middlewares -- but still before its HTML fallback. Mounting any
+       * later means the fallback answers every page request first and the
+       * catch-all never runs.
+       */
+      return () => {
+        server.middlewares.use(createDevMiddleware(votApp));
+      };
     },
   };
 

@@ -11,7 +11,6 @@ import {
 import { withCtx } from '@fastkit/vue-utils';
 import { createEntry } from './entry';
 import { CreateEntryOptions } from './schema';
-import type { VotNodeRuntime } from './schema';
 import { VOT_GENERATE_PAGES_PATH } from './schema/generate';
 
 export * from '@fastkit/vue-page';
@@ -48,16 +47,34 @@ export async function createVotHook(
             middleware: (ctx) => {
               /**
                * This writes the route table straight down the wire rather than
-               * rendering a page, so it needs the real Node response — which
-               * the page layer no longer carries. It comes back through the
-               * runtime handle vot put there itself.
+               * rendering a page, so it needs the real transport response --
+               * which the page layer no longer carries. It comes back through
+               * the runtime handle the adapter put there.
+               *
+               * The shape is spelled out structurally rather than imported
+               * from `@fastkit/vot/adapters/node`: this module is part of the
+               * application bundle, and that one names `node:http`. Reaching
+               * for it here would put Node's http module in the import graph
+               * of every build, including the ones that have no such module.
                */
-              const { response } = (ctx.server?.runtime ||
-                {}) as Partial<VotNodeRuntime>;
-              if (response) {
-                response.setHeader('Content-Type', 'application/json');
-                response.writeHead(200);
-                response.end(JSON.stringify(router.getRoutes()));
+              const outgoing = (
+                ctx.server?.runtime as
+                  | {
+                      native?: {
+                        outgoing?: {
+                          setHeader(name: string, value: string): void;
+                          writeHead(status: number): void;
+                          end(body: string): void;
+                        };
+                      };
+                    }
+                  | undefined
+              )?.native?.outgoing;
+
+              if (outgoing) {
+                outgoing.setHeader('Content-Type', 'application/json');
+                outgoing.writeHead(200);
+                outgoing.end(JSON.stringify(router.getRoutes()));
               }
             },
           },

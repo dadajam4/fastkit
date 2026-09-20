@@ -1,8 +1,6 @@
-import type { ServerResponse } from 'node:http';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { performance } from 'perf_hooks';
-import { NextHandleFunction } from 'connect';
 import {
   createServer as createViteServer,
   isCSSRequest,
@@ -13,7 +11,8 @@ import {
 import chalk from 'chalk';
 import module from 'node:module';
 import { getPluginOptions, getEntryPoint } from '../utils';
-import type { WrittenResponse, SsrOptions } from '../../vot';
+import type { SsrOptions } from '../../vot';
+import type { VotRequestHandler } from '../../schema/adapter';
 
 const require = module.createRequire(import.meta.url);
 
@@ -207,47 +206,26 @@ export const createSSRDevHandler = (
     return styles.filter((style): style is DevStyle => !!style);
   }
 
-  function writeHead(response: ServerResponse, params: WrittenResponse = {}) {
-    if (params.status) {
-      response.statusCode = params.status;
-    }
+  const handleSsrRequest: VotRequestHandler = async (request, runtime) => {
+    const url = new URL(request.url);
+    const requestPath = `${url.pathname}${url.search}`;
 
-    if (params.statusText) {
-      response.statusMessage = params.statusText;
-    }
-
-    if (params.headers) {
-      for (const [key, value] of Object.entries(params.headers)) {
-        response.setHeader(key, value);
-      }
-    }
-  }
-
-  const handleSsrRequest: NextHandleFunction = async (
-    request,
-    response,
-    next,
-  ) => {
-    const { originalUrl = '' } = request;
-
+    // Declining rather than answering: these belong to Vite's own middlewares,
+    // or to whatever sits behind vot.
     if (
       request.method !== 'GET' ||
-      originalUrl === '/favicon.ico' ||
-      (!useCSSDevSourcemap && SCSS_MAP_MATCH_RE.test(originalUrl))
+      url.pathname === '/favicon.ico' ||
+      (!useCSSDevSourcemap && SCSS_MAP_MATCH_RE.test(requestPath))
     ) {
-      return next();
+      return undefined;
     }
 
     fixEntryPoint(server);
 
-    let template: string;
-
-    try {
-      template = await getIndexTemplate(request.originalUrl as string);
-    } catch (error) {
+    let template = await getIndexTemplate(requestPath).catch((error) => {
       server.ssrFixStacktrace(error as Error);
-      return next(error);
-    }
+      throw error;
+    });
 
     // Reserve the slot the collected styles go into. The placeholder is an HTML
     // comment, so it is harmless on the paths that bypass the replacement.
@@ -265,66 +243,80 @@ export const createSSRDevHandler = (
       resolvedEntryPoint = resolvedEntryPoint.default || resolvedEntryPoint;
       const render = resolvedEntryPoint.render || resolvedEntryPoint;
 
-      const protocol =
-        (request as any).protocol ||
-        (request.headers.referer || '').split(':')[0] ||
-        'http';
-
-      const url = `${protocol}://${request.headers.host}${request.originalUrl}`;
-
       // This context might contain initialState provided by other plugins
       const { getRenderContext } = options;
 
       const context =
         (getRenderContext &&
           (await getRenderContext({
-            url,
+            url: request.url,
             request,
-            response,
+            runtime,
             resolvedEntryPoint,
           }))) ||
         {};
 
-      writeHead(response, context);
       if (isRedirect(context)) {
-        return response.end();
+        return new Response(null, {
+          status: context.status,
+          ...(context.statusText
+            ? { statusText: context.statusText }
+            : undefined),
+          headers: context.headers,
+        });
       }
 
-      const result = await render(url, {
+      const result = await render(request.url, {
         request,
-        response,
+        runtime,
         template,
         ...context,
       });
 
-      if (response.headersSent) {
-        return response.end();
-      }
-
-      writeHead(response, result);
       if (isRedirect(result)) {
-        return response.end();
+        return new Response(null, {
+          status: result.status,
+          ...(result.statusText
+            ? { statusText: result.statusText }
+            : undefined),
+          headers: result.headers,
+        });
       }
 
       // The set of stylesheets depends on what the render actually imported,
       // so this has to happen per request, once the render is done.
       const styles = await collectDevStyles(resolvedEntryId);
 
-      response.setHeader('Content-Type', 'text/html');
-      response.end(
+      const headers = new Headers(result.headers);
+      headers.set('Content-Type', 'text/html');
+
+      return new Response(
         (result.html as string).replace(DEV_STYLES_PLACEHOLDER, () =>
           renderDevStyles(styles),
         ),
+        {
+          status: result.status || 200,
+          ...(result.statusText
+            ? { statusText: result.statusText }
+            : undefined),
+          headers,
+        },
       );
     } catch (error) {
-      // Send back template HTML to inject ViteErrorOverlay
-      response.setHeader('Content-Type', 'text/html');
-      response.end(template.replace(DEV_STYLES_PLACEHOLDER, ''));
-
-      // Wait until browser injects ViteErrorOverlay
-      // custom element from the previous template
-      setTimeout(() => next(error), 250);
       server.ssrFixStacktrace(error as Error);
+      /**
+       * The template goes back so that Vite's client can mount its error
+       * overlay; the error itself is logged here rather than handed onward,
+       * because a fetch handler has nowhere to hand it.
+       */
+      server.config.logger.error(
+        chalk.red(`[vot] SSR render failed: ${(error as Error).stack}`),
+        { error: error as Error },
+      );
+      return new Response(template.replace(DEV_STYLES_PLACEHOLDER, ''), {
+        status: 500,
+        headers: { 'Content-Type': 'text/html' },
+      });
     }
   };
 
