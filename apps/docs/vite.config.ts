@@ -50,6 +50,19 @@ export default defineConfig({
             const pkgName = segments[0].startsWith('@')
               ? segments.slice(0, 2).join('/')
               : segments[0];
+
+            /**
+             * prismjs stays with the code that imports it.
+             *
+             * Its grammar files (`prismjs/components/prism-*`) import nothing
+             * and reach for a global `Prism` that the core publishes when it
+             * runs. The bundler cannot see that dependency, so giving them a
+             * chunk of their own let them run before the core ever did --
+             * `Uncaught ReferenceError: Prism is not defined`, and no
+             * highlighting anywhere (#276).
+             */
+            if (pkgName === 'prismjs') return;
+
             return `vendor-${pkgName}`;
           }
         },
