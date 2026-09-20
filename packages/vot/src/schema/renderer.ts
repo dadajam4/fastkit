@@ -6,6 +6,8 @@ export type {
   WrittenResponse,
   WriteResponseFn,
   RedirectFn,
+  PageResponseDraft,
+  VuePageServerContext,
 } from '@fastkit/vue-page';
 
 export interface Rendered extends WrittenResponse {

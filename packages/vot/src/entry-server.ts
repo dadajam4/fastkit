@@ -1,4 +1,5 @@
-import { createApp } from 'vue';
+import { createApp, reactive } from 'vue';
+import { Cookies } from '@fastkit/cookies';
 import { renderToString } from '@vue/server-renderer';
 import { createRouter, createMemoryHistory, RouteRecordRaw } from 'vue-router';
 import { renderSSRHead } from 'unhead/server';
@@ -16,6 +17,8 @@ import { setupVotPluginsAndHooks } from './schema';
 import type {
   SsrHandler,
   VotContext,
+  VotNodeRuntime,
+  VuePageServerContext,
   VotBeforeRouterSetupParams,
 } from './schema';
 
@@ -90,6 +93,7 @@ export const createEntry: SsrHandler = function createSsrEntry(
     // Server redirect utilities
     const {
       deferred,
+      draft,
       response: writtenResponse,
       writeResponse,
       redirect,
@@ -104,6 +108,24 @@ export const createEntry: SsrHandler = function createSsrEntry(
       throw new Error('need response object.');
     }
 
+    /**
+     * The cookie jar is built here, not by the page layer: this is the only
+     * place that knows what the request and the response actually are. The
+     * context is still Node-shaped, so `Set-Cookie` continues to go out
+     * through `response.setHeader`.
+     */
+    const cookies = new Cookies(
+      { req: request, res: response },
+      { bucket: reactive({}) },
+    );
+
+    const server: VuePageServerContext = {
+      request,
+      response: draft,
+      cookies,
+      runtime: { request, response } satisfies VotNodeRuntime,
+    };
+
     const context: VotContext = {
       url,
       isClient: false,
@@ -111,6 +133,7 @@ export const createEntry: SsrHandler = function createSsrEntry(
       router,
       request,
       response,
+      server,
       initialRoute,
       initialState: {},
       writeResponse,
@@ -161,7 +184,7 @@ export const createEntry: SsrHandler = function createSsrEntry(
     ]);
 
     // The 'redirect' utility has been called during rendering: skip everything else
-    if (isRedirect()) return writtenResponse;
+    if (isRedirect()) return writtenResponse();
 
     // Not a redirect: get the HTML parts returned by the renderer and continue
     const htmlParts = {
@@ -196,7 +219,7 @@ export const createEntry: SsrHandler = function createSsrEntry(
     return {
       html,
       ...htmlParts,
-      ...writtenResponse,
+      ...writtenResponse(),
     };
   };
 };
