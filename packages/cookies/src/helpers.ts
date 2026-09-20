@@ -4,6 +4,7 @@ import type {
   ServerResponse,
 } from 'node:http';
 import { stringifySetCookie } from 'cookie';
+import * as setCookieParser from 'set-cookie-parser';
 import type { Cookie } from 'set-cookie-parser';
 import { isObject } from '@fastkit/helpers';
 import { CookiesBrowserContext, SerializeOptions } from './schema';
@@ -34,6 +35,47 @@ export function isServerResponse(source: any): source is ServerResponse {
     typeof target.setHeader === 'function' &&
     typeof target.writableEnded === 'boolean'
   );
+}
+
+/**
+ * Tells whether the given value is a web-standard {@link Request}.
+ *
+ * The check is duck-typed on purpose. {@link isIncomingMessage} and
+ * {@link isServerResponse} are built on `isObject`, which asks for
+ * `[object Object]` — a `Request` stringifies to `[object Request]` and would
+ * be rejected by it. Duck-typing also accepts the request-like objects that
+ * server frameworks hand out in place of the global.
+ */
+export function isWebRequest(source: any): source is Request {
+  return typeof source?.headers?.get === 'function';
+}
+
+/**
+ * Tells whether the given value is a web-standard {@link Headers}.
+ *
+ * Duck-typed for the same reason as {@link isWebRequest}.
+ */
+export function isWebHeaders(source: any): source is Headers {
+  return (
+    typeof source?.append === 'function' && typeof source?.get === 'function'
+  );
+}
+
+/**
+ * Read the `Set-Cookie` values a {@link Headers} already carries, as one entry
+ * per cookie.
+ *
+ * `getSetCookie()` is the only way to get that split reliably, so it is used
+ * whenever the implementation has it. The fallback exists for the older
+ * polyfills that predate it, where `get('set-cookie')` returns every cookie
+ * joined by commas — which `splitCookiesString` knows how to take apart again.
+ */
+export function getSetCookies(headers: Headers): string[] {
+  if (typeof headers.getSetCookie === 'function') {
+    return headers.getSetCookie();
+  }
+  const raw = headers.get('set-cookie');
+  return raw ? setCookieParser.splitCookiesString(raw) : [];
 }
 
 /**
@@ -126,4 +168,43 @@ export function areCookiesEqual(a: Cookie, b: Cookie) {
       { ...b, value: undefined, sameSite: undefined },
     ) && normalizeSameSite(a.sameSite) === normalizeSameSite(b.sameSite)
   );
+}
+
+/**
+ * Merge a new cookie into the `Set-Cookie` values a response already carries.
+ *
+ * Every existing entry is serialized back as it was, except the one the new
+ * cookie would overwrite in the browser — {@link areCookiesEqual} decides that,
+ * and the match is dropped so the header never ships two cookies that the
+ * browser would collapse into one anyway.
+ *
+ * Values are parsed with `decodeValues: false`: they were encoded on the way
+ * in, and decoding them here would only mean encoding them again below.
+ */
+export function mergeSetCookies(
+  existing: string[],
+  name: string,
+  value: string,
+  options?: SerializeOptions,
+): string[] {
+  const parsedCookies = setCookieParser.parse(existing, {
+    decodeValues: false,
+  });
+  const newCookie = createCookie(name, value, options);
+  const cookiesToSet: string[] = [];
+
+  parsedCookies.forEach((parsedCookie: Cookie) => {
+    if (!areCookiesEqual(parsedCookie, newCookie)) {
+      cookiesToSet.push(
+        serializeCookie(parsedCookie.name, parsedCookie.value, {
+          // we prevent reencoding by default, but you might override it
+          encode: (val: string) => val,
+          ...(parsedCookie as SerializeOptions),
+        }),
+      );
+    }
+  });
+  cookiesToSet.push(serializeCookie(name, value, options));
+
+  return cookiesToSet;
 }

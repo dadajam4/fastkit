@@ -1,10 +1,10 @@
 import { parseCookie } from 'cookie';
-import * as setCookieParser from 'set-cookie-parser';
-import type { Cookie } from 'set-cookie-parser';
 import { EV } from '@fastkit/ev';
 import { IN_DOCUMENT } from '@fastkit/helpers';
 import {
   CookiesContext,
+  CookiesNodeContext,
+  CookiesWebContext,
   ParseOptions,
   CookiesBucket,
   SerializeOptions,
@@ -14,11 +14,23 @@ import {
   isCookiesBrowserContext,
   isIncomingMessage,
   isServerResponse,
-  createCookie,
-  areCookiesEqual,
+  isWebRequest,
+  isWebHeaders,
+  getSetCookies,
+  mergeSetCookies,
   serializeCookie,
 } from './helpers';
 import { logger, CookiesError } from './logger';
+
+/**
+ * A server context with every member of both halves in view.
+ *
+ * `CookiesServerContext` is a union, so reaching for `req` or `request`
+ * through it would need a narrowing step that says nothing: the members the
+ * context does not carry are simply `undefined`, and the `is*` guards below
+ * are what actually decide which branch runs.
+ */
+type AnyServerContext = CookiesNodeContext & CookiesWebContext;
 
 export interface CookiesOptions extends ParseOptions {
   bucket?: CookiesBucket;
@@ -76,10 +88,15 @@ export class Cookies extends EV<CookiesEventMap> {
     let cookieString: string;
     if (isCookiesBrowserContext(ctx)) {
       cookieString = ctx.cookie;
-    } else if (isIncomingMessage(ctx.req)) {
-      cookieString = ctx.req.headers.cookie || '';
     } else {
-      return {};
+      const { req, request } = ctx as AnyServerContext;
+      if (isIncomingMessage(req)) {
+        cookieString = req.headers.cookie || '';
+      } else if (isWebRequest(request)) {
+        cookieString = request.headers.get('cookie') || '';
+      } else {
+        return {};
+      }
     }
     return parseCookie(cookieString, options || this.options);
   }
@@ -102,9 +119,13 @@ export class Cookies extends EV<CookiesEventMap> {
         throw new CookiesError('Can not set a httpOnly cookie in the browser.');
       }
       ctx.cookie = serializeCookie(name, value, options);
-    } else if (isServerResponse(ctx.res)) {
-      const { res } = ctx;
+      this.update({ [name]: value });
+      return;
+    }
 
+    const { res, headers } = ctx as AnyServerContext;
+
+    if (isServerResponse(res)) {
       // Check if response has finished and warn about it.
       if (res.writableEnded) {
         logger.warn(`Not setting "${name}" cookie. Response has finished.`);
@@ -120,44 +141,27 @@ export class Cookies extends EV<CookiesEventMap> {
       if (typeof cookies === 'string') cookies = [cookies];
       if (typeof cookies === 'number') cookies = [];
 
-      /**
-       * Parse cookies but ignore values - we've already encoded
-       * them in the previous call.
-       */
-      const parsedCookies = setCookieParser.parse(cookies, {
-        decodeValues: false,
-      });
-
-      /**
-       * We create the new cookie and make sure that none of
-       * the existing cookies match it.
-       */
-      const newCookie = createCookie(name, value, options);
-      const cookiesToSet: string[] = [];
-
-      parsedCookies.forEach((parsedCookie: Cookie) => {
-        if (!areCookiesEqual(parsedCookie, newCookie)) {
-          /**
-           * We serialize the cookie back to the original format
-           * if it isn't the same as the new one.
-           */
-          const serializedCookie = serializeCookie(
-            parsedCookie.name,
-            parsedCookie.value,
-            {
-              // we prevent reencoding by default, but you might override it
-              encode: (val: string) => val,
-              ...(parsedCookie as SerializeOptions),
-            },
-          );
-          cookiesToSet.push(serializedCookie);
-        }
-      });
-      cookiesToSet.push(serializeCookie(name, value, options));
-
       // Update the header.
-      res.setHeader('Set-Cookie', cookiesToSet);
+      res.setHeader(
+        'Set-Cookie',
+        mergeSetCookies(cookies, name, value, options),
+      );
+    } else if (isWebHeaders(headers)) {
+      /**
+       * `Headers` only appends, so the whole `Set-Cookie` set is rewritten:
+       * dropping an entry is the point of the merge, and there is no other way
+       * to take one back out.
+       */
+      const cookiesToSet = mergeSetCookies(
+        getSetCookies(headers),
+        name,
+        value,
+        options,
+      );
+      headers.delete('set-cookie');
+      cookiesToSet.forEach((cookie) => headers.append('set-cookie', cookie));
     }
+
     this.update({ [name]: value });
   }
 

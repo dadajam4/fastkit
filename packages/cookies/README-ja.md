@@ -6,7 +6,7 @@
 
 ## 機能
 
-- **ユニバーサルAPI**: サーバー（Node.js）とブラウザで統一されたCookie操作インターフェース
+- **ユニバーサルAPI**: ブラウザ、Node.js の `req`/`res`、Web標準の `Request`/`Headers` を統一されたCookie操作インターフェースで扱う
 - **TypeScript完全サポート**: 厳密な型定義による型安全性
 - **イベントドリブン**: Cookie変更時のリアルタイム通知機能
 - **自動コンテキスト検出**: 実行環境に応じた自動的なコンテキスト設定
@@ -83,6 +83,40 @@ app.get('/api/user', (req: IncomingMessage, res: ServerResponse) => {
   res.end('Cookie設定完了')
 })
 ```
+
+### Web標準（Request / Headers）での使用
+
+`node:http` を持たないランタイム（Workers、Deno、Bun、あるいはリクエストを既に `Request` に持ち上げている Node サーバ）では、Web標準のペアを渡します。読み取りは `request.headers.get('cookie')`、書き込みは `headers.append('set-cookie', ...)` を経由します。
+
+```typescript
+import { Cookies } from '@fastkit/cookies'
+
+export default {
+  async fetch(request: Request): Promise<Response> {
+    const headers = new Headers()
+    const cookies = new Cookies({ request, headers })
+
+    let sessionId = cookies.get('session_id')
+
+    if (!sessionId) {
+      sessionId = generateSessionId()
+      cookies.set('session_id', sessionId, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 // 24時間（秒）
+      })
+    }
+
+    // `headers` には Cookie ごとに 1 つの `Set-Cookie` が入っています。
+    return new Response(JSON.stringify({ sessionId }), { headers })
+  }
+}
+```
+
+どちらか一方だけを渡すこともできます。`{ request }` だけなら読み取り専用、`{ headers }` だけなら別の場所で組み立てたレスポンスへの書き込み専用になります。
+
+Node のコンテキストと違い、参照できる `writableEnded` はありません。`Headers` はレスポンスが送出済みかどうかを知らないためです。ヘッダを引き渡す前に Cookie を設定してください。
 
 ### Next.jsでの使用例
 
@@ -184,7 +218,7 @@ cookies.set('language', 'ja') // changeイベントが発生
 
 ```typescript
 import { Cookies } from '@fastkit/cookies'
-import type { CookiesContext, CookieSerializeOptions } from '@fastkit/cookies'
+import type { CookiesContext, SerializeOptions } from '@fastkit/cookies'
 
 interface UserPreferences {
   theme: 'light' | 'dark'
@@ -208,7 +242,7 @@ class CookieManager {
 
   // ユーザー設定の管理
   setUserPreferences(prefs: UserPreferences) {
-    const options: CookieSerializeOptions = {
+    const options: SerializeOptions = {
       expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1年間
       path: '/',
       sameSite: 'strict'
@@ -231,7 +265,7 @@ class CookieManager {
 
   // セッション管理
   setSession(sessionData: SessionData) {
-    const options: CookieSerializeOptions = {
+    const options: SerializeOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -521,11 +555,11 @@ class Cookies extends EV<CookiesEventMap> {
 
   // Cookie操作
   get(name: string): string | undefined
-  set(name: string, value: string, options?: CookieSerializeOptions): void
-  delete(name: string, options?: CookieSerializeOptions): void
+  set(name: string, value: string, options?: SerializeOptions): void
+  delete(name: string, options?: SerializeOptions): void
 
   // Cookieの解析
-  parse(options?: CookieParseOptions): CookiesBucket
+  parse(options?: ParseOptions): CookiesBucket
 
   // プロパティ
   readonly ctx: CookiesContext
@@ -540,15 +574,22 @@ class Cookies extends EV<CookiesEventMap> {
 // コンテキスト型
 type CookiesContext = CookiesBrowserContext | CookiesServerContext
 
-interface CookiesBrowserContext extends Document {}
+type CookiesBrowserContext = Document
 
-interface CookiesServerContext {
+type CookiesServerContext = CookiesNodeContext | CookiesWebContext
+
+interface CookiesNodeContext {
   req?: IncomingMessage
   res?: ServerResponse
 }
 
+interface CookiesWebContext {
+  request?: Request
+  headers?: Headers
+}
+
 // Cookie格納型
-type CookiesBucket = Record<string, string>
+type CookiesBucket = Record<string, string | undefined>
 
 // イベント型
 interface OnCookiesChangeEvent {
@@ -561,12 +602,12 @@ interface CookiesEventMap {
 }
 
 // オプション型
-interface CookiesOptions extends CookieParseOptions {
+interface CookiesOptions extends ParseOptions {
   bucket?: CookiesBucket
 }
 
 // Cookieシリアライズオプション
-interface CookieSerializeOptions {
+interface SerializeOptions {
   expires?: Date
   maxAge?: number
   path?: string
@@ -585,10 +626,8 @@ interface CookieSerializeOptions {
 function isCookiesBrowserContext(source: any): source is CookiesBrowserContext
 function isIncomingMessage(source: any): source is IncomingMessage
 function isServerResponse(source: any): source is ServerResponse
-
-// Cookie操作
-function createCookie(name: string, value: string, options?: CookieSerializeOptions): Cookie
-function areCookiesEqual(a: Cookie, b: Cookie): boolean
+function isWebRequest(source: any): source is Request
+function isWebHeaders(source: any): source is Headers
 ```
 
 ## 注意事項
@@ -599,7 +638,7 @@ function areCookiesEqual(a: Cookie, b: Cookie): boolean
 - ドメインあたりのCookie数制限に注意
 
 ### サーバー環境
-- レスポンス送信後のCookie設定は警告が表示
+- レスポンス送信後のCookie設定は警告が表示（Node.js コンテキストのみ。`Headers` からは判定できません）
 - 重複したSet-Cookieヘッダーは自動的に排除
 - HTTPSでない場合はsecureオプションを使用しない
 

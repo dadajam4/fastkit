@@ -1,6 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import type { Cookie } from 'set-cookie-parser';
-import { serializeCookie, createCookie, areCookiesEqual } from '../helpers';
+import {
+  serializeCookie,
+  createCookie,
+  areCookiesEqual,
+  isIncomingMessage,
+  isServerResponse,
+  isWebRequest,
+  isWebHeaders,
+  getSetCookies,
+} from '../helpers';
 
 describe('serializeCookie', () => {
   it('serializes a bare cookie', () => {
@@ -108,5 +117,77 @@ describe('areCookiesEqual', () => {
     ['sameSite', cookie({ sameSite: 'strict' })],
   ])('treats a differing %s as a different cookie', (_label, other) => {
     expect(areCookiesEqual(cookie({}), other)).toBe(false);
+  });
+});
+
+describe('isWebRequest', () => {
+  it('accepts a web-standard Request', () => {
+    expect(isWebRequest(new Request('https://example.com/'))).toBe(true);
+  });
+
+  it('accepts a request-like object carrying a Headers', () => {
+    expect(isWebRequest({ headers: new Headers() })).toBe(true);
+  });
+
+  it.each([
+    ['an IncomingMessage-like object', { headers: { cookie: 'a=b' } }],
+    ['an object without headers', {}],
+    ['null', null],
+    ['undefined', undefined],
+  ])('rejects %s', (_label, source) => {
+    expect(isWebRequest(source)).toBe(false);
+  });
+
+  it('is the check the Node guards cannot stand in for', () => {
+    // `isIncomingMessage` starts from `isObject`, which asks for
+    // `[object Object]`. A `Request` stringifies to `[object Request]`, so it
+    // used to fall through every branch and read no cookies at all.
+    const request = new Request('https://example.com/');
+    expect(isIncomingMessage(request)).toBe(false);
+    expect(isWebRequest(request)).toBe(true);
+  });
+});
+
+describe('isWebHeaders', () => {
+  it('accepts a web-standard Headers', () => {
+    expect(isWebHeaders(new Headers())).toBe(true);
+  });
+
+  it.each([
+    ['a plain header record', { cookie: 'a=b' }],
+    ['an object with only append', { append: () => undefined }],
+    ['null', null],
+    ['undefined', undefined],
+  ])('rejects %s', (_label, source) => {
+    expect(isWebHeaders(source)).toBe(false);
+  });
+
+  it('is the check the Node guards cannot stand in for', () => {
+    const headers = new Headers();
+    expect(isServerResponse(headers)).toBe(false);
+    expect(isWebHeaders(headers)).toBe(true);
+  });
+});
+
+describe('getSetCookies', () => {
+  it('returns one entry per cookie', () => {
+    const headers = new Headers();
+    headers.append('set-cookie', 'a=1; Path=/');
+    headers.append('set-cookie', 'b=2; Path=/');
+    expect(getSetCookies(headers)).toEqual(['a=1; Path=/', 'b=2; Path=/']);
+  });
+
+  it('is empty when nothing has been set', () => {
+    expect(getSetCookies(new Headers())).toEqual([]);
+  });
+
+  it('splits a joined value when getSetCookie() is unavailable', () => {
+    const headers = {
+      get: () => 'a=1; Expires=Tue, 01 Jan 2030 00:00:00 GMT, b=2; Path=/',
+    } as unknown as Headers;
+    expect(getSetCookies(headers)).toEqual([
+      'a=1; Expires=Tue, 01 Jan 2030 00:00:00 GMT',
+      'b=2; Path=/',
+    ]);
   });
 });
