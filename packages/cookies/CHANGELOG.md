@@ -1,5 +1,54 @@
 # @fastkit/cookies
 
+## 1.1.0
+
+### Minor Changes
+
+- [#267](https://github.com/dadajam4/fastkit/pull/267) [`98bfb47`](https://github.com/dadajam4/fastkit/commit/98bfb47338c1e9c562c5359ed18745ab54194b49) Thanks [@dadajam4](https://github.com/dadajam4)! - Accept a web-standard `Request` / `Headers` pair as a server context.
+
+  `Cookies` took a browser `Document` or a Node `{ req, res }` pair, and nothing else. Handed a `Request` it did not throw — it silently did nothing. The detection helpers were the reason: `isIncomingMessage` and `isServerResponse` both start from `isObject`, which asks for `[object Object]`, and a `Request` stringifies to `[object Request]`. So `parse()` fell through to `{}` and every cookie read as absent, while `set()` still updated the in-memory bucket and produced no `Set-Cookie` at all — a session that looks right in development and drops every cookie in production.
+
+  There is now a second server context:
+
+  ```ts
+  export default {
+    async fetch(request: Request): Promise<Response> {
+      const headers = new Headers();
+      const cookies = new Cookies({ request, headers });
+
+      cookies.get('session_id');
+      cookies.set('session_id', id, { httpOnly: true, sameSite: 'strict' });
+
+      return new Response(body, { headers });
+    },
+  };
+  ```
+
+  Reading goes through `request.headers.get('cookie')` and writing through `headers.append('set-cookie', …)`, both feeding the same parser and the same duplicate-cookie merge the Node branch has always used. Either half may be left out: `{ request }` alone reads, `{ headers }` alone writes.
+
+  Two things are worth knowing about the web branch. `Headers` only appends, so the whole `Set-Cookie` set is rewritten on each `set()` — that is how an overwritten cookie gets taken back out. And there is no `writableEnded` equivalent to consult, so the "response has already been sent" warning is Node-only; on the web branch that check belongs to the transport layer.
+
+  `CookiesServerContext` is now `CookiesNodeContext | CookiesWebContext`. Existing `{ req, res }` and `Document` callers are untouched; only code that reads `.req` off a value _typed_ as `CookiesServerContext` needs to narrow first.
+
+  New exports: the `CookiesWebContext` type and the `isWebRequest` / `isWebHeaders` guards, both duck-typed rather than built on `isObject`.
+
+### Patch Changes
+
+- [#279](https://github.com/dadajam4/fastkit/pull/279) [`2346b16`](https://github.com/dadajam4/fastkit/commit/2346b16c15db7b97b721174ea09a06b2304d89a8) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix the README's `maxAge` examples, which were in milliseconds.
+
+  `maxAge` is in **seconds** — `cookie@2` types it as "the `number` (in seconds)", per RFC 6265 §5.2.2 — and four examples multiplied by 1,000:
+
+  | written                                     | read as     | meant    |
+  | ------------------------------------------- | ----------- | -------- |
+  | `maxAge: 24 * 60 * 60 * 1000 // 24 hours`   | ~2.7 years  | 24 hours |
+  | `maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days` | ~19.2 years | 7 days   |
+
+  Three of the four are session and auth-token examples, which is the worst place for it: copying the login handler out of this README shipped a session cookie that never expires in any practical sense, with a comment on the line saying it lasts a day.
+
+  The `SerializeOptions` reference now says which unit it is, since that is what would have made this visible. `expires` was and remains correct: it takes a `Date`, so the millisecond arithmetic around it is right.
+
+  Documentation only.
+
 ## 1.0.1
 
 ### Patch Changes
