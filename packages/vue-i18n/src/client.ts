@@ -224,13 +224,20 @@ export class VueI18nClient {
    *
    * * If the runtime environment is a browser, ignore behavior settings and return `Navigator.languages`
    *
+   * @remarks
+   * The browser check is `IN_WINDOW`, not the presence of `navigator`. Node has
+   * had a global `navigator` since v21, and it reports the **server process's**
+   * locale -- so asking for `navigator` during SSR answers with whatever
+   * `LANG` the server was started with, and the caller's `getClientLanguage`
+   * never runs.
+   *
    * @returns client-recognizable languages
    * @see {@link VueI18nClientSettings.getClientLanguage}
    */
   getClientLanguage(
     availableLocales: string[] | readonly string[] = this.availableLocales,
   ) {
-    if (typeof navigator !== 'undefined') {
+    if (IN_WINDOW) {
       return navigator.languages;
     }
     const { getClientLanguage } = this.settings;
