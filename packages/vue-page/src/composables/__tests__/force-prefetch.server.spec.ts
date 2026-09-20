@@ -3,7 +3,21 @@
 import { describe, it, expect } from 'vitest';
 import { createApp } from 'vue';
 import { createRouter, createMemoryHistory } from 'vue-router';
+import { Cookies } from '@fastkit/cookies';
 import { VuePageControl } from '../page-control';
+import type { VuePageServerContext } from '../page-control';
+
+/**
+ * The shape a transport layer hands in. Built here rather than assembled by
+ * the control: that boundary is the point.
+ */
+function createServerContext(): VuePageServerContext {
+  return {
+    request: {} as any,
+    response: { headers: new Headers() },
+    cookies: new Cookies({}),
+  };
+}
 
 function createControl() {
   const app = createApp({ render: () => null });
@@ -14,10 +28,10 @@ function createControl() {
   return new VuePageControl({
     app,
     router,
-    initialRoute: router.currentRoute.value,
-    request: {} as any,
-    response: {} as any,
-  } as any);
+    // `ResolvedRouteLocation` is a route plus the `href` the router resolves.
+    initialRoute: { ...router.currentRoute.value, href: '/' },
+    server: createServerContext(),
+  });
 }
 
 describe('force-prefetch flags (server)', () => {

@@ -11,6 +11,7 @@ import {
 import { withCtx } from '@fastkit/vue-utils';
 import { createEntry } from './entry';
 import { CreateEntryOptions } from './schema';
+import type { VotNodeRuntime } from './schema';
 import { VOT_GENERATE_PAGES_PATH } from './schema/generate';
 
 export * from '@fastkit/vue-page';
@@ -45,10 +46,18 @@ export async function createVotHook(
             name: VOT_GENERATE_PAGES_PATH,
             template: '',
             middleware: (ctx) => {
-              if (ctx.response) {
-                ctx.response.setHeader('Content-Type', 'application/json');
-                ctx.response.writeHead(200);
-                ctx.response.end(JSON.stringify(router.getRoutes()));
+              /**
+               * This writes the route table straight down the wire rather than
+               * rendering a page, so it needs the real Node response — which
+               * the page layer no longer carries. It comes back through the
+               * runtime handle vot put there itself.
+               */
+              const { response } = (ctx.server?.runtime ||
+                {}) as Partial<VotNodeRuntime>;
+              if (response) {
+                response.setHeader('Content-Type', 'application/json');
+                response.writeHead(200);
+                response.end(JSON.stringify(router.getRoutes()));
               }
             },
           },
@@ -58,8 +67,7 @@ export async function createVotHook(
       const {
         initialState,
         initialRoute,
-        request,
-        response,
+        server,
         writeResponse,
         redirect,
         plugins,
@@ -78,8 +86,7 @@ export async function createVotHook(
           useLink: routerOptions?.useLink,
           initialState,
           initialRoute,
-          request,
-          response,
+          server,
           middleware,
           writeResponse,
           serverRedirect: redirect,

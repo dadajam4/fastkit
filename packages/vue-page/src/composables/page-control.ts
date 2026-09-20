@@ -27,8 +27,8 @@ import {
   isComponentCustomOptions,
 } from '@fastkit/vue-utils';
 import { EV } from '@fastkit/ev';
-import type { ServerResponse, IncomingMessage } from 'node:http';
-import { Cookies, CookiesContext } from '@fastkit/cookies';
+import type { IncomingMessage } from 'node:http';
+import { Cookies } from '@fastkit/cookies';
 import { ResolvedRouteLocation, WatchQueryOption } from '../schema';
 import { routeKeyWithWatchQueryByRouteItem } from '../utils';
 import { useVuePageControl } from '../injections';
@@ -56,6 +56,57 @@ export interface WrittenResponse {
 export type WriteResponseFn = (params: WrittenResponse) => void;
 
 export type RedirectFn = (location: string, status?: number) => void;
+
+/**
+ * The response being assembled for the current server render.
+ *
+ * The mutable sibling of {@link WrittenResponse}: the same three pieces, but
+ * `headers` is a `Headers` rather than a `Record<string, string>`, so a
+ * multi-value header — `Set-Cookie`, above all — survives being written here.
+ *
+ * It is not an HTTP response. Nothing about how it is finally sent belongs in
+ * this package; the transport layer owns the draft and decides what to do with
+ * it once the render is over.
+ */
+export interface PageResponseDraft {
+  status?: number;
+  statusText?: string;
+  headers: Headers;
+}
+
+/**
+ * What the transport layer hands to the page layer for a server render.
+ *
+ * This package receives it and never assembles one. Everything HTTP-shaped
+ * lives behind this boundary, which is what lets the page layer run wherever
+ * the transport does.
+ */
+export interface VuePageServerContext {
+  /**
+   * The incoming request.
+   *
+   * Still a Node `IncomingMessage`; it becomes a web-standard `Request` once
+   * the transport layer stops being Node-only.
+   */
+  request: IncomingMessage;
+  /**
+   * Where the status and headers for this render are written.
+   */
+  response: PageResponseDraft;
+  /**
+   * The cookie jar for this request, built by the transport layer — it is the
+   * only side that knows what the request and the response actually are.
+   */
+  cookies: Cookies;
+  /**
+   * An adapter-specific handle for code that has to reach the real transport.
+   *
+   * This package never looks inside it. It exists so that an adapter can pass
+   * something to its own code running as page middleware without widening this
+   * interface for everyone else.
+   */
+  runtime?: unknown;
+}
 
 export interface PrefetchHandlerContext {
   control: VuePageControl;
@@ -245,8 +296,10 @@ export interface VuePageControlSettings {
   initialState?: InitialState;
   initialRoute: ResolvedRouteLocation;
   ErrorComponent?: Component;
-  request?: IncomingMessage;
-  response?: ServerResponse;
+  /**
+   * Supplied by the transport layer for a server render, absent in the browser.
+   */
+  server?: VuePageServerContext;
   serverRedirect?: RedirectFn;
   writeResponse?: WriteResponseFn;
   middleware?: VuePageControlMiddlewareFn[];
@@ -306,9 +359,22 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
   private _ErrorComponent: Component;
 
-  readonly request?: IncomingMessage;
+  readonly server?: VuePageServerContext;
 
-  readonly response?: ServerResponse;
+  /**
+   * The incoming request for a server render, `undefined` in the browser.
+   */
+  get request(): IncomingMessage | undefined {
+    return this.server?.request;
+  }
+
+  /**
+   * The response being assembled for a server render, `undefined` in the
+   * browser.
+   */
+  get response(): PageResponseDraft | undefined {
+    return this.server?.response;
+  }
 
   private readonly _serverRedirect?: RedirectFn;
 
@@ -429,8 +495,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
       initialState = {},
       initialRoute,
       ErrorComponent,
-      request,
-      response,
+      server,
       serverRedirect,
       writeResponse,
       middleware = [],
@@ -438,16 +503,24 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
 
     this.app = app;
     this.router = router;
-    this.request = request;
-    this.response = response;
+    this.server = server;
     this.isClient = typeof window !== 'undefined';
     this.RouterLink = settings.RouterLink || RouterLink;
     this.useLink = settings.useLink || useLink;
 
-    const cookiesContext: CookiesContext = this.isClient
-      ? document
-      : { req: request, res: response };
-    this.cookies = new Cookies(cookiesContext, { bucket: reactive({}) });
+    /**
+     * The browser jar is built here because `document` is not transport — it is
+     * simply where cookies live on this side. A server jar is another matter:
+     * only the transport layer knows what the request and response are, so it
+     * builds that one and passes it in.
+     *
+     * A server render that arrives without a context falls back to an empty
+     * one: a jar that reads nothing and writes nowhere, which is what the
+     * absent-`req`/`res` case has always produced.
+     */
+    this.cookies =
+      server?.cookies ||
+      new Cookies(this.isClient ? document : {}, { bucket: reactive({}) });
 
     this.middleware = middleware;
     this._serverRedirect = serverRedirect;
@@ -864,9 +937,14 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   }
 
   private _writeStates(status: number) {
-    if (IN_WINDOW || !this.response) return;
-    if (this.response.headersSent) return;
-    this.response.statusCode = status;
+    const draft = this.server?.response;
+    if (IN_WINDOW || !draft) return;
+    /**
+     * Only the draft is written. Whether anything has already gone out on the
+     * wire is not knowable from here, and not this layer's question — the
+     * transport owns the draft and applies it when the render is over.
+     */
+    draft.status = status;
     this.writeResponse({
       status,
     });

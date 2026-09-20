@@ -867,6 +867,9 @@ importers:
 
   packages/vot:
     dependencies:
+      '@fastkit/cookies':
+        specifier: workspace:^
+        version: link:../cookies
       '@fastkit/helpers':
         specifier: workspace:^
         version: link:../helpers

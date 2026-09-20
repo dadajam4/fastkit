@@ -91,6 +91,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@fastkit/cookies": "workspace:^",
     "@fastkit/helpers": "workspace:^",
     "@fastkit/vue-page": "workspace:^",
     "@fastkit/vue-utils": "workspace:^",
