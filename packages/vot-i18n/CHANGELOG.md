@@ -1,5 +1,26 @@
 # @fastkit/vot-i18n
 
+## 6.0.0
+
+### Major Changes
+
+- [#269](https://github.com/dadajam4/fastkit/pull/269) [`95973b0`](https://github.com/dadajam4/fastkit/commit/95973b04d175bec2d1cb8c233a261d9ee43b53b1) Thanks [@dadajam4](https://github.com/dadajam4)! - Read the request through the web-standard `Headers`, and require `@fastkit/vot` 2.
+
+  The SSR context now carries a `Request` rather than a Node `IncomingMessage`, so language negotiation reads its header the web way:
+
+  ```diff
+  -request.headers['accept-language']
+  +request.headers.get('accept-language')
+  ```
+
+  Nothing else changes here. `ctx.cookies` and `ctx.request` keep their names, and the strategy storage is untouched. What moves is the floor: a project still on vot 1 cannot take this version.
+
+### Patch Changes
+
+- Updated dependencies [[`95973b0`](https://github.com/dadajam4/fastkit/commit/95973b04d175bec2d1cb8c233a261d9ee43b53b1), [`711affa`](https://github.com/dadajam4/fastkit/commit/711affa81c96f1f4ff6f80aa819998f3c2d32d74)]:
+  - @fastkit/vot@2.0.0
+  - @fastkit/vue-i18n@1.0.1
+
 ## 5.3.4
 
 ### Patch Changes
