@@ -38,31 +38,54 @@ export interface PrismHighlightResult {
   classBinding: string[];
 }
 
+const HTML_ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+};
+
+function escapeHtml(source: string): string {
+  return source.replace(/[&<>"]/g, (char) => HTML_ESCAPES[char]);
+}
+
 export function highlight(
   code: string,
-  language = 'markup',
+  language?: string,
   options: PrismHighlightOptions = {},
 ): PrismHighlightResult {
   const stripedCode = trimCode(code);
   const { inline = !stripedCode.includes('\n'), attrs = {} } = options;
 
-  const prismLanguage = Prism.languages[language];
+  /**
+   * A fenced block with no language reaches `marked`'s renderer as `''`, which
+   * a default parameter does not cover -- it only fires on `undefined`.
+   */
+  const resolvedLanguage = language || 'markup';
+  const prismLanguage = Prism.languages[resolvedLanguage];
 
   if (import.meta.env.DEV && !prismLanguage) {
-    throw new Error(
-      `Prism component for language "${language}" was not found, did you forget to register it? See all available ones: https://cdn.jsdelivr.net/npm/prismjs/components/`,
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[VPrism] No Prism component for language "${resolvedLanguage}". Rendering it unhighlighted. See all available ones: https://cdn.jsdelivr.net/npm/prismjs/components/`,
     );
   }
 
-  const className = `language-${language}`;
+  const className = `language-${resolvedLanguage}`;
   const classBinding = ['v-prism', attrs.class, className];
 
-  const highlighted = Prism.highlight(stripedCode, prismLanguage, language);
+  /**
+   * An unknown language is rendered as plain escaped text rather than taken as
+   * fatal. A documentation build should not be brought down by a code fence.
+   */
+  const highlighted = prismLanguage
+    ? Prism.highlight(stripedCode, prismLanguage, resolvedLanguage)
+    : escapeHtml(stripedCode);
 
   const result: PrismHighlightResult = {
     highlighted,
     inline,
-    language,
+    language: resolvedLanguage,
     className,
     classBinding,
     html() {
