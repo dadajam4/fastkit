@@ -64,7 +64,6 @@ export async function generate(_config?: ResolvedConfig) {
   const { serve } = await import('../../internal/serve');
 
   const launched = await serve();
-  const { server } = launched;
 
   const urlParseRe = /(https?:)([^?]+)(\?.+)?/;
   const normalizeUrl = (url: string) => {
@@ -106,7 +105,7 @@ export async function generate(_config?: ResolvedConfig) {
   const filteredPages = generateVotGeneratePagePaths(generateOptions, pages);
   if (!filteredPages.length) {
     console.log(chalk.gray('No pages found for generate.'));
-    server.close();
+    await launched.close();
     return;
   }
 
@@ -180,7 +179,7 @@ export async function generate(_config?: ResolvedConfig) {
       await processChunks(chunks);
     }
   } finally {
-    server.close();
+    await launched.close();
   }
 
   const outputSync =

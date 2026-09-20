@@ -1,4 +1,5 @@
-import type { ProxyOptions } from 'vite';
+import type { Hono } from 'hono';
+import type { VotProxyConfig } from './proxy';
 import type { VotConfigureServerFn } from './options';
 
 /**
@@ -31,7 +32,7 @@ export interface VotServerContext {
  * Everything here is read by both `vot dev` and `vot serve`, so the two can
  * never drift apart.
  */
-export interface VotServerConfig {
+export interface VotServerConfig<App = Hono> {
   /**
    * Hostname the server listens on.
    * @default '0.0.0.0' (`vot serve`)
@@ -43,18 +44,22 @@ export interface VotServerConfig {
    */
   port?: number;
   /**
-   * Proxy rules, in the same shape as Vite's `server.proxy`.
+   * Proxy rules.
    *
-   * Matched at the server root, outside `base`.
+   * Matched at the server root, outside `base`. See {@link VotProxyOptions}
+   * for what a rule may carry -- it is narrower than Vite's `server.proxy`,
+   * because forwarding is done over `fetch`.
    */
-  proxy?: Record<string, string | ProxyOptions>;
+  proxy?: VotProxyConfig;
   /**
    * Mount extra middleware on the server.
    *
-   * Middleware is mounted at the server root, outside `base`, so a path such as
-   * `/healthcheck` answers at the same URL under `vot dev` and `vot serve`.
+   * The callback receives the adapter's own application object, a `Hono`
+   * instance by default. Middleware is mounted at the server root, outside
+   * `base`, so a path such as `/healthcheck` answers at the same URL under
+   * `vot dev` and `vot serve`.
    */
-  configureServer?: VotConfigureServerFn;
+  configureServer?: VotConfigureServerFn<App>;
 }
 
 /**
@@ -63,9 +68,11 @@ export interface VotServerConfig {
  * The function form is evaluated at startup, so it can read `process.env` of
  * the machine that runs the app rather than the one that built it.
  */
-export type VotServerDefinition =
-  | VotServerConfig
-  | ((ctx: VotServerContext) => VotServerConfig | Promise<VotServerConfig>);
+export type VotServerDefinition<App = Hono> =
+  | VotServerConfig<App>
+  | ((
+      ctx: VotServerContext,
+    ) => VotServerConfig<App> | Promise<VotServerConfig<App>>);
 
 /**
  * Define the server-side runtime surface of a vot application.
@@ -81,24 +88,27 @@ export type VotServerDefinition =
  * export default defineVotServer(({ dev }) => ({
  *   host: '0.0.0.0',
  *   port: dev ? 3000 : Number(process.env.PORT ?? 8080),
- *   configureServer({ use }) {
- *     use('/healthcheck', (_req, res) => res.writeHead(200).end());
+ *   configureServer({ app }) {
+ *     app.get('/healthcheck', (c) => c.body(null, 200));
  *   },
  * }));
  * ```
+ *
+ * `app` is typed by the adapter in use. It defaults to `Hono`; an application
+ * on another adapter names that adapter's type -- `defineVotServer<MyApp>(...)`.
  */
-export function defineVotServer<T extends VotServerDefinition>(
-  definition: T,
-): T {
+export function defineVotServer<App = Hono>(
+  definition: VotServerDefinition<App>,
+): VotServerDefinition<App> {
   return definition;
 }
 
 /**
  * Evaluate a server entry's default export for the given context.
  */
-export async function resolveVotServerDefinition(
-  definition: VotServerDefinition,
+export async function resolveVotServerDefinition<App = Hono>(
+  definition: VotServerDefinition<App>,
   ctx: VotServerContext,
-): Promise<VotServerConfig> {
+): Promise<VotServerConfig<App>> {
   return typeof definition === 'function' ? definition(ctx) : definition;
 }

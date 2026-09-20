@@ -27,7 +27,6 @@ import {
   isComponentCustomOptions,
 } from '@fastkit/vue-utils';
 import { EV } from '@fastkit/ev';
-import type { IncomingMessage } from 'node:http';
 import { Cookies } from '@fastkit/cookies';
 import { ResolvedRouteLocation, WatchQueryOption } from '../schema';
 import { routeKeyWithWatchQueryByRouteItem } from '../utils';
@@ -83,12 +82,12 @@ export interface PageResponseDraft {
  */
 export interface VuePageServerContext {
   /**
-   * The incoming request.
+   * The incoming request, as a web-standard `Request`.
    *
-   * Still a Node `IncomingMessage`; it becomes a web-standard `Request` once
-   * the transport layer stops being Node-only.
+   * Nothing here is tied to `node:http`, which is what lets the page layer run
+   * wherever its transport does.
    */
-  request: IncomingMessage;
+  request: Request;
   /**
    * Where the status and headers for this render are written.
    */
@@ -364,7 +363,7 @@ export class VuePageControl extends EV<VuePageControlEventMap> {
   /**
    * The incoming request for a server render, `undefined` in the browser.
    */
-  get request(): IncomingMessage | undefined {
+  get request(): Request | undefined {
     return this.server?.request;
   }
 

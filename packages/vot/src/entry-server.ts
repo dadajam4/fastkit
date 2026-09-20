@@ -17,7 +17,6 @@ import { setupVotPluginsAndHooks } from './schema';
 import type {
   SsrHandler,
   VotContext,
-  VotNodeRuntime,
   VuePageServerContext,
   VotBeforeRouterSetupParams,
 } from './schema';
@@ -55,13 +54,13 @@ export const createEntry: SsrHandler = function createSsrEntry(
       skip = false,
       template = `__VOT_HTML__`, // This string is transformed at build time
       request,
-      response,
+      runtime,
       initialState,
       // ...extra
     } = {},
   ) {
     if (skip) {
-      return { html: template, ...getEmptyHtmlParts() };
+      return { html: template, ...getEmptyHtmlParts(), headers: new Headers() };
     }
 
     url = createUrl(url);
@@ -91,31 +90,22 @@ export const createEntry: SsrHandler = function createSsrEntry(
     const initialRoute = createMockPathRoute(router, fullPath);
 
     // Server redirect utilities
-    const {
-      deferred,
-      draft,
-      response: writtenResponse,
-      writeResponse,
-      redirect,
-      isRedirect,
-    } = useSsrResponse();
+    const { deferred, draft, writeResponse, redirect, isRedirect } =
+      useSsrResponse();
 
     if (!request) {
       throw new Error('need request object.');
     }
 
-    if (!response) {
-      throw new Error('need response object.');
-    }
-
     /**
      * The cookie jar is built here, not by the page layer: this is the only
-     * place that knows what the request and the response actually are. The
-     * context is still Node-shaped, so `Set-Cookie` continues to go out
-     * through `response.setHeader`.
+     * place that knows what the request and the response are. Both halves are
+     * web-standard now -- the jar reads `request.headers` and appends to the
+     * draft's `Headers`, so a `Set-Cookie` per cookie survives all the way out
+     * of the renderer instead of being written straight to a Node response.
      */
     const cookies = new Cookies(
-      { req: request, res: response },
+      { request, headers: draft.headers },
       { bucket: reactive({}) },
     );
 
@@ -123,7 +113,7 @@ export const createEntry: SsrHandler = function createSsrEntry(
       request,
       response: draft,
       cookies,
-      runtime: { request, response } satisfies VotNodeRuntime,
+      runtime,
     };
 
     const context: VotContext = {
@@ -132,7 +122,8 @@ export const createEntry: SsrHandler = function createSsrEntry(
       app,
       router,
       request,
-      response,
+      response: draft,
+      runtime,
       server,
       initialRoute,
       initialState: {},
@@ -184,7 +175,7 @@ export const createEntry: SsrHandler = function createSsrEntry(
     ]);
 
     // The 'redirect' utility has been called during rendering: skip everything else
-    if (isRedirect()) return writtenResponse();
+    if (isRedirect()) return draft;
 
     // Not a redirect: get the HTML parts returned by the renderer and continue
     const htmlParts = {
@@ -219,7 +210,9 @@ export const createEntry: SsrHandler = function createSsrEntry(
     return {
       html,
       ...htmlParts,
-      ...writtenResponse(),
+      status: draft.status,
+      statusText: draft.statusText,
+      headers: draft.headers,
     };
   };
 };

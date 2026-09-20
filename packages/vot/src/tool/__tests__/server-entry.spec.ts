@@ -181,12 +181,13 @@ describe('votPlugin() server entry integration', () => {
     expect(config.server.port).toBe(8080);
   });
 
-  it('mounts middleware from the entry', async () => {
+  it('hands the entry the adapter app, and mounts it after Vite', async () => {
     const root = createRoot({
       'vot.server.ts': [
         'export default {',
-        '  configureServer({ use }) {',
-        "    use('/healthcheck', () => {});",
+        '  configureServer(ctx) {',
+        '    globalThis.__votConfigureServerKeys = Object.keys(ctx);',
+        "    ctx.app.get('/healthcheck', (c) => c.text('ok'));",
         '  },',
         '};',
         '',
@@ -196,11 +197,32 @@ describe('votPlugin() server entry integration', () => {
     const plugin = findVotPlugin(votPlugin() as Plugin[]);
     await callConfigHook(plugin, root);
 
-    const use = vi.fn();
+    const mounted: unknown[] = [];
+    const server = {
+      config: {
+        base: '/',
+        server: { host: '127.0.0.1', port: 3000 },
+        logger: { error: () => undefined },
+      },
+      middlewares: { use: (fn: unknown) => mounted.push(fn) },
+    };
+
     const hook = plugin.configureServer;
     const handler = typeof hook === 'function' ? hook : hook?.handler;
-    await (handler as any).call({}, { middlewares: { use } });
+    const post = await (handler as any).call({}, server);
 
-    expect(use).toHaveBeenCalledWith('/healthcheck', expect.any(Function));
+    // The entry ran, and it was given the adapter's app rather than connect's
+    // `use` -- the change this release is about.
+    expect((globalThis as any).__votConfigureServerKeys).toEqual(['app']);
+
+    // Nothing is mounted until the post-hook runs. Mounting during the hook
+    // itself would put vot ahead of Vite's own middlewares; mounting after
+    // Vite's HTML fallback would mean it never sees a page request at all.
+    expect(mounted).toHaveLength(0);
+    post?.();
+    expect(mounted).toHaveLength(1);
+    expect(mounted[0]).toBeTypeOf('function');
+
+    delete (globalThis as any).__votConfigureServerKeys;
   });
 });

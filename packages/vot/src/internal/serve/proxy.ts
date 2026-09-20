@@ -1,121 +1,109 @@
 /* eslint-disable no-console */
-
-import * as http from 'node:http';
+import { proxy } from 'hono/proxy';
+import type { MiddlewareHandler } from 'hono';
 import chalk from 'chalk';
-import { isObject } from '@fastkit/helpers';
-import { ProxyOptions, Logger, HttpProxy } from 'vite';
-import { NextHandleFunction } from 'connect';
-import httpProxy from 'http-proxy';
+import type { Logger } from 'vite';
+import {
+  ResolvedVotProxyRule,
+  matchProxyRule,
+  ruleForwardsWebSocket,
+} from '../../schema/proxy';
 
-/**
- * The slice of a resolved Vite config that the proxy actually needs.
- *
- * Narrowed on purpose: `vot serve` builds this by hand so that serving a
- * prebuilt app never has to resolve the project's Vite config.
- */
 export interface ProxyMiddlewareConfig {
-  proxy: Record<string, string | ProxyOptions>;
+  rules: ResolvedVotProxyRule[];
   logger: Pick<Logger, 'error'>;
 }
 
+/**
+ * Resolve where a request goes once a rule has claimed it.
+ *
+ * The target's own path is a prefix, so a rule pointing at
+ * `http://upstream/v1` sends `/api/items` to `/v1/api/items` -- the behaviour
+ * `http-proxy` had. A `ws:` target is normalized to `http:` here; forwarding an
+ * upgrade is the adapter's job, and what reaches this function is the plain
+ * HTTP half of such a rule.
+ */
+export function resolveProxyTarget(
+  rule: ResolvedVotProxyRule,
+  requestUrl: string,
+): URL {
+  const source = new URL(requestUrl);
+  const pathWithQuery = `${source.pathname}${source.search}`;
+  const forwarded = rule.rewrite ? rule.rewrite(pathWithQuery) : pathWithQuery;
+
+  const target = new URL(rule.target.replace(/^ws/, 'http'));
+  const prefix = target.pathname.replace(/\/$/, '');
+  const [pathname, search = ''] = splitOnce(forwarded, '?');
+
+  const destination = new URL(target);
+  destination.pathname = `${prefix}${pathname}`;
+  destination.search = search;
+  return destination;
+}
+
+function splitOnce(value: string, separator: string): [string, string?] {
+  const index = value.indexOf(separator);
+  return index === -1
+    ? [value]
+    : [value.slice(0, index), value.slice(index + 1)];
+}
+
+/**
+ * Forward matching requests upstream, and decline everything else.
+ *
+ * Mounted at the server root, outside `base`: a proxy rule is not part of the
+ * application's asset tree, and the same rule has to answer at the same URL
+ * under `vot dev` and `vot serve`.
+ */
 export function proxyMiddleware(
-  httpServer: http.Server | null,
   config: ProxyMiddlewareConfig,
-): NextHandleFunction {
-  const options = config.proxy;
+): MiddlewareHandler {
+  const { rules, logger } = config;
 
-  // lazy require only when proxy is used
-  const proxies: Record<string, [HttpProxy.ProxyServer, ProxyOptions]> = {};
+  return async function votProxyMiddleware(c, next) {
+    const { pathname, search } = new URL(c.req.url);
+    const rule = matchProxyRule(rules, `${pathname}${search}`);
+    if (!rule) return next();
 
-  Object.keys(options).forEach((context) => {
-    let opts = options[context];
-    if (typeof opts === 'string') {
-      opts = { target: opts, changeOrigin: true } as ProxyOptions;
+    const destination = resolveProxyTarget(rule, c.req.url);
+    const headers: Record<string, string | undefined> = {
+      ...c.req.header(),
+      ...rule.headers,
+    };
+    if (rule.changeOrigin) headers.host = destination.host;
+
+    try {
+      return await proxy(destination, { raw: c.req.raw, headers });
+    } catch (error) {
+      logger.error(
+        `${chalk.red('http proxy error:')}\n${(error as Error).stack}`,
+        { timestamp: true, error: error as Error },
+      );
+      return c.body(null, 502);
     }
-    const proxy = httpProxy.createProxyServer(
-      opts as httpProxy.ServerOptions,
-    ) as HttpProxy.ProxyServer;
-
-    proxy.on('error', (err) => {
-      config.logger.error(`${chalk.red(`http proxy error:`)}\n${err.stack}`, {
-        timestamp: true,
-        error: err,
-      });
-    });
-
-    if (opts.configure) {
-      opts.configure(proxy, opts);
-    }
-    // clone before saving because http-proxy mutates the options
-    proxies[context] = [proxy, { ...opts }];
-  });
-
-  if (httpServer) {
-    httpServer.on('upgrade', (req, socket, head) => {
-      const url = req.url!;
-      for (const context in proxies) {
-        if (doesProxyContextMatchUrl(context, url)) {
-          const [proxy, opts] = proxies[context];
-          if (
-            opts.ws ||
-            opts.target?.toString().startsWith('ws:') /* &&
-            req.headers['sec-websocket-protocol'] !== HMR_HEADER */
-          ) {
-            if (opts.rewrite) {
-              req.url = opts.rewrite(url);
-            }
-            // debug(`${req.url} -> ws ${opts.target}`);
-            console.log(`${req.url} -> ws ${opts.target}`);
-            proxy.ws(req, socket, head);
-            return;
-          }
-        }
-      }
-    });
-  }
-
-  // Keep the named function. The name is visible in debug logs via `DEBUG=connect:dispatcher ...`
-  return function viteProxyMiddleware(req, res, next) {
-    const url = req.url!;
-    for (const context in proxies) {
-      if (doesProxyContextMatchUrl(context, url)) {
-        const [proxy, opts] = proxies[context];
-        const options: HttpProxy.ServerOptions = {};
-
-        if (opts.bypass) {
-          const bypassResult = opts.bypass(req, res, opts);
-          if (typeof bypassResult === 'string') {
-            req.url = bypassResult;
-            // debug(`bypass: ${req.url} -> ${bypassResult}`);
-            return next();
-          }
-          if (isObject(bypassResult)) {
-            Object.assign(options, bypassResult);
-            // debug(`bypass: ${req.url} use modified options: %O`, options);
-            return next();
-          }
-          if (bypassResult === false) {
-            // debug(`bypass: ${req.url} -> 404`);
-            console.log(`bypass: ${req.url} -> 404`);
-            return res.end(404);
-          }
-        }
-
-        // debug(`${req.url} -> ${opts.target || opts.forward}`);
-        if (opts.rewrite) {
-          req.url = opts.rewrite(req.url!);
-        }
-        proxy.web(req, res, options);
-        return;
-      }
-    }
-    next();
   };
 }
 
-function doesProxyContextMatchUrl(context: string, url: string): boolean {
-  return (
-    (context.startsWith('^') && new RegExp(context).test(url)) ||
-    url.startsWith(context)
-  );
+/**
+ * Warn about rules asking for something this adapter cannot do.
+ *
+ * Silence is the failure mode worth avoiding here: a `ws: true` rule that
+ * quietly forwards nothing looks like a working configuration until a
+ * WebSocket is actually needed in production (#236).
+ */
+export function warnUnsupportedProxyRules(
+  rules: ResolvedVotProxyRule[],
+  adapterName: string,
+  supportsWebSocket: boolean,
+): void {
+  if (supportsWebSocket) return;
+  for (const rule of rules) {
+    if (ruleForwardsWebSocket(rule)) {
+      console.warn(
+        chalk.yellow(
+          `[vot] proxy rule "${rule.context}" asks for WebSocket forwarding, which the "${adapterName}" adapter does not support. HTTP requests are still forwarded.`,
+        ),
+      );
+    }
+  }
 }

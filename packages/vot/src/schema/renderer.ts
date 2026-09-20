@@ -1,6 +1,5 @@
-import type { WrittenResponse } from '@fastkit/vue-page';
-import type { ServerResponse } from 'node:http';
-import type { IncomingMessage } from 'connect';
+import type { WrittenResponse, PageResponseDraft } from '@fastkit/vue-page';
+import type { VotRuntimeContext } from './adapter';
 
 export type {
   WrittenResponse,
@@ -10,7 +9,16 @@ export type {
   VuePageServerContext,
 } from '@fastkit/vue-page';
 
-export interface Rendered extends WrittenResponse {
+/**
+ * A completed render.
+ *
+ * Built on {@link PageResponseDraft} rather than {@link WrittenResponse}: its
+ * `headers` is a `Headers`, so a multi-value header survives the trip out of
+ * the renderer. `Set-Cookie` is the one that matters -- collapsing it into a
+ * `Record<string, string>` here is what used to force cookies to be written
+ * straight to the Node response instead.
+ */
+export interface Rendered extends PageResponseDraft {
   html: string;
   htmlAttrs: string;
   headTags: string;
@@ -30,8 +38,12 @@ export interface RendererOptions {
   /* Skip SSR and only return the default index.html */
   skip?: boolean;
   // [key: string]: any;
-  request?: IncomingMessage;
-  response?: ServerResponse;
+  /** The incoming request, as a web-standard `Request`. */
+  request?: Request;
+  /** The response being assembled for this render. */
+  response?: PageResponseDraft;
+  /** A handle on the transport the request arrived over. */
+  runtime?: VotRuntimeContext;
   initialState?: any;
 }
 
@@ -39,7 +51,7 @@ export interface Renderer {
   (
     url: string | URL,
     options?: RendererOptions,
-  ): Promise<Rendered | WrittenResponse>;
+  ): Promise<Rendered | PageResponseDraft>;
 }
 
 export interface SSRPageDescriptor {

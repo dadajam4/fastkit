@@ -45,10 +45,8 @@ export default defineVotServer({
   proxy: {
     '/api': 'http://localhost:8080',
   },
-  configureServer({ use }) {
-    use('/healthcheck', (_req, res) => {
-      res.writeHead(200).end();
-    });
+  configureServer({ app }) {
+    app.get('/healthcheck', (c) => c.body(null, 200));
   },
 });
 ```
@@ -94,8 +92,8 @@ build time.
 | ----------------- | ----------------------------------------- | ---------------------------------------------------------- |
 | `host`            | `string \| boolean`                       | Hostname to listen on. `vot serve` defaults to `'0.0.0.0'`  |
 | `port`            | `number`                                  | Port to listen on. Defaults to `3000`                       |
-| `proxy`           | `Record<string, string \| ProxyOptions>`  | Proxy rules, in the same shape as Vite's `server.proxy`     |
-| `configureServer` | `(ctx: { use }) => void \| Promise<void>` | Mount middleware on the server                              |
+| `proxy`           | `Record<string, string \| VotProxyOptions>` | Proxy rules. Narrower than Vite's `server.proxy` -- see below |
+| `configureServer` | `(ctx: { app }) => void \| Promise<void>` | Mount middleware on the adapter's app (`Hono` by default)   |
 
 `base` is **not** an option. It is baked into the client bundle's asset URLs at
 build time, so it belongs to `vite.config.ts`; `vot build` records the value in
@@ -157,6 +155,25 @@ it imports is duplicated into `vot.server.js`.
 requires the build-time plugins in production, and it is the only reason
 `vot serve` imports `vite` at all. It is expected to be removed in a future
 major version.
+
+## Proxy rules
+
+Forwarding is done over `fetch`, so a rule carries `target`, `changeOrigin`,
+`rewrite`, `headers` and `ws` -- and nothing else.
+
+Vite's `configure` and `bypass` are absent: one hands out the `http-proxy`
+instance and the other the Node request and response, and neither has a `fetch`
+equivalent. Keeping them would let `vot dev` and `vot serve` drift apart, which
+is the one thing this entry exists to prevent. `secure` is absent for a related
+reason -- there is no standard way to turn off TLS verification for a `fetch`,
+and declaring an option that quietly does nothing is worse than not having it.
+Reach a self-signed upstream with `NODE_TLS_REJECT_UNAUTHORIZED=0` instead.
+
+WebSocket forwarding (`ws: true`, or a `ws:` / `wss:` target) is a capability of
+the adapter rather than of vot: the fetch model has no notion of an upgrade, so
+each runtime has to do it with its own API. The default node adapter forwards
+them; an adapter that cannot declares `supports.proxyWebSocket: false`, and vot
+warns at startup rather than leaving a rule silently doing nothing.
 
 ## `base` and middleware
 

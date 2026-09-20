@@ -6,9 +6,7 @@ export default defineVotServer({
   proxy: {
     '/google': 'https://google.com',
   },
-  configureServer({ use }) {
-    use('/healthcheck', (req, res) => {
-      res.writeHead(200).end();
-    });
+  configureServer({ app }) {
+    app.get('/healthcheck', (c) => c.body(null, 200));
   },
 });

@@ -32,8 +32,23 @@ function createDist(dir: string, base: string, proxyTarget: string) {
 
   fs.writeFileSync(
     path.join(serverDist, 'main.mjs'),
-    `export default async function renderPage(url) {
-      return { html: 'rendered:' + new URL(url).pathname, status: 200 };
+    `export default async function renderPage(url, options = {}) {
+      const { request } = options;
+      const headers = new Headers();
+      // Echo back what the transport delivered, so the tests can see whether
+      // the render context really carries a web-standard Request.
+      headers.set(
+        'x-saw-accept-language',
+        request?.headers?.get('accept-language') ?? '(none)',
+      );
+      headers.set('x-saw-url', request?.url ?? '(none)');
+      headers.append('set-cookie', 'a=1; Path=/');
+      headers.append('set-cookie', 'b=2; Path=/');
+      return {
+        html: 'rendered:' + new URL(url).pathname,
+        status: 200,
+        headers,
+      };
     }\n`,
   );
 
@@ -47,11 +62,10 @@ function createDist(dir: string, base: string, proxyTarget: string) {
         // Opting into WebSocket forwarding, the way Vite's proxy does.
         '/ws': { target: ${JSON.stringify(proxyTarget)}, ws: true },
       },
-      configureServer({ use }) {
-        use('/healthcheck', (req, res) => {
-          res.writeHead(200, { 'content-type': 'text/plain' });
-          res.end('healthcheck');
-        });
+      configureServer({ app }) {
+        app.get('/healthcheck', (c) =>
+          c.text('healthcheck', 200, { 'content-type': 'text/plain' }),
+        );
       },
     };\n`,
   );
@@ -113,6 +127,11 @@ function servedFixture(base: string) {
         'Upgrade: websocket\r\nConnection: Upgrade\r\n' +
         `Sec-WebSocket-Accept: ${accept}\r\n\r\n`,
     );
+    // Echo whatever arrives, so a forwarded socket can be told apart from a
+    // handshake that carries nothing.
+    socket.on('data', (chunk: Buffer) => {
+      socket.write(`echo:${chunk.toString()}`);
+    });
   });
 
   let origin: string;
@@ -129,26 +148,39 @@ function servedFixture(base: string) {
     vi.spyOn(console, 'log').mockImplementation(() => undefined);
 
     served = await serve();
-    servedSockets = trackSockets(served.server);
-    origin = `http://127.0.0.1:${(served.server.address() as AddressInfo).port}`;
+    servedSockets = trackSockets(served.native as http.Server);
+    origin = `http://127.0.0.1:${served.port}`;
   }, 30_000);
 
   afterAll(async () => {
     process.chdir(cwd);
     vi.restoreAllMocks();
-    await close(served.server, servedSockets);
+    for (const socket of servedSockets) socket.destroy();
+    servedSockets.clear();
+    await served.close();
     await close(upstream, upstreamSockets);
     fs.rmSync(dir, { recursive: true, force: true });
   });
 
-  const get = async (pathname: string) => {
-    const res = await fetch(`${origin}${pathname}`);
-    return { status: res.status, body: await res.text() };
+  const get = async (pathname: string, init?: RequestInit) => {
+    const res = await fetch(`${origin}${pathname}`, init);
+    return {
+      status: res.status,
+      contentType: res.headers.get('content-type'),
+      headers: res.headers,
+      body: await res.text(),
+    };
   };
 
-  /** Ask for a WebSocket upgrade and report what came back. */
-  const upgrade = (pathname: string) =>
-    new Promise<'upgraded' | 'not upgraded'>((resolve) => {
+  /**
+   * Ask for a WebSocket upgrade and report what came back.
+   *
+   * With `send`, the answer also carries what the upstream echoed. A 101 that
+   * cannot carry a frame is not a forwarded socket, and asserting only on the
+   * status line would pass against a proxy that splices nothing.
+   */
+  const upgrade = (pathname: string, send?: string) =>
+    new Promise<'upgraded' | 'not upgraded' | `echo:${string}`>((resolve) => {
       const { port } = new URL(origin);
       const request = http.request({
         host: '127.0.0.1',
@@ -161,14 +193,18 @@ function servedFixture(base: string) {
           'Sec-WebSocket-Version': '13',
         },
       });
-      const done = (answer: 'upgraded' | 'not upgraded') => {
+      const done = (answer: 'upgraded' | 'not upgraded' | `echo:${string}`) => {
         request.destroy();
         resolve(answer);
       };
       const timer = setTimeout(() => done('not upgraded'), 2000);
-      request.on('upgrade', () => {
+      request.on('upgrade', (_res, socket) => {
         clearTimeout(timer);
-        done('upgraded');
+        if (!send) return done('upgraded');
+        socket.once('data', (chunk: Buffer) =>
+          done(chunk.toString() as `echo:${string}`),
+        );
+        socket.write(send);
       });
       request.on('response', () => {
         clearTimeout(timer);
@@ -191,7 +227,7 @@ describe("serve, base '/app/'", () => {
   const { get, upgrade } = servedFixture('/app/');
 
   it('mounts configureServer middleware at the server root, outside base', async () => {
-    await expect(get('/healthcheck')).resolves.toEqual({
+    await expect(get('/healthcheck')).resolves.toMatchObject({
       status: 200,
       body: 'healthcheck',
     });
@@ -203,7 +239,7 @@ describe("serve, base '/app/'", () => {
   });
 
   it('matches proxy rules at the server root, outside base', async () => {
-    await expect(get('/api/items')).resolves.toEqual({
+    await expect(get('/api/items')).resolves.toMatchObject({
       status: 200,
       body: 'upstream:/api/items',
     });
@@ -212,6 +248,33 @@ describe("serve, base '/app/'", () => {
   it('still renders the application under base', async () => {
     const { body } = await get('/app/some/page');
     expect(body).toBe('rendered:/app/some/page');
+  });
+
+  // Without this the transport falls back to `text/plain` and a browser shows
+  // the markup instead of rendering it -- which no assertion on the body can
+  // see.
+  it('serves a rendered page as HTML', async () => {
+    const { contentType } = await get('/app/some/page');
+    expect(contentType).toMatch(/^text\/html/);
+  });
+
+  // The render context carries a web-standard `Request` now. Anything reading
+  // a request header -- language negotiation, above all -- depends on this
+  // actually arriving, and a render that quietly sees no headers looks exactly
+  // like one that does.
+  it('delivers the request, headers and all, to the renderer', async () => {
+    const { headers } = await get('/app/some/page', {
+      headers: { 'accept-language': 'ja,en;q=0.8' },
+    });
+    expect(headers.get('x-saw-accept-language')).toBe('ja,en;q=0.8');
+    expect(headers.get('x-saw-url')).toMatch(/\/app\/some\/page$/);
+  });
+
+  // A `Record<string, string>` could not have carried this, which is why
+  // cookies used to be written straight to the Node response instead.
+  it('carries every Set-Cookie the render wrote', async () => {
+    const { headers } = await get('/app/some/page');
+    expect(headers.getSetCookie()).toEqual(['a=1; Path=/', 'b=2; Path=/']);
   });
 
   // An upgrade never reaches Express -- the listener sits on the HTTP server --
@@ -229,14 +292,14 @@ describe("serve, base '/'", () => {
   const { get, upgrade } = servedFixture('/');
 
   it('answers configureServer middleware before the render route', async () => {
-    await expect(get('/healthcheck')).resolves.toEqual({
+    await expect(get('/healthcheck')).resolves.toMatchObject({
       status: 200,
       body: 'healthcheck',
     });
   });
 
   it('answers proxy rules before the render route', async () => {
-    await expect(get('/api/items')).resolves.toEqual({
+    await expect(get('/api/items')).resolves.toMatchObject({
       status: 200,
       body: 'upstream:/api/items',
     });
@@ -252,6 +315,13 @@ describe("serve, base '/'", () => {
   // rule worked under `vot dev` and silently did nothing here (issue #236).
   it('forwards a WebSocket upgrade for a rule that opts in', async () => {
     await expect(upgrade('/ws/socket')).resolves.toBe('upgraded');
+  });
+
+  // The handshake is the easy half. This is the half `http-proxy` used to do,
+  // and the half a hand-rolled forwarder can get wrong without anything
+  // else noticing.
+  it('carries data over the forwarded socket in both directions', async () => {
+    await expect(upgrade('/ws/socket', 'ping')).resolves.toBe('echo:ping');
   });
 
   it('leaves an upgrade alone for a rule that does not', async () => {

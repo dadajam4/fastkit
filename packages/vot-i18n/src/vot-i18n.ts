@@ -86,7 +86,7 @@ export function createVotI18n<
           ? (availableLocales) => {
               const picked = pick(
                 availableLocales,
-                request.headers['accept-language'],
+                request.headers.get('accept-language') || undefined,
                 { loose: true },
               );
               return picked;

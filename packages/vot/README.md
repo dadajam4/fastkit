@@ -311,7 +311,7 @@ installed.
 ```typescript
 // vot.server.ts
 import { defineVotServer } from '@fastkit/vot/server'
-import express from 'express'
+import { serveStatic } from '@hono/node-server/serve-static'
 
 export default defineVotServer(({ dev }) => ({
   host: '0.0.0.0',
@@ -319,13 +319,12 @@ export default defineVotServer(({ dev }) => ({
   proxy: {
     '/api': 'http://localhost:8080',
   },
-  configureServer({ use }) {
-    use('/healthcheck', (_req, res) => {
-      res.writeHead(200).end()
-    })
+  configureServer({ app }) {
+    // `app` is the adapter's own application -- a Hono instance by default.
+    app.get('/healthcheck', (c) => c.body(null, 200))
 
     // Serve static files
-    use('/uploads', express.static('uploads'))
+    app.use('/uploads/*', serveStatic({ root: './uploads' }))
   },
 }))
 ```
@@ -343,24 +342,18 @@ this form is only read by `vot dev` and by the `vot serve` fallback path.
 
 ```typescript
 import type { VotConfigureServerFn } from '@fastkit/vot'
-import express from 'express'
+import type { Hono } from 'hono'
 
-export const configureServer: VotConfigureServerFn = ({ use }) => {
+export const configureServer: VotConfigureServerFn<Hono> = ({ app }) => {
   // Add API endpoints
-  const apiRouter = express.Router()
-
-  apiRouter.get('/users/:id', (req, res) => {
-    res.json({
-      id: req.params.id,
-      name: `User ${req.params.id}`,
-      email: `user${req.params.id}@example.com`
+  app.get('/api/users/:id', (c) => {
+    const id = c.req.param('id')
+    return c.json({
+      id,
+      name: `User ${id}`,
+      email: `user${id}@example.com`
     })
   })
-
-  use('/api', apiRouter)
-
-  // Serve static files
-  use('/uploads', express.static('uploads'))
 
   // Return cleanup function
   return () => {
