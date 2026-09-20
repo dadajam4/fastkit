@@ -64,7 +64,7 @@
     "@fastkit/vot": "workspace:^"
   },
   "peerDependencies": {
-    "@fastkit/vot": "workspace:^"
+    "@fastkit/vot": "^2.0.0"
   },
   "engines": {
     "node": ">=22.0.0"
