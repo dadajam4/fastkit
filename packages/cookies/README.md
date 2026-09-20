@@ -7,7 +7,7 @@ A helper library for universally controlling Cookie headers on both server and b
 
 ## Features
 
-- **Universal API**: Unified Cookie operation interface for server (Node.js) and browser
+- **Universal API**: Unified Cookie operation interface for the browser, a Node.js `req`/`res` pair, and a web-standard `Request`/`Headers` pair
 - **Full TypeScript Support**: Type safety through strict type definitions
 - **Event-Driven**: Real-time notification functionality for Cookie changes
 - **Automatic Context Detection**: Automatic context setting based on execution environment
@@ -84,6 +84,40 @@ app.get('/api/user', (req: IncomingMessage, res: ServerResponse) => {
   res.end('Cookie setup completed')
 })
 ```
+
+### Using on the Web platform (Request / Headers)
+
+Runtimes without `node:http` — Workers, Deno, Bun, or a Node server that has already lifted the request into a `Request` — pass the web-standard pair instead. Reading goes through `request.headers.get('cookie')`, writing through `headers.append('set-cookie', ...)`.
+
+```typescript
+import { Cookies } from '@fastkit/cookies'
+
+export default {
+  async fetch(request: Request): Promise<Response> {
+    const headers = new Headers()
+    const cookies = new Cookies({ request, headers })
+
+    let sessionId = cookies.get('session_id')
+
+    if (!sessionId) {
+      sessionId = generateSessionId()
+      cookies.set('session_id', sessionId, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 // 24 hours, in seconds
+      })
+    }
+
+    // `headers` now carries one `Set-Cookie` entry per cookie.
+    return new Response(JSON.stringify({ sessionId }), { headers })
+  }
+}
+```
+
+Either half may be left out: `{ request }` alone reads and never writes, `{ headers }` alone writes onto a response assembled elsewhere.
+
+Unlike the Node context there is no `writableEnded` to consult — a `Headers` does not know whether the response has already gone out. Set your cookies before handing the headers over.
 
 ### Usage Example with Next.js
 
@@ -185,7 +219,7 @@ cookies.set('language', 'ja') // change event occurs
 
 ```typescript
 import { Cookies } from '@fastkit/cookies'
-import type { CookiesContext, CookieSerializeOptions } from '@fastkit/cookies'
+import type { CookiesContext, SerializeOptions } from '@fastkit/cookies'
 
 interface UserPreferences {
   theme: 'light' | 'dark'
@@ -209,7 +243,7 @@ class CookieManager {
 
   // User settings management
   setUserPreferences(prefs: UserPreferences) {
-    const options: CookieSerializeOptions = {
+    const options: SerializeOptions = {
       expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
       path: '/',
       sameSite: 'strict'
@@ -232,7 +266,7 @@ class CookieManager {
 
   // Session management
   setSession(sessionData: SessionData) {
-    const options: CookieSerializeOptions = {
+    const options: SerializeOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -522,11 +556,11 @@ class Cookies extends EV<CookiesEventMap> {
 
   // Cookie operations
   get(name: string): string | undefined
-  set(name: string, value: string, options?: CookieSerializeOptions): void
-  delete(name: string, options?: CookieSerializeOptions): void
+  set(name: string, value: string, options?: SerializeOptions): void
+  delete(name: string, options?: SerializeOptions): void
 
   // Cookie parsing
-  parse(options?: CookieParseOptions): CookiesBucket
+  parse(options?: ParseOptions): CookiesBucket
 
   // Properties
   readonly ctx: CookiesContext
@@ -541,15 +575,22 @@ class Cookies extends EV<CookiesEventMap> {
 // Context type
 type CookiesContext = CookiesBrowserContext | CookiesServerContext
 
-interface CookiesBrowserContext extends Document {}
+type CookiesBrowserContext = Document
 
-interface CookiesServerContext {
+type CookiesServerContext = CookiesNodeContext | CookiesWebContext
+
+interface CookiesNodeContext {
   req?: IncomingMessage
   res?: ServerResponse
 }
 
+interface CookiesWebContext {
+  request?: Request
+  headers?: Headers
+}
+
 // Cookie storage type
-type CookiesBucket = Record<string, string>
+type CookiesBucket = Record<string, string | undefined>
 
 // Event type
 interface OnCookiesChangeEvent {
@@ -562,12 +603,12 @@ interface CookiesEventMap {
 }
 
 // Option type
-interface CookiesOptions extends CookieParseOptions {
+interface CookiesOptions extends ParseOptions {
   bucket?: CookiesBucket
 }
 
 // Cookie serialize options
-interface CookieSerializeOptions {
+interface SerializeOptions {
   expires?: Date
   maxAge?: number
   path?: string
@@ -586,10 +627,8 @@ interface CookieSerializeOptions {
 function isCookiesBrowserContext(source: any): source is CookiesBrowserContext
 function isIncomingMessage(source: any): source is IncomingMessage
 function isServerResponse(source: any): source is ServerResponse
-
-// Cookie operations
-function createCookie(name: string, value: string, options?: CookieSerializeOptions): Cookie
-function areCookiesEqual(a: Cookie, b: Cookie): boolean
+function isWebRequest(source: any): source is Request
+function isWebHeaders(source: any): source is Headers
 ```
 
 ## Considerations
@@ -600,7 +639,7 @@ function areCookiesEqual(a: Cookie, b: Cookie): boolean
 - Note Cookie count limit per domain
 
 ### Server Environment
-- Warning displayed when setting Cookie after sending response
+- Warning displayed when setting Cookie after sending response (Node.js context only — a `Headers` has no way to tell)
 - Duplicate Set-Cookie headers are automatically excluded
 - Do not use secure option when not HTTPS
 
