@@ -71,7 +71,7 @@ app.get('/api/user', (req: IncomingMessage, res: ServerResponse) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000 // 24時間
+      maxAge: 24 * 60 * 60 // 24時間（秒）
     })
   }
 
@@ -139,7 +139,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         path: '/',
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7日間
+        maxAge: 7 * 24 * 60 * 60 // 7日間（秒）
       })
 
       // ユーザー設定をCookieに保存
@@ -270,7 +270,7 @@ class CookieManager {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       path: '/',
-      maxAge: 24 * 60 * 60 * 1000 // 24時間
+      maxAge: 24 * 60 * 60 // 24時間（秒）
     }
 
     this.cookies.set('session', JSON.stringify(sessionData), options)
@@ -424,7 +424,7 @@ app.post('/auth/login', async (req: Request, res: Response) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 24 * 60 * 60 * 1000 // 24時間
+        maxAge: 24 * 60 * 60 // 24時間（秒）
       })
 
       // ユーザー情報Cookieを設定
@@ -609,6 +609,7 @@ interface CookiesOptions extends ParseOptions {
 // Cookieシリアライズオプション
 interface SerializeOptions {
   expires?: Date
+  /** ミリ秒ではなく秒。 */
   maxAge?: number
   path?: string
   domain?: string

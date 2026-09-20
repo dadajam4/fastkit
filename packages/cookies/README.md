@@ -72,7 +72,7 @@ app.get('/api/user', (req: IncomingMessage, res: ServerResponse) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 24 * 60 * 60 // 24 hours, in seconds
     })
   }
 
@@ -140,7 +140,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         path: '/',
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        maxAge: 7 * 24 * 60 * 60 // 7 days, in seconds
       })
 
       // Save user settings to Cookie
@@ -271,7 +271,7 @@ class CookieManager {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       path: '/',
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 24 * 60 * 60 // 24 hours, in seconds
     }
 
     this.cookies.set('session', JSON.stringify(sessionData), options)
@@ -425,7 +425,7 @@ app.post('/auth/login', async (req: Request, res: Response) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        maxAge: 24 * 60 * 60 // 24 hours, in seconds
       })
 
       // Set user info Cookie
@@ -610,6 +610,7 @@ interface CookiesOptions extends ParseOptions {
 // Cookie serialize options
 interface SerializeOptions {
   expires?: Date
+  /** In seconds, not milliseconds. */
   maxAge?: number
   path?: string
   domain?: string
