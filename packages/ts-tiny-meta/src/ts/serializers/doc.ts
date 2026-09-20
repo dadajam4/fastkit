@@ -84,6 +84,30 @@ export function normalizeJSDocComment(
   return nodes;
 }
 
+/**
+ * Read a comment node as documentation text, with the comment syntax off.
+ *
+ * `getText()` returns the node's span of the **source file**, so on a
+ * multi-line comment it carries the `/**` opener and every ` * ` line prefix
+ * along with it. A `JSDocText` node also carries `text`, which TypeScript has
+ * already stripped, and that is what documentation wants.
+ *
+ * The distinction only shows up when a comment contains a `{@link}`: without
+ * one, `getComment()` hands back a plain string that TypeScript has already
+ * cleaned, and the two agree. With one, it hands back nodes, and they do not.
+ *
+ * Link nodes keep `getText()` on purpose: `{@link Foo.bar baz}` is what belongs
+ * in the flattened text, while {@link MetaDocPart.link} carries it structured.
+ */
+function readCommentNodeText(node: JSDocCommentNode): string {
+  if (Node.isNode(node) && Node.isJSDocText(node)) {
+    return node.compilerNode.text;
+  }
+  // The non-node shapes are built from an already-plain string, so their
+  // `getText()` is that string.
+  return node.getText();
+}
+
 export function extractMetaDocPartsFromJSDocComment(
   comment: JSDocCommentType,
   isParameter?: boolean,
@@ -92,7 +116,7 @@ export function extractMetaDocPartsFromJSDocComment(
   const parts: MetaDocPart[] = [];
   normalizedNodes.forEach((node, nodeIndex) => {
     const part: MetaDocPart = {
-      text: node.getText(),
+      text: readCommentNodeText(node),
     };
     if (isParameter && nodeIndex === 0) {
       part.text = part.text

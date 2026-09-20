@@ -2,19 +2,20 @@ import { MetaDoc, MetaDocPart, ParsedComment } from '@fastkit/ts-tiny-meta';
 import { defineComponent, PropType, computed } from 'vue';
 import { VMarked } from '../VMarked';
 
-const TRIM_PART_RE = /^(\/\*\*\n\s\*\s)/;
-
 function partToMarkdownChunk(part: MetaDocPart): string {
-  let { text } = part;
-  const { link } = part;
-  text = text.replace(TRIM_PART_RE, '');
+  const { text, link } = part;
   if (!link) return text;
   const { name, url } = link;
   return `[${name}](${url})`;
 }
 
+/**
+ * Parts are contiguous spans of one comment, so they are joined with nothing
+ * between them -- a separator would break a sentence that a `{@link}` sits in
+ * the middle of. This mirrors `metaDocPartToString` in `@fastkit/ts-tiny-meta`.
+ */
 function commentToMarkDown(comment: ParsedComment) {
-  return comment.parts.map(partToMarkdownChunk).join('\n');
+  return comment.parts.map(partToMarkdownChunk).join('');
 }
 
 export const VTSMetaDoc = defineComponent({
