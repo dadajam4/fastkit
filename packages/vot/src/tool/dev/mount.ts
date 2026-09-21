@@ -3,6 +3,7 @@ import type { NextHandleFunction } from 'connect';
 import { getRequestListener } from '@hono/node-server';
 import type { VotAdapterApp } from '../../schema/adapter';
 import { isDeclined } from '../../internal/serve/handler';
+import { KEEP_STANDARD_GLOBALS } from '../../internal/hono-globals';
 
 /** Thrown to make the listener give up without touching the response. */
 const DECLINE = Symbol('vot.decline');
@@ -30,6 +31,7 @@ export function createDevMiddleware(
       throw DECLINE;
     },
     {
+      ...KEEP_STANDARD_GLOBALS,
       /**
        * Returning nothing is how the listener is told to give up: it returns
        * without having written anything to the response, which leaves it
