@@ -260,6 +260,9 @@ export const fetchResponseResolver = (
       ctx.resolve();
 
       if (!ctx.canAwait) {
+        // The body is right there and cannot be waited for. Say so, rather than
+        // hand back a `bodyRead: false` that looks like a response without one.
+        ctx.degraded?.('response body');
         return {
           fetchError: {
             name,

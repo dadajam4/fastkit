@@ -10,6 +10,7 @@ import {
   ResolverContext,
 } from './schema';
 import { nativeErrorResolver } from './resolvers/native';
+import { devWarn } from './dev';
 
 /**
  * Checks if the value of the specified argument is a catcher instance
@@ -51,15 +52,45 @@ export function build<
 >(
   opts: CatcherBuilderOptions<Resolvers, Normalizer>,
 ): CatcherConstructor<Resolvers, Normalizer> {
-  const { resolvers = [], normalizer, defaultName = 'CatcherError' } = opts;
+  const {
+    resolvers = [],
+    normalizer,
+    defaultName = 'CatcherError',
+    defaultMessage,
+  } = opts;
 
-  if (!(resolvers as any).includes(nativeErrorResolver)) {
-    // Native Error resolvers are forced to be inserted into the last stage of the resolver.
-    (resolvers as any).unshift(nativeErrorResolver);
-  }
+  /**
+   * The resolvers this catcher runs
+   *
+   * A copy, never `opts.resolvers` itself. The native resolver has to go in
+   * front, and doing that in place would rewrite an array the caller still
+   * holds -- a `const resolvers = [...]` shared between two `build()` calls is
+   * the natural thing to write, and it would come back with a resolver in it
+   * that was never put there.
+   *
+   * A list that already names the native resolver is taken as given: its
+   * position was chosen deliberately, and moving it would change which
+   * resolvers see `nativeError` in `ctx.resolvedData`.
+   */
+  const resolverList: AnyResolvers = (resolvers as AnyResolvers).includes(
+    nativeErrorResolver,
+  )
+    ? [...resolvers]
+    : [nativeErrorResolver, ...resolvers];
+
+  /**
+   * What this catcher has already warned about
+   *
+   * Per catcher rather than per instance: every warning here is about how the
+   * catcher was built, so it is the same warning for every exception the
+   * application hands over -- and an application in a failure loop hands over
+   * a great many.
+   */
+  const warned = new Set<string>();
 
   function createResolverContext(resolvedData: AnyData, canAwait: boolean) {
     let stopped = false;
+    const degradations: string[] = [];
     const ctx: ResolverContext = {
       resolve: () => {
         stopped = true;
@@ -68,8 +99,14 @@ export function build<
         return resolvedData;
       },
       canAwait,
+      degraded: (what) => {
+        // Nothing was lost when the caller could wait, so there is nothing to
+        // report -- a resolver may call this unconditionally.
+        if (canAwait || degradations.includes(what)) return;
+        degradations.push(what);
+      },
     };
-    return { ctx, isStopped: () => stopped };
+    return { ctx, isStopped: () => stopped, degradations };
   }
 
   /**
@@ -83,8 +120,11 @@ export function build<
    * get their turn.
    */
   function runResolvers(infoOrException: unknown, resolvedData: AnyData): void {
-    const { ctx, isStopped } = createResolverContext(resolvedData, false);
-    for (const resolver of resolvers) {
+    const { ctx, isStopped, degradations } = createResolverContext(
+      resolvedData,
+      false,
+    );
+    for (const resolver of resolverList) {
       const result = resolver(infoOrException, ctx);
       if (isPromiseLike(result)) {
         result.catch(() => undefined);
@@ -96,6 +136,13 @@ export function build<
           break;
         }
       }
+    }
+    if (degradations.length) {
+      devWarn(
+        warned,
+        `A resolver could not wait for: ${degradations.join(', ')}.\n` +
+          `  Use \`await ${defaultName}.fromAsync(e)\` where you can await.`,
+      );
     }
   }
 
@@ -110,7 +157,7 @@ export function build<
   async function runResolversAsync(infoOrException: unknown): Promise<AnyData> {
     const resolvedData: AnyData = {};
     const { ctx, isStopped } = createResolverContext(resolvedData, true);
-    for (const resolver of resolvers) {
+    for (const resolver of resolverList) {
       // Sequential on purpose, exactly like the synchronous pass: a resolver
       // may read what an earlier one left in `ctx.resolvedData`, and
       // `ctx.resolve()` is meant to stop the ones after it.
@@ -245,6 +292,25 @@ export function build<
               this.data[nativeProp] = nativeError[nativeProp];
             }
           });
+        }
+
+        // Last word on the message. `''` counts as absent: an `Error` is born
+        // with one, so a normalizer that returned nothing and an exception that
+        // carried nothing leave it here -- and `toJSONString` then reports
+        // `"message": ""`, which reads like a message rather than the absence
+        // of one.
+        if (!this.data.message) {
+          if (defaultMessage !== undefined) {
+            this.data.message = defaultMessage;
+          } else {
+            devWarn(
+              warned,
+              'An instance was built with no message: the normalizer returned ' +
+                'none,\n  and the exception carried none. `toJSON()` will ' +
+                'report `"message": ""`.\n  Set `defaultMessage` in `build()` ' +
+                'to guarantee one.',
+            );
+          }
         }
       }
 

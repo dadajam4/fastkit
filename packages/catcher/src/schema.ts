@@ -51,6 +51,43 @@ export type ResolverContext = {
    * the response metadata either way and the body only when it may await.
    */
   readonly canAwait: boolean;
+  /**
+   * Report something this resolver found and could not reach
+   *
+   * Call it when {@link ResolverContext.canAwait canAwait} is `false` and you
+   * are about to return less than you have -- a `Response` whose body you can
+   * see but cannot wait for. The catcher collects what was reported and, in
+   * development only, warns once that an `await`-capable entry point would
+   * have got more:
+   *
+   * ```
+   * [@fastkit/catcher] A resolver could not wait for: response body.
+   *   Use `await Catcher.fromAsync(e)` where you can await.
+   * ```
+   *
+   * Nothing is emitted when nothing is reported, so a catcher that happens to
+   * hold an async-capable resolver stays quiet for the exceptions that resolver
+   * never matched. Say what was lost, not that something might have been:
+   *
+   * ```ts
+   * if (!ctx.canAwait) {
+   *   ctx.degraded?.('response body');
+   *   return { fetchError: { response: { bodyRead: false, ...meta } } };
+   * }
+   * ```
+   *
+   * A no-op when `canAwait` is `true`: nothing was lost, so there is nothing to
+   * say.
+   *
+   * @remarks Optional only so that a hand-built context still type-checks --
+   *   a catcher always supplies it. Prefer `runResolver` from
+   *   `@fastkit/catcher/testing` over building one by hand; it is what makes
+   *   this observable in a test.
+   *
+   * @param what - What could not be reached, as a noun phrase that reads after
+   *   "could not wait for": `'response body'`, `'stream contents'`
+   */
+  degraded?: (what: string) => void;
 };
 
 /**
@@ -135,6 +172,33 @@ export interface CatcherBuilderOptions<
    */
   defaultName?: string;
   /**
+   * Message to use when nothing else produced one
+   *
+   * Applied last, after the normalizer and after the native error's own
+   * `message`, and only when what is left is empty.
+   *
+   * **Set it.** Without it there is no guarantee that a catcher has a message,
+   * and the failure is quiet rather than loud: a normalizer that returns no
+   * `message` for an exception it did not recognise leaves the instance with
+   * the empty string an `Error` is born with, so `toJSON()` reports
+   * `"message": ""` -- not an absent field a log pipeline can spot, but a
+   * present one that reads like a real, empty message.
+   *
+   * ```ts
+   * build({
+   *   defaultName: 'AppError',
+   *   defaultMessage: 'Something went wrong',
+   *   resolvers,
+   *   normalizer,
+   * });
+   * ```
+   *
+   * The string belongs to the application, not to this package, so there is no
+   * default -- it is what a user may end up reading. Development warns once
+   * per catcher when an instance is built without a message and this is unset.
+   */
+  defaultMessage?: string;
+  /**
    * List of Exception Resolver
    */
   resolvers?: Resolvers;
@@ -146,13 +210,21 @@ export interface CatcherBuilderOptions<
   normalizer: Normalizer;
 }
 
-export type CatcherData<T = AnyData> = T & {
+export type CatcherData<T = AnyData> = T &
   /**
-   * Catcher symbol
-   * @internal
+   * The fields the catcher fills in for itself, whatever the normalizer
+   * returned: `name` from `defaultName`, `stack` from the instance, and
+   * `message` from the exception or from `defaultMessage`. Optional because
+   * a normalizer that declares them narrows them back to required, and
+   * nothing guarantees a `message` unless `defaultMessage` is set.
    */
-  $__catcher: true;
-};
+  Partial<ErrorImplements> & {
+    /**
+     * Catcher symbol
+     * @internal
+     */
+    $__catcher: true;
+  };
 
 /**
  * Caught exception instances

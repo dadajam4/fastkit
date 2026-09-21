@@ -86,6 +86,35 @@ return { code: 'HTTP_ERROR', message: response.json?.message }
 return { ...response }
 ```
 
+## Guaranteeing a message
+
+Set `defaultMessage`. Without it there is no guarantee that a catcher has one, and the failure is quiet rather than loud:
+
+```typescript
+const AppError = build({ normalizer: () => () => ({ code: 'APP_ERROR' }) })
+
+const err = AppError.from('just a string')  // nothing recognised it
+err.message                                 // ''
+err.toJSONString()                          // {"code":"APP_ERROR","message":"", ...}
+```
+
+An instance is a real `Error`, and an `Error` is born with an empty message. So a normalizer that returned no `message` for an exception it did not recognise does not leave the field out — it leaves an empty one, which reads like a message rather than the absence of one.
+
+`defaultMessage` is the last word, applied after the normalizer and after the exception's own message:
+
+```typescript
+const AppError = build({
+  defaultName: 'AppError',
+  defaultMessage: 'Something went wrong',
+  normalizer: () => () => ({ code: 'APP_ERROR' }),
+})
+
+AppError.from('just a string').message   // 'Something went wrong'
+AppError.from(new Error('real')).message // 'real' — never displaced
+```
+
+The string is not this package's to choose, because it is what a user may end up reading, so there is no default. Development warns once per catcher when an instance is built without a message and `defaultMessage` is unset.
+
 ## Features
 
 - **Type-Safe Exception Handling**: Safe exception handling through strict type definitions in TypeScript
@@ -212,6 +241,61 @@ console.log(caught.message)     // 'Username is invalid'
 console.log(caught.statusCode)  // 400
 console.log(caught.type)        // 'API_ERROR'
 ```
+
+## Testing a resolver
+
+Writing a resolver is how most applications use this package, and testing one should not mean building a context by hand — that couples your tests to the shape of a type you do not own, and leaves `ctx.resolve()` and `ctx.degraded()` unobservable.
+
+```typescript
+import { runResolver } from '@fastkit/catcher/testing'
+
+const { data, resolved, degraded } = await runResolver(apiErrorResolver, apiError)
+
+data?.apiErrorCode // what the resolver returned, or undefined if it declined
+resolved           // whether it called ctx.resolve()
+degraded           // what it reported through ctx.degraded()
+```
+
+Always asynchronous, whether or not the resolver is, so one `await` covers both kinds. Two options shape the run:
+
+| option | default | what it is for |
+| --- | --- | --- |
+| `canAwait` | `true` | The value of `ctx.canAwait`. Set `false` to exercise the path the synchronous entry points take. |
+| `resolvedData` | `{}` | What earlier resolvers left behind. Inside a real catcher this is never empty for an `Error`: `nativeErrorResolver` runs first and always contributes `nativeError`. |
+
+```typescript
+// The synchronous path, and what it admits to losing
+const sync = await runResolver(fetchResponseResolver(), err, { canAwait: false })
+sync.degraded // ['response body']
+```
+
+It runs the one resolver you give it and nothing else, which is what `resolvedData` is for.
+
+It is published on its own path, so it never reaches an application bundle through the main entry.
+
+### Reporting what could not be reached
+
+A resolver that can reach further when awaited has two paths through it. On the synchronous one, say what was left behind:
+
+```typescript
+const myResolver = createCatcherResolver((source, ctx) => {
+  const extracted = extract(source)
+  if (!extracted) return
+
+  if (!ctx.canAwait) {
+    ctx.degraded?.('response body')
+    return { myError: metaOf(extracted) }
+  }
+
+  return readBody(extracted).then((body) => ({
+    myError: { ...metaOf(extracted), body },
+  }))
+})
+```
+
+`ctx.degraded()` is a no-op when `ctx.canAwait` is `true`, so it needs no guard of its own. It exists so the warning can name what was lost instead of guessing that something might have been — and `runResolver` is what makes it assertable.
+
+It is optional on the type only so that a hand-built context still compiles; a catcher always supplies it.
 
 ## Advanced Usage Examples
 
@@ -412,6 +496,15 @@ catch (e) {
 
 `from` is then left for what it is good at: an error boundary that cannot await, where the response metadata is all there is to report anyway.
 
+Where the choice cannot be confined — a `from` called directly — development says so rather than letting it pass:
+
+```
+[@fastkit/catcher] A resolver could not wait for: response body.
+  Use `await AppError.fromAsync(e)` where you can await.
+```
+
+The resolver reports this, through `ctx.degraded()`, so it appears only when something really was within reach and could not be taken. A catcher that merely *holds* `fetchResponseResolver` stays quiet for every exception that resolver never matched.
+
 #### What to return from the normalizer
 
 See [The two layers](#the-two-layers). A response is exactly the kind of thing worth copying from deliberately: `set-cookie`, a `url` that may carry a signed-URL signature, and a body that may hold more than the message you were after.
@@ -604,6 +697,10 @@ interface CatcherBuilderOptions<Resolvers, Normalizer> {
   // Default error name
   defaultName?: string
 
+  // Message used when nothing else produced one.
+  // See [Guaranteeing a message](#guaranteeing-a-message).
+  defaultMessage?: string
+
   // Resolver array
   resolvers?: Resolvers
 
@@ -700,6 +797,27 @@ function isCatcher(source: unknown): source is Catcher
 // Catcher data determination
 function isCatcherData<T extends Catcher>(source: unknown): source is T['data']
 ```
+
+### `runResolver` Function
+
+Published as `@fastkit/catcher/testing`, so it stays out of application bundles.
+
+```typescript
+function runResolver<Resolver extends AnyResolver>(
+  resolver: Resolver,
+  source: unknown,
+  options?: {
+    canAwait?: boolean      // default: true
+    resolvedData?: AnyData  // default: {}
+  }
+): Promise<{
+  data: ResolverOutput<Resolver> | undefined
+  resolved: boolean
+  degraded: string[]
+}>
+```
+
+Runs a single resolver over an exception. See [Testing a resolver](#testing-a-resolver).
 
 ## Considerations
 

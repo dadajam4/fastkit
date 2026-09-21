@@ -84,6 +84,35 @@ return { code: 'HTTP_ERROR', message: response.json?.message }
 return { ...response }
 ```
 
+## メッセージを保証する
+
+`defaultMessage` を設定してください。設定しないとキャッチャーがメッセージを持つ保証はなく、しかもその失敗は静かです。
+
+```typescript
+const AppError = build({ normalizer: () => () => ({ code: 'APP_ERROR' }) })
+
+const err = AppError.from('ただの文字列')  // どのリゾルバーも認識しなかった
+err.message                                // ''
+err.toJSONString()                         // {"code":"APP_ERROR","message":"", ...}
+```
+
+インスタンスは本物の `Error` であり、`Error` は空のメッセージを持って生まれます。つまり、認識できなかった例外に対してノーマライザーが `message` を返さなかったとき、フィールドが欠落するのではなく**空のフィールドが残ります**。これは「メッセージが無い」ではなく「メッセージがある」ように読めてしまいます。
+
+`defaultMessage` は最後の一手で、ノーマライザーの後、そして例外自身のメッセージの後に適用されます。
+
+```typescript
+const AppError = build({
+  defaultName: 'AppError',
+  defaultMessage: '問題が発生しました',
+  normalizer: () => () => ({ code: 'APP_ERROR' }),
+})
+
+AppError.from('ただの文字列').message      // '問題が発生しました'
+AppError.from(new Error('real')).message // 'real' — 上書きはしない
+```
+
+この文字列は最終的にユーザーが読むものなので、パッケージが決めるべきものではありません。よって既定値はありません。`defaultMessage` が未設定のままメッセージ無しのインスタンスが生成されたとき、開発時にキャッチャーごとに1回だけ警告します。
+
 ## 機能
 
 - **型安全な例外処理**: TypeScriptでの厳密な型定義による安全な例外ハンドリング
@@ -409,9 +438,73 @@ catch (e) {
 
 `from` は本来の得意分野に残ります。await できないエラー境界で、そもそも報告できるのはレスポンスのメタ情報だけ、という場面です。
 
+選択を閉じ込めきれない場合（`from` を直接呼んだ場合）は、黙って通さず開発時に知らせます。
+
+```
+[@fastkit/catcher] A resolver could not wait for: response body.
+  Use `await AppError.fromAsync(e)` where you can await.
+```
+
+これを報告するのはリゾルバー自身（`ctx.degraded()`）です。したがって、**本当に手が届く場所にあって取れなかったとき**にだけ出ます。`fetchResponseResolver` を「持っているだけ」のキャッチャーは、そのリゾルバーがマッチしなかった例外に対しては黙ったままです。
+
 #### ノーマライザーで何を返すか
 
 [2つの層](#2つの層)を参照してください。レスポンスはまさに「選んでコピーすべきもの」の典型です。`set-cookie`、署名付き URL の署名を含みうる `url`、そして目的のメッセージ以上のものを含みうるボディが乗っています。
+
+## リゾルバーをテストする
+
+このパッケージの主な使われ方はリゾルバーを書くことです。そのテストのためにコンテキストを手で組み立てる必要はありません。手組みは自分の所有物でない型の形にテストを結合させ、さらに `ctx.resolve()` と `ctx.degraded()` を観測不能にします。
+
+```typescript
+import { runResolver } from '@fastkit/catcher/testing'
+
+const { data, resolved, degraded } = await runResolver(apiErrorResolver, apiError)
+
+data?.apiErrorCode // リゾルバーの戻り値。処理しなかった場合は undefined
+resolved           // ctx.resolve() を呼んだか
+degraded           // ctx.degraded() で報告された内容
+```
+
+リゾルバーが同期か非同期かに関わらず常に非同期なので、`await` 1つで両方を扱えます。実行の形を決めるオプションは2つです。
+
+| オプション | 既定 | 用途 |
+| --- | --- | --- |
+| `canAwait` | `true` | `ctx.canAwait` の値。`false` にすると同期エントリーポイントが通る経路を検証できます。 |
+| `resolvedData` | `{}` | 先行するリゾルバーが残したもの。実際のキャッチャーでは `Error` に対してこれが空になることはありません（`nativeErrorResolver` が最初に走り、必ず `nativeError` を足すため）。 |
+
+```typescript
+// 同期経路と、そこで失われたと申告された内容
+const sync = await runResolver(fetchResponseResolver(), err, { canAwait: false })
+sync.degraded // ['response body']
+```
+
+渡した1つのリゾルバーだけを実行します。それ以外は走らないので、必要な前提は `resolvedData` で与えてください。
+
+専用のパスで公開しているので、メインエントリー経由でアプリケーションのバンドルに入ることはありません。
+
+### 届かなかったものを申告する
+
+await できればもっと取れるリゾルバーには、2つの経路があります。同期側の経路では、置き去りにしたものを申告してください。
+
+```typescript
+const myResolver = createCatcherResolver((source, ctx) => {
+  const extracted = extract(source)
+  if (!extracted) return
+
+  if (!ctx.canAwait) {
+    ctx.degraded?.('response body')
+    return { myError: metaOf(extracted) }
+  }
+
+  return readBody(extracted).then((body) => ({
+    myError: { ...metaOf(extracted), body },
+  }))
+})
+```
+
+`ctx.degraded()` は `ctx.canAwait` が `true` のときは何もしないので、呼び出し側でガードする必要はありません。これは「何かが失われたかもしれない」と推測するのではなく、警告が**失われたものの名前**を出せるようにするためのものです。そして `runResolver` がそれをテストで表明可能にします。
+
+型の上で optional なのは、手組みのコンテキストがコンパイルを通り続けるようにするためだけです。キャッチャーは常にこれを渡します。
 
 ### 複数リゾルバーとエラー履歴管理
 
@@ -601,6 +694,10 @@ interface CatcherBuilderOptions<Resolvers, Normalizer> {
   // デフォルトエラー名
   defaultName?: string
 
+  // 他の何もメッセージを生まなかったときに使うメッセージ
+  // （[メッセージを保証する](#メッセージを保証する)を参照）
+  defaultMessage?: string
+
   // リゾルバー配列
   resolvers?: Resolvers
 
@@ -698,6 +795,27 @@ function isCatcher(source: unknown): source is Catcher
 // キャッチャーデータ判定
 function isCatcherData<T extends Catcher>(source: unknown): source is T['data']
 ```
+
+### `runResolver` 関数
+
+`@fastkit/catcher/testing` として公開しています。アプリケーションのバンドルには入りません。
+
+```typescript
+function runResolver<Resolver extends AnyResolver>(
+  resolver: Resolver,
+  source: unknown,
+  options?: {
+    canAwait?: boolean      // 既定: true
+    resolvedData?: AnyData  // 既定: {}
+  }
+): Promise<{
+  data: ResolverOutput<Resolver> | undefined
+  resolved: boolean
+  degraded: string[]
+}>
+```
+
+1つのリゾルバーを例外に対して実行します（[リゾルバーをテストする](#リゾルバーをテストする)を参照）。
 
 ## 注意事項
 
