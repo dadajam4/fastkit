@@ -1,0 +1,25 @@
+// A symbol reference inside a doc comment. It opens a preview rather than
+// navigating, so it is styled as a link but carries no href.
+.VTSMetaDoc__symbol {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+  font-family: var(--font-family-mono, monospace);
+  font-size: 0.925em;
+
+  &:hover {
+    text-decoration-style: solid;
+  }
+}
+
+.VTSMetaDoc__preview {
+  overflow: auto;
+  max-height: 60vh;
+  padding: 8px;
+}
+
+.VTSMetaDoc__preview__description {
+  margin-bottom: 4px;
+  font-size: 0.875em;
+}
