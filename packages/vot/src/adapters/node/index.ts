@@ -24,6 +24,7 @@ import {
   VOT_DECLINE_HEADER,
 } from '../../internal/serve/handler';
 import { matchProxyRule, ruleForwardsWebSocket } from '../../schema/proxy';
+import { KEEP_STANDARD_GLOBALS } from '../../internal/hono-globals';
 import { forwardUpgrade } from './upgrade';
 
 export const NODE_ADAPTER_NAME = 'node';
@@ -229,7 +230,10 @@ async function createApp(
   };
 
   const listen = async (): Promise<VotListenResult> => {
-    const server = createAdaptorServer({ fetch: app.fetch });
+    const server = createAdaptorServer({
+      fetch: app.fetch,
+      ...KEEP_STANDARD_GLOBALS,
+    });
 
     /**
      * The `upgrade` listener is installed before `listen()`, not after. It used

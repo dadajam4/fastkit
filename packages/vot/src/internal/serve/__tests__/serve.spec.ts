@@ -44,6 +44,19 @@ function createDist(dir: string, base: string, proxyTarget: string, ws = true) {
       headers.set('x-saw-url', request?.url ?? '(none)');
       headers.append('set-cookie', 'a=1; Path=/');
       headers.append('set-cookie', 'b=2; Path=/');
+
+      // #289: the transport must not have replaced the standard globals, so a
+      // Response that came from fetch() has to still be one. Asked for by
+      // path, because it costs a round trip.
+      if (new URL(url).pathname.endsWith('/instanceof-probe')) {
+        const probe = await fetch(${JSON.stringify(proxyTarget)});
+        headers.set('x-fetch-is-response', String(probe instanceof Response));
+        headers.set(
+          'x-constructed-is-response',
+          String(new Response(null) instanceof Response),
+        );
+      }
+
       return {
         html: 'rendered:' + new URL(url).pathname,
         status: 200,
@@ -324,6 +337,24 @@ describe("serve, base '/'", () => {
   it('renders everything else', async () => {
     const { body } = await get('/some/page');
     expect(body).toBe('rendered:/some/page');
+  });
+
+  /**
+   * #289. `@hono/node-server` replaces `globalThis.Response` with a class that
+   * does not extend the native one, so `instanceof Response` used to be false
+   * for everything `fetch()` returned anywhere inside a vot application -- and
+   * true for everything vot constructed, which is what made it look fine.
+   *
+   * Both halves are asserted because only the pair is diagnostic: with the
+   * substitution back, the constructed one still says `true` and only the
+   * fetched one flips.
+   *
+   * No static check can see this. It is only observable from inside a request.
+   */
+  it('leaves `instanceof Response` telling the truth', async () => {
+    const { headers } = await get('/instanceof-probe');
+    expect(headers.get('x-fetch-is-response')).toBe('true');
+    expect(headers.get('x-constructed-is-response')).toBe('true');
   });
 
   // The proxy installs its `upgrade` listener on the HTTP server it is given,
