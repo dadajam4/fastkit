@@ -300,6 +300,8 @@ export class PlugboyWorkspace {
 
     _exports['./*'] = './dist/*';
 
+    // Compact: this doubles as the deep-clone source and as the left-hand side
+    // of the change check below.
     const originalJSONString = JSON.stringify(json);
     const cloned: typeof json = JSON.parse(originalJSONString);
     cloned.exports = _exports;
@@ -347,11 +349,30 @@ export class PlugboyWorkspace {
     await this.hooks.preparePackageJSON(json, this);
 
     const sorted = sortPackageJson(cloned);
-    const toStr = JSON.stringify(sorted, null, 2);
-    if (originalJSONString !== toStr) {
-      await writeFileAtomic(this.dir.join(PACKAGE_JSON_FILENAME).value, toStr);
-      this._json = sorted;
+
+    // Write only when the fields or their order actually changed. Both sides are
+    // compact, so the check is about content and not about layout: plugboy owns
+    // what the file says, and leaves the whitespace between it to whatever
+    // formatter the repo runs.
+    //
+    // Key order counts as content. Ignoring it would quietly disable
+    // `sortPackageJson` for every file that already exists, which is most of
+    // them.
+    //
+    // This is what the check was always meant to be. It compared against the
+    // *indented* output, which a compact string can never equal, so it fired on
+    // every build of every workspace -- invisibly, because the bytes written
+    // usually matched the bytes already there.
+    if (originalJSONString !== JSON.stringify(sorted)) {
+      // `.editorconfig` sets `insert_final_newline`, and `JSON.stringify` emits
+      // none, so a built `package.json` used to lose the newline a formatter or
+      // a hand edit had given it.
+      await writeFileAtomic(
+        this.dir.join(PACKAGE_JSON_FILENAME).value,
+        `${JSON.stringify(sorted, null, 2)}\n`,
+      );
     }
+    this._json = sorted;
     return sorted;
   }
 

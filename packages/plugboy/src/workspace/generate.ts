@@ -175,7 +175,7 @@ export async function generateWorkspace(
   // 2. Write package.json
   await fs.writeFile(
     path.join(workspaceDir, 'package.json'),
-    JSON.stringify(json, null, 2),
+    `${JSON.stringify(json, null, 2)}\n`,
   );
 
   // 3. Write README.md
@@ -196,7 +196,7 @@ export async function generateWorkspace(
     if (tsconfig) {
       await fs.writeFile(
         path.join(workspaceDir, 'tsconfig.json'),
-        JSON.stringify(tsconfig, null, 2),
+        `${JSON.stringify(tsconfig, null, 2)}\n`,
       );
     }
 
