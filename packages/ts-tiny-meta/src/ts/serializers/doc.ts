@@ -8,11 +8,14 @@ import {
   JSDocTag,
   Symbol as MorphSymbol,
   JSDocTagInfo,
+  SyntaxKind,
 } from 'ts-morph';
 import * as ts from 'typescript';
 
 import {
   MetaDoc,
+  MetaDocLink,
+  MetaDocLinkSummary,
   MetaDocLinkType,
   MetaDocPart,
   ParsedComment,
@@ -108,6 +111,109 @@ function readCommentNodeText(node: JSDocCommentNode): string {
   return node.getText();
 }
 
+type AnyJSDocLink = JSDocLink | JSDocLinkCode | JSDocLinkPlain;
+
+/**
+ * A `{@link}` tag, split into where it points and what it reads as.
+ *
+ * TypeScript hands the tag over already halved, but along a seam that does not
+ * match the two forms the tag actually has: `name` is the first token and
+ * `text` is the rest, so a URL arrives as `"https"` plus `"://example.com Label"`
+ * while a symbol reference arrives as `"Api.other"` plus `"other"`.
+ */
+interface ParsedLinkTag {
+  /** What the link reads as */
+  label: string;
+  /** Where the link points, as written */
+  location: string;
+  /** `true` when {@link ParsedLinkTag.location} is a URL, not a symbol reference */
+  isUrl: boolean;
+}
+
+function parseLinkTag(link: AnyJSDocLink): ParsedLinkTag | undefined {
+  const { name } = link.compilerNode;
+  if (!name) return;
+
+  const linkText = link.compilerNode.text;
+  const nameText = name.getText();
+
+  if (linkText.startsWith('://')) {
+    // `{@link https://example.com Label}` -> "https" + "://example.com Label"
+    const parsed = linkText.match(LINK_TEXT_PARSE_RE);
+    if (!parsed) return;
+    const location = nameText + parsed[1];
+    return { label: parsed[3] || location, location, isUrl: true };
+  }
+
+  // `{@link Api.other other}` -> "Api.other" + "other", a symbol reference.
+  // A tag written without a label -- `{@link Api}` -- has no text at all, so
+  // the reference itself has to stand in for one.
+  return { label: linkText || nameText, location: nameText, isUrl: false };
+}
+
+/** Cap on how much of a declaration a link summary carries. */
+const SUMMARY_MAX_LINES = 20;
+
+function unwrapAliasSymbol(symbol: MorphSymbol): MorphSymbol {
+  return symbol.getAliasedSymbol() || symbol;
+}
+
+/**
+ * Read the reference out of a link node.
+ *
+ * `compilerNode.name` is the same reference, but as a raw compiler node, and
+ * resolving a symbol from one of those means reaching into ts-morph's node
+ * factory. The wrapped child is the same thing with the public API attached.
+ */
+function getLinkNameNode(link: AnyJSDocLink): Node | undefined {
+  return (
+    link.getFirstChildByKind(SyntaxKind.QualifiedName) ??
+    link.getFirstChildByKind(SyntaxKind.Identifier)
+  );
+}
+
+/**
+ * Flatten a comment for a link preview.
+ *
+ * A nested `{@link}` collapses to its label. A preview is one level deep, so
+ * it has nowhere to put a link of its own -- and resolving one would let two
+ * symbols that reference each other recurse forever.
+ */
+function flattenCommentForSummary(comment: JSDocCommentType): string {
+  return normalizeJSDocComment(comment)
+    .map((node) => {
+      const extracted = getLinkSourceFromJSDocCommentNode(node);
+      if (!extracted) return readCommentNodeText(node);
+      return parseLinkTag(extracted.link)?.label ?? '';
+    })
+    .join('');
+}
+
+function buildLinkSummary(link: AnyJSDocLink): MetaDocLinkSummary | undefined {
+  const nameNode = getLinkNameNode(link);
+  const symbol = nameNode?.getSymbol();
+  if (!symbol) return;
+
+  const [declaration] = unwrapAliasSymbol(symbol).getDeclarations();
+  if (!declaration) return;
+
+  const lines = declaration.getText().split('\n');
+  const truncated = lines.length > SUMMARY_MAX_LINES;
+  const summary: MetaDocLinkSummary = {
+    text: (truncated ? lines.slice(0, SUMMARY_MAX_LINES) : lines).join('\n'),
+  };
+  if (truncated) summary.truncated = true;
+  if (declaration.getSourceFile().isInNodeModules()) summary.external = true;
+
+  if (Node.isJSDocable(declaration)) {
+    const [jsDoc] = declaration.getJsDocs();
+    const description = jsDoc && flattenCommentForSummary(jsDoc.getComment());
+    if (description) summary.description = description.trim();
+  }
+
+  return summary;
+}
+
 export function extractMetaDocPartsFromJSDocComment(
   comment: JSDocCommentType,
   isParameter?: boolean,
@@ -129,31 +235,23 @@ export function extractMetaDocPartsFromJSDocComment(
     if (!linkExtracted) return;
 
     const { type, link } = linkExtracted;
+    const parsed = parseLinkTag(link);
+    if (!parsed) return;
 
-    const { name } = link.compilerNode;
-    if (!name) return;
-    const linkText = link.compilerNode.text;
-    const nameText = name.getText();
+    const metaLink: MetaDocLink = { type, name: parsed.label };
 
-    let linkLocation = '';
-    let linkLabel = '';
-
-    if (linkText.startsWith('://')) {
-      const parsed = linkText.match(LINK_TEXT_PARSE_RE);
-      if (parsed) {
-        linkLocation = nameText + parsed[1];
-        linkLabel = parsed[3] || linkLocation;
-      }
+    if (parsed.isUrl) {
+      metaLink.url = parsed.location;
     } else {
-      linkLocation = nameText;
-      linkLabel = linkText;
+      // A symbol reference is not a URL, and `url` promises one. Hand the
+      // reference over as what it is, with a preview of what it resolves to
+      // when it resolves at all.
+      metaLink.target = parsed.location;
+      const summary = buildLinkSummary(link);
+      if (summary) metaLink.summary = summary;
     }
 
-    part.link = {
-      type,
-      name: linkLabel,
-      url: linkLocation,
-    };
+    part.link = metaLink;
   });
   return parts;
 }

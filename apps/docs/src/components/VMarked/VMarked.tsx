@@ -37,6 +37,12 @@ export const VMarked = defineComponent({
       if (localeMatchRe.test(href)) {
         return { href };
       }
+      // Only a path can take a locale prefix. Anything else -- a fragment, a
+      // `mailto:`, a symbol reference that slipped through -- would come out
+      // as `/en` glued straight onto it, which is not a route anywhere.
+      if (!href.startsWith('/')) {
+        return { href };
+      }
       href = `/${$i18n.currentLocaleName}${href}`;
       return {
         href,
