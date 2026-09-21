@@ -1,5 +1,164 @@
 # @fastkit/vot
 
+## 2.1.1
+
+### Patch Changes
+
+- [#293](https://github.com/dadajam4/fastkit/pull/293) [`292573e`](https://github.com/dadajam4/fastkit/commit/292573e936d8740b1c792088dd7f8c8f959b6871) Thanks [@dadajam4](https://github.com/dadajam4)! - Document what a server render is handed, and what `vot generate` does with it.
+
+  `VotContext.request` and the cookie jar have been web-standard since 2.0.0, and
+  neither appeared anywhere outside the type definitions — `request` was not
+  mentioned in the README at all, and `cookies` only as a dependency in
+  `@fastkit/vue-page`'s list. So the entry points to reading a request and
+  writing a response during SSR were discoverable only by reading the types.
+
+  The new [request and response guide](https://github.com/dadajam4/fastkit/blob/main/packages/vot/docs/ssr-request-response.md)
+  covers `request`, `response`, `writeResponse`/`redirect` and `cookies`, why
+  `request` being `undefined` in the browser is the load-bearing part, forwarding
+  headers to an upstream API, and what `vot generate` keeps and discards.
+
+  That last part is the one nothing else could say. `vot generate` boots a real
+  server and crawls it over HTTP, so the request and response are real — but the
+  request is the crawler's (no cookies, no `accept-language`, host is the local
+  preview server), only the HTML body is kept, and a page that answers non-200 —
+  a redirect included — is skipped with a warning rather than generated.
+
+  No API changes.
+
+- [#291](https://github.com/dadajam4/fastkit/pull/291) [`d02a470`](https://github.com/dadajam4/fastkit/commit/d02a470752285b84942b852a9c40dd788696aa2a) Thanks [@dadajam4](https://github.com/dadajam4)! - Stop the node adapter from breaking `instanceof Response`.
+
+  `@hono/node-server` replaces `globalThis.Request` and `globalThis.Response` the
+  first time a request listener is built, unless told not to, and vot did not tell
+  it not to. The two replacements are not symmetric:
+
+  |            |                                  | `instanceof` after the swap    |
+  | ---------- | -------------------------------- | ------------------------------ |
+  | `Request`  | `class extends GlobalRequest`    | works                          |
+  | `Response` | a standalone class, no `extends` | **false for every native one** |
+
+  So inside a vot application, `x instanceof Response` was false for everything
+  `fetch()` returns. vot now passes `overrideGlobalObjects: false` at both entries
+  — the node adapter and the dev middleware — and the standard globals stay the
+  platform's.
+
+  ## Why this was expensive to find
+
+  Nothing static can see it. `typecheck`, `build` and the dependency audits are
+  all green; the types say `Response`, and they are right. It only appears once a
+  request is served, and it appears as an error thrown by whichever library did
+  the check, which points at the consumer rather than at the substitution.
+
+  The consumer that found it uses [openapi-fetch](https://github.com/openapi-ts/openapi-typescript/tree/main/packages/openapi-fetch),
+  whose middleware contract is "return a `Response` only when you modify it" and
+  which enforces that with `if (!(result instanceof Response)) throw`. A handler
+  that returned the response unmodified — redundant, but not wrong — therefore
+  threw on every call, and every server-rendered page that touched the API became
+  a 500.
+
+  ## Why it is vot's to fix rather than to document
+
+  vot 2's contract is web-standard throughout: `VotRequestHandler` is
+  `(request: Request) => Promise<Response | undefined>`, and anything
+  runtime-specific is quarantined behind `VotRuntimeContext.native` on purpose. A
+  global substitution escapes that quarantine and applies process-wide, invisibly,
+  to code that never asked for the node adapter.
+
+  vot cannot promise that `instanceof` works everywhere — cross-realm checks are
+  nobody's to guarantee. It can promise not to be the reason it stops working.
+
+  ## What it costs
+
+  Opting out is not free. hono's replacement exists so that a response built from
+  a string keeps the string, and the fast path can write it straight out with
+  `outgoing.end(body)`; a native `Response` carries a `ReadableStream` instead, so
+  the same response goes through `getReader()`, an awaited read and a rebuilt
+  header record.
+
+  Measured on Node 24.16.0, 16 concurrent keep-alive connections, median of 3:
+
+  |                             |      cost | per request |
+  | --------------------------- | --------: | ----------: |
+  | a 45KB string, no work      |      -55% |       +29us |
+  | `serveStatic`, 45KB file    |     -5.1% |      +3.4us |
+  | a 2-byte response           |      -21% |      +3.2us |
+  | **45KB after a 3ms render** | **-0.9%** |       +28us |
+
+  The overhead is flat — about 3us fixed, plus a component that scales with the
+  body — so the percentage says more about the denominator than about the change.
+  On the path vot actually spends its time, rendering, it is under 1%.
+
+  The real fix belongs upstream: `static [Symbol.hasInstance]` on hono's class
+  would keep the fast path _and_ answer correctly, which neither this nor
+  documentation can do together. Measured at +5ns per check — roughly three orders
+  of magnitude less than what is paid here. It is tracked as
+  [honojs/node-server#321](https://github.com/honojs/node-server/issues/321), open
+  and unanswered since March 2026, which is why vot does not wait for it. If it
+  lands, this option can be dropped.
+
+  Closes [#289](https://github.com/dadajam4/fastkit/issues/289).
+
+- [#291](https://github.com/dadajam4/fastkit/pull/291) [`d02a470`](https://github.com/dadajam4/fastkit/commit/d02a470752285b84942b852a9c40dd788696aa2a) Thanks [@dadajam4](https://github.com/dadajam4)! - Say something when a WebSocket upgrade arrives for a proxy rule that forwards
+  HTTP only.
+
+  A rule written as a bare string forwards HTTP and not upgrades. That is
+  deliberate and matches Vite, so one configuration behaves the same under
+  `vot dev` and `vot serve`. What was missing is any signal when the omission is a
+  mistake:
+
+  ```ts
+  export default defineVotServer({
+    proxy: {
+      // Forwards HTTP. Not upgrades.
+      '/socket.io': 'http://127.0.0.1:3001',
+    },
+  });
+  ```
+
+  Nothing breaks, which is the whole problem. socket.io defaults to
+  `transports: ['polling', 'websocket']`, so a client connects over long-polling,
+  tries to upgrade, gets nowhere, and stays on polling. The application works and
+  simply pays for it — in one consumer that ran unnoticed in production for
+  months, and was found by reading the proxy implementation rather than by
+  observing anything.
+
+  `vot serve` now warns, once per rule, the first time an upgrade arrives
+  somewhere that cannot carry it:
+
+  ```
+  [vot] an upgrade request arrived for proxy rule "/socket.io", which forwards HTTP only.
+        Add `ws: true` to the rule (or use a ws:/wss: target) to forward WebSocket upgrades.
+  ```
+
+  Once per rule rather than once per request, because a client that keeps retrying
+  should not fill the log. Startup is the wrong moment to say it: most rules are
+  HTTP-only on purpose, so a startup check would warn about nearly all of them. An
+  upgrade actually arriving is what turns the omission into a mistake.
+
+  ## An upgrade that goes nowhere is now closed rather than left open
+
+  Finding this turned up a second, quieter problem. The node adapter installed its
+  `upgrade` listener only when at least one rule opted into WebSockets, and that
+  listener returned without touching the socket when no ws-forwarding rule
+  matched. Node closes an upgrade itself when nothing is listening for one — but
+  once a listener exists, returning from it leaves the socket **accepted and
+  open**, so the client waits out its own timeout for a 101 that is never coming.
+
+  Measured against a configuration with one `ws: true` rule and one HTTP-only
+  rule, an upgrade to the HTTP-only rule held the socket until the client gave up.
+  It is now closed immediately, which is what an application without any ws rule
+  already got from Node.
+
+  So the listener is installed whenever there are any proxy rules, and matches
+  against all of them. What a client sees is otherwise unchanged.
+
+  ## `vot dev` cannot do this
+
+  Under `vot dev` the rules are merged into Vite's own `server.proxy` and Vite
+  owns the socket, so vot never sees the upgrade. Vite does not warn either. The
+  half that is covered is the half where the cost accrues unseen: production.
+
+  Closes [#290](https://github.com/dadajam4/fastkit/issues/290).
+
 ## 2.1.0
 
 ### Minor Changes
