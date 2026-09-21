@@ -41,12 +41,49 @@ export interface FetchResponseMeta {
  * `fromAsync` / `createAsync` to get {@link FetchResponseWithBody} instead.
  */
 export interface FetchResponseWithoutBody extends FetchResponseMeta {
+  /** See {@link FetchResponseWithBody.bodyRead} */
   bodyRead: false;
+  /** Nothing was attempted. See {@link FetchBodyState}. */
+  bodyState: 'unread';
 }
 
-/** A response whose body was read */
+/**
+ * Where the body on a response came from
+ *
+ * `bodyRead` says whether there is a body to look at. This says how it got
+ * here, which is the difference between a server that sent nothing and a body
+ * this resolver could not reach:
+ *
+ * * `'unread'` -- nothing was attempted. The instance was built through a
+ *   synchronous entry point, where a body cannot be waited for
+ * * `'read'` -- read off the wire. `text` is what the server sent, and `json`
+ *   is that parsed, or `null` when it is not JSON
+ * * `'unavailable'` -- reading was attempted and could not happen: the body was
+ *   already consumed or locked by the time the resolver got there, so there was
+ *   nothing left to copy
+ * * `'provided'` -- the application handed it over through
+ *   {@link ExtractedFetchError.body}, having read it for its own reasons.
+ *   `json` is that value and `text` is `''`, because nothing was read here
+ *
+ * `'read'` with an empty body and `'unavailable'` used to be the same value.
+ */
+export type FetchBodyState = 'read' | 'unavailable' | 'provided';
+
+/** A response with a body to look at */
 export interface FetchResponseWithBody extends FetchResponseMeta {
+  /**
+   * Whether there is a body on this object to look at
+   *
+   * Derived from {@link FetchResponseWithBody.bodyState bodyState}, and kept
+   * anyway, the way `Response.ok` is kept beside `Response.status`: "can I look
+   * at the body" is the question asked at almost every use site, and it
+   * deserves a one-word answer rather than a comparison against two of four
+   * states. `bodyState` is there for the times the answer is no and you want to
+   * know why.
+   */
   bodyRead: true;
+  /** {@link FetchBodyState Where this body came from} */
+  bodyState: FetchBodyState;
   /**
    * The body parsed as JSON, or `null` when it is not JSON
    *
@@ -55,7 +92,13 @@ export interface FetchResponseWithBody extends FetchResponseMeta {
    * its own.
    */
   json: any;
-  /** The body as text, or `''` when it could not be read */
+  /**
+   * The body as text
+   *
+   * What came off the wire, so `''` for `'unavailable'` -- nothing was read --
+   * and `''` for `'provided'` too: the application handed over a value, not a
+   * response. A synthesised `JSON.stringify` would not be what the server sent.
+   */
   text: string;
 }
 
@@ -71,6 +114,10 @@ export interface FetchResponseWithBody extends FetchResponseMeta {
  *   response.json; // only in scope here
  * }
  * ```
+ *
+ * {@link FetchBodyState bodyState} then says where that body came from, which
+ * is what separates a server that sent nothing from a body this resolver could
+ * not reach.
  *
  * ## This is resolver output, not the serialized error
  *
@@ -151,29 +198,30 @@ function readMeta(response: Response): FetchResponseMeta {
  */
 async function readBody(
   response: Response,
-): Promise<Pick<FetchResponseWithBody, 'json' | 'text'>> {
+): Promise<Pick<FetchResponseWithBody, 'bodyState' | 'json' | 'text'>> {
   let body: Response;
   try {
     // Throws if the body is already disturbed or locked -- someone else got
-    // there first, so there is nothing left to copy.
+    // there first, so there is nothing left to copy. An application in that
+    // position can hand the body over through `ExtractedFetchError.body`.
     body = response.clone();
   } catch (_err) {
-    return { json: null, text: '' };
+    return { bodyState: 'unavailable', json: null, text: '' };
   }
 
   let text: string;
   try {
     text = await body.text();
   } catch (_err) {
-    return { json: null, text: '' };
+    return { bodyState: 'unavailable', json: null, text: '' };
   }
 
   try {
-    return { json: JSON.parse(text), text };
+    return { bodyState: 'read', json: JSON.parse(text), text };
   } catch (_err) {
     // Not JSON -- an HTML error page is the ordinary case here, and an empty
     // body throws too.
-    return { json: null, text };
+    return { bodyState: 'read', json: null, text };
   }
 }
 
@@ -191,6 +239,36 @@ export interface ExtractedFetchError {
   stack?: string;
   /** Fetch Response */
   response: Response;
+  /**
+   * A body the error already holds
+   *
+   * An application that throws its own error for a failed fetch usually reads
+   * the body first, because it needs it to build the error's message. The body
+   * is then consumed, so this resolver cannot read it again -- `clone()` throws
+   * on a disturbed body -- and the structured part of it, the `code` and the
+   * field-level errors that are the whole reason to normalize, would be lost.
+   *
+   * Hand it over and it is used as-is, reported as
+   * {@link FetchBodyState `bodyState: 'provided'`}. This is not the consumer
+   * doing the resolver's job: the application read the body for its own
+   * reasons, and this is the resolver being willing to use what is already
+   * there rather than insisting on reading it again.
+   *
+   * ```ts
+   * fetchResponseResolver((source) =>
+   *   source instanceof ApiResponseError
+   *     ? { response: source.response, body: source.body }
+   *     : undefined,
+   * );
+   * ```
+   *
+   * A body that arrives this way needs no `await`, so `from` is enough where
+   * `fromAsync` would otherwise be required.
+   *
+   * `undefined` means no body was handed over. A body that is genuinely
+   * `null` -- the response was JSON `null` -- is carried through as `null`.
+   */
+  body?: unknown;
 }
 
 /**
@@ -216,6 +294,10 @@ const DEFAULT_EXTRACT_FETCH_ERROR: ExtractFetchError = (source) => {
       message: source.message,
       stack: source.stack,
       response,
+      // Only once a `Response` has been found on the error: a `body` sitting
+      // next to one is that response's body, read by the application on its
+      // way to building this error's message.
+      body: (source as any).body,
     };
   }
 };
@@ -254,10 +336,29 @@ export const fetchResponseResolver = (
       const extracted = extract(source);
       if (!extracted) return;
 
-      const { name, message, stack, response } = extracted;
+      const { name, message, stack, response, body } = extracted;
       const meta = readMeta(response);
 
       ctx.resolve();
+
+      if (body !== undefined) {
+        // Already in hand, so there is nothing to wait for and nothing to take
+        // from the caller. `from` is enough here.
+        return {
+          fetchError: {
+            name,
+            message,
+            stack,
+            response: {
+              bodyRead: true,
+              bodyState: 'provided',
+              json: body,
+              text: '',
+              ...meta,
+            },
+          },
+        };
+      }
 
       if (!ctx.canAwait) {
         // The body is right there and cannot be waited for. Say so, rather than
@@ -268,17 +369,17 @@ export const fetchResponseResolver = (
             name,
             message,
             stack,
-            response: { bodyRead: false, ...meta },
+            response: { bodyRead: false, bodyState: 'unread', ...meta },
           },
         };
       }
 
-      return readBody(response).then((body) => ({
+      return readBody(response).then((read) => ({
         fetchError: {
           name,
           message,
           stack,
-          response: { bodyRead: true, ...meta, ...body },
+          response: { bodyRead: true, ...meta, ...read },
         },
       }));
     },

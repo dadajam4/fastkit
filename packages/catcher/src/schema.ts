@@ -167,7 +167,17 @@ export type ResolvedCatcherData<Resolvers extends AnyResolvers = AnyResolvers> =
 /**
  * Exception Normalizer
  *
- * A method to finally normalize the set of values resolved by the resolver
+ * Decides what an error looks like in this application: it is handed everything
+ * the resolvers extracted and returns the fields the instance carries.
+ *
+ * **It is also the boundary.** What it returns becomes
+ * {@link Catcher.data data} and is the only thing `toJSON()` emits, so "what
+ * this application calls an error" and "what is safe to log" are one decision,
+ * made here. Read {@link Catcher.resolvedData resolvedData} for what that means
+ * in practice; spreading a response into the return value is how a `set-cookie`
+ * ends up in a log line.
+ *
+ * {@link match} is usually a better way to write one than a chain of `?.`.
  */
 export type AnyNormalizer<Resolvers extends AnyResolvers = AnyResolvers> = (
   resolvedData: ResolvedCatcherData<Resolvers>,
@@ -264,9 +274,47 @@ export interface Catcher<
 > extends Error {
   /** It is a catcher instance */
   readonly isCatcher: true;
-  /** Error information fully processed by custom resolvers and normalizers */
+  /**
+   * What the **normalizer** returned -- and the only thing that is serialized
+   *
+   * `toJSON()` emits this and nothing else, so this is what leaves the process:
+   * what reaches a log, an error report, a response body. Its fields are also
+   * defined onto the instance, which is where `err.status` comes from.
+   *
+   * Not to be confused with {@link Catcher.resolvedData resolvedData}, which is
+   * one layer earlier and is not serialized. The two names are one word apart
+   * and the difference between them is what is safe to keep -- see
+   * {@link Catcher.resolvedData resolvedData} before copying anything across.
+   */
   readonly data: CatcherData<T>;
-  /** Data extracted by custom resolvers */
+  /**
+   * What the **resolvers** extracted -- never serialized
+   *
+   * Everything they found, in full, because none of it leaves on its own:
+   * `toJSON()` emits {@link Catcher.data data}, which is what the normalizer
+   * returned. That is the boundary, and it is deliberate -- a resolver may hold
+   * the whole response precisely because holding it costs nothing.
+   *
+   * **So copy out of here deliberately, never wholesale.** What a response
+   * carries is what the server sent:
+   *
+   * * `set-cookie` -- session and refresh tokens, and a 401 is exactly when
+   *   those get rotated
+   * * a `url` that may hold a signed-URL signature or a `?token=`
+   * * a body that may hold far more than the message you were after
+   *
+   * ```ts
+   * // Fine: a code and a message.
+   * return { code: 'HTTP_ERROR', message: response.json?.message };
+   *
+   * // Puts the session cookie, the signed URL and the whole body wherever
+   * // this error is logged.
+   * return { ...response };
+   * ```
+   *
+   * This package's own README made the second mistake, which is the reason this
+   * warning is here rather than in the documentation alone.
+   */
   readonly resolvedData: ResolvedCatcherData<Resolvers>;
   /**
    * Catcher instance generated from original exception source before override

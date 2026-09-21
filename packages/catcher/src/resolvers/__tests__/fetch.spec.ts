@@ -46,6 +46,12 @@ export type _BodyIsBehindTheDiscriminant = Expect<
   'json' extends keyof SerializableFetchResponse ? false : true
 >;
 
+// `bodyState` is on both halves: it answers "why is there no body" as well as
+// "where did this one come from", so it must not need narrowing first.
+export type _BodyStateIsAlwaysReadable = Expect<
+  'bodyState' extends keyof SerializableFetchResponse ? true : false
+>;
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
@@ -58,6 +64,16 @@ function resolveFetch(source: unknown) {
 /** The same, awaiting the resolver the way `fromAsync` does. */
 function resolveFetchAsync(source: unknown) {
   return runResolver(fetchResponseResolver(), source);
+}
+
+/** Synchronously, with a custom extract function. */
+function resolveFetchWith(
+  extract: Parameters<typeof fetchResponseResolver>[0],
+  source: unknown,
+) {
+  return runResolver(fetchResponseResolver(extract), source, {
+    canAwait: false,
+  });
 }
 
 const AppError = build({
@@ -151,6 +167,19 @@ describe('fetch resolver', () => {
     const info = data!.fetchError.response as FetchResponseWithBody;
     expect(info.text).toBe('');
     expect(info.json).toBeNull();
+    // Not the same as a server that sent nothing, which these two used to be
+    // indistinguishable from.
+    expect(info.bodyState).toBe('unavailable');
+  });
+
+  test('tells an empty body apart from one it could not reach', async () => {
+    // Not a 204: `Response` refuses a body on one, even an empty one.
+    const { data } = await resolveFetchAsync(new Response('', { status: 500 }));
+
+    const info = data!.fetchError.response as FetchResponseWithBody;
+    expect(info.text).toBe('');
+    expect(info.json).toBeNull();
+    expect(info.bodyState).toBe('read');
   });
 
   test('flattens headers, combining repeats the way Headers.get does', async () => {
@@ -261,5 +290,95 @@ describe('fetch resolver, through a catcher', () => {
     const resolved = err.resolvedData.fetchError!.response;
     expect(resolved.headers['set-cookie']).toBe('session=SECRET-COOKIE');
     expect(resolved.url).toContain('SECRET-SIG');
+  });
+});
+
+/**
+ * The shape both downstream consumers I looked at are in: the application reads
+ * the body to build its error's message, which leaves the response drained, so
+ * the resolver could report the metadata and nothing else. `code` and the
+ * field-level errors -- the part worth normalizing -- were invisible.
+ */
+describe('a body the error already carries', () => {
+  class ApiResponseError extends Error {
+    readonly response: Response;
+
+    readonly body: unknown;
+
+    constructor(response: Response, body: unknown) {
+      super((body as any)?.message ?? response.statusText);
+      this.name = 'ApiResponseError';
+      this.response = response;
+      this.body = body;
+    }
+  }
+
+  const payload = {
+    message: 'That item is gone.',
+    code: 'ITEM_GONE',
+    errors: [{ field: 'id' }],
+  };
+
+  async function drainedError() {
+    const response = new Response(JSON.stringify(payload), {
+      status: 404,
+      statusText: 'Not Found',
+      headers: { 'content-type': 'application/json' },
+    });
+    const parsed = await response.json();
+    return new ApiResponseError(response, parsed);
+  }
+
+  test('the default extract finds it next to the response', async () => {
+    const { data } = await resolveFetch(await drainedError());
+
+    const response = data!.fetchError.response as FetchResponseWithBody;
+    expect(response.bodyRead).toBe(true);
+    expect(response.bodyState).toBe('provided');
+    expect(response.json).toEqual(payload);
+    expect(response.status).toBe(404);
+  });
+
+  // The point of taking it: `from` is enough, because nothing has to be awaited.
+  test('needs no await, so a synchronous entry point is enough', async () => {
+    const AppError = build({
+      resolvers: [fetchResponseResolver()],
+      defaultMessage: 'Something went wrong',
+      normalizer: (resolved) => () => ({
+        code: resolved.fetchError?.response.bodyRead
+          ? resolved.fetchError.response.json?.code
+          : undefined,
+      }),
+    });
+
+    const err = AppError.from(await drainedError());
+
+    expect(err.code).toBe('ITEM_GONE');
+  });
+
+  test('reports nothing was lost, since nothing was', async () => {
+    const { degraded } = await resolveFetch(await drainedError());
+
+    expect(degraded).toEqual([]);
+  });
+
+  test('text stays what came off the wire, which is nothing here', async () => {
+    const { data } = await resolveFetch(await drainedError());
+
+    expect((data!.fetchError.response as FetchResponseWithBody).text).toBe('');
+  });
+
+  test('a body of null is a body, and no body is not', async () => {
+    const extract = (source: unknown) =>
+      source instanceof Response ? { response: source, body: null } : undefined;
+
+    const withNull = await resolveFetchWith(extract, new Response('{}'));
+    expect(
+      (withNull.data!.fetchError.response as FetchResponseWithBody).bodyState,
+    ).toBe('provided');
+
+    // Nothing handed over, and no awaiting, so nothing is read.
+    const without = await resolveFetch(new Response('{}'));
+    expect(without.data!.fetchError.response.bodyRead).toBe(false);
   });
 });
