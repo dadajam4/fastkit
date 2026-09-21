@@ -46,8 +46,19 @@ const { incoming, outgoing } = getNodeRuntime(runtime) ?? {};
 ```
 
 The cast is needed because `VuePageServerContext.runtime` is typed `unknown`
-— that side of the boundary does not know about adapters. `getNodeRuntime`
-checks the adapter name at runtime and returns `undefined` for anything else.
+— that side of the boundary does not know about adapters, deliberately.
+`getNodeRuntime` checks the adapter name at runtime and returns `undefined` for
+anything else, so the cast is asserting nothing the call does not verify.
+
+From a component, `useContext().runtime` is already a `VotRuntimeContext` and
+needs no cast:
+
+```ts
+import { useContext } from '@fastkit/vot';
+import { getNodeRuntime } from '@fastkit/vot/adapters/node';
+
+const { incoming, outgoing } = getNodeRuntime(useContext().runtime) ?? {};
+```
 
 ## Writing to the response
 

@@ -44,9 +44,20 @@ const runtime = ctx.server?.runtime as VotRuntimeContext | undefined;
 const { incoming, outgoing } = getNodeRuntime(runtime) ?? {};
 ```
 
-キャストが要るのは `VuePageServerContext.runtime` が `unknown` だからです —— この型は
-アダプタを知らない側の都合で、`getNodeRuntime` 自身はアダプタ名を実行時に検査して
-合わなければ `undefined` を返します。
+キャストが要るのは `VuePageServerContext.runtime` が `unknown` だからです。これは
+アダプタを知らない側が意図的にそうしています。`getNodeRuntime` 自身はアダプタ名を
+実行時に検査して、合わなければ `undefined` を返すので、このキャストは呼び出し側が
+検査していないことを主張してはいません。
+
+コンポーネントからなら `useContext().runtime` が最初から `VotRuntimeContext` なので、
+キャストは不要です。
+
+```ts
+import { useContext } from '@fastkit/vot';
+import { getNodeRuntime } from '@fastkit/vot/adapters/node';
+
+const { incoming, outgoing } = getNodeRuntime(useContext().runtime) ?? {};
+```
 
 ## レスポンスに書く
 
