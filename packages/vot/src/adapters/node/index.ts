@@ -16,6 +16,7 @@ import {
 import {
   proxyMiddleware,
   warnUnsupportedProxyRules,
+  createHttpOnlyUpgradeWarner,
 } from '../../internal/serve/proxy';
 import {
   declineResponse,
@@ -236,11 +237,30 @@ async function createApp(
      * called, so a `ws: true` rule worked under `vot dev` and silently did
      * nothing in production (#236, #254).
      */
-    const wsRules = ctx.proxy.filter(ruleForwardsWebSocket);
-    if (wsRules.length) {
+    if (ctx.proxy.length) {
+      /**
+       * Matched against **every** rule, not only the ones that forward
+       * upgrades. Filtering first is what made the mistake invisible: a rule
+       * written without `ws: true` was indistinguishable from no rule at all,
+       * so the upgrade it should have carried went nowhere and said nothing
+       * (#290).
+       */
+      const warnHttpOnly = createHttpOnlyUpgradeWarner();
       server.on('upgrade', (req, socket, head) => {
-        const rule = matchProxyRule(wsRules, req.url || '');
-        if (!rule) return;
+        const rule = matchProxyRule(ctx.proxy, req.url || '');
+
+        if (!rule || !ruleForwardsWebSocket(rule)) {
+          if (rule) warnHttpOnly(rule);
+          /**
+           * Destroyed rather than left alone. Node closes an upgrade itself
+           * when nothing is listening for one, so installing a listener in
+           * order to be able to warn must not turn a closed connection into a
+           * socket that hangs until the client gives up.
+           */
+          socket.destroy();
+          return;
+        }
+
         forwardUpgrade(req, socket, head, rule, (error) => {
           ctx.logger.error(
             `${chalk.red('websocket proxy error:')}\n${error.stack}`,

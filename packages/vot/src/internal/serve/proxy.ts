@@ -107,3 +107,38 @@ export function warnUnsupportedProxyRules(
     }
   }
 }
+
+/**
+ * Warn when an upgrade arrives for a rule that forwards HTTP only.
+ *
+ * The mirror image of {@link warnUnsupportedProxyRules}, and the direction
+ * that actually costs people: there, a rule asks for more than the adapter can
+ * do; here, a rule asks for less than the client needs. Nothing breaks --
+ * socket.io defaults to `['polling', 'websocket']`, so it connects over
+ * long-polling, tries to upgrade, gets nowhere, and stays on polling forever.
+ * The application works and simply pays for it, which is why one consumer ran
+ * that way in production without noticing (#290).
+ *
+ * Only a request can reveal this. Whether a rule *should* forward upgrades is
+ * not knowable from the configuration -- most rules are HTTP-only on purpose,
+ * so warning at startup would mean warning about nearly every rule. An upgrade
+ * actually arriving is the evidence that turns it into a mistake.
+ *
+ * The returned function warns once per rule rather than once per request: a
+ * client that keeps retrying should not fill the log.
+ */
+export function createHttpOnlyUpgradeWarner(): (
+  rule: ResolvedVotProxyRule,
+) => void {
+  const warned = new Set<string>();
+  return (rule) => {
+    if (warned.has(rule.context)) return;
+    warned.add(rule.context);
+    console.warn(
+      chalk.yellow(
+        `[vot] an upgrade request arrived for proxy rule "${rule.context}", which forwards HTTP only.\n` +
+          '      Add `ws: true` to the rule (or use a ws:/wss: target) to forward WebSocket upgrades.',
+      ),
+    );
+  };
+}

@@ -14,7 +14,7 @@ import { serve } from '../serve';
  * SSR manifest and the render entry, so a handful of files is enough to drive
  * the whole mounting path without running a real build.
  */
-function createDist(dir: string, base: string, proxyTarget: string) {
+function createDist(dir: string, base: string, proxyTarget: string, ws = true) {
   const serverDist = path.join(dir, 'dist/server');
   fs.mkdirSync(serverDist, { recursive: true });
   fs.mkdirSync(path.join(dir, 'dist/client/.vite'), { recursive: true });
@@ -59,8 +59,12 @@ function createDist(dir: string, base: string, proxyTarget: string) {
       port: 0,
       proxy: {
         '/api': ${JSON.stringify(proxyTarget)},
-        // Opting into WebSocket forwarding, the way Vite's proxy does.
-        '/ws': { target: ${JSON.stringify(proxyTarget)}, ws: true },
+        ${
+          ws
+            ? // Opting into WebSocket forwarding, the way Vite's proxy does.
+              `'/ws': { target: ${JSON.stringify(proxyTarget)}, ws: true },`
+            : ''
+        }
       },
       configureServer({ app }) {
         app.get('/healthcheck', (c) =>
@@ -103,10 +107,22 @@ function trackSockets(server: http.Server): Set<Socket> {
 }
 
 /**
+ * What came back from asking for a WebSocket upgrade.
+ *
+ * The ways of *not* upgrading are told apart on purpose. `closed` is what Node
+ * does for an upgrade nobody listens for, and therefore what vot has to keep
+ * doing once it installs a listener of its own; `timed out` means the socket
+ * was accepted and then left open, which is the leak that distinction exists
+ * to catch (#290).
+ */
+type UpgradeResult =
+  'upgraded' | 'closed' | 'timed out' | `status:${number}` | `echo:${string}`;
+
+/**
  * Boot `serve()` against a throwaway `dist/` and an upstream the proxy rule
  * points at, and hand back a `GET` bound to the resulting origin.
  */
-function servedFixture(base: string) {
+function servedFixture(base: string, ws = true) {
   const cwd = process.cwd();
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vot-serve-'));
   const upstream = http.createServer((req, res) => {
@@ -140,7 +156,7 @@ function servedFixture(base: string) {
   let servedSockets: Set<Socket>;
 
   beforeAll(async () => {
-    createDist(dir, base, `http://127.0.0.1:${await listen(upstream)}`);
+    createDist(dir, base, `http://127.0.0.1:${await listen(upstream)}`, ws);
 
     // `serve()` resolves `dist` against the working directory, and prints a
     // URL banner we have no use for here.
@@ -180,7 +196,7 @@ function servedFixture(base: string) {
    * status line would pass against a proxy that splices nothing.
    */
   const upgrade = (pathname: string, send?: string) =>
-    new Promise<'upgraded' | 'not upgraded' | `echo:${string}`>((resolve) => {
+    new Promise<UpgradeResult>((resolve) => {
       const { port } = new URL(origin);
       const request = http.request({
         host: '127.0.0.1',
@@ -193,11 +209,11 @@ function servedFixture(base: string) {
           'Sec-WebSocket-Version': '13',
         },
       });
-      const done = (answer: 'upgraded' | 'not upgraded' | `echo:${string}`) => {
+      const done = (answer: UpgradeResult) => {
         request.destroy();
         resolve(answer);
       };
-      const timer = setTimeout(() => done('not upgraded'), 2000);
+      const timer = setTimeout(() => done('timed out'), 2000);
       request.on('upgrade', (_res, socket) => {
         clearTimeout(timer);
         if (!send) return done('upgraded');
@@ -206,13 +222,13 @@ function servedFixture(base: string) {
         );
         socket.write(send);
       });
-      request.on('response', () => {
+      request.on('response', (res) => {
         clearTimeout(timer);
-        done('not upgraded');
+        done(`status:${res.statusCode ?? 0}`);
       });
       request.on('error', () => {
         clearTimeout(timer);
-        done('not upgraded');
+        done('closed');
       });
       request.end();
     });
@@ -282,7 +298,7 @@ describe("serve, base '/app/'", () => {
   // root rather than inside `base`.
   it('forwards a WebSocket upgrade at the root, not under base', async () => {
     await expect(upgrade('/ws/socket')).resolves.toBe('upgraded');
-    await expect(upgrade('/app/ws/socket')).resolves.toBe('not upgraded');
+    await expect(upgrade('/app/ws/socket')).resolves.toBe('closed');
   });
 });
 
@@ -324,9 +340,72 @@ describe("serve, base '/'", () => {
     await expect(upgrade('/ws/socket', 'ping')).resolves.toBe('echo:ping');
   });
 
-  it('leaves an upgrade alone for a rule that does not', async () => {
-    // Matches Vite: a plain string target forwards HTTP only, so the same
-    // config behaves the same under `vot dev` and `vot serve`.
-    await expect(upgrade('/api/socket')).resolves.toBe('not upgraded');
+  /**
+   * Matches Vite: a plain string target forwards HTTP only, so the same config
+   * behaves the same under `vot dev` and `vot serve`. What changed in #290 is
+   * that it no longer happens in silence.
+   *
+   * Both halves are asserted in one test because the warning fires once per
+   * rule for the life of the server -- a second test upgrading through `/api`
+   * would find it already spent.
+   *
+   * `closed` is the other half of the fix. Measured before it: the socket was
+   * accepted and then left open, so the client waited out its own timeout for
+   * a 101 that was never coming.
+   */
+  it('closes an upgrade for a rule that has not opted in, and says so once', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    try {
+      await expect(upgrade('/api/socket')).resolves.toBe('closed');
+      await expect(upgrade('/api/other')).resolves.toBe('closed');
+
+      const matched = warn.mock.calls
+        .map(([message]) => String(message))
+        .filter((message) =>
+          message.includes('an upgrade request arrived for proxy rule "/api"'),
+        );
+      expect(matched).toHaveLength(1);
+      expect(matched[0]).toContain('ws: true');
+    } finally {
+      warn.mockRestore();
+    }
+  });
+});
+
+/**
+ * The configuration that made #290 worth fixing.
+ *
+ * Every rule forwards HTTP only, so vot used to install no `upgrade` listener
+ * at all and Node closed the connection on its behalf -- correct, and entirely
+ * silent. That silence is the whole bug: one consumer ran a socket.io client
+ * on long-polling in production for months because nothing ever said the
+ * upgrade had nowhere to go.
+ *
+ * What the client sees is deliberately unchanged. Only the warning is new.
+ */
+describe('serve, proxy rules that forward HTTP only', () => {
+  const { get, upgrade } = servedFixture('/', false);
+
+  it('still forwards HTTP for those rules', async () => {
+    await expect(get('/api/items')).resolves.toMatchObject({
+      status: 200,
+      body: 'upstream:/api/items',
+    });
+  });
+
+  it('closes an upgrade and warns, although no rule forwards WebSockets', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    try {
+      await expect(upgrade('/api/socket')).resolves.toBe('closed');
+
+      const matched = warn.mock.calls
+        .map(([message]) => String(message))
+        .filter((message) =>
+          message.includes('an upgrade request arrived for proxy rule "/api"'),
+        );
+      expect(matched).toHaveLength(1);
+    } finally {
+      warn.mockRestore();
+    }
   });
 });
