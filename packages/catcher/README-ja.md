@@ -240,6 +240,131 @@ console.log(caught.statusCode)  // 400
 console.log(caught.type)        // 'API_ERROR'
 ```
 
+## リゾルバーを書く
+
+リゾルバーが答えるのは1つの問いだけです。**この例外は自分のものか、だとしたら何を取り出す価値があるか。** オブジェクトを返すとノーマライザー向けに `resolvedData` へマージされ、何も返さなければ「自分のものではない」という意思表示になります。
+
+```typescript
+const apiErrorResolver = createCatcherResolver((source, ctx) => {
+  if (!isAPIError(source)) return // 自分のものではない
+
+  ctx.resolve() // そして後続が見る必要もない
+  return { apiError: { code: source.code, status: source.statusCode } }
+})
+```
+
+`createCatcherResolver` は恒等関数です。引数の型を推論させ、戻り値の型を `resolvedData` とノーマライザーまで運ぶために存在します。
+
+### 実行される順序
+
+`nativeErrorResolver` はあなたのリストの**前**に置かれ、`Error` を決して見送りません。
+
+| 書いたもの | 実行されるもの |
+| --- | --- |
+| `resolvers: [a, b]` | `nativeErrorResolver`, `a`, `b` |
+| `resolvers: [a, nativeErrorResolver, b]` | `a`, `nativeErrorResolver`, `b` |
+
+位置を動かしたいときは自分でリストに書きます。既に含まれているリストはそのまま尊重されます。`build` は渡された配列を書き換えないので、1つの `const resolvers` を2つのキャッチャーで共有できます。
+
+したがって、あなたのリゾルバーが走る時点で `ctx.resolvedData` は、`Error` に対しては既に `nativeError` を持っており、`Error` でないものに対しては空です。
+
+**2つのリゾルバーが同じ例外にマッチするのは例外ケースではなく通常ケースです。** fetch エラーは `fetchError` と `nativeError` の両方を持ちます。ネイティブリゾルバーが先に走り、それを見送らなかったからです。
+
+### マージと `ctx.resolve()`
+
+結果は順にマージされるので、後のリゾルバーは先のリゾルバーのキーを上書きし、それ以外はそのまま残します。
+
+```typescript
+// a が { who: 'a', onlyA: 1 } を返し、次に b が { who: 'b' } を返す
+resolvedData // { nativeError, who: 'b', onlyA: 1 }
+```
+
+返すものを1つのキーの下にまとめる（`{ code, status }` ではなく `{ apiError: { ... } }`）と、2つのリゾルバーが黙って互いのフィールドを上書きすることを防げます。
+
+`ctx.resolve()` は後続のリゾルバーを止めます。呼ぶかどうかは任意です。呼ばなければ全員に順番が回るので、例外を「占有する」のではなく「一側面を足す」リゾルバーではそれが正解です。**何かを返したかどうかに関わらず効きます。**「これは自分のもので、後続が見る必要はない」は、例外を認識した上で取り出す価値のあるものが無かったリゾルバーにも等しく言えることだからです。
+
+### Promise を返す
+
+`ctx.canAwait` が `true` のときだけです。同期エントリーポイントには await する場所がありません（インスタンスは、throw される時点で存在していなければならない `Error` です）。そこで返された Promise は、それが生んだはずのものごと破棄されます。
+
+await できればもっと取れるリゾルバーには2つの経路があり、同期側ではそれが何を失わせたかを申告します。
+
+```typescript
+const myResolver = createCatcherResolver((source, ctx) => {
+  const extracted = extract(source)
+  if (!extracted) return
+
+  if (!ctx.canAwait) {
+    ctx.degraded?.('response body')
+    return { myError: metaOf(extracted) }
+  }
+
+  return readBody(extracted).then((body) => ({
+    myError: { ...metaOf(extracted), body },
+  }))
+})
+```
+
+`ctx.degraded()` は `ctx.canAwait` が `true` のときは何もしないので、呼び出し側でガードする必要はありません。これは「何かが失われたかもしれない」と推測するのではなく、警告が**失われたものの名前**を出せるようにするためのものです。型の上で optional なのは、手組みのコンテキストがコンパイルを通り続けるようにするためだけで、キャッチャーは常にこれを渡します。
+
+### throw してはいけない
+
+リゾルバーはエラーが記述されている最中に走ります。そこに自分のエラーを持ち込んではいけません。元の例外を処理している側が、捕まえたはずのものの代わりにこのパッケージ内部からの `TypeError` を受け取ることになります。
+
+それでも throw したリゾルバーはスキップされ、後続のリゾルバーには順番が回り、開発時には通知されます。
+
+```
+[@fastkit/catcher] A resolver threw while describing an exception, and was skipped.
+  TypeError: Cannot read properties of undefined (reading 'data')
+  The exception being described is unaffected -- fix the resolver.
+```
+
+throw したリゾルバーは「何も貢献しなかった」として扱われ、それには `ctx.resolve()` も含まれます。1回の失敗が後続すべてを黙らせることはありません。これは安全網であって免罪符ではありません。気づく場所がこの警告です。
+
+### どのエントリーポイントを使うか
+
+| | ノーマライザー第2段への引数 | overrides | リゾルバーを await |
+| --- | --- | --- | --- |
+| `create(info)` | `info` | 不可 | しない |
+| `from(e, overrides?)` | `undefined` | 可 | しない |
+| `createAsync(info)` | `info` | 不可 | する |
+| `fromAsync(e, overrides?)` | `undefined` | 可 | する |
+
+`from` は「捕まえたが何かは分からないもの」向けで、ノーマライザーはリゾルバーが抽出したものから組み立てます。通常はこちらです。`create` は「自分のペイロードから意図的に構築するエラー」向けで、そのペイロードがノーマライザーの第2段にそのまま渡ります。
+
+`fromAsync` / `createAsync` は同じ2つを、全リゾルバーを await してから実行する版です。await できる場所では常にこちらを選んでください（[`from` と `fromAsync`](#from-と-fromasync)を参照）。
+
+## リゾルバーをテストする
+
+リゾルバーのテストのためにコンテキストを手で組み立てる必要はありません。手組みは自分の所有物でない型の形にテストを結合させ、さらに `ctx.resolve()` と `ctx.degraded()` を観測不能にします。
+
+```typescript
+import { runResolver } from '@fastkit/catcher/testing'
+
+const { data, resolved, degraded } = await runResolver(apiErrorResolver, apiError)
+
+data?.apiError.code // リゾルバーの戻り値。処理しなかった場合は undefined
+resolved            // ctx.resolve() を呼んだか
+degraded            // ctx.degraded() で報告された内容
+```
+
+リゾルバーが同期か非同期かに関わらず常に非同期なので、`await` 1つで両方を扱えます。実行の形を決めるオプションは2つです。
+
+| オプション | 既定 | 用途 |
+| --- | --- | --- |
+| `canAwait` | `true` | `ctx.canAwait` の値。`false` にすると同期エントリーポイントが通る経路を検証できます。 |
+| `resolvedData` | `{}` | 先行するリゾルバーが残したもの。実際のキャッチャーでは `Error` に対してこれが空になることはありません（`nativeErrorResolver` が最初に走るため）。 |
+
+```typescript
+// 同期経路と、そこで失われたと申告された内容
+const sync = await runResolver(fetchResponseResolver(), err, { canAwait: false })
+sync.degraded // ['response body']
+```
+
+渡した1つのリゾルバーだけを実行します。それ以外は走らないので、必要な前提は `resolvedData` で与えてください。
+
+専用のパスで公開しているので、メインエントリー経由でアプリケーションのバンドルに入ることはありません。
+
 ## 高度な使用例
 
 ### Axios エラーハンドリング
@@ -451,61 +576,6 @@ catch (e) {
 
 [2つの層](#2つの層)を参照してください。レスポンスはまさに「選んでコピーすべきもの」の典型です。`set-cookie`、署名付き URL の署名を含みうる `url`、そして目的のメッセージ以上のものを含みうるボディが乗っています。
 
-## リゾルバーをテストする
-
-このパッケージの主な使われ方はリゾルバーを書くことです。そのテストのためにコンテキストを手で組み立てる必要はありません。手組みは自分の所有物でない型の形にテストを結合させ、さらに `ctx.resolve()` と `ctx.degraded()` を観測不能にします。
-
-```typescript
-import { runResolver } from '@fastkit/catcher/testing'
-
-const { data, resolved, degraded } = await runResolver(apiErrorResolver, apiError)
-
-data?.apiErrorCode // リゾルバーの戻り値。処理しなかった場合は undefined
-resolved           // ctx.resolve() を呼んだか
-degraded           // ctx.degraded() で報告された内容
-```
-
-リゾルバーが同期か非同期かに関わらず常に非同期なので、`await` 1つで両方を扱えます。実行の形を決めるオプションは2つです。
-
-| オプション | 既定 | 用途 |
-| --- | --- | --- |
-| `canAwait` | `true` | `ctx.canAwait` の値。`false` にすると同期エントリーポイントが通る経路を検証できます。 |
-| `resolvedData` | `{}` | 先行するリゾルバーが残したもの。実際のキャッチャーでは `Error` に対してこれが空になることはありません（`nativeErrorResolver` が最初に走り、必ず `nativeError` を足すため）。 |
-
-```typescript
-// 同期経路と、そこで失われたと申告された内容
-const sync = await runResolver(fetchResponseResolver(), err, { canAwait: false })
-sync.degraded // ['response body']
-```
-
-渡した1つのリゾルバーだけを実行します。それ以外は走らないので、必要な前提は `resolvedData` で与えてください。
-
-専用のパスで公開しているので、メインエントリー経由でアプリケーションのバンドルに入ることはありません。
-
-### 届かなかったものを申告する
-
-await できればもっと取れるリゾルバーには、2つの経路があります。同期側の経路では、置き去りにしたものを申告してください。
-
-```typescript
-const myResolver = createCatcherResolver((source, ctx) => {
-  const extracted = extract(source)
-  if (!extracted) return
-
-  if (!ctx.canAwait) {
-    ctx.degraded?.('response body')
-    return { myError: metaOf(extracted) }
-  }
-
-  return readBody(extracted).then((body) => ({
-    myError: { ...metaOf(extracted), body },
-  }))
-})
-```
-
-`ctx.degraded()` は `ctx.canAwait` が `true` のときは何もしないので、呼び出し側でガードする必要はありません。これは「何かが失われたかもしれない」と推測するのではなく、警告が**失われたものの名前**を出せるようにするためのものです。そして `runResolver` がそれをテストで表明可能にします。
-
-型の上で optional なのは、手組みのコンテキストがコンパイルを通り続けるようにするためだけです。キャッチャーは常にこれを渡します。
-
 ### 複数リゾルバーとエラー履歴管理
 
 ```typescript
@@ -714,7 +784,7 @@ function createCatcherResolver<Resolver extends AnyResolver>(
 ): Resolver
 ```
 
-カスタムリゾルバーを作成します。
+カスタムリゾルバーを作成します。守るべき契約は[リゾルバーを書く](#リゾルバーを書く)を参照してください。
 
 ### `createCatcherNormalizer` 関数
 

@@ -242,40 +242,54 @@ console.log(caught.statusCode)  // 400
 console.log(caught.type)        // 'API_ERROR'
 ```
 
-## Testing a resolver
+## Writing a resolver
 
-Writing a resolver is how most applications use this package, and testing one should not mean building a context by hand — that couples your tests to the shape of a type you do not own, and leaves `ctx.resolve()` and `ctx.degraded()` unobservable.
-
-```typescript
-import { runResolver } from '@fastkit/catcher/testing'
-
-const { data, resolved, degraded } = await runResolver(apiErrorResolver, apiError)
-
-data?.apiErrorCode // what the resolver returned, or undefined if it declined
-resolved           // whether it called ctx.resolve()
-degraded           // what it reported through ctx.degraded()
-```
-
-Always asynchronous, whether or not the resolver is, so one `await` covers both kinds. Two options shape the run:
-
-| option | default | what it is for |
-| --- | --- | --- |
-| `canAwait` | `true` | The value of `ctx.canAwait`. Set `false` to exercise the path the synchronous entry points take. |
-| `resolvedData` | `{}` | What earlier resolvers left behind. Inside a real catcher this is never empty for an `Error`: `nativeErrorResolver` runs first and always contributes `nativeError`. |
+A resolver answers one question: *is this exception mine, and if so what is worth pulling out of it?* Return an object, which is merged into `resolvedData` for the normalizer, or nothing to decline.
 
 ```typescript
-// The synchronous path, and what it admits to losing
-const sync = await runResolver(fetchResponseResolver(), err, { canAwait: false })
-sync.degraded // ['response body']
+const apiErrorResolver = createCatcherResolver((source, ctx) => {
+  if (!isAPIError(source)) return // not mine
+
+  ctx.resolve() // ...and nobody after me needs to look
+  return { apiError: { code: source.code, status: source.statusCode } }
+})
 ```
 
-It runs the one resolver you give it and nothing else, which is what `resolvedData` is for.
+`createCatcherResolver` is an identity function. It exists so the argument types are inferred and the return type is carried through to `resolvedData` and the normalizer.
 
-It is published on its own path, so it never reaches an application bundle through the main entry.
+### The order they run in
 
-### Reporting what could not be reached
+`nativeErrorResolver` is put in front of your list, and it never declines an `Error`.
 
-A resolver that can reach further when awaited has two paths through it. On the synchronous one, say what was left behind:
+| what you write | what runs |
+| --- | --- |
+| `resolvers: [a, b]` | `nativeErrorResolver`, `a`, `b` |
+| `resolvers: [a, nativeErrorResolver, b]` | `a`, `nativeErrorResolver`, `b` |
+
+Naming it yourself is how you move it: a list that already contains it is taken as given. `build` never rewrites the array you pass, so one `const resolvers` can be shared between two catchers.
+
+So by the time your resolver runs, `ctx.resolvedData` already holds `nativeError` for anything that is an `Error`, and is empty for anything that is not.
+
+**Two resolvers matching the same exception is the normal case, not an edge case.** A fetch error carries both `fetchError` and `nativeError`, because the native resolver ran first and did not decline it.
+
+### Merging, and `ctx.resolve()`
+
+Results are merged in order, so a later resolver overwrites the keys of an earlier one and leaves the rest:
+
+```typescript
+// a returns { who: 'a', onlyA: 1 }, then b returns { who: 'b' }
+resolvedData // { nativeError, who: 'b', onlyA: 1 }
+```
+
+Namespacing what you return under one key — `{ apiError: { ... } }` rather than `{ code, status }` — keeps two resolvers from silently overwriting each other's fields.
+
+`ctx.resolve()` stops the resolvers after you. It is optional: leaving it uncalled means everyone still gets a turn, which is what you want when your resolver adds a facet of the exception rather than claiming it. It holds whether or not you return anything — "this one is mine and nobody after me needs to look" is just as sayable by a resolver that recognised the exception and found nothing in it worth extracting.
+
+### Returning a promise
+
+Only when `ctx.canAwait` is `true`. A synchronous entry point has nowhere to await — an instance is an `Error` that has to exist by the time it is thrown — so a promise returned there is discarded, along with whatever it would have produced.
+
+A resolver that can reach further when awaited therefore has two paths, and says on the synchronous one what that cost:
 
 ```typescript
 const myResolver = createCatcherResolver((source, ctx) => {
@@ -293,9 +307,65 @@ const myResolver = createCatcherResolver((source, ctx) => {
 })
 ```
 
-`ctx.degraded()` is a no-op when `ctx.canAwait` is `true`, so it needs no guard of its own. It exists so the warning can name what was lost instead of guessing that something might have been — and `runResolver` is what makes it assertable.
+`ctx.degraded()` is a no-op when `ctx.canAwait` is `true`, so it needs no guard of its own. It is what lets the warning name the thing that was lost instead of guessing that something might have been. It is optional on the type only so that a hand-built context still compiles; a catcher always supplies it.
 
-It is optional on the type only so that a hand-built context still compiles; a catcher always supplies it.
+### Do not throw
+
+A resolver runs while an error is being described, and must not replace it with one of its own — whoever is handling the original exception would get a `TypeError` from inside this package instead of the thing they caught.
+
+One that throws anyway is skipped, the resolvers after it still get their turn, and development is told:
+
+```
+[@fastkit/catcher] A resolver threw while describing an exception, and was skipped.
+  TypeError: Cannot read properties of undefined (reading 'data')
+  The exception being described is unaffected -- fix the resolver.
+```
+
+A resolver that threw is treated as having contributed nothing, and that includes its `ctx.resolve()`: one failed run does not get to silence every resolver after it. This is a safety net rather than a licence — the warning is where you find out.
+
+### Which entry point
+
+| | second argument to the normalizer | takes overrides | awaits resolvers |
+| --- | --- | --- | --- |
+| `create(info)` | `info` | no | no |
+| `from(e, overrides?)` | `undefined` | yes | no |
+| `createAsync(info)` | `info` | no | yes |
+| `fromAsync(e, overrides?)` | `undefined` | yes | yes |
+
+`from` is for something you caught and do not recognise: the normalizer works from what the resolvers extracted, and that is the usual case. `create` is for an error you are constructing deliberately from your own payload, which the normalizer's second stage then sees in full.
+
+`fromAsync` / `createAsync` are the same two, awaiting every resolver first. Prefer them wherever you can await — see [`from` vs `fromAsync`](#from-vs-fromasync).
+
+## Testing a resolver
+
+Testing a resolver should not mean building a context by hand — that couples your tests to the shape of a type you do not own, and leaves `ctx.resolve()` and `ctx.degraded()` unobservable.
+
+```typescript
+import { runResolver } from '@fastkit/catcher/testing'
+
+const { data, resolved, degraded } = await runResolver(apiErrorResolver, apiError)
+
+data?.apiError.code // what the resolver returned, or undefined if it declined
+resolved            // whether it called ctx.resolve()
+degraded            // what it reported through ctx.degraded()
+```
+
+Always asynchronous, whether or not the resolver is, so one `await` covers both kinds. Two options shape the run:
+
+| option | default | what it is for |
+| --- | --- | --- |
+| `canAwait` | `true` | The value of `ctx.canAwait`. Set `false` to exercise the path the synchronous entry points take. |
+| `resolvedData` | `{}` | What earlier resolvers left behind. Inside a real catcher this is never empty for an `Error`, since `nativeErrorResolver` runs first. |
+
+```typescript
+// The synchronous path, and what it admits to losing
+const sync = await runResolver(fetchResponseResolver(), err, { canAwait: false })
+sync.degraded // ['response body']
+```
+
+It runs the one resolver you give it and nothing else, which is what `resolvedData` is for.
+
+It is published on its own path, so it never reaches an application bundle through the main entry.
 
 ## Advanced Usage Examples
 
@@ -717,7 +787,7 @@ function createCatcherResolver<Resolver extends AnyResolver>(
 ): Resolver
 ```
 
-Creates a custom resolver.
+Creates a custom resolver. See [Writing a resolver](#writing-a-resolver) for the contract it has to keep.
 
 ### `createCatcherNormalizer` Function
 

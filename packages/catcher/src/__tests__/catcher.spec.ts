@@ -224,3 +224,163 @@ describe('build: ctx.degraded', () => {
     expect(warn).not.toHaveBeenCalled();
   });
 });
+
+describe('build: the resolver contract', () => {
+  const a = createCatcherResolver(() => ({ who: 'a', onlyA: 1 }));
+  const b = createCatcherResolver(() => ({ who: 'b' }));
+
+  test('merges in order, so a later resolver wins a shared key', () => {
+    const AppError = build({
+      defaultMessage: 'm',
+      resolvers: [a, b],
+      normalizer: () => () => ({}),
+    });
+
+    expect(AppError.from(new Error('x')).resolvedData).toMatchObject({
+      who: 'b',
+      onlyA: 1,
+    });
+  });
+
+  test('ctx.resolve() stops the resolvers after it', () => {
+    const claim = createCatcherResolver((_source: unknown, ctx) => {
+      ctx.resolve();
+      return { who: 'a' };
+    });
+    const AppError = build({
+      defaultMessage: 'm',
+      resolvers: [claim, b],
+      normalizer: () => () => ({}),
+    });
+
+    expect(AppError.from(new Error('x')).resolvedData.who).toBe('a');
+  });
+
+  // The stop check used to sit inside `if (result)`, so "this one is mine and
+  // nobody after me needs to look" was silently ignored unless the resolver
+  // also had something to extract.
+  test('ctx.resolve() holds even when the resolver returns nothing', () => {
+    const claimOnly = createCatcherResolver((_source: unknown, ctx) => {
+      ctx.resolve();
+    });
+    const AppError = build({
+      defaultMessage: 'm',
+      resolvers: [claimOnly, b],
+      normalizer: () => () => ({}),
+    });
+
+    expect(AppError.from(new Error('x')).resolvedData.who).toBeUndefined();
+  });
+
+  test('the same, on the path that awaits', async () => {
+    const claimOnly = createCatcherResolver((_source: unknown, ctx) => {
+      ctx.resolve();
+    });
+    const AppError = build({
+      defaultMessage: 'm',
+      resolvers: [claimOnly, b],
+      normalizer: () => () => ({}),
+    });
+
+    const err = await AppError.fromAsync(new Error('x'));
+    expect(err.resolvedData.who).toBeUndefined();
+  });
+});
+
+describe('build: a resolver that throws', () => {
+  const boom = createCatcherResolver(() => {
+    throw new TypeError('resolver blew up');
+  });
+  const after = createCatcherResolver(() => ({ who: 'after' }));
+
+  const buildAppError = () =>
+    build({
+      defaultMessage: 'Something went wrong',
+      resolvers: [boom, after],
+      normalizer: (resolved) => () => ({ who: resolved.who }),
+    });
+
+  // The whole point of the package is to describe whatever was caught. A
+  // resolver throwing used to replace it: the caller got a `TypeError` from
+  // inside this package instead of the exception they were handling.
+  test('does not replace the exception being described', () => {
+    captureWarnings();
+
+    const err = buildAppError().from(new Error('the real problem'));
+
+    expect(err.message).toBe('the real problem');
+  });
+
+  test('lets the resolvers after it have their turn', () => {
+    captureWarnings();
+
+    expect(buildAppError().from(new Error('x')).who).toBe('after');
+  });
+
+  test('warns, naming what was thrown', () => {
+    const warn = captureWarnings();
+
+    buildAppError().from(new Error('x'));
+
+    expect(warn).toHaveBeenCalledTimes(1);
+    const [message] = warn.mock.calls[0];
+    expect(message).toContain('A resolver threw');
+    expect(message).toContain('TypeError: resolver blew up');
+  });
+
+  // A resolver that did not finish contributed nothing, and that includes its
+  // claim on the exception -- otherwise one failed run silences every resolver
+  // after it.
+  test('does not get to keep its ctx.resolve()', () => {
+    captureWarnings();
+    const claimThenThrow = createCatcherResolver((_source: unknown, ctx) => {
+      ctx.resolve();
+      throw new Error('too late');
+    });
+    const AppError = build({
+      defaultMessage: 'm',
+      resolvers: [claimThenThrow, after],
+      normalizer: (resolved) => () => ({ who: resolved.who }),
+    });
+
+    expect(AppError.from(new Error('x')).who).toBe('after');
+  });
+
+  test('the same, on the path that awaits', async () => {
+    captureWarnings();
+    const rejects = createCatcherResolver(async (_source: unknown, ctx) => {
+      ctx.resolve();
+      throw new Error('rejected');
+    });
+    const AppError = build({
+      defaultMessage: 'm',
+      resolvers: [rejects, after],
+      normalizer: (resolved) => () => ({ who: resolved.who }),
+    });
+
+    const err = await AppError.fromAsync(new Error('the real problem'));
+    expect(err.message).toBe('the real problem');
+    expect(err.who).toBe('after');
+  });
+});
+
+describe('build: create vs from', () => {
+  const Spy = build({
+    defaultMessage: 'm',
+    normalizer: () => (exceptionInfo) => ({ sawSecondStage: exceptionInfo }),
+  });
+  const info = { code: 'X' };
+
+  // `create` is for an error you are constructing from your own payload, so
+  // the normalizer's second stage sees it; `from` is for something you caught
+  // and do not recognise, so it works from what the resolvers extracted.
+  test('create hands the info to the normalizer, from does not', () => {
+    expect(Spy.create(info).sawSecondStage).toBe(info);
+    expect(Spy.from(info).sawSecondStage).toBeUndefined();
+  });
+
+  test('the same on the paths that await', async () => {
+    expect((await Spy.createAsync(info)).sawSecondStage).toBe(info);
+    expect((await Spy.fromAsync(info)).sawSecondStage).toBeUndefined();
+  });
+});

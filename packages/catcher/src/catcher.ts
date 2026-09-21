@@ -106,7 +106,38 @@ export function build<
         degradations.push(what);
       },
     };
-    return { ctx, isStopped: () => stopped, degradations };
+    return {
+      ctx,
+      isStopped: () => stopped,
+      /**
+       * Take back a `ctx.resolve()` from a resolver that then threw
+       *
+       * A resolver that did not finish contributed nothing, and that includes
+       * its claim on the exception -- honouring it would silence every
+       * resolver after it on the strength of a run that failed.
+       */
+      undoStop: () => {
+        stopped = false;
+      },
+      degradations,
+    };
+  }
+
+  /**
+   * Report a resolver that threw, and carry on
+   *
+   * A resolver runs while an error is being described and must not replace it
+   * with one of its own: whoever is handling the original exception would get
+   * a `TypeError` from inside this package instead of the thing they caught.
+   * So it is skipped, the rest still get their turn, and development is told.
+   */
+  function reportResolverError(err: unknown): void {
+    devWarn(
+      warned,
+      `A resolver threw while describing an exception, and was skipped.\n` +
+        `  ${err instanceof Error ? `${err.name}: ${err.message}` : String(err)}\n` +
+        `  The exception being described is unaffected -- fix the resolver.`,
+    );
   }
 
   /**
@@ -120,21 +151,31 @@ export function build<
    * get their turn.
    */
   function runResolvers(infoOrException: unknown, resolvedData: AnyData): void {
-    const { ctx, isStopped, degradations } = createResolverContext(
+    const { ctx, isStopped, undoStop, degradations } = createResolverContext(
       resolvedData,
       false,
     );
     for (const resolver of resolverList) {
-      const result = resolver(infoOrException, ctx);
+      let result: ReturnType<typeof resolver>;
+      try {
+        result = resolver(infoOrException, ctx);
+      } catch (err) {
+        undoStop();
+        reportResolverError(err);
+        continue;
+      }
       if (isPromiseLike(result)) {
         result.catch(() => undefined);
         continue;
       }
       if (result) {
         Object.assign(resolvedData, result);
-        if (isStopped()) {
-          break;
-        }
+      }
+      // Outside the merge on purpose: `ctx.resolve()` says "nobody after me
+      // needs to look", which is just as sayable by a resolver that recognised
+      // the exception and found nothing in it worth extracting.
+      if (isStopped()) {
+        break;
       }
     }
     if (degradations.length) {
@@ -156,18 +197,29 @@ export function build<
    */
   async function runResolversAsync(infoOrException: unknown): Promise<AnyData> {
     const resolvedData: AnyData = {};
-    const { ctx, isStopped } = createResolverContext(resolvedData, true);
+    const { ctx, isStopped, undoStop } = createResolverContext(
+      resolvedData,
+      true,
+    );
     for (const resolver of resolverList) {
       // Sequential on purpose, exactly like the synchronous pass: a resolver
       // may read what an earlier one left in `ctx.resolvedData`, and
       // `ctx.resolve()` is meant to stop the ones after it.
 
-      const result = await resolver(infoOrException, ctx);
+      let result: Awaited<ReturnType<typeof resolver>>;
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        result = await resolver(infoOrException, ctx);
+      } catch (err) {
+        undoStop();
+        reportResolverError(err);
+        continue;
+      }
       if (result) {
         Object.assign(resolvedData, result);
-        if (isStopped()) {
-          break;
-        }
+      }
+      if (isStopped()) {
+        break;
       }
     }
     return resolvedData;

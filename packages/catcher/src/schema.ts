@@ -27,11 +27,26 @@ type ExcludeNullableReturnType<T> = T extends (...args: any[]) => any
 
 export type ResolverContext = {
   /**
-   * By executing this method, it is possible to skip processing of subsequent resolvers
+   * Stop the resolvers after this one
+   *
+   * Optional. Leaving it uncalled means every later resolver still gets its
+   * turn, which is what you want when your resolver adds a facet of the
+   * exception rather than claiming it.
+   *
+   * It holds whether or not you return anything: "this one is mine and nobody
+   * after me needs to look" is just as sayable by a resolver that recognised
+   * the exception and found nothing in it worth extracting.
+   *
+   * A resolver that throws does not get to keep this -- it contributed
+   * nothing, and that includes its claim on the exception.
    */
   resolve: () => void;
   /**
-   * Value extracted by an already executed resolver
+   * What the resolvers before this one returned, merged
+   *
+   * Never empty for an `Error`: `nativeErrorResolver` runs in front of your
+   * list and never declines one, so `nativeError` is already here. Empty for
+   * anything that is not an `Error`.
    */
   readonly resolvedData: AnyData;
   /**
@@ -93,10 +108,24 @@ export type ResolverContext = {
 /**
  * Exception Resolver
  *
+ * Answers one question: is this exception mine, and if so what is worth
+ * pulling out of it? Return an object to be merged into `resolvedData` for the
+ * normalizer, or nothing to decline.
+ *
+ * * Results are merged in order, so a later resolver overwrites the keys of an
+ *   earlier one and leaves the rest. Namespacing what you return under one key
+ *   -- `{ apiError: { ... } }` rather than `{ code, status }` -- keeps two
+ *   resolvers from silently overwriting each other's fields.
  * * May return a promise. It is only awaited when the instance is built through
  *   {@link CatcherConstructor.fromAsync fromAsync} / {@link
  *   CatcherConstructor.createAsync createAsync} -- check
- *   {@link ResolverContext.canAwait ctx.canAwait} before returning one.
+ *   {@link ResolverContext.canAwait ctx.canAwait} before returning one, and
+ *   report what the synchronous path cost through
+ *   {@link ResolverContext.degraded ctx.degraded()}.
+ * * **Must not throw.** A resolver runs while an error is being described and
+ *   must not replace it with one of its own. One that does is skipped and
+ *   warned about in development, and the exception being described reaches the
+ *   normalizer regardless -- a safety net, not a licence.
  */
 export type AnyResolver = (
   exceptionInfo: unknown,
