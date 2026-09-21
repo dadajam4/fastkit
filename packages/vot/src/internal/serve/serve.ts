@@ -29,7 +29,6 @@ import { createVotRequestHandler } from './handler';
 const require = module.createRequire(import.meta.url);
 
 export interface ServeOptions {
-  memwatch?: boolean;
   /**
    * Run on something other than Node.
    *
@@ -159,27 +158,6 @@ async function loadConfigFromViteConfig(): Promise<ResolvedServeConfig> {
 }
 
 export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
-  let memwatch: any;
-
-  if (opts.memwatch) {
-    const { createMemwatch } = await import('./memwatch');
-
-    memwatch = await createMemwatch();
-
-    memwatch.memwatcher.start({
-      graph: true,
-      graphSetup(setup: any) {
-        setup.metrics.malloc = {
-          aggregator: 'avg',
-          color: 'cyan',
-        };
-      },
-      graphAddMetric(turtleGraph: any, stats: any) {
-        turtleGraph.metric('malloc', 'malloc').push(stats.malloced_memory);
-      },
-    });
-  }
-
   const dist = path.resolve(process.cwd(), 'dist');
   const serverDist = path.join(dist, 'server');
 
@@ -234,17 +212,6 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
       ? (ctx) => config.configureServer?.(ctx) as void | Promise<void>
       : undefined,
   };
-
-  if (memwatch) {
-    const userConfigureServer = adapterContext.configureServer;
-    adapterContext.configureServer = async (ctx) => {
-      ctx.app.get('/__memwatch__/diff', (c) => {
-        memwatch.gc();
-        return c.json(memwatch.diff());
-      });
-      await userConfigureServer?.(ctx);
-    };
-  }
 
   const app = await adapter.createApp(adapterContext);
 

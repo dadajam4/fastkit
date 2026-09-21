@@ -1,10 +1,6 @@
 import { serve } from '../dist/internal/serve.mjs';
 
-const [, , ...args] = process.argv;
-
-const served = await serve({
-  memwatch: args.includes('--memwatch'),
-});
+const served = await serve();
 
 /**
  * Shut down on the signals an orchestrator actually sends.

@@ -544,6 +544,58 @@ export default defineVotConfig({
 })
 ```
 
+### Investigating memory in production
+
+Nothing in vot is needed for this -- `vot serve` runs `serve()` in the same
+process as the bin, so Node's own flags reach it through `NODE_OPTIONS`, and vot
+registers no signal handler other than the shutdown ones, leaving `SIGUSR2`
+free.
+
+```bash
+# Take a snapshot on demand with `kill -USR2 <pid>`, and one automatically just
+# before the heap limit is hit.
+NODE_OPTIONS="--heapsnapshot-signal=SIGUSR2 --heapsnapshot-near-heap-limit=3" vot serve
+```
+
+Load the resulting `.heapsnapshot` files into Chrome DevTools' Memory tab and
+compare two taken under the same load; the objects that keep growing between
+them are the leak, and the Retainers pane names what is holding them.
+
+Judge a leak by the `heapUsed` baseline *after* a major GC rather than by RSS,
+which moves for reasons that are not leaks. Watch `external` separately -- when
+that is what grows, the cause is outside the JS heap (buffers, streams) and a
+heap snapshot will not show it.
+
+```ts
+// vot.server.ts -- record the baseline that actually indicates a leak.
+import { PerformanceObserver } from 'node:perf_hooks';
+
+new PerformanceObserver((list) => {
+  for (const entry of list.getEntries()) {
+    record(entry.detail.kind, process.memoryUsage());
+  }
+}).observe({ entryTypes: ['gc'] });
+```
+
+Per-route attribution goes through `configureServer`, whose middleware is
+mounted ahead of the catch-all and so wraps the render:
+
+```ts
+configureServer({ app }) {
+  app.use(async (c, next) => {
+    const before = process.memoryUsage().heapUsed;
+    await next();
+    record(c.req.path, process.memoryUsage().heapUsed - before);
+  });
+}
+```
+
+> **A heap snapshot contains whatever is in memory at that moment** -- session
+> tokens, credentials, and the user data being rendered. Prefer the signal above
+> to an HTTP endpoint that dumps one: it adds no public surface. If you do add an
+> endpoint, put it behind your application's own authentication, and treat the
+> files themselves as sensitive.
+
 ### E2E Test Integration
 
 ```typescript

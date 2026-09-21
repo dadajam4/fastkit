@@ -12,11 +12,6 @@ export default defineWorkspaceConfig({
     head: './src/head.ts',
   },
   deps: {
-    neverBundle: [
-      'virtual:generated-pages',
-      /^@fastkit\/vot/,
-      'node-memwatcher',
-      '@airbnb/node-memwatch',
-    ],
+    neverBundle: ['virtual:generated-pages', /^@fastkit\/vot/],
   },
 });
