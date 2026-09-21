@@ -1,5 +1,108 @@
 # @fastkit/vot
 
+## 2.1.0
+
+### Minor Changes
+
+- [#286](https://github.com/dadajam4/fastkit/pull/286) [`08b43b2`](https://github.com/dadajam4/fastkit/commit/08b43b25fbf5b2626fd77cf8635d46e875b14354) Thanks [@dadajam4](https://github.com/dadajam4)! - Remove `vot serve --memwatch`.
+
+  The flag could not have worked. `createMemwatch()` did `const gc = getGc()`
+  against an `async` function without awaiting it, so `gc` was a `Promise` and the
+  `/__memwatch__/diff` route — the only reason the flag existed — threw
+  `TypeError: memwatch.gc is not a function` on its first request. The file had
+  barely changed since the initial commit, so this went unnoticed for a long time.
+
+  Repairing it was not worth doing. The two packages behind it were never declared
+  anywhere: `node-memwatcher` and `@airbnb/node-memwatch` were dynamic-imported
+  under a `MODULE_NOT_FOUND` guard, but `package.json` carried neither
+  `optionalDependencies` nor `peerDependenciesMeta` for them, in this version or
+  in any published one. `node-memwatcher` was last published in 2022, and
+  `@airbnb/node-memwatch` is a native addon — the opposite direction from the work
+  that made vot's core runtime-agnostic.
+
+  Everything it set out to do is in Node itself, with nothing to install and
+  nothing to compile: `v8.writeHeapSnapshot()`, `--heapsnapshot-signal`,
+  `--heapsnapshot-near-heap-limit`, `--heap-prof`, and GC entries from
+  `perf_hooks`. All of them reach `vot serve` through `NODE_OPTIONS`, because it
+  runs `serve()` in the same process as the bin.
+
+  The README gains an "Investigating memory in production" section covering that
+  route, including why a heap-snapshot endpoint is better left out of the
+  framework: a snapshot contains whatever is in memory at the time, including
+  session tokens and user data, and the authentication that should guard it
+  belongs to the application.
+
+  ## Migration
+
+  Replace the flag with Node's own instrumentation:
+
+  ```bash
+  # was: vot serve --memwatch
+  NODE_OPTIONS="--heapsnapshot-signal=SIGUSR2 --heapsnapshot-near-heap-limit=3" vot serve
+  ```
+
+  `ServeOptions.memwatch` is gone from `@fastkit/vot/internal/serve` along with
+  it. Passing it did nothing that worked, so nothing that worked can break.
+
+  Closes [#281](https://github.com/dadajam4/fastkit/issues/281).
+
+- [#283](https://github.com/dadajam4/fastkit/pull/283) [`4d93e47`](https://github.com/dadajam4/fastkit/commit/4d93e477329f2be83c21e6df6bb329ade72e033c) Thanks [@dadajam4](https://github.com/dadajam4)! - Shut `vot serve` down gracefully instead of dropping in-flight requests.
+
+  `vot serve` registered no signal handlers at all, and `bin/serve.mjs` discarded
+  the `ServedResult` that `serve()` returns — so the `close()` the node adapter
+  had implemented was unreachable. On `SIGTERM` the process died on the spot and
+  whatever was being rendered went with it. Every rolling deploy dropped requests,
+  showing up as a handful of 502s or truncated responses that are easy to blame on
+  the load balancer.
+
+  Nothing downstream could fix this: `configureServer` hands out the adapter's
+  `Hono` app, not the server, and `VotListenResult.native` never escaped the bin.
+
+  `vot serve` now handles `SIGTERM` and `SIGINT`, stops accepting connections,
+  lets accepted requests finish, and exits `128 + signal`.
+
+  ## `close()` had to learn to drain
+
+  `server.close()` on its own is not a graceful shutdown — it waits for _every_
+  connection to end, and an idle keep-alive socket ends when the client decides
+  it should. Worse, **Node keeps answering `Connection: keep-alive` after
+  `close()` has been called**, so a socket that goes idle partway through the
+  drain is never released either. A shutdown that only called `close()` would not
+  drain at all; it would hang until `SIGKILL`.
+
+  So the adapter drops idle connections when the shutdown starts _and_ as each
+  further request finishes, and forces the rest once the deadline passes.
+
+  ## `shutdownTimeout`
+
+  ```ts
+  export default defineVotServer({
+    shutdownTimeout: 10_000, // default
+  });
+  ```
+
+  The default is deliberately below the 30s grace period Kubernetes and Docker
+  both default to: a timeout that expires at the same moment as the grace period
+  never gets to force anything, because `SIGKILL` has already arrived. Raise it
+  only alongside `terminationGracePeriodSeconds`. `0` forces immediately.
+
+  There is no environment variable for it — a server entry is evaluated at startup
+  and can read `process.env` itself.
+
+  ## `vot dev` is unchanged, on purpose
+
+  Vite's dev server installs its own `SIGTERM` handler whenever it is not in
+  middleware mode, which is how `vot dev` runs it. A second handler here would
+  race Vite's to `process.exit()`, so adding one would be a regression rather than
+  a fix.
+
+  Adapters other than the node one are unaffected in shape: `close()` is already
+  part of `VotListenResult`, so the bin-level handling covers any adapter that
+  implements `listen()`. `VotAdapterContext` gains an optional `shutdownTimeout`
+  for adapters that own a listening socket.
+
+  Closes [#282](https://github.com/dadajam4/fastkit/issues/282).
+
 ## 2.0.0
 
 ### Major Changes
