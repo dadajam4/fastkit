@@ -68,11 +68,13 @@ Work through these in order for any dependency `X` used by a package:
    → **`optionalDependencies`** or `peerDependenciesMeta.<X>.optional = true`
    (or leave it undeclared if it is intentionally optional-and-absent).
 
-6. **Refinement — is a peer `X` (from step 3 or 4) reachable only through a
-   subpath export the consumer opts into, not from the main entry?**
-   → keep it a `peerDependency` but mark it **optional**
-   (`peerDependenciesMeta.<X>.optional = true`). See
-   [Peers scoped to an optional subpath export](#peers-scoped-to-an-optional-subpath-export).
+6. **Refinement — is a peer `X` (from step 3 or 4) needed by *every* consumer,
+   or only by the ones who opt into a single feature of the package?**
+   → needed by only some: keep it a `peerDependency` but mark it **optional**
+   (`peerDependenciesMeta.<X>.optional = true`). A dependency reachable only
+   through an opt-in subpath export qualifies, and so does a type re-exposed
+   from the main entry whose value the consumer supplies. See
+   [Optional peers](#optional-peers-dependencies-not-every-consumer-needs).
 
 ## Reference table
 
@@ -88,32 +90,34 @@ Work through these in order for any dependency `X` used by a package:
 | plugboy plugin (the package *is* a plugin) | required `peerDependencies` | `@fastkit/plugboy-sass-plugin` |
 | Dependency reachable only via an opt-in subpath export | **optional** `peerDependencies` | `@fastkit/plugboy` in `@fastkit/icon-font`; `vite` in `@fastkit/ts-tiny-meta` |
 | Workspace package declared as a peer | `peerDependencies` with an **explicit range** (+ `workspace:^` dev) — never `workspace:^` as the peer | `@fastkit/icon-font-gen: ^1.0.0` in `@fastkit/vite-plugin-vui` |
-| Re-exposed type whose value the consumer supplies | **optional** `peerDependencies` | `@datadog/browser-logs` in `@fastkit/universal-logger` |
+| Re-exposed type whose value the consumer supplies | **optional** `peerDependencies` | `@datadog/browser-logs` in `@fastkit/universal-logger`; `@fastkit/icon-font-gen` in `@fastkit/vite-plugin-vui` |
 | Package with code that executes in Node | declare `engines.node` at its dependencies' floor | `>=22.0.0` in `@fastkit/node-util` |
 
 ## Special cases and established rules
 
-### Peers scoped to an optional subpath export
+### Optional peers: dependencies not every consumer needs
 
-**General rule:** if a dependency is used **only** by a subpath export that the
-consumer opts into — not by the package's main entry — declare it as an
-**optional** peer (`peerDependenciesMeta.<dep>.optional = true`).
+**General rule:** a peer is **optional**
+(`peerDependenciesMeta.<dep>.optional = true`) when only the consumers who opt
+into one feature of the package need it, and **required** when every consumer
+does.
 
-A consumer who imports only the main entry never touches that subpath and does
-not need the dependency; a *required* peer would emit a spurious
-"missing peer dependency" warning for them. Marking it optional keeps the
-relationship documented for consumers who do use the subpath (which, for a
-build-time subpath, always run in a context that already provides the dep) while
-staying quiet for everyone else.
+A consumer who never reaches the feature does not need the dependency, and a
+*required* peer would emit a spurious "missing peer dependency" warning for
+them. Marking it optional keeps the relationship documented for the consumers
+who do reach it while staying quiet for everyone else.
 
-How to tell whether a dependency is subpath-scoped: check whether it is imported
-from the main entry's (`src/index.ts`) import closure, or only from the source
-files that back a non-main subpath entry. If it appears only outside the main
-closure, it is subpath-scoped and its peer should be optional. (This can be
-audited mechanically — walk the relative-import graph from `src/index.ts` and
-flag peers that never appear in it.)
+"Does every consumer need it" is the question. Two shapes answer *no*, and the
+second one is easy to miss because the dependency **is** on the main entry.
 
-Examples in this repo:
+#### The feature lives behind an opt-in subpath export
+
+The dependency is imported only by the source files backing a non-main entry.
+
+How to tell: check whether it appears in the main entry's (`src/index.ts`)
+import closure, or only outside it. If it appears only outside, its peer should
+be optional. (This can be audited mechanically — walk the relative-import graph
+from `src/index.ts` and flag peers that never appear in it.)
 
 - `@fastkit/icon-font`, `@fastkit/color-scheme`, and `@fastkit/media-match` each
   export a `./plugboy-dts-preserve` subpath that imports `@fastkit/plugboy`,
@@ -121,9 +125,34 @@ Examples in this repo:
 - `@fastkit/ts-tiny-meta` uses `vite` only in its `./vite` subpath → `vite` is an
   **optional** peer.
 
-Contrast: a dependency used by the **main** entry (e.g. `vue` in a component
-package, or `typescript` in `@fastkit/ts-tiny-meta`'s core) is a **required**
-peer — every consumer needs it.
+#### The main entry re-exposes a type whose value the consumer supplies
+
+The package imports the dependency **for its types only** and hands the
+corresponding value back to the consumer to provide. The type is published from
+the main entry, so it has to *resolve* for anyone who references it — which is
+why it is a peer rather than a `devDependency` — but nobody who leaves the
+feature alone has to *install* it.
+
+- `@fastkit/universal-logger` types `DDTransportSettings.dd` as
+  `typeof datadogLogs` and lets the caller pass the namespace object in; nothing
+  of `@datadog/browser-logs` is imported at runtime → **optional** peer.
+- `@fastkit/vite-plugin-vui` types its `iconFont` / `iconFontDefaults` options
+  with `RawIconFontEntry` / `IconFontSettings`; leave them unset — the common
+  case — and no icon font is generated, so the project needs no
+  `@fastkit/icon-font-gen` → **optional** peer.
+
+This shape cannot always be turned into the first one. In `@fastkit/vite-plugin-vui`
+the types are fields on the **main plugin's options object**, so there is no
+subpath to move them to without moving the plugin itself.
+
+How to tell: grep the built main-entry `.d.mts` for an `import` of the peer. A
+name that appears only as a string constant or in JSDoc — as
+`@fastkit/icon-font` does in `@fastkit/icon-font-gen`, which defaults
+`runtimeModule` to it — does not count; nothing has to resolve.
+
+Contrast: a dependency the main entry needs **at runtime**, or whose type every
+consumer unavoidably touches — `vue` in a component package, `typescript` in
+`@fastkit/ts-tiny-meta`'s core — is a **required** peer.
 
 ### Peer dependency version ranges
 
@@ -465,8 +494,8 @@ a developer on a newer Node saw everything green.
    dependencies — `dependencies` plus non-optional `peerDependencies` — walking
    workspace packages transitively. Write the exact floor (`>=22.18.0`), not the
    major: it is what the audit compares against.
-4. **Optional peers are excluded.** They are reachable only through an opt-in
-   subpath, so their floor is not imposed on every consumer. `@fastkit/plugboy`
+4. **Optional peers are excluded.** By definition not every consumer needs
+   them, so their floor is not imposed on every consumer. `@fastkit/plugboy`
    is an optional peer of `@fastkit/color-scheme` and does not push that package
    to Node 22.
 5. **Declare a floor only, not the full range.** A dependency range like
