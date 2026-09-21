@@ -1,5 +1,194 @@
 # @fastkit/catcher
 
+## 1.3.0
+
+### Minor Changes
+
+- [#301](https://github.com/dadajam4/fastkit/pull/301) [`eff207b`](https://github.com/dadajam4/fastkit/commit/eff207be9cdf4d901863d413f5a7f2af074b85c2) Thanks [@dadajam4](https://github.com/dadajam4)! - Add `defaultMessage`, so an application can guarantee that every catcher has a message.
+
+  For a package whose pitch is "throw anything at it and read the result", "whatever you throw, the result has a message" ought to hold. It did not, and the failure was quiet rather than loud:
+
+  ```ts
+  const AppError = build({ normalizer: () => () => ({ code: 'APP_ERROR' }) });
+
+  const err = AppError.from('just a string'); // nothing recognised it
+  err.message; // ''
+  err.toJSONString(); // {"code":"APP_ERROR","message":"", ...}
+  ```
+
+  An instance is a real `Error`, and an `Error` is born with an empty message. So a normalizer that returned no `message` for an exception it did not recognise did not leave the field out — it left an empty one, which reads like a message rather than the absence of one. Nothing flagged it.
+
+  `defaultMessage` is the last word, applied after the normalizer and after the exception's own message, and only when what is left is empty:
+
+  ```ts
+  const AppError = build({
+    defaultName: 'AppError',
+    defaultMessage: 'Something went wrong',
+    normalizer: () => () => ({ code: 'APP_ERROR' }),
+  });
+
+  AppError.from('just a string').message; // 'Something went wrong'
+  AppError.from(new Error('real')).message; // 'real' — never displaced
+  ```
+
+  There is no default value: the string is what a user may end up reading, so it belongs to the application rather than to this package. Development warns once per catcher when an instance is built with no message and `defaultMessage` is unset.
+
+  `CatcherData` now also carries `name`, `message` and `stack` as optional members, which is what the catcher has always written into it regardless of the normalizer. A normalizer that declares them narrows them back to required.
+
+- [#301](https://github.com/dadajam4/fastkit/pull/301) [`eff207b`](https://github.com/dadajam4/fastkit/commit/eff207be9cdf4d901863d413f5a7f2af074b85c2) Thanks [@dadajam4](https://github.com/dadajam4)! - Add `ctx.degraded()`, so a resolver can say what a synchronous entry point cost it.
+
+  `from` and `fromAsync` differ in what they can reach, not in what they mean, and picking the wrong one in an async context was silent:
+
+  ```ts
+  catch (e) {
+    throw AppError.from(e); // no body. No type error, no runtime error.
+  }
+  ```
+
+  The normalizer just saw `bodyRead: false` and fell back to `statusText`. A resolver now reports what it could see and could not take, and the catcher warns once, in development only:
+
+  ```
+  [@fastkit/catcher] A resolver could not wait for: response body.
+    Use `await AppError.fromAsync(e)` where you can await.
+  ```
+
+  It is the resolver that reports this rather than the builder inferring it from the resolver list, so the warning names what was lost instead of guessing that something might have been — and it stays quiet for every exception that resolver never matched. A catcher holding `fetchResponseResolver` says nothing when you wrap a `TypeError` that has no `Response` in it.
+
+  Custom resolvers get the same mechanism, which is the point: writing a resolver is how this package is mostly used, and a builder-side inference would have had nothing to offer one.
+
+  ```ts
+  if (!ctx.canAwait) {
+    ctx.degraded?.('response body');
+    return { myError: meta };
+  }
+  ```
+
+  It is a no-op when `ctx.canAwait` is `true`, so it needs no guard of its own. Optional on `ResolverContext` only so that a hand-built context still compiles; a catcher always supplies it.
+
+- [#303](https://github.com/dadajam4/fastkit/pull/303) [`dadb40b`](https://github.com/dadajam4/fastkit/commit/dadb40b4d6fb369ba4bf0b88b512ff0e6d632616) Thanks [@dadajam4](https://github.com/dadajam4)! - Add `match`, so a normalizer dispatches on the kind of exception rather than on which fields happen to exist.
+
+  Written by hand a normalizer is a chain of optional access, and its shape ends up dominated by "does this field exist":
+
+  ```ts
+  normalizer: (resolved) => () => ({
+    message: resolved.fetchError?.response.bodyRead
+      ? (resolved.fetchError.response.json?.message ??
+        resolved.fetchError.response.statusText)
+      : resolved.fetchError?.response.statusText,
+    status: resolved.fetchError?.response.status,
+  });
+  ```
+
+  `match` hands each branch its slice, already narrowed:
+
+  ```ts
+  const resolvers = [fetchResponseResolver()];
+
+  const AppError = build({
+    resolvers,
+    defaultMessage: 'Something went wrong',
+    normalizer: match(resolvers, {
+      fetchError: ({ response }) => ({
+        code: 'HTTP_ERROR',
+        message: response.bodyRead
+          ? (response.json?.message ?? response.statusText)
+          : response.statusText,
+        status: response.status,
+      }),
+      nativeError: (e) => ({ code: 'UNEXPECTED', message: e.message }),
+      default: () => ({ code: 'UNKNOWN', message: 'Something went wrong' }),
+    }),
+  });
+  ```
+
+  **The branches are ordered, not exclusive**, and that is the thing to know before writing one. They are tried in the order written, the first whose key is present wins, and `default` is always last wherever you put it. They have to be ordered because `nativeErrorResolver` runs in front of your list and never declines an `Error`, so a fetch error arrives carrying both keys — a `nativeError` branch matches almost everything and belongs last. Listing it earlier makes every branch after it dead, and development warns when you do.
+
+  **The branch return types are merged rather than left as a union.** A field is required on the result when every branch produces it and optional when only some do, so `err.status` reads as `number | undefined` instead of being an error on a union whose other member has no `status`. That is what `default` being required buys: without a total dispatch there is always a path producing nothing, and no field can be promised. Declare `message` in every branch and it is guaranteed at the type level, with `defaultMessage` covering the runtime half.
+
+  **The resolvers are passed again because they are the only way to type the slices.** Written as `match({ ... })` the branch parameters fall back to `any`, taking the narrowing with them — measured, not assumed. Nothing reads the array at runtime.
+
+- [#301](https://github.com/dadajam4/fastkit/pull/301) [`eff207b`](https://github.com/dadajam4/fastkit/commit/eff207be9cdf4d901863d413f5a7f2af074b85c2) Thanks [@dadajam4](https://github.com/dadajam4)! - Add `@fastkit/catcher/testing`, so a resolver can be tested without hand-rolling a context.
+
+  Writing a resolver is how most applications use this package, and testing one meant reaching into the shape of `ResolverContext`:
+
+  ```ts
+  // before
+  const result = myResolver(someError, {
+    resolve() {},
+    resolvedData: {},
+    canAwait: true,
+  });
+  ```
+
+  That couples every consumer's tests to a type they do not own, and leaves the parts that are not plain return values unobservable — whether the resolver called `ctx.resolve()`, and what it reported through `ctx.degraded()`.
+
+  ```ts
+  import { runResolver } from '@fastkit/catcher/testing';
+
+  const { data, resolved, degraded } = await runResolver(myResolver, someError);
+
+  // ...and the path the synchronous entry points take
+  const sync = await runResolver(fetchResponseResolver(), err, {
+    canAwait: false,
+  });
+  sync.degraded; // ['response body']
+  ```
+
+  Always asynchronous, whether or not the resolver is, so one `await` covers both kinds. `canAwait` (default `true`) picks the path; `resolvedData` (default `{}`) seeds what earlier resolvers left behind — inside a real catcher that is never empty for an `Error`, since `nativeErrorResolver` runs first and always contributes.
+
+  It is a separate export path so it never reaches an application bundle through the main entry.
+
+### Patch Changes
+
+- [#301](https://github.com/dadajam4/fastkit/pull/301) [`eff207b`](https://github.com/dadajam4/fastkit/commit/eff207be9cdf4d901863d413f5a7f2af074b85c2) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix `ctx.resolve()` being ignored when the resolver returns nothing.
+
+  The check that stops the later resolvers sat inside the branch that merges a result, so a resolver had to both claim the exception _and_ have something to extract for the claim to hold:
+
+  ```ts
+  const claimOnly = createCatcherResolver((source, ctx) => {
+    if (!isMine(source)) return;
+    ctx.resolve(); // "this one is mine, nobody after me needs to look"
+    // ...and nothing worth extracting
+  });
+  ```
+
+  Every resolver after it ran anyway. "This is mine and there is nothing in it worth reporting" is a legitimate thing for a resolver to say, and the documented meaning of `resolve()` never mentioned a return value.
+
+  The stop is now honoured either way, on both the synchronous and the awaiting pass.
+
+- [#301](https://github.com/dadajam4/fastkit/pull/301) [`eff207b`](https://github.com/dadajam4/fastkit/commit/eff207be9cdf4d901863d413f5a7f2af074b85c2) Thanks [@dadajam4](https://github.com/dadajam4)! - Stop a resolver that throws from replacing the exception it was describing.
+
+  A resolver runs while an error is being handled. If it threw — one `?.` short of an unexpected payload shape is enough — the exception propagated out of `from()`, so the caller got a `TypeError` from inside this package instead of the API error they had caught. The package's own code says this must not happen, in the comment on `readBody`, but nothing enforced it for resolvers.
+
+  The resolver is now skipped, the resolvers after it still get their turn, the exception being described reaches the normalizer unharmed, and development is told:
+
+  ```
+  [@fastkit/catcher] A resolver threw while describing an exception, and was skipped.
+    TypeError: Cannot read properties of undefined (reading 'data')
+    The exception being described is unaffected -- fix the resolver.
+  ```
+
+  A resolver that threw is treated as having contributed nothing, and that includes its `ctx.resolve()`: one failed run does not get to silence every resolver after it.
+
+  This is a safety net rather than a licence, which is what the warning is for. The contract is now written down — see "Writing a resolver" in the README.
+
+- [#301](https://github.com/dadajam4/fastkit/pull/301) [`eff207b`](https://github.com/dadajam4/fastkit/commit/eff207be9cdf4d901863d413f5a7f2af074b85c2) Thanks [@dadajam4](https://github.com/dadajam4)! - Fix `build()` rewriting the resolver array it was given.
+
+  The native resolver has to run in front, and `build` put it there with `unshift` — on `opts.resolvers` itself, which the caller still holds:
+
+  ```ts
+  const resolvers = [apiErrorResolver];
+
+  const AppError = build({ resolvers, normalizer: a });
+  const HttpError = build({ resolvers, normalizer: b });
+
+  resolvers; // [nativeErrorResolver, apiErrorResolver] — never put there
+  ```
+
+  A shared `const resolvers` is the natural thing to write once an application has two catchers, and the array came back with a resolver in it that was never added. The `includes` guard stopped the double insert but not the rewrite.
+
+  `build` now copies the list. A list that already names `nativeErrorResolver` is still taken as given, since its position decides which resolvers see `nativeError` in `ctx.resolvedData`.
+
 ## 1.2.0
 
 ### Minor Changes
