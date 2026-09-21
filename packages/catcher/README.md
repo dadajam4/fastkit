@@ -631,6 +631,68 @@ if (response.bodyRead) {
 }
 ```
 
+Unless the error already carries the body — see
+[When the error already has the body](#when-the-error-already-has-the-body),
+where `from` is enough.
+
+#### `bodyState`: where the body came from
+
+`bodyRead` answers "can I look at it". `bodyState` answers "why not", or "where
+did this one come from":
+
+| `bodyState` | `bodyRead` | meaning |
+| --- | --- | --- |
+| `'unread'` | `false` | Nothing was attempted — a synchronous entry point, which cannot wait for a body |
+| `'read'` | `true` | Read off the wire. `text` is what the server sent |
+| `'unavailable'` | `true` | Reading was attempted and could not happen: the body was already consumed or locked |
+| `'provided'` | `true` | The application handed it over. `json` is that value, `text` is `''` |
+
+The first two of those used to be the only distinction available, which left a
+server that genuinely sent nothing and a body this resolver could not reach
+looking identical — both `text: ''`, `json: null`. When an error report says a
+body was empty, that difference is whether to suspect the server or your own
+code.
+
+`bodyRead` is derived from `bodyState` and kept anyway, the way `Response.ok` is
+kept beside `Response.status`: "can I look at the body" is the question asked at
+almost every use site and deserves a one-word answer.
+
+#### When the error already has the body
+
+An application that throws its own error for a failed fetch usually reads the
+body first, because it needs it to build the error's message:
+
+```typescript
+class ApiResponseError extends Error {
+  readonly response: Response
+  readonly body: unknown // already parsed
+}
+```
+
+The body is then consumed, so the resolver cannot read it again — `clone()`
+throws on a disturbed body — and the structured part of it, the `code` and the
+field-level errors that are the whole reason to normalize, would be lost.
+
+Hand it over and it is used as-is:
+
+```typescript
+fetchResponseResolver((source) =>
+  source instanceof ApiResponseError
+    ? { response: source.response, body: source.body }
+    : undefined
+)
+```
+
+The built-in extract function already does this when a `body` sits next to a
+`response` on the error, so the shape above often needs no custom extract at
+all.
+
+This is not the consumer doing the resolver's job: the application read the body
+for its own reasons, and this is the resolver being willing to use what is
+already there rather than insisting on reading it again. A body that arrives
+this way needs no `await`, so **`from` is enough** where `fromAsync` would
+otherwise be required.
+
 #### Keeping the choice in one place
 
 `from` and `fromAsync` differ in what they can reach, not in what they mean, and picking the wrong one loses the body silently. Write one helper where the choice belongs and call that everywhere:
