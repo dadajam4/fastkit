@@ -4,6 +4,7 @@ import {
   build,
   createCatcherResolver,
   createCatcherNormalizer,
+  match,
   CatcherBuilderOptions,
   Catcher,
   CatcherConstructor,
@@ -14,6 +15,8 @@ export const buildMeta = extractMeta(build);
 export const createCatcherResolverMeta = extractMeta(createCatcherResolver);
 
 export const createCatcherNormalizerMeta = extractMeta(createCatcherNormalizer);
+
+export const matchMeta = extractMeta(match);
 
 export const CatcherBuilderOptionsMeta = extractMeta<CatcherBuilderOptions>();
 

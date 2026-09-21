@@ -365,6 +365,87 @@ sync.degraded // ['response body']
 
 専用のパスで公開しているので、メインエントリー経由でアプリケーションのバンドルに入ることはありません。
 
+## ノーマライザーを書く
+
+ノーマライザーは「このアプリケーションにとってエラーとは何か」を決めます。手で書くとオプショナルアクセスの連鎖になり、構造が「どの種類の例外だったか」ではなく「このフィールドは存在するか」に支配されます。
+
+```typescript
+normalizer: (resolved) => () => ({
+  message: resolved.fetchError?.response.bodyRead
+    ? (resolved.fetchError.response.json?.message ??
+       resolved.fetchError.response.statusText)
+    : resolved.fetchError?.response.statusText,
+  status: resolved.fetchError?.response.status,
+})
+```
+
+`match` はリゾルバーが見つけたものでディスパッチし、各ブランチには**絞り込み済みのスライス**を渡します。`?.` は消えます。
+
+```typescript
+import { build, match, fetchResponseResolver } from '@fastkit/catcher'
+
+const resolvers = [fetchResponseResolver()]
+
+export const AppError = build({
+  resolvers,
+  defaultName: 'AppError',
+  defaultMessage: '問題が発生しました',
+  normalizer: match(resolvers, {
+    fetchError: ({ response }) => ({
+      code: 'HTTP_ERROR',
+      message: response.bodyRead
+        ? (response.json?.message ?? response.statusText)
+        : response.statusText,
+      status: response.status,
+    }),
+    nativeError: (e) => ({ code: 'UNEXPECTED', message: e.message }),
+    default: () => ({ code: 'UNKNOWN', message: '問題が発生しました' }),
+  }),
+})
+```
+
+### ブランチは排他ではなく順序つき
+
+これが書く前に知っておくべき唯一のことです。**ブランチは書かれた順に試され**、キーが存在する最初のものが勝ちます。`default` はどこに書いても常に最後です。
+
+順序つきでなければならないのは、排他ではないからです。`nativeErrorResolver` はあなたのリストの前に走り、`Error` を決して見送りません（[実行される順序](#実行される順序)を参照）。したがって fetch エラーは**両方のキー**を持って到達します。
+
+```typescript
+resolvedData // { nativeError: ApiResponseError, fetchError: { ... } }
+```
+
+つまり `nativeError` ブランチはほぼ何にでもマッチするので、`default` の直前、最後に置きます。それより前に置くと後続のブランチはすべて死にます。そうしたときは開発時に警告します。
+
+```
+[@fastkit/catcher] `match` lists `nativeError` before `fetchError`, which will never run.
+```
+
+オブジェクトリテラルは例外の種類に対する `switch` のように見えますが、実体は「リゾルバーが残したものに対する述語の順序つきリスト」です。具体的なものから順に並べてください。
+
+### ブランチが受け取るもの
+
+```typescript
+fetchError: (slice, ctx) => ({ ... })
+default: (ctx) => ({ ... })
+```
+
+`slice` はそのリゾルバー自身の出力から `undefined` を除いたものです。`ctx.resolvedData` はリゾルバーが見つけたすべてで、他のブランチが取るはずだったスライスも含みます。ブランチは分割ではなくディスパッチなので、`fetchError` ブランチが `nativeError.stack` を参照するのは通常の使い方です。`ctx.exceptionInfo` は `create` / `createAsync` ではエラー情報、`from` / `fromAsync` では `undefined` です。
+
+### 結果の型
+
+ブランチの戻り値型はユニオンのままではなく**マージ**されます。すべてのブランチが返すフィールドは**必須**に、一部だけが返すフィールドは**オプショナル**になります。
+
+```typescript
+AppError.from(e).code   // 'HTTP_ERROR' | 'UNEXPECTED' | 'UNKNOWN'
+AppError.from(e).status // number | undefined
+```
+
+ユニオンのままだと `status` は読むこと自体がエラーになります。`default` が必須であることが効いてくるのもここです。全体をカバーするディスパッチでなければ「何も返さない経路」が常に存在し、どのフィールドも約束できません。すべてのブランチで `message` を宣言すれば型レベルで保証されます。ランタイム側は [`defaultMessage`](#メッセージを保証する) と組み合わせてください。メッセージを例外自身に委ねるブランチもカバーできます。
+
+### なぜリゾルバーを再度渡すのか
+
+スライスに型を付ける唯一の方法だからです。渡さずに `match({ ... })` と書くと、ブランチの引数は `any` に落ち、絞り込みごとこのヘルパーの意味が失われます。ランタイムでは配列を読みません。`const` に持ち上げて、同じものを両方に渡してください。
+
 ## 高度な使用例
 
 ### Axios エラーハンドリング
@@ -785,6 +866,17 @@ function createCatcherResolver<Resolver extends AnyResolver>(
 ```
 
 カスタムリゾルバーを作成します。守るべき契約は[リゾルバーを書く](#リゾルバーを書く)を参照してください。
+
+### `match` 関数
+
+```typescript
+function match<Resolvers extends AnyResolvers, Branches extends MatchBranches<Resolvers>>(
+  resolvers: Resolvers,
+  branches: Branches
+): AnyNormalizer<Resolvers>
+```
+
+リゾルバーが見つけたものでディスパッチするノーマライザーを作ります。ブランチは書かれた順に試され、`default` は必須かつ常に最後です（[ノーマライザーを書く](#ノーマライザーを書く)を参照）。
 
 ### `createCatcherNormalizer` 関数
 

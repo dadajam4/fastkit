@@ -367,6 +367,87 @@ It runs the one resolver you give it and nothing else, which is what `resolvedDa
 
 It is published on its own path, so it never reaches an application bundle through the main entry.
 
+## Writing a normalizer
+
+The normalizer decides what an error looks like in your application. Written by hand it is a chain of optional access, and its shape ends up dominated by "does this field exist" rather than "which kind of exception was it":
+
+```typescript
+normalizer: (resolved) => () => ({
+  message: resolved.fetchError?.response.bodyRead
+    ? (resolved.fetchError.response.json?.message ??
+       resolved.fetchError.response.statusText)
+    : resolved.fetchError?.response.statusText,
+  status: resolved.fetchError?.response.status,
+})
+```
+
+`match` dispatches on what the resolvers found, and hands each branch its slice already narrowed, so the `?.` disappears:
+
+```typescript
+import { build, match, fetchResponseResolver } from '@fastkit/catcher'
+
+const resolvers = [fetchResponseResolver()]
+
+export const AppError = build({
+  resolvers,
+  defaultName: 'AppError',
+  defaultMessage: 'Something went wrong',
+  normalizer: match(resolvers, {
+    fetchError: ({ response }) => ({
+      code: 'HTTP_ERROR',
+      message: response.bodyRead
+        ? (response.json?.message ?? response.statusText)
+        : response.statusText,
+      status: response.status,
+    }),
+    nativeError: (e) => ({ code: 'UNEXPECTED', message: e.message }),
+    default: () => ({ code: 'UNKNOWN', message: 'Something went wrong' }),
+  }),
+})
+```
+
+### The branches are ordered, not exclusive
+
+This is the one thing to know before writing one. **Branches are tried in the order they are written**, and the first whose key is present wins. `default` is always last, wherever you put it.
+
+They have to be ordered, because they are not exclusive. `nativeErrorResolver` runs in front of your list and never declines an `Error` — see [The order they run in](#the-order-they-run-in) — so a fetch error arrives with *both* keys:
+
+```typescript
+resolvedData // { nativeError: ApiResponseError, fetchError: { ... } }
+```
+
+A `nativeError` branch therefore matches almost everything, and belongs last, just before `default`. Listing it earlier makes every branch after it dead. Development warns when you do:
+
+```
+[@fastkit/catcher] `match` lists `nativeError` before `fetchError`, which will never run.
+```
+
+The object literal looks like a `switch` on the kind of exception. It is really an ordered list of predicates over what the resolvers left behind, so order the branches from most specific to least.
+
+### What a branch gets
+
+```typescript
+fetchError: (slice, ctx) => ({ ... })
+default: (ctx) => ({ ... })
+```
+
+`slice` is that resolver's own output, with the `undefined` removed. `ctx.resolvedData` is everything the resolvers found, including the slices other branches would have taken — the branches are a dispatch, not a partition, so a `fetchError` branch reaching for `nativeError.stack` is the ordinary case. `ctx.exceptionInfo` is the error information for `create` / `createAsync`, and `undefined` for `from` / `fromAsync`.
+
+### The result type
+
+The branch return types are merged rather than left as a union: a field is **required** on the result when every branch produces it, and **optional** when only some do.
+
+```typescript
+AppError.from(e).code   // 'HTTP_ERROR' | 'UNEXPECTED' | 'UNKNOWN'
+AppError.from(e).status // number | undefined
+```
+
+A union would have made `status` an error to read at all. This is also what `default` being required buys: without a total dispatch there would always be a path that produced nothing, and no field could be promised. Declare `message` in every branch and it is guaranteed at the type level; pair it with [`defaultMessage`](#guaranteeing-a-message) for the runtime half, which also covers a branch that deliberately leaves the message to the exception itself.
+
+### Why the resolvers are passed again
+
+They are the only way to type the slices. Written without them — `match({ ... })` — the branch parameters fall back to `any`, taking the narrowing and the point of the helper with them. Nothing reads the array at runtime; hoist it to a `const` and hand the same one to both.
+
 ## Advanced Usage Examples
 
 ### Axios Error Handling
@@ -788,6 +869,17 @@ function createCatcherResolver<Resolver extends AnyResolver>(
 ```
 
 Creates a custom resolver. See [Writing a resolver](#writing-a-resolver) for the contract it has to keep.
+
+### `match` Function
+
+```typescript
+function match<Resolvers extends AnyResolvers, Branches extends MatchBranches<Resolvers>>(
+  resolvers: Resolvers,
+  branches: Branches
+): AnyNormalizer<Resolvers>
+```
+
+Builds a normalizer that dispatches on what the resolvers found. Branches are tried in the order they are written; `default` is required and always last. See [Writing a normalizer](#writing-a-normalizer).
 
 ### `createCatcherNormalizer` Function
 

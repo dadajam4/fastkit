@@ -208,7 +208,6 @@ export function build<
 
       let result: Awaited<ReturnType<typeof resolver>>;
       try {
-        // eslint-disable-next-line no-await-in-loop
         result = await resolver(infoOrException, ctx);
       } catch (err) {
         undoStop();
