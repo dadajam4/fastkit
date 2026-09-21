@@ -15,12 +15,19 @@ function partsFor(lines: string[]) {
   const file = project.createSourceFile(
     'probe.ts',
     [
+      // Longer than the summary cap, so that a link to it has to be cut short.
+      'export interface Big {',
+      ...Array.from({ length: 30 }, (_, index) => `  member${index}: string;`),
+      '}',
       'export interface Api {',
       '  /**',
       ...lines.map((line) => (line ? `   * ${line}` : '   *')),
       '   */',
       '  method(): void;',
+      '  /** The other one. */',
       '  other(): void;',
+      '  /** Points at {@link Api.other other}. */',
+      '  nested(): void;',
       '}',
     ].join('\n'),
   );
@@ -31,6 +38,15 @@ function partsFor(lines: string[]) {
       .getJsDocs()[0]
       .getComment(),
   );
+}
+
+/** The single link part of a one-line comment. */
+function linkPartFor(line: string) {
+  const part = partsFor([line]).find((candidate) => candidate.link);
+  if (!part) {
+    throw new Error(`no link part was extracted from: ${line}`);
+  }
+  return part;
 }
 
 const BODY = ['Opening line.', '', '```ts', 'const a = 1;', '```'];
@@ -81,6 +97,80 @@ describe('extractMetaDocPartsFromJSDocComment', () => {
     const linkPart = parts.find((part) => part.link);
 
     expect(linkPart?.text).toBe('{@link Api.other other}');
-    expect(linkPart?.link).toMatchObject({ name: 'other', url: 'Api.other' });
+    expect(linkPart?.link).toMatchObject({
+      name: 'other',
+      target: 'Api.other',
+    });
+  });
+});
+
+describe('link targets', () => {
+  it('leaves `url` unset for a symbol reference', () => {
+    // `url` promises somewhere a consumer can navigate to. A symbol reference
+    // is not that, and handing one over as a url produced a dead anchor.
+    const { link } = linkPartFor('See {@link Api.other other}.');
+
+    expect(link?.url).toBeUndefined();
+    expect(link?.target).toBe('Api.other');
+  });
+
+  it('still sets `url` for a real URL', () => {
+    const { link } = linkPartFor('See {@link https://example.com/a Label}.');
+
+    expect(link).toMatchObject({
+      name: 'Label',
+      url: 'https://example.com/a',
+    });
+    expect(link?.target).toBeUndefined();
+  });
+
+  it('falls back to the reference when the tag carries no label', () => {
+    // `{@link Api}` has a name but no text, which used to leave `name` empty.
+    const { link } = linkPartFor('See {@link Api}.');
+
+    expect(link?.name).toBe('Api');
+    expect(link?.target).toBe('Api');
+  });
+});
+
+describe('link summaries', () => {
+  it('previews the declaration a reference resolves to', () => {
+    const { link } = linkPartFor('See {@link Api.other other}.');
+
+    expect(link?.summary).toMatchObject({
+      text: 'other(): void;',
+      description: 'The other one.',
+    });
+    expect(link?.summary?.external).toBeUndefined();
+  });
+
+  it('collapses a nested link in the preview to its label', () => {
+    // A preview is one level deep, so it has nowhere to hang a link of its
+    // own -- and resolving one would recurse forever between two symbols that
+    // reference each other.
+    const { link } = linkPartFor('See {@link Api.nested nested}.');
+
+    expect(link?.summary?.description).toBe('Points at other.');
+  });
+
+  it('caps a long declaration and says that it did', () => {
+    const { link } = linkPartFor('See {@link Big}.');
+    const summary = link?.summary;
+
+    expect(summary?.truncated).toBe(true);
+    expect(summary?.text.split('\n')).toHaveLength(20);
+  });
+
+  it('marks a declaration that lives outside the project', () => {
+    const { link } = linkPartFor('See {@link Promise}.');
+
+    expect(link?.summary?.external).toBe(true);
+  });
+
+  it('leaves the summary off when the reference does not resolve', () => {
+    const { link } = linkPartFor('See {@link Nope.gone x}.');
+
+    expect(link?.target).toBe('Nope.gone');
+    expect(link?.summary).toBeUndefined();
   });
 });
