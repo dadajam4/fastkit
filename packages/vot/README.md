@@ -15,6 +15,7 @@ A comprehensive orchestration tool and framework for building Vue applications. 
 - **Head Management**: Meta tag and SEO optimization with Unhead
 - **Proxy Support**: API proxy functionality during development
 - **Server Entry**: A single `vot.server.ts` owns host / port / proxy / middleware for both `vot dev` and `vot serve`, so a production image needs no build toolchain ([docs](./docs/server-entry.md))
+- **Web-standard Request and Response**: A server render reads a `Request` and writes status, headers and cookies through a `Headers`, with nothing tied to `node:http` ([docs](./docs/ssr-request-response.md))
 
 ## Installation
 
@@ -659,7 +660,7 @@ interface VotConfig {
 |---------|-------------|
 | `vot dev` | Start development server |
 | `vot build` | Build for production |
-| `vot generate` | Generate static site |
+| `vot generate` | Generate static site ([what a generated render sees](./docs/ssr-request-response.md#vot-generate)) |
 | `vot serve` | Serve a production build ([server entry](./docs/server-entry.md)) |
 | `vot preview` | Preview build result |
 
