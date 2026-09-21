@@ -27,6 +27,12 @@
         "default": "./dist/catcher.mjs"
       }
     },
+    "./testing": {
+      "types": "./dist/testing.d.mts",
+      "import": {
+        "default": "./dist/testing.mjs"
+      }
+    },
     "./*": "./dist/*"
   },
   "main": "./dist/catcher.mjs",
@@ -35,6 +41,9 @@
     "*": {
       ".": [
         "./dist/catcher.d.mts"
+      ],
+      "testing": [
+        "./dist/testing.d.mts"
       ]
     }
   },

@@ -1,5 +1,6 @@
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, afterEach } from 'vitest';
 import { build } from '../../catcher';
+import { runResolver } from '../../testing';
 import {
   fetchResponseResolver,
   type SerializableFetchResponse,
@@ -45,21 +46,18 @@ export type _BodyIsBehindTheDiscriminant = Expect<
   'json' extends keyof SerializableFetchResponse ? false : true
 >;
 
-/** Run the resolver directly, with a context that records `resolve()`. */
-function resolveFetch(source: unknown, canAwait = false) {
-  const resolve = vi.fn();
-  const result = fetchResponseResolver()(source, {
-    resolve,
-    resolvedData: {},
-    canAwait,
-  });
-  return { result, resolve };
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
+/** Run the resolver the way the synchronous entry points do. */
+function resolveFetch(source: unknown) {
+  return runResolver(fetchResponseResolver(), source, { canAwait: false });
 }
 
 /** The same, awaiting the resolver the way `fromAsync` does. */
-async function resolveFetchAsync(source: unknown) {
-  const { result, resolve } = resolveFetch(source, true);
-  return { result: await result, resolve };
+function resolveFetchAsync(source: unknown) {
+  return runResolver(fetchResponseResolver(), source);
 }
 
 const AppError = build({
@@ -75,25 +73,27 @@ const AppError = build({
 });
 
 describe('fetch resolver', () => {
-  test('ignores a source that carries no Response', () => {
-    const { result, resolve } = resolveFetch(new Error('boom'));
+  test('ignores a source that carries no Response', async () => {
+    const { data, resolved } = await resolveFetch(new Error('boom'));
 
-    expect(result).toBeUndefined();
-    expect(resolve).not.toHaveBeenCalled();
+    expect(data).toBeUndefined();
+    expect(resolved).toBe(false);
   });
 
-  test('reports the metadata synchronously, without the body', () => {
+  test('reports the metadata synchronously, without the body', async () => {
     const response = new Response('{"message":"not found"}', {
       status: 404,
       statusText: 'Not Found',
       headers: { 'content-type': 'application/json' },
     });
-    const { result, resolve } = resolveFetch(response);
+    const { data, resolved, degraded } = await resolveFetch(response);
 
-    expect(resolve).toHaveBeenCalled();
-    const info = (
-      result as { fetchError: { response: SerializableFetchResponse } }
-    ).fetchError.response;
+    expect(resolved).toBe(true);
+    // The body is right there and cannot be waited for, so the resolver says
+    // so rather than leaving `bodyRead: false` to look like a body-less
+    // response.
+    expect(degraded).toEqual(['response body']);
+    const info: SerializableFetchResponse = data!.fetchError.response;
     expect(info.bodyRead).toBe(false);
     expect(info.status).toBe(404);
     expect(info.statusText).toBe('Not Found');
@@ -104,11 +104,13 @@ describe('fetch resolver', () => {
   });
 
   test('reads the body when it may await', async () => {
-    const { result } = await resolveFetchAsync(
+    const { data, degraded } = await resolveFetchAsync(
       new Response('{"message":"not found"}', { status: 404 }),
     );
 
-    const info = result!.fetchError.response as FetchResponseWithBody;
+    // Nothing was lost, so nothing is reported.
+    expect(degraded).toEqual([]);
+    const info = data!.fetchError.response as FetchResponseWithBody;
     expect(info.bodyRead).toBe(true);
     expect(info.text).toBe('{"message":"not found"}');
     expect(info.json).toEqual({ message: 'not found' });
@@ -121,21 +123,21 @@ describe('fetch resolver', () => {
   // every test here reproduces that; this one pins the other consequence.
   test('leaves the caller their own body to read', async () => {
     const response = new Response('{"message":"not found"}');
-    const { result } = await resolveFetchAsync(response);
+    const { data } = await resolveFetchAsync(response);
 
     expect(response.bodyUsed).toBe(false);
     await expect(response.json()).resolves.toEqual({ message: 'not found' });
-    expect((result!.fetchError.response as FetchResponseWithBody).text).toBe(
+    expect((data!.fetchError.response as FetchResponseWithBody).text).toBe(
       '{"message":"not found"}',
     );
   });
 
   test('keeps a non-JSON body as text without rejecting', async () => {
-    const { result } = await resolveFetchAsync(
+    const { data } = await resolveFetchAsync(
       new Response('<html>Gateway Timeout</html>', { status: 504 }),
     );
 
-    const info = result!.fetchError.response as FetchResponseWithBody;
+    const info = data!.fetchError.response as FetchResponseWithBody;
     expect(info.text).toBe('<html>Gateway Timeout</html>');
     expect(info.json).toBeNull();
   });
@@ -144,15 +146,15 @@ describe('fetch resolver', () => {
     const response = new Response('{"a":1}');
     await response.text();
 
-    const { result } = await resolveFetchAsync(response);
+    const { data } = await resolveFetchAsync(response);
 
-    const info = result!.fetchError.response as FetchResponseWithBody;
+    const info = data!.fetchError.response as FetchResponseWithBody;
     expect(info.text).toBe('');
     expect(info.json).toBeNull();
   });
 
   test('flattens headers, combining repeats the way Headers.get does', async () => {
-    const { result } = await resolveFetchAsync(
+    const { data } = await resolveFetchAsync(
       new Response(null, {
         status: 401,
         headers: [
@@ -163,7 +165,7 @@ describe('fetch resolver', () => {
       }),
     );
 
-    const { headers } = result!.fetchError.response;
+    const { headers } = data!.fetchError.response;
     expect(headers).toEqual({
       'content-type': 'application/json',
       // `Object.fromEntries` would have dropped `session=a` here.
@@ -178,14 +180,14 @@ describe('fetch resolver', () => {
       response: new Response('{"a":1}', { status: 500 }),
     });
 
-    const { result } = await resolveFetchAsync(error);
+    const { data } = await resolveFetchAsync(error);
 
-    expect(result!.fetchError.message).toBe('Request failed');
-    expect(result!.fetchError.name).toBe('Error');
-    expect(result!.fetchError.response.status).toBe(500);
-    expect((result!.fetchError.response as FetchResponseWithBody).json).toEqual(
-      { a: 1 },
-    );
+    expect(data!.fetchError.message).toBe('Request failed');
+    expect(data!.fetchError.name).toBe('Error');
+    expect(data!.fetchError.response.status).toBe(500);
+    expect((data!.fetchError.response as FetchResponseWithBody).json).toEqual({
+      a: 1,
+    });
   });
 });
 
@@ -203,11 +205,19 @@ describe('fetch resolver, through a catcher', () => {
     expect(err.status).toBe(404);
   });
 
-  test('from falls back to what is knowable synchronously', () => {
+  test('from falls back to what is knowable synchronously, and says so', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
     const err = AppError.from(notFound());
 
     expect(err.message).toBe('Not Found');
     expect(err.status).toBe(404);
+    // Picking `from` here costs the body, which used to be silent: the
+    // normalizer just saw `bodyRead: false` and fell back to `statusText`.
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][0]).toContain(
+      'could not wait for: response body',
+    );
   });
 
   test('fromAsync still honours overrides, and the source keeps the body', async () => {
