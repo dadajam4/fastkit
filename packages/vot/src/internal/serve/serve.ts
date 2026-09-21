@@ -17,10 +17,11 @@ import {
   ResolvedVotProxyRule,
   VotProxyConfig,
 } from '../../schema/proxy';
-import type {
-  VotAdapterContext,
-  VotListenResult,
-  VotServerAdapter,
+import {
+  DEFAULT_SHUTDOWN_TIMEOUT,
+  type VotAdapterContext,
+  type VotListenResult,
+  type VotServerAdapter,
 } from '../../schema/adapter';
 import type { VotConfigureServerFn } from '../../schema/options';
 import { createVotRequestHandler } from './handler';
@@ -57,6 +58,7 @@ interface ResolvedServeConfig {
   proxy?: VotProxyConfig;
   logger: Pick<Logger, 'error'>;
   configureServer?: VotConfigureServerFn<any>;
+  shutdownTimeout?: number;
 }
 
 const DEFAULT_HOST = '0.0.0.0';
@@ -121,6 +123,7 @@ async function loadConfigFromServerEntry(
     proxy: config.proxy,
     logger: consoleLogger,
     configureServer: config.configureServer,
+    shutdownTimeout: config.shutdownTimeout,
   };
 }
 
@@ -224,6 +227,7 @@ export async function serve(opts: ServeOptions = {}): Promise<ServedResult> {
     base,
     proxy: rules,
     logger,
+    shutdownTimeout: config.shutdownTimeout ?? DEFAULT_SHUTDOWN_TIMEOUT,
     static: { dir: path.join(dist, 'client'), assets: ssr.assets || [] },
     handler,
     configureServer: config.configureServer

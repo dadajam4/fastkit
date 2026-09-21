@@ -90,10 +90,48 @@ export default defineVotServer(({ command, dev, mode }) => ({
 | `port`            | `number`                                  | listen するポート。既定は `3000`                    |
 | `proxy`           | `Record<string, string \| VotProxyOptions>` | プロキシ設定。Vite の `server.proxy` より狭い（後述） |
 | `configureServer` | `(ctx: { app }) => void \| Promise<void>` | アダプタのアプリ（既定では `Hono`）にミドルウェアをマウントする |
+| `shutdownTimeout` | `number`                                  | graceful shutdown が処理中のリクエストを待つミリ秒。既定は `10000`（後述） |
 
 `base` はオプションに**含まれません**。ビルド時にクライアントバンドルのアセット
 URL へ焼き込まれる値なので `vite.config.ts` が持ち、`vot build` がその値を
 `dist/server/package.json` に記録して `vot serve` のルーターのマウント先にします。
+
+## graceful shutdown
+
+`vot serve` は `SIGTERM` と `SIGINT` を受け取ります。新しい接続の受け付けを止め、
+すでに受け付けたリクエストを完了させてから終了します。
+
+アイドル状態の keep-alive ソケットは、シャットダウン開始時と、その後リクエストが
+完了するたびに破棄されます。これは最適化ではありません。**Node は
+`server.close()` の後も `Connection: keep-alive` を返し続ける**ため、ドレイン中に
+アイドルへ戻ったソケットはクライアントが手放すまで解放されず、`close()` を呼ぶ
+だけのシャットダウンはドレインせずに `SIGKILL` までハングします。
+
+`shutdownTimeout` を過ぎても処理中のものは強制的に切断されます。
+
+```ts
+export default defineVotServer({
+  // プラットフォームの猶予時間より短くして、SIGKILL より先に強制が効くようにする
+  shutdownTimeout: 10_000,
+});
+```
+
+既定値 `10000` は、Kubernetes と Docker がどちらも猶予時間の既定に使う 30 秒より
+意図的に短くしてあります。猶予時間と同時に満了するタイムアウトは、`SIGKILL` が
+先に届くため何も強制できません。延ばすときは `terminationGracePeriodSeconds`
+（または相当の設定）と合わせて調整してください。`0` は即座に強制します。
+
+これに対応する環境変数はありません。サーバエントリは起動時に評価されるので、
+自分で `process.env` を読めます。
+
+```ts
+export default defineVotServer({
+  shutdownTimeout: Number(process.env.SHUTDOWN_TIMEOUT ?? 10_000),
+});
+```
+
+`vot dev` に同等の仕組みはなく、必要もありません。dev では listen している
+ソケットは Vite のものであり、Vite 自身が `SIGTERM` で閉じます。
 
 ## パスを変える
 

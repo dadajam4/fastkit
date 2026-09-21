@@ -52,6 +52,31 @@ export interface VotServerConfig<App = Hono> {
    */
   proxy?: VotProxyConfig;
   /**
+   * How long a graceful shutdown waits for in-flight requests before forcing
+   * the remaining connections shut, in milliseconds.
+   *
+   * On `SIGTERM` or `SIGINT`, `vot serve` stops accepting connections and lets
+   * the requests it has already accepted finish. Idle keep-alive sockets are
+   * dropped straight away -- they carry no work, and waiting for the client to
+   * release them is what would otherwise stall a shutdown well past the
+   * orchestrator's grace period.
+   *
+   * The default is deliberately shorter than the 30s that Kubernetes and Docker
+   * both use for their grace period. A timeout that expires at the same moment
+   * as the grace period never gets to force anything, because `SIGKILL` has
+   * already arrived.
+   *
+   * `0` forces immediately. There is no environment variable for this: a server
+   * entry is evaluated at startup and can read `process.env` itself, so vot
+   * does not need to invent a name for it.
+   *
+   * Only `vot serve` reads this. Under `vot dev` the listening socket belongs
+   * to Vite, which closes it on `SIGTERM` itself.
+   *
+   * @default 10000
+   */
+  shutdownTimeout?: number;
+  /**
    * Mount extra middleware on the server.
    *
    * The callback receives the adapter's own application object, a `Hono`

@@ -30,10 +30,28 @@ export type VotRequestHandler = (
   runtime?: VotRuntimeContext,
 ) => Promise<Response | undefined>;
 
+/**
+ * How long {@link VotListenResult.close} waits for in-flight requests before
+ * forcing the rest shut, when nothing says otherwise.
+ *
+ * Shorter than the 30s grace period Kubernetes and Docker default to, so that
+ * forcing still happens before `SIGKILL` does.
+ */
+export const DEFAULT_SHUTDOWN_TIMEOUT = 10_000;
+
 /** What an adapter reports after it has started listening. */
 export interface VotListenResult {
   host: string;
   port: number;
+  /**
+   * Stop listening, then drain.
+   *
+   * Resolves once the server has stopped accepting connections and the requests
+   * it had already accepted have finished -- or once
+   * {@link VotAdapterContext.shutdownTimeout} has run out and the rest have
+   * been forced shut. Calling it on a server that has already stopped is not an
+   * error.
+   */
   close(): Promise<void>;
   /** The native server, for callers that knowingly target one runtime. */
   native?: unknown;
@@ -57,6 +75,16 @@ export interface VotAdapterContext<App = unknown> {
   base: string;
   proxy: ResolvedVotProxyRule[];
   logger: Pick<Logger, 'error'>;
+  /**
+   * How long {@link VotListenResult.close} waits for in-flight requests before
+   * forcing the remaining connections shut, in milliseconds.
+   *
+   * Only an adapter that owns a listening socket can honour this, so `vot dev`
+   * leaves it unset: there, the socket is Vite's and Vite closes it.
+   *
+   * @default {@link DEFAULT_SHUTDOWN_TIMEOUT}
+   */
+  shutdownTimeout?: number;
   /**
    * Static assets to serve under `base`. Absent under `vot dev`, where Vite
    * serves them itself.
