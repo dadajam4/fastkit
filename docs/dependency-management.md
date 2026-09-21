@@ -88,7 +88,7 @@ Work through these in order for any dependency `X` used by a package:
 | plugboy plugin (the package *is* a plugin) | required `peerDependencies` | `@fastkit/plugboy-sass-plugin` |
 | Dependency reachable only via an opt-in subpath export | **optional** `peerDependencies` | `@fastkit/plugboy` in `@fastkit/icon-font`; `vite` in `@fastkit/ts-tiny-meta` |
 | Workspace package declared as a peer | `peerDependencies` with an **explicit range** (+ `workspace:^` dev) — never `workspace:^` as the peer | `@fastkit/icon-font-gen: ^1.0.0` in `@fastkit/vite-plugin-vui` |
-| Optional feature via guarded dynamic import | `optionalDependencies` / `peerDependenciesMeta.optional` | `node-memwatcher` in `vot` |
+| Re-exposed type whose value the consumer supplies | **optional** `peerDependencies` | `@datadog/browser-logs` in `@fastkit/universal-logger` |
 | Package with code that executes in Node | declare `engines.node` at its dependencies' floor | `>=22.0.0` in `@fastkit/node-util` |
 
 ## Special cases and established rules
