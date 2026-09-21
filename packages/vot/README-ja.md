@@ -15,6 +15,7 @@ Vueアプリケーションを構築するための包括的なオーケスト�
 - **Head管理**: Unheadによるメタタグ・SEO最適化
 - **プロキシサポート**: 開発時のAPIプロキシ機能
 - **サーバーエントリ**: 1つの `vot.server.ts` が `vot dev` と `vot serve` 双方のホスト / ポート / プロキシ / ミドルウェアを所有。本番イメージにビルドツールチェーンが不要になります（[ドキュメント](./docs/server-entry-ja.md)）
+- **web 標準のリクエストとレスポンス**: サーバーサイド描画は `Request` を読み、ステータス / ヘッダ / クッキーを `Headers` 経由で書きます。`node:http` に依存するものはありません（[ドキュメント](./docs/ssr-request-response-ja.md)）
 
 ## インストール
 
@@ -607,7 +608,7 @@ interface VotConfig {
 |----------|------|
 | `vot dev` | 開発サーバーを起動 |
 | `vot build` | 本番用にビルド |
-| `vot generate` | 静的サイトを生成 |
+| `vot generate` | 静的サイトを生成（[生成時の描画に何が見えるか](./docs/ssr-request-response-ja.md#vot-generate)）|
 | `vot serve` | 本番ビルドを配信（[サーバーエントリ](./docs/server-entry-ja.md)） |
 | `vot preview` | ビルド結果をプレビュー |
 
