@@ -1,16 +1,17 @@
 import path from 'node:path';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { Hono } from 'hono';
-import { createAdaptorServer } from '@hono/node-server';
+import { createAdaptorServer, type ServerType } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { RESPONSE_ALREADY_SENT } from '@hono/node-server/utils/response';
 import chalk from 'chalk';
-import type {
-  VotServerAdapter,
-  VotAdapterApp,
-  VotAdapterContext,
-  VotListenResult,
-  VotRuntimeContext,
+import {
+  DEFAULT_SHUTDOWN_TIMEOUT,
+  type VotServerAdapter,
+  type VotAdapterApp,
+  type VotAdapterContext,
+  type VotListenResult,
+  type VotRuntimeContext,
 } from '../../schema/adapter';
 import {
   proxyMiddleware,
@@ -50,6 +51,107 @@ export function getNodeRuntime(
 }
 
 type NodeBindings = { incoming: IncomingMessage; outgoing: ServerResponse };
+
+/**
+ * A server whose connections can be managed one class at a time.
+ *
+ * `createAdaptorServer` may hand back an HTTP/2 server, and those have no
+ * connection-level control -- see nodejs/node#55459. Narrowing rather than
+ * casting keeps the difference visible at the one place it matters.
+ */
+type DrainableServer = ServerType & {
+  closeIdleConnections(): void;
+  closeAllConnections(): void;
+};
+
+function isDrainable(server: ServerType): server is DrainableServer {
+  return typeof (server as DrainableServer).closeIdleConnections === 'function';
+}
+
+/**
+ * How often idle connections are swept while a shutdown is draining.
+ *
+ * Short enough that a socket going idle does not measurably delay the
+ * shutdown, long enough to be free.
+ */
+const IDLE_SWEEP_INTERVAL = 50;
+
+/**
+ * Stop listening, then let in-flight requests finish.
+ *
+ * `server.close()` on its own is not a graceful shutdown. It stops accepting
+ * connections, but then waits for *every* open connection to end, and an idle
+ * keep-alive socket ends when the client decides it should -- long after an
+ * orchestrator's grace period has run out. A process that only calls `close()`
+ * does not drain; it hangs until `SIGKILL`.
+ *
+ * So idle sockets are dropped, because they carry no work, and whatever is
+ * still in flight gets `timeout` to finish before the rest are destroyed.
+ *
+ * The sweep has to repeat rather than run once. Node does **not** switch to
+ * `Connection: close` after `server.close()` -- a response sent while draining
+ * still carries `connection: keep-alive`, so its socket goes back to idle
+ * *after* the first sweep has already been and gone. Dropping idle sockets only
+ * at the start therefore leaves exactly the connections a drain is supposed to
+ * release, and `close()` never completes.
+ *
+ * A socket can be swept in the instant between one request finishing and the
+ * next arriving on it. That is the intended trade: the server has stopped
+ * accepting connections and is on its way out, so a client that tries to reuse
+ * the socket should be reconnecting elsewhere rather than being served here.
+ */
+export function closeServer(
+  server: ServerType,
+  timeout: number = DEFAULT_SHUTDOWN_TIMEOUT,
+): Promise<void> {
+  const drainable = isDrainable(server) ? server : undefined;
+  const draining = !!drainable && timeout > 0;
+
+  /**
+   * Armed before `close()` rather than from inside its callback: the callback
+   * cannot fire before this function has returned, so arming here costs
+   * nothing and leaves both handles `const` for the callback to clear.
+   */
+  const sweep = draining
+    ? setInterval(() => drainable.closeIdleConnections(), IDLE_SWEEP_INTERVAL)
+    : undefined;
+  const force = draining
+    ? setTimeout(() => drainable.closeAllConnections(), timeout)
+    : undefined;
+
+  // Nothing should keep the process alive merely because the drain has not
+  // finished yet.
+  sweep?.unref?.();
+  force?.unref?.();
+
+  return new Promise((resolve, reject) => {
+    server.close((error) => {
+      if (sweep) clearInterval(sweep);
+      if (force) clearTimeout(force);
+
+      /**
+       * A server that was already closed reports `ERR_SERVER_NOT_RUNNING`.
+       * That is the state the caller asked for, so it resolves rather than
+       * throwing -- shutdown paths double up easily and should be idempotent.
+       */
+      if (
+        error &&
+        (error as NodeJS.ErrnoException).code !== 'ERR_SERVER_NOT_RUNNING'
+      ) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
+
+    if (!drainable) return;
+
+    drainable.closeIdleConnections();
+
+    // Nothing is going to wait, so the in-flight sockets go with the idle ones.
+    if (!draining) drainable.closeAllConnections();
+  });
+}
 
 function runtimeFor(bindings: NodeBindings): VotRuntimeContext {
   return { adapter: NODE_ADAPTER_NAME, native: bindings };
@@ -165,10 +267,7 @@ async function createApp(
     return {
       ...resolved,
       native: server,
-      close: () =>
-        new Promise<void>((resolve, reject) => {
-          server.close((error) => (error ? reject(error) : resolve()));
-        }),
+      close: () => closeServer(server, ctx.shutdownTimeout),
     };
   };
 

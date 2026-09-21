@@ -94,10 +94,49 @@ build time.
 | `port`            | `number`                                  | Port to listen on. Defaults to `3000`                       |
 | `proxy`           | `Record<string, string \| VotProxyOptions>` | Proxy rules. Narrower than Vite's `server.proxy` -- see below |
 | `configureServer` | `(ctx: { app }) => void \| Promise<void>` | Mount middleware on the adapter's app (`Hono` by default)   |
+| `shutdownTimeout` | `number`                                  | Milliseconds a graceful shutdown waits for in-flight requests. Defaults to `10000` -- see below |
 
 `base` is **not** an option. It is baked into the client bundle's asset URLs at
 build time, so it belongs to `vite.config.ts`; `vot build` records the value in
 `dist/server/package.json` for `vot serve` to mount its router on.
+
+## Graceful shutdown
+
+`vot serve` handles `SIGTERM` and `SIGINT`. It stops accepting connections, lets
+the requests it has already accepted finish, and only then exits.
+
+Idle keep-alive sockets are dropped as soon as the shutdown begins, and again as
+each further request finishes. This is not an optimization -- Node keeps
+answering `Connection: keep-alive` after `server.close()`, so a socket that goes
+idle mid-drain is never released by the client in time, and a shutdown that only
+called `close()` would hang until `SIGKILL` instead of draining.
+
+Anything still in flight when `shutdownTimeout` runs out is forced shut.
+
+```ts
+export default defineVotServer({
+  // Shorter than the platform's grace period, so that forcing still happens
+  // before SIGKILL does.
+  shutdownTimeout: 10_000,
+});
+```
+
+The default of `10000` is deliberately below the 30s that Kubernetes and Docker
+both use for their grace period: a timeout that expires at the same moment as
+the grace period never gets to force anything. Raise it only alongside
+`terminationGracePeriodSeconds` (or the equivalent). `0` forces immediately.
+
+There is no environment variable for this. A server entry is evaluated at
+startup, so it can read `process.env` itself:
+
+```ts
+export default defineVotServer({
+  shutdownTimeout: Number(process.env.SHUTDOWN_TIMEOUT ?? 10_000),
+});
+```
+
+`vot dev` has no equivalent, and needs none: there the listening socket belongs
+to Vite, which closes it on `SIGTERM` itself.
 
 ## A custom path
 
