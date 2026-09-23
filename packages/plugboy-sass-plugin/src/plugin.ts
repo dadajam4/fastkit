@@ -1,4 +1,9 @@
-import { definePlugin, type TryGetWorkspace } from '@fastkit/plugboy';
+import {
+  captureChunkGraph,
+  definePlugin,
+  orderPackageChunks,
+  type TryGetWorkspace,
+} from '@fastkit/plugboy';
 import sass from 'rollup-plugin-sass';
 import {
   PLUGIN_NAME,
@@ -7,6 +12,17 @@ import {
   SassStyleEntry,
 } from './types';
 import { modulesPaths } from './utils';
+
+/** The parts of a bundle output the ordering reads. */
+interface BundleOutput {
+  type: string;
+  fileName: string;
+  name?: string;
+  isEntry?: boolean;
+  imports?: string[];
+  dynamicImports?: string[];
+  modules?: Record<string, unknown>;
+}
 
 /**
  * Concatenate the collected stylesheets in module execution order.
@@ -17,22 +33,26 @@ import { modulesPaths } from './utils';
  * to finish and the emitted CSS differs between builds of identical sources —
  * which matters, because that order is the cascade order.
  *
- * The bundle's module order is already stable, so use it as the key. Entries the
- * module graph does not account for keep the order they were collected in, after
- * the ones that could be placed.
+ * The key is the order the stylesheets load in: chunks in dependency order
+ * (`orderPackageChunks`, the order plugboy assembles every other stylesheet in),
+ * and modules in their order within each chunk. The bundle's own chunk order is
+ * stable but not usable, since it puts a shared chunk after the entries that
+ * depend on it. Entries the module graph does not account for keep the order
+ * they were collected in, after the ones that could be placed.
  */
 function concatStylesInModuleOrder(
   entries: SassStyleEntry[],
-  bundle: Record<string, unknown>,
+  bundle: Record<string, BundleOutput>,
+  entryIds: readonly string[] | undefined,
 ): string {
   const position = new Map<string, number>();
 
-  for (const output of Object.values(bundle)) {
-    const chunk = output as {
-      type?: string;
-      modules?: Record<string, unknown>;
-    };
-    if (chunk.type !== 'chunk' || !chunk.modules) continue;
+  for (const fileName of orderPackageChunks(
+    captureChunkGraph(bundle),
+    entryIds,
+  )) {
+    const chunk = bundle[fileName];
+    if (chunk?.type !== 'chunk' || !chunk.modules) continue;
     for (const id of Object.keys(chunk.modules)) {
       if (!position.has(id)) position.set(id, position.size);
     }
@@ -101,14 +121,17 @@ export function createSassPlugin(options: PluginOptions = {}) {
         );
       }
 
-      const styles = concatStylesInModuleOrder(_styleEntries, bundle);
+      const workspace = _getWorkspace();
+      const styles = concatStylesInModuleOrder(
+        _styleEntries,
+        bundle as unknown as Record<string, BundleOutput>,
+        workspace && Object.keys(workspace.entry),
+      );
       if (!styles) return;
 
       let cssFile = outputOptions.file;
 
       if (!cssFile) {
-        const workspace = _getWorkspace();
-
         const cssExport = workspace?.exports.find((e) => e.id.endsWith('.css'));
         if (cssExport) {
           const tmp = cssExport.id.split('/');

@@ -86,29 +86,19 @@ The main options accepted by `createVanillaExtractPlugin(options)` / `ViteVanill
 | `identifiers` | `'short' \| 'debug' \| ((meta) => string)` | Format of generated identifiers such as class names. Use `'short'` for production builds and `'debug'` while debugging. |
 | `esbuildOptions` | `EsbuildOptions` | Options forwarded to esbuild when compiling `.css.ts` files. |
 
-### Reserved `css` options
+### `css` options
 
-This plugin sets plugboy's `css.splitting` and `css.fileName` for the workspaces
-it is registered in, so the emitted stylesheets match the CSS exports plugboy
-declares — `./<entry>.css` for every entry with `css: true`:
-
-- One such entry (the common case): `splitting: false` and
-  `fileName: '<package>.css'` — a single stylesheet for the package.
-- Several: `splitting: true`, so tsdown emits one stylesheet per output chunk,
-  named after it. `splitting: false` would collect the package into one file and
-  keep only one chunk's CSS, silently dropping the rest.
-
-Configuration wins over plugin defaults, so declaring either key is applied as
-written, and the emitted file names may then no longer match those exports. Every
-other `css` option (`target`, `transformer`, `minify`, `preprocessorOptions`,
+Every `css` option (`target`, `transformer`, `minify`, `preprocessorOptions`,
 `lightningcss`, `postcss`, `modules`, …) is free to use and applies to the
-extracted CSS as well.
+extracted CSS as well. The plugin reserves none of them.
 
-> [!NOTE]
-> With several CSS entries, a `.css.ts` imported by more than one of them is placed
-> in a shared chunk. plugboy folds that chunk's stylesheet back into each entry that
-> needs it, so every `./<entry>.css` stays complete — see
-> [One stylesheet per CSS entry](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README.md#one-stylesheet-per-css-entry).
+Which stylesheets the package emits, and in what order their rules come, is
+plugboy's job rather than this plugin's: every `./<entry>.css` is built in
+dependency order, so a style composed with `style([base, { … }])` always comes
+after `base`, even when `base` is in a `.css.ts` that lands in a chunk of its own
+— see
+[Stylesheets of the CSS entries](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README.md#stylesheets-of-the-css-entries).
+Leave `css.splitting` unset for that to hold.
 
 ### How the CSS reaches the output
 

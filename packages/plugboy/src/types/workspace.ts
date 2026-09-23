@@ -145,11 +145,14 @@ export interface UserWorkspaceConfig extends TSDownSyncOptions {
    * Shallow-merged over the project configuration, so a workspace only needs to
    * restate the keys it changes.
    *
-   * Plugins may seed defaults here during workspace setup (e.g. the
-   * vanilla-extract plugin sets `splitting` / `fileName`, which it needs to own
-   * to keep its CSS pipeline intact). A value declared in the configuration
-   * always wins over such a default — consult the plugin's documentation before
-   * overriding a key it manages.
+   * In a workspace with `css: true` entries, plugboy turns `splitting` on and
+   * builds each declared `./<entry>.css` itself, in dependency order;
+   * `fileName` names the stylesheet of a single CSS entry. Declaring `splitting`
+   * leaves the merge to tsdown as written, which concatenates chunks in bundle
+   * order — leave it unset unless that is what you want.
+   *
+   * Plugins may seed other defaults here during workspace setup. A value declared
+   * in the configuration always wins over such a default.
    *
    * `css.target` defaults to {@link UserWorkspaceConfig.target}.
    *

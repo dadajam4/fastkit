@@ -111,6 +111,14 @@ describe('per-entry stylesheets (integration)', () => {
     expect(a.indexOf('.shared')).toBeLessThan(a.indexOf('.own'));
   }, 60_000);
 
+  test('needs no css option: plugboy turns splitting on itself', () => {
+    const { cssFiles, read } = buildFixture();
+    expect(cssFiles.sort()).toEqual(['a.css', 'b.css']);
+    expect(read('b.css')).toContain('.shared');
+    const a = read('a.css');
+    expect(a.indexOf('.shared')).toBeLessThan(a.indexOf('.own'));
+  }, 60_000);
+
   test('the assembled stylesheet still goes through optimizeCSS', () => {
     // `combineRules` is plugboy's own postcss optimization. It runs in
     // `writeBundle`, like the assembly, over a set of stylesheets that has to

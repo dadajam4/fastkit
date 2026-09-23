@@ -3,6 +3,7 @@ import path from 'node:path';
 import { definePlugin } from '../../utils';
 import type { PlugboyWorkspace } from '../workspace';
 import { listEmittedStylesheets } from '../stylesheets';
+import { captureChunkGraph, orderPackageChunks } from '../chunk-order';
 
 /**
  * Plugin to preserve what tsdown's CSS pipeline would rewrite away at the top of
@@ -194,16 +195,23 @@ export function createPreserveCssImportsPlugin(workspace: PlugboyWorkspace) {
     },
     // Merge the per-module declarations into one order (see `mergeLayerOrder`).
     //
-    // The sequences are visited in module execution order — a module's position in
-    // `chunk.moduleIds`, which is also the order tsdown concatenates the modules'
-    // CSS in. That decides which sequence wins a contradiction, and how free names
-    // are ordered; the order the `transform` hook happened to visit modules in is
-    // not usable for either.
+    // The sequences are visited in the order the stylesheets load: chunks in
+    // dependency order (`orderPackageChunks`, which is also the order plugboy
+    // assembles their CSS in), and modules in their position in `moduleIds`
+    // within each chunk. That decides which sequence wins a contradiction, and
+    // how free names are ordered; the order the `transform` hook happened to
+    // visit modules in is not usable for either, and neither is the bundle's,
+    // which puts a shared chunk after the entries that depend on it.
     generateBundle(_options, bundle) {
       if (!layersByModule.size) return;
       const sequences: string[][] = [];
-      for (const chunk of Object.values(bundle)) {
-        if (chunk.type !== 'chunk') continue;
+      const ordered = orderPackageChunks(
+        captureChunkGraph(bundle),
+        Object.keys(workspace.entry),
+      );
+      for (const fileName of ordered) {
+        const chunk = bundle[fileName];
+        if (chunk?.type !== 'chunk') continue;
         for (const id of chunk.moduleIds) {
           const names = layersByModule.get(id);
           if (names) sequences.push(names);

@@ -7,9 +7,10 @@ import { spawnSync } from 'node:child_process';
  * Integration coverage for the `css` option: run a *real* plugboy build of a
  * generated fixture and assert on the emitted stylesheet.
  *
- * `css` is handed to tsdown untouched, so the assertions observe it through the
- * output — which file name the stylesheet lands under, and whether the JS keeps
- * an import pointing at it (`inject`).
+ * `css` is handed to tsdown with plugboy's own defaults filled in (see
+ * `resolveCssOptions`), so the assertions observe it through the output — which
+ * file name the stylesheet lands under, and whether the JS keeps an import
+ * pointing at it (`inject`).
  *
  * Fixtures live under the repo root (outside `packages/**`) and are created and
  * removed at test time — see `external-imports.build.spec.ts` for the rationale.
@@ -110,11 +111,14 @@ function buildFixture(options: {
 }
 
 describe('css option (integration)', () => {
-  test('no css option anywhere leaves tsdown defaults in place', () => {
+  test('with no css option the stylesheet is the one plugboy declares', () => {
+    // tsdown on its own would name it `style.css`, which the `./pkg.css` export
+    // plugboy declares for the `css: true` entry does not point at.
     const { distFiles, js } = buildFixture({});
-    expect(distFiles).toContain('style.css');
+    expect(distFiles).toContain('pkg.css');
+    expect(distFiles).not.toContain('style.css');
     // `inject` defaults to false: the JS carries no import of the stylesheet.
-    expect(js).not.toContain('style.css');
+    expect(js).not.toContain('.css');
   }, 60_000);
 
   test('a workspace css option reaches tsdown', () => {
