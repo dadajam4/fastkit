@@ -1,5 +1,15 @@
 # @fastkit/plugboy-sass-plugin
 
+## 3.0.4
+
+### Patch Changes
+
+- [#307](https://github.com/dadajam4/fastkit/pull/307) [`e7e3ccb`](https://github.com/dadajam4/fastkit/commit/e7e3ccbd11091799c84f44e2dc1d70bac9bbe201) Thanks [@dadajam4](https://github.com/dadajam4)! - Concatenate stylesheets in dependency order across chunks.
+
+  The styles were ordered by each module's position in the bundle. That puts every entry chunk's modules first, so a `.scss` imported through a chunk shared between entries came after the styles that depend on it. They are now ordered by plugboy's chunk load order: each chunk after the chunks it imports statically, dynamically imported chunks last. Within a chunk, the module order is unchanged.
+
+  Requires `@fastkit/plugboy` with the exported chunk ordering (the release this ships with).
+
 ## 3.0.3
 
 ### Patch Changes

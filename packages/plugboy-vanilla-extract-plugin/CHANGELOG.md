@@ -1,5 +1,15 @@
 # @fastkit/plugboy-vanilla-extract-plugin
 
+## 4.2.3
+
+### Patch Changes
+
+- [#307](https://github.com/dadajam4/fastkit/pull/307) [`e7e3ccb`](https://github.com/dadajam4/fastkit/commit/e7e3ccbd11091799c84f44e2dc1d70bac9bbe201) Thanks [@dadajam4](https://github.com/dadajam4)! - Leave `css.splitting` and `css.fileName` to plugboy.
+
+  The plugin used to default `splitting` to `false` for a single CSS entry, which handed the package's stylesheet to tsdown's merge. That merge concatenates chunks in bundle order, so a `.css.ts` whose styles are composed from another chunk could end up after the styles built on it. plugboy now sets both keys itself and builds the stylesheet in dependency order. The plugin no longer reserves any `css` option.
+
+  Requires `@fastkit/plugboy` with dependency-ordered stylesheets (the release this ships with). Upgrade the two together.
+
 ## 4.2.2
 
 ### Patch Changes
