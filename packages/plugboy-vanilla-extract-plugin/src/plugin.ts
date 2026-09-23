@@ -19,58 +19,12 @@ export async function createVanillaExtractPlugin(options: PluginOptions = {}) {
     _options: options,
     hooks: {
       async setupWorkspace(ctx) {
-        // Derive the CSS file name from the workspace entry, mirroring the way
-        // plugboy names the JS output: the main entry (`.`) maps to the package
-        // directory name (e.g. `vue-app-layout`), other entries keep their id.
-        //
-        // `splitting: false` produces a single combined CSS for the package, so
-        // that one file has to be named after the entry plugboy declared
-        // `./<entry>.css` for — which is the entry carrying `css: true`, not
-        // necessarily the main one. Naming it after the main entry regardless
-        // left a package whose only `css: true` entry is a secondary one (say
-        // `styles`, in a package with a `.` entry that has no CSS) emitting
-        // `dist/<package>.css` while plugboy declared `./styles.css`, so the
-        // published export resolved to a file the build never wrote.
-        //
-        // With no CSS entry the name is unused; with several, `splitting` takes
-        // over and names each stylesheet after its chunk.
-        const entryIds = Object.keys(ctx.config.entries);
-        const cssEntryIds = Object.entries(ctx.config.entries)
-          .filter(([, entry]) => entry.css)
-          .map(([id]) => id);
-        const normalizeEntryId = (id: string) =>
-          id === '.' ? ctx.dir.basename : id;
-        const cssBaseName =
-          cssEntryIds.length === 1
-            ? normalizeEntryId(cssEntryIds[0])
-            : entryIds.includes('.')
-              ? ctx.dir.basename
-              : (entryIds[0] ?? ctx.dir.basename);
-        const cssFileName = `${cssBaseName}.css`;
-
-        // plugboy declares a `./<entry>.css` export for every entry with
-        // `css: true`, so more than one of them needs one stylesheet per entry —
-        // which is what tsdown's `css.splitting` produces (one file per output
-        // chunk, named after it). `splitting: false` collects the whole package
-        // into `fileName`, and with several entries in play it keeps only one
-        // chunk's CSS, silently dropping the rest.
-        const cssEntryCount = cssEntryIds.length;
-
         ctx.mergeExternals(/@vanilla-extract/);
 
         ctx.meta.hasVanillaExtract = !!(await findFile(
           ctx.dirs.src.value,
           /\.css\.ts$/,
         ));
-
-        // Defaults, not overrides: `...ctx.css` comes last so anything the
-        // workspace/project configuration declares wins. See the README for why
-        // these two keys should be left to the plugin.
-        ctx.css = {
-          splitting: cssEntryCount > 1,
-          fileName: cssFileName,
-          ...ctx.css,
-        };
 
         if (!ctx.meta.hasVanillaExtract) return;
 

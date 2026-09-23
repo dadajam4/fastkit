@@ -86,17 +86,11 @@ export const component = framework.defineNestedLayer({ globalName: 'component' }
 | `identifiers` | `'short' \| 'debug' \| ((meta) => string)` | 生成されるクラス名などの識別子の形式。本番ビルドでは `'short'`、デバッグ時は `'debug'` を推奨します。 |
 | `esbuildOptions` | `EsbuildOptions` | `.css.ts` のコンパイルに使用する esbuild へ渡すオプション。 |
 
-### 予約された `css` オプション
+### `css` オプション
 
-このプラグインは、登録されたワークスペースに対して plugboy の `css.splitting` と `css.fileName` を設定します。これは、出力されるスタイルシートが plugboy の宣言する CSS export（`css: true` の各エントリに対する `./<entry>.css`）と一致するようにするためです。
+すべての `css` オプション（`target`、`transformer`、`minify`、`preprocessorOptions`、`lightningcss`、`postcss`、`modules` など）は自由に利用でき、抽出された CSS にも適用されます。このプラグインが予約するキーはありません。
 
-- 該当エントリが 1 つ（通常のケース）: `splitting: false`、`fileName: '<package>.css'` — パッケージにつき単一のスタイルシート。
-- 複数の場合: `splitting: true` とし、tsdown が出力チャンクごとにその名前でスタイルシートを出力します。`splitting: false` ではパッケージ全体を 1 ファイルに集約する際に 1 つのチャンクの CSS しか残らず、残りが黙って失われます。
-
-設定はプラグインのデフォルトより優先されるため、これらのキーを宣言するとその通りに適用され、出力ファイル名が上記の export と一致しなくなる場合があります。その他の `css` オプション（`target`、`transformer`、`minify`、`preprocessorOptions`、`lightningcss`、`postcss`、`modules` など）は自由に利用でき、抽出された CSS にも適用されます。
-
-> [!NOTE]
-> CSS エントリが複数ある場合、2 つ以上のエントリから import された `.css.ts` は共有チャンクに配置されます。plugboy がその共有チャンクのスタイルシートを必要な各エントリへ畳み込むため、`./<entry>.css` は常に完結した内容になります（[CSS エントリごとのスタイルシート](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README-ja.md#css-エントリごとのスタイルシート)）。
+パッケージがどのスタイルシートを出力し、そのルールがどの順に並ぶかは、このプラグインではなく plugboy の責務です。`./<entry>.css` はすべて依存順で組み立てられるので、`style([base, { … }])` で合成したスタイルは、`base` のある `.css.ts` が別チャンクに入った場合でも必ず `base` の後に来ます（[CSS エントリのスタイルシート](https://github.com/dadajam4/fastkit/blob/main/packages/plugboy/README-ja.md#css-エントリのスタイルシート)）。これを成り立たせるため、`css.splitting` は指定しないでください。
 
 ### CSS が出力に至る経路
 
