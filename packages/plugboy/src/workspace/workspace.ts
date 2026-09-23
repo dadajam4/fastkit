@@ -40,6 +40,7 @@ import {
   createExternalImportsPlugin,
   createSuppressDtsSourcemapWarningPlugin,
 } from './plugins';
+import { resolveCssOptions } from './stylesheets';
 import { type CssOptions } from '@tsdown/css';
 
 export type WorkspaceStubLink =
@@ -189,12 +190,12 @@ export class PlugboyWorkspace {
     ];
     this.hooks = hooks;
     this.dts = dts;
-    this.cssOptions = css;
     this.optimizeCSSOptions = optimizeCSS
       ? resolveOptimizeCSSOptions(optimizeCSS)
       : false;
 
     const entry: Record<string, string> = {};
+    const cssEntryIds: string[] = [];
     const exports: WorkspaceExport[] = [
       {
         id: `./${PACKAGE_JSON_FILENAME}`,
@@ -216,6 +217,7 @@ export class PlugboyWorkspace {
       entry[normalizedId] = src;
 
       if (css) {
+        cssEntryIds.push(normalizedId);
         const cssDest = `./dist/${normalizedId}.css`;
         exports.push({
           id: `./${normalizedId}.css`,
@@ -255,6 +257,7 @@ export class PlugboyWorkspace {
 
     this.entry = entry;
     this.exports = exports;
+    this.cssOptions = resolveCssOptions(css, cssEntryIds);
     this.builder = new Builder(this);
   }
 
