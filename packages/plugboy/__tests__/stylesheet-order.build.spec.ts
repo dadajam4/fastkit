@@ -160,9 +160,10 @@ describe('stylesheet order (integration)', () => {
   }, 60_000);
 
   // Pins the upstream behaviour plugboy works around: tsdown's own merge
-  // concatenates in bundle order, so the shared base lands last. When this
-  // fails, tsdown orders the merge by dependency itself, and plugboy's
-  // single-stylesheet assembly can be reconsidered.
+  // concatenates in bundle order, so the shared base lands last
+  // (https://github.com/rolldown/tsdown/issues/1086). When this fails, tsdown
+  // orders the merge by dependency itself, and plugboy's single-stylesheet
+  // assembly can be reconsidered.
   test("tsdown's own merge (splitting: false) still puts the shared base last", () => {
     const { read } = buildFixture({
       ...SHARED_BASE,
