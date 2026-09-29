@@ -8,7 +8,8 @@ Show warnings on form nodes without blocking submission
 A form node takes a new `warningMessages` prop (`string | string[]`), next to
 `errorMessages`. Warnings are shown to the user like errors, but they do not
 make the node invalid, do not fail `validate()` and do not block form
-submission.
+submission. A `warning` prop, next to `error`, forces the warning state without
+a message.
 
 ```tsx
 <VTextField
@@ -30,9 +31,10 @@ needed:
 
 **`@fastkit/vue-form-control`**
 
+- Form node props: `warningMessages` and `warning`.
 - `FormNodeControl`: `warnings`, `warningMessages`, `firstWarningMessage`,
-  `hasMyWarning`, and `warned` (this node or a descendant has a warning; it is
-  independent of `invalid`).
+  `hasMyWarning` (also `true` with the `warning` prop), and `warned` (this node
+  or a descendant has a warning; it is independent of `invalid`).
 - `FormGroupControl`: `warningMessages` also collects the warnings of nodes
   that have no error.
 - `FormNodeWrapper`: `warned`, `warningMessages`, `firstWarningMessage` and

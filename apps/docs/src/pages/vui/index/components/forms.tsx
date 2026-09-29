@@ -453,6 +453,11 @@ export default defineComponent({
                     warningMessages={this.warnings.autoRenew}>
                     自動更新
                   </VSwitch>
+                  <VTextField
+                    label="文言なしで警告状態にする（warning）"
+                    hint="warning を指定すると、文言を出さずに見た目だけ警告になります。"
+                    warning
+                  />
                   <VButton type="submit" color="primary">
                     送信
                   </VButton>

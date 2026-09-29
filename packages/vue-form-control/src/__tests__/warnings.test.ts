@@ -175,6 +175,23 @@ describe('form node warnings', () => {
     ).toEqual(['Check this value']);
   });
 
+  it('can be forced without a message', async () => {
+    const { registry, text } = setup(({ Field, Wrapper }) =>
+      h(Wrapper, { id: 'w' }, () => h(Field, { name: 'a', warning: true })),
+    );
+    await nextTick();
+    const node = registry.nodes.a;
+
+    expect(node.hasMyWarning).toBe(true);
+    expect(node.warned).toBe(true);
+    expect(node.warnings).toEqual([]);
+    expect(node.invalid).toBe(false);
+    expect(await node.validate()).toBe(true);
+    expect(registry.wrappers.w.warned).toBe(true);
+    expect(registry.wrappers.w.warningMessages).toEqual([]);
+    expect(text('.wrapper-message-w')).toBe('');
+  });
+
   it('is not shown by the node itself while it has an error', async () => {
     const { registry } = setup(({ Field }) =>
       h(Field, {

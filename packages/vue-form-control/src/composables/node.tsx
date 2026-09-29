@@ -296,6 +296,12 @@ export function createFormNodeProps<
       >,
       /** Force an error state. */
       error: Boolean,
+      /**
+       * Force a warning state.
+       *
+       * Like {@link FormNodeControl.warnings warnings}, this does not make the node invalid and does not block form submission.
+       */
+      warning: Boolean,
       /** List of error messages. */
       errorMessages: [String, Array] as PropType<string | string[]>,
       /**
@@ -833,9 +839,12 @@ export class FormNodeControl<
 
   /**
    * Whether itself has one or more warnings
+   *
+   * @remarks
+   * This also takes into consideration the configuration of the `warning` property.
    */
   get hasMyWarning(): boolean {
-    return this.warnings.length > 0;
+    return this._props.warning || this.warnings.length > 0;
   }
 
   /**
