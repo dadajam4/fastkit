@@ -9,9 +9,9 @@ Rename the settings that decide where validation messages are rendered
 node's validation messages, not whether a node has errors. They are renamed so
 the names keep describing that as messages other than errors are added:
 
-| Before | After | Where |
-| --- | --- | --- |
-| `showOwnErrors` | `showOwnValidationMessages` | form node prop and `FormNodeControl` getter |
+| Before                 | After                       | Where                                                                                 |
+| ---------------------- | --------------------------- | ------------------------------------------------------------------------------------- |
+| `showOwnErrors`        | `showOwnValidationMessages` | form node prop and `FormNodeControl` getter                                           |
 | `collectErrorMessages` | `collectValidationMessages` | form group / form node wrapper prop and `FormGroupControl` / `FormNodeWrapper` getter |
 
 Behavior is unchanged. The old names are removed without aliases.

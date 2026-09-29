@@ -20,12 +20,20 @@
     --my-outline-color: var(--control-field-outline-color);
     --my-outline-hover-color: var(--control-field-outline-hover-color);
 
-    &--invalid:not(#{&}--disabled):not(#{&}--readonly),
-    &--warned:not(#{&}--disabled):not(#{&}--readonly) {
+    &--invalid:not(#{&}--disabled):not(#{&}--readonly) {
       --my-bottom-color: var(--main-color);
       --my-bottom-hover-color: var(--main-color);
       --my-outline-color: var(--main-color);
       --my-outline-hover-color: var(--main-color);
+    }
+
+    // See `.v-form-control--warned`.
+    &--warned:not(#{&}--invalid):not(#{&}--disabled):not(#{&}--readonly) {
+      --my-focused-color: var(--outlineText-color, var(--main-color));
+      --my-bottom-color: var(--outlineText-color, var(--main-color));
+      --my-bottom-hover-color: var(--outlineText-color, var(--main-color));
+      --my-outline-color: var(--outlineText-color, var(--main-color));
+      --my-outline-hover-color: var(--outlineText-color, var(--main-color));
     }
 
     &--readonly {

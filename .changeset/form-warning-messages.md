@@ -13,7 +13,9 @@ submission.
 ```tsx
 <VTextField
   v-model={price.value}
-  warningMessages={price.value >= 100000 ? 'Is this amount correct?' : undefined}
+  warningMessages={
+    price.value >= 100000 ? 'Is this amount correct?' : undefined
+  }
 />
 ```
 
@@ -46,6 +48,10 @@ default), below errors in precedence: `VTextField`, `VTextarea`, `VNumberField`,
 `VSwitch`, `VSwitchGroup` and anything else built on `VFormControl` or
 `VControlField`.
 
+- The warning state draws its label, message, field lines and checkable icon
+  with the scope's `outlineText` color and falls back to its main color, since
+  a warning color is often too light to read on the page background. Errors
+  keep using the main color.
 - New state classes: `v-form-control--warned`, `v-control-field--warned`,
   `v-checkable--warned` and `v-form--warned`.
 - `VCheckable` takes a `warned` prop.

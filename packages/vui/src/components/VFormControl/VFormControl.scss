@@ -9,10 +9,16 @@
     --my-label-color: var(--control-label-color);
     --my-message-color: var(--control-message-color);
 
-    &--invalid:not(#{&}--readonly),
-    &--warned:not(#{&}--readonly) {
+    &--invalid:not(#{&}--readonly) {
       --my-label-color: var(--main-color);
       --my-message-color: var(--main-color);
+    }
+
+    // Warnings are text on the page background, so prefer the scope's text
+    // color for that: a warning's main color is often too light to read.
+    &--warned:not(#{&}--invalid):not(#{&}--readonly) {
+      --my-label-color: var(--outlineText-color, var(--main-color));
+      --my-message-color: var(--outlineText-color, var(--main-color));
     }
 
     &--disabled {

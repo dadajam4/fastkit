@@ -16,9 +16,13 @@
       --color: var(--main-color);
     }
 
-    &--invalid:not(#{&}--readonly),
-    &--warned:not(#{&}--readonly) {
+    &--invalid:not(#{&}--readonly) {
       --color: var(--main-color);
+    }
+
+    // See `.v-form-control--warned`.
+    &--warned:not(#{&}--invalid):not(#{&}--readonly) {
+      --color: var(--outlineText-color, var(--main-color));
     }
 
     &--disabled {
