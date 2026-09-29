@@ -72,14 +72,14 @@ export function createFormNodeWrapperProps() {
       /** Chip(required) display settings */
       requiredChip: {} as PropType<RequiredChipSource>,
       /**
-       * Collect the error messages of all nodes belonging to this node
+       * Collect the validation messages of all nodes belonging to this node
        *
-       * By default, a node attempts to render error messages on its own, but enabling this setting allows the parent wrapper to manage the rendering of error messages.
-       * If you want to exclude a specific node from this configuration, enable the `showOwnErrors` setting for that node.
+       * By default, a node attempts to render validation messages on its own, but enabling this setting allows the parent wrapper to manage their rendering.
+       * If you want to exclude a specific node from this configuration, enable the `showOwnValidationMessages` setting for that node.
        *
        * @default true
        */
-      collectErrorMessages: {
+      collectValidationMessages: {
         type: Boolean,
         default: true,
       },
@@ -292,16 +292,16 @@ export class FormNodeWrapper {
   }
 
   /**
-   * Collect the error messages of all nodes belonging to this node
+   * Collect the validation messages of all nodes belonging to this node
    */
-  get collectErrorMessages() {
-    return this._props.collectErrorMessages;
+  get collectValidationMessages() {
+    return this._props.collectValidationMessages;
   }
 
   /**
    * Source code for all collected error messages
    *
-   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnValidationMessages showOwnValidationMessages}.
    *
    * @see {@link FormNodeErrorMessageSource}
    */
@@ -312,7 +312,7 @@ export class FormNodeWrapper {
   /**
    * Source code for the first error message among all collected messages
    *
-   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnValidationMessages showOwnValidationMessages}.
    *
    * @see {@link FormNodeErrorMessageSource}
    */
@@ -436,8 +436,8 @@ export class FormNodeWrapper {
       const messages: FormNodeErrorMessageSource[] = [];
       for (const node of this.allNodes) {
         if (
-          !node.showOwnErrors &&
-          !node.parentFormGroup?.collectErrorMessages
+          !node.showOwnValidationMessages &&
+          !node.parentFormGroup?.collectValidationMessages
         ) {
           node.errors.forEach((error) => {
             messages.push(

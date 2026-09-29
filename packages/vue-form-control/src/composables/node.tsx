@@ -285,13 +285,13 @@ export function createFormNodeProps<
       /** List of error messages. */
       errorMessages: [String, Array] as PropType<string | string[]>,
       /**
-       * Display error messages on this node itself
+       * Display validation messages on this node itself
        *
-       * If `true`, attempts to render errors for this node itself; if `false`, delegates error message display to the associated form group or wrapper.
+       * If `true`, attempts to render validation messages for this node itself; if `false`, delegates their display to the associated form group or wrapper.
        *
-       * @default `false` if a parent group or wrapper exists and the `collectErrorMessages` setting is enabled; otherwise, `true`.
+       * @default `false` if a parent group or wrapper exists and the `collectValidationMessages` setting is enabled; otherwise, `true`.
        */
-      showOwnErrors: {
+      showOwnValidationMessages: {
         type: Boolean,
         default: undefined,
       },
@@ -703,7 +703,7 @@ export class FormNodeControl<
   /**
    * Source code for all collected error messages
    *
-   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnValidationMessages showOwnValidationMessages}.
    *
    * @see {@link FormNodeErrorMessageSource}
    */
@@ -714,7 +714,7 @@ export class FormNodeControl<
   /**
    * Source code for the first error message among all collected messages
    *
-   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnValidationMessages showOwnValidationMessages}.
    *
    * @see {@link FormNodeErrorMessageSource}
    */
@@ -926,16 +926,16 @@ export class FormNodeControl<
   }
 
   /**
-   * Display error messages on this node itself
+   * Display validation messages on this node itself
    */
-  get showOwnErrors(): boolean {
-    const { showOwnErrors } = this._props;
-    if (showOwnErrors === false) return false;
-    if (showOwnErrors) return true;
-    if (this.parentFormGroup?.collectErrorMessages) {
+  get showOwnValidationMessages(): boolean {
+    const { showOwnValidationMessages } = this._props;
+    if (showOwnValidationMessages === false) return false;
+    if (showOwnValidationMessages) return true;
+    if (this.parentFormGroup?.collectValidationMessages) {
       return false;
     }
-    return !this.parentFormNodeWrapper?.collectErrorMessages;
+    return !this.parentFormNodeWrapper?.collectValidationMessages;
   }
 
   /**
@@ -1033,7 +1033,7 @@ export class FormNodeControl<
     ]);
 
     this._resolvedErrorMessages = computed(() =>
-      this.showOwnErrors
+      this.showOwnValidationMessages
         ? this.errors.map((error, index) =>
             this._createFormNodeErrorMessageSource(error, index),
           )
