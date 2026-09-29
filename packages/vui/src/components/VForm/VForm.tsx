@@ -53,6 +53,7 @@ export const VForm = defineComponent({
       {
         'v-form--valid': nodeControl.valid,
         'v-form--invalid': nodeControl.invalid,
+        'v-form--warned': nodeControl.warned,
         'v-form--disabled': nodeControl.isDisabled,
         'v-form--validating': nodeControl.validating,
         'v-form--pending': nodeControl.pending,

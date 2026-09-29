@@ -133,6 +133,30 @@ export class FormGroupControl extends FormNodeControl {
       return messages;
     });
 
+    const { _resolvedWarningMessages } = this;
+
+    this._resolvedWarningMessages = computed(() => {
+      if (!this.showOwnValidationMessages) return [];
+      const messages = _resolvedWarningMessages.value.slice();
+      for (const node of this.allNodes) {
+        if (
+          node.hasMyWarning &&
+          !node.hasMyError &&
+          !node.showOwnValidationMessages
+        ) {
+          node.warnings.forEach((warning) => {
+            messages.push(
+              node._createFormNodeWarningMessageSource(
+                warning,
+                messages.length + 1,
+              ),
+            );
+          });
+        }
+      }
+      return messages;
+    });
+
     provide(FormGroupInjectionKey, this);
   }
 

@@ -1,4 +1,4 @@
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import {
   VHero,
   VTextarea,
@@ -62,6 +62,39 @@ export default defineComponent({
     const input2 = ref('');
     const checked = ref(true);
 
+    const warningInput = ref({
+      price: '',
+      comment: '',
+      notify: true,
+      plan: '1',
+      channels: ['1'],
+      autoRenew: true,
+      size: '3',
+    });
+    const warnings = computed(() => {
+      const { price, comment, notify, plan, channels, autoRenew, size } =
+        warningInput.value;
+      return {
+        price: Number(price) >= 100000 ? '金額が大きすぎませんか？' : undefined,
+        comment:
+          comment && comment.length < 10
+            ? 'もう少し詳しく書くと伝わりやすくなります。'
+            : undefined,
+        notify: notify ? undefined : 'チェックを外すと通知が届きません。',
+        plan: plan === '5' ? 'このプランは近日提供終了予定です。' : undefined,
+        channels:
+          channels.length > 3 ? '通知が多くなる可能性があります。' : undefined,
+        autoRenew: autoRenew
+          ? undefined
+          : '期限が切れると利用できなくなります。',
+        size: size === '1' ? '在庫が少なくなっています。' : undefined,
+      };
+    });
+
+    function submitWarnings() {
+      vui.snackbar('送信しました。');
+    }
+
     return {
       size,
       variant,
@@ -78,6 +111,9 @@ export default defineComponent({
       input1,
       input2,
       checked,
+      warningInput,
+      warnings,
+      submitWarnings,
     };
   },
   render() {
@@ -363,6 +399,66 @@ export default defineComponent({
               </VSwitch>
             </div>
           </div>
+        </DocsSection>
+
+        <DocsSection title="Warnings">
+          <p>
+            <code>warningMessages</code>{' '}
+            で渡した警告は表示されますが、送信は妨げません。同じ入力にエラーがあるときはエラーが優先されます。
+          </p>
+          <VForm
+            onSubmit={() => {
+              this.submitWarnings();
+            }}
+            v-slots={{
+              default: () => (
+                <>
+                  <VTextField
+                    label="金額（100000 以上で警告）"
+                    type="number"
+                    required
+                    v-model={this.warningInput.price}
+                    warningMessages={this.warnings.price}
+                  />
+                  <VTextarea
+                    label="ひとことコメント（10 文字未満で警告）"
+                    v-model={this.warningInput.comment}
+                    warningMessages={this.warnings.comment}
+                  />
+                  <VSelect
+                    label="サイズ（アイテム1で警告）"
+                    items={items}
+                    v-model={this.warningInput.size}
+                    warningMessages={this.warnings.size}
+                  />
+                  <VRadioGroup
+                    label="プラン（アイテム5で警告）"
+                    items={items}
+                    v-model={this.warningInput.plan}
+                    warningMessages={this.warnings.plan}
+                  />
+                  <VCheckboxGroup
+                    label="通知チャネル（4 つ以上で警告）"
+                    items={items}
+                    v-model={this.warningInput.channels}
+                    warningMessages={this.warnings.channels}
+                  />
+                  <VCheckbox
+                    v-model={this.warningInput.notify}
+                    warningMessages={this.warnings.notify}>
+                    通知を受け取る
+                  </VCheckbox>
+                  <VSwitch
+                    v-model={this.warningInput.autoRenew}
+                    warningMessages={this.warnings.autoRenew}>
+                    自動更新
+                  </VSwitch>
+                  <VButton type="submit" color="primary">
+                    送信
+                  </VButton>
+                </>
+              ),
+            }}></VForm>
         </DocsSection>
       </div>
     );

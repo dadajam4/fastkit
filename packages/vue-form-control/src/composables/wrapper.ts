@@ -25,6 +25,7 @@ import {
   FormNodeErrorSlots,
   FormNodeErrorSlotsSource,
   FormNodeErrorMessageSource,
+  FormNodeWarningMessageSource,
 } from './node';
 import type { VueFormService } from '../service';
 import { useVueForm, FormNodeWrapperInjectionKey } from '../injections';
@@ -160,6 +161,12 @@ export class FormNodeWrapper {
   protected _invalid: ComputedRef<boolean>;
 
   protected _resolvedErrorMessages: ComputedRef<FormNodeErrorMessageSource[]>;
+
+  protected _warned: ComputedRef<boolean>;
+
+  protected _resolvedWarningMessages: ComputedRef<
+    FormNodeWarningMessageSource[]
+  >;
 
   /**
    * Root service of `vue-form-control`
@@ -320,6 +327,36 @@ export class FormNodeWrapper {
     return this.errorMessages[0];
   }
 
+  /**
+   * One of the associated nodes has a warning
+   *
+   * This is independent of {@link FormNodeWrapper.invalid invalid}.
+   */
+  get warned() {
+    return this._warned.value;
+  }
+
+  /**
+   * Source code for all collected warning messages
+   *
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnValidationMessages showOwnValidationMessages}.
+   * The warnings of a node that has an error are not included.
+   *
+   * @see {@link FormNodeWarningMessageSource}
+   */
+  get warningMessages(): FormNodeWarningMessageSource[] {
+    return this._resolvedWarningMessages.value;
+  }
+
+  /**
+   * Source code for the first warning message among all collected messages
+   *
+   * @see {@link FormNodeWarningMessageSource}
+   */
+  get firstWarningMessage(): FormNodeWarningMessageSource | undefined {
+    return this.warningMessages[0];
+  }
+
   get labelSlot() {
     return this._labelSlot.value;
   }
@@ -390,7 +427,8 @@ export class FormNodeWrapper {
         | 'dirty'
         | 'touched'
         | 'isRequired'
-        | 'invalid',
+        | 'invalid'
+        | 'warned',
     >(
       prop: P,
     ): boolean => {
@@ -428,6 +466,7 @@ export class FormNodeWrapper {
     );
     this._required = computed(() => hasTrueFromControlOrChildren('isRequired'));
     this._invalid = computed(() => hasTrueFromControlOrChildren('invalid'));
+    this._warned = computed(() => hasTrueFromControlOrChildren('warned'));
 
     this._resolvedErrorMessages = computed(() => {
       const nc = props.nodeControl;
@@ -445,6 +484,30 @@ export class FormNodeWrapper {
                 error,
                 messages.length + 1,
                 ctx.slots as any,
+              ),
+            );
+          });
+        }
+      }
+      return messages;
+    });
+
+    this._resolvedWarningMessages = computed(() => {
+      const nc = props.nodeControl;
+      if (nc) return nc.warningMessages;
+
+      const messages: FormNodeWarningMessageSource[] = [];
+      for (const node of this.allNodes) {
+        if (
+          !node.hasMyError &&
+          !node.showOwnValidationMessages &&
+          !node.parentFormGroup?.collectValidationMessages
+        ) {
+          node.warnings.forEach((warning) => {
+            messages.push(
+              node._createFormNodeWarningMessageSource(
+                warning,
+                messages.length + 1,
               ),
             );
           });
@@ -491,10 +554,19 @@ export class FormNodeWrapper {
     return this.firstErrorMessage?.render(slotsOverrides);
   }
 
+  renderFirstWarning() {
+    if (!this.canOperation) {
+      return;
+    }
+    return this.firstWarningMessage?.render();
+  }
+
   renderMessage(allowNotFocused?: boolean) {
     if (!this.canOperation) return EMPTY_MESSAGE;
     const error = this.renderFirstError();
     if (error) return error;
+    const warning = this.renderFirstWarning();
+    if (warning) return warning;
     return (
       (!this._hinttip.value && this.renderHint(allowNotFocused)) ||
       EMPTY_MESSAGE

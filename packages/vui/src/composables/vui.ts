@@ -5,6 +5,7 @@ export type { VuiService } from '../service';
 
 export interface VuiColorProvider {
   primary: ComputedRef<ScopeName>;
+  warning: ComputedRef<ScopeName>;
   error: ComputedRef<ScopeName>;
-  className: (type: 'primary' | 'error') => string;
+  className: (type: 'primary' | 'warning' | 'error') => string;
 }

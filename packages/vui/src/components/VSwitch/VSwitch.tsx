@@ -57,6 +57,7 @@ export const VSwitch = defineComponent({
         class={classes.value}
         checked={nodeControl.selected}
         invalid={nodeControl.invalid}
+        warned={nodeControl.warned}
         disabled={nodeControl.isDisabled}
         readonly={nodeControl.isReadonly}
         v-slots={withCtxForSlots(slots)}

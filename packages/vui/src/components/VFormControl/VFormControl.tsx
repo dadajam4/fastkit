@@ -98,6 +98,7 @@ export const VFormControl = defineComponent({
         'v-form-control--touched': control.touched,
         'v-form-control--untouched': control.untouched,
         'v-form-control--invalid': control.invalid,
+        'v-form-control--warned': control.warned,
         'v-form-control--valid': control.valid,
       },
       colorProvider.className(
@@ -105,7 +106,9 @@ export const VFormControl = defineComponent({
           ? 'error'
           : control.invalid && !control.isReadonly
             ? 'error'
-            : 'primary',
+            : control.warned && !control.isReadonly
+              ? 'warning'
+              : 'primary',
       ),
     ]);
 

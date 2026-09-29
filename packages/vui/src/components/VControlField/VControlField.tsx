@@ -75,6 +75,7 @@ export const VControlField = defineComponent({
 
     const disabled = computed(() => !!parentNode && parentNode.isDisabled);
     const invalid = computed(() => !!parentNode && parentNode.invalid);
+    const warned = computed(() => !!parentNode && parentNode.warned);
     const autoHeight = computed(() => props.autoHeight);
     const readonly = computed(() => !!parentNode && parentNode.isReadonly);
     // const computedTabindex = computed(() =>
@@ -90,6 +91,7 @@ export const VControlField = defineComponent({
         {
           'v-control-field--disabled': disabled.value,
           'v-control-field--invalid': invalid.value || props.error,
+          'v-control-field--warned': warned.value,
           'v-control-field--readonly': readonly.value,
           'v-control-field--focused': props.focused,
           'v-control-field--auto-height': autoHeight.value,
@@ -100,7 +102,9 @@ export const VControlField = defineComponent({
             ? 'error'
             : invalid.value && !readonly.value
               ? 'error'
-              : 'primary',
+              : warned.value && !readonly.value
+                ? 'warning'
+                : 'primary',
         ),
       ];
       return _classes;

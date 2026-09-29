@@ -16,7 +16,8 @@
       --color: var(--main-color);
     }
 
-    &--invalid:not(#{&}--readonly) {
+    &--invalid:not(#{&}--readonly),
+    &--warned:not(#{&}--readonly) {
       --color: var(--main-color);
     }
 
