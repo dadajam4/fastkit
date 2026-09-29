@@ -162,6 +162,8 @@ export function defineFormSelectorComponent(
           label={props.label}
           hint={props.hint}
           hinttip={props.hinttip}
+          hinttipDelay={props.hinttipDelay}
+          infoAppends={props.infoAppends}
           requiredChip={props.requiredChip}
           error={selectorControl.itemsLoadFailed}
           v-slots={{

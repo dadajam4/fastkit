@@ -5,9 +5,16 @@ import {
   useTextInputNodeControl,
   createFormNodeWrapperProps,
   FormNodeWrapperSlots,
+  FormNodeWrapper,
   TextInputNodeEmits,
 } from '@fastkit/vue-form-control';
-import { defineSlots, ExtractPropInput, withCtx } from '@fastkit/vue-utils';
+import {
+  defineSlots,
+  ExtractPropInput,
+  withCtx,
+  resolveVNodeChildOrSlots,
+  cleanupEmptyVNodeChild,
+} from '@fastkit/vue-utils';
 import { VFormControl } from '../VFormControl';
 import {
   VControlField,
@@ -82,10 +89,16 @@ export const VTextField = defineComponent({
       />
     );
 
-    const infoAppendsSlot = () => {
+    // The counter takes the `infoAppends` slot of `VFormControl`, so render
+    // the caller's own `infoAppends` (prop or slot) in front of it.
+    const infoAppendsSlot = (wrapper: FormNodeWrapper) => {
+      const slot = resolveVNodeChildOrSlots(
+        props.infoAppends,
+        ctx.slots.infoAppends,
+      );
+      const appends = (slot && cleanupEmptyVNodeChild(slot(wrapper))) || [];
       const { counterResult } = inputControl;
-      if (!counterResult) return;
-      return <VTextCounter {...counterResult} />;
+      return [...appends, counterResult && <VTextCounter {...counterResult} />];
     };
 
     ctx.expose({
@@ -101,6 +114,7 @@ export const VTextField = defineComponent({
         label={props.label}
         hint={props.hint}
         hinttip={props.hinttip}
+        hinttipDelay={props.hinttipDelay}
         requiredChip={props.requiredChip}
         onClickLabel={handleClickLabel}
         v-slots={{
