@@ -1,5 +1,99 @@
 # @fastkit/vue-form-control
 
+## 1.1.0
+
+### Minor Changes
+
+- [#309](https://github.com/dadajam4/fastkit/pull/309) [`f54f7af`](https://github.com/dadajam4/fastkit/commit/f54f7af8bd3817fef668136bae2849f27fae3908) Thanks [@dadajam4](https://github.com/dadajam4)! - Show warnings on form nodes without blocking submission
+
+  A form node takes a new `warningMessages` prop (`string | string[]`), next to
+  `errorMessages`. Warnings are shown to the user like errors, but they do not
+  make the node invalid, do not fail `validate()` and do not block form
+  submission. A `warning` prop, next to `error`, forces the warning state without
+  a message.
+
+  ```tsx
+  <VTextField
+    v-model={price.value}
+    warningMessages={
+      price.value >= 100000 ? 'Is this amount correct?' : undefined
+    }
+  />
+  ```
+
+  Warnings are routed by the same settings as errors, so no new configuration is
+  needed:
+
+  - They follow `showOwnValidationMessages`, and a form group or wrapper with
+    `collectValidationMessages` collects them the way it collects errors.
+  - A detached node's warnings stay with that node.
+  - While a node has an error, its own warnings are not shown. Warnings of other
+    nodes are unaffected.
+
+  **`@fastkit/vue-form-control`**
+
+  - Form node props: `warningMessages` and `warning`.
+  - `FormNodeControl`: `warnings`, `warningMessages`, `firstWarningMessage`,
+    `hasMyWarning` (also `true` with the `warning` prop), and `warned` (this node
+    or a descendant has a warning; it is independent of `invalid`).
+  - `FormGroupControl`: `warningMessages` also collects the warnings of nodes
+    that have no error.
+  - `FormNodeWrapper`: `warned`, `warningMessages`, `firstWarningMessage` and
+    `renderFirstWarning()`. `renderMessage()` now shows the first error, then the
+    first warning, then the hint.
+  - New types `FormNodeWarning` and `FormNodeWarningMessageSource`.
+
+  **`@fastkit/vui`**
+
+  Every form component shows warnings in the `warningScope` color (`warning` by
+  default), below errors in precedence: `VTextField`, `VTextarea`, `VNumberField`,
+  `VSelect`, `VFileInput`, `VCheckbox`, `VCheckboxGroup`, `VRadioGroup`,
+  `VSwitch`, `VSwitchGroup` and anything else built on `VFormControl` or
+  `VControlField`.
+
+  - The warning state draws its label, message, field lines and checkable icon
+    with the scope's `outlineText` color and falls back to its main color, since
+    a warning color is often too light to read on the page background. Errors
+    keep using the main color.
+  - New state classes: `v-form-control--warned`, `v-control-field--warned`,
+    `v-checkable--warned` and `v-form--warned`.
+  - `VCheckable` takes a `warned` prop.
+  - `VuiColorProvider` gains `warning`, and `className()` accepts `'warning'`.
+    A custom provider supplied through `VuiColorProviderInjectionKey` must add
+    `warning`.
+
+- [#309](https://github.com/dadajam4/fastkit/pull/309) [`f54f7af`](https://github.com/dadajam4/fastkit/commit/f54f7af8bd3817fef668136bae2849f27fae3908) Thanks [@dadajam4](https://github.com/dadajam4)! - Rename the settings that decide where validation messages are rendered
+
+  `showOwnErrors` and `collectErrorMessages` decide which component renders a
+  node's validation messages, not whether a node has errors. They are renamed so
+  the names keep describing that as messages other than errors are added:
+
+  | Before                 | After                       | Where                                                                                 |
+  | ---------------------- | --------------------------- | ------------------------------------------------------------------------------------- |
+  | `showOwnErrors`        | `showOwnValidationMessages` | form node prop and `FormNodeControl` getter                                           |
+  | `collectErrorMessages` | `collectValidationMessages` | form group / form node wrapper prop and `FormGroupControl` / `FormNodeWrapper` getter |
+
+  Behavior is unchanged. The old names are removed without aliases.
+
+  **Migration**
+
+  Replace the old names in templates, JSX and code that reads the getters:
+
+  ```diff
+  - <VFormGroup collectErrorMessages>
+  -   <VTextField showOwnErrors={false} />
+  + <VFormGroup collectValidationMessages>
+  +   <VTextField showOwnValidationMessages={false} />
+    </VFormGroup>
+  ```
+
+  In templates, the kebab-case forms change accordingly:
+  `show-own-errors` → `show-own-validation-messages`,
+  `collect-error-messages` → `collect-validation-messages`.
+
+  The getters that return the collected messages (`errorMessages`,
+  `firstErrorMessage`) keep their names.
+
 ## 1.0.0
 
 ### Major Changes
