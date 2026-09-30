@@ -23,12 +23,12 @@ export function createFormGroupProps() {
     ...createFormNodeProps(),
     ...createPropsOptions({
       /**
-       * Collect the error messages of all nodes belonging to this node
+       * Collect the validation messages of all nodes belonging to this node
        *
-       * By default, a node attempts to render error messages on its own, but enabling this setting allows the parent group to manage the rendering of error messages.
-       * If you want to exclude a specific node from this configuration, enable the `showOwnErrors` setting for that node.
+       * By default, a node attempts to render validation messages on its own, but enabling this setting allows the parent group to manage their rendering.
+       * If you want to exclude a specific node from this configuration, enable the `showOwnValidationMessages` setting for that node.
        */
-      collectErrorMessages: Boolean,
+      collectValidationMessages: Boolean,
       /**
        * Auto scroll to the location of the form when invalid input is detected in the validation on submission
        */
@@ -74,10 +74,10 @@ export class FormGroupControl extends FormNodeControl {
   }
 
   /**
-   * Collect the error messages of all nodes belonging to this node
+   * Collect the validation messages of all nodes belonging to this node
    */
-  get collectErrorMessages() {
-    return this._props.collectErrorMessages;
+  get collectValidationMessages() {
+    return this._props.collectValidationMessages;
   }
 
   /**
@@ -114,17 +114,41 @@ export class FormGroupControl extends FormNodeControl {
     const { _resolvedErrorMessages } = this;
 
     this._resolvedErrorMessages = computed(() => {
-      if (!this.showOwnErrors) return [];
+      if (!this.showOwnValidationMessages) return [];
       const messages = _resolvedErrorMessages.value.slice();
       const { allInvalidNodes } = this;
       for (const node of allInvalidNodes) {
-        if (!node.showOwnErrors) {
+        if (!node.showOwnValidationMessages) {
           node.errors.forEach((error) => {
             messages.push(
               node._createFormNodeErrorMessageSource(
                 error,
                 messages.length + 1,
                 ctx.slots as any,
+              ),
+            );
+          });
+        }
+      }
+      return messages;
+    });
+
+    const { _resolvedWarningMessages } = this;
+
+    this._resolvedWarningMessages = computed(() => {
+      if (!this.showOwnValidationMessages) return [];
+      const messages = _resolvedWarningMessages.value.slice();
+      for (const node of this.allNodes) {
+        if (
+          node.hasMyWarning &&
+          !node.hasMyError &&
+          !node.showOwnValidationMessages
+        ) {
+          node.warnings.forEach((warning) => {
+            messages.push(
+              node._createFormNodeWarningMessageSource(
+                warning,
+                messages.length + 1,
               ),
             );
           });

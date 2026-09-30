@@ -159,7 +159,21 @@ export function createSimpleColorScheme(opts: SimpleColorSchemeOptions = {}) {
           // ],
           ['info', ({ palette }) => palette('info')],
           ['success', ({ palette }) => palette('success')],
-          ['warning', ({ palette }) => palette('warning')],
+          [
+            'warning',
+            ({ palette }) => palette('warning'),
+            {
+              // The warning hue is too light to read as text on a light
+              // background (#f8c200 on white is 1.65:1). Darkening it in place
+              // turns it gold, so shift it toward amber first: this gives
+              // #b06400, 4.5:1 on white.
+              outlineText: ({ palette, theme }) => {
+                if (!theme.isLight) return false;
+                const warning = palette('warning');
+                return warning.hue(warning.hue() - 12.8).mix('#000', 0.288);
+              },
+            },
+          ],
           ['error', ({ palette }) => palette('error')],
           ['muted', ({ palette }) => palette('muted')],
         ],

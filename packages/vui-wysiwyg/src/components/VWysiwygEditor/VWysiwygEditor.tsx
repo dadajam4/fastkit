@@ -11,6 +11,9 @@ import {
 import {
   createFormNodeWrapperProps,
   FormNodeWrapperSlots,
+  FormNodeWrapper,
+  resolveVNodeChildOrSlots,
+  cleanupEmptyVNodeChild,
   VFormControl,
   VControlField,
   createControlFieldProps,
@@ -318,10 +321,16 @@ export const VWysiwygEditor = defineComponent({
       </div>
     );
 
-    const infoAppendsSlot = () => {
+    // The counter takes the `infoAppends` slot of `VFormControl`, so render
+    // the caller's own `infoAppends` (prop or slot) in front of it.
+    const infoAppendsSlot = (wrapper: FormNodeWrapper) => {
+      const slot = resolveVNodeChildOrSlots(
+        props.infoAppends,
+        ctx.slots.infoAppends,
+      );
+      const appends = (slot && cleanupEmptyVNodeChild(slot(wrapper))) || [];
       const { counterResult } = inputControl;
-      if (!counterResult) return;
-      return <VTextCounter {...counterResult} />;
+      return [...appends, counterResult && <VTextCounter {...counterResult} />];
     };
 
     return () => (
@@ -331,6 +340,7 @@ export const VWysiwygEditor = defineComponent({
         label={props.label}
         hint={props.hint}
         hinttip={props.hinttip}
+        hinttipDelay={props.hinttipDelay}
         hiddenInfo={props.hiddenInfo}
         requiredChip={props.requiredChip}
         onClickLabel={handleClickLabel}

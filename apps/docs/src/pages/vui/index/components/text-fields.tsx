@@ -123,6 +123,25 @@ export default defineComponent({
             </div>
           </div>
         </DocsSection>
+
+        <DocsSection title="Info appends">
+          <VTextField
+            label="prop で指定（カウンターあり）"
+            counter
+            maxlength="10"
+            infoAppends="prop の内容"
+          />
+          <VTextField
+            label="slot で指定（カウンターあり）"
+            counter
+            maxlength="10"
+            v-slots={{ infoAppends: () => 'slot の内容' }}
+          />
+          <VTextField
+            label="prop で指定（カウンターなし）"
+            infoAppends="prop の内容"
+          />
+        </DocsSection>
       </div>
     );
   },

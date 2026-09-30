@@ -47,9 +47,11 @@ export function useVuiColorProvider(): VuiColorProvider {
 
   const vui = useVui();
   const primary = computed(() => vui.setting('primaryScope'));
+  const warning = computed(() => vui.setting('warningScope'));
   const error = computed(() => vui.setting('errorScope'));
   const provider: VuiColorProvider = {
     primary,
+    warning,
     error,
     className: (type) => {
       const scope = provider[type].value;

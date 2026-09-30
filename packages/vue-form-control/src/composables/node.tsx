@@ -123,6 +123,20 @@ export function toFormNodeError(
 }
 
 /**
+ * A warning on a form node
+ *
+ * Warnings are shown to the user like errors, but they do not make the node invalid and do not block form submission.
+ */
+export interface FormNodeWarning extends Omit<ValidationError, '$$symbol'> {}
+
+function toFormNodeWarning(source: string): FormNodeWarning {
+  return {
+    name: source,
+    message: source,
+  };
+}
+
+/**
  * Validation Timing
  *
  * - `always` Always validate
@@ -282,16 +296,29 @@ export function createFormNodeProps<
       >,
       /** Force an error state. */
       error: Boolean,
+      /**
+       * Force a warning state.
+       *
+       * Like {@link FormNodeControl.warnings warnings}, this does not make the node invalid and does not block form submission.
+       */
+      warning: Boolean,
       /** List of error messages. */
       errorMessages: [String, Array] as PropType<string | string[]>,
       /**
-       * Display error messages on this node itself
+       * List of warning messages.
        *
-       * If `true`, attempts to render errors for this node itself; if `false`, delegates error message display to the associated form group or wrapper.
-       *
-       * @default `false` if a parent group or wrapper exists and the `collectErrorMessages` setting is enabled; otherwise, `true`.
+       * Warnings are shown to the user like errors, but they do not make the node invalid and do not block form submission.
+       * They are routed by the same settings as errors ({@link FormNodeControl.showOwnValidationMessages showOwnValidationMessages} and `collectValidationMessages`), and are not shown while the node has an error.
        */
-      showOwnErrors: {
+      warningMessages: [String, Array] as PropType<string | string[]>,
+      /**
+       * Display validation messages on this node itself
+       *
+       * If `true`, attempts to render validation messages for this node itself; if `false`, delegates their display to the associated form group or wrapper.
+       *
+       * @default `false` if a parent group or wrapper exists and the `collectValidationMessages` setting is enabled; otherwise, `true`.
+       */
+      showOwnValidationMessages: {
         type: Boolean,
         default: undefined,
       },
@@ -386,6 +413,32 @@ export interface FormNodeErrorMessageSource {
   key: string;
 }
 
+/**
+ * Source code for rendering warning messages of form nodes
+ */
+export interface FormNodeWarningMessageSource {
+  /** Render warning message */
+  render: () => VNodeArrayChildren;
+  /**
+   * Warning object
+   *
+   * @see {@link FormNodeWarning}
+   */
+  warning: FormNodeWarning;
+  /**
+   * Node holding the warning
+   *
+   * @see {@link FormNodeControl}
+   */
+  node: FormNodeControl;
+  /**
+   * Automatically generated key
+   *
+   * Can be safely used as the key for the vnode when rendering in lists, etc.
+   */
+  key: string;
+}
+
 let _mountedId = 0;
 
 /**
@@ -461,6 +514,14 @@ export class FormNodeControl<
   protected _resolvedErrorMessages: ComputedRef<FormNodeErrorMessageSource[]>;
 
   protected _errorCount: ComputedRef<number>;
+
+  protected _warnings: ComputedRef<FormNodeWarning[]>;
+
+  protected _resolvedWarningMessages: ComputedRef<
+    FormNodeWarningMessageSource[]
+  >;
+
+  protected _warned: ComputedRef<boolean>;
 
   protected _isDisabled: ComputedRef<boolean>;
 
@@ -703,7 +764,7 @@ export class FormNodeControl<
   /**
    * Source code for all collected error messages
    *
-   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnValidationMessages showOwnValidationMessages}.
    *
    * @see {@link FormNodeErrorMessageSource}
    */
@@ -714,7 +775,7 @@ export class FormNodeControl<
   /**
    * Source code for the first error message among all collected messages
    *
-   * This list is generated based on the setting of {@link FormNodeControl.showOwnErrors showOwnErrors}.
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnValidationMessages showOwnValidationMessages}.
    *
    * @see {@link FormNodeErrorMessageSource}
    */
@@ -744,6 +805,55 @@ export class FormNodeControl<
    */
   get hasError(): boolean {
     return this.hasMyError || (!this.detached && !!this.parentNode?.hasMyError);
+  }
+
+  /**
+   * The list of all warnings within itself
+   *
+   * Warnings do not make the node invalid and do not block form submission.
+   */
+  get warnings(): FormNodeWarning[] {
+    return this._warnings.value;
+  }
+
+  /**
+   * Source code for all collected warning messages
+   *
+   * This list is generated based on the setting of {@link FormNodeControl.showOwnValidationMessages showOwnValidationMessages}.
+   * The warnings of a node that has an error are not included.
+   *
+   * @see {@link FormNodeWarningMessageSource}
+   */
+  get warningMessages(): FormNodeWarningMessageSource[] {
+    return this._resolvedWarningMessages.value;
+  }
+
+  /**
+   * Source code for the first warning message among all collected messages
+   *
+   * @see {@link FormNodeWarningMessageSource}
+   */
+  get firstWarningMessage(): FormNodeWarningMessageSource | undefined {
+    return this.warningMessages[0];
+  }
+
+  /**
+   * Whether itself has one or more warnings
+   *
+   * @remarks
+   * This also takes into consideration the configuration of the `warning` property.
+   */
+  get hasMyWarning(): boolean {
+    return this._props.warning || this.warnings.length > 0;
+  }
+
+  /**
+   * Either this node or one of its descendants has a warning
+   *
+   * This is independent of {@link FormNodeControl.invalid invalid}: a node can be both invalid and warned.
+   */
+  get warned(): boolean {
+    return this._warned.value;
   }
 
   /**
@@ -926,16 +1036,16 @@ export class FormNodeControl<
   }
 
   /**
-   * Display error messages on this node itself
+   * Display validation messages on this node itself
    */
-  get showOwnErrors(): boolean {
-    const { showOwnErrors } = this._props;
-    if (showOwnErrors === false) return false;
-    if (showOwnErrors) return true;
-    if (this.parentFormGroup?.collectErrorMessages) {
+  get showOwnValidationMessages(): boolean {
+    const { showOwnValidationMessages } = this._props;
+    if (showOwnValidationMessages === false) return false;
+    if (showOwnValidationMessages) return true;
+    if (this.parentFormGroup?.collectValidationMessages) {
       return false;
     }
-    return !this.parentFormNodeWrapper?.collectErrorMessages;
+    return !this.parentFormNodeWrapper?.collectValidationMessages;
   }
 
   /**
@@ -1033,7 +1143,7 @@ export class FormNodeControl<
     ]);
 
     this._resolvedErrorMessages = computed(() =>
-      this.showOwnErrors
+      this.showOwnValidationMessages
         ? this.errors.map((error, index) =>
             this._createFormNodeErrorMessageSource(error, index),
           )
@@ -1042,6 +1152,26 @@ export class FormNodeControl<
 
     this._invalidChildren = computed(() =>
       this.children.filter((node) => node.invalid),
+    );
+
+    this._warnings = computed(() => {
+      const { warningMessages = [] } = props;
+      const messages = Array.isArray(warningMessages)
+        ? warningMessages
+        : [warningMessages];
+      return messages.map(toFormNodeWarning);
+    });
+
+    this._resolvedWarningMessages = computed(() =>
+      this.showOwnValidationMessages && !this.hasMyError
+        ? this.warnings.map((warning, index) =>
+            this._createFormNodeWarningMessageSource(warning, index),
+          )
+        : [],
+    );
+
+    this._warned = computed(
+      () => this.hasMyWarning || this.children.some((node) => node.warned),
     );
 
     this._errorCount = computed(() => {
@@ -1243,6 +1373,21 @@ export class FormNodeControl<
       node: this,
       key: `${String(this.nodeType)}:${this.name}:${this.tag}:${
         error.name
+      }:${index}`,
+    };
+  }
+
+  /** @internal */
+  _createFormNodeWarningMessageSource(
+    warning: FormNodeWarning,
+    index: number,
+  ): FormNodeWarningMessageSource {
+    return {
+      render: () => [warning.message],
+      warning,
+      node: this,
+      key: `${String(this.nodeType)}:${this.name}:${this.tag}:warning:${
+        warning.name
       }:${index}`,
     };
   }

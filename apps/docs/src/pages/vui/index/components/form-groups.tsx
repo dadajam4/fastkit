@@ -80,7 +80,7 @@ export default defineComponent({
         <VHero>Forms</VHero>
         <DocsSection title="Basic">
           <VFormGroup
-            collectErrorMessages
+            collectValidationMessages
             disabled={this.form1Sending}
             v-slots={{
               default: (form) => (
@@ -206,7 +206,7 @@ export default defineComponent({
                 disabled={this.form2Sending || this.disabled}
                 size={this.size}
                 readonly={this.readonly}
-                collectErrorMessages
+                collectValidationMessages
                 v-slots={{
                   default: (group) => (
                     <>
@@ -220,7 +220,7 @@ export default defineComponent({
                       <VTextField
                         label="氏名"
                         required
-                        showOwnErrors={false}
+                        showOwnValidationMessages={false}
                         hint="これは入力ヒントテキストです。"
                         counter
                         maxlength="10"
@@ -259,7 +259,7 @@ export default defineComponent({
                         hint="これは入力ヒントテキストです。"
                         stacked={false}
                         items={items}
-                        showOwnErrors
+                        showOwnValidationMessages
                         v-slots={{
                           'error:required': (err) => '趣味が選択されていません',
                         }}

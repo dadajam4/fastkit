@@ -18,6 +18,7 @@ export const VCheckable = defineComponent({
   name: 'VCheckable',
   props: {
     invalid: Boolean,
+    warned: Boolean,
     disabled: Boolean,
     readonly: Boolean,
     checked: Boolean,
@@ -28,6 +29,7 @@ export const VCheckable = defineComponent({
   setup(props, ctx) {
     const colorProvider = useVuiColorProvider();
     const invalid = computed(() => props.invalid);
+    const warned = computed(() => props.warned);
     const disabled = computed(() => props.disabled);
     const readonly = computed(() => props.readonly);
     const checked = computed(() => props.checked);
@@ -35,13 +37,16 @@ export const VCheckable = defineComponent({
     const classes = computed(() => [
       {
         'v-checkable--invalid': invalid.value,
+        'v-checkable--warned': warned.value,
         'v-checkable--disabled': disabled.value,
         'v-checkable--readonly': readonly.value,
         'v-checkable--checked': checked.value,
         'v-checkable--custom-icon': !!ctx.slots.icon,
         disabled: disabled.value,
       },
-      colorProvider.className(invalid.value ? 'error' : 'primary'),
+      colorProvider.className(
+        invalid.value ? 'error' : warned.value ? 'warning' : 'primary',
+      ),
     ]);
 
     return () => (
