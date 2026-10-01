@@ -1,25 +1,36 @@
 import {
   type RouteLocationPathRaw,
-  type LocationQueryRaw,
   type RouteLocationRaw,
   type RouteLocationNamedRaw,
+  parseQuery,
 } from 'vue-router';
 
+const EXTERNAL_LOCATION_RE = /^([a-z][a-z\d+\-.]*:|\/\/)/i;
+
+/**
+ * Check if the location string points outside the router, i.e. it has a protocol (`https:`, `tel:`, `mailto:`, ...) or is protocol-relative (`//example.com`)
+ *
+ * @param locationStr - location string
+ * @returns `true` if the location is external
+ */
+export function isExternalLocation(locationStr: string) {
+  return EXTERNAL_LOCATION_RE.test(locationStr);
+}
+
 function locationStringToPathRaw(locationStr: string): RouteLocationPathRaw {
-  const [pathWithParams, hash] = locationStr.split('#');
-  const [path, search] = pathWithParams.split('?');
-  const raw: RouteLocationPathRaw = {
-    path,
-    hash,
-  };
-  if (search) {
-    const query: LocationQueryRaw = {};
-    const rows = search.split('&');
-    for (const row of rows) {
-      const [key, value] = row.split('=');
-      query[key] = value == null ? '' : value;
-    }
-    raw.query = query;
+  const hashIndex = locationStr.indexOf('#');
+  const pathWithSearch =
+    hashIndex === -1 ? locationStr : locationStr.slice(0, hashIndex);
+  const searchIndex = pathWithSearch.indexOf('?');
+  const path =
+    searchIndex === -1 ? pathWithSearch : pathWithSearch.slice(0, searchIndex);
+  const raw: RouteLocationPathRaw = { path };
+  if (hashIndex !== -1) {
+    // Vue Router expects the hash to keep its leading `#`
+    raw.hash = locationStr.slice(hashIndex);
+  }
+  if (searchIndex !== -1) {
+    raw.query = parseQuery(pathWithSearch.slice(searchIndex + 1));
   }
   return raw;
 }
@@ -27,7 +38,7 @@ function locationStringToPathRaw(locationStr: string): RouteLocationPathRaw {
 const RELATIVE_PATH_RE = /^(\.\/|\.\.\/|[^/])/;
 
 function isRelativePath(str: string) {
-  return !str || RELATIVE_PATH_RE.test(str);
+  return !str || (RELATIVE_PATH_RE.test(str) && !isExternalLocation(str));
 }
 
 const TRIM_SLASH_RE = /(^\/|\/$)/g;
