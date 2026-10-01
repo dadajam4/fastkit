@@ -16,7 +16,7 @@ import type {
   CustomRouterLinkPropKey,
   ActionableRouterLinkSettings,
 } from './schema';
-import { resolveRelativeLocationRaw } from './utils';
+import { resolveRelativeLocationRaw, isExternalLocation } from './utils';
 import { DEFAULT_ACTIVE_CLASS, DEFAULT_EXACT_ACTIVE_CLASS } from './constants';
 import {
   useActionableResolvedAttrs,
@@ -32,6 +32,14 @@ export type RouteActionHandler = (
 
 let _routeActionHandler: RouteActionHandler | undefined;
 
+/**
+ * Register a handler that resolves the navigation target on click.
+ *
+ * Only used when the RouterLink component does not provide `navigate` to its slot.
+ * Otherwise the RouterLink navigates to the location it resolved for `href`.
+ *
+ * @param handler - Route action handler
+ */
 export const registerRouteActionHandler = (handler: RouteActionHandler) => {
   _routeActionHandler = handler;
 };
@@ -58,6 +66,20 @@ export function setDefaultRouterLink(
 }
 
 const noop = () => {};
+
+type RouterLinkNavigate = () => unknown;
+
+/**
+ * Attributes of a disabled link.
+ *
+ * `<a>` has no `disabled` attribute. Without `href` the link cannot be followed by
+ * any means (modifier keys, middle click, `target`), and `role` keeps it announced
+ * as a link, since an `<a>` without `href` has no link role.
+ */
+const DISABLED_LINK_ATTRS = {
+  role: 'link',
+  'aria-disabled': 'true',
+} as const;
 
 const isRightClick = (ev: PointerEvent) =>
   ev.button !== undefined && ev.button !== 0;
@@ -135,8 +157,14 @@ export function useActionable(
           ? linkFallbackTag()
           : linkFallbackTag;
 
-      const { tag, href } = props;
-      const { to } = props;
+      const { tag } = props;
+      // A `to` with a protocol cannot be resolved by the router, so render it as `href`
+      const externalTo =
+        typeof props.to === 'string' && isExternalLocation(props.to)
+          ? props.to
+          : undefined;
+      const to = externalTo ? undefined : props.to;
+      const href = externalTo ?? props.href;
       let Tag: ActionableTag;
 
       const dynamicAttrs: Record<string, unknown> = {};
@@ -160,9 +188,13 @@ export function useActionable(
       );
       const actionable = hasAction && !isDisabled;
 
-      let action: ((ev: PointerEvent) => void) | undefined;
+      let action:
+        ((ev: PointerEvent, navigate?: RouterLinkNavigate) => void) | undefined;
 
-      const handleClick = async (ev: PointerEvent): Promise<void> => {
+      const handleClick = async (
+        ev: PointerEvent,
+        navigate?: RouterLinkNavigate,
+      ): Promise<void> => {
         if (ev.defaultPrevented || isRightClick(ev)) return;
         if (href || to) {
           if (isWithControlKey(ev) || props.target) {
@@ -199,7 +231,7 @@ export function useActionable(
           if (finalEvent.defaultPrevented) return;
         }
 
-        action && action(finalEvent);
+        action && action(finalEvent, navigate);
       };
 
       let attrs = {
@@ -237,7 +269,12 @@ export function useActionable(
           opts.exactActiveClass || DEFAULT_EXACT_ACTIVE_CLASS,
         ];
 
-        action = () => {
+        action = (_ev, navigate) => {
+          if (navigate) {
+            // Called without the event: its default is already prevented, and
+            // Vue Router's `navigate` ignores events whose default is prevented.
+            return Promise.resolve(navigate()).catch(noop);
+          }
           const target = _routeActionHandler?.(_to, router) ?? _to;
           return router[routerLinkProps.replace ? 'replace' : 'push'](
             target,
@@ -249,21 +286,25 @@ export function useActionable(
         let _resolvedHref: string | undefined;
 
         const slots: ActionableRouterLinkSettings['slots'] = (children) => ({
-          default: withCtx(({ href, isActive, isExactActive }) => {
+          default: withCtx(({ href, navigate, isActive, isExactActive }) => {
             const classes = [
               isActive && activeClass,
               isExactActive && exactActiveClass,
             ];
 
             // @TODO 1. This is support for cases where the href cannot be obtained when used in conjunction with nuxt-i18n.
-            if (!href) {
+            if (!href && !isDisabled) {
               if (_resolvedHref === undefined) {
                 _resolvedHref = router.resolve(_to).href;
               }
               href = _resolvedHref;
             }
             return (
-              <a {...attrs} class={classes} href={href} onClick={handleClick}>
+              <a
+                {...attrs}
+                class={classes}
+                {...(isDisabled ? DISABLED_LINK_ATTRS : { href })}
+                onClick={(ev: PointerEvent) => handleClick(ev, navigate)}>
                 {children}
               </a>
             );
@@ -275,8 +316,16 @@ export function useActionable(
           slots,
         };
       } else if (href) {
+        if (externalTo) {
+          for (const routerPropKey of ACTIONABLE_ROUTER_PROP_KEYS) {
+            delete ctxAttrs[routerPropKey];
+          }
+        }
         Tag = tag || 'a';
-        dynamicAttrs.href = href;
+        Object.assign(
+          dynamicAttrs,
+          isDisabled ? DISABLED_LINK_ATTRS : { href },
+        );
         dynamicAttrs.rel = props.rel;
         dynamicAttrs.download = normalizeBoolean(props.download);
         dynamicAttrs.media = props.media;
@@ -329,7 +378,7 @@ export function useActionable(
         class: classes,
       });
 
-      if (!attrs.disabled && attrs.disabled !== '') {
+      if (to || href || (!attrs.disabled && attrs.disabled !== '')) {
         delete attrs.disabled;
       }
 
