@@ -1,6 +1,14 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { defineComponent, h, onMounted, onUnmounted, ref } from 'vue';
+import {
+  Fragment,
+  createVNode,
+  defineComponent,
+  h,
+  onMounted,
+  onUnmounted,
+  ref,
+} from 'vue';
 import { mount, flushPromises } from '@vue/test-utils';
 import { defineDisabledReasonComponent } from '../disabled-reason';
 import {
@@ -84,6 +92,44 @@ describe('defineDisabledReasonComponent', () => {
     expect(oldContainer.querySelector('.probe')).toBeNull();
     expect(unmounts).toBe(1);
     expect(wrapper.element.querySelector('p .probe')).not.toBeNull();
+    wrapper.unmount();
+  });
+
+  it('tears down outside the parent patch so siblings flush in order', async () => {
+    const show = ref(true);
+    const label = ref('before');
+    let seen: string | undefined;
+    const Reader = defineComponent({
+      setup() {
+        onMounted(() => {
+          seen = document.querySelector('footer')!.textContent!;
+        });
+        return () => h('i');
+      },
+    });
+    const wrapper = mount(
+      // Unkeyed fragment: children are patched strictly in order.
+      () =>
+        createVNode(
+          Fragment,
+          null,
+          [
+            !show.value ? h(Reader) : null,
+            show.value
+              ? h(TestReason, null, { default: () => h('button', 'a') })
+              : null,
+            h('footer', label.value),
+          ],
+          256, // PatchFlags.UNKEYED_FRAGMENT
+        ),
+      { attachTo: document.body },
+    );
+    await flushPromises();
+
+    show.value = false;
+    label.value = 'after';
+    await flushPromises();
+    expect(seen).toBe('after');
     wrapper.unmount();
   });
 

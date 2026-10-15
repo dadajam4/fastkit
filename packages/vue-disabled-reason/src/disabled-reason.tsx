@@ -296,7 +296,10 @@ export function defineDisabledReasonComponent<
       onMounted(setup);
       onUpdated(setup);
       onBeforeUnmount(() => {
-        mountedContainers.forEach(teardownDisabledLayer);
+        // render() during the parent's patch would flush the post-flush queue early.
+        nextTick(() => {
+          mountedContainers.forEach(teardownDisabledLayer);
+        });
       });
 
       return () => {
