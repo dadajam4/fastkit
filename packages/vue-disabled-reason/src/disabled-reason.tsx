@@ -11,6 +11,7 @@ import {
   render,
   onBeforeUnmount,
   type PropType,
+  type VNode,
   type VNodeChild,
   type VNodeArrayChildren,
   type ExtractPropTypes,
@@ -206,7 +207,7 @@ export function defineDisabledReasonComponent<
         resolveVNodeChildOrSlots(props.reason, ctx.slots.reason),
       );
 
-      const mountedContainers = new Set<HTMLElement>();
+      const mountedContainers = new Map<HTMLElement, VNode>();
 
       const renderReasonLayer = options.setup(setupCtx);
 
@@ -216,10 +217,13 @@ export function defineDisabledReasonComponent<
       };
 
       const setupDisabledLayer = (container: HTMLElement) => {
-        if (mountedContainers.has(container)) return;
+        const mounted = mountedContainers.get(container);
+        // The layer's DOM can be removed by the host (e.g. a text update).
+        if (mounted?.el && container.contains(mounted.el as Node)) return;
+        if (mounted) teardownDisabledLayer(container);
         const layer = h(ReasonLayer);
         layer.appContext = instance!.appContext;
-        mountedContainers.add(container);
+        mountedContainers.set(container, layer);
 
         container.setAttribute(DISABLED_REASON_ACTIVATED_ATTR, '');
 
@@ -255,7 +259,7 @@ export function defineDisabledReasonComponent<
           }
         }
 
-        mountedContainers.forEach((container) => {
+        mountedContainers.forEach((_, container) => {
           if (!containers.includes(container)) {
             teardownDisabledLayer(container);
           }
@@ -298,7 +302,9 @@ export function defineDisabledReasonComponent<
       onBeforeUnmount(() => {
         // render() during the parent's patch would flush the post-flush queue early.
         nextTick(() => {
-          mountedContainers.forEach(teardownDisabledLayer);
+          mountedContainers.forEach((_, container) =>
+            teardownDisabledLayer(container),
+          );
         });
       });
 

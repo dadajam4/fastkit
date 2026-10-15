@@ -133,6 +133,45 @@ describe('defineDisabledReasonComponent', () => {
     wrapper.unmount();
   });
 
+  it('re-renders a layer that a text update removed', async () => {
+    const label = ref('a');
+    const wrapper = mount(
+      () =>
+        h(TestReason, null, {
+          default: () => h('button', { disabled: true }, label.value),
+        }),
+      { attachTo: document.body },
+    );
+    await flushPromises();
+    expect(mounts).toBe(1);
+
+    label.value = 'b';
+    await flushPromises();
+    expect(wrapper.element.querySelector('.probe')).not.toBeNull();
+    expect(unmounts).toBe(1);
+    expect(mounts).toBe(2);
+    wrapper.unmount();
+  });
+
+  it('unmounts the layer when the slot content becomes empty', async () => {
+    const show = ref(true);
+    const wrapper = mount(
+      () =>
+        h(TestReason, null, {
+          default: () => (show.value ? h('button', 'a') : null),
+        }),
+      { attachTo: document.body },
+    );
+    await flushPromises();
+    expect(document.querySelector('.probe')).not.toBeNull();
+
+    show.value = false;
+    await flushPromises();
+    expect(unmounts).toBe(1);
+    expect(document.querySelector('.probe')).toBeNull();
+    wrapper.unmount();
+  });
+
   describe('disabled', () => {
     const detect = async (
       props: Record<string, unknown>,
