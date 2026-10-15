@@ -11,7 +11,6 @@ import {
   render,
   onBeforeUnmount,
   type PropType,
-  type VNode,
   type VNodeChild,
   type VNodeArrayChildren,
   type ExtractPropTypes,
@@ -202,7 +201,7 @@ export function defineDisabledReasonComponent<
         resolveVNodeChildOrSlots(props.reason, ctx.slots.reason),
       );
 
-      let _reasonLayers: WeakMap<HTMLElement, VNode> | undefined;
+      const mountedContainers = new Set<HTMLElement>();
 
       const renderReasonLayer = options.setup(setupCtx);
 
@@ -212,15 +211,20 @@ export function defineDisabledReasonComponent<
       };
 
       const setupDisabledLayer = (container: HTMLElement) => {
-        if (_reasonLayers?.has(container)) return;
-        _reasonLayers = _reasonLayers || new WeakMap<HTMLElement, VNode>();
+        if (mountedContainers.has(container)) return;
         const layer = h(ReasonLayer);
         layer.appContext = instance!.appContext;
-        _reasonLayers.set(container, layer);
+        mountedContainers.add(container);
 
         container.setAttribute(DISABLED_REASON_ACTIVATED_ATTR, '');
 
         render(layer, container);
+      };
+
+      const teardownDisabledLayer = (container: HTMLElement) => {
+        render(null, container);
+        container.removeAttribute(DISABLED_REASON_ACTIVATED_ATTR);
+        mountedContainers.delete(container);
       };
 
       const setup = async () => {
@@ -232,19 +236,28 @@ export function defineDisabledReasonComponent<
         );
         disabled.value = false;
 
-        if (!child) {
-          return;
+        const containers: HTMLElement[] = [];
+        if (child) {
+          const specifiedContainers = (
+            child.el as HTMLElement
+          ).querySelectorAll<HTMLElement>(
+            `[${DISABLED_REASON_CONTAINER_ATTR}]`,
+          );
+          if (specifiedContainers.length) {
+            containers.push(...specifiedContainers);
+          } else {
+            containers.push(child.el as HTMLElement);
+          }
         }
 
-        const containers: HTMLElement[] = [];
-        const specifiedContainers = (
-          child.el as HTMLElement
-        ).querySelectorAll<HTMLElement>(`[${DISABLED_REASON_CONTAINER_ATTR}]`);
-        if (specifiedContainers.length) {
-          containers.push(...specifiedContainers);
-        } else {
-          containers.push(child.el as HTMLElement);
-        }
+        mountedContainers.forEach((container) => {
+          if (!containers.includes(container)) {
+            teardownDisabledLayer(container);
+          }
+        });
+
+        if (!containers.length) return;
+
         let el = containers[0];
         if (!el.matches(DISABLEABLE_ELEMENT_QUERY)) {
           const disabledChild = el.querySelector<HTMLElement>(
@@ -256,7 +269,7 @@ export function defineDisabledReasonComponent<
         }
 
         const disabledValue =
-          child.props?.disabled ?? el.getAttribute('disabled');
+          child!.props?.disabled ?? el.getAttribute('disabled');
         if (
           disabledValue === '' ||
           disabledValue === 'true' ||
@@ -266,7 +279,7 @@ export function defineDisabledReasonComponent<
         }
         {
           const ariaValue =
-            child.props?.['aria-disabled'] ?? el.getAttribute('aria-disabled');
+            child!.props?.['aria-disabled'] ?? el.getAttribute('aria-disabled');
           if (ariaValue === 'true' || ariaValue === true) {
             disabled.value = true;
           }
@@ -278,7 +291,7 @@ export function defineDisabledReasonComponent<
       onMounted(setup);
       onUpdated(setup);
       onBeforeUnmount(() => {
-        _reasonLayers = undefined;
+        mountedContainers.forEach(teardownDisabledLayer);
       });
 
       return () => {
