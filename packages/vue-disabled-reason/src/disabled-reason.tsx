@@ -126,6 +126,11 @@ const slots = defineSlots<{
 export const DISABLED_REASON_BASE_PROPS = createPropsOptions({
   /** The content or slot that provides the disabled reason */
   reason: {} as PropType<VNodeChildOrSlot>,
+  /**
+   * Whether the target is disabled.
+   * When specified, it takes precedence over detection from the DOM.
+   */
+  disabled: { type: Boolean, default: undefined },
 });
 
 /**
@@ -186,13 +191,13 @@ export function defineDisabledReasonComponent<
         typeof DISABLED_REASON_BASE_PROPS
       >;
       const instance = getCurrentInstance();
-      const disabled = ref(false);
+      const detected = ref(false);
       const api: DisabledReasonAPI<Props> = {
         get props() {
           return props as any;
         },
         get disabled() {
-          return disabled.value;
+          return props.disabled ?? detected.value;
         },
       };
       const setupCtx: DisabledReasonSetupContext<Props> = api;
@@ -234,7 +239,7 @@ export function defineDisabledReasonComponent<
           instance?.subTree.children,
           options.skipVNode,
         );
-        disabled.value = false;
+        detected.value = false;
 
         const containers: HTMLElement[] = [];
         if (child) {
@@ -256,7 +261,7 @@ export function defineDisabledReasonComponent<
           }
         });
 
-        if (!containers.length) return;
+        if (!child) return;
 
         let el = containers[0];
         if (!el.matches(DISABLEABLE_ELEMENT_QUERY)) {
@@ -269,19 +274,19 @@ export function defineDisabledReasonComponent<
         }
 
         const disabledValue =
-          child!.props?.disabled ?? el.getAttribute('disabled');
+          child.props?.disabled ?? el.getAttribute('disabled');
         if (
           disabledValue === '' ||
           disabledValue === 'true' ||
           disabledValue === true
         ) {
-          disabled.value = true;
+          detected.value = true;
         }
         {
           const ariaValue =
-            child!.props?.['aria-disabled'] ?? el.getAttribute('aria-disabled');
+            child.props?.['aria-disabled'] ?? el.getAttribute('aria-disabled');
           if (ariaValue === 'true' || ariaValue === true) {
-            disabled.value = true;
+            detected.value = true;
           }
         }
 

@@ -10,6 +10,7 @@ A library providing utility functions to define headless Vue.js components for m
 - **Headless Design**: Create components that handle only logic without providing UI
 - **Automatic Disabled State Detection**: Automatically monitors `disabled` and `aria-disabled` attributes
 - **Flexible Display Control**: Display reasons through slots or render functions
+- **Explicit Disabled State**: Pass the `disabled` prop to take precedence over DOM detection
 - **Full TypeScript Support**: Type safety with strict type definitions
 - **Advanced Customization**: Support for custom VNode traversal handling
 - **Performance Optimization**: Efficient element monitoring and rendering control
@@ -212,6 +213,11 @@ function defineDisabledReasonComponent<Props>(
 - `props?`: Additional property definitions
 - `skipVNode?`: VNode traversal skip handler
 - `setup`: Setup function that returns a render function
+
+**Props:**
+
+- `reason?`: Reason content (the `reason` slot is also available)
+- `disabled?`: Whether the target is disabled. When specified, it takes precedence over detection from the DOM. Useful when the wrapped component already knows its own state
 
 ### DisabledReasonAPI
 
