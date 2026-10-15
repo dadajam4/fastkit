@@ -1,5 +1,16 @@
 # @fastkit/vui
 
+## 1.9.0
+
+### Minor Changes
+
+- [#320](https://github.com/dadajam4/fastkit/pull/320) [`4c2343f`](https://github.com/dadajam4/fastkit/commit/4c2343f39b1d63e765c7418a301cd7b130b61659) Thanks [@schwarz9791](https://github.com/schwarz9791)! - - `VDisabledReason`'s `disabled` now tells whether the target is disabled and takes precedence over DOM detection. It replaces the `disabled` inherited from the menu props, which had no effect. Callers that passed it see the new behavior: `false` hides the reason even on a disabled target, and `true` activates the tooltip and the overlay (which catches clicks) on an enabled one.
+
+### Patch Changes
+
+- Updated dependencies [[`4c2343f`](https://github.com/dadajam4/fastkit/commit/4c2343f39b1d63e765c7418a301cd7b130b61659)]:
+  - @fastkit/vue-disabled-reason@1.1.0
+
 ## 1.8.0
 
 ### Minor Changes
