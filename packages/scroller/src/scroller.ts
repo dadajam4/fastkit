@@ -761,6 +761,8 @@ export class Scroller extends EV<ScrollerEventMap> {
     this._checkDestroyed();
     if (this.isRunning) return;
     await this.ready();
+    // It may have been destroyed while waiting.
+    if (this.isDestroyed) return;
     this._startListeners();
     this._setState(ScrollerState.Running);
   }
@@ -791,7 +793,8 @@ export class Scroller extends EV<ScrollerEventMap> {
     this.cancel();
     this._readyResolvers = [];
     this._scrollStoppers = [];
-    this._scrollEnable();
+    // The element may never have been set (e.g. unmounted before mount).
+    if (this._el) this._scrollEnable();
     this._observers = [];
     visibilityManager.remove(this._visibilityListener);
 
