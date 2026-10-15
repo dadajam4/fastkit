@@ -11,7 +11,6 @@ import {
   render,
   onBeforeUnmount,
   type PropType,
-  type VNode,
   type VNodeChild,
   type VNodeArrayChildren,
   type ExtractPropTypes,
@@ -36,16 +35,23 @@ type PropsOptionsImpl = Record<string, any>;
 /**
  * Public API available inside DisabledReason components.
  *
- * Exposes the component's resolved props and whether
- * the target element is currently disabled.
+ * Exposes the component's resolved props and whether the target is
+ * disabled: the `disabled` prop when specified, otherwise the state
+ * detected from the DOM.
  */
 export interface DisabledReasonAPI<
   Props extends Readonly<PropsOptionsImpl> = {},
 > {
   /** Resolved component props. */
-  get props(): ExtractPropTypes<Props>;
+  get props(): ExtractPropTypes<
+    Omit<Props, keyof typeof DISABLED_REASON_BASE_PROPS> &
+      typeof DISABLED_REASON_BASE_PROPS
+  >;
 
-  /** True if the wrapped element is disabled. */
+  /**
+   * True if the target is disabled: the `disabled` prop when specified,
+   * otherwise the state detected from the DOM.
+   */
   get disabled(): boolean;
 }
 
@@ -54,7 +60,8 @@ export interface DisabledReasonAPI<
  *
  * Provides reactive access to:
  * - The component's resolved props.
- * - The evaluated disabled state of the target element.
+ * - The disabled state of the target (the `disabled` prop when specified,
+ *   otherwise the state detected from the DOM).
  *
  * Use this context inside `setup` to determine whether the target
  * element is disabled and to render the disabled reason accordingly.
@@ -127,6 +134,11 @@ const slots = defineSlots<{
 export const DISABLED_REASON_BASE_PROPS = createPropsOptions({
   /** The content or slot that provides the disabled reason */
   reason: {} as PropType<VNodeChildOrSlot>,
+  /**
+   * Whether the target is disabled.
+   * When specified, it takes precedence over detection from the DOM.
+   */
+  disabled: { type: Boolean, default: undefined },
 });
 
 /**
@@ -187,13 +199,13 @@ export function defineDisabledReasonComponent<
         typeof DISABLED_REASON_BASE_PROPS
       >;
       const instance = getCurrentInstance();
-      const disabled = ref(false);
+      const detected = ref(false);
       const api: DisabledReasonAPI<Props> = {
         get props() {
           return props as any;
         },
         get disabled() {
-          return disabled.value;
+          return props.disabled ?? detected.value;
         },
       };
       const setupCtx: DisabledReasonSetupContext<Props> = api;
@@ -202,7 +214,7 @@ export function defineDisabledReasonComponent<
         resolveVNodeChildOrSlots(props.reason, ctx.slots.reason),
       );
 
-      let _reasonLayers: WeakMap<HTMLElement, VNode> | undefined;
+      const mountedContainers = new Map<HTMLElement, HTMLElement>();
 
       const renderReasonLayer = options.setup(setupCtx);
 
@@ -212,15 +224,35 @@ export function defineDisabledReasonComponent<
       };
 
       const setupDisabledLayer = (container: HTMLElement) => {
-        if (_reasonLayers?.has(container)) return;
-        _reasonLayers = _reasonLayers || new WeakMap<HTMLElement, VNode>();
-        const layer = h(ReasonLayer);
-        layer.appContext = instance!.appContext;
-        _reasonLayers.set(container, layer);
+        const host = mountedContainers.get(container);
+        // A dedicated host keeps the layer's nodes together even if the
+        // container's content is replaced, so the layer can always be
+        // unmounted, and its presence tells whether the layer is still in place.
+        if (host && container.contains(host)) return;
+        if (host) teardownDisabledLayer(container);
+
+        const newHost = container.ownerDocument.createElement('span');
+        // Adds no box; keeps the overlay's inherited radius equal to the container's.
+        newHost.style.display = 'contents';
+        newHost.style.borderRadius = 'inherit';
+        container.appendChild(newHost);
+        mountedContainers.set(container, newHost);
 
         container.setAttribute(DISABLED_REASON_ACTIVATED_ATTR, '');
 
-        render(layer, container);
+        const layer = h(ReasonLayer);
+        layer.appContext = instance!.appContext;
+        render(layer, newHost);
+      };
+
+      const teardownDisabledLayer = (container: HTMLElement) => {
+        const host = mountedContainers.get(container);
+        if (host) {
+          render(null, host);
+          host.remove();
+        }
+        container.removeAttribute(DISABLED_REASON_ACTIVATED_ATTR);
+        mountedContainers.delete(container);
       };
 
       const setup = async () => {
@@ -230,21 +262,30 @@ export function defineDisabledReasonComponent<
           instance?.subTree.children,
           options.skipVNode,
         );
-        disabled.value = false;
-
-        if (!child) {
-          return;
-        }
+        detected.value = false;
 
         const containers: HTMLElement[] = [];
-        const specifiedContainers = (
-          child.el as HTMLElement
-        ).querySelectorAll<HTMLElement>(`[${DISABLED_REASON_CONTAINER_ATTR}]`);
-        if (specifiedContainers.length) {
-          containers.push(...specifiedContainers);
-        } else {
-          containers.push(child.el as HTMLElement);
+        if (child) {
+          const specifiedContainers = (
+            child.el as HTMLElement
+          ).querySelectorAll<HTMLElement>(
+            `[${DISABLED_REASON_CONTAINER_ATTR}]`,
+          );
+          if (specifiedContainers.length) {
+            containers.push(...specifiedContainers);
+          } else {
+            containers.push(child.el as HTMLElement);
+          }
         }
+
+        mountedContainers.forEach((_, container) => {
+          if (!containers.includes(container)) {
+            teardownDisabledLayer(container);
+          }
+        });
+
+        if (!child) return;
+
         let el = containers[0];
         if (!el.matches(DISABLEABLE_ELEMENT_QUERY)) {
           const disabledChild = el.querySelector<HTMLElement>(
@@ -262,13 +303,13 @@ export function defineDisabledReasonComponent<
           disabledValue === 'true' ||
           disabledValue === true
         ) {
-          disabled.value = true;
+          detected.value = true;
         }
         {
           const ariaValue =
             child.props?.['aria-disabled'] ?? el.getAttribute('aria-disabled');
           if (ariaValue === 'true' || ariaValue === true) {
-            disabled.value = true;
+            detected.value = true;
           }
         }
 
@@ -278,7 +319,12 @@ export function defineDisabledReasonComponent<
       onMounted(setup);
       onUpdated(setup);
       onBeforeUnmount(() => {
-        _reasonLayers = undefined;
+        // render() during the parent's patch would flush the post-flush queue early.
+        nextTick(() => {
+          mountedContainers.forEach((_, container) =>
+            teardownDisabledLayer(container),
+          );
+        });
       });
 
       return () => {
