@@ -1,5 +1,17 @@
 # @fastkit/scroller
 
+## 1.0.1
+
+### Patch Changes
+
+- [#318](https://github.com/dadajam4/fastkit/pull/318) [`2784c73`](https://github.com/dadajam4/fastkit/commit/2784c732fb52dcb7245cab60a8471b43bca3d695) Thanks [@dadajam4](https://github.com/dadajam4)! - `Scroller.destroy()` no longer throws `missing element` when no element has
+  been set yet. `useScrollerControl({ el: 'self' })` from `@fastkit/vue-scroller`
+  hit this when its component was unmounted before mounting, e.g. by navigating
+  away while a `<Suspense>` boundary was still pending.
+
+  Destroying a `Scroller` right after giving it an element no longer leaves an
+  unhandled rejection from the `start()` that the element setup had kicked off.
+
 ## 1.0.0
 
 ### Major Changes
