@@ -11,7 +11,6 @@ import {
   render,
   onBeforeUnmount,
   type PropType,
-  type VNode,
   type VNodeChild,
   type VNodeArrayChildren,
   type ExtractPropTypes,
@@ -215,7 +214,7 @@ export function defineDisabledReasonComponent<
         resolveVNodeChildOrSlots(props.reason, ctx.slots.reason),
       );
 
-      const mountedContainers = new Map<HTMLElement, VNode>();
+      const mountedContainers = new Map<HTMLElement, HTMLElement>();
 
       const renderReasonLayer = options.setup(setupCtx);
 
@@ -225,21 +224,33 @@ export function defineDisabledReasonComponent<
       };
 
       const setupDisabledLayer = (container: HTMLElement) => {
-        const mounted = mountedContainers.get(container);
-        // The layer's DOM can be removed by the host (e.g. a text update).
-        if (mounted?.el && container.contains(mounted.el as Node)) return;
-        if (mounted) teardownDisabledLayer(container);
-        const layer = h(ReasonLayer);
-        layer.appContext = instance!.appContext;
-        mountedContainers.set(container, layer);
+        const host = mountedContainers.get(container);
+        // A dedicated host keeps the layer's nodes together even if the
+        // container's content is replaced, so the layer can always be
+        // unmounted, and its presence tells whether the layer is still in place.
+        if (host && container.contains(host)) return;
+        if (host) teardownDisabledLayer(container);
+
+        const newHost = container.ownerDocument.createElement('span');
+        // Adds no box; keeps the overlay's inherited radius equal to the container's.
+        newHost.style.display = 'contents';
+        newHost.style.borderRadius = 'inherit';
+        container.appendChild(newHost);
+        mountedContainers.set(container, newHost);
 
         container.setAttribute(DISABLED_REASON_ACTIVATED_ATTR, '');
 
-        render(layer, container);
+        const layer = h(ReasonLayer);
+        layer.appContext = instance!.appContext;
+        render(layer, newHost);
       };
 
       const teardownDisabledLayer = (container: HTMLElement) => {
-        render(null, container);
+        const host = mountedContainers.get(container);
+        if (host) {
+          render(null, host);
+          host.remove();
+        }
         container.removeAttribute(DISABLED_REASON_ACTIVATED_ATTR);
         mountedContainers.delete(container);
       };

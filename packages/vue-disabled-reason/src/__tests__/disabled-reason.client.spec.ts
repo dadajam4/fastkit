@@ -37,7 +37,7 @@ const Probe = defineComponent({
 
 const TestReason = defineDisabledReasonComponent({
   name: 'TestReason',
-  setup: (api) => () => h(Probe, { disabled: api.disabled }),
+  setup: (api) => () => h(Fragment, [h(Probe, { disabled: api.disabled })]),
 });
 
 beforeEach(() => {
