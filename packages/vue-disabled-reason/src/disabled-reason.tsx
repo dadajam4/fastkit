@@ -36,16 +36,23 @@ type PropsOptionsImpl = Record<string, any>;
 /**
  * Public API available inside DisabledReason components.
  *
- * Exposes the component's resolved props and whether
- * the target element is currently disabled.
+ * Exposes the component's resolved props and whether the target is
+ * disabled: the `disabled` prop when specified, otherwise the state
+ * detected from the DOM.
  */
 export interface DisabledReasonAPI<
   Props extends Readonly<PropsOptionsImpl> = {},
 > {
   /** Resolved component props. */
-  get props(): ExtractPropTypes<Props>;
+  get props(): ExtractPropTypes<
+    Omit<Props, keyof typeof DISABLED_REASON_BASE_PROPS> &
+      typeof DISABLED_REASON_BASE_PROPS
+  >;
 
-  /** True if the wrapped element is disabled. */
+  /**
+   * True if the target is disabled: the `disabled` prop when specified,
+   * otherwise the state detected from the DOM.
+   */
   get disabled(): boolean;
 }
 
@@ -54,7 +61,8 @@ export interface DisabledReasonAPI<
  *
  * Provides reactive access to:
  * - The component's resolved props.
- * - The evaluated disabled state of the target element.
+ * - The disabled state of the target (the `disabled` prop when specified,
+ *   otherwise the state detected from the DOM).
  *
  * Use this context inside `setup` to determine whether the target
  * element is disabled and to render the disabled reason accordingly.

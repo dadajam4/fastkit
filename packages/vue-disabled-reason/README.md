@@ -217,7 +217,7 @@ function defineDisabledReasonComponent<Props>(
 **Props:**
 
 - `reason?`: Reason content (the `reason` slot is also available)
-- `disabled?`: Whether the target is disabled. When specified, it takes precedence over detection from the DOM. Useful when the wrapped component already knows its own state
+- `disabled?`: Whether the target is disabled. When specified, it takes precedence over detection from the DOM. Useful when the wrapped component already knows its own state. `true` is treated exactly like a DOM-detected disabled state (renderers typically activate an overlay that catches pointer events), so pass `true` only when the target really is disabled; it reports the state and does not disable the control. For a partially disabled group, pass the group's own state and wrap each option for per-option reasons. A `disabled` prop defined in the `props` passed to `defineDisabledReasonComponent` is replaced by this one
 
 ### DisabledReasonAPI
 
