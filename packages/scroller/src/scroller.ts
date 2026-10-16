@@ -893,7 +893,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     diffY: number,
     options?: ScrollerScrollOptions,
   ): ScrollResult {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollBy(diffX, diffY, this._createMergedScrollOptions(options)),
     );
   }
@@ -908,7 +908,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     scrollPosition: Partial<ScrollPosition>,
     options?: ScrollerScrollOptions,
   ): ScrollResult {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollTo(scrollPosition, this._createMergedScrollOptions(options)),
     );
   }
@@ -924,11 +924,12 @@ export class Scroller extends EV<ScrollerEventMap> {
     target: ScrollToElementTarget,
     options?: ScrollerScrollToElementOptions,
   ) {
-    const merged = this._createMergedScrollToElementOptions(options);
-    if (merged.x === undefined) merged.x = this.baseAxis === 'x';
-    if (merged.y === undefined) merged.y = this.baseAxis === 'y';
-
-    return this._setScrollToResult(scrollToElement(target, merged));
+    return this._runScroll(() => {
+      const merged = this._createMergedScrollToElementOptions(options);
+      if (merged.x === undefined) merged.x = this.baseAxis === 'x';
+      if (merged.y === undefined) merged.y = this.baseAxis === 'y';
+      return scrollToElement(target, merged);
+    });
   }
 
   /**
@@ -941,7 +942,7 @@ export class Scroller extends EV<ScrollerEventMap> {
     targets: ScrollToSideTargets,
     options?: ScrollerScrollOptions,
   ): ScrollResult {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollToSide(targets, this._createMergedScrollOptions(options)),
     );
   }
@@ -952,7 +953,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * @param options - スクロールオプション
    */
   toTop(options?: ScrollerScrollOptions) {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollToTop(this._createMergedScrollOptions(options)),
     );
   }
@@ -963,7 +964,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * @param options - スクロールオプション
    */
   toRight(options?: ScrollerScrollOptions) {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollToRight(this._createMergedScrollOptions(options)),
     );
   }
@@ -974,7 +975,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * @param options - スクロールオプション
    */
   toBottom(options?: ScrollerScrollOptions) {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollToBottom(this._createMergedScrollOptions(options)),
     );
   }
@@ -985,7 +986,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * @param options - スクロールオプション
    */
   toLeft(options?: ScrollerScrollOptions) {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollToLeft(this._createMergedScrollOptions(options)),
     );
   }
@@ -996,7 +997,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * @param options - スクロールオプション
    */
   toLeftTop(options?: ScrollerScrollOptions) {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollToLeftTop(this._createMergedScrollOptions(options)),
     );
   }
@@ -1007,7 +1008,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * @param options - スクロールオプション
    */
   toLeftBottom(options?: ScrollerScrollOptions) {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollToLeftBottom(this._createMergedScrollOptions(options)),
     );
   }
@@ -1018,7 +1019,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * @param options - スクロールオプション
    */
   toRightTop(options?: ScrollerScrollOptions) {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollToRightTop(this._createMergedScrollOptions(options)),
     );
   }
@@ -1029,7 +1030,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * @param options - スクロールオプション
    */
   toRightBottom(options?: ScrollerScrollOptions) {
-    return this._setScrollToResult(
+    return this._runScroll(() =>
       scrollToRightBottom(this._createMergedScrollOptions(options)),
     );
   }
@@ -1480,7 +1481,17 @@ export class Scroller extends EV<ScrollerEventMap> {
     this._scrollToResult = null;
   }
 
-  private _setScrollToResult(result: ScrollResult): ScrollResult {
+  private _runScroll(scroll: () => ScrollResult): ScrollResult {
+    // Scrolling needs an element; before it is set (e.g. while mounting is
+    // pending) there is nothing to do.
+    if (!this._el) {
+      return {
+        cancel: () => {},
+        promise: Promise.resolve(),
+        plans: { x: 0, y: 0 },
+      };
+    }
+    const result = scroll();
     this._scrollToResult = result;
     result.promise.then(() => {
       this._clearScrollToResult();
@@ -1489,6 +1500,8 @@ export class Scroller extends EV<ScrollerEventMap> {
   }
 
   private _updateScrollable() {
+    // Stoppers are applied by `_setup()` once the element is set.
+    if (!this._el) return;
     if (this.scrollEnabled) {
       this._scrollEnable();
     } else {
