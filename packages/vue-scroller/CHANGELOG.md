@@ -1,5 +1,15 @@
 # @fastkit/vue-scroller
 
+## 1.0.1
+
+### Patch Changes
+
+- [#322](https://github.com/dadajam4/fastkit/pull/322) [`d56e20b`](https://github.com/dadajam4/fastkit/commit/d56e20b7a3a80720df89bee1edc15dc568cb80c0) Thanks [@dadajam4](https://github.com/dadajam4)! - Require `@fastkit/scroller` `^1.0.1`, which fixes `missing element` thrown when
+  a `useScrollerControl({ el: 'self' })` component is unmounted before it mounts
+  (e.g. navigating away while a `<Suspense>` boundary is still pending). Without
+  this release, `@fastkit/vue-scroller` still accepted `^1.0.0`, so an existing
+  lockfile kept the unfixed version.
+
 ## 1.0.0
 
 ### Major Changes
