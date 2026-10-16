@@ -10,6 +10,25 @@ Fastkit typically performs pull-request based releases. This is performed by the
 
 1. When a PR with a changeset changelog is merged, the package is released by Github Actions.
 
+## Delivering a fix in a dependency to its dependents
+
+A release of one package does **not** release the packages that depend on it as
+long as the new version is still within their declared range. For example,
+releasing `@fastkit/scroller@1.0.1` leaves `@fastkit/vue-scroller@1.0.0` as is,
+because its published range `^1.0.0` already admits `1.0.1`.
+(`updateInternalDependencies: "patch"` in `.changeset/config.json` only rewrites
+the range when the dependent is being released anyway.)
+
+Consumers then pick the fix up only when they refresh their lockfile for that
+package (e.g. `pnpm update @fastkit/scroller`). Updating the dependent itself is
+not enough: an existing lockfile can keep the old version of the dependency.
+
+That is fine for most patches. When the bug surfaces **through the dependent**
+and the fix must reach everyone who updates it, also add a changeset for the
+dependent (usually a patch). Its `workspace:^` range is published as
+`^<new version>`, which raises the floor and makes the fix part of the
+dependent's release.
+
 ## Manual Release
 
 **This is an explanation for the maintainer**
