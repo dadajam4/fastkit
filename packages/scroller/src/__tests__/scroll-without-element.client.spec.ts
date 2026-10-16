@@ -40,4 +40,17 @@ describe('Scroller without an element', () => {
     scroller.destroy();
     el.remove();
   });
+
+  it('does nothing after destroy()', async () => {
+    const el = document.createElement('div');
+    document.body.appendChild(el);
+    const scroller = new Scroller({ el });
+    scroller.destroy();
+
+    const result = scroller.to({ y: 100 });
+    await expect(result.promise).resolves.toBeUndefined();
+    expect(result.plans).toEqual({ x: 0, y: 0 });
+
+    el.remove();
+  });
 });
