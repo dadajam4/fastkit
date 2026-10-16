@@ -1040,7 +1040,7 @@ export class Scroller extends EV<ScrollerEventMap> {
    * @param stopper - 停止要求ソース
    */
   pushScrollStopper(stopper: ScrollStopper) {
-    if (!this._scrollStoppers.includes(stopper)) {
+    if (!this.isDestroyed && !this._scrollStoppers.includes(stopper)) {
       this._scrollStoppers.push(stopper);
       if (this._scrollStoppers.length === 1) {
         this._updateScrollable();

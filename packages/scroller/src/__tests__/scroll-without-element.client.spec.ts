@@ -53,4 +53,16 @@ describe('Scroller without an element', () => {
 
     el.remove();
   });
+
+  it('ignores scroll stoppers after destroy()', () => {
+    const el = document.createElement('div');
+    document.body.appendChild(el);
+    const scroller = new Scroller({ el });
+    scroller.destroy();
+
+    scroller.pushScrollStopper({});
+    expect(scroller.scrollEnabled).toBe(true);
+
+    el.remove();
+  });
 });
