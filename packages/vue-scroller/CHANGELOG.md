@@ -1,5 +1,16 @@
 # @fastkit/vue-scroller
 
+## 1.0.2
+
+### Patch Changes
+
+- [#324](https://github.com/dadajam4/fastkit/pull/324) [`fa293c4`](https://github.com/dadajam4/fastkit/commit/fa293c4086e996dd881bdc57c97961b17d50c8af) Thanks [@schwarz9791](https://github.com/schwarz9791)! - Require `@fastkit/scroller` `^1.0.2`, which fixes `missing element` thrown by
+  scroll operations and scroll stoppers called before the element is set (e.g.
+  while a `<Suspense>` boundary is still pending). Without this release, an
+  existing lockfile keeps the unfixed version.
+- Updated dependencies [[`fa293c4`](https://github.com/dadajam4/fastkit/commit/fa293c4086e996dd881bdc57c97961b17d50c8af)]:
+  - @fastkit/scroller@1.0.2
+
 ## 1.0.1
 
 ### Patch Changes

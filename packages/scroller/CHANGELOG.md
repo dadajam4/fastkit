@@ -1,5 +1,19 @@
 # @fastkit/scroller
 
+## 1.0.2
+
+### Patch Changes
+
+- [#324](https://github.com/dadajam4/fastkit/pull/324) [`fa293c4`](https://github.com/dadajam4/fastkit/commit/fa293c4086e996dd881bdc57c97961b17d50c8af) Thanks [@schwarz9791](https://github.com/schwarz9791)! - Scroll operations (`by()`, `to()`, `toElement()`, `toSide()`, `toTop()` etc.) no
+  longer throw `missing element` when no element has been set yet, or after
+  `destroy()`. They return a result that does nothing and resolves immediately.
+  `pushScrollStopper()` and `removeScrollStopper()` no longer throw either; a
+  stopper pushed before the element is set takes effect once it is set, and one
+  pushed after `destroy()` is ignored.
+  `useScrollerControl({ el: 'self' })` and `VScroller` from
+  `@fastkit/vue-scroller` only set the element on mount, so this was hit while a
+  `<Suspense>` boundary was still pending.
+
 ## 1.0.1
 
 ### Patch Changes
