@@ -1,5 +1,13 @@
 # @fastkit/plugboy
 
+## 1.6.1
+
+### Patch Changes
+
+- [#326](https://github.com/dadajam4/fastkit/pull/326) [`c119caa`](https://github.com/dadajam4/fastkit/commit/c119caa6cbd125eb4038a2a8e3c235e417823654) Thanks [@schwarz9791](https://github.com/schwarz9791)! - `plugboy` commands no longer rewrite a workspace dependency's range. A package that declares `workspace:*` or `workspace:~` keeps it, so `package.json` stays in sync with the lockfile after a build. Previously every `workspace:` range was rewritten to `workspace:^`, which made a frozen `pnpm install` fail with `ERR_PNPM_OUTDATED_LOCKFILE`.
+
+- [#327](https://github.com/dadajam4/fastkit/pull/327) [`f2a86d0`](https://github.com/dadajam4/fastkit/commit/f2a86d0b00024f8f54187fc122721b30367f762e) Thanks [@schwarz9791](https://github.com/schwarz9791)! - Changes a `preparePackageJSON` hook makes to `json` are now saved to `package.json`. Previously they were silently discarded, so the documented `json.sideEffects = false` had no effect. The hook now receives the content about to be saved, including the generated `exports`, instead of the content read before the update. A `null` target in `exports` no longer makes the next `plugboy` command fail with a `TypeError`.
+
 ## 1.6.0
 
 ### Minor Changes
