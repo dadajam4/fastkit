@@ -138,4 +138,26 @@ describe('preparePackageJSON', () => {
       './*': './dist/*',
     });
   });
+
+  test('keeps the range a workspace dependency was declared with', async () => {
+    const dir = createFixture();
+    const file = path.join(dir, 'package.json');
+    const declared = {
+      dependencies: {
+        '@plugboy-test/exact': 'workspace:*',
+        '@plugboy-test/caret': 'workspace:^',
+      },
+      devDependencies: { '@plugboy-test/tilde': 'workspace:~' },
+      peerDependencies: { '@plugboy-test/peer': 'workspace:*' },
+    };
+    const json = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    fs.writeFileSync(
+      file,
+      `${JSON.stringify({ ...json, ...declared }, null, 2)}\n`,
+    );
+
+    await prepare(dir);
+
+    expect(JSON.parse(fs.readFileSync(file, 'utf-8'))).toMatchObject(declared);
+  });
 });
