@@ -395,7 +395,7 @@ export default defineWorkspaceConfig({
     createWorkspace: (workspace) => {
       console.log('Workspace created:', workspace.name);
     },
-    // package.json が修正・保存される直前に呼び出されます
+    // package.json が保存される直前に呼び出されます。`json` への変更は保存されます
     preparePackageJSON: (json, workspace) => {
       json.sideEffects = false;
     }

@@ -22,7 +22,7 @@ export interface HookTypes {
   createWorkspace: (workspace: PlugboyWorkspace) => any;
   /**
    * Hooks when correcting package.json
-   * @param json - package.json just before it was modified and saved by the plugboy
+   * @param json - package.json just before plugboy saves it. Changes made here are saved
    * @param workspace - {@link PlugboyWorkspace workspace instance}
    */
   preparePackageJSON: (
