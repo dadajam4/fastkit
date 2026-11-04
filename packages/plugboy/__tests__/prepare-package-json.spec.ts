@@ -54,6 +54,20 @@ async function prepare(dir: string) {
   await workspace.preparePackageJSON();
 }
 
+function writeHook(dir: string, body: string) {
+  fs.writeFileSync(
+    path.join(dir, 'plugboy.workspace.ts'),
+    `export default {
+      entries: { '.': './src/index.ts' },
+      hooks: {
+        preparePackageJSON(json) {
+          ${body}
+        },
+      },
+    };\n`,
+  );
+}
+
 describe('preparePackageJSON', () => {
   test('writes a `package.json` that ends with a newline', async () => {
     const dir = createFixture();
@@ -68,16 +82,10 @@ describe('preparePackageJSON', () => {
 
   test('saves the changes a `preparePackageJSON` hook makes', async () => {
     const dir = createFixture();
-    fs.writeFileSync(
-      path.join(dir, 'plugboy.workspace.ts'),
-      `export default {
-        entries: { '.': './src/index.ts' },
-        hooks: {
-          preparePackageJSON(json) {
-            json.sideEffects = false;
-          },
-        },
-      };\n`,
+    writeHook(
+      dir,
+      `json.sideEffects = false;
+      json.exports['./*'] = './dist/hooked/*';`,
     );
 
     const workspace = await getWorkspace(dir);
@@ -87,7 +95,22 @@ describe('preparePackageJSON', () => {
       fs.readFileSync(path.join(dir, 'package.json'), 'utf-8'),
     );
     expect(saved.sideEffects).toBe(false);
+    expect(saved.exports['./*']).toBe('./dist/hooked/*');
     expect(workspace.json.sideEffects).toBe(false);
+  });
+
+  test('keeps working after a hook saves a `null` exports target', async () => {
+    const dir = createFixture();
+    const file = path.join(dir, 'package.json');
+    writeHook(dir, `json.exports['./internal/*'] = null;`);
+
+    await prepare(dir);
+    const { ino } = fs.statSync(file);
+    await prepare(dir);
+
+    const { exports } = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    expect(exports['./internal/*']).toBeNull();
+    expect(fs.statSync(file).ino).toBe(ino);
   });
 
   test('does not touch the file when nothing changed', async () => {
