@@ -324,10 +324,7 @@ export class PlugboyWorkspace {
         const deps = cloned[prop];
         if (!deps) return;
         Object.keys(deps).forEach((dep) => {
-          const version = deps[dep];
-          if (version.startsWith(WORKSPACE_SPEC_PREFIX)) {
-            deps[dep] = `${WORKSPACE_SPEC_PREFIX}^`;
-          } else if (
+          if (
             projectPeerDependencies &&
             projectPeerDependencies[dep] &&
             !deps[dep]

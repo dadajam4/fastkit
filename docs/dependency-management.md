@@ -89,6 +89,7 @@ Work through these in order for any dependency `X` used by a package:
 | Build config (`plugboy.workspace.ts`) or bundled build helper | root toolchain / `devDependencies` — **never `dependencies`** | `@fastkit/plugboy` |
 | plugboy plugin (the package *is* a plugin) | required `peerDependencies` | `@fastkit/plugboy-sass-plugin` |
 | Dependency reachable only via an opt-in subpath export | **optional** `peerDependencies` | `@fastkit/plugboy` in `@fastkit/icon-font`; `vite` in `@fastkit/ts-tiny-meta` |
+| Workspace package in `dependencies` | `dependencies` with `workspace:^` — plugboy keeps the range as written, so nothing else enforces this | `@fastkit/vue-utils` in `vue-page` |
 | Workspace package declared as a peer | `peerDependencies` with an **explicit range** (+ `workspace:^` dev) — never `workspace:^` as the peer | `@fastkit/icon-font-gen: ^1.0.0` in `@fastkit/vite-plugin-vui` |
 | Re-exposed type whose value the consumer supplies | **optional** `peerDependencies` | `@datadog/browser-logs` in `@fastkit/universal-logger`; `@fastkit/icon-font-gen` in `@fastkit/vite-plugin-vui` |
 | Package with code that executes in Node | declare `engines.node` at its dependencies' floor | `>=22.0.0` in `@fastkit/node-util` |
