@@ -349,7 +349,7 @@ export class PlugboyWorkspace {
 
     cloned.type = cloned.type || 'module';
 
-    await this.hooks.preparePackageJSON(json, this);
+    await this.hooks.preparePackageJSON(cloned, this);
 
     const sorted = sortPackageJson(cloned);
 

@@ -66,6 +66,30 @@ describe('preparePackageJSON', () => {
     expect(JSON.parse(content).exports).toMatchObject({ './*': './dist/*' });
   });
 
+  test('saves the changes a `preparePackageJSON` hook makes', async () => {
+    const dir = createFixture();
+    fs.writeFileSync(
+      path.join(dir, 'plugboy.workspace.ts'),
+      `export default {
+        entries: { '.': './src/index.ts' },
+        hooks: {
+          preparePackageJSON(json) {
+            json.sideEffects = false;
+          },
+        },
+      };\n`,
+    );
+
+    const workspace = await getWorkspace(dir);
+    await workspace.preparePackageJSON();
+
+    const saved = JSON.parse(
+      fs.readFileSync(path.join(dir, 'package.json'), 'utf-8'),
+    );
+    expect(saved.sideEffects).toBe(false);
+    expect(workspace.json.sideEffects).toBe(false);
+  });
+
   test('does not touch the file when nothing changed', async () => {
     const dir = createFixture();
     const file = path.join(dir, 'package.json');
